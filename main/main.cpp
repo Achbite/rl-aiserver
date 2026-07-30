@@ -104,17 +104,10 @@ static bool ApplyCommandLine(int argc,
                 error = "--sample-distributor must use host:port";
                 return false;
             }
-        } else if (argument == "--run-id") {
-            const char* candidate = value("--run-id");
-            if (!candidate || std::string(candidate).empty()) {
-                error = "--run-id must not be empty";
-                return false;
-            }
-            config.sample_output.run_id = candidate;
-        } else if (argument == "--model-cache-dir") {
-            const char* candidate = value("--model-cache-dir");
+        } else if (argument == "--local-train-dir") {
+            const char* candidate = value("--local-train-dir");
             if (!candidate) return false;
-            config.model.p2p_dir = candidate;
+            config.model.local_train_dir = candidate;
         } else if (argument == "--smoke-model-dir") {
             const char* candidate = value("--smoke-model-dir");
             if (!candidate) return false;
@@ -158,8 +151,7 @@ int main(int argc, char* argv[]) {
                    argument == "--listen-port" ||
                    argument == "--model-distributor" ||
                    argument == "--sample-distributor" ||
-                   argument == "--run-id" ||
-                   argument == "--model-cache-dir" ||
+                   argument == "--local-train-dir" ||
                    argument == "--smoke-model-dir" ||
                    argument == "--local-model-dir") {
             ++i;
@@ -179,11 +171,10 @@ int main(int argc, char* argv[]) {
     }
     LOG_INFO(
         "Main",
-        "最终配置: workload=%d, listen=0.0.0.0:%d, run_id=%s, "
+        "最终配置: workload=%d, listen=0.0.0.0:%d, "
         "model_distributor=%s:%d, sample_distributor=%s:%d",
         cfg.server.run_mode,
         cfg.server.listen_port,
-        cfg.sample_output.run_id.c_str(),
         cfg.model_distribution.host.c_str(),
         cfg.model_distribution.port,
         cfg.sample_output.host.c_str(),

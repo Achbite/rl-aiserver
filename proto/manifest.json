@@ -2,18 +2,18 @@
   "files": {
     "cpp/maze.grpc.pb.cc": "143ea7527954cf4454cb69dba7573a1464c874db189d779d8021d68a796dec6b",
     "cpp/maze.grpc.pb.h": "be812a1c69981d6ebed7ea2743e7fae1caf7ceb0504d6e19088ca1609949e1ce",
-    "cpp/maze.pb.cc": "74cc1e779afba5e8d0a9dd66460a48cecf08093b4a1257e1e6acd1ce1223bd6f",
-    "cpp/maze.pb.h": "942e734c365a131cd00b2fa01e86b9e624fce22e9c3f595c0b110936e454f61e",
-    "maze.proto": "10b993c4cf8cf486275de5a2d4d48549c29326bbe12c1d827dd501ab4d180ade",
+    "cpp/maze.pb.cc": "c5a97566be35a7350b6f040fb2a52c3f310af0f03d6cf017b7c6e386c0456086",
+    "cpp/maze.pb.h": "02f00f57fbca70ab4ce83e29019fd9663454accf7cad25cda1a17a949a5d06fc",
+    "maze.proto": "f06d12958b0745ba98a96413d77f0e25511239bfb0e81f057c6f26d685843b81",
     "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "python/maze_pb2.py": "aa00b414b09b12a31515f5116883c95e9f38458ee2efb04c6f56c552b06fab76",
+    "python/maze_pb2.py": "0cba45b1407c0209446892916124a76d83d32f7cd8c03ccb3b1942b0375698d6",
     "python/maze_pb2_grpc.py": "7aac826dec4d1400cff59f92df46125dc05d00b975ac1b8a3ca2dcfd5b2fc003"
   },
   "package": "rl-contracts",
   "platform": "linux/arm64",
   "schema_version": 1,
   "source_commit": "e13a875b057c",
-  "source_id": "e13a875b057c",
-  "source_sha256": "10b993c4cf8cf486275de5a2d4d48549c29326bbe12c1d827dd501ab4d180ade",
-  "version": "0.3.0"
+  "source_id": "e13a875b057c-dirty-f06d12958b07",
+  "source_sha256": "f06d12958b0745ba98a96413d77f0e25511239bfb0e81f057c6f26d685843b81",
+  "version": "0.5.0"
 }

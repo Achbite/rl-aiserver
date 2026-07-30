@@ -2,13 +2,14 @@
 
 set -u
 
-repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 default_aiserver_bin="${repo_dir}/build/maze_aiserver"
 if [ -x "${repo_dir}/bin/maze_aiserver" ]; then
     default_aiserver_bin="${repo_dir}/bin/maze_aiserver"
 fi
 aiserver_bin="${AISERVER_BIN:-${default_aiserver_bin}}"
 aiserver_config="${AISERVER_CONFIG:-${repo_dir}/configs/server_config.yaml}"
+local_train_root="${MAZE_LOCAL_TRAIN_ROOT:-${repo_dir}/models/local-train}"
 
 canonical_workload() {
     case "$1" in
@@ -76,16 +77,14 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
             workload_override="${runtime_arguments[${value_index}]}"
             argument_index=$((argument_index + 2))
             ;;
-        --run-id)
+        --local-train-dir)
             value_index=$((argument_index + 1))
             if [ "${value_index}" -ge "${#runtime_arguments[@]}" ] ||
                [ -z "${runtime_arguments[${value_index}]}" ]; then
-                echo "--run-id requires a value" >&2
+                echo "--local-train-dir requires a value" >&2
                 exit 2
             fi
-            export MAZE_RUN_ID="${runtime_arguments[${value_index}]}"
-            forward_arguments+=(
-                "${argument}" "${runtime_arguments[${value_index}]}")
+            local_train_root="${runtime_arguments[${value_index}]}"
             argument_index=$((argument_index + 2))
             ;;
         --sample-distributor)
@@ -120,7 +119,7 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
             forward_arguments+=("${argument}" "${address}")
             argument_index=$((argument_index + 2))
             ;;
-        --listen-port|--model-distributor|--model-cache-dir|\
+        --listen-port|--model-distributor|\
         --smoke-model-dir|--local-model-dir)
             value_index=$((argument_index + 1))
             if [ "${value_index}" -ge "${#runtime_arguments[@]}" ] ||
@@ -193,6 +192,7 @@ aiserver_pid=""
 stopping=0
 quiesced=0
 quiesce_marker="${MAZE_QUIESCE_MARKER:-/tmp/rl-training-quiesced}"
+training_lock=""
 rm -f "${quiesce_marker}"
 
 terminate_process() {
@@ -223,6 +223,10 @@ shutdown() {
     aiserver_pid=""
     terminate_process "${distributor_pid}" 3
     distributor_pid=""
+    if [ -n "${training_lock}" ]; then
+        rm -rf -- "${training_lock}"
+        training_lock=""
+    fi
 }
 
 quiesce() {
@@ -242,6 +246,24 @@ case "${workload}" in
     inference-smoke|model-evaluation|astar-test)
         ;;
     training)
+        if [ "$(basename "${local_train_root}")" != "local-train" ]; then
+            echo "AIServer local-train path must end with /local-train" >&2
+            exit 1
+        fi
+        if [ -L "${local_train_root}" ]; then
+            echo "AIServer local-train path must not be a symbolic link" >&2
+            exit 1
+        fi
+        mkdir -p "$(dirname "${local_train_root}")"
+        local_train_parent="$(
+            cd "$(dirname "${local_train_root}")" && pwd -P
+        )"
+        local_train_root="${local_train_parent}/local-train"
+        expected_local_train_root="${repo_dir}/models/local-train"
+        if [ "${local_train_root}" != "${expected_local_train_root}" ]; then
+            echo "Unsafe AIServer local-train path: ${local_train_root}" >&2
+            exit 1
+        fi
         if [ -z "${distributor_bin}" ] || [ -z "${distributor_config}" ]; then
             echo "training requires a staged SampleDistributor artifact" >&2
             echo "Expected: ${repo_dir}/sample-distributor/bin/maze_sample_distributor" >&2
@@ -256,6 +278,23 @@ case "${workload}" in
             echo "SampleDistributor config is missing: ${distributor_config}" >&2
             exit 1
         fi
+        training_lock="${MAZE_TRAIN_LOCK_DIR:-${local_train_parent}/.aiserver-local-train.lock}"
+        if ! mkdir "${training_lock}" 2>/dev/null; then
+            echo "AIServer training is already active or its lock remains: ${training_lock}" >&2
+            exit 1
+        fi
+        printf '%s\n' "$$" > "${training_lock}/pid"
+        if [ -d "${local_train_root}" ]; then
+            find "${local_train_root}" -mindepth 1 -maxdepth 1 \
+                -exec rm -rf -- {} +
+        else
+            mkdir -p "${local_train_root}"
+        fi
+        mkdir -p \
+            "${local_train_root}/incoming" \
+            "${local_train_root}/active" \
+            "${local_train_root}/previous"
+        export MAZE_LOCAL_TRAIN_ROOT="${local_train_root}"
         export MAZE_SAMPLE_DISTRIBUTOR_HOST="${MAZE_SAMPLE_DISTRIBUTOR_HOST:-127.0.0.1}"
         export MAZE_SAMPLE_DISTRIBUTOR_PORT="${MAZE_SAMPLE_DISTRIBUTOR_PORT:-9100}"
         "${distributor_bin}" "${distributor_config}" &

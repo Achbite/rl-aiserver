@@ -5,6 +5,7 @@
 #include "ai/onnx_inferencer.h"
 #include "config/config_loader.h"
 #include "maze.grpc.pb.h"
+#include "metrics/episode_metrics.h"
 #include "model/model_manifest.h"
 #include "model/model_distributor_client.h"
 #include "sample/sample_sender.h"
@@ -105,7 +106,6 @@ private:
     int64_t EstimateCachedBytes();
     void RecordUpdateLatency(std::chrono::steady_clock::time_point start);
     void MarkDegraded(const std::string& error);
-    bool ValidateRunId(const std::string& run_id, std::string& error) const;
     static int64_t NowMs();
     static std::string CreateProducerInstanceId(const std::string& aiserver_id);
 
@@ -114,6 +114,7 @@ private:
     mutable std::mutex mutex_;
     std::condition_variable model_condition_;
     SampleSender sample_sender_;
+    EpisodeMetricsWindow episode_metrics_;
     OnnxInferencer onnx_inferencer_;
     ModelDistributorClient model_distributor_;
     ModelManifest model_manifest_;

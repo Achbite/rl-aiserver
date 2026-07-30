@@ -7,7 +7,7 @@ selected for the AIServer image. The artifact is copied here explicitly after
 For the versions in `../artifact_versions.env`, run from `rl-aiserver`:
 
 ```bash
-cp -R ../.workspace/artifacts/rl-sample-pool/0.3.0/linux-arm64/. \
+cp -R ../.workspace/artifacts/rl-sample-pool/0.5.0/linux-arm64/. \
     sample-distributor/
 ```
 

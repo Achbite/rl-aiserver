@@ -140,20 +140,18 @@ bool ComputeFileSha256(const std::string& path,
 }
 
 bool LoadModelManifest(const ModelConfig& config,
-                       const std::string& run_id,
                        ModelManifest& manifest,
                        std::string& error) {
     namespace fs = std::filesystem;
 
-    fs::path run_dir = fs::path(config.p2p_dir) / run_id;
-    fs::path manifest_path = run_dir / config.manifest_name;
+    fs::path manifest_path = fs::path(config.local_train_dir) /
+                             "active" / config.manifest_name;
     return LoadModelManifestFile(
-        config, manifest_path.string(), run_id, manifest, error);
+        config, manifest_path.string(), manifest, error);
 }
 
 bool LoadModelManifestFile(const ModelConfig& config,
                            const std::string& manifest_file_path,
-                           const std::string& expected_run_id,
                            ModelManifest& manifest,
                            std::string& error) {
     namespace fs = std::filesystem;
@@ -183,7 +181,6 @@ bool LoadModelManifestFile(const ModelConfig& config,
     if (!ReadInteger(document, "schema_version", schema_version, error) ||
         !ReadString(document, "contract_version",
                     manifest.contract_version, error) ||
-        !ReadString(document, "run_id", manifest.run_id, error) ||
         !ReadInteger(document, "model_version", model_version, error) ||
         !ReadString(document, "artifact_uri", manifest.artifact_uri, error) ||
         !ReadString(document, "model_file", manifest.model_file, error) ||
@@ -209,7 +206,7 @@ bool LoadModelManifestFile(const ModelConfig& config,
         error = "unsupported model manifest schema_version";
         return false;
     }
-    if (manifest.contract_version != "0.3.0") {
+    if (manifest.contract_version != "0.5.0") {
         error = "unsupported model manifest contract_version";
         return false;
     }
@@ -217,13 +214,8 @@ bool LoadModelManifestFile(const ModelConfig& config,
         error = "model manifest is not ready";
         return false;
     }
-    if (!expected_run_id.empty() &&
-        manifest.run_id != expected_run_id) {
-        error = "model manifest run_id does not match AIServer run_id";
-        return false;
-    }
-    if (manifest.model_version != 0) {
-        error = "initial model_version must be 0";
+    if (manifest.model_version < 0) {
+        error = "model_version must not be negative";
         return false;
     }
     if (manifest.model_file.empty() ||

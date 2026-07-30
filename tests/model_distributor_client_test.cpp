@@ -19,8 +19,8 @@ public:
     explicit CorruptModelService(std::string checksum)
         : checksum_(std::move(checksum)) {}
 
-    void SetWrongRun(bool enabled) {
-        wrong_run_ = enabled;
+    void SetWrongShape(bool enabled) {
+        wrong_shape_ = enabled;
     }
 
     grpc::Status GetModelManifest(
@@ -30,16 +30,14 @@ public:
         response->set_ret_code(0);
         auto* manifest = response->mutable_manifest();
         manifest->set_schema_version(1);
-        manifest->set_contract_version("0.3.0");
-        manifest->set_run_id(
-            wrong_run_ ? "different-run" : request->run_id());
+        manifest->set_contract_version("0.5.0");
         manifest->set_model_version(0);
         manifest->set_artifact_uri("file:///models/model_v000000.onnx");
         manifest->set_model_file("model_v000000.onnx");
         manifest->set_size_bytes(4);
         manifest->set_sha256(checksum_);
         manifest->add_input_shape(1);
-        manifest->add_input_shape(13);
+        manifest->add_input_shape(wrong_shape_ ? 12 : 13);
         manifest->add_action_shape(1);
         manifest->add_action_shape(9);
         manifest->add_value_shape(1);
@@ -54,7 +52,6 @@ public:
         const maze::DownloadModelReq* request,
         grpc::ServerWriter<maze::ModelChunk>* writer) override {
         maze::ModelChunk chunk;
-        chunk.set_run_id(request->run_id());
         chunk.set_model_version(request->model_version());
         chunk.set_offset(0);
         chunk.set_data("evil");
@@ -64,7 +61,7 @@ public:
 
 private:
     std::string checksum_;
-    bool wrong_run_ = false;
+    bool wrong_shape_ = false;
 };
 
 int Fail(const std::string& message) {
@@ -111,16 +108,16 @@ int main() {
     distribution.host = "127.0.0.1";
     distribution.port = selected_port;
     distribution.rpc_timeout_ms = 1000;
-    distribution.contract_version = "0.3.0";
+    distribution.contract_version = "0.5.0";
     ModelConfig model;
-    model.p2p_dir = (root / "cache").string();
+    model.local_train_dir = (root / "local-train").string();
     ModelDistributorClient client(distribution, model);
     ModelManifest manifest;
     std::string error;
     int latest_version = -1;
     std::string latest_checksum;
     if (!client.GetLatestIdentity(
-            "test-run", "aiserver-0",
+            "aiserver-0",
             latest_version, latest_checksum, error) ||
         latest_version != 0 || latest_checksum != checksum) {
         server->Shutdown();
@@ -128,21 +125,21 @@ int main() {
         return Fail("latest model identity query failed: " + error);
     }
     if (client.FetchLatest(
-            "test-run", "aiserver-0", manifest, error) ||
+            "aiserver-0", manifest, error) ||
         error != "downloaded model checksum mismatch") {
         server->Shutdown();
         fs::remove_all(root);
         return Fail("corrupted transfer was not rejected: " + error);
     }
 
-    service.SetWrongRun(true);
+    service.SetWrongShape(true);
     error.clear();
     if (client.FetchLatest(
-            "test-run", "aiserver-0", manifest, error) ||
-        error != "model manifest run_id mismatch") {
+            "aiserver-0", manifest, error) ||
+        error != "model manifest shape does not match AIServer") {
         server->Shutdown();
         fs::remove_all(root);
-        return Fail("cross-run manifest was not rejected: " + error);
+        return Fail("shape mismatch was not rejected: " + error);
     }
     server->Shutdown();
 
@@ -151,10 +148,32 @@ int main() {
     ModelDistributorClient unavailable(distribution, model);
     error.clear();
     if (unavailable.FetchLatest(
-            "test-run", "aiserver-0", manifest, error) ||
+            "aiserver-0", manifest, error) ||
         error.find("model manifest RPC failed") == std::string::npos) {
         fs::remove_all(root);
         return Fail("unreachable ModelDistributor was not reported");
+    }
+
+    const fs::path incoming_dir = root / "local-train" / "incoming";
+    const fs::path active_dir = root / "local-train" / "active";
+    fs::create_directories(incoming_dir);
+    fs::create_directories(active_dir);
+    {
+        std::ofstream(active_dir / "model.onnx", std::ios::binary)
+            << "old";
+        std::ofstream(incoming_dir / "model_v000001.onnx", std::ios::binary)
+            << "new";
+    }
+    manifest.model_path =
+        (incoming_dir / "model_v000001.onnx").string();
+    std::string previous_path;
+    error.clear();
+    if (!client.Promote(manifest, previous_path, error) ||
+        !fs::is_regular_file(manifest.model_path) ||
+        !fs::is_regular_file(previous_path)) {
+        fs::remove_all(root);
+        return Fail("model promotion did not preserve the previous model: " +
+                    error);
     }
 
     fs::remove_all(root);

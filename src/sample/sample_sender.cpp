@@ -24,7 +24,6 @@ SampleSender::~SampleSender() {
 
 bool SampleSender::ProbeDistributor() {
     maze::DistributorStatusReq request;
-    request.set_run_id(config_.run_id);
     maze::DistributorStatusRsp response;
     grpc::ClientContext context;
     context.set_deadline(std::chrono::system_clock::now() +
@@ -34,8 +33,8 @@ bool SampleSender::ProbeDistributor() {
         MarkDegraded("SampleDistributor status failed: " + status.error_message());
         return false;
     }
-    if (!response.ready() || response.run_id() != config_.run_id) {
-        MarkDegraded("SampleDistributor is not ready for run_id=" + config_.run_id);
+    if (!response.ready()) {
+        MarkDegraded("SampleDistributor is not ready");
         return false;
     }
 
@@ -165,8 +164,7 @@ bool SampleSender::SendFront(const QueueItem& item,
             error = response.message();
             std::lock_guard<std::mutex> lock(mutex_);
             ++rejected_push_attempt_count_;
-            if (response.result() == maze::PUSH_RESULT_REJECTED_RUN ||
-                response.result() == maze::PUSH_RESULT_REJECTED_INVALID) {
+            if (response.result() == maze::PUSH_RESULT_REJECTED_INVALID) {
                 return false;
             }
         } else {

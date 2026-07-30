@@ -10,7 +10,7 @@ Build Sample Pool and stage the binary:
 
 ```bash
 (cd ../rl-sample-pool && bash build_artifact.sh)
-cp -R ../.workspace/artifacts/rl-sample-pool/0.3.0/linux-arm64/. \
+cp -R ../.workspace/artifacts/rl-sample-pool/0.5.0/linux-arm64/. \
   sample-distributor/
 ```
 

@@ -29,11 +29,27 @@ bool IsTerminalReason(maze::TerminationReason reason) {
            reason == maze::TERMINATION_REASON_CHAIN_FAILURE;
 }
 
+maze::WorkloadMode WorkloadModeForRunMode(int run_mode) {
+    switch (run_mode) {
+        case aiserver_mode::kTraining:
+            return maze::WORKLOAD_MODE_TRAINING;
+        case aiserver_mode::kLocalTest:
+            return maze::WORKLOAD_MODE_INFERENCE_SMOKE;
+        case aiserver_mode::kModelEvaluation:
+            return maze::WORKLOAD_MODE_MODEL_EVALUATION;
+        case aiserver_mode::kAstarTest:
+            return maze::WORKLOAD_MODE_ASTAR_TEST;
+        default:
+            return maze::WORKLOAD_MODE_UNSPECIFIED;
+    }
+}
+
 }  // namespace
 
 MazeServiceImpl::MazeServiceImpl(const AIServerConfig& config)
     : config_(config),
       sample_sender_(config.sample_output),
+      episode_metrics_(config.metrics.episode_window),
       model_distributor_(config.model_distribution, config.model),
       producer_instance_id_(
           CreateProducerInstanceId(config.sample_output.aiserver_id)) {}
@@ -71,7 +87,6 @@ bool MazeServiceImpl::LoadInitialModel() {
         }
         model_manifest_.model_path = path;
         model_manifest_.model_version = 0;
-        model_manifest_.run_id = config_.sample_output.run_id;
         if (!ComputeFileSha256(path, model_manifest_.sha256, error)) {
             model_state_.store(maze::MODEL_STATE_FAILED);
             last_error_ = "local model checksum failed: " + error;
@@ -87,8 +102,7 @@ bool MazeServiceImpl::LoadInitialModel() {
             config_.model.smoke_dir + "/" + config_.model.manifest_name;
         std::string error;
         if (!LoadModelManifestFile(
-                config_.model, manifest_path,
-                "inference-smoke-fixture", model_manifest_, error)) {
+                config_.model, manifest_path, model_manifest_, error)) {
             model_state_.store(maze::MODEL_STATE_FAILED);
             last_error_ = "smoke model manifest failed: " + error;
             return false;
@@ -111,28 +125,37 @@ bool MazeServiceImpl::LoadInitialModel() {
     while (std::chrono::steady_clock::now() < deadline) {
         ModelManifest candidate;
         if (model_distributor_.FetchLatest(
-                config_.sample_output.run_id,
                 config_.sample_output.aiserver_id,
                 candidate, error)) {
             std::string load_error;
-            if (!onnx_inferencer_.LoadModel(
+            OnnxInferencer validator;
+            if (!validator.LoadModel(
                     candidate.model_path,
                     config_.model.expected_obs_dim,
                     config_.model.expected_action_dim,
                     &load_error)) {
                 std::string ack_error;
                 model_distributor_.Ack(
-                    candidate, config_.sample_output.run_id,
-                    config_.sample_output.aiserver_id,
+                    candidate, config_.sample_output.aiserver_id,
                     maze::MODEL_LOAD_STATUS_FAILED, load_error, ack_error);
                 model_state_.store(maze::MODEL_STATE_FAILED);
                 last_error_ = "ONNX model validation failed: " + load_error;
                 return false;
             }
+            std::string previous_path;
+            if (!model_distributor_.Promote(
+                    candidate, previous_path, load_error) ||
+                !onnx_inferencer_.LoadModel(
+                    candidate.model_path,
+                    config_.model.expected_obs_dim,
+                    config_.model.expected_action_dim, &load_error)) {
+                model_state_.store(maze::MODEL_STATE_FAILED);
+                last_error_ = "model promotion failed: " + load_error;
+                return false;
+            }
             std::string ack_error;
             if (!model_distributor_.Ack(
-                    candidate, config_.sample_output.run_id,
-                    config_.sample_output.aiserver_id,
+                    candidate, config_.sample_output.aiserver_id,
                     maze::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error)) {
                 error = "model ACK failed: " + ack_error;
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -141,8 +164,7 @@ bool MazeServiceImpl::LoadInitialModel() {
             model_manifest_ = std::move(candidate);
             model_state_.store(maze::MODEL_STATE_READY);
             LOG_INFO("MazeService",
-                     "初始模型就绪: run=%s version=%d sha256=%s",
-                     model_manifest_.run_id.c_str(),
+                     "初始模型就绪: version=%d sha256=%s",
                      model_manifest_.model_version,
                      model_manifest_.sha256.c_str());
             return true;
@@ -189,7 +211,6 @@ void MazeServiceImpl::ModelWatchLoop() {
         std::string latest_checksum;
         std::string error;
         if (model_distributor_.GetLatestIdentity(
-                config_.sample_output.run_id,
                 config_.sample_output.aiserver_id,
                 latest_version, latest_checksum, error) &&
             latest_version > active_version &&
@@ -197,7 +218,6 @@ void MazeServiceImpl::ModelWatchLoop() {
             const int requested_version = active_version + 1;
             ModelManifest candidate;
             if (model_distributor_.FetchVersion(
-                    config_.sample_output.run_id,
                     config_.sample_output.aiserver_id,
                     requested_version, candidate, error)) {
                 OnnxInferencer validator;
@@ -209,8 +229,7 @@ void MazeServiceImpl::ModelWatchLoop() {
                         &validation_error)) {
                     std::string ack_error;
                     model_distributor_.Ack(
-                        candidate, config_.sample_output.run_id,
-                        config_.sample_output.aiserver_id,
+                        candidate, config_.sample_output.aiserver_id,
                         maze::MODEL_LOAD_STATUS_FAILED,
                         validation_error, ack_error);
                     std::lock_guard<std::mutex> lock(mutex_);
@@ -329,19 +348,6 @@ void MazeServiceImpl::BeginShutdown() {
     }
 }
 
-bool MazeServiceImpl::ValidateRunId(const std::string& run_id,
-                                    std::string& error) const {
-    if (run_id.empty()) {
-        error = "run_id is required";
-        return false;
-    }
-    if (run_id != config_.sample_output.run_id) {
-        error = "run_id does not match AIServer";
-        return false;
-    }
-    return true;
-}
-
 bool MazeServiceImpl::AtGlobalFragmentBoundary() {
     SessionManager::Session* session = session_mgr_.GetSession(0);
     if (!session ||
@@ -374,21 +380,30 @@ bool MazeServiceImpl::CanActivateStagedModel() {
 bool MazeServiceImpl::ActivateStagedModel() {
     if (!CanActivateStagedModel()) return true;
 
-    const ModelManifest candidate = staged_model_manifest_;
-    if (candidate.model_version != model_manifest_.model_version + 1) {
+    if (staged_model_manifest_.model_version !=
+        model_manifest_.model_version + 1) {
         MarkDegraded("staged model version is not contiguous");
         return false;
     }
 
     std::string error;
+    std::string previous_path;
+    if (!model_distributor_.Promote(
+            staged_model_manifest_, previous_path, error)) {
+        MarkDegraded("staged model promotion failed: " + error);
+        return false;
+    }
+    if (!previous_path.empty()) {
+        model_manifest_.model_path = previous_path;
+    }
+    const ModelManifest candidate = staged_model_manifest_;
     if (!onnx_inferencer_.LoadModel(
             candidate.model_path,
             config_.model.expected_obs_dim,
             config_.model.expected_action_dim, &error)) {
         std::string ack_error;
         model_distributor_.Ack(
-            candidate, config_.sample_output.run_id,
-            config_.sample_output.aiserver_id,
+            candidate, config_.sample_output.aiserver_id,
             maze::MODEL_LOAD_STATUS_FAILED, error, ack_error);
         MarkDegraded("staged model activation failed: " + error);
         return false;
@@ -396,8 +411,7 @@ bool MazeServiceImpl::ActivateStagedModel() {
 
     std::string ack_error;
     if (!model_distributor_.Ack(
-            candidate, config_.sample_output.run_id,
-            config_.sample_output.aiserver_id,
+            candidate, config_.sample_output.aiserver_id,
             maze::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error)) {
         std::string rollback_error;
         onnx_inferencer_.LoadModel(
@@ -460,6 +474,11 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
         agent.fragment_first_action_frame_id = -1;
         agent.visited.clear();
         agent.recent_positions.clear();
+        agent.episode_return = 0.0;
+        agent.episode_transition_count = 0;
+        agent.final_termination_reason =
+            maze::TERMINATION_REASON_UNSPECIFIED;
+        agent.reward_component_sums.clear();
         if (config_.server.run_mode == aiserver_mode::kAstarTest) {
             agent.path_valid = agent.solver.PlanPath(
                 session.start_x, session.start_y,
@@ -619,6 +638,14 @@ bool MazeServiceImpl::FinalizePendingTransition(
     RewardDetail reward = MazeReward::Calculate(
         session, agent_id, gx, gy, is_done,
         static_cast<int>(session.agents.size()));
+    agent.episode_return += reward.total;
+    ++agent.episode_transition_count;
+    for (const auto& item : reward.items) {
+        agent.reward_component_sums[item.first] += item.second;
+    }
+    if (is_done) {
+        agent.final_termination_reason = reason;
+    }
 
     maze::Sample sample;
     for (float value : agent.pending_obs) sample.add_obs(value);
@@ -664,8 +691,7 @@ void MazeServiceImpl::FillSampleBatchMetadata(
     const auto agent_it = session.agents.find(agent_id);
     if (agent_it == session.agents.end()) return;
     const auto& agent = agent_it->second;
-    batch.set_protocol_version(2);
-    batch.set_run_id(config_.sample_output.run_id);
+    batch.set_protocol_version(3);
     batch.set_aiserver_id(config_.sample_output.aiserver_id);
     batch.set_env_id(session.env_id);
     batch.set_session_id(session.session_id);
@@ -683,8 +709,7 @@ void MazeServiceImpl::FillSampleBatchMetadata(
     batch.set_termination_reason(reason);
 
     std::ostringstream batch_id;
-    batch_id << config_.sample_output.run_id << "/"
-             << producer_instance_id_ << "/"
+    batch_id << producer_instance_id_ << "/"
              << session.session_id << "/"
              << session.current_episode_id << "/"
              << agent_id << "/" << sequence;
@@ -778,17 +803,19 @@ grpc::Status MazeServiceImpl::Init(
     const maze::InitReq* req,
     maze::InitRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
-    std::string error;
     if (!IsReady()) {
         rsp->set_ret_code(-1);
         rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
         rsp->set_message("AIServer is not ready");
         return grpc::Status::OK;
     }
-    if (!ValidateRunId(req->run_id(), error)) {
+    const maze::WorkloadMode expected_mode =
+        WorkloadModeForRunMode(config_.server.run_mode);
+    if (req->workload_mode() == maze::WORKLOAD_MODE_UNSPECIFIED ||
+        req->workload_mode() != expected_mode) {
         rsp->set_ret_code(-1);
         rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
-        rsp->set_message(error);
+        rsp->set_message("Client workload does not match AIServer workload");
         return grpc::Status::OK;
     }
     if (req->agent_num() <= 0 ||
@@ -802,9 +829,9 @@ grpc::Status MazeServiceImpl::Init(
     auto* session = session_mgr_.GetOrCreateSession(req->session_id());
     if (session->initialized) {
         bool same_identity =
-            session->run_id == req->run_id() &&
             session->client_id == req->client_id() &&
             session->env_id == req->env_id() &&
+            session->workload_mode == req->workload_mode() &&
             session->agents.size() ==
                 static_cast<std::size_t>(req->agent_num());
         rsp->set_ret_code(same_identity ? 0 : -1);
@@ -817,9 +844,9 @@ grpc::Status MazeServiceImpl::Init(
         return grpc::Status::OK;
     }
 
-    session->run_id = req->run_id();
     session->client_id = req->client_id();
     session->env_id = req->env_id();
+    session->workload_mode = req->workload_mode();
     session->map_width = req->map_size().x();
     session->map_height = req->map_size().y();
     session->start_x = req->start_pos().x();
@@ -866,8 +893,8 @@ grpc::Status MazeServiceImpl::Init(
     rsp->set_result(maze::LIFECYCLE_RESULT_OK);
     rsp->set_message("session initialized");
     LOG_INFO("MazeService",
-             "Client 初始化完成: run=%s session=%d client=%s env=%s agents=%d",
-             session->run_id.c_str(), session->session_id,
+             "Client 初始化完成: session=%d client=%s env=%s agents=%d",
+             session->session_id,
              session->client_id.c_str(), session->env_id.c_str(),
              req->agent_num());
     return grpc::Status::OK;
@@ -878,13 +905,6 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     const maze::BeginEpisodeReq* req,
     maze::EpisodeLifecycleRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
-    std::string error;
-    if (!ValidateRunId(req->run_id(), error)) {
-        rsp->set_ret_code(-1);
-        rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
-        rsp->set_message(error);
-        return grpc::Status::OK;
-    }
     auto* session = session_mgr_.GetSession(req->session_id());
     if (!session || !session->initialized) {
         rsp->set_ret_code(-1);
@@ -955,11 +975,6 @@ grpc::Status MazeServiceImpl::Update(
             grpc::StatusCode::UNAVAILABLE, "AIServer sample chain is degraded");
     }
 
-    std::string error;
-    if (!ValidateRunId(req->run_id(), error)) {
-        RecordUpdateLatency(rpc_start);
-        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, error);
-    }
     auto* session = session_mgr_.GetSession(req->session_id());
     if (!session || !session->initialized) {
         RecordUpdateLatency(rpc_start);
@@ -1196,13 +1211,6 @@ grpc::Status MazeServiceImpl::EndEpisode(
     const maze::EpisodeEndReq* req,
     maze::EpisodeEndRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
-    std::string error;
-    if (!ValidateRunId(req->run_id(), error)) {
-        rsp->set_ret_code(-1);
-        rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
-        rsp->set_message(error);
-        return grpc::Status::OK;
-    }
     auto* session = session_mgr_.GetSession(req->session_id());
     if (!session) {
         rsp->set_ret_code(-1);
@@ -1239,6 +1247,21 @@ grpc::Status MazeServiceImpl::EndEpisode(
         }
     }
 
+    std::vector<AgentEpisodeResult> episode_results;
+    episode_results.reserve(session->agents.size());
+    for (const auto& item : session->agents) {
+        const auto& agent = item.second;
+        AgentEpisodeResult result;
+        result.episode_return = agent.episode_return;
+        result.success =
+            agent.final_termination_reason ==
+            maze::TERMINATION_REASON_GOAL_REACHED;
+        result.termination_reason = agent.final_termination_reason;
+        result.transition_count = agent.episode_transition_count;
+        result.reward_component_sums = agent.reward_component_sums;
+        episode_results.push_back(std::move(result));
+    }
+    episode_metrics_.AddCompleted(std::move(episode_results));
     session->episode_state = SessionManager::EpisodeState::Ended;
     session->episode_history[req->episode_id()] =
         SessionManager::EpisodeState::Ended;
@@ -1253,13 +1276,6 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     const maze::AbortEpisodeReq* req,
     maze::EpisodeLifecycleRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
-    std::string error;
-    if (!ValidateRunId(req->run_id(), error)) {
-        rsp->set_ret_code(-1);
-        rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
-        rsp->set_message(error);
-        return grpc::Status::OK;
-    }
     auto* session = session_mgr_.GetSession(req->session_id());
     if (!session) {
         rsp->set_ret_code(-1);
@@ -1292,6 +1308,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     for (const auto& item : session->agents) {
         QuarantineAgentSamples(*session, item.first);
     }
+    episode_metrics_.AddExcluded(session->agents.size(), reason);
     session->episode_state = SessionManager::EpisodeState::Aborted;
     session->episode_history[req->episode_id()] =
         SessionManager::EpisodeState::Aborted;
@@ -1344,15 +1361,9 @@ int64_t MazeServiceImpl::EstimateCachedBytes() {
 
 grpc::Status MazeServiceImpl::GetAIServerStatus(
     grpc::ServerContext*,
-    const maze::AIServerStatusReq* req,
+    const maze::AIServerStatusReq*,
     maze::AIServerStatusRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!req->run_id().empty() &&
-        req->run_id() != config_.sample_output.run_id) {
-        return grpc::Status(
-            grpc::StatusCode::INVALID_ARGUMENT,
-            "run_id does not match AIServer");
-    }
 
     auto sender = sample_sender_.GetSnapshot();
     maze::AIServerState state = state_.load();
@@ -1364,8 +1375,7 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     int64_t cached_samples = CountCachedSamples();
     int64_t cached_fragments = CountCachedFragments();
 
-    rsp->set_protocol_version(2);
-    rsp->set_run_id(config_.sample_output.run_id);
+    rsp->set_protocol_version(3);
     rsp->set_aiserver_id(config_.sample_output.aiserver_id);
     rsp->set_producer_instance_id(producer_instance_id_);
     rsp->set_state(state);
@@ -1428,5 +1438,8 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
         quarantined_sample_count_);
     rsp->set_quarantined_fragment_count(
         quarantined_fragment_count_);
+    rsp->set_workload_mode(
+        WorkloadModeForRunMode(config_.server.run_mode));
+    episode_metrics_.Fill(rsp->mutable_episode_metrics());
     return grpc::Status::OK;
 }

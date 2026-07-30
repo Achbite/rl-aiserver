@@ -52,14 +52,20 @@ public:
         // --- 奖励辅助状态 ---
         std::unordered_set<int> visited;        // 已访问网格集合（key = gy * cols + gx），用于探索奖励
         std::deque<int>         recent_positions; // 最近 N 步位置历史（滑动窗口），用于徘徊惩罚
+        double episode_return = 0.0;
+        int64_t episode_transition_count = 0;
+        maze::TerminationReason final_termination_reason =
+            maze::TERMINATION_REASON_UNSPECIFIED;
+        std::unordered_map<std::string, double> reward_component_sums;
     };
 
     // ---- 单个会话 ----
     struct Session {
         int session_id = 0;
-        std::string run_id;
         std::string client_id;
         std::string env_id;
+        maze::WorkloadMode workload_mode =
+            maze::WORKLOAD_MODE_UNSPECIFIED;
         std::unordered_map<int, AgentRuntime> agents;   // agent_id → 运行时状态
         int current_episode_id = 0;                     // 当前 Episode ID
         EpisodeState episode_state = EpisodeState::None;

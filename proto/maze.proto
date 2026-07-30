@@ -22,11 +22,13 @@ enum TerminationReason {
 }
 
 enum PushResult {
+    reserved 4;
+    reserved "PUSH_RESULT_REJECTED_RUN";
+
     PUSH_RESULT_UNSPECIFIED = 0;
     PUSH_RESULT_ACCEPTED = 1;
     PUSH_RESULT_DUPLICATE = 2;
     PUSH_RESULT_REJECTED_CAPACITY = 3;
-    PUSH_RESULT_REJECTED_RUN = 4;
     PUSH_RESULT_REJECTED_INVALID = 5;
 }
 
@@ -106,24 +108,35 @@ enum ModelAckResult {
     MODEL_ACK_RESULT_REJECTED = 4;
 }
 
+enum WorkloadMode {
+    WORKLOAD_MODE_UNSPECIFIED = 0;
+    WORKLOAD_MODE_TRAINING = 1;
+    WORKLOAD_MODE_INFERENCE_SMOKE = 2;
+    WORKLOAD_MODE_MODEL_EVALUATION = 3;
+    WORKLOAD_MODE_ASTAR_TEST = 4;
+}
+
 message Vec2 {
     float x = 1;
     float y = 2;
 }
 
 message InitReq {
+    reserved 6;
+    reserved "run_id";
+
     int32 agent_num = 1;
     Vec2 map_size = 2;
     Vec2 start_pos = 3;
     Vec2 end_pos = 4;
     int32 session_id = 5;
-    string run_id = 6;
     string client_id = 7;
     string env_id = 8;
     float grid_size = 9;
     int32 grid_cols = 10;
     int32 grid_rows = 11;
     Vec2 end_grid = 12;
+    WorkloadMode workload_mode = 13;
 }
 
 message InitRsp {
@@ -133,7 +146,9 @@ message InitRsp {
 }
 
 message BeginEpisodeReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     int32 session_id = 2;
     int32 episode_id = 3;
 }
@@ -154,10 +169,12 @@ message AgentState {
 }
 
 message UpdateReq {
+    reserved 4;
+    reserved "run_id";
+
     repeated AgentState agents = 1;
     int32 frame_id = 2;
     int32 session_id = 3;
-    string run_id = 4;
     int32 episode_id = 5;
 }
 
@@ -172,9 +189,11 @@ message UpdateRsp {
 }
 
 message EpisodeEndReq {
+    reserved 3;
+    reserved "run_id";
+
     int32 episode_id = 1;
     int32 session_id = 2;
-    string run_id = 3;
 }
 
 message EpisodeEndRsp {
@@ -184,7 +203,9 @@ message EpisodeEndRsp {
 }
 
 message AbortEpisodeReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     int32 session_id = 2;
     int32 episode_id = 3;
     TerminationReason reason = 4;
@@ -208,12 +229,14 @@ message Sample {
 }
 
 message SampleBatch {
+    reserved 6;
+    reserved "run_id";
+
     int32 episode_id = 1;
     int32 agent_id = 2;
     repeated Sample samples = 3;
     bool is_episode_end = 4;
     int32 session_id = 5;
-    string run_id = 6;
     string aiserver_id = 7;
     string env_id = 8;
     int32 fragment_id = 9;
@@ -252,9 +275,11 @@ message PushSamplesRsp {
 }
 
 message GetBatchReq {
+    reserved 3;
+    reserved "run_id";
+
     int32 batch_size = 1;
     int32 timeout_ms = 2;
-    string run_id = 3;
     string consumer_instance_id = 4;
     int32 lease_timeout_ms = 5;
     int32 behavior_model_version = 6;
@@ -279,7 +304,9 @@ message GetBatchRsp {
 }
 
 message AckBatchReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     string consumer_instance_id = 2;
     string delivery_id = 3;
     AckDisposition disposition = 4;
@@ -287,14 +314,18 @@ message AckBatchReq {
 }
 
 message NackBatchReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     string consumer_instance_id = 2;
     string delivery_id = 3;
     string reason = 4;
 }
 
 message RenewLeaseReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     string consumer_instance_id = 2;
     string delivery_id = 3;
     int32 lease_timeout_ms = 4;
@@ -313,7 +344,8 @@ message DeliveryRsp {
 }
 
 message DistributorStatusReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
 }
 
 message BehaviorVersionQueueStatus {
@@ -331,6 +363,9 @@ message BehaviorVersionQueueStatus {
 }
 
 message DistributorStatusRsp {
+    reserved 10;
+    reserved "run_id";
+
     int64 push_sample_count = 1;
     int64 consume_sample_count = 2;
     int64 queue_size = 3;
@@ -340,7 +375,6 @@ message DistributorStatusRsp {
     int64 latest_push_ts_ms = 7;
     int64 latest_consume_ts_ms = 8;
     uint32 protocol_version = 9;
-    string run_id = 10;
     string distributor_instance_id = 11;
     bool ready = 12;
     int64 push_attempt_count = 13;
@@ -380,12 +414,38 @@ message DistributorStatusRsp {
 }
 
 message AIServerStatusReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+}
+
+message TerminationReasonCount {
+    TerminationReason reason = 1;
+    int64 count = 2;
+}
+
+message EpisodeMetrics {
+    int32 configured_window_size = 1;
+    int64 completed_episode_count = 2;
+    int64 completed_agent_count = 3;
+    double mean_agent_return = 4;
+    double min_agent_return = 5;
+    double max_agent_return = 6;
+    int64 agent_success_count = 7;
+    double agent_success_rate = 8;
+    int64 environment_any_success_count = 9;
+    double environment_any_success_rate = 10;
+    int64 environment_all_success_count = 11;
+    double environment_all_success_rate = 12;
+    int64 excluded_episode_count = 13;
+    repeated TerminationReasonCount termination_counts = 14;
+    map<string, double> reward_component_mean = 15;
 }
 
 message AIServerStatusRsp {
+    reserved 2;
+    reserved "run_id";
+
     uint32 protocol_version = 1;
-    string run_id = 2;
     string aiserver_id = 3;
     string producer_instance_id = 4;
     AIServerState state = 5;
@@ -428,12 +488,16 @@ message AIServerStatusRsp {
     int64 model_switch_count = 42;
     int64 quarantined_sample_count = 43;
     int64 quarantined_fragment_count = 44;
+    WorkloadMode workload_mode = 45;
+    EpisodeMetrics episode_metrics = 46;
 }
 
 message ModelArtifactManifest {
+    reserved 3;
+    reserved "run_id";
+
     uint32 schema_version = 1;
     string contract_version = 2;
-    string run_id = 3;
     int32 model_version = 4;
     string artifact_uri = 5;
     string model_file = 6;
@@ -460,7 +524,9 @@ message RegisterModelRsp {
 }
 
 message GetModelManifestReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     int32 model_version = 2;
     string aiserver_id = 3;
     bool latest = 4;
@@ -474,20 +540,26 @@ message GetModelManifestRsp {
 }
 
 message DownloadModelReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     int32 model_version = 2;
     string aiserver_id = 3;
 }
 
 message ModelChunk {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     int32 model_version = 2;
     int64 offset = 3;
     bytes data = 4;
 }
 
 message AckModelReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
+
     string aiserver_id = 2;
     int32 model_version = 3;
     string sha256 = 4;
@@ -503,12 +575,15 @@ message AckModelRsp {
 }
 
 message ModelDistributorStatusReq {
-    string run_id = 1;
+    reserved 1;
+    reserved "run_id";
 }
 
 message ModelDistributorStatusRsp {
+    reserved 2;
+    reserved "run_id";
+
     uint32 protocol_version = 1;
-    string run_id = 2;
     string distributor_instance_id = 3;
     bool ready = 4;
     int64 registered_model_count = 5;

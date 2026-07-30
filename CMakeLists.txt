@@ -24,6 +24,7 @@ set(SOURCES
     src/ai/onnx_inferencer.cpp
     src/model/model_manifest.cpp
     src/model/model_distributor_client.cpp
+    src/metrics/episode_metrics.cpp
     src/sample/sample_sender.cpp
 )
 
@@ -118,4 +119,19 @@ if(BUILD_TESTING)
     )
     add_test(NAME fragment_boundary_contract
              COMMAND fragment_boundary_test)
+
+    add_executable(episode_metrics_test
+        tests/episode_metrics_test.cpp
+        src/metrics/episode_metrics.cpp
+        ${PROTO_GEN_DIR}/maze.pb.cc
+    )
+    target_include_directories(episode_metrics_test PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROTO_GEN_DIR}
+        ${Protobuf_INCLUDE_DIRS}
+    )
+    target_link_libraries(episode_metrics_test PRIVATE
+        protobuf::libprotobuf
+    )
+    add_test(NAME episode_metrics_contract COMMAND episode_metrics_test)
 endif()

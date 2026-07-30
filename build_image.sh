@@ -106,7 +106,7 @@ if smoke.get("package") != "rl-smoke-model" or smoke.get("version") != sys.argv[
     raise SystemExit("Smoke model artifact identity is invalid")
 if smoke.get("contract_version") != contract["version"]:
     raise SystemExit("Smoke model artifact uses a different contract version")
-if smoke.get("run_id") != "inference-smoke-fixture" or not smoke.get("ready"):
+if not smoke.get("ready"):
     raise SystemExit("Smoke model manifest identity is invalid")
 model_path = smoke_path.parent / smoke.get("model_file", "")
 if not model_path.is_file():

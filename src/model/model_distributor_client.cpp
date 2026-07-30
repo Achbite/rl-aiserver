@@ -93,14 +93,16 @@ bool ModelDistributorClient::Download(
     std::string& local_path,
     std::string& error) {
     namespace fs = std::filesystem;
-    const fs::path run_dir = fs::path(model_.p2p_dir) / source.run_id();
+    const fs::path incoming_dir =
+        fs::path(model_.local_train_dir) / "incoming";
     std::error_code fs_error;
-    fs::create_directories(run_dir, fs_error);
+    fs::create_directories(incoming_dir, fs_error);
     if (fs_error) {
-        error = "cannot create model cache: " + fs_error.message();
+        error = "cannot create incoming model directory: " +
+                fs_error.message();
         return false;
     }
-    const fs::path final_path = run_dir / source.model_file();
+    const fs::path final_path = incoming_dir / source.model_file();
     const fs::path temporary =
         final_path.string() + ".tmp." + std::to_string(::getpid());
     const int descriptor = ::open(
@@ -111,7 +113,6 @@ bool ModelDistributorClient::Download(
     }
 
     maze::DownloadModelReq request;
-    request.set_run_id(source.run_id());
     request.set_model_version(source.model_version());
     request.set_aiserver_id(aiserver_id);
     grpc::ClientContext context;
@@ -124,8 +125,7 @@ bool ModelDistributorClient::Download(
     maze::ModelChunk chunk;
     bool write_ok = true;
     while (reader->Read(&chunk)) {
-        if (chunk.run_id() != source.run_id() ||
-            chunk.model_version() != source.model_version() ||
+        if (chunk.model_version() != source.model_version() ||
             chunk.offset() != expected_offset ||
             !WriteAll(descriptor, chunk.data().data(), chunk.data().size())) {
             write_ok = false;
@@ -165,14 +165,12 @@ bool ModelDistributorClient::Download(
     return true;
 }
 
-bool ModelDistributorClient::Fetch(const std::string& run_id,
-                                   const std::string& aiserver_id,
+bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
                                    int model_version,
                                    bool latest,
                                    ModelManifest& manifest,
-                                   std::string& error) {
+    std::string& error) {
     maze::GetModelManifestReq request;
-    request.set_run_id(run_id);
     request.set_model_version(model_version);
     request.set_aiserver_id(aiserver_id);
     request.set_latest(latest);
@@ -191,10 +189,8 @@ bool ModelDistributorClient::Fetch(const std::string& run_id,
         return false;
     }
     const auto& source = response.manifest();
-    if (source.run_id() != run_id ||
-        !ValidateManifest(
+    if (!ValidateManifest(
             source, latest ? -1 : model_version, error)) {
-        if (error.empty()) error = "model manifest run_id mismatch";
         return false;
     }
 
@@ -202,7 +198,6 @@ bool ModelDistributorClient::Fetch(const std::string& run_id,
     if (!Download(source, aiserver_id, local_path, error)) return false;
     manifest.schema_version = static_cast<int>(source.schema_version());
     manifest.contract_version = source.contract_version();
-    manifest.run_id = source.run_id();
     manifest.model_version = source.model_version();
     manifest.artifact_uri = source.artifact_uri();
     manifest.model_file = source.model_file();
@@ -222,31 +217,27 @@ bool ModelDistributorClient::Fetch(const std::string& run_id,
 }
 
 bool ModelDistributorClient::FetchLatest(
-    const std::string& run_id,
     const std::string& aiserver_id,
     ModelManifest& manifest,
     std::string& error) {
-    return Fetch(run_id, aiserver_id, -1, true, manifest, error);
+    return Fetch(aiserver_id, -1, true, manifest, error);
 }
 
 bool ModelDistributorClient::FetchVersion(
-    const std::string& run_id,
     const std::string& aiserver_id,
     int model_version,
     ModelManifest& manifest,
     std::string& error) {
     return Fetch(
-        run_id, aiserver_id, model_version, false, manifest, error);
+        aiserver_id, model_version, false, manifest, error);
 }
 
 bool ModelDistributorClient::GetLatestIdentity(
-    const std::string& run_id,
     const std::string& aiserver_id,
     int& model_version,
     std::string& checksum,
     std::string& error) {
     maze::GetModelManifestReq request;
-    request.set_run_id(run_id);
     request.set_aiserver_id(aiserver_id);
     request.set_latest(true);
     maze::GetModelManifestRsp response;
@@ -264,9 +255,7 @@ bool ModelDistributorClient::GetLatestIdentity(
         return false;
     }
     const auto& source = response.manifest();
-    if (source.run_id() != run_id ||
-        !ValidateManifest(source, -1, error)) {
-        if (error.empty()) error = "model manifest run_id mismatch";
+    if (!ValidateManifest(source, -1, error)) {
         return false;
     }
     model_version = source.model_version();
@@ -275,13 +264,11 @@ bool ModelDistributorClient::GetLatestIdentity(
 }
 
 bool ModelDistributorClient::Ack(const ModelManifest& manifest,
-                                 const std::string& run_id,
                                  const std::string& aiserver_id,
                                  maze::ModelLoadStatus load_status,
                                  const std::string& message,
                                  std::string& error) {
     maze::AckModelReq request;
-    request.set_run_id(run_id);
     request.set_aiserver_id(aiserver_id);
     request.set_model_version(manifest.model_version);
     request.set_sha256(manifest.sha256);
@@ -301,5 +288,61 @@ bool ModelDistributorClient::Ack(const ModelManifest& manifest,
                     : "model ACK RPC failed: " + status.error_message();
         return false;
     }
+    return true;
+}
+
+bool ModelDistributorClient::Promote(
+    ModelManifest& manifest,
+    std::string& previous_path,
+    std::string& error) {
+    namespace fs = std::filesystem;
+    const fs::path source = manifest.model_path;
+    const fs::path root = model_.local_train_dir;
+    const fs::path active_dir = root / "active";
+    const fs::path previous_dir = root / "previous";
+    const fs::path active_path = active_dir / "model.onnx";
+    const fs::path previous_model = previous_dir / "model.onnx";
+    std::error_code fs_error;
+
+    if (!fs::is_regular_file(source, fs_error) || fs_error) {
+        error = "incoming model does not exist";
+        return false;
+    }
+    fs::create_directories(active_dir, fs_error);
+    if (fs_error) {
+        error = "cannot create active model directory: " +
+                fs_error.message();
+        return false;
+    }
+    fs::create_directories(previous_dir, fs_error);
+    if (fs_error) {
+        error = "cannot create previous model directory: " +
+                fs_error.message();
+        return false;
+    }
+
+    fs::remove(previous_model, fs_error);
+    fs_error.clear();
+    previous_path.clear();
+    if (fs::exists(active_path, fs_error)) {
+        fs::rename(active_path, previous_model, fs_error);
+        if (fs_error) {
+            error = "cannot preserve previous model: " +
+                    fs_error.message();
+            return false;
+        }
+        previous_path = previous_model.string();
+    }
+
+    fs::rename(source, active_path, fs_error);
+    if (fs_error) {
+        if (!previous_path.empty()) {
+            std::error_code rollback_error;
+            fs::rename(previous_model, active_path, rollback_error);
+        }
+        error = "cannot promote incoming model: " + fs_error.message();
+        return false;
+    }
+    manifest.model_path = active_path.string();
     return true;
 }

@@ -23,6 +23,7 @@
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/arena.h>
 #include <google/protobuf/arenastring.h>
+#include <google/protobuf/generated_message_bases.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/metadata_lite.h>
 #include <google/protobuf/generated_message_reflection.h>
@@ -100,6 +101,12 @@ extern EpisodeEndRspDefaultTypeInternal _EpisodeEndRsp_default_instance_;
 class EpisodeLifecycleRsp;
 struct EpisodeLifecycleRspDefaultTypeInternal;
 extern EpisodeLifecycleRspDefaultTypeInternal _EpisodeLifecycleRsp_default_instance_;
+class EpisodeMetrics;
+struct EpisodeMetricsDefaultTypeInternal;
+extern EpisodeMetricsDefaultTypeInternal _EpisodeMetrics_default_instance_;
+class EpisodeMetrics_RewardComponentMeanEntry_DoNotUse;
+struct EpisodeMetrics_RewardComponentMeanEntry_DoNotUseDefaultTypeInternal;
+extern EpisodeMetrics_RewardComponentMeanEntry_DoNotUseDefaultTypeInternal _EpisodeMetrics_RewardComponentMeanEntry_DoNotUse_default_instance_;
 class GetBatchReq;
 struct GetBatchReqDefaultTypeInternal;
 extern GetBatchReqDefaultTypeInternal _GetBatchReq_default_instance_;
@@ -157,6 +164,9 @@ extern SampleResponseDefaultTypeInternal _SampleResponse_default_instance_;
 class Sample_RewardDetailsEntry_DoNotUse;
 struct Sample_RewardDetailsEntry_DoNotUseDefaultTypeInternal;
 extern Sample_RewardDetailsEntry_DoNotUseDefaultTypeInternal _Sample_RewardDetailsEntry_DoNotUse_default_instance_;
+class TerminationReasonCount;
+struct TerminationReasonCountDefaultTypeInternal;
+extern TerminationReasonCountDefaultTypeInternal _TerminationReasonCount_default_instance_;
 class UpdateReq;
 struct UpdateReqDefaultTypeInternal;
 extern UpdateReqDefaultTypeInternal _UpdateReq_default_instance_;
@@ -185,6 +195,8 @@ template<> ::maze::DownloadModelReq* Arena::CreateMaybeMessage<::maze::DownloadM
 template<> ::maze::EpisodeEndReq* Arena::CreateMaybeMessage<::maze::EpisodeEndReq>(Arena*);
 template<> ::maze::EpisodeEndRsp* Arena::CreateMaybeMessage<::maze::EpisodeEndRsp>(Arena*);
 template<> ::maze::EpisodeLifecycleRsp* Arena::CreateMaybeMessage<::maze::EpisodeLifecycleRsp>(Arena*);
+template<> ::maze::EpisodeMetrics* Arena::CreateMaybeMessage<::maze::EpisodeMetrics>(Arena*);
+template<> ::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse* Arena::CreateMaybeMessage<::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse>(Arena*);
 template<> ::maze::GetBatchReq* Arena::CreateMaybeMessage<::maze::GetBatchReq>(Arena*);
 template<> ::maze::GetBatchRsp* Arena::CreateMaybeMessage<::maze::GetBatchRsp>(Arena*);
 template<> ::maze::GetModelManifestReq* Arena::CreateMaybeMessage<::maze::GetModelManifestReq>(Arena*);
@@ -204,6 +216,7 @@ template<> ::maze::Sample* Arena::CreateMaybeMessage<::maze::Sample>(Arena*);
 template<> ::maze::SampleBatch* Arena::CreateMaybeMessage<::maze::SampleBatch>(Arena*);
 template<> ::maze::SampleResponse* Arena::CreateMaybeMessage<::maze::SampleResponse>(Arena*);
 template<> ::maze::Sample_RewardDetailsEntry_DoNotUse* Arena::CreateMaybeMessage<::maze::Sample_RewardDetailsEntry_DoNotUse>(Arena*);
+template<> ::maze::TerminationReasonCount* Arena::CreateMaybeMessage<::maze::TerminationReasonCount>(Arena*);
 template<> ::maze::UpdateReq* Arena::CreateMaybeMessage<::maze::UpdateReq>(Arena*);
 template<> ::maze::UpdateRsp* Arena::CreateMaybeMessage<::maze::UpdateRsp>(Arena*);
 template<> ::maze::Vec2* Arena::CreateMaybeMessage<::maze::Vec2>(Arena*);
@@ -272,7 +285,6 @@ enum PushResult : int {
   PUSH_RESULT_ACCEPTED = 1,
   PUSH_RESULT_DUPLICATE = 2,
   PUSH_RESULT_REJECTED_CAPACITY = 3,
-  PUSH_RESULT_REJECTED_RUN = 4,
   PUSH_RESULT_REJECTED_INVALID = 5,
   PushResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   PushResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
@@ -572,6 +584,34 @@ inline bool ModelAckResult_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ModelAckResult>(
     ModelAckResult_descriptor(), name, value);
 }
+enum WorkloadMode : int {
+  WORKLOAD_MODE_UNSPECIFIED = 0,
+  WORKLOAD_MODE_TRAINING = 1,
+  WORKLOAD_MODE_INFERENCE_SMOKE = 2,
+  WORKLOAD_MODE_MODEL_EVALUATION = 3,
+  WORKLOAD_MODE_ASTAR_TEST = 4,
+  WorkloadMode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  WorkloadMode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool WorkloadMode_IsValid(int value);
+constexpr WorkloadMode WorkloadMode_MIN = WORKLOAD_MODE_UNSPECIFIED;
+constexpr WorkloadMode WorkloadMode_MAX = WORKLOAD_MODE_ASTAR_TEST;
+constexpr int WorkloadMode_ARRAYSIZE = WorkloadMode_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* WorkloadMode_descriptor();
+template<typename T>
+inline const std::string& WorkloadMode_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, WorkloadMode>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function WorkloadMode_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    WorkloadMode_descriptor(), enum_t_value);
+}
+inline bool WorkloadMode_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, WorkloadMode* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<WorkloadMode>(
+    WorkloadMode_descriptor(), name, value);
+}
 // ===================================================================
 
 class Vec2 final :
@@ -854,7 +894,6 @@ class InitReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 6,
     kClientIdFieldNumber = 7,
     kEnvIdFieldNumber = 8,
     kMapSizeFieldNumber = 2,
@@ -866,21 +905,8 @@ class InitReq final :
     kGridSizeFieldNumber = 9,
     kGridColsFieldNumber = 10,
     kGridRowsFieldNumber = 11,
+    kWorkloadModeFieldNumber = 13,
   };
-  // string run_id = 6;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string client_id = 7;
   void clear_client_id();
   const std::string& client_id() const;
@@ -1026,6 +1052,15 @@ class InitReq final :
   void _internal_set_grid_rows(int32_t value);
   public:
 
+  // .maze.WorkloadMode workload_mode = 13;
+  void clear_workload_mode();
+  ::maze::WorkloadMode workload_mode() const;
+  void set_workload_mode(::maze::WorkloadMode value);
+  private:
+  ::maze::WorkloadMode _internal_workload_mode() const;
+  void _internal_set_workload_mode(::maze::WorkloadMode value);
+  public:
+
   // @@protoc_insertion_point(class_scope:maze.InitReq)
  private:
   class _Internal;
@@ -1034,7 +1069,6 @@ class InitReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr client_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr env_id_;
     ::maze::Vec2* map_size_;
@@ -1046,6 +1080,7 @@ class InitReq final :
     float grid_size_;
     int32_t grid_cols_;
     int32_t grid_rows_;
+    int workload_mode_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1349,24 +1384,9 @@ class BeginEpisodeReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kSessionIdFieldNumber = 2,
     kEpisodeIdFieldNumber = 3,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // int32 session_id = 2;
   void clear_session_id();
   int32_t session_id() const;
@@ -1393,7 +1413,6 @@ class BeginEpisodeReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     int32_t session_id_;
     int32_t episode_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -1925,7 +1944,6 @@ class UpdateReq final :
 
   enum : int {
     kAgentsFieldNumber = 1,
-    kRunIdFieldNumber = 4,
     kFrameIdFieldNumber = 2,
     kSessionIdFieldNumber = 3,
     kEpisodeIdFieldNumber = 5,
@@ -1947,20 +1965,6 @@ class UpdateReq final :
   ::maze::AgentState* add_agents();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::AgentState >&
       agents() const;
-
-  // string run_id = 4;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
 
   // int32 frame_id = 2;
   void clear_frame_id();
@@ -1998,7 +2002,6 @@ class UpdateReq final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::AgentState > agents_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     int32_t frame_id_;
     int32_t session_id_;
     int32_t episode_id_;
@@ -2457,24 +2460,9 @@ class EpisodeEndReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 3,
     kEpisodeIdFieldNumber = 1,
     kSessionIdFieldNumber = 2,
   };
-  // string run_id = 3;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // int32 episode_id = 1;
   void clear_episode_id();
   int32_t episode_id() const;
@@ -2501,7 +2489,6 @@ class EpisodeEndReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     int32_t episode_id_;
     int32_t session_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2807,26 +2794,11 @@ class AbortEpisodeReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kMessageFieldNumber = 5,
     kSessionIdFieldNumber = 2,
     kEpisodeIdFieldNumber = 3,
     kReasonFieldNumber = 4,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string message = 5;
   void clear_message();
   const std::string& message() const;
@@ -2876,7 +2848,6 @@ class AbortEpisodeReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     int32_t session_id_;
     int32_t episode_id_;
@@ -3311,7 +3282,6 @@ class SampleBatch final :
 
   enum : int {
     kSamplesFieldNumber = 3,
-    kRunIdFieldNumber = 6,
     kAiserverIdFieldNumber = 7,
     kEnvIdFieldNumber = 8,
     kProducerInstanceIdFieldNumber = 12,
@@ -3349,20 +3319,6 @@ class SampleBatch final :
   ::maze::Sample* add_samples();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::Sample >&
       samples() const;
-
-  // string run_id = 6;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
 
   // string aiserver_id = 7;
   void clear_aiserver_id();
@@ -3569,7 +3525,6 @@ class SampleBatch final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::Sample > samples_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr aiserver_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr env_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr producer_instance_id_;
@@ -4160,7 +4115,6 @@ class GetBatchReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 3,
     kConsumerInstanceIdFieldNumber = 4,
     kBatchSizeFieldNumber = 1,
     kTimeoutMsFieldNumber = 2,
@@ -4168,20 +4122,6 @@ class GetBatchReq final :
     kBehaviorModelVersionFieldNumber = 6,
     kSelectionPolicyFieldNumber = 7,
   };
-  // string run_id = 3;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string consumer_instance_id = 4;
   void clear_consumer_instance_id();
   const std::string& consumer_instance_id() const;
@@ -4249,7 +4189,6 @@ class GetBatchReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr consumer_instance_id_;
     int32_t batch_size_;
     int32_t timeout_ms_;
@@ -4699,26 +4638,11 @@ class AckBatchReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kConsumerInstanceIdFieldNumber = 2,
     kDeliveryIdFieldNumber = 3,
     kTrainUpdateIdFieldNumber = 5,
     kDispositionFieldNumber = 4,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string consumer_instance_id = 2;
   void clear_consumer_instance_id();
   const std::string& consumer_instance_id() const;
@@ -4778,7 +4702,6 @@ class AckBatchReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr consumer_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr train_update_id_;
@@ -4911,25 +4834,10 @@ class NackBatchReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kConsumerInstanceIdFieldNumber = 2,
     kDeliveryIdFieldNumber = 3,
     kReasonFieldNumber = 4,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string consumer_instance_id = 2;
   void clear_consumer_instance_id();
   const std::string& consumer_instance_id() const;
@@ -4980,7 +4888,6 @@ class NackBatchReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr consumer_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr reason_;
@@ -5112,25 +5019,10 @@ class RenewLeaseReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kConsumerInstanceIdFieldNumber = 2,
     kDeliveryIdFieldNumber = 3,
     kLeaseTimeoutMsFieldNumber = 4,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string consumer_instance_id = 2;
   void clear_consumer_instance_id();
   const std::string& consumer_instance_id() const;
@@ -5176,7 +5068,6 @@ class RenewLeaseReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr consumer_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
     int32_t lease_timeout_ms_;
@@ -5439,10 +5330,9 @@ class DeliveryRsp final :
 // -------------------------------------------------------------------
 
 class DistributorStatusReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.DistributorStatusReq) */ {
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:maze.DistributorStatusReq) */ {
  public:
   inline DistributorStatusReq() : DistributorStatusReq(nullptr) {}
-  ~DistributorStatusReq() override;
   explicit PROTOBUF_CONSTEXPR DistributorStatusReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   DistributorStatusReq(const DistributorStatusReq& from);
@@ -5515,29 +5405,15 @@ class DistributorStatusReq final :
   DistributorStatusReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
     return CreateMaybeMessage<DistributorStatusReq>(arena);
   }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const DistributorStatusReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const DistributorStatusReq& from) {
-    DistributorStatusReq::MergeImpl(*this, from);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const DistributorStatusReq& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(*this, from);
   }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const DistributorStatusReq& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
   public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(DistributorStatusReq* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
@@ -5558,23 +5434,6 @@ class DistributorStatusReq final :
 
   // accessors -------------------------------------------------------
 
-  enum : int {
-    kRunIdFieldNumber = 1,
-  };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // @@protoc_insertion_point(class_scope:maze.DistributorStatusReq)
  private:
   class _Internal;
@@ -5583,10 +5442,7 @@ class DistributorStatusReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
-  union { Impl_ _impl_; };
   friend struct ::TableStruct_maze_2eproto;
 };
 // -------------------------------------------------------------------
@@ -5971,7 +5827,6 @@ class DistributorStatusRsp final :
 
   enum : int {
     kBehaviorVersionsFieldNumber = 41,
-    kRunIdFieldNumber = 10,
     kDistributorInstanceIdFieldNumber = 11,
     kLastErrorFieldNumber = 40,
     kPushSampleCountFieldNumber = 1,
@@ -6034,20 +5889,6 @@ class DistributorStatusRsp final :
   ::maze::BehaviorVersionQueueStatus* add_behavior_versions();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::BehaviorVersionQueueStatus >&
       behavior_versions() const;
-
-  // string run_id = 10;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
 
   // string distributor_instance_id = 11;
   void clear_distributor_instance_id();
@@ -6464,7 +6305,6 @@ class DistributorStatusRsp final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::BehaviorVersionQueueStatus > behavior_versions_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr distributor_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
     int64_t push_sample_count_;
@@ -6517,10 +6357,9 @@ class DistributorStatusRsp final :
 // -------------------------------------------------------------------
 
 class AIServerStatusReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.AIServerStatusReq) */ {
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:maze.AIServerStatusReq) */ {
  public:
   inline AIServerStatusReq() : AIServerStatusReq(nullptr) {}
-  ~AIServerStatusReq() override;
   explicit PROTOBUF_CONSTEXPR AIServerStatusReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   AIServerStatusReq(const AIServerStatusReq& from);
@@ -6593,29 +6432,15 @@ class AIServerStatusReq final :
   AIServerStatusReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
     return CreateMaybeMessage<AIServerStatusReq>(arena);
   }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const AIServerStatusReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const AIServerStatusReq& from) {
-    AIServerStatusReq::MergeImpl(*this, from);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const AIServerStatusReq& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(*this, from);
   }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const AIServerStatusReq& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
   public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(AIServerStatusReq* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
@@ -6636,23 +6461,6 @@ class AIServerStatusReq final :
 
   // accessors -------------------------------------------------------
 
-  enum : int {
-    kRunIdFieldNumber = 1,
-  };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // @@protoc_insertion_point(class_scope:maze.AIServerStatusReq)
  private:
   class _Internal;
@@ -6661,7 +6469,515 @@ class AIServerStatusReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
+  };
+  friend struct ::TableStruct_maze_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TerminationReasonCount final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.TerminationReasonCount) */ {
+ public:
+  inline TerminationReasonCount() : TerminationReasonCount(nullptr) {}
+  ~TerminationReasonCount() override;
+  explicit PROTOBUF_CONSTEXPR TerminationReasonCount(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TerminationReasonCount(const TerminationReasonCount& from);
+  TerminationReasonCount(TerminationReasonCount&& from) noexcept
+    : TerminationReasonCount() {
+    *this = ::std::move(from);
+  }
+
+  inline TerminationReasonCount& operator=(const TerminationReasonCount& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TerminationReasonCount& operator=(TerminationReasonCount&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TerminationReasonCount& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TerminationReasonCount* internal_default_instance() {
+    return reinterpret_cast<const TerminationReasonCount*>(
+               &_TerminationReasonCount_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    27;
+
+  friend void swap(TerminationReasonCount& a, TerminationReasonCount& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TerminationReasonCount* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TerminationReasonCount* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TerminationReasonCount* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TerminationReasonCount>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TerminationReasonCount& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const TerminationReasonCount& from) {
+    TerminationReasonCount::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TerminationReasonCount* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "maze.TerminationReasonCount";
+  }
+  protected:
+  explicit TerminationReasonCount(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCountFieldNumber = 2,
+    kReasonFieldNumber = 1,
+  };
+  // int64 count = 2;
+  void clear_count();
+  int64_t count() const;
+  void set_count(int64_t value);
+  private:
+  int64_t _internal_count() const;
+  void _internal_set_count(int64_t value);
+  public:
+
+  // .maze.TerminationReason reason = 1;
+  void clear_reason();
+  ::maze::TerminationReason reason() const;
+  void set_reason(::maze::TerminationReason value);
+  private:
+  ::maze::TerminationReason _internal_reason() const;
+  void _internal_set_reason(::maze::TerminationReason value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:maze.TerminationReasonCount)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    int64_t count_;
+    int reason_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_maze_2eproto;
+};
+// -------------------------------------------------------------------
+
+class EpisodeMetrics_RewardComponentMeanEntry_DoNotUse : public ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<EpisodeMetrics_RewardComponentMeanEntry_DoNotUse, 
+    std::string, double,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_DOUBLE> {
+public:
+  typedef ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<EpisodeMetrics_RewardComponentMeanEntry_DoNotUse, 
+    std::string, double,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_DOUBLE> SuperType;
+  EpisodeMetrics_RewardComponentMeanEntry_DoNotUse();
+  explicit PROTOBUF_CONSTEXPR EpisodeMetrics_RewardComponentMeanEntry_DoNotUse(
+      ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  explicit EpisodeMetrics_RewardComponentMeanEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void MergeFrom(const EpisodeMetrics_RewardComponentMeanEntry_DoNotUse& other);
+  static const EpisodeMetrics_RewardComponentMeanEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const EpisodeMetrics_RewardComponentMeanEntry_DoNotUse*>(&_EpisodeMetrics_RewardComponentMeanEntry_DoNotUse_default_instance_); }
+  static bool ValidateKey(std::string* s) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(s->data(), static_cast<int>(s->size()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE, "maze.EpisodeMetrics.RewardComponentMeanEntry.key");
+ }
+  static bool ValidateValue(void*) { return true; }
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  friend struct ::TableStruct_maze_2eproto;
+};
+
+// -------------------------------------------------------------------
+
+class EpisodeMetrics final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.EpisodeMetrics) */ {
+ public:
+  inline EpisodeMetrics() : EpisodeMetrics(nullptr) {}
+  ~EpisodeMetrics() override;
+  explicit PROTOBUF_CONSTEXPR EpisodeMetrics(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  EpisodeMetrics(const EpisodeMetrics& from);
+  EpisodeMetrics(EpisodeMetrics&& from) noexcept
+    : EpisodeMetrics() {
+    *this = ::std::move(from);
+  }
+
+  inline EpisodeMetrics& operator=(const EpisodeMetrics& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline EpisodeMetrics& operator=(EpisodeMetrics&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const EpisodeMetrics& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const EpisodeMetrics* internal_default_instance() {
+    return reinterpret_cast<const EpisodeMetrics*>(
+               &_EpisodeMetrics_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    29;
+
+  friend void swap(EpisodeMetrics& a, EpisodeMetrics& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(EpisodeMetrics* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(EpisodeMetrics* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  EpisodeMetrics* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<EpisodeMetrics>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const EpisodeMetrics& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const EpisodeMetrics& from) {
+    EpisodeMetrics::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EpisodeMetrics* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "maze.EpisodeMetrics";
+  }
+  protected:
+  explicit EpisodeMetrics(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTerminationCountsFieldNumber = 14,
+    kRewardComponentMeanFieldNumber = 15,
+    kCompletedEpisodeCountFieldNumber = 2,
+    kCompletedAgentCountFieldNumber = 3,
+    kMeanAgentReturnFieldNumber = 4,
+    kMinAgentReturnFieldNumber = 5,
+    kMaxAgentReturnFieldNumber = 6,
+    kAgentSuccessCountFieldNumber = 7,
+    kAgentSuccessRateFieldNumber = 8,
+    kEnvironmentAnySuccessCountFieldNumber = 9,
+    kEnvironmentAnySuccessRateFieldNumber = 10,
+    kEnvironmentAllSuccessCountFieldNumber = 11,
+    kEnvironmentAllSuccessRateFieldNumber = 12,
+    kExcludedEpisodeCountFieldNumber = 13,
+    kConfiguredWindowSizeFieldNumber = 1,
+  };
+  // repeated .maze.TerminationReasonCount termination_counts = 14;
+  int termination_counts_size() const;
+  private:
+  int _internal_termination_counts_size() const;
+  public:
+  void clear_termination_counts();
+  ::maze::TerminationReasonCount* mutable_termination_counts(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::TerminationReasonCount >*
+      mutable_termination_counts();
+  private:
+  const ::maze::TerminationReasonCount& _internal_termination_counts(int index) const;
+  ::maze::TerminationReasonCount* _internal_add_termination_counts();
+  public:
+  const ::maze::TerminationReasonCount& termination_counts(int index) const;
+  ::maze::TerminationReasonCount* add_termination_counts();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::TerminationReasonCount >&
+      termination_counts() const;
+
+  // map<string, double> reward_component_mean = 15;
+  int reward_component_mean_size() const;
+  private:
+  int _internal_reward_component_mean_size() const;
+  public:
+  void clear_reward_component_mean();
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >&
+      _internal_reward_component_mean() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >*
+      _internal_mutable_reward_component_mean();
+  public:
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >&
+      reward_component_mean() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >*
+      mutable_reward_component_mean();
+
+  // int64 completed_episode_count = 2;
+  void clear_completed_episode_count();
+  int64_t completed_episode_count() const;
+  void set_completed_episode_count(int64_t value);
+  private:
+  int64_t _internal_completed_episode_count() const;
+  void _internal_set_completed_episode_count(int64_t value);
+  public:
+
+  // int64 completed_agent_count = 3;
+  void clear_completed_agent_count();
+  int64_t completed_agent_count() const;
+  void set_completed_agent_count(int64_t value);
+  private:
+  int64_t _internal_completed_agent_count() const;
+  void _internal_set_completed_agent_count(int64_t value);
+  public:
+
+  // double mean_agent_return = 4;
+  void clear_mean_agent_return();
+  double mean_agent_return() const;
+  void set_mean_agent_return(double value);
+  private:
+  double _internal_mean_agent_return() const;
+  void _internal_set_mean_agent_return(double value);
+  public:
+
+  // double min_agent_return = 5;
+  void clear_min_agent_return();
+  double min_agent_return() const;
+  void set_min_agent_return(double value);
+  private:
+  double _internal_min_agent_return() const;
+  void _internal_set_min_agent_return(double value);
+  public:
+
+  // double max_agent_return = 6;
+  void clear_max_agent_return();
+  double max_agent_return() const;
+  void set_max_agent_return(double value);
+  private:
+  double _internal_max_agent_return() const;
+  void _internal_set_max_agent_return(double value);
+  public:
+
+  // int64 agent_success_count = 7;
+  void clear_agent_success_count();
+  int64_t agent_success_count() const;
+  void set_agent_success_count(int64_t value);
+  private:
+  int64_t _internal_agent_success_count() const;
+  void _internal_set_agent_success_count(int64_t value);
+  public:
+
+  // double agent_success_rate = 8;
+  void clear_agent_success_rate();
+  double agent_success_rate() const;
+  void set_agent_success_rate(double value);
+  private:
+  double _internal_agent_success_rate() const;
+  void _internal_set_agent_success_rate(double value);
+  public:
+
+  // int64 environment_any_success_count = 9;
+  void clear_environment_any_success_count();
+  int64_t environment_any_success_count() const;
+  void set_environment_any_success_count(int64_t value);
+  private:
+  int64_t _internal_environment_any_success_count() const;
+  void _internal_set_environment_any_success_count(int64_t value);
+  public:
+
+  // double environment_any_success_rate = 10;
+  void clear_environment_any_success_rate();
+  double environment_any_success_rate() const;
+  void set_environment_any_success_rate(double value);
+  private:
+  double _internal_environment_any_success_rate() const;
+  void _internal_set_environment_any_success_rate(double value);
+  public:
+
+  // int64 environment_all_success_count = 11;
+  void clear_environment_all_success_count();
+  int64_t environment_all_success_count() const;
+  void set_environment_all_success_count(int64_t value);
+  private:
+  int64_t _internal_environment_all_success_count() const;
+  void _internal_set_environment_all_success_count(int64_t value);
+  public:
+
+  // double environment_all_success_rate = 12;
+  void clear_environment_all_success_rate();
+  double environment_all_success_rate() const;
+  void set_environment_all_success_rate(double value);
+  private:
+  double _internal_environment_all_success_rate() const;
+  void _internal_set_environment_all_success_rate(double value);
+  public:
+
+  // int64 excluded_episode_count = 13;
+  void clear_excluded_episode_count();
+  int64_t excluded_episode_count() const;
+  void set_excluded_episode_count(int64_t value);
+  private:
+  int64_t _internal_excluded_episode_count() const;
+  void _internal_set_excluded_episode_count(int64_t value);
+  public:
+
+  // int32 configured_window_size = 1;
+  void clear_configured_window_size();
+  int32_t configured_window_size() const;
+  void set_configured_window_size(int32_t value);
+  private:
+  int32_t _internal_configured_window_size() const;
+  void _internal_set_configured_window_size(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:maze.EpisodeMetrics)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::TerminationReasonCount > termination_counts_;
+    ::PROTOBUF_NAMESPACE_ID::internal::MapField<
+        EpisodeMetrics_RewardComponentMeanEntry_DoNotUse,
+        std::string, double,
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_DOUBLE> reward_component_mean_;
+    int64_t completed_episode_count_;
+    int64_t completed_agent_count_;
+    double mean_agent_return_;
+    double min_agent_return_;
+    double max_agent_return_;
+    int64_t agent_success_count_;
+    double agent_success_rate_;
+    int64_t environment_any_success_count_;
+    double environment_any_success_rate_;
+    int64_t environment_all_success_count_;
+    double environment_all_success_rate_;
+    int64_t excluded_episode_count_;
+    int32_t configured_window_size_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -6717,7 +7033,7 @@ class AIServerStatusRsp final :
                &_AIServerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    30;
 
   friend void swap(AIServerStatusRsp& a, AIServerStatusRsp& b) {
     a.Swap(&b);
@@ -6790,12 +7106,12 @@ class AIServerStatusRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 2,
     kAiserverIdFieldNumber = 3,
     kProducerInstanceIdFieldNumber = 4,
     kLoadedModelChecksumFieldNumber = 10,
     kLastErrorFieldNumber = 38,
     kStagedModelChecksumFieldNumber = 41,
+    kEpisodeMetricsFieldNumber = 46,
     kProtocolVersionFieldNumber = 1,
     kStateFieldNumber = 5,
     kModelStateFieldNumber = 8,
@@ -6834,21 +7150,8 @@ class AIServerStatusRsp final :
     kModelSwitchCountFieldNumber = 42,
     kQuarantinedSampleCountFieldNumber = 43,
     kQuarantinedFragmentCountFieldNumber = 44,
+    kWorkloadModeFieldNumber = 45,
   };
-  // string run_id = 2;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string aiserver_id = 3;
   void clear_aiserver_id();
   const std::string& aiserver_id() const;
@@ -6918,6 +7221,24 @@ class AIServerStatusRsp final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_staged_model_checksum(const std::string& value);
   std::string* _internal_mutable_staged_model_checksum();
   public:
+
+  // .maze.EpisodeMetrics episode_metrics = 46;
+  bool has_episode_metrics() const;
+  private:
+  bool _internal_has_episode_metrics() const;
+  public:
+  void clear_episode_metrics();
+  const ::maze::EpisodeMetrics& episode_metrics() const;
+  PROTOBUF_NODISCARD ::maze::EpisodeMetrics* release_episode_metrics();
+  ::maze::EpisodeMetrics* mutable_episode_metrics();
+  void set_allocated_episode_metrics(::maze::EpisodeMetrics* episode_metrics);
+  private:
+  const ::maze::EpisodeMetrics& _internal_episode_metrics() const;
+  ::maze::EpisodeMetrics* _internal_mutable_episode_metrics();
+  public:
+  void unsafe_arena_set_allocated_episode_metrics(
+      ::maze::EpisodeMetrics* episode_metrics);
+  ::maze::EpisodeMetrics* unsafe_arena_release_episode_metrics();
 
   // uint32 protocol_version = 1;
   void clear_protocol_version();
@@ -7261,6 +7582,15 @@ class AIServerStatusRsp final :
   void _internal_set_quarantined_fragment_count(int64_t value);
   public:
 
+  // .maze.WorkloadMode workload_mode = 45;
+  void clear_workload_mode();
+  ::maze::WorkloadMode workload_mode() const;
+  void set_workload_mode(::maze::WorkloadMode value);
+  private:
+  ::maze::WorkloadMode _internal_workload_mode() const;
+  void _internal_set_workload_mode(::maze::WorkloadMode value);
+  public:
+
   // @@protoc_insertion_point(class_scope:maze.AIServerStatusRsp)
  private:
   class _Internal;
@@ -7269,12 +7599,12 @@ class AIServerStatusRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr aiserver_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr producer_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr loaded_model_checksum_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr staged_model_checksum_;
+    ::maze::EpisodeMetrics* episode_metrics_;
     uint32_t protocol_version_;
     int state_;
     int model_state_;
@@ -7313,6 +7643,7 @@ class AIServerStatusRsp final :
     int64_t model_switch_count_;
     int64_t quarantined_sample_count_;
     int64_t quarantined_fragment_count_;
+    int workload_mode_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -7368,7 +7699,7 @@ class ModelArtifactManifest final :
                &_ModelArtifactManifest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    31;
 
   friend void swap(ModelArtifactManifest& a, ModelArtifactManifest& b) {
     a.Swap(&b);
@@ -7445,7 +7776,6 @@ class ModelArtifactManifest final :
     kActionShapeFieldNumber = 10,
     kValueShapeFieldNumber = 11,
     kContractVersionFieldNumber = 2,
-    kRunIdFieldNumber = 3,
     kArtifactUriFieldNumber = 5,
     kModelFileFieldNumber = 6,
     kSha256FieldNumber = 8,
@@ -7534,20 +7864,6 @@ class ModelArtifactManifest final :
   const std::string& _internal_contract_version() const;
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_contract_version(const std::string& value);
   std::string* _internal_mutable_contract_version();
-  public:
-
-  // string run_id = 3;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
   public:
 
   // string artifact_uri = 5;
@@ -7661,7 +7977,6 @@ class ModelArtifactManifest final :
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t > value_shape_;
     mutable std::atomic<int> _value_shape_cached_byte_size_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr contract_version_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr artifact_uri_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_file_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr sha256_;
@@ -7726,7 +8041,7 @@ class RegisterModelReq final :
                &_RegisterModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    32;
 
   friend void swap(RegisterModelReq& a, RegisterModelReq& b) {
     a.Swap(&b);
@@ -7883,7 +8198,7 @@ class RegisterModelRsp final :
                &_RegisterModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    33;
 
   friend void swap(RegisterModelRsp& a, RegisterModelRsp& b) {
     a.Swap(&b);
@@ -8094,7 +8409,7 @@ class GetModelManifestReq final :
                &_GetModelManifestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    34;
 
   friend void swap(GetModelManifestReq& a, GetModelManifestReq& b) {
     a.Swap(&b);
@@ -8167,25 +8482,10 @@ class GetModelManifestReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kAiserverIdFieldNumber = 3,
     kModelVersionFieldNumber = 2,
     kLatestFieldNumber = 4,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string aiserver_id = 3;
   void clear_aiserver_id();
   const std::string& aiserver_id() const;
@@ -8226,7 +8526,6 @@ class GetModelManifestReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr aiserver_id_;
     int32_t model_version_;
     bool latest_;
@@ -8285,7 +8584,7 @@ class GetModelManifestRsp final :
                &_GetModelManifestRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    35;
 
   friend void swap(GetModelManifestRsp& a, GetModelManifestRsp& b) {
     a.Swap(&b);
@@ -8485,7 +8784,7 @@ class DownloadModelReq final :
                &_DownloadModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    36;
 
   friend void swap(DownloadModelReq& a, DownloadModelReq& b) {
     a.Swap(&b);
@@ -8558,24 +8857,9 @@ class DownloadModelReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kAiserverIdFieldNumber = 3,
     kModelVersionFieldNumber = 2,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string aiserver_id = 3;
   void clear_aiserver_id();
   const std::string& aiserver_id() const;
@@ -8607,7 +8891,6 @@ class DownloadModelReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr aiserver_id_;
     int32_t model_version_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -8665,7 +8948,7 @@ class ModelChunk final :
                &_ModelChunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    37;
 
   friend void swap(ModelChunk& a, ModelChunk& b) {
     a.Swap(&b);
@@ -8738,25 +9021,10 @@ class ModelChunk final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kDataFieldNumber = 4,
     kOffsetFieldNumber = 3,
     kModelVersionFieldNumber = 2,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // bytes data = 4;
   void clear_data();
   const std::string& data() const;
@@ -8797,7 +9065,6 @@ class ModelChunk final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
     int64_t offset_;
     int32_t model_version_;
@@ -8856,7 +9123,7 @@ class AckModelReq final :
                &_AckModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    38;
 
   friend void swap(AckModelReq& a, AckModelReq& b) {
     a.Swap(&b);
@@ -8929,27 +9196,12 @@ class AckModelReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 1,
     kAiserverIdFieldNumber = 2,
     kSha256FieldNumber = 4,
     kMessageFieldNumber = 6,
     kModelVersionFieldNumber = 3,
     kLoadStatusFieldNumber = 5,
   };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string aiserver_id = 2;
   void clear_aiserver_id();
   const std::string& aiserver_id() const;
@@ -9018,7 +9270,6 @@ class AckModelReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr aiserver_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr sha256_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
@@ -9079,7 +9330,7 @@ class AckModelRsp final :
                &_AckModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    39;
 
   friend void swap(AckModelRsp& a, AckModelRsp& b) {
     a.Swap(&b);
@@ -9223,10 +9474,9 @@ class AckModelRsp final :
 // -------------------------------------------------------------------
 
 class ModelDistributorStatusReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.ModelDistributorStatusReq) */ {
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:maze.ModelDistributorStatusReq) */ {
  public:
   inline ModelDistributorStatusReq() : ModelDistributorStatusReq(nullptr) {}
-  ~ModelDistributorStatusReq() override;
   explicit PROTOBUF_CONSTEXPR ModelDistributorStatusReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   ModelDistributorStatusReq(const ModelDistributorStatusReq& from);
@@ -9270,7 +9520,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    40;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -9299,29 +9549,15 @@ class ModelDistributorStatusReq final :
   ModelDistributorStatusReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
     return CreateMaybeMessage<ModelDistributorStatusReq>(arena);
   }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ModelDistributorStatusReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const ModelDistributorStatusReq& from) {
-    ModelDistributorStatusReq::MergeImpl(*this, from);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const ModelDistributorStatusReq& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(*this, from);
   }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const ModelDistributorStatusReq& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
   public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ModelDistributorStatusReq* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
@@ -9342,23 +9578,6 @@ class ModelDistributorStatusReq final :
 
   // accessors -------------------------------------------------------
 
-  enum : int {
-    kRunIdFieldNumber = 1,
-  };
-  // string run_id = 1;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // @@protoc_insertion_point(class_scope:maze.ModelDistributorStatusReq)
  private:
   class _Internal;
@@ -9367,10 +9586,7 @@ class ModelDistributorStatusReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
-  union { Impl_ _impl_; };
   friend struct ::TableStruct_maze_2eproto;
 };
 // -------------------------------------------------------------------
@@ -9423,7 +9639,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    41;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -9496,7 +9712,6 @@ class ModelDistributorStatusRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kRunIdFieldNumber = 2,
     kDistributorInstanceIdFieldNumber = 3,
     kLatestModelChecksumFieldNumber = 7,
     kLatestAckAiserverIdFieldNumber = 17,
@@ -9518,20 +9733,6 @@ class ModelDistributorStatusRsp final :
     kTimestampMsFieldNumber = 21,
     kLatestAckStatusFieldNumber = 19,
   };
-  // string run_id = 2;
-  void clear_run_id();
-  const std::string& run_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_run_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_run_id();
-  PROTOBUF_NODISCARD std::string* release_run_id();
-  void set_allocated_run_id(std::string* run_id);
-  private:
-  const std::string& _internal_run_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_run_id(const std::string& value);
-  std::string* _internal_mutable_run_id();
-  public:
-
   // string distributor_instance_id = 3;
   void clear_distributor_instance_id();
   const std::string& distributor_instance_id() const;
@@ -9740,7 +9941,6 @@ class ModelDistributorStatusRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr distributor_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr latest_model_checksum_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr latest_ack_aiserver_id_;
@@ -10131,56 +10331,6 @@ inline void InitReq::set_session_id(int32_t value) {
   // @@protoc_insertion_point(field_set:maze.InitReq.session_id)
 }
 
-// string run_id = 6;
-inline void InitReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& InitReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.InitReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void InitReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.InitReq.run_id)
-}
-inline std::string* InitReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.InitReq.run_id)
-  return _s;
-}
-inline const std::string& InitReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void InitReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* InitReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* InitReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.InitReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void InitReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.InitReq.run_id)
-}
-
 // string client_id = 7;
 inline void InitReq::clear_client_id() {
   _impl_.client_id_.ClearToEmpty();
@@ -10431,6 +10581,26 @@ inline void InitReq::set_allocated_end_grid(::maze::Vec2* end_grid) {
   // @@protoc_insertion_point(field_set_allocated:maze.InitReq.end_grid)
 }
 
+// .maze.WorkloadMode workload_mode = 13;
+inline void InitReq::clear_workload_mode() {
+  _impl_.workload_mode_ = 0;
+}
+inline ::maze::WorkloadMode InitReq::_internal_workload_mode() const {
+  return static_cast< ::maze::WorkloadMode >(_impl_.workload_mode_);
+}
+inline ::maze::WorkloadMode InitReq::workload_mode() const {
+  // @@protoc_insertion_point(field_get:maze.InitReq.workload_mode)
+  return _internal_workload_mode();
+}
+inline void InitReq::_internal_set_workload_mode(::maze::WorkloadMode value) {
+  
+  _impl_.workload_mode_ = value;
+}
+inline void InitReq::set_workload_mode(::maze::WorkloadMode value) {
+  _internal_set_workload_mode(value);
+  // @@protoc_insertion_point(field_set:maze.InitReq.workload_mode)
+}
+
 // -------------------------------------------------------------------
 
 // InitRsp
@@ -10528,56 +10698,6 @@ inline void InitRsp::set_allocated_message(std::string* message) {
 // -------------------------------------------------------------------
 
 // BeginEpisodeReq
-
-// string run_id = 1;
-inline void BeginEpisodeReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& BeginEpisodeReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.BeginEpisodeReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void BeginEpisodeReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.BeginEpisodeReq.run_id)
-}
-inline std::string* BeginEpisodeReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.BeginEpisodeReq.run_id)
-  return _s;
-}
-inline const std::string& BeginEpisodeReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void BeginEpisodeReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* BeginEpisodeReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* BeginEpisodeReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.BeginEpisodeReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void BeginEpisodeReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.BeginEpisodeReq.run_id)
-}
 
 // int32 session_id = 2;
 inline void BeginEpisodeReq::clear_session_id() {
@@ -11018,56 +11138,6 @@ inline void UpdateReq::set_session_id(int32_t value) {
   // @@protoc_insertion_point(field_set:maze.UpdateReq.session_id)
 }
 
-// string run_id = 4;
-inline void UpdateReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& UpdateReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.UpdateReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void UpdateReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.UpdateReq.run_id)
-}
-inline std::string* UpdateReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.UpdateReq.run_id)
-  return _s;
-}
-inline const std::string& UpdateReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void UpdateReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* UpdateReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* UpdateReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.UpdateReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void UpdateReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.UpdateReq.run_id)
-}
-
 // int32 episode_id = 5;
 inline void UpdateReq::clear_episode_id() {
   _impl_.episode_id_ = 0;
@@ -11240,56 +11310,6 @@ inline void EpisodeEndReq::set_session_id(int32_t value) {
   // @@protoc_insertion_point(field_set:maze.EpisodeEndReq.session_id)
 }
 
-// string run_id = 3;
-inline void EpisodeEndReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& EpisodeEndReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.EpisodeEndReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void EpisodeEndReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.EpisodeEndReq.run_id)
-}
-inline std::string* EpisodeEndReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.EpisodeEndReq.run_id)
-  return _s;
-}
-inline const std::string& EpisodeEndReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void EpisodeEndReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* EpisodeEndReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* EpisodeEndReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.EpisodeEndReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void EpisodeEndReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.EpisodeEndReq.run_id)
-}
-
 // -------------------------------------------------------------------
 
 // EpisodeEndRsp
@@ -11387,56 +11407,6 @@ inline void EpisodeEndRsp::set_allocated_message(std::string* message) {
 // -------------------------------------------------------------------
 
 // AbortEpisodeReq
-
-// string run_id = 1;
-inline void AbortEpisodeReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& AbortEpisodeReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.AbortEpisodeReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void AbortEpisodeReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.AbortEpisodeReq.run_id)
-}
-inline std::string* AbortEpisodeReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.AbortEpisodeReq.run_id)
-  return _s;
-}
-inline const std::string& AbortEpisodeReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void AbortEpisodeReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* AbortEpisodeReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* AbortEpisodeReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.AbortEpisodeReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void AbortEpisodeReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.AbortEpisodeReq.run_id)
-}
 
 // int32 session_id = 2;
 inline void AbortEpisodeReq::clear_session_id() {
@@ -11912,56 +11882,6 @@ inline void SampleBatch::_internal_set_session_id(int32_t value) {
 inline void SampleBatch::set_session_id(int32_t value) {
   _internal_set_session_id(value);
   // @@protoc_insertion_point(field_set:maze.SampleBatch.session_id)
-}
-
-// string run_id = 6;
-inline void SampleBatch::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& SampleBatch::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.SampleBatch.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void SampleBatch::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.SampleBatch.run_id)
-}
-inline std::string* SampleBatch::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.SampleBatch.run_id)
-  return _s;
-}
-inline const std::string& SampleBatch::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void SampleBatch::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* SampleBatch::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* SampleBatch::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.SampleBatch.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void SampleBatch::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.SampleBatch.run_id)
 }
 
 // string aiserver_id = 7;
@@ -12836,56 +12756,6 @@ inline void GetBatchReq::set_timeout_ms(int32_t value) {
   // @@protoc_insertion_point(field_set:maze.GetBatchReq.timeout_ms)
 }
 
-// string run_id = 3;
-inline void GetBatchReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& GetBatchReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.GetBatchReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void GetBatchReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.GetBatchReq.run_id)
-}
-inline std::string* GetBatchReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.GetBatchReq.run_id)
-  return _s;
-}
-inline const std::string& GetBatchReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void GetBatchReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* GetBatchReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* GetBatchReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.GetBatchReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void GetBatchReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.GetBatchReq.run_id)
-}
-
 // string consumer_instance_id = 4;
 inline void GetBatchReq::clear_consumer_instance_id() {
   _impl_.consumer_instance_id_.ClearToEmpty();
@@ -13394,56 +13264,6 @@ inline void GetBatchRsp::set_behavior_model_version(int32_t value) {
 
 // AckBatchReq
 
-// string run_id = 1;
-inline void AckBatchReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& AckBatchReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.AckBatchReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void AckBatchReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.AckBatchReq.run_id)
-}
-inline std::string* AckBatchReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.AckBatchReq.run_id)
-  return _s;
-}
-inline const std::string& AckBatchReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void AckBatchReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* AckBatchReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* AckBatchReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.AckBatchReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void AckBatchReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.AckBatchReq.run_id)
-}
-
 // string consumer_instance_id = 2;
 inline void AckBatchReq::clear_consumer_instance_id() {
   _impl_.consumer_instance_id_.ClearToEmpty();
@@ -13618,56 +13438,6 @@ inline void AckBatchReq::set_allocated_train_update_id(std::string* train_update
 
 // NackBatchReq
 
-// string run_id = 1;
-inline void NackBatchReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& NackBatchReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.NackBatchReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void NackBatchReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.NackBatchReq.run_id)
-}
-inline std::string* NackBatchReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.NackBatchReq.run_id)
-  return _s;
-}
-inline const std::string& NackBatchReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void NackBatchReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* NackBatchReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* NackBatchReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.NackBatchReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void NackBatchReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.NackBatchReq.run_id)
-}
-
 // string consumer_instance_id = 2;
 inline void NackBatchReq::clear_consumer_instance_id() {
   _impl_.consumer_instance_id_.ClearToEmpty();
@@ -13821,56 +13591,6 @@ inline void NackBatchReq::set_allocated_reason(std::string* reason) {
 // -------------------------------------------------------------------
 
 // RenewLeaseReq
-
-// string run_id = 1;
-inline void RenewLeaseReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& RenewLeaseReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.RenewLeaseReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RenewLeaseReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.RenewLeaseReq.run_id)
-}
-inline std::string* RenewLeaseReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.RenewLeaseReq.run_id)
-  return _s;
-}
-inline const std::string& RenewLeaseReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void RenewLeaseReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RenewLeaseReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RenewLeaseReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.RenewLeaseReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void RenewLeaseReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.RenewLeaseReq.run_id)
-}
 
 // string consumer_instance_id = 2;
 inline void RenewLeaseReq::clear_consumer_instance_id() {
@@ -14269,56 +13989,6 @@ inline void DeliveryRsp::set_allocated_train_update_id(std::string* train_update
 // -------------------------------------------------------------------
 
 // DistributorStatusReq
-
-// string run_id = 1;
-inline void DistributorStatusReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& DistributorStatusReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.DistributorStatusReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void DistributorStatusReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.DistributorStatusReq.run_id)
-}
-inline std::string* DistributorStatusReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.DistributorStatusReq.run_id)
-  return _s;
-}
-inline const std::string& DistributorStatusReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void DistributorStatusReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* DistributorStatusReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* DistributorStatusReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.DistributorStatusReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void DistributorStatusReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.DistributorStatusReq.run_id)
-}
 
 // -------------------------------------------------------------------
 
@@ -14726,56 +14396,6 @@ inline void DistributorStatusRsp::_internal_set_protocol_version(uint32_t value)
 inline void DistributorStatusRsp::set_protocol_version(uint32_t value) {
   _internal_set_protocol_version(value);
   // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.protocol_version)
-}
-
-// string run_id = 10;
-inline void DistributorStatusRsp::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& DistributorStatusRsp::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.DistributorStatusRsp.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void DistributorStatusRsp::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.run_id)
-}
-inline std::string* DistributorStatusRsp::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.DistributorStatusRsp.run_id)
-  return _s;
-}
-inline const std::string& DistributorStatusRsp::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void DistributorStatusRsp::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* DistributorStatusRsp::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* DistributorStatusRsp::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.DistributorStatusRsp.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void DistributorStatusRsp::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.DistributorStatusRsp.run_id)
 }
 
 // string distributor_instance_id = 11;
@@ -15582,54 +15202,383 @@ inline void DistributorStatusRsp::set_lease_renew_count(int64_t value) {
 
 // AIServerStatusReq
 
-// string run_id = 1;
-inline void AIServerStatusReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
+// -------------------------------------------------------------------
+
+// TerminationReasonCount
+
+// .maze.TerminationReason reason = 1;
+inline void TerminationReasonCount::clear_reason() {
+  _impl_.reason_ = 0;
 }
-inline const std::string& AIServerStatusReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.AIServerStatusReq.run_id)
-  return _internal_run_id();
+inline ::maze::TerminationReason TerminationReasonCount::_internal_reason() const {
+  return static_cast< ::maze::TerminationReason >(_impl_.reason_);
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void AIServerStatusReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.AIServerStatusReq.run_id)
+inline ::maze::TerminationReason TerminationReasonCount::reason() const {
+  // @@protoc_insertion_point(field_get:maze.TerminationReasonCount.reason)
+  return _internal_reason();
 }
-inline std::string* AIServerStatusReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.AIServerStatusReq.run_id)
-  return _s;
-}
-inline const std::string& AIServerStatusReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void AIServerStatusReq::_internal_set_run_id(const std::string& value) {
+inline void TerminationReasonCount::_internal_set_reason(::maze::TerminationReason value) {
   
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
+  _impl_.reason_ = value;
 }
-inline std::string* AIServerStatusReq::_internal_mutable_run_id() {
+inline void TerminationReasonCount::set_reason(::maze::TerminationReason value) {
+  _internal_set_reason(value);
+  // @@protoc_insertion_point(field_set:maze.TerminationReasonCount.reason)
+}
+
+// int64 count = 2;
+inline void TerminationReasonCount::clear_count() {
+  _impl_.count_ = int64_t{0};
+}
+inline int64_t TerminationReasonCount::_internal_count() const {
+  return _impl_.count_;
+}
+inline int64_t TerminationReasonCount::count() const {
+  // @@protoc_insertion_point(field_get:maze.TerminationReasonCount.count)
+  return _internal_count();
+}
+inline void TerminationReasonCount::_internal_set_count(int64_t value) {
   
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
+  _impl_.count_ = value;
 }
-inline std::string* AIServerStatusReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.AIServerStatusReq.run_id)
-  return _impl_.run_id_.Release();
+inline void TerminationReasonCount::set_count(int64_t value) {
+  _internal_set_count(value);
+  // @@protoc_insertion_point(field_set:maze.TerminationReasonCount.count)
 }
-inline void AIServerStatusReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.AIServerStatusReq.run_id)
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// EpisodeMetrics
+
+// int32 configured_window_size = 1;
+inline void EpisodeMetrics::clear_configured_window_size() {
+  _impl_.configured_window_size_ = 0;
+}
+inline int32_t EpisodeMetrics::_internal_configured_window_size() const {
+  return _impl_.configured_window_size_;
+}
+inline int32_t EpisodeMetrics::configured_window_size() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.configured_window_size)
+  return _internal_configured_window_size();
+}
+inline void EpisodeMetrics::_internal_set_configured_window_size(int32_t value) {
+  
+  _impl_.configured_window_size_ = value;
+}
+inline void EpisodeMetrics::set_configured_window_size(int32_t value) {
+  _internal_set_configured_window_size(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.configured_window_size)
+}
+
+// int64 completed_episode_count = 2;
+inline void EpisodeMetrics::clear_completed_episode_count() {
+  _impl_.completed_episode_count_ = int64_t{0};
+}
+inline int64_t EpisodeMetrics::_internal_completed_episode_count() const {
+  return _impl_.completed_episode_count_;
+}
+inline int64_t EpisodeMetrics::completed_episode_count() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.completed_episode_count)
+  return _internal_completed_episode_count();
+}
+inline void EpisodeMetrics::_internal_set_completed_episode_count(int64_t value) {
+  
+  _impl_.completed_episode_count_ = value;
+}
+inline void EpisodeMetrics::set_completed_episode_count(int64_t value) {
+  _internal_set_completed_episode_count(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.completed_episode_count)
+}
+
+// int64 completed_agent_count = 3;
+inline void EpisodeMetrics::clear_completed_agent_count() {
+  _impl_.completed_agent_count_ = int64_t{0};
+}
+inline int64_t EpisodeMetrics::_internal_completed_agent_count() const {
+  return _impl_.completed_agent_count_;
+}
+inline int64_t EpisodeMetrics::completed_agent_count() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.completed_agent_count)
+  return _internal_completed_agent_count();
+}
+inline void EpisodeMetrics::_internal_set_completed_agent_count(int64_t value) {
+  
+  _impl_.completed_agent_count_ = value;
+}
+inline void EpisodeMetrics::set_completed_agent_count(int64_t value) {
+  _internal_set_completed_agent_count(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.completed_agent_count)
+}
+
+// double mean_agent_return = 4;
+inline void EpisodeMetrics::clear_mean_agent_return() {
+  _impl_.mean_agent_return_ = 0;
+}
+inline double EpisodeMetrics::_internal_mean_agent_return() const {
+  return _impl_.mean_agent_return_;
+}
+inline double EpisodeMetrics::mean_agent_return() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.mean_agent_return)
+  return _internal_mean_agent_return();
+}
+inline void EpisodeMetrics::_internal_set_mean_agent_return(double value) {
+  
+  _impl_.mean_agent_return_ = value;
+}
+inline void EpisodeMetrics::set_mean_agent_return(double value) {
+  _internal_set_mean_agent_return(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.mean_agent_return)
+}
+
+// double min_agent_return = 5;
+inline void EpisodeMetrics::clear_min_agent_return() {
+  _impl_.min_agent_return_ = 0;
+}
+inline double EpisodeMetrics::_internal_min_agent_return() const {
+  return _impl_.min_agent_return_;
+}
+inline double EpisodeMetrics::min_agent_return() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.min_agent_return)
+  return _internal_min_agent_return();
+}
+inline void EpisodeMetrics::_internal_set_min_agent_return(double value) {
+  
+  _impl_.min_agent_return_ = value;
+}
+inline void EpisodeMetrics::set_min_agent_return(double value) {
+  _internal_set_min_agent_return(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.min_agent_return)
+}
+
+// double max_agent_return = 6;
+inline void EpisodeMetrics::clear_max_agent_return() {
+  _impl_.max_agent_return_ = 0;
+}
+inline double EpisodeMetrics::_internal_max_agent_return() const {
+  return _impl_.max_agent_return_;
+}
+inline double EpisodeMetrics::max_agent_return() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.max_agent_return)
+  return _internal_max_agent_return();
+}
+inline void EpisodeMetrics::_internal_set_max_agent_return(double value) {
+  
+  _impl_.max_agent_return_ = value;
+}
+inline void EpisodeMetrics::set_max_agent_return(double value) {
+  _internal_set_max_agent_return(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.max_agent_return)
+}
+
+// int64 agent_success_count = 7;
+inline void EpisodeMetrics::clear_agent_success_count() {
+  _impl_.agent_success_count_ = int64_t{0};
+}
+inline int64_t EpisodeMetrics::_internal_agent_success_count() const {
+  return _impl_.agent_success_count_;
+}
+inline int64_t EpisodeMetrics::agent_success_count() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.agent_success_count)
+  return _internal_agent_success_count();
+}
+inline void EpisodeMetrics::_internal_set_agent_success_count(int64_t value) {
+  
+  _impl_.agent_success_count_ = value;
+}
+inline void EpisodeMetrics::set_agent_success_count(int64_t value) {
+  _internal_set_agent_success_count(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.agent_success_count)
+}
+
+// double agent_success_rate = 8;
+inline void EpisodeMetrics::clear_agent_success_rate() {
+  _impl_.agent_success_rate_ = 0;
+}
+inline double EpisodeMetrics::_internal_agent_success_rate() const {
+  return _impl_.agent_success_rate_;
+}
+inline double EpisodeMetrics::agent_success_rate() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.agent_success_rate)
+  return _internal_agent_success_rate();
+}
+inline void EpisodeMetrics::_internal_set_agent_success_rate(double value) {
+  
+  _impl_.agent_success_rate_ = value;
+}
+inline void EpisodeMetrics::set_agent_success_rate(double value) {
+  _internal_set_agent_success_rate(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.agent_success_rate)
+}
+
+// int64 environment_any_success_count = 9;
+inline void EpisodeMetrics::clear_environment_any_success_count() {
+  _impl_.environment_any_success_count_ = int64_t{0};
+}
+inline int64_t EpisodeMetrics::_internal_environment_any_success_count() const {
+  return _impl_.environment_any_success_count_;
+}
+inline int64_t EpisodeMetrics::environment_any_success_count() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.environment_any_success_count)
+  return _internal_environment_any_success_count();
+}
+inline void EpisodeMetrics::_internal_set_environment_any_success_count(int64_t value) {
+  
+  _impl_.environment_any_success_count_ = value;
+}
+inline void EpisodeMetrics::set_environment_any_success_count(int64_t value) {
+  _internal_set_environment_any_success_count(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.environment_any_success_count)
+}
+
+// double environment_any_success_rate = 10;
+inline void EpisodeMetrics::clear_environment_any_success_rate() {
+  _impl_.environment_any_success_rate_ = 0;
+}
+inline double EpisodeMetrics::_internal_environment_any_success_rate() const {
+  return _impl_.environment_any_success_rate_;
+}
+inline double EpisodeMetrics::environment_any_success_rate() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.environment_any_success_rate)
+  return _internal_environment_any_success_rate();
+}
+inline void EpisodeMetrics::_internal_set_environment_any_success_rate(double value) {
+  
+  _impl_.environment_any_success_rate_ = value;
+}
+inline void EpisodeMetrics::set_environment_any_success_rate(double value) {
+  _internal_set_environment_any_success_rate(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.environment_any_success_rate)
+}
+
+// int64 environment_all_success_count = 11;
+inline void EpisodeMetrics::clear_environment_all_success_count() {
+  _impl_.environment_all_success_count_ = int64_t{0};
+}
+inline int64_t EpisodeMetrics::_internal_environment_all_success_count() const {
+  return _impl_.environment_all_success_count_;
+}
+inline int64_t EpisodeMetrics::environment_all_success_count() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.environment_all_success_count)
+  return _internal_environment_all_success_count();
+}
+inline void EpisodeMetrics::_internal_set_environment_all_success_count(int64_t value) {
+  
+  _impl_.environment_all_success_count_ = value;
+}
+inline void EpisodeMetrics::set_environment_all_success_count(int64_t value) {
+  _internal_set_environment_all_success_count(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.environment_all_success_count)
+}
+
+// double environment_all_success_rate = 12;
+inline void EpisodeMetrics::clear_environment_all_success_rate() {
+  _impl_.environment_all_success_rate_ = 0;
+}
+inline double EpisodeMetrics::_internal_environment_all_success_rate() const {
+  return _impl_.environment_all_success_rate_;
+}
+inline double EpisodeMetrics::environment_all_success_rate() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.environment_all_success_rate)
+  return _internal_environment_all_success_rate();
+}
+inline void EpisodeMetrics::_internal_set_environment_all_success_rate(double value) {
+  
+  _impl_.environment_all_success_rate_ = value;
+}
+inline void EpisodeMetrics::set_environment_all_success_rate(double value) {
+  _internal_set_environment_all_success_rate(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.environment_all_success_rate)
+}
+
+// int64 excluded_episode_count = 13;
+inline void EpisodeMetrics::clear_excluded_episode_count() {
+  _impl_.excluded_episode_count_ = int64_t{0};
+}
+inline int64_t EpisodeMetrics::_internal_excluded_episode_count() const {
+  return _impl_.excluded_episode_count_;
+}
+inline int64_t EpisodeMetrics::excluded_episode_count() const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.excluded_episode_count)
+  return _internal_excluded_episode_count();
+}
+inline void EpisodeMetrics::_internal_set_excluded_episode_count(int64_t value) {
+  
+  _impl_.excluded_episode_count_ = value;
+}
+inline void EpisodeMetrics::set_excluded_episode_count(int64_t value) {
+  _internal_set_excluded_episode_count(value);
+  // @@protoc_insertion_point(field_set:maze.EpisodeMetrics.excluded_episode_count)
+}
+
+// repeated .maze.TerminationReasonCount termination_counts = 14;
+inline int EpisodeMetrics::_internal_termination_counts_size() const {
+  return _impl_.termination_counts_.size();
+}
+inline int EpisodeMetrics::termination_counts_size() const {
+  return _internal_termination_counts_size();
+}
+inline void EpisodeMetrics::clear_termination_counts() {
+  _impl_.termination_counts_.Clear();
+}
+inline ::maze::TerminationReasonCount* EpisodeMetrics::mutable_termination_counts(int index) {
+  // @@protoc_insertion_point(field_mutable:maze.EpisodeMetrics.termination_counts)
+  return _impl_.termination_counts_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::TerminationReasonCount >*
+EpisodeMetrics::mutable_termination_counts() {
+  // @@protoc_insertion_point(field_mutable_list:maze.EpisodeMetrics.termination_counts)
+  return &_impl_.termination_counts_;
+}
+inline const ::maze::TerminationReasonCount& EpisodeMetrics::_internal_termination_counts(int index) const {
+  return _impl_.termination_counts_.Get(index);
+}
+inline const ::maze::TerminationReasonCount& EpisodeMetrics::termination_counts(int index) const {
+  // @@protoc_insertion_point(field_get:maze.EpisodeMetrics.termination_counts)
+  return _internal_termination_counts(index);
+}
+inline ::maze::TerminationReasonCount* EpisodeMetrics::_internal_add_termination_counts() {
+  return _impl_.termination_counts_.Add();
+}
+inline ::maze::TerminationReasonCount* EpisodeMetrics::add_termination_counts() {
+  ::maze::TerminationReasonCount* _add = _internal_add_termination_counts();
+  // @@protoc_insertion_point(field_add:maze.EpisodeMetrics.termination_counts)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::maze::TerminationReasonCount >&
+EpisodeMetrics::termination_counts() const {
+  // @@protoc_insertion_point(field_list:maze.EpisodeMetrics.termination_counts)
+  return _impl_.termination_counts_;
+}
+
+// map<string, double> reward_component_mean = 15;
+inline int EpisodeMetrics::_internal_reward_component_mean_size() const {
+  return _impl_.reward_component_mean_.size();
+}
+inline int EpisodeMetrics::reward_component_mean_size() const {
+  return _internal_reward_component_mean_size();
+}
+inline void EpisodeMetrics::clear_reward_component_mean() {
+  _impl_.reward_component_mean_.Clear();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >&
+EpisodeMetrics::_internal_reward_component_mean() const {
+  return _impl_.reward_component_mean_.GetMap();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >&
+EpisodeMetrics::reward_component_mean() const {
+  // @@protoc_insertion_point(field_map:maze.EpisodeMetrics.reward_component_mean)
+  return _internal_reward_component_mean();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >*
+EpisodeMetrics::_internal_mutable_reward_component_mean() {
+  return _impl_.reward_component_mean_.MutableMap();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, double >*
+EpisodeMetrics::mutable_reward_component_mean() {
+  // @@protoc_insertion_point(field_mutable_map:maze.EpisodeMetrics.reward_component_mean)
+  return _internal_mutable_reward_component_mean();
 }
 
 // -------------------------------------------------------------------
@@ -15654,56 +15603,6 @@ inline void AIServerStatusRsp::_internal_set_protocol_version(uint32_t value) {
 inline void AIServerStatusRsp::set_protocol_version(uint32_t value) {
   _internal_set_protocol_version(value);
   // @@protoc_insertion_point(field_set:maze.AIServerStatusRsp.protocol_version)
-}
-
-// string run_id = 2;
-inline void AIServerStatusRsp::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& AIServerStatusRsp::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.AIServerStatusRsp.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void AIServerStatusRsp::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.AIServerStatusRsp.run_id)
-}
-inline std::string* AIServerStatusRsp::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.AIServerStatusRsp.run_id)
-  return _s;
-}
-inline const std::string& AIServerStatusRsp::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void AIServerStatusRsp::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* AIServerStatusRsp::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* AIServerStatusRsp::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.AIServerStatusRsp.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void AIServerStatusRsp::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.AIServerStatusRsp.run_id)
 }
 
 // string aiserver_id = 3;
@@ -16696,6 +16595,116 @@ inline void AIServerStatusRsp::set_quarantined_fragment_count(int64_t value) {
   // @@protoc_insertion_point(field_set:maze.AIServerStatusRsp.quarantined_fragment_count)
 }
 
+// .maze.WorkloadMode workload_mode = 45;
+inline void AIServerStatusRsp::clear_workload_mode() {
+  _impl_.workload_mode_ = 0;
+}
+inline ::maze::WorkloadMode AIServerStatusRsp::_internal_workload_mode() const {
+  return static_cast< ::maze::WorkloadMode >(_impl_.workload_mode_);
+}
+inline ::maze::WorkloadMode AIServerStatusRsp::workload_mode() const {
+  // @@protoc_insertion_point(field_get:maze.AIServerStatusRsp.workload_mode)
+  return _internal_workload_mode();
+}
+inline void AIServerStatusRsp::_internal_set_workload_mode(::maze::WorkloadMode value) {
+  
+  _impl_.workload_mode_ = value;
+}
+inline void AIServerStatusRsp::set_workload_mode(::maze::WorkloadMode value) {
+  _internal_set_workload_mode(value);
+  // @@protoc_insertion_point(field_set:maze.AIServerStatusRsp.workload_mode)
+}
+
+// .maze.EpisodeMetrics episode_metrics = 46;
+inline bool AIServerStatusRsp::_internal_has_episode_metrics() const {
+  return this != internal_default_instance() && _impl_.episode_metrics_ != nullptr;
+}
+inline bool AIServerStatusRsp::has_episode_metrics() const {
+  return _internal_has_episode_metrics();
+}
+inline void AIServerStatusRsp::clear_episode_metrics() {
+  if (GetArenaForAllocation() == nullptr && _impl_.episode_metrics_ != nullptr) {
+    delete _impl_.episode_metrics_;
+  }
+  _impl_.episode_metrics_ = nullptr;
+}
+inline const ::maze::EpisodeMetrics& AIServerStatusRsp::_internal_episode_metrics() const {
+  const ::maze::EpisodeMetrics* p = _impl_.episode_metrics_;
+  return p != nullptr ? *p : reinterpret_cast<const ::maze::EpisodeMetrics&>(
+      ::maze::_EpisodeMetrics_default_instance_);
+}
+inline const ::maze::EpisodeMetrics& AIServerStatusRsp::episode_metrics() const {
+  // @@protoc_insertion_point(field_get:maze.AIServerStatusRsp.episode_metrics)
+  return _internal_episode_metrics();
+}
+inline void AIServerStatusRsp::unsafe_arena_set_allocated_episode_metrics(
+    ::maze::EpisodeMetrics* episode_metrics) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.episode_metrics_);
+  }
+  _impl_.episode_metrics_ = episode_metrics;
+  if (episode_metrics) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:maze.AIServerStatusRsp.episode_metrics)
+}
+inline ::maze::EpisodeMetrics* AIServerStatusRsp::release_episode_metrics() {
+  
+  ::maze::EpisodeMetrics* temp = _impl_.episode_metrics_;
+  _impl_.episode_metrics_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::maze::EpisodeMetrics* AIServerStatusRsp::unsafe_arena_release_episode_metrics() {
+  // @@protoc_insertion_point(field_release:maze.AIServerStatusRsp.episode_metrics)
+  
+  ::maze::EpisodeMetrics* temp = _impl_.episode_metrics_;
+  _impl_.episode_metrics_ = nullptr;
+  return temp;
+}
+inline ::maze::EpisodeMetrics* AIServerStatusRsp::_internal_mutable_episode_metrics() {
+  
+  if (_impl_.episode_metrics_ == nullptr) {
+    auto* p = CreateMaybeMessage<::maze::EpisodeMetrics>(GetArenaForAllocation());
+    _impl_.episode_metrics_ = p;
+  }
+  return _impl_.episode_metrics_;
+}
+inline ::maze::EpisodeMetrics* AIServerStatusRsp::mutable_episode_metrics() {
+  ::maze::EpisodeMetrics* _msg = _internal_mutable_episode_metrics();
+  // @@protoc_insertion_point(field_mutable:maze.AIServerStatusRsp.episode_metrics)
+  return _msg;
+}
+inline void AIServerStatusRsp::set_allocated_episode_metrics(::maze::EpisodeMetrics* episode_metrics) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.episode_metrics_;
+  }
+  if (episode_metrics) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(episode_metrics);
+    if (message_arena != submessage_arena) {
+      episode_metrics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, episode_metrics, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.episode_metrics_ = episode_metrics;
+  // @@protoc_insertion_point(field_set_allocated:maze.AIServerStatusRsp.episode_metrics)
+}
+
 // -------------------------------------------------------------------
 
 // ModelArtifactManifest
@@ -16768,56 +16777,6 @@ inline void ModelArtifactManifest::set_allocated_contract_version(std::string* c
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:maze.ModelArtifactManifest.contract_version)
-}
-
-// string run_id = 3;
-inline void ModelArtifactManifest::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& ModelArtifactManifest::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.ModelArtifactManifest.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelArtifactManifest::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.ModelArtifactManifest.run_id)
-}
-inline std::string* ModelArtifactManifest::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.ModelArtifactManifest.run_id)
-  return _s;
-}
-inline const std::string& ModelArtifactManifest::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void ModelArtifactManifest::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.ModelArtifactManifest.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void ModelArtifactManifest::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.ModelArtifactManifest.run_id)
 }
 
 // int32 model_version = 4;
@@ -17543,56 +17502,6 @@ inline void RegisterModelRsp::set_allocated_distributor_instance_id(std::string*
 
 // GetModelManifestReq
 
-// string run_id = 1;
-inline void GetModelManifestReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& GetModelManifestReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.GetModelManifestReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void GetModelManifestReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.GetModelManifestReq.run_id)
-}
-inline std::string* GetModelManifestReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.GetModelManifestReq.run_id)
-  return _s;
-}
-inline const std::string& GetModelManifestReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void GetModelManifestReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* GetModelManifestReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* GetModelManifestReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.GetModelManifestReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void GetModelManifestReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.GetModelManifestReq.run_id)
-}
-
 // int32 model_version = 2;
 inline void GetModelManifestReq::clear_model_version() {
   _impl_.model_version_ = 0;
@@ -17901,56 +17810,6 @@ inline void GetModelManifestRsp::set_allocated_distributor_instance_id(std::stri
 
 // DownloadModelReq
 
-// string run_id = 1;
-inline void DownloadModelReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& DownloadModelReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.DownloadModelReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void DownloadModelReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.DownloadModelReq.run_id)
-}
-inline std::string* DownloadModelReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.DownloadModelReq.run_id)
-  return _s;
-}
-inline const std::string& DownloadModelReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void DownloadModelReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* DownloadModelReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* DownloadModelReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.DownloadModelReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void DownloadModelReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.DownloadModelReq.run_id)
-}
-
 // int32 model_version = 2;
 inline void DownloadModelReq::clear_model_version() {
   _impl_.model_version_ = 0;
@@ -18024,56 +17883,6 @@ inline void DownloadModelReq::set_allocated_aiserver_id(std::string* aiserver_id
 // -------------------------------------------------------------------
 
 // ModelChunk
-
-// string run_id = 1;
-inline void ModelChunk::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& ModelChunk::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.ModelChunk.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelChunk::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.ModelChunk.run_id)
-}
-inline std::string* ModelChunk::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.ModelChunk.run_id)
-  return _s;
-}
-inline const std::string& ModelChunk::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void ModelChunk::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelChunk::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelChunk::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.ModelChunk.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void ModelChunk::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.ModelChunk.run_id)
-}
 
 // int32 model_version = 2;
 inline void ModelChunk::clear_model_version() {
@@ -18168,56 +17977,6 @@ inline void ModelChunk::set_allocated_data(std::string* data) {
 // -------------------------------------------------------------------
 
 // AckModelReq
-
-// string run_id = 1;
-inline void AckModelReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& AckModelReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.AckModelReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void AckModelReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.AckModelReq.run_id)
-}
-inline std::string* AckModelReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.AckModelReq.run_id)
-  return _s;
-}
-inline const std::string& AckModelReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void AckModelReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* AckModelReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* AckModelReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.AckModelReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void AckModelReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.AckModelReq.run_id)
-}
 
 // string aiserver_id = 2;
 inline void AckModelReq::clear_aiserver_id() {
@@ -18557,56 +18316,6 @@ inline void AckModelRsp::set_allocated_distributor_instance_id(std::string* dist
 
 // ModelDistributorStatusReq
 
-// string run_id = 1;
-inline void ModelDistributorStatusReq::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& ModelDistributorStatusReq::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.ModelDistributorStatusReq.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelDistributorStatusReq::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.ModelDistributorStatusReq.run_id)
-}
-inline std::string* ModelDistributorStatusReq::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.ModelDistributorStatusReq.run_id)
-  return _s;
-}
-inline const std::string& ModelDistributorStatusReq::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void ModelDistributorStatusReq::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelDistributorStatusReq::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelDistributorStatusReq::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.ModelDistributorStatusReq.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void ModelDistributorStatusReq::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.ModelDistributorStatusReq.run_id)
-}
-
 // -------------------------------------------------------------------
 
 // ModelDistributorStatusRsp
@@ -18629,56 +18338,6 @@ inline void ModelDistributorStatusRsp::_internal_set_protocol_version(uint32_t v
 inline void ModelDistributorStatusRsp::set_protocol_version(uint32_t value) {
   _internal_set_protocol_version(value);
   // @@protoc_insertion_point(field_set:maze.ModelDistributorStatusRsp.protocol_version)
-}
-
-// string run_id = 2;
-inline void ModelDistributorStatusRsp::clear_run_id() {
-  _impl_.run_id_.ClearToEmpty();
-}
-inline const std::string& ModelDistributorStatusRsp::run_id() const {
-  // @@protoc_insertion_point(field_get:maze.ModelDistributorStatusRsp.run_id)
-  return _internal_run_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelDistributorStatusRsp::set_run_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.run_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:maze.ModelDistributorStatusRsp.run_id)
-}
-inline std::string* ModelDistributorStatusRsp::mutable_run_id() {
-  std::string* _s = _internal_mutable_run_id();
-  // @@protoc_insertion_point(field_mutable:maze.ModelDistributorStatusRsp.run_id)
-  return _s;
-}
-inline const std::string& ModelDistributorStatusRsp::_internal_run_id() const {
-  return _impl_.run_id_.Get();
-}
-inline void ModelDistributorStatusRsp::_internal_set_run_id(const std::string& value) {
-  
-  _impl_.run_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelDistributorStatusRsp::_internal_mutable_run_id() {
-  
-  return _impl_.run_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelDistributorStatusRsp::release_run_id() {
-  // @@protoc_insertion_point(field_release:maze.ModelDistributorStatusRsp.run_id)
-  return _impl_.run_id_.Release();
-}
-inline void ModelDistributorStatusRsp::set_allocated_run_id(std::string* run_id) {
-  if (run_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.run_id_.SetAllocated(run_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.run_id_.IsDefault()) {
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:maze.ModelDistributorStatusRsp.run_id)
 }
 
 // string distributor_instance_id = 3;
@@ -19260,6 +18919,12 @@ inline void ModelDistributorStatusRsp::set_timestamp_ms(int64_t value) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -19331,6 +18996,11 @@ template <> struct is_proto_enum< ::maze::ModelAckResult> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::maze::ModelAckResult>() {
   return ::maze::ModelAckResult_descriptor();
+}
+template <> struct is_proto_enum< ::maze::WorkloadMode> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::maze::WorkloadMode>() {
+  return ::maze::WorkloadMode_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

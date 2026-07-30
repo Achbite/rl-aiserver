@@ -9,7 +9,6 @@
 struct ModelManifest {
     int schema_version = 0;
     std::string contract_version;
-    std::string run_id;
     int model_version = -1;
     std::string artifact_uri;
     std::string model_file;
@@ -26,13 +25,11 @@ struct ModelManifest {
 };
 
 bool LoadModelManifest(const ModelConfig& config,
-                       const std::string& run_id,
                        ModelManifest& manifest,
                        std::string& error);
 
 bool LoadModelManifestFile(const ModelConfig& config,
                            const std::string& manifest_path,
-                           const std::string& expected_run_id,
                            ModelManifest& manifest,
                            std::string& error);
 

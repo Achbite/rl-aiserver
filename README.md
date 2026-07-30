@@ -10,7 +10,7 @@ C++ 环境交互与推理服务。训练模式同时启动 SampleDistributor；�
 
 ```bash
 (cd ../rl-sample-pool && bash build_artifact.sh)
-cp -R ../.workspace/artifacts/rl-sample-pool/0.3.0/linux-arm64/. \
+cp -R ../.workspace/artifacts/rl-sample-pool/0.5.0/linux-arm64/. \
   sample-distributor/
 ```
 

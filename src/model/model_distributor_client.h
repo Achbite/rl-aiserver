@@ -14,29 +14,29 @@ public:
     ModelDistributorClient(const ModelDistributionConfig& distribution,
                            const ModelConfig& model);
 
-    bool FetchLatest(const std::string& run_id,
-                     const std::string& aiserver_id,
+    bool FetchLatest(const std::string& aiserver_id,
                      ModelManifest& manifest,
                      std::string& error);
 
-    bool FetchVersion(const std::string& run_id,
-                      const std::string& aiserver_id,
+    bool FetchVersion(const std::string& aiserver_id,
                       int model_version,
                       ModelManifest& manifest,
                       std::string& error);
 
-    bool GetLatestIdentity(const std::string& run_id,
-                           const std::string& aiserver_id,
+    bool GetLatestIdentity(const std::string& aiserver_id,
                            int& model_version,
                            std::string& checksum,
                            std::string& error);
 
     bool Ack(const ModelManifest& manifest,
-             const std::string& run_id,
              const std::string& aiserver_id,
              maze::ModelLoadStatus status,
              const std::string& message,
              std::string& error);
+
+    bool Promote(ModelManifest& manifest,
+                 std::string& previous_path,
+                 std::string& error);
 
 private:
     bool ValidateManifest(const maze::ModelArtifactManifest& source,
@@ -46,8 +46,7 @@ private:
                   const std::string& aiserver_id,
                   std::string& local_path,
                   std::string& error);
-    bool Fetch(const std::string& run_id,
-               const std::string& aiserver_id,
+    bool Fetch(const std::string& aiserver_id,
                int model_version,
                bool latest,
                ModelManifest& manifest,

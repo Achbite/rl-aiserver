@@ -165,9 +165,10 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     if (!local_dir.empty()) {
         out_config.model.local_dir = local_dir;
     }
-    std::string p2p_dir = FindValue(entries, "model", "p2p_dir");
-    if (!p2p_dir.empty()) {
-        out_config.model.p2p_dir = p2p_dir;
+    std::string local_train_dir =
+        FindValue(entries, "model", "local_train_dir");
+    if (!local_train_dir.empty()) {
+        out_config.model.local_train_dir = local_train_dir;
     }
     std::string smoke_dir = FindValue(entries, "model", "smoke_dir");
     if (!smoke_dir.empty()) {
@@ -231,10 +232,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     out_config.sample_output.outbound_max_estimated_bytes =
         SafeSize(FindValue(entries, "sample_output", "outbound_max_estimated_bytes"),
                  64ULL * 1024ULL * 1024ULL);
-    std::string run_id = FindValue(entries, "sample_output", "run_id");
-    if (!run_id.empty()) {
-        out_config.sample_output.run_id = run_id;
-    }
     std::string aiserver_id = FindValue(entries, "sample_output", "aiserver_id");
     if (!aiserver_id.empty()) {
         out_config.sample_output.aiserver_id = aiserver_id;
@@ -243,6 +240,8 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     if (!env_id.empty()) {
         out_config.sample_output.env_id = env_id;
     }
+    out_config.metrics.episode_window = SafeSize(
+        FindValue(entries, "metrics", "episode_window"), 100);
 
     std::string listen_port = GetEnvValue("MAZE_LISTEN_PORT");
     if (!listen_port.empty()) {
@@ -273,10 +272,10 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.model_distribution.port = SafeInt(
             model_distributor_port, out_config.model_distribution.port);
     }
-    std::string model_cache_dir =
-        GetEnvValue("MAZE_MODEL_CACHE_DIR");
-    if (!model_cache_dir.empty()) {
-        out_config.model.p2p_dir = model_cache_dir;
+    std::string local_train_root =
+        GetEnvValue("MAZE_LOCAL_TRAIN_ROOT");
+    if (!local_train_root.empty()) {
+        out_config.model.local_train_dir = local_train_root;
     }
     std::string smoke_model_dir =
         GetEnvValue("MAZE_SMOKE_MODEL_DIR");
@@ -295,10 +294,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     std::string sd_port = GetEnvValue("MAZE_SAMPLE_DISTRIBUTOR_PORT");
     if (!sd_port.empty()) {
         out_config.sample_output.port = SafeInt(sd_port, out_config.sample_output.port);
-    }
-    std::string env_run_id = GetEnvValue("MAZE_RUN_ID");
-    if (!env_run_id.empty()) {
-        out_config.sample_output.run_id = env_run_id;
     }
     std::string env_aiserver_id = GetEnvValue("MAZE_AISERVER_ID");
     if (!env_aiserver_id.empty()) {
@@ -328,6 +323,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         EnvInt(
             "MAZE_MODEL_BOUNDARY_WAIT_MS",
             out_config.model_distribution.boundary_wait_ms);
+    out_config.metrics.episode_window = SafeSize(
+        GetEnvValue("MAZE_EPISODE_METRICS_WINDOW"),
+        out_config.metrics.episode_window);
+    if (out_config.metrics.episode_window == 0) {
+        out_config.metrics.episode_window = 100;
+    }
 
     LOG_INFO("Config", "server: port=%d, max_agents=%d, run_mode=%d(%s)",
              out_config.server.listen_port, out_config.server.max_agents,
@@ -336,9 +337,9 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     LOG_INFO("Config", "strategy: grid=%d, replan=%d",
              out_config.strategy.grid_size,
              out_config.strategy.replan_interval);
-    LOG_INFO("Config", "model: local=%s, cache=%s, smoke=%s, manifest=%s, startup_timeout_ms=%d, shape=[%d]->[%d]",
+    LOG_INFO("Config", "model: local=%s, local_train=%s, smoke=%s, manifest=%s, startup_timeout_ms=%d, shape=[%d]->[%d]",
              out_config.model.local_dir.c_str(),
-             out_config.model.p2p_dir.c_str(),
+             out_config.model.local_train_dir.c_str(),
              out_config.model.smoke_dir.c_str(),
              out_config.model.manifest_name.c_str(),
              out_config.model.startup_timeout_ms,
@@ -351,7 +352,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
              out_config.model_distribution.boundary_wait_ms,
              out_config.model_distribution.rpc_timeout_ms,
              out_config.model_distribution.contract_version.c_str());
-    LOG_INFO("Config", "sample_output: enabled=%s, target=%s:%d, fragment=%d, rpc_timeout_ms=%d, attempts=%d, queue=%zu/%zuB, run_id=%s, aiserver_id=%s, env_id=%s",
+    LOG_INFO("Config", "sample_output: enabled=%s, target=%s:%d, fragment=%d, rpc_timeout_ms=%d, attempts=%d, queue=%zu/%zuB, aiserver_id=%s, env_id=%s",
              out_config.sample_output.enabled ? "true" : "false",
              out_config.sample_output.host.c_str(),
              out_config.sample_output.port,
@@ -360,8 +361,9 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
              out_config.sample_output.max_attempts,
              out_config.sample_output.outbound_max_fragments,
              out_config.sample_output.outbound_max_estimated_bytes,
-             out_config.sample_output.run_id.c_str(),
              out_config.sample_output.aiserver_id.c_str(),
              out_config.sample_output.env_id.c_str());
+    LOG_INFO("Config", "metrics: episode_window=%zu",
+             out_config.metrics.episode_window);
     return true;
 }

@@ -8,7 +8,7 @@
 server:
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
-  run_mode: 2                     # 1=training, 2=local-test, 3=model-evaluation, 4=A*测试
+  run_mode: 1                     # 1=training, 2=local-test, 3=model-evaluation, 4=A*测试
 
 # --- 网格参数（A* 测试 + 训练共用）---
 strategy:
@@ -18,7 +18,7 @@ strategy:
 # --- 模型参数 ---
 model:
   local_dir: "models/local"
-  p2p_dir: "models/cache"
+  local_train_dir: "models/local-train"
   smoke_dir: "models/smoke"
   save_name: "SaveModel"          # 本地保存的模型文件名（不含扩展名）
   manifest_name: "manifest.json"
@@ -32,7 +32,7 @@ model_distribution:
   poll_interval_ms: 200
   boundary_wait_ms: 1000
   rpc_timeout_ms: 5000
-  contract_version: "0.3.0"
+  contract_version: "0.5.0"
 
 # --- 样本输出参数（AIServer → SampleDistributor）---
 sample_output:
@@ -47,6 +47,8 @@ sample_output:
   health_timeout_ms: 5000
   outbound_max_fragments: 64
   outbound_max_estimated_bytes: 67108864
-  run_id: "local-run"
   aiserver_id: "aiserver-0"
   env_id: "env-0"
+
+metrics:
+  episode_window: 100

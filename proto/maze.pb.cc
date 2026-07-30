@@ -37,8 +37,7 @@ struct Vec2DefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 Vec2DefaultTypeInternal _Vec2_default_instance_;
 PROTOBUF_CONSTEXPR InitReq::InitReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.client_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.client_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.env_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.map_size_)*/nullptr
   , /*decltype(_impl_.start_pos_)*/nullptr
@@ -49,6 +48,7 @@ PROTOBUF_CONSTEXPR InitReq::InitReq(
   , /*decltype(_impl_.grid_size_)*/0
   , /*decltype(_impl_.grid_cols_)*/0
   , /*decltype(_impl_.grid_rows_)*/0
+  , /*decltype(_impl_.workload_mode_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct InitReqDefaultTypeInternal {
   PROTOBUF_CONSTEXPR InitReqDefaultTypeInternal()
@@ -76,8 +76,7 @@ struct InitRspDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 InitRspDefaultTypeInternal _InitRsp_default_instance_;
 PROTOBUF_CONSTEXPR BeginEpisodeReq::BeginEpisodeReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.session_id_)*/0
+    /*decltype(_impl_.session_id_)*/0
   , /*decltype(_impl_.episode_id_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct BeginEpisodeReqDefaultTypeInternal {
@@ -125,7 +124,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR UpdateReq::UpdateReq(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.agents_)*/{}
-  , /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.frame_id_)*/0
   , /*decltype(_impl_.session_id_)*/0
   , /*decltype(_impl_.episode_id_)*/0
@@ -169,8 +167,7 @@ struct UpdateRspDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 UpdateRspDefaultTypeInternal _UpdateRsp_default_instance_;
 PROTOBUF_CONSTEXPR EpisodeEndReq::EpisodeEndReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.episode_id_)*/0
+    /*decltype(_impl_.episode_id_)*/0
   , /*decltype(_impl_.session_id_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct EpisodeEndReqDefaultTypeInternal {
@@ -199,8 +196,7 @@ struct EpisodeEndRspDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EpisodeEndRspDefaultTypeInternal _EpisodeEndRsp_default_instance_;
 PROTOBUF_CONSTEXPR AbortEpisodeReq::AbortEpisodeReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.session_id_)*/0
   , /*decltype(_impl_.episode_id_)*/0
   , /*decltype(_impl_.reason_)*/0
@@ -250,7 +246,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR SampleBatch::SampleBatch(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.samples_)*/{}
-  , /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.env_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.producer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -320,8 +315,7 @@ struct PushSamplesRspDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PushSamplesRspDefaultTypeInternal _PushSamplesRsp_default_instance_;
 PROTOBUF_CONSTEXPR GetBatchReq::GetBatchReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.batch_size_)*/0
   , /*decltype(_impl_.timeout_ms_)*/0
   , /*decltype(_impl_.lease_timeout_ms_)*/0
@@ -365,8 +359,7 @@ struct GetBatchRspDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetBatchRspDefaultTypeInternal _GetBatchRsp_default_instance_;
 PROTOBUF_CONSTEXPR AckBatchReq::AckBatchReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.delivery_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.train_update_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.disposition_)*/0
@@ -382,8 +375,7 @@ struct AckBatchReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AckBatchReqDefaultTypeInternal _AckBatchReq_default_instance_;
 PROTOBUF_CONSTEXPR NackBatchReq::NackBatchReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.delivery_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.reason_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -398,8 +390,7 @@ struct NackBatchReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 NackBatchReqDefaultTypeInternal _NackBatchReq_default_instance_;
 PROTOBUF_CONSTEXPR RenewLeaseReq::RenewLeaseReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.consumer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.delivery_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.lease_timeout_ms_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -434,9 +425,7 @@ struct DeliveryRspDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeliveryRspDefaultTypeInternal _DeliveryRsp_default_instance_;
 PROTOBUF_CONSTEXPR DistributorStatusReq::DistributorStatusReq(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+    ::_pbi::ConstantInitialized) {}
 struct DistributorStatusReqDefaultTypeInternal {
   PROTOBUF_CONSTEXPR DistributorStatusReqDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -472,7 +461,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR DistributorStatusRsp::DistributorStatusRsp(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.behavior_versions_)*/{}
-  , /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.distributor_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.last_error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.push_sample_count_)*/int64_t{0}
@@ -528,9 +516,7 @@ struct DistributorStatusRspDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DistributorStatusRspDefaultTypeInternal _DistributorStatusRsp_default_instance_;
 PROTOBUF_CONSTEXPR AIServerStatusReq::AIServerStatusReq(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+    ::_pbi::ConstantInitialized) {}
 struct AIServerStatusReqDefaultTypeInternal {
   PROTOBUF_CONSTEXPR AIServerStatusReqDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -540,14 +526,66 @@ struct AIServerStatusReqDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AIServerStatusReqDefaultTypeInternal _AIServerStatusReq_default_instance_;
+PROTOBUF_CONSTEXPR TerminationReasonCount::TerminationReasonCount(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.count_)*/int64_t{0}
+  , /*decltype(_impl_.reason_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct TerminationReasonCountDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TerminationReasonCountDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TerminationReasonCountDefaultTypeInternal() {}
+  union {
+    TerminationReasonCount _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TerminationReasonCountDefaultTypeInternal _TerminationReasonCount_default_instance_;
+PROTOBUF_CONSTEXPR EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse(
+    ::_pbi::ConstantInitialized) {}
+struct EpisodeMetrics_RewardComponentMeanEntry_DoNotUseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EpisodeMetrics_RewardComponentMeanEntry_DoNotUseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EpisodeMetrics_RewardComponentMeanEntry_DoNotUseDefaultTypeInternal() {}
+  union {
+    EpisodeMetrics_RewardComponentMeanEntry_DoNotUse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EpisodeMetrics_RewardComponentMeanEntry_DoNotUseDefaultTypeInternal _EpisodeMetrics_RewardComponentMeanEntry_DoNotUse_default_instance_;
+PROTOBUF_CONSTEXPR EpisodeMetrics::EpisodeMetrics(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.termination_counts_)*/{}
+  , /*decltype(_impl_.reward_component_mean_)*/{::_pbi::ConstantInitialized()}
+  , /*decltype(_impl_.completed_episode_count_)*/int64_t{0}
+  , /*decltype(_impl_.completed_agent_count_)*/int64_t{0}
+  , /*decltype(_impl_.mean_agent_return_)*/0
+  , /*decltype(_impl_.min_agent_return_)*/0
+  , /*decltype(_impl_.max_agent_return_)*/0
+  , /*decltype(_impl_.agent_success_count_)*/int64_t{0}
+  , /*decltype(_impl_.agent_success_rate_)*/0
+  , /*decltype(_impl_.environment_any_success_count_)*/int64_t{0}
+  , /*decltype(_impl_.environment_any_success_rate_)*/0
+  , /*decltype(_impl_.environment_all_success_count_)*/int64_t{0}
+  , /*decltype(_impl_.environment_all_success_rate_)*/0
+  , /*decltype(_impl_.excluded_episode_count_)*/int64_t{0}
+  , /*decltype(_impl_.configured_window_size_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct EpisodeMetricsDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EpisodeMetricsDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EpisodeMetricsDefaultTypeInternal() {}
+  union {
+    EpisodeMetrics _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EpisodeMetricsDefaultTypeInternal _EpisodeMetrics_default_instance_;
 PROTOBUF_CONSTEXPR AIServerStatusRsp::AIServerStatusRsp(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.producer_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.loaded_model_checksum_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.last_error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.staged_model_checksum_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.episode_metrics_)*/nullptr
   , /*decltype(_impl_.protocol_version_)*/0u
   , /*decltype(_impl_.state_)*/0
   , /*decltype(_impl_.model_state_)*/0
@@ -586,6 +624,7 @@ PROTOBUF_CONSTEXPR AIServerStatusRsp::AIServerStatusRsp(
   , /*decltype(_impl_.model_switch_count_)*/int64_t{0}
   , /*decltype(_impl_.quarantined_sample_count_)*/int64_t{0}
   , /*decltype(_impl_.quarantined_fragment_count_)*/int64_t{0}
+  , /*decltype(_impl_.workload_mode_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct AIServerStatusRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR AIServerStatusRspDefaultTypeInternal()
@@ -605,7 +644,6 @@ PROTOBUF_CONSTEXPR ModelArtifactManifest::ModelArtifactManifest(
   , /*decltype(_impl_.value_shape_)*/{}
   , /*decltype(_impl_._value_shape_cached_byte_size_)*/{0}
   , /*decltype(_impl_.contract_version_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.artifact_uri_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.model_file_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.sha256_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -657,8 +695,7 @@ struct RegisterModelRspDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RegisterModelRspDefaultTypeInternal _RegisterModelRsp_default_instance_;
 PROTOBUF_CONSTEXPR GetModelManifestReq::GetModelManifestReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.model_version_)*/0
   , /*decltype(_impl_.latest_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -689,8 +726,7 @@ struct GetModelManifestRspDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetModelManifestRspDefaultTypeInternal _GetModelManifestRsp_default_instance_;
 PROTOBUF_CONSTEXPR DownloadModelReq::DownloadModelReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.model_version_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct DownloadModelReqDefaultTypeInternal {
@@ -704,8 +740,7 @@ struct DownloadModelReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DownloadModelReqDefaultTypeInternal _DownloadModelReq_default_instance_;
 PROTOBUF_CONSTEXPR ModelChunk::ModelChunk(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.offset_)*/int64_t{0}
   , /*decltype(_impl_.model_version_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -720,8 +755,7 @@ struct ModelChunkDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ModelChunkDefaultTypeInternal _ModelChunk_default_instance_;
 PROTOBUF_CONSTEXPR AckModelReq::AckModelReq(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.sha256_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.model_version_)*/0
@@ -753,9 +787,7 @@ struct AckModelRspDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AckModelRspDefaultTypeInternal _AckModelRsp_default_instance_;
 PROTOBUF_CONSTEXPR ModelDistributorStatusReq::ModelDistributorStatusReq(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+    ::_pbi::ConstantInitialized) {}
 struct ModelDistributorStatusReqDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ModelDistributorStatusReqDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -767,8 +799,7 @@ struct ModelDistributorStatusReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ModelDistributorStatusReqDefaultTypeInternal _ModelDistributorStatusReq_default_instance_;
 PROTOBUF_CONSTEXPR ModelDistributorStatusRsp::ModelDistributorStatusRsp(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.run_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.distributor_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.distributor_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.latest_model_checksum_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.latest_ack_aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.last_error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -799,8 +830,8 @@ struct ModelDistributorStatusRspDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ModelDistributorStatusRspDefaultTypeInternal _ModelDistributorStatusRsp_default_instance_;
 }  // namespace maze
-static ::_pb::Metadata file_level_metadata_maze_2eproto[39];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_2eproto[13];
+static ::_pb::Metadata file_level_metadata_maze_2eproto[42];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_2eproto[14];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_maze_2eproto = nullptr;
 
 const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -823,13 +854,13 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.start_pos_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.end_pos_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.session_id_),
-  PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.client_id_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.env_id_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.grid_size_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.grid_cols_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.grid_rows_),
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.end_grid_),
+  PROTOBUF_FIELD_OFFSET(::maze::InitReq, _impl_.workload_mode_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::InitRsp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -845,7 +876,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::BeginEpisodeReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::BeginEpisodeReq, _impl_.session_id_),
   PROTOBUF_FIELD_OFFSET(::maze::BeginEpisodeReq, _impl_.episode_id_),
   ~0u,  // no _has_bits_
@@ -878,7 +908,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::maze::UpdateReq, _impl_.agents_),
   PROTOBUF_FIELD_OFFSET(::maze::UpdateReq, _impl_.frame_id_),
   PROTOBUF_FIELD_OFFSET(::maze::UpdateReq, _impl_.session_id_),
-  PROTOBUF_FIELD_OFFSET(::maze::UpdateReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::UpdateReq, _impl_.episode_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::AgentAction, _internal_metadata_),
@@ -904,7 +933,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::maze::EpisodeEndReq, _impl_.episode_id_),
   PROTOBUF_FIELD_OFFSET(::maze::EpisodeEndReq, _impl_.session_id_),
-  PROTOBUF_FIELD_OFFSET(::maze::EpisodeEndReq, _impl_.run_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::EpisodeEndRsp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -920,7 +948,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::AbortEpisodeReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AbortEpisodeReq, _impl_.session_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AbortEpisodeReq, _impl_.episode_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AbortEpisodeReq, _impl_.reason_),
@@ -962,7 +989,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::maze::SampleBatch, _impl_.samples_),
   PROTOBUF_FIELD_OFFSET(::maze::SampleBatch, _impl_.is_episode_end_),
   PROTOBUF_FIELD_OFFSET(::maze::SampleBatch, _impl_.session_id_),
-  PROTOBUF_FIELD_OFFSET(::maze::SampleBatch, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::SampleBatch, _impl_.aiserver_id_),
   PROTOBUF_FIELD_OFFSET(::maze::SampleBatch, _impl_.env_id_),
   PROTOBUF_FIELD_OFFSET(::maze::SampleBatch, _impl_.fragment_id_),
@@ -1012,7 +1038,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::maze::GetBatchReq, _impl_.batch_size_),
   PROTOBUF_FIELD_OFFSET(::maze::GetBatchReq, _impl_.timeout_ms_),
-  PROTOBUF_FIELD_OFFSET(::maze::GetBatchReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::GetBatchReq, _impl_.consumer_instance_id_),
   PROTOBUF_FIELD_OFFSET(::maze::GetBatchReq, _impl_.lease_timeout_ms_),
   PROTOBUF_FIELD_OFFSET(::maze::GetBatchReq, _impl_.behavior_model_version_),
@@ -1043,7 +1068,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::AckBatchReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AckBatchReq, _impl_.consumer_instance_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AckBatchReq, _impl_.delivery_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AckBatchReq, _impl_.disposition_),
@@ -1054,7 +1078,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::NackBatchReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::NackBatchReq, _impl_.consumer_instance_id_),
   PROTOBUF_FIELD_OFFSET(::maze::NackBatchReq, _impl_.delivery_id_),
   PROTOBUF_FIELD_OFFSET(::maze::NackBatchReq, _impl_.reason_),
@@ -1064,7 +1087,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::RenewLeaseReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::RenewLeaseReq, _impl_.consumer_instance_id_),
   PROTOBUF_FIELD_OFFSET(::maze::RenewLeaseReq, _impl_.delivery_id_),
   PROTOBUF_FIELD_OFFSET(::maze::RenewLeaseReq, _impl_.lease_timeout_ms_),
@@ -1089,7 +1111,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusReq, _impl_.run_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::BehaviorVersionQueueStatus, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1122,7 +1143,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.latest_push_ts_ms_),
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.latest_consume_ts_ms_),
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.protocol_version_),
-  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.distributor_instance_id_),
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.ready_),
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.push_attempt_count_),
@@ -1165,7 +1185,45 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusReq, _impl_.run_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::maze::TerminationReasonCount, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::maze::TerminationReasonCount, _impl_.reason_),
+  PROTOBUF_FIELD_OFFSET(::maze::TerminationReasonCount, _impl_.count_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse, value_),
+  0,
+  1,
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.configured_window_size_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.completed_episode_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.completed_agent_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.mean_agent_return_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.min_agent_return_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.max_agent_return_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.agent_success_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.agent_success_rate_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.environment_any_success_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.environment_any_success_rate_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.environment_all_success_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.environment_all_success_rate_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.excluded_episode_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.termination_counts_),
+  PROTOBUF_FIELD_OFFSET(::maze::EpisodeMetrics, _impl_.reward_component_mean_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1173,7 +1231,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.protocol_version_),
-  PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.aiserver_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.producer_instance_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.state_),
@@ -1216,6 +1273,8 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.model_switch_count_),
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.quarantined_sample_count_),
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.quarantined_fragment_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.workload_mode_),
+  PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusRsp, _impl_.episode_metrics_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::ModelArtifactManifest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1224,7 +1283,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::maze::ModelArtifactManifest, _impl_.schema_version_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelArtifactManifest, _impl_.contract_version_),
-  PROTOBUF_FIELD_OFFSET(::maze::ModelArtifactManifest, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelArtifactManifest, _impl_.model_version_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelArtifactManifest, _impl_.artifact_uri_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelArtifactManifest, _impl_.model_file_),
@@ -1260,7 +1318,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::GetModelManifestReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::GetModelManifestReq, _impl_.model_version_),
   PROTOBUF_FIELD_OFFSET(::maze::GetModelManifestReq, _impl_.aiserver_id_),
   PROTOBUF_FIELD_OFFSET(::maze::GetModelManifestReq, _impl_.latest_),
@@ -1280,7 +1337,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::DownloadModelReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::DownloadModelReq, _impl_.model_version_),
   PROTOBUF_FIELD_OFFSET(::maze::DownloadModelReq, _impl_.aiserver_id_),
   ~0u,  // no _has_bits_
@@ -1289,7 +1345,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::ModelChunk, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelChunk, _impl_.model_version_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelChunk, _impl_.offset_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelChunk, _impl_.data_),
@@ -1299,7 +1354,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::AckModelReq, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AckModelReq, _impl_.aiserver_id_),
   PROTOBUF_FIELD_OFFSET(::maze::AckModelReq, _impl_.model_version_),
   PROTOBUF_FIELD_OFFSET(::maze::AckModelReq, _impl_.sha256_),
@@ -1321,7 +1375,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::maze::ModelDistributorStatusReq, _impl_.run_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::ModelDistributorStatusRsp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1329,7 +1382,6 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::maze::ModelDistributorStatusRsp, _impl_.protocol_version_),
-  PROTOBUF_FIELD_OFFSET(::maze::ModelDistributorStatusRsp, _impl_.run_id_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelDistributorStatusRsp, _impl_.distributor_instance_id_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelDistributorStatusRsp, _impl_.ready_),
   PROTOBUF_FIELD_OFFSET(::maze::ModelDistributorStatusRsp, _impl_.registered_model_count_),
@@ -1355,41 +1407,44 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 8, -1, -1, sizeof(::maze::InitReq)},
   { 26, -1, -1, sizeof(::maze::InitRsp)},
   { 35, -1, -1, sizeof(::maze::BeginEpisodeReq)},
-  { 44, -1, -1, sizeof(::maze::EpisodeLifecycleRsp)},
-  { 54, -1, -1, sizeof(::maze::AgentState)},
-  { 65, -1, -1, sizeof(::maze::UpdateReq)},
-  { 76, -1, -1, sizeof(::maze::AgentAction)},
-  { 84, -1, -1, sizeof(::maze::UpdateRsp)},
-  { 92, -1, -1, sizeof(::maze::EpisodeEndReq)},
-  { 101, -1, -1, sizeof(::maze::EpisodeEndRsp)},
-  { 110, -1, -1, sizeof(::maze::AbortEpisodeReq)},
-  { 121, 129, -1, sizeof(::maze::Sample_RewardDetailsEntry_DoNotUse)},
-  { 131, -1, -1, sizeof(::maze::Sample)},
-  { 147, -1, -1, sizeof(::maze::SampleBatch)},
-  { 174, -1, -1, sizeof(::maze::SampleResponse)},
-  { 182, -1, -1, sizeof(::maze::PushSamplesRsp)},
-  { 200, -1, -1, sizeof(::maze::GetBatchReq)},
-  { 213, -1, -1, sizeof(::maze::GetBatchRsp)},
-  { 233, -1, -1, sizeof(::maze::AckBatchReq)},
-  { 244, -1, -1, sizeof(::maze::NackBatchReq)},
-  { 254, -1, -1, sizeof(::maze::RenewLeaseReq)},
-  { 264, -1, -1, sizeof(::maze::DeliveryRsp)},
-  { 279, -1, -1, sizeof(::maze::DistributorStatusReq)},
-  { 286, -1, -1, sizeof(::maze::BehaviorVersionQueueStatus)},
-  { 303, -1, -1, sizeof(::maze::DistributorStatusRsp)},
-  { 355, -1, -1, sizeof(::maze::AIServerStatusReq)},
-  { 362, -1, -1, sizeof(::maze::AIServerStatusRsp)},
-  { 412, -1, -1, sizeof(::maze::ModelArtifactManifest)},
-  { 432, -1, -1, sizeof(::maze::RegisterModelReq)},
-  { 439, -1, -1, sizeof(::maze::RegisterModelRsp)},
-  { 450, -1, -1, sizeof(::maze::GetModelManifestReq)},
-  { 460, -1, -1, sizeof(::maze::GetModelManifestRsp)},
-  { 470, -1, -1, sizeof(::maze::DownloadModelReq)},
-  { 479, -1, -1, sizeof(::maze::ModelChunk)},
-  { 489, -1, -1, sizeof(::maze::AckModelReq)},
-  { 501, -1, -1, sizeof(::maze::AckModelRsp)},
-  { 511, -1, -1, sizeof(::maze::ModelDistributorStatusReq)},
-  { 518, -1, -1, sizeof(::maze::ModelDistributorStatusRsp)},
+  { 43, -1, -1, sizeof(::maze::EpisodeLifecycleRsp)},
+  { 53, -1, -1, sizeof(::maze::AgentState)},
+  { 64, -1, -1, sizeof(::maze::UpdateReq)},
+  { 74, -1, -1, sizeof(::maze::AgentAction)},
+  { 82, -1, -1, sizeof(::maze::UpdateRsp)},
+  { 90, -1, -1, sizeof(::maze::EpisodeEndReq)},
+  { 98, -1, -1, sizeof(::maze::EpisodeEndRsp)},
+  { 107, -1, -1, sizeof(::maze::AbortEpisodeReq)},
+  { 117, 125, -1, sizeof(::maze::Sample_RewardDetailsEntry_DoNotUse)},
+  { 127, -1, -1, sizeof(::maze::Sample)},
+  { 143, -1, -1, sizeof(::maze::SampleBatch)},
+  { 169, -1, -1, sizeof(::maze::SampleResponse)},
+  { 177, -1, -1, sizeof(::maze::PushSamplesRsp)},
+  { 195, -1, -1, sizeof(::maze::GetBatchReq)},
+  { 207, -1, -1, sizeof(::maze::GetBatchRsp)},
+  { 227, -1, -1, sizeof(::maze::AckBatchReq)},
+  { 237, -1, -1, sizeof(::maze::NackBatchReq)},
+  { 246, -1, -1, sizeof(::maze::RenewLeaseReq)},
+  { 255, -1, -1, sizeof(::maze::DeliveryRsp)},
+  { 270, -1, -1, sizeof(::maze::DistributorStatusReq)},
+  { 276, -1, -1, sizeof(::maze::BehaviorVersionQueueStatus)},
+  { 293, -1, -1, sizeof(::maze::DistributorStatusRsp)},
+  { 344, -1, -1, sizeof(::maze::AIServerStatusReq)},
+  { 350, -1, -1, sizeof(::maze::TerminationReasonCount)},
+  { 358, 366, -1, sizeof(::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse)},
+  { 368, -1, -1, sizeof(::maze::EpisodeMetrics)},
+  { 389, -1, -1, sizeof(::maze::AIServerStatusRsp)},
+  { 440, -1, -1, sizeof(::maze::ModelArtifactManifest)},
+  { 459, -1, -1, sizeof(::maze::RegisterModelReq)},
+  { 466, -1, -1, sizeof(::maze::RegisterModelRsp)},
+  { 477, -1, -1, sizeof(::maze::GetModelManifestReq)},
+  { 486, -1, -1, sizeof(::maze::GetModelManifestRsp)},
+  { 496, -1, -1, sizeof(::maze::DownloadModelReq)},
+  { 504, -1, -1, sizeof(::maze::ModelChunk)},
+  { 513, -1, -1, sizeof(::maze::AckModelReq)},
+  { 524, -1, -1, sizeof(::maze::AckModelRsp)},
+  { 534, -1, -1, sizeof(::maze::ModelDistributorStatusReq)},
+  { 540, -1, -1, sizeof(::maze::ModelDistributorStatusRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1420,6 +1475,9 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::maze::_BehaviorVersionQueueStatus_default_instance_._instance,
   &::maze::_DistributorStatusRsp_default_instance_._instance,
   &::maze::_AIServerStatusReq_default_instance_._instance,
+  &::maze::_TerminationReasonCount_default_instance_._instance,
+  &::maze::_EpisodeMetrics_RewardComponentMeanEntry_DoNotUse_default_instance_._instance,
+  &::maze::_EpisodeMetrics_default_instance_._instance,
   &::maze::_AIServerStatusRsp_default_instance_._instance,
   &::maze::_ModelArtifactManifest_default_instance_._instance,
   &::maze::_RegisterModelReq_default_instance_._instance,
@@ -1436,320 +1494,344 @@ static const ::_pb::Message* const file_default_instances[] = {
 
 const char descriptor_table_protodef_maze_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\nmaze.proto\022\004maze\"\034\n\004Vec2\022\t\n\001x\030\001 \001(\002\022\t\n"
-  "\001y\030\002 \001(\002\"\224\002\n\007InitReq\022\021\n\tagent_num\030\001 \001(\005\022"
+  "\001y\030\002 \001(\002\"\275\002\n\007InitReq\022\021\n\tagent_num\030\001 \001(\005\022"
   "\034\n\010map_size\030\002 \001(\0132\n.maze.Vec2\022\035\n\tstart_p"
   "os\030\003 \001(\0132\n.maze.Vec2\022\033\n\007end_pos\030\004 \001(\0132\n."
-  "maze.Vec2\022\022\n\nsession_id\030\005 \001(\005\022\016\n\006run_id\030"
-  "\006 \001(\t\022\021\n\tclient_id\030\007 \001(\t\022\016\n\006env_id\030\010 \001(\t"
-  "\022\021\n\tgrid_size\030\t \001(\002\022\021\n\tgrid_cols\030\n \001(\005\022\021"
-  "\n\tgrid_rows\030\013 \001(\005\022\034\n\010end_grid\030\014 \001(\0132\n.ma"
-  "ze.Vec2\"S\n\007InitRsp\022\020\n\010ret_code\030\001 \001(\005\022%\n\006"
-  "result\030\002 \001(\0162\025.maze.LifecycleResult\022\017\n\007m"
-  "essage\030\003 \001(\t\"I\n\017BeginEpisodeReq\022\016\n\006run_i"
-  "d\030\001 \001(\t\022\022\n\nsession_id\030\002 \001(\005\022\022\n\nepisode_i"
-  "d\030\003 \001(\005\"s\n\023EpisodeLifecycleRsp\022\020\n\010ret_co"
+  "maze.Vec2\022\022\n\nsession_id\030\005 \001(\005\022\021\n\tclient_"
+  "id\030\007 \001(\t\022\016\n\006env_id\030\010 \001(\t\022\021\n\tgrid_size\030\t "
+  "\001(\002\022\021\n\tgrid_cols\030\n \001(\005\022\021\n\tgrid_rows\030\013 \001("
+  "\005\022\034\n\010end_grid\030\014 \001(\0132\n.maze.Vec2\022)\n\rworkl"
+  "oad_mode\030\r \001(\0162\022.maze.WorkloadModeJ\004\010\006\020\007"
+  "R\006run_id\"S\n\007InitRsp\022\020\n\010ret_code\030\001 \001(\005\022%\n"
+  "\006result\030\002 \001(\0162\025.maze.LifecycleResult\022\017\n\007"
+  "message\030\003 \001(\t\"G\n\017BeginEpisodeReq\022\022\n\nsess"
+  "ion_id\030\002 \001(\005\022\022\n\nepisode_id\030\003 \001(\005J\004\010\001\020\002R\006"
+  "run_id\"s\n\023EpisodeLifecycleRsp\022\020\n\010ret_cod"
+  "e\030\001 \001(\005\022%\n\006result\030\002 \001(\0162\025.maze.Lifecycle"
+  "Result\022\017\n\007message\030\003 \001(\t\022\022\n\nepisode_id\030\004 "
+  "\001(\005\"\212\001\n\nAgentState\022\020\n\010agent_id\030\001 \001(\005\022\027\n\003"
+  "pos\030\002 \001(\0132\n.maze.Vec2\022\017\n\007is_done\030\003 \001(\010\022\013"
+  "\n\003obs\030\004 \003(\002\0223\n\022termination_reason\030\005 \001(\0162"
+  "\027.maze.TerminationReason\"u\n\tUpdateReq\022 \n"
+  "\006agents\030\001 \003(\0132\020.maze.AgentState\022\020\n\010frame"
+  "_id\030\002 \001(\005\022\022\n\nsession_id\030\003 \001(\005\022\022\n\nepisode"
+  "_id\030\005 \001(\005J\004\010\004\020\005R\006run_id\"2\n\013AgentAction\022\020"
+  "\n\010agent_id\030\001 \001(\005\022\021\n\taction_id\030\002 \001(\005\"A\n\tU"
+  "pdateRsp\022\"\n\007actions\030\001 \003(\0132\021.maze.AgentAc"
+  "tion\022\020\n\010replayed\030\002 \001(\010\"E\n\rEpisodeEndReq\022"
+  "\022\n\nepisode_id\030\001 \001(\005\022\022\n\nsession_id\030\002 \001(\005J"
+  "\004\010\003\020\004R\006run_id\"Y\n\rEpisodeEndRsp\022\020\n\010ret_co"
   "de\030\001 \001(\005\022%\n\006result\030\002 \001(\0162\025.maze.Lifecycl"
-  "eResult\022\017\n\007message\030\003 \001(\t\022\022\n\nepisode_id\030\004"
-  " \001(\005\"\212\001\n\nAgentState\022\020\n\010agent_id\030\001 \001(\005\022\027\n"
-  "\003pos\030\002 \001(\0132\n.maze.Vec2\022\017\n\007is_done\030\003 \001(\010\022"
-  "\013\n\003obs\030\004 \003(\002\0223\n\022termination_reason\030\005 \001(\016"
-  "2\027.maze.TerminationReason\"w\n\tUpdateReq\022 "
-  "\n\006agents\030\001 \003(\0132\020.maze.AgentState\022\020\n\010fram"
-  "e_id\030\002 \001(\005\022\022\n\nsession_id\030\003 \001(\005\022\016\n\006run_id"
-  "\030\004 \001(\t\022\022\n\nepisode_id\030\005 \001(\005\"2\n\013AgentActio"
-  "n\022\020\n\010agent_id\030\001 \001(\005\022\021\n\taction_id\030\002 \001(\005\"A"
-  "\n\tUpdateRsp\022\"\n\007actions\030\001 \003(\0132\021.maze.Agen"
-  "tAction\022\020\n\010replayed\030\002 \001(\010\"G\n\rEpisodeEndR"
-  "eq\022\022\n\nepisode_id\030\001 \001(\005\022\022\n\nsession_id\030\002 \001"
-  "(\005\022\016\n\006run_id\030\003 \001(\t\"Y\n\rEpisodeEndRsp\022\020\n\010r"
-  "et_code\030\001 \001(\005\022%\n\006result\030\002 \001(\0162\025.maze.Lif"
-  "ecycleResult\022\017\n\007message\030\003 \001(\t\"\203\001\n\017AbortE"
-  "pisodeReq\022\016\n\006run_id\030\001 \001(\t\022\022\n\nsession_id\030"
-  "\002 \001(\005\022\022\n\nepisode_id\030\003 \001(\005\022\'\n\006reason\030\004 \001("
-  "\0162\027.maze.TerminationReason\022\017\n\007message\030\005 "
-  "\001(\t\"\360\002\n\006Sample\022\013\n\003obs\030\001 \003(\002\022\016\n\006action\030\002 "
-  "\001(\005\022\016\n\006reward\030\003 \001(\002\022\024\n\014old_log_prob\030\004 \001("
-  "\002\022\021\n\told_vpred\030\005 \001(\002\0227\n\016reward_details\030\t"
-  " \003(\0132\037.maze.Sample.RewardDetailsEntry\022\022\n"
-  "\nterminated\030\n \001(\010\022\021\n\ttruncated\030\013 \001(\010\0223\n\022"
-  "termination_reason\030\014 \001(\0162\027.maze.Terminat"
-  "ionReason\022\027\n\017action_frame_id\030\r \001(\003\0324\n\022Re"
-  "wardDetailsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002"
-  " \001(\002:\0028\001J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tR\tadvantageR\tt"
-  "d_returnR\004mask\"\244\004\n\013SampleBatch\022\022\n\nepisod"
-  "e_id\030\001 \001(\005\022\020\n\010agent_id\030\002 \001(\005\022\035\n\007samples\030"
-  "\003 \003(\0132\014.maze.Sample\022\026\n\016is_episode_end\030\004 "
-  "\001(\010\022\022\n\nsession_id\030\005 \001(\005\022\016\n\006run_id\030\006 \001(\t\022"
-  "\023\n\013aiserver_id\030\007 \001(\t\022\016\n\006env_id\030\010 \001(\t\022\023\n\013"
-  "fragment_id\030\t \001(\005\022\036\n\026behavior_model_vers"
-  "ion\030\n \001(\005\022\025\n\rcreated_ts_ms\030\013 \001(\003\022\034\n\024prod"
-  "ucer_instance_id\030\014 \001(\t\022\024\n\014fragment_seq\030\r"
-  " \001(\004\022\020\n\010batch_id\030\016 \001(\t\022\030\n\020protocol_versi"
-  "on\030\017 \001(\r\022\037\n\027behavior_model_checksum\030\020 \001("
-  "\t\0223\n\022termination_reason\030\021 \001(\0162\027.maze.Ter"
-  "minationReason\022\027\n\017bootstrap_value\030\022 \001(\002\022"
-  "\027\n\017bootstrap_valid\030\023 \001(\010\022\035\n\025first_action"
-  "_frame_id\030\024 \001(\003\022\034\n\024last_action_frame_id\030"
-  "\025 \001(\003\"9\n\016SampleResponse\022\020\n\010ret_code\030\001 \001("
-  "\005\022\025\n\rmodel_version\030\002 \001(\005\"\334\002\n\016PushSamples"
-  "Rsp\022\020\n\010ret_code\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\030"
-  "\n\020accepted_samples\030\003 \001(\003\022\022\n\nqueue_size\030\004"
-  " \001(\003\022 \n\006result\030\005 \001(\0162\020.maze.PushResult\022\020"
-  "\n\010batch_id\030\006 \001(\t\022\037\n\027accepted_unique_samp"
-  "les\030\007 \001(\003\022\030\n\020resident_samples\030\010 \001(\003\022\032\n\022r"
-  "esident_fragments\030\t \001(\003\022 \n\030resident_esti"
-  "mated_bytes\030\n \001(\003\022+\n\016pressure_state\030\013 \001("
-  "\0162\023.maze.PressureState\022\037\n\027distributor_in"
-  "stance_id\030\014 \001(\t\"\323\001\n\013GetBatchReq\022\022\n\nbatch"
-  "_size\030\001 \001(\005\022\022\n\ntimeout_ms\030\002 \001(\005\022\016\n\006run_i"
-  "d\030\003 \001(\t\022\034\n\024consumer_instance_id\030\004 \001(\t\022\030\n"
-  "\020lease_timeout_ms\030\005 \001(\005\022\036\n\026behavior_mode"
-  "l_version\030\006 \001(\005\0224\n\020selection_policy\030\007 \001("
-  "\0162\032.maze.BatchSelectionPolicy\"\374\002\n\013GetBat"
-  "chRsp\022\020\n\010ret_code\030\001 \001(\005\022\"\n\007batches\030\002 \003(\013"
-  "2\021.maze.SampleBatch\022\022\n\nqueue_size\030\003 \001(\003\022"
-  "\030\n\020returned_samples\030\004 \001(\003\022\017\n\007message\030\005 \001"
-  "(\t\022$\n\006result\030\006 \001(\0162\024.maze.GetBatchResult"
-  "\022\023\n\013delivery_id\030\007 \001(\t\022\034\n\024lease_deadline_"
-  "ts_ms\030\010 \001(\003\022\032\n\022returned_fragments\030\t \001(\003\022"
-  "\031\n\021actual_batch_size\030\n \001(\003\022\017\n\007wait_ms\030\013 "
-  "\001(\003\022\026\n\016leased_samples\030\014 \001(\003\022\037\n\027distribut"
-  "or_instance_id\030\r \001(\t\022\036\n\026behavior_model_v"
-  "ersion\030\016 \001(\005\"\224\001\n\013AckBatchReq\022\016\n\006run_id\030\001"
-  " \001(\t\022\034\n\024consumer_instance_id\030\002 \001(\t\022\023\n\013de"
-  "livery_id\030\003 \001(\t\022)\n\013disposition\030\004 \001(\0162\024.m"
-  "aze.AckDisposition\022\027\n\017train_update_id\030\005 "
-  "\001(\t\"a\n\014NackBatchReq\022\016\n\006run_id\030\001 \001(\t\022\034\n\024c"
-  "onsumer_instance_id\030\002 \001(\t\022\023\n\013delivery_id"
-  "\030\003 \001(\t\022\016\n\006reason\030\004 \001(\t\"l\n\rRenewLeaseReq\022"
-  "\016\n\006run_id\030\001 \001(\t\022\034\n\024consumer_instance_id\030"
-  "\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022\030\n\020lease_time"
-  "out_ms\030\004 \001(\005\"\373\001\n\013DeliveryRsp\022\020\n\010ret_code"
-  "\030\001 \001(\005\022$\n\006result\030\002 \001(\0162\024.maze.DeliveryRe"
-  "sult\022\017\n\007message\030\003 \001(\t\022\023\n\013delivery_id\030\004 \001"
-  "(\t\022\030\n\020affected_samples\030\005 \001(\003\022\022\n\nqueue_si"
-  "ze\030\006 \001(\003\022\034\n\024lease_deadline_ts_ms\030\007 \001(\003\022)"
-  "\n\013disposition\030\010 \001(\0162\024.maze.AckDispositio"
-  "n\022\027\n\017train_update_id\030\t \001(\t\"&\n\024Distributo"
-  "rStatusReq\022\016\n\006run_id\030\001 \001(\t\"\273\002\n\032BehaviorV"
-  "ersionQueueStatus\022\036\n\026behavior_model_vers"
-  "ion\030\001 \001(\005\022\025\n\rready_samples\030\002 \001(\003\022\027\n\017read"
-  "y_fragments\030\003 \001(\003\022\026\n\016leased_samples\030\004 \001("
-  "\003\022\030\n\020leased_fragments\030\005 \001(\003\022\025\n\racked_sam"
-  "ples\030\006 \001(\003\022\027\n\017acked_fragments\030\007 \001(\003\022\027\n\017t"
-  "rained_samples\030\010 \001(\003\022\025\n\rstale_samples\030\t "
-  "\001(\003\022\027\n\017invalid_samples\030\n \001(\003\022\"\n\032shutdown"
-  "_untrained_samples\030\013 \001(\003\"\332\n\n\024Distributor"
-  "StatusRsp\022\031\n\021push_sample_count\030\001 \001(\003\022\034\n\024"
-  "consume_sample_count\030\002 \001(\003\022\022\n\nqueue_size"
-  "\030\003 \001(\003\022\030\n\020push_batch_count\030\004 \001(\003\022\033\n\023cons"
-  "ume_batch_count\030\005 \001(\003\022\022\n\ndrop_count\030\006 \001("
-  "\003\022\031\n\021latest_push_ts_ms\030\007 \001(\003\022\034\n\024latest_c"
-  "onsume_ts_ms\030\010 \001(\003\022\030\n\020protocol_version\030\t"
-  " \001(\r\022\016\n\006run_id\030\n \001(\t\022\037\n\027distributor_inst"
-  "ance_id\030\013 \001(\t\022\r\n\005ready\030\014 \001(\010\022\032\n\022push_att"
-  "empt_count\030\r \001(\003\022\037\n\027accepted_unique_samp"
-  "les\030\016 \001(\003\022\037\n\027accepted_unique_batches\030\017 \001"
-  "(\003\022$\n\034duplicate_push_attempt_count\030\020 \001(\003"
-  "\022!\n\031duplicate_sample_attempts\030\021 \001(\003\022#\n\033r"
-  "ejected_push_attempt_count\030\022 \001(\003\022 \n\030reje"
-  "cted_sample_attempts\030\023 \001(\003\022\034\n\024acked_uniq"
-  "ue_samples\030\024 \001(\003\022\034\n\024acked_unique_batches"
-  "\030\025 \001(\003\022\033\n\023ready_queue_samples\030\026 \001(\003\022\035\n\025r"
-  "eady_queue_fragments\030\027 \001(\003\022\026\n\016leased_sam"
-  "ples\030\030 \001(\003\022\030\n\020leased_fragments\030\031 \001(\003\022\030\n\020"
-  "resident_samples\030\032 \001(\003\022\032\n\022resident_fragm"
-  "ents\030\033 \001(\003\022 \n\030resident_estimated_bytes\030\034"
-  " \001(\003\022\030\n\020capacity_samples\030\035 \001(\003\022\032\n\022capaci"
-  "ty_fragments\030\036 \001(\003\022 \n\030capacity_estimated"
-  "_bytes\030\037 \001(\003\022+\n\016pressure_state\030  \001(\0162\023.m"
-  "aze.PressureState\022\030\n\020redelivery_count\030! "
-  "\001(\003\022\022\n\nnack_count\030\" \001(\003\022\033\n\023expired_lease"
-  "_count\030# \001(\003\022\030\n\020latest_ack_ts_ms\030$ \001(\003\022\030"
-  "\n\020target_hit_count\030% \001(\003\022\031\n\021partial_get_"
-  "count\030& \001(\003\022\033\n\023empty_timeout_count\030\' \001(\003"
-  "\022\022\n\nlast_error\030( \001(\t\022;\n\021behavior_version"
-  "s\030) \003(\0132 .maze.BehaviorVersionQueueStatu"
-  "s\022\034\n\024trained_sample_count\030* \001(\003\022\032\n\022stale"
-  "_sample_count\030+ \001(\003\022\034\n\024invalid_sample_co"
-  "unt\030, \001(\003\022\'\n\037shutdown_untrained_sample_c"
-  "ount\030- \001(\003\022\031\n\021lease_renew_count\030. \001(\003\"#\n"
-  "\021AIServerStatusReq\022\016\n\006run_id\030\001 \001(\t\"\314\n\n\021A"
-  "IServerStatusRsp\022\030\n\020protocol_version\030\001 \001"
-  "(\r\022\016\n\006run_id\030\002 \001(\t\022\023\n\013aiserver_id\030\003 \001(\t\022"
-  "\034\n\024producer_instance_id\030\004 \001(\t\022\"\n\005state\030\005"
-  " \001(\0162\023.maze.AIServerState\022\r\n\005ready\030\006 \001(\010"
-  "\022\031\n\021distributor_ready\030\007 \001(\010\022%\n\013model_sta"
-  "te\030\010 \001(\0162\020.maze.ModelState\022\034\n\024loaded_mod"
-  "el_version\030\t \001(\005\022\035\n\025loaded_model_checksu"
-  "m\030\n \001(\t\022 \n\030outbound_queue_fragments\030\013 \001("
-  "\003\022\036\n\026outbound_queue_samples\030\014 \001(\003\022&\n\036out"
-  "bound_queue_estimated_bytes\030\r \001(\003\022%\n\035out"
-  "bound_queue_high_watermark\030\016 \001(\003\022\037\n\027prod"
-  "uced_unique_samples\030\017 \001(\003\022\037\n\027produced_un"
-  "ique_batches\030\020 \001(\003\022\032\n\022push_attempt_count"
-  "\030\021 \001(\003\022\037\n\027accepted_unique_samples\030\022 \001(\003\022"
-  "$\n\034duplicate_push_attempt_count\030\023 \001(\003\022#\n"
-  "\033rejected_push_attempt_count\030\024 \001(\003\022\033\n\023re"
-  "try_attempt_count\030\025 \001(\003\022!\n\031final_drop_un"
-  "ique_samples\030\026 \001(\003\022\034\n\024active_session_cou"
-  "nt\030\027 \001(\003\022\034\n\024active_episode_count\030\030 \001(\003\022\032"
-  "\n\022client_initialized\030\031 \001(\010\022\030\n\020update_rpc"
-  "_count\030\032 \001(\003\022!\n\031update_rpc_latency_sum_m"
-  "s\030\033 \001(\001\022!\n\031update_rpc_latency_max_ms\030\034 \001"
-  "(\001\022\027\n\017inference_count\030\035 \001(\003\022 \n\030inference"
-  "_latency_sum_ms\030\036 \001(\001\022 \n\030inference_laten"
-  "cy_max_ms\030\037 \001(\001\022\025\n\renqueue_count\030  \001(\003\022\036"
-  "\n\026enqueue_latency_sum_ms\030! \001(\001\022\036\n\026enqueu"
-  "e_latency_max_ms\030\" \001(\001\022\026\n\016push_rpc_count"
-  "\030# \001(\003\022\037\n\027push_rpc_latency_sum_ms\030$ \001(\001\022"
-  "\037\n\027push_rpc_latency_max_ms\030% \001(\001\022\022\n\nlast"
-  "_error\030& \001(\t\022\024\n\014timestamp_ms\030\' \001(\003\022\034\n\024st"
-  "aged_model_version\030( \001(\005\022\035\n\025staged_model"
-  "_checksum\030) \001(\t\022\032\n\022model_switch_count\030* "
-  "\001(\003\022 \n\030quarantined_sample_count\030+ \001(\003\022\"\n"
-  "\032quarantined_fragment_count\030, \001(\003\"\264\002\n\025Mo"
-  "delArtifactManifest\022\026\n\016schema_version\030\001 "
-  "\001(\r\022\030\n\020contract_version\030\002 \001(\t\022\016\n\006run_id\030"
-  "\003 \001(\t\022\025\n\rmodel_version\030\004 \001(\005\022\024\n\014artifact"
-  "_uri\030\005 \001(\t\022\022\n\nmodel_file\030\006 \001(\t\022\022\n\nsize_b"
-  "ytes\030\007 \001(\003\022\016\n\006sha256\030\010 \001(\t\022\023\n\013input_shap"
-  "e\030\t \003(\003\022\024\n\014action_shape\030\n \003(\003\022\023\n\013value_s"
-  "hape\030\013 \003(\003\022\014\n\004seed\030\014 \001(\003\022\r\n\005ready\030\r \001(\010\022"
-  "\027\n\017published_ts_ms\030\016 \001(\003\"A\n\020RegisterMode"
-  "lReq\022-\n\010manifest\030\001 \001(\0132\033.maze.ModelArtif"
-  "actManifest\"\260\001\n\020RegisterModelRsp\022\020\n\010ret_"
-  "code\030\001 \001(\005\022)\n\006result\030\002 \001(\0162\031.maze.ModelR"
-  "egisterResult\022\017\n\007message\030\003 \001(\t\022-\n\010manife"
-  "st\030\004 \001(\0132\033.maze.ModelArtifactManifest\022\037\n"
-  "\027distributor_instance_id\030\005 \001(\t\"a\n\023GetMod"
-  "elManifestReq\022\016\n\006run_id\030\001 \001(\t\022\025\n\rmodel_v"
-  "ersion\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001(\t\022\016\n\006lat"
-  "est\030\004 \001(\010\"\210\001\n\023GetModelManifestRsp\022\020\n\010ret"
-  "_code\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022-\n\010manifest"
-  "\030\003 \001(\0132\033.maze.ModelArtifactManifest\022\037\n\027d"
-  "istributor_instance_id\030\004 \001(\t\"N\n\020Download"
-  "ModelReq\022\016\n\006run_id\030\001 \001(\t\022\025\n\rmodel_versio"
-  "n\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001(\t\"Q\n\nModelChu"
-  "nk\022\016\n\006run_id\030\001 \001(\t\022\025\n\rmodel_version\030\002 \001("
-  "\005\022\016\n\006offset\030\003 \001(\003\022\014\n\004data\030\004 \001(\014\"\226\001\n\013AckM"
-  "odelReq\022\016\n\006run_id\030\001 \001(\t\022\023\n\013aiserver_id\030\002"
-  " \001(\t\022\025\n\rmodel_version\030\003 \001(\005\022\016\n\006sha256\030\004 "
-  "\001(\t\022*\n\013load_status\030\005 \001(\0162\025.maze.ModelLoa"
-  "dStatus\022\017\n\007message\030\006 \001(\t\"w\n\013AckModelRsp\022"
-  "\020\n\010ret_code\030\001 \001(\005\022$\n\006result\030\002 \001(\0162\024.maze"
-  ".ModelAckResult\022\017\n\007message\030\003 \001(\t\022\037\n\027dist"
-  "ributor_instance_id\030\004 \001(\t\"+\n\031ModelDistri"
-  "butorStatusReq\022\016\n\006run_id\030\001 \001(\t\"\375\004\n\031Model"
-  "DistributorStatusRsp\022\030\n\020protocol_version"
-  "\030\001 \001(\r\022\016\n\006run_id\030\002 \001(\t\022\037\n\027distributor_in"
-  "stance_id\030\003 \001(\t\022\r\n\005ready\030\004 \001(\010\022\036\n\026regist"
-  "ered_model_count\030\005 \001(\003\022\034\n\024latest_model_v"
-  "ersion\030\006 \001(\005\022\035\n\025latest_model_checksum\030\007 "
-  "\001(\t\022\036\n\026register_attempt_count\030\010 \001(\003\022 \n\030d"
-  "uplicate_register_count\030\t \001(\003\022\037\n\027rejecte"
-  "d_register_count\030\n \001(\003\022\036\n\026download_reque"
-  "st_count\030\013 \001(\003\022\036\n\026download_success_count"
-  "\030\014 \001(\003\022\036\n\026download_failure_count\030\r \001(\003\022\024"
-  "\n\014bytes_served\030\016 \001(\003\022\030\n\020loaded_ack_count"
-  "\030\017 \001(\003\022\030\n\020failed_ack_count\030\020 \001(\003\022\036\n\026late"
-  "st_ack_aiserver_id\030\021 \001(\t\022 \n\030latest_ack_m"
-  "odel_version\030\022 \001(\005\0220\n\021latest_ack_status\030"
-  "\023 \001(\0162\025.maze.ModelLoadStatus\022\022\n\nlast_err"
-  "or\030\024 \001(\t\022\024\n\014timestamp_ms\030\025 \001(\003*\221\001\n\017Lifec"
-  "ycleResult\022 \n\034LIFECYCLE_RESULT_UNSPECIFI"
-  "ED\020\000\022\027\n\023LIFECYCLE_RESULT_OK\020\001\022$\n LIFECYC"
-  "LE_RESULT_ALREADY_APPLIED\020\002\022\035\n\031LIFECYCLE"
-  "_RESULT_REJECTED\020\003*\213\002\n\021TerminationReason"
-  "\022\"\n\036TERMINATION_REASON_UNSPECIFIED\020\000\022\035\n\031"
-  "TERMINATION_REASON_ACTIVE\020\001\022#\n\037TERMINATI"
-  "ON_REASON_GOAL_REACHED\020\002\022!\n\035TERMINATION_"
-  "REASON_TIME_LIMIT\020\003\022 \n\034TERMINATION_REASO"
-  "N_COUNTDOWN\020\004\022#\n\037TERMINATION_REASON_CLIE"
-  "NT_ABORT\020\005\022$\n TERMINATION_REASON_CHAIN_F"
-  "AILURE\020\006*\301\001\n\nPushResult\022\033\n\027PUSH_RESULT_U"
-  "NSPECIFIED\020\000\022\030\n\024PUSH_RESULT_ACCEPTED\020\001\022\031"
-  "\n\025PUSH_RESULT_DUPLICATE\020\002\022!\n\035PUSH_RESULT"
-  "_REJECTED_CAPACITY\020\003\022\034\n\030PUSH_RESULT_REJE"
-  "CTED_RUN\020\004\022 \n\034PUSH_RESULT_REJECTED_INVAL"
-  "ID\020\005*|\n\rPressureState\022\036\n\032PRESSURE_STATE_"
-  "UNSPECIFIED\020\000\022\031\n\025PRESSURE_STATE_NORMAL\020\001"
-  "\022\027\n\023PRESSURE_STATE_HIGH\020\002\022\027\n\023PRESSURE_ST"
-  "ATE_FULL\020\003*\247\001\n\016GetBatchResult\022 \n\034GET_BAT"
-  "CH_RESULT_UNSPECIFIED\020\000\022\033\n\027GET_BATCH_RES"
-  "ULT_LEASED\020\001\022\034\n\030GET_BATCH_RESULT_TIMEOUT"
-  "\020\002\022\031\n\025GET_BATCH_RESULT_BUSY\020\003\022\035\n\031GET_BAT"
-  "CH_RESULT_REJECTED\020\004*\222\001\n\024BatchSelectionP"
-  "olicy\022&\n\"BATCH_SELECTION_POLICY_UNSPECIF"
-  "IED\020\000\022&\n\"BATCH_SELECTION_POLICY_TARGET_O"
-  "NLY\020\001\022*\n&BATCH_SELECTION_POLICY_DRAIN_AV"
-  "AILABLE\020\002*\315\001\n\016DeliveryResult\022\037\n\033DELIVERY"
-  "_RESULT_UNSPECIFIED\020\000\022\033\n\027DELIVERY_RESULT"
-  "_APPLIED\020\001\022#\n\037DELIVERY_RESULT_ALREADY_AP"
-  "PLIED\020\002\022\033\n\027DELIVERY_RESULT_EXPIRED\020\003\022\035\n\031"
-  "DELIVERY_RESULT_NOT_FOUND\020\004\022\034\n\030DELIVERY_"
-  "RESULT_REJECTED\020\005*\256\001\n\016AckDisposition\022\037\n\033"
-  "ACK_DISPOSITION_UNSPECIFIED\020\000\022\033\n\027ACK_DIS"
-  "POSITION_TRAINED\020\001\022\031\n\025ACK_DISPOSITION_ST"
-  "ALE\020\002\022\033\n\027ACK_DISPOSITION_INVALID\020\003\022&\n\"AC"
-  "K_DISPOSITION_SHUTDOWN_UNTRAINED\020\004*\274\001\n\rA"
-  "IServerState\022\036\n\032AISERVER_STATE_UNSPECIFI"
-  "ED\020\000\022\033\n\027AISERVER_STATE_STARTING\020\001\022\030\n\024AIS"
-  "ERVER_STATE_READY\020\002\022\033\n\027AISERVER_STATE_DE"
-  "GRADED\020\003\022\033\n\027AISERVER_STATE_DRAINING\020\004\022\032\n"
-  "\026AISERVER_STATE_STOPPED\020\005*q\n\nModelState\022"
-  "\033\n\027MODEL_STATE_UNSPECIFIED\020\000\022\027\n\023MODEL_ST"
-  "ATE_WAITING\020\001\022\025\n\021MODEL_STATE_READY\020\002\022\026\n\022"
-  "MODEL_STATE_FAILED\020\003*\351\001\n\023ModelRegisterRe"
-  "sult\022%\n!MODEL_REGISTER_RESULT_UNSPECIFIE"
-  "D\020\000\022$\n MODEL_REGISTER_RESULT_REGISTERED\020"
-  "\001\022,\n(MODEL_REGISTER_RESULT_ALREADY_REGIS"
-  "TERED\020\002\022*\n&MODEL_REGISTER_RESULT_REJECTE"
-  "D_INVALID\020\003\022+\n\'MODEL_REGISTER_RESULT_REJ"
-  "ECTED_CONFLICT\020\004*p\n\017ModelLoadStatus\022!\n\035M"
-  "ODEL_LOAD_STATUS_UNSPECIFIED\020\000\022\034\n\030MODEL_"
-  "LOAD_STATUS_LOADED\020\001\022\034\n\030MODEL_LOAD_STATU"
-  "S_FAILED\020\002*\265\001\n\016ModelAckResult\022 \n\034MODEL_A"
-  "CK_RESULT_UNSPECIFIED\020\000\022\034\n\030MODEL_ACK_RES"
-  "ULT_APPLIED\020\001\022$\n MODEL_ACK_RESULT_ALREAD"
-  "Y_APPLIED\020\002\022\036\n\032MODEL_ACK_RESULT_NOT_FOUN"
-  "D\020\003\022\035\n\031MODEL_ACK_RESULT_REJECTED\020\0042\342\002\n\013M"
-  "azeService\022$\n\004Init\022\r.maze.InitReq\032\r.maze"
-  ".InitRsp\022@\n\014BeginEpisode\022\025.maze.BeginEpi"
-  "sodeReq\032\031.maze.EpisodeLifecycleRsp\022*\n\006Up"
-  "date\022\017.maze.UpdateReq\032\017.maze.UpdateRsp\0226"
-  "\n\nEndEpisode\022\023.maze.EpisodeEndReq\032\023.maze"
-  ".EpisodeEndRsp\022@\n\014AbortEpisode\022\025.maze.Ab"
-  "ortEpisodeReq\032\031.maze.EpisodeLifecycleRsp"
-  "\022E\n\021GetAIServerStatus\022\027.maze.AIServerSta"
-  "tusReq\032\027.maze.AIServerStatusRsp2H\n\016Learn"
-  "erService\0226\n\013SendSamples\022\021.maze.SampleBa"
-  "tch\032\024.maze.SampleResponse2\345\002\n\030SampleDist"
-  "ributorService\0226\n\013PushSamples\022\021.maze.Sam"
-  "pleBatch\032\024.maze.PushSamplesRsp\0220\n\010GetBat"
-  "ch\022\021.maze.GetBatchReq\032\021.maze.GetBatchRsp"
-  "\0220\n\010AckBatch\022\021.maze.AckBatchReq\032\021.maze.D"
-  "eliveryRsp\0222\n\tNackBatch\022\022.maze.NackBatch"
-  "Req\032\021.maze.DeliveryRsp\0224\n\nRenewLease\022\023.m"
-  "aze.RenewLeaseReq\032\021.maze.DeliveryRsp\022C\n\t"
-  "GetStatus\022\032.maze.DistributorStatusReq\032\032."
-  "maze.DistributorStatusRsp2\362\002\n\027ModelDistr"
-  "ibutorService\022\?\n\rRegisterModel\022\026.maze.Re"
-  "gisterModelReq\032\026.maze.RegisterModelRsp\022H"
-  "\n\020GetModelManifest\022\031.maze.GetModelManife"
-  "stReq\032\031.maze.GetModelManifestRsp\022;\n\rDown"
-  "loadModel\022\026.maze.DownloadModelReq\032\020.maze"
-  ".ModelChunk0\001\0220\n\010AckModel\022\021.maze.AckMode"
-  "lReq\032\021.maze.AckModelRsp\022]\n\031GetModelDistr"
-  "ibutorStatus\022\037.maze.ModelDistributorStat"
-  "usReq\032\037.maze.ModelDistributorStatusRspB\003"
-  "\200\001\000b\006proto3"
+  "eResult\022\017\n\007message\030\003 \001(\t\"\201\001\n\017AbortEpisod"
+  "eReq\022\022\n\nsession_id\030\002 \001(\005\022\022\n\nepisode_id\030\003"
+  " \001(\005\022\'\n\006reason\030\004 \001(\0162\027.maze.TerminationR"
+  "eason\022\017\n\007message\030\005 \001(\tJ\004\010\001\020\002R\006run_id\"\360\002\n"
+  "\006Sample\022\013\n\003obs\030\001 \003(\002\022\016\n\006action\030\002 \001(\005\022\016\n\006"
+  "reward\030\003 \001(\002\022\024\n\014old_log_prob\030\004 \001(\002\022\021\n\tol"
+  "d_vpred\030\005 \001(\002\0227\n\016reward_details\030\t \003(\0132\037."
+  "maze.Sample.RewardDetailsEntry\022\022\n\ntermin"
+  "ated\030\n \001(\010\022\021\n\ttruncated\030\013 \001(\010\0223\n\022termina"
+  "tion_reason\030\014 \001(\0162\027.maze.TerminationReas"
+  "on\022\027\n\017action_frame_id\030\r \001(\003\0324\n\022RewardDet"
+  "ailsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\002:\0028"
+  "\001J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tR\tadvantageR\ttd_retur"
+  "nR\004mask\"\242\004\n\013SampleBatch\022\022\n\nepisode_id\030\001 "
+  "\001(\005\022\020\n\010agent_id\030\002 \001(\005\022\035\n\007samples\030\003 \003(\0132\014"
+  ".maze.Sample\022\026\n\016is_episode_end\030\004 \001(\010\022\022\n\n"
+  "session_id\030\005 \001(\005\022\023\n\013aiserver_id\030\007 \001(\t\022\016\n"
+  "\006env_id\030\010 \001(\t\022\023\n\013fragment_id\030\t \001(\005\022\036\n\026be"
+  "havior_model_version\030\n \001(\005\022\025\n\rcreated_ts"
+  "_ms\030\013 \001(\003\022\034\n\024producer_instance_id\030\014 \001(\t\022"
+  "\024\n\014fragment_seq\030\r \001(\004\022\020\n\010batch_id\030\016 \001(\t\022"
+  "\030\n\020protocol_version\030\017 \001(\r\022\037\n\027behavior_mo"
+  "del_checksum\030\020 \001(\t\0223\n\022termination_reason"
+  "\030\021 \001(\0162\027.maze.TerminationReason\022\027\n\017boots"
+  "trap_value\030\022 \001(\002\022\027\n\017bootstrap_valid\030\023 \001("
+  "\010\022\035\n\025first_action_frame_id\030\024 \001(\003\022\034\n\024last"
+  "_action_frame_id\030\025 \001(\003J\004\010\006\020\007R\006run_id\"9\n\016"
+  "SampleResponse\022\020\n\010ret_code\030\001 \001(\005\022\025\n\rmode"
+  "l_version\030\002 \001(\005\"\334\002\n\016PushSamplesRsp\022\020\n\010re"
+  "t_code\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\030\n\020accepte"
+  "d_samples\030\003 \001(\003\022\022\n\nqueue_size\030\004 \001(\003\022 \n\006r"
+  "esult\030\005 \001(\0162\020.maze.PushResult\022\020\n\010batch_i"
+  "d\030\006 \001(\t\022\037\n\027accepted_unique_samples\030\007 \001(\003"
+  "\022\030\n\020resident_samples\030\010 \001(\003\022\032\n\022resident_f"
+  "ragments\030\t \001(\003\022 \n\030resident_estimated_byt"
+  "es\030\n \001(\003\022+\n\016pressure_state\030\013 \001(\0162\023.maze."
+  "PressureState\022\037\n\027distributor_instance_id"
+  "\030\014 \001(\t\"\321\001\n\013GetBatchReq\022\022\n\nbatch_size\030\001 \001"
+  "(\005\022\022\n\ntimeout_ms\030\002 \001(\005\022\034\n\024consumer_insta"
+  "nce_id\030\004 \001(\t\022\030\n\020lease_timeout_ms\030\005 \001(\005\022\036"
+  "\n\026behavior_model_version\030\006 \001(\005\0224\n\020select"
+  "ion_policy\030\007 \001(\0162\032.maze.BatchSelectionPo"
+  "licyJ\004\010\003\020\004R\006run_id\"\374\002\n\013GetBatchRsp\022\020\n\010re"
+  "t_code\030\001 \001(\005\022\"\n\007batches\030\002 \003(\0132\021.maze.Sam"
+  "pleBatch\022\022\n\nqueue_size\030\003 \001(\003\022\030\n\020returned"
+  "_samples\030\004 \001(\003\022\017\n\007message\030\005 \001(\t\022$\n\006resul"
+  "t\030\006 \001(\0162\024.maze.GetBatchResult\022\023\n\013deliver"
+  "y_id\030\007 \001(\t\022\034\n\024lease_deadline_ts_ms\030\010 \001(\003"
+  "\022\032\n\022returned_fragments\030\t \001(\003\022\031\n\021actual_b"
+  "atch_size\030\n \001(\003\022\017\n\007wait_ms\030\013 \001(\003\022\026\n\016leas"
+  "ed_samples\030\014 \001(\003\022\037\n\027distributor_instance"
+  "_id\030\r \001(\t\022\036\n\026behavior_model_version\030\016 \001("
+  "\005\"\222\001\n\013AckBatchReq\022\034\n\024consumer_instance_i"
+  "d\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022)\n\013disposit"
+  "ion\030\004 \001(\0162\024.maze.AckDisposition\022\027\n\017train"
+  "_update_id\030\005 \001(\tJ\004\010\001\020\002R\006run_id\"_\n\014NackBa"
+  "tchReq\022\034\n\024consumer_instance_id\030\002 \001(\t\022\023\n\013"
+  "delivery_id\030\003 \001(\t\022\016\n\006reason\030\004 \001(\tJ\004\010\001\020\002R"
+  "\006run_id\"j\n\rRenewLeaseReq\022\034\n\024consumer_ins"
+  "tance_id\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022\030\n\020l"
+  "ease_timeout_ms\030\004 \001(\005J\004\010\001\020\002R\006run_id\"\373\001\n\013"
+  "DeliveryRsp\022\020\n\010ret_code\030\001 \001(\005\022$\n\006result\030"
+  "\002 \001(\0162\024.maze.DeliveryResult\022\017\n\007message\030\003"
+  " \001(\t\022\023\n\013delivery_id\030\004 \001(\t\022\030\n\020affected_sa"
+  "mples\030\005 \001(\003\022\022\n\nqueue_size\030\006 \001(\003\022\034\n\024lease"
+  "_deadline_ts_ms\030\007 \001(\003\022)\n\013disposition\030\010 \001"
+  "(\0162\024.maze.AckDisposition\022\027\n\017train_update"
+  "_id\030\t \001(\t\"$\n\024DistributorStatusReqJ\004\010\001\020\002R"
+  "\006run_id\"\273\002\n\032BehaviorVersionQueueStatus\022\036"
+  "\n\026behavior_model_version\030\001 \001(\005\022\025\n\rready_"
+  "samples\030\002 \001(\003\022\027\n\017ready_fragments\030\003 \001(\003\022\026"
+  "\n\016leased_samples\030\004 \001(\003\022\030\n\020leased_fragmen"
+  "ts\030\005 \001(\003\022\025\n\racked_samples\030\006 \001(\003\022\027\n\017acked"
+  "_fragments\030\007 \001(\003\022\027\n\017trained_samples\030\010 \001("
+  "\003\022\025\n\rstale_samples\030\t \001(\003\022\027\n\017invalid_samp"
+  "les\030\n \001(\003\022\"\n\032shutdown_untrained_samples\030"
+  "\013 \001(\003\"\330\n\n\024DistributorStatusRsp\022\031\n\021push_s"
+  "ample_count\030\001 \001(\003\022\034\n\024consume_sample_coun"
+  "t\030\002 \001(\003\022\022\n\nqueue_size\030\003 \001(\003\022\030\n\020push_batc"
+  "h_count\030\004 \001(\003\022\033\n\023consume_batch_count\030\005 \001"
+  "(\003\022\022\n\ndrop_count\030\006 \001(\003\022\031\n\021latest_push_ts"
+  "_ms\030\007 \001(\003\022\034\n\024latest_consume_ts_ms\030\010 \001(\003\022"
+  "\030\n\020protocol_version\030\t \001(\r\022\037\n\027distributor"
+  "_instance_id\030\013 \001(\t\022\r\n\005ready\030\014 \001(\010\022\032\n\022pus"
+  "h_attempt_count\030\r \001(\003\022\037\n\027accepted_unique"
+  "_samples\030\016 \001(\003\022\037\n\027accepted_unique_batche"
+  "s\030\017 \001(\003\022$\n\034duplicate_push_attempt_count\030"
+  "\020 \001(\003\022!\n\031duplicate_sample_attempts\030\021 \001(\003"
+  "\022#\n\033rejected_push_attempt_count\030\022 \001(\003\022 \n"
+  "\030rejected_sample_attempts\030\023 \001(\003\022\034\n\024acked"
+  "_unique_samples\030\024 \001(\003\022\034\n\024acked_unique_ba"
+  "tches\030\025 \001(\003\022\033\n\023ready_queue_samples\030\026 \001(\003"
+  "\022\035\n\025ready_queue_fragments\030\027 \001(\003\022\026\n\016lease"
+  "d_samples\030\030 \001(\003\022\030\n\020leased_fragments\030\031 \001("
+  "\003\022\030\n\020resident_samples\030\032 \001(\003\022\032\n\022resident_"
+  "fragments\030\033 \001(\003\022 \n\030resident_estimated_by"
+  "tes\030\034 \001(\003\022\030\n\020capacity_samples\030\035 \001(\003\022\032\n\022c"
+  "apacity_fragments\030\036 \001(\003\022 \n\030capacity_esti"
+  "mated_bytes\030\037 \001(\003\022+\n\016pressure_state\030  \001("
+  "\0162\023.maze.PressureState\022\030\n\020redelivery_cou"
+  "nt\030! \001(\003\022\022\n\nnack_count\030\" \001(\003\022\033\n\023expired_"
+  "lease_count\030# \001(\003\022\030\n\020latest_ack_ts_ms\030$ "
+  "\001(\003\022\030\n\020target_hit_count\030% \001(\003\022\031\n\021partial"
+  "_get_count\030& \001(\003\022\033\n\023empty_timeout_count\030"
+  "\' \001(\003\022\022\n\nlast_error\030( \001(\t\022;\n\021behavior_ve"
+  "rsions\030) \003(\0132 .maze.BehaviorVersionQueue"
+  "Status\022\034\n\024trained_sample_count\030* \001(\003\022\032\n\022"
+  "stale_sample_count\030+ \001(\003\022\034\n\024invalid_samp"
+  "le_count\030, \001(\003\022\'\n\037shutdown_untrained_sam"
+  "ple_count\030- \001(\003\022\031\n\021lease_renew_count\030. \001"
+  "(\003J\004\010\n\020\013R\006run_id\"!\n\021AIServerStatusReqJ\004\010"
+  "\001\020\002R\006run_id\"P\n\026TerminationReasonCount\022\'\n"
+  "\006reason\030\001 \001(\0162\027.maze.TerminationReason\022\r"
+  "\n\005count\030\002 \001(\003\"\366\004\n\016EpisodeMetrics\022\036\n\026conf"
+  "igured_window_size\030\001 \001(\005\022\037\n\027completed_ep"
+  "isode_count\030\002 \001(\003\022\035\n\025completed_agent_cou"
+  "nt\030\003 \001(\003\022\031\n\021mean_agent_return\030\004 \001(\001\022\030\n\020m"
+  "in_agent_return\030\005 \001(\001\022\030\n\020max_agent_retur"
+  "n\030\006 \001(\001\022\033\n\023agent_success_count\030\007 \001(\003\022\032\n\022"
+  "agent_success_rate\030\010 \001(\001\022%\n\035environment_"
+  "any_success_count\030\t \001(\003\022$\n\034environment_a"
+  "ny_success_rate\030\n \001(\001\022%\n\035environment_all"
+  "_success_count\030\013 \001(\003\022$\n\034environment_all_"
+  "success_rate\030\014 \001(\001\022\036\n\026excluded_episode_c"
+  "ount\030\r \001(\003\0228\n\022termination_counts\030\016 \003(\0132\034"
+  ".maze.TerminationReasonCount\022L\n\025reward_c"
+  "omponent_mean\030\017 \003(\0132-.maze.EpisodeMetric"
+  "s.RewardComponentMeanEntry\032:\n\030RewardComp"
+  "onentMeanEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001"
+  "(\001:\0028\001\"\244\013\n\021AIServerStatusRsp\022\030\n\020protocol"
+  "_version\030\001 \001(\r\022\023\n\013aiserver_id\030\003 \001(\t\022\034\n\024p"
+  "roducer_instance_id\030\004 \001(\t\022\"\n\005state\030\005 \001(\016"
+  "2\023.maze.AIServerState\022\r\n\005ready\030\006 \001(\010\022\031\n\021"
+  "distributor_ready\030\007 \001(\010\022%\n\013model_state\030\010"
+  " \001(\0162\020.maze.ModelState\022\034\n\024loaded_model_v"
+  "ersion\030\t \001(\005\022\035\n\025loaded_model_checksum\030\n "
+  "\001(\t\022 \n\030outbound_queue_fragments\030\013 \001(\003\022\036\n"
+  "\026outbound_queue_samples\030\014 \001(\003\022&\n\036outboun"
+  "d_queue_estimated_bytes\030\r \001(\003\022%\n\035outboun"
+  "d_queue_high_watermark\030\016 \001(\003\022\037\n\027produced"
+  "_unique_samples\030\017 \001(\003\022\037\n\027produced_unique"
+  "_batches\030\020 \001(\003\022\032\n\022push_attempt_count\030\021 \001"
+  "(\003\022\037\n\027accepted_unique_samples\030\022 \001(\003\022$\n\034d"
+  "uplicate_push_attempt_count\030\023 \001(\003\022#\n\033rej"
+  "ected_push_attempt_count\030\024 \001(\003\022\033\n\023retry_"
+  "attempt_count\030\025 \001(\003\022!\n\031final_drop_unique"
+  "_samples\030\026 \001(\003\022\034\n\024active_session_count\030\027"
+  " \001(\003\022\034\n\024active_episode_count\030\030 \001(\003\022\032\n\022cl"
+  "ient_initialized\030\031 \001(\010\022\030\n\020update_rpc_cou"
+  "nt\030\032 \001(\003\022!\n\031update_rpc_latency_sum_ms\030\033 "
+  "\001(\001\022!\n\031update_rpc_latency_max_ms\030\034 \001(\001\022\027"
+  "\n\017inference_count\030\035 \001(\003\022 \n\030inference_lat"
+  "ency_sum_ms\030\036 \001(\001\022 \n\030inference_latency_m"
+  "ax_ms\030\037 \001(\001\022\025\n\renqueue_count\030  \001(\003\022\036\n\026en"
+  "queue_latency_sum_ms\030! \001(\001\022\036\n\026enqueue_la"
+  "tency_max_ms\030\" \001(\001\022\026\n\016push_rpc_count\030# \001"
+  "(\003\022\037\n\027push_rpc_latency_sum_ms\030$ \001(\001\022\037\n\027p"
+  "ush_rpc_latency_max_ms\030% \001(\001\022\022\n\nlast_err"
+  "or\030& \001(\t\022\024\n\014timestamp_ms\030\' \001(\003\022\034\n\024staged"
+  "_model_version\030( \001(\005\022\035\n\025staged_model_che"
+  "cksum\030) \001(\t\022\032\n\022model_switch_count\030* \001(\003\022"
+  " \n\030quarantined_sample_count\030+ \001(\003\022\"\n\032qua"
+  "rantined_fragment_count\030, \001(\003\022)\n\rworkloa"
+  "d_mode\030- \001(\0162\022.maze.WorkloadMode\022-\n\017epis"
+  "ode_metrics\030. \001(\0132\024.maze.EpisodeMetricsJ"
+  "\004\010\002\020\003R\006run_id\"\262\002\n\025ModelArtifactManifest\022"
+  "\026\n\016schema_version\030\001 \001(\r\022\030\n\020contract_vers"
+  "ion\030\002 \001(\t\022\025\n\rmodel_version\030\004 \001(\005\022\024\n\014arti"
+  "fact_uri\030\005 \001(\t\022\022\n\nmodel_file\030\006 \001(\t\022\022\n\nsi"
+  "ze_bytes\030\007 \001(\003\022\016\n\006sha256\030\010 \001(\t\022\023\n\013input_"
+  "shape\030\t \003(\003\022\024\n\014action_shape\030\n \003(\003\022\023\n\013val"
+  "ue_shape\030\013 \003(\003\022\014\n\004seed\030\014 \001(\003\022\r\n\005ready\030\r "
+  "\001(\010\022\027\n\017published_ts_ms\030\016 \001(\003J\004\010\003\020\004R\006run_"
+  "id\"A\n\020RegisterModelReq\022-\n\010manifest\030\001 \001(\013"
+  "2\033.maze.ModelArtifactManifest\"\260\001\n\020Regist"
+  "erModelRsp\022\020\n\010ret_code\030\001 \001(\005\022)\n\006result\030\002"
+  " \001(\0162\031.maze.ModelRegisterResult\022\017\n\007messa"
+  "ge\030\003 \001(\t\022-\n\010manifest\030\004 \001(\0132\033.maze.ModelA"
+  "rtifactManifest\022\037\n\027distributor_instance_"
+  "id\030\005 \001(\t\"_\n\023GetModelManifestReq\022\025\n\rmodel"
+  "_version\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001(\t\022\016\n\006l"
+  "atest\030\004 \001(\010J\004\010\001\020\002R\006run_id\"\210\001\n\023GetModelMa"
+  "nifestRsp\022\020\n\010ret_code\030\001 \001(\005\022\017\n\007message\030\002"
+  " \001(\t\022-\n\010manifest\030\003 \001(\0132\033.maze.ModelArtif"
+  "actManifest\022\037\n\027distributor_instance_id\030\004"
+  " \001(\t\"L\n\020DownloadModelReq\022\025\n\rmodel_versio"
+  "n\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001(\tJ\004\010\001\020\002R\006run_"
+  "id\"O\n\nModelChunk\022\025\n\rmodel_version\030\002 \001(\005\022"
+  "\016\n\006offset\030\003 \001(\003\022\014\n\004data\030\004 \001(\014J\004\010\001\020\002R\006run"
+  "_id\"\224\001\n\013AckModelReq\022\023\n\013aiserver_id\030\002 \001(\t"
+  "\022\025\n\rmodel_version\030\003 \001(\005\022\016\n\006sha256\030\004 \001(\t\022"
+  "*\n\013load_status\030\005 \001(\0162\025.maze.ModelLoadSta"
+  "tus\022\017\n\007message\030\006 \001(\tJ\004\010\001\020\002R\006run_id\"w\n\013Ac"
+  "kModelRsp\022\020\n\010ret_code\030\001 \001(\005\022$\n\006result\030\002 "
+  "\001(\0162\024.maze.ModelAckResult\022\017\n\007message\030\003 \001"
+  "(\t\022\037\n\027distributor_instance_id\030\004 \001(\t\")\n\031M"
+  "odelDistributorStatusReqJ\004\010\001\020\002R\006run_id\"\373"
+  "\004\n\031ModelDistributorStatusRsp\022\030\n\020protocol"
+  "_version\030\001 \001(\r\022\037\n\027distributor_instance_i"
+  "d\030\003 \001(\t\022\r\n\005ready\030\004 \001(\010\022\036\n\026registered_mod"
+  "el_count\030\005 \001(\003\022\034\n\024latest_model_version\030\006"
+  " \001(\005\022\035\n\025latest_model_checksum\030\007 \001(\t\022\036\n\026r"
+  "egister_attempt_count\030\010 \001(\003\022 \n\030duplicate"
+  "_register_count\030\t \001(\003\022\037\n\027rejected_regist"
+  "er_count\030\n \001(\003\022\036\n\026download_request_count"
+  "\030\013 \001(\003\022\036\n\026download_success_count\030\014 \001(\003\022\036"
+  "\n\026download_failure_count\030\r \001(\003\022\024\n\014bytes_"
+  "served\030\016 \001(\003\022\030\n\020loaded_ack_count\030\017 \001(\003\022\030"
+  "\n\020failed_ack_count\030\020 \001(\003\022\036\n\026latest_ack_a"
+  "iserver_id\030\021 \001(\t\022 \n\030latest_ack_model_ver"
+  "sion\030\022 \001(\005\0220\n\021latest_ack_status\030\023 \001(\0162\025."
+  "maze.ModelLoadStatus\022\022\n\nlast_error\030\024 \001(\t"
+  "\022\024\n\014timestamp_ms\030\025 \001(\003J\004\010\002\020\003R\006run_id*\221\001\n"
+  "\017LifecycleResult\022 \n\034LIFECYCLE_RESULT_UNS"
+  "PECIFIED\020\000\022\027\n\023LIFECYCLE_RESULT_OK\020\001\022$\n L"
+  "IFECYCLE_RESULT_ALREADY_APPLIED\020\002\022\035\n\031LIF"
+  "ECYCLE_RESULT_REJECTED\020\003*\213\002\n\021Termination"
+  "Reason\022\"\n\036TERMINATION_REASON_UNSPECIFIED"
+  "\020\000\022\035\n\031TERMINATION_REASON_ACTIVE\020\001\022#\n\037TER"
+  "MINATION_REASON_GOAL_REACHED\020\002\022!\n\035TERMIN"
+  "ATION_REASON_TIME_LIMIT\020\003\022 \n\034TERMINATION"
+  "_REASON_COUNTDOWN\020\004\022#\n\037TERMINATION_REASO"
+  "N_CLIENT_ABORT\020\005\022$\n TERMINATION_REASON_C"
+  "HAIN_FAILURE\020\006*\303\001\n\nPushResult\022\033\n\027PUSH_RE"
+  "SULT_UNSPECIFIED\020\000\022\030\n\024PUSH_RESULT_ACCEPT"
+  "ED\020\001\022\031\n\025PUSH_RESULT_DUPLICATE\020\002\022!\n\035PUSH_"
+  "RESULT_REJECTED_CAPACITY\020\003\022 \n\034PUSH_RESUL"
+  "T_REJECTED_INVALID\020\005\"\004\010\004\020\004*\030PUSH_RESULT_"
+  "REJECTED_RUN*|\n\rPressureState\022\036\n\032PRESSUR"
+  "E_STATE_UNSPECIFIED\020\000\022\031\n\025PRESSURE_STATE_"
+  "NORMAL\020\001\022\027\n\023PRESSURE_STATE_HIGH\020\002\022\027\n\023PRE"
+  "SSURE_STATE_FULL\020\003*\247\001\n\016GetBatchResult\022 \n"
+  "\034GET_BATCH_RESULT_UNSPECIFIED\020\000\022\033\n\027GET_B"
+  "ATCH_RESULT_LEASED\020\001\022\034\n\030GET_BATCH_RESULT"
+  "_TIMEOUT\020\002\022\031\n\025GET_BATCH_RESULT_BUSY\020\003\022\035\n"
+  "\031GET_BATCH_RESULT_REJECTED\020\004*\222\001\n\024BatchSe"
+  "lectionPolicy\022&\n\"BATCH_SELECTION_POLICY_"
+  "UNSPECIFIED\020\000\022&\n\"BATCH_SELECTION_POLICY_"
+  "TARGET_ONLY\020\001\022*\n&BATCH_SELECTION_POLICY_"
+  "DRAIN_AVAILABLE\020\002*\315\001\n\016DeliveryResult\022\037\n\033"
+  "DELIVERY_RESULT_UNSPECIFIED\020\000\022\033\n\027DELIVER"
+  "Y_RESULT_APPLIED\020\001\022#\n\037DELIVERY_RESULT_AL"
+  "READY_APPLIED\020\002\022\033\n\027DELIVERY_RESULT_EXPIR"
+  "ED\020\003\022\035\n\031DELIVERY_RESULT_NOT_FOUND\020\004\022\034\n\030D"
+  "ELIVERY_RESULT_REJECTED\020\005*\256\001\n\016AckDisposi"
+  "tion\022\037\n\033ACK_DISPOSITION_UNSPECIFIED\020\000\022\033\n"
+  "\027ACK_DISPOSITION_TRAINED\020\001\022\031\n\025ACK_DISPOS"
+  "ITION_STALE\020\002\022\033\n\027ACK_DISPOSITION_INVALID"
+  "\020\003\022&\n\"ACK_DISPOSITION_SHUTDOWN_UNTRAINED"
+  "\020\004*\274\001\n\rAIServerState\022\036\n\032AISERVER_STATE_U"
+  "NSPECIFIED\020\000\022\033\n\027AISERVER_STATE_STARTING\020"
+  "\001\022\030\n\024AISERVER_STATE_READY\020\002\022\033\n\027AISERVER_"
+  "STATE_DEGRADED\020\003\022\033\n\027AISERVER_STATE_DRAIN"
+  "ING\020\004\022\032\n\026AISERVER_STATE_STOPPED\020\005*q\n\nMod"
+  "elState\022\033\n\027MODEL_STATE_UNSPECIFIED\020\000\022\027\n\023"
+  "MODEL_STATE_WAITING\020\001\022\025\n\021MODEL_STATE_REA"
+  "DY\020\002\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001\n\023ModelRe"
+  "gisterResult\022%\n!MODEL_REGISTER_RESULT_UN"
+  "SPECIFIED\020\000\022$\n MODEL_REGISTER_RESULT_REG"
+  "ISTERED\020\001\022,\n(MODEL_REGISTER_RESULT_ALREA"
+  "DY_REGISTERED\020\002\022*\n&MODEL_REGISTER_RESULT"
+  "_REJECTED_INVALID\020\003\022+\n\'MODEL_REGISTER_RE"
+  "SULT_REJECTED_CONFLICT\020\004*p\n\017ModelLoadSta"
+  "tus\022!\n\035MODEL_LOAD_STATUS_UNSPECIFIED\020\000\022\034"
+  "\n\030MODEL_LOAD_STATUS_LOADED\020\001\022\034\n\030MODEL_LO"
+  "AD_STATUS_FAILED\020\002*\265\001\n\016ModelAckResult\022 \n"
+  "\034MODEL_ACK_RESULT_UNSPECIFIED\020\000\022\034\n\030MODEL"
+  "_ACK_RESULT_APPLIED\020\001\022$\n MODEL_ACK_RESUL"
+  "T_ALREADY_APPLIED\020\002\022\036\n\032MODEL_ACK_RESULT_"
+  "NOT_FOUND\020\003\022\035\n\031MODEL_ACK_RESULT_REJECTED"
+  "\020\004*\256\001\n\014WorkloadMode\022\035\n\031WORKLOAD_MODE_UNS"
+  "PECIFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAINING\020\001\022!"
+  "\n\035WORKLOAD_MODE_INFERENCE_SMOKE\020\002\022\"\n\036WOR"
+  "KLOAD_MODE_MODEL_EVALUATION\020\003\022\034\n\030WORKLOA"
+  "D_MODE_ASTAR_TEST\020\0042\342\002\n\013MazeService\022$\n\004I"
+  "nit\022\r.maze.InitReq\032\r.maze.InitRsp\022@\n\014Beg"
+  "inEpisode\022\025.maze.BeginEpisodeReq\032\031.maze."
+  "EpisodeLifecycleRsp\022*\n\006Update\022\017.maze.Upd"
+  "ateReq\032\017.maze.UpdateRsp\0226\n\nEndEpisode\022\023."
+  "maze.EpisodeEndReq\032\023.maze.EpisodeEndRsp\022"
+  "@\n\014AbortEpisode\022\025.maze.AbortEpisodeReq\032\031"
+  ".maze.EpisodeLifecycleRsp\022E\n\021GetAIServer"
+  "Status\022\027.maze.AIServerStatusReq\032\027.maze.A"
+  "IServerStatusRsp2H\n\016LearnerService\0226\n\013Se"
+  "ndSamples\022\021.maze.SampleBatch\032\024.maze.Samp"
+  "leResponse2\345\002\n\030SampleDistributorService\022"
+  "6\n\013PushSamples\022\021.maze.SampleBatch\032\024.maze"
+  ".PushSamplesRsp\0220\n\010GetBatch\022\021.maze.GetBa"
+  "tchReq\032\021.maze.GetBatchRsp\0220\n\010AckBatch\022\021."
+  "maze.AckBatchReq\032\021.maze.DeliveryRsp\0222\n\tN"
+  "ackBatch\022\022.maze.NackBatchReq\032\021.maze.Deli"
+  "veryRsp\0224\n\nRenewLease\022\023.maze.RenewLeaseR"
+  "eq\032\021.maze.DeliveryRsp\022C\n\tGetStatus\022\032.maz"
+  "e.DistributorStatusReq\032\032.maze.Distributo"
+  "rStatusRsp2\362\002\n\027ModelDistributorService\022\?"
+  "\n\rRegisterModel\022\026.maze.RegisterModelReq\032"
+  "\026.maze.RegisterModelRsp\022H\n\020GetModelManif"
+  "est\022\031.maze.GetModelManifestReq\032\031.maze.Ge"
+  "tModelManifestRsp\022;\n\rDownloadModel\022\026.maz"
+  "e.DownloadModelReq\032\020.maze.ModelChunk0\001\0220"
+  "\n\010AckModel\022\021.maze.AckModelReq\032\021.maze.Ack"
+  "ModelRsp\022]\n\031GetModelDistributorStatus\022\037."
+  "maze.ModelDistributorStatusReq\032\037.maze.Mo"
+  "delDistributorStatusRspB\003\200\001\000b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_maze_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_maze_2eproto = {
-    false, false, 12331, descriptor_table_protodef_maze_2eproto,
+    false, false, 13316, descriptor_table_protodef_maze_2eproto,
     "maze.proto",
-    &descriptor_table_maze_2eproto_once, nullptr, 0, 39,
+    &descriptor_table_maze_2eproto_once, nullptr, 0, 42,
     schemas, file_default_instances, TableStruct_maze_2eproto::offsets,
     file_level_metadata_maze_2eproto, file_level_enum_descriptors_maze_2eproto,
     file_level_service_descriptors_maze_2eproto,
@@ -1806,7 +1888,6 @@ bool PushResult_IsValid(int value) {
     case 1:
     case 2:
     case 3:
-    case 4:
     case 5:
       return true;
     default:
@@ -1968,6 +2049,23 @@ const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ModelAckResult_descriptor() {
   return file_level_enum_descriptors_maze_2eproto[12];
 }
 bool ModelAckResult_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* WorkloadMode_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_2eproto);
+  return file_level_enum_descriptors_maze_2eproto[13];
+}
+bool WorkloadMode_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -2252,8 +2350,7 @@ InitReq::InitReq(const InitReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   InitReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.client_id_){}
+      decltype(_impl_.client_id_){}
     , decltype(_impl_.env_id_){}
     , decltype(_impl_.map_size_){nullptr}
     , decltype(_impl_.start_pos_){nullptr}
@@ -2264,17 +2361,10 @@ InitReq::InitReq(const InitReq& from)
     , decltype(_impl_.grid_size_){}
     , decltype(_impl_.grid_cols_){}
     , decltype(_impl_.grid_rows_){}
+    , decltype(_impl_.workload_mode_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.client_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.client_id_.Set("", GetArenaForAllocation());
@@ -2304,8 +2394,8 @@ InitReq::InitReq(const InitReq& from)
     _this->_impl_.end_grid_ = new ::maze::Vec2(*from._impl_.end_grid_);
   }
   ::memcpy(&_impl_.agent_num_, &from._impl_.agent_num_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.grid_rows_) -
-    reinterpret_cast<char*>(&_impl_.agent_num_)) + sizeof(_impl_.grid_rows_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.workload_mode_) -
+    reinterpret_cast<char*>(&_impl_.agent_num_)) + sizeof(_impl_.workload_mode_));
   // @@protoc_insertion_point(copy_constructor:maze.InitReq)
 }
 
@@ -2314,8 +2404,7 @@ inline void InitReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.client_id_){}
+      decltype(_impl_.client_id_){}
     , decltype(_impl_.env_id_){}
     , decltype(_impl_.map_size_){nullptr}
     , decltype(_impl_.start_pos_){nullptr}
@@ -2326,12 +2415,9 @@ inline void InitReq::SharedCtor(
     , decltype(_impl_.grid_size_){0}
     , decltype(_impl_.grid_cols_){0}
     , decltype(_impl_.grid_rows_){0}
+    , decltype(_impl_.workload_mode_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.client_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.client_id_.Set("", GetArenaForAllocation());
@@ -2353,7 +2439,6 @@ InitReq::~InitReq() {
 
 inline void InitReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.client_id_.Destroy();
   _impl_.env_id_.Destroy();
   if (this != internal_default_instance()) delete _impl_.map_size_;
@@ -2372,7 +2457,6 @@ void InitReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.client_id_.ClearToEmpty();
   _impl_.env_id_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && _impl_.map_size_ != nullptr) {
@@ -2392,8 +2476,8 @@ void InitReq::Clear() {
   }
   _impl_.end_grid_ = nullptr;
   ::memset(&_impl_.agent_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.grid_rows_) -
-      reinterpret_cast<char*>(&_impl_.agent_num_)) + sizeof(_impl_.grid_rows_));
+      reinterpret_cast<char*>(&_impl_.workload_mode_) -
+      reinterpret_cast<char*>(&_impl_.agent_num_)) + sizeof(_impl_.workload_mode_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2440,16 +2524,6 @@ const char* InitReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
           _impl_.session_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.InitReq.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -2502,6 +2576,15 @@ const char* InitReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
           ptr = ctx->ParseMessage(_internal_mutable_end_grid(), ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.WorkloadMode workload_mode = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_workload_mode(static_cast<::maze::WorkloadMode>(val));
         } else
           goto handle_unusual;
         continue;
@@ -2567,16 +2650,6 @@ uint8_t* InitReq::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_session_id(), target);
   }
 
-  // string run_id = 6;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.InitReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        6, this->_internal_run_id(), target);
-  }
-
   // string client_id = 7;
   if (!this->_internal_client_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -2626,6 +2699,13 @@ uint8_t* InitReq::_InternalSerialize(
         _Internal::end_grid(this).GetCachedSize(), target, stream);
   }
 
+  // .maze.WorkloadMode workload_mode = 13;
+  if (this->_internal_workload_mode() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      13, this->_internal_workload_mode(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2641,13 +2721,6 @@ size_t InitReq::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // string run_id = 6;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
 
   // string client_id = 7;
   if (!this->_internal_client_id().empty()) {
@@ -2720,6 +2793,12 @@ size_t InitReq::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_grid_rows());
   }
 
+  // .maze.WorkloadMode workload_mode = 13;
+  if (this->_internal_workload_mode() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_workload_mode());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2738,9 +2817,6 @@ void InitReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_client_id().empty()) {
     _this->_internal_set_client_id(from._internal_client_id());
   }
@@ -2782,6 +2858,9 @@ void InitReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   if (from._internal_grid_rows() != 0) {
     _this->_internal_set_grid_rows(from._internal_grid_rows());
   }
+  if (from._internal_workload_mode() != 0) {
+    _this->_internal_set_workload_mode(from._internal_workload_mode());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2802,10 +2881,6 @@ void InitReq::InternalSwap(InitReq* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.client_id_, lhs_arena,
       &other->_impl_.client_id_, rhs_arena
   );
@@ -2814,8 +2889,8 @@ void InitReq::InternalSwap(InitReq* other) {
       &other->_impl_.env_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(InitReq, _impl_.grid_rows_)
-      + sizeof(InitReq::_impl_.grid_rows_)
+      PROTOBUF_FIELD_OFFSET(InitReq, _impl_.workload_mode_)
+      + sizeof(InitReq::_impl_.workload_mode_)
       - PROTOBUF_FIELD_OFFSET(InitReq, _impl_.map_size_)>(
           reinterpret_cast<char*>(&_impl_.map_size_),
           reinterpret_cast<char*>(&other->_impl_.map_size_));
@@ -3109,20 +3184,11 @@ BeginEpisodeReq::BeginEpisodeReq(const BeginEpisodeReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   BeginEpisodeReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.session_id_){}
+      decltype(_impl_.session_id_){}
     , decltype(_impl_.episode_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   ::memcpy(&_impl_.session_id_, &from._impl_.session_id_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.episode_id_) -
     reinterpret_cast<char*>(&_impl_.session_id_)) + sizeof(_impl_.episode_id_));
@@ -3134,15 +3200,10 @@ inline void BeginEpisodeReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.session_id_){0}
+      decltype(_impl_.session_id_){0}
     , decltype(_impl_.episode_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 BeginEpisodeReq::~BeginEpisodeReq() {
@@ -3156,7 +3217,6 @@ BeginEpisodeReq::~BeginEpisodeReq() {
 
 inline void BeginEpisodeReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
 }
 
 void BeginEpisodeReq::SetCachedSize(int size) const {
@@ -3169,7 +3229,6 @@ void BeginEpisodeReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   ::memset(&_impl_.session_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.episode_id_) -
       reinterpret_cast<char*>(&_impl_.session_id_)) + sizeof(_impl_.episode_id_));
@@ -3182,16 +3241,6 @@ const char* BeginEpisodeReq::_InternalParse(const char* ptr, ::_pbi::ParseContex
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.BeginEpisodeReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // int32 session_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
@@ -3237,16 +3286,6 @@ uint8_t* BeginEpisodeReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.BeginEpisodeReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // int32 session_id = 2;
   if (this->_internal_session_id() != 0) {
     target = stream->EnsureSpace(target);
@@ -3274,13 +3313,6 @@ size_t BeginEpisodeReq::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
 
   // int32 session_id = 2;
   if (this->_internal_session_id() != 0) {
@@ -3310,9 +3342,6 @@ void BeginEpisodeReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (from._internal_session_id() != 0) {
     _this->_internal_set_session_id(from._internal_session_id());
   }
@@ -3335,13 +3364,7 @@ bool BeginEpisodeReq::IsInitialized() const {
 
 void BeginEpisodeReq::InternalSwap(BeginEpisodeReq* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(BeginEpisodeReq, _impl_.episode_id_)
       + sizeof(BeginEpisodeReq::_impl_.episode_id_)
@@ -3975,21 +3998,12 @@ UpdateReq::UpdateReq(const UpdateReq& from)
   UpdateReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.agents_){from._impl_.agents_}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.frame_id_){}
     , decltype(_impl_.session_id_){}
     , decltype(_impl_.episode_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   ::memcpy(&_impl_.frame_id_, &from._impl_.frame_id_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.episode_id_) -
     reinterpret_cast<char*>(&_impl_.frame_id_)) + sizeof(_impl_.episode_id_));
@@ -4002,16 +4016,11 @@ inline void UpdateReq::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.agents_){arena}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.frame_id_){0}
     , decltype(_impl_.session_id_){0}
     , decltype(_impl_.episode_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 UpdateReq::~UpdateReq() {
@@ -4026,7 +4035,6 @@ UpdateReq::~UpdateReq() {
 inline void UpdateReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.agents_.~RepeatedPtrField();
-  _impl_.run_id_.Destroy();
 }
 
 void UpdateReq::SetCachedSize(int size) const {
@@ -4040,7 +4048,6 @@ void UpdateReq::Clear() {
   (void) cached_has_bits;
 
   _impl_.agents_.Clear();
-  _impl_.run_id_.ClearToEmpty();
   ::memset(&_impl_.frame_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.episode_id_) -
       reinterpret_cast<char*>(&_impl_.frame_id_)) + sizeof(_impl_.episode_id_));
@@ -4079,16 +4086,6 @@ const char* UpdateReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.session_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.UpdateReq.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -4149,16 +4146,6 @@ uint8_t* UpdateReq::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_session_id(), target);
   }
 
-  // string run_id = 4;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.UpdateReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        4, this->_internal_run_id(), target);
-  }
-
   // int32 episode_id = 5;
   if (this->_internal_episode_id() != 0) {
     target = stream->EnsureSpace(target);
@@ -4186,13 +4173,6 @@ size_t UpdateReq::ByteSizeLong() const {
   for (const auto& msg : this->_impl_.agents_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
-  }
-
-  // string run_id = 4;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
   }
 
   // int32 frame_id = 2;
@@ -4229,9 +4209,6 @@ void UpdateReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   (void) cached_has_bits;
 
   _this->_impl_.agents_.MergeFrom(from._impl_.agents_);
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (from._internal_frame_id() != 0) {
     _this->_internal_set_frame_id(from._internal_frame_id());
   }
@@ -4257,14 +4234,8 @@ bool UpdateReq::IsInitialized() const {
 
 void UpdateReq::InternalSwap(UpdateReq* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.agents_.InternalSwap(&other->_impl_.agents_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(UpdateReq, _impl_.episode_id_)
       + sizeof(UpdateReq::_impl_.episode_id_)
@@ -4718,20 +4689,11 @@ EpisodeEndReq::EpisodeEndReq(const EpisodeEndReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   EpisodeEndReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.episode_id_){}
+      decltype(_impl_.episode_id_){}
     , decltype(_impl_.session_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   ::memcpy(&_impl_.episode_id_, &from._impl_.episode_id_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.session_id_) -
     reinterpret_cast<char*>(&_impl_.episode_id_)) + sizeof(_impl_.session_id_));
@@ -4743,15 +4705,10 @@ inline void EpisodeEndReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.episode_id_){0}
+      decltype(_impl_.episode_id_){0}
     , decltype(_impl_.session_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 EpisodeEndReq::~EpisodeEndReq() {
@@ -4765,7 +4722,6 @@ EpisodeEndReq::~EpisodeEndReq() {
 
 inline void EpisodeEndReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
 }
 
 void EpisodeEndReq::SetCachedSize(int size) const {
@@ -4778,7 +4734,6 @@ void EpisodeEndReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   ::memset(&_impl_.episode_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.session_id_) -
       reinterpret_cast<char*>(&_impl_.episode_id_)) + sizeof(_impl_.session_id_));
@@ -4804,16 +4759,6 @@ const char* EpisodeEndReq::_InternalParse(const char* ptr, ::_pbi::ParseContext*
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.session_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.EpisodeEndReq.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -4858,16 +4803,6 @@ uint8_t* EpisodeEndReq::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_session_id(), target);
   }
 
-  // string run_id = 3;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.EpisodeEndReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        3, this->_internal_run_id(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4883,13 +4818,6 @@ size_t EpisodeEndReq::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // string run_id = 3;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
 
   // int32 episode_id = 1;
   if (this->_internal_episode_id() != 0) {
@@ -4919,9 +4847,6 @@ void EpisodeEndReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (from._internal_episode_id() != 0) {
     _this->_internal_set_episode_id(from._internal_episode_id());
   }
@@ -4944,13 +4869,7 @@ bool EpisodeEndReq::IsInitialized() const {
 
 void EpisodeEndReq::InternalSwap(EpisodeEndReq* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(EpisodeEndReq, _impl_.session_id_)
       + sizeof(EpisodeEndReq::_impl_.session_id_)
@@ -5247,22 +5166,13 @@ AbortEpisodeReq::AbortEpisodeReq(const AbortEpisodeReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   AbortEpisodeReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.message_){}
+      decltype(_impl_.message_){}
     , decltype(_impl_.session_id_){}
     , decltype(_impl_.episode_id_){}
     , decltype(_impl_.reason_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.message_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.message_.Set("", GetArenaForAllocation());
@@ -5282,17 +5192,12 @@ inline void AbortEpisodeReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.message_){}
+      decltype(_impl_.message_){}
     , decltype(_impl_.session_id_){0}
     , decltype(_impl_.episode_id_){0}
     , decltype(_impl_.reason_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.message_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.message_.Set("", GetArenaForAllocation());
@@ -5310,7 +5215,6 @@ AbortEpisodeReq::~AbortEpisodeReq() {
 
 inline void AbortEpisodeReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.message_.Destroy();
 }
 
@@ -5324,7 +5228,6 @@ void AbortEpisodeReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.message_.ClearToEmpty();
   ::memset(&_impl_.session_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.reason_) -
@@ -5338,16 +5241,6 @@ const char* AbortEpisodeReq::_InternalParse(const char* ptr, ::_pbi::ParseContex
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.AbortEpisodeReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // int32 session_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
@@ -5412,16 +5305,6 @@ uint8_t* AbortEpisodeReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.AbortEpisodeReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // int32 session_id = 2;
   if (this->_internal_session_id() != 0) {
     target = stream->EnsureSpace(target);
@@ -5467,13 +5350,6 @@ size_t AbortEpisodeReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string message = 5;
   if (!this->_internal_message().empty()) {
     total_size += 1 +
@@ -5515,9 +5391,6 @@ void AbortEpisodeReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_message().empty()) {
     _this->_internal_set_message(from._internal_message());
   }
@@ -5549,10 +5422,6 @@ void AbortEpisodeReq::InternalSwap(AbortEpisodeReq* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.message_, lhs_arena,
       &other->_impl_.message_, rhs_arena
@@ -6093,7 +5962,6 @@ SampleBatch::SampleBatch(const SampleBatch& from)
   SampleBatch* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.samples_){from._impl_.samples_}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.env_id_){}
     , decltype(_impl_.producer_instance_id_){}
@@ -6116,14 +5984,6 @@ SampleBatch::SampleBatch(const SampleBatch& from)
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -6176,7 +6036,6 @@ inline void SampleBatch::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.samples_){arena}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.env_id_){}
     , decltype(_impl_.producer_instance_id_){}
@@ -6198,10 +6057,6 @@ inline void SampleBatch::SharedCtor(
     , decltype(_impl_.bootstrap_value_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -6236,7 +6091,6 @@ SampleBatch::~SampleBatch() {
 inline void SampleBatch::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.samples_.~RepeatedPtrField();
-  _impl_.run_id_.Destroy();
   _impl_.aiserver_id_.Destroy();
   _impl_.env_id_.Destroy();
   _impl_.producer_instance_id_.Destroy();
@@ -6255,7 +6109,6 @@ void SampleBatch::Clear() {
   (void) cached_has_bits;
 
   _impl_.samples_.Clear();
-  _impl_.run_id_.ClearToEmpty();
   _impl_.aiserver_id_.ClearToEmpty();
   _impl_.env_id_.ClearToEmpty();
   _impl_.producer_instance_id_.ClearToEmpty();
@@ -6315,16 +6168,6 @@ const char* SampleBatch::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
           _impl_.session_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.SampleBatch.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -6520,16 +6363,6 @@ uint8_t* SampleBatch::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_session_id(), target);
   }
 
-  // string run_id = 6;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.SampleBatch.run_id");
-    target = stream->WriteStringMaybeAliased(
-        6, this->_internal_run_id(), target);
-  }
-
   // string aiserver_id = 7;
   if (!this->_internal_aiserver_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -6668,13 +6501,6 @@ size_t SampleBatch::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // string run_id = 6;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string aiserver_id = 7;
   if (!this->_internal_aiserver_id().empty()) {
     total_size += 1 +
@@ -6808,9 +6634,6 @@ void SampleBatch::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   (void) cached_has_bits;
 
   _this->_impl_.samples_.MergeFrom(from._impl_.samples_);
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_aiserver_id().empty()) {
     _this->_internal_set_aiserver_id(from._internal_aiserver_id());
   }
@@ -6892,10 +6715,6 @@ void SampleBatch::InternalSwap(SampleBatch* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.samples_.InternalSwap(&other->_impl_.samples_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.aiserver_id_, lhs_arena,
       &other->_impl_.aiserver_id_, rhs_arena
@@ -7694,8 +7513,7 @@ GetBatchReq::GetBatchReq(const GetBatchReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   GetBatchReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.batch_size_){}
     , decltype(_impl_.timeout_ms_){}
     , decltype(_impl_.lease_timeout_ms_){}
@@ -7704,14 +7522,6 @@ GetBatchReq::GetBatchReq(const GetBatchReq& from)
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -7731,8 +7541,7 @@ inline void GetBatchReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.batch_size_){0}
     , decltype(_impl_.timeout_ms_){0}
     , decltype(_impl_.lease_timeout_ms_){0}
@@ -7740,10 +7549,6 @@ inline void GetBatchReq::SharedCtor(
     , decltype(_impl_.selection_policy_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -7761,7 +7566,6 @@ GetBatchReq::~GetBatchReq() {
 
 inline void GetBatchReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.consumer_instance_id_.Destroy();
 }
 
@@ -7775,7 +7579,6 @@ void GetBatchReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.consumer_instance_id_.ClearToEmpty();
   ::memset(&_impl_.batch_size_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.selection_policy_) -
@@ -7802,16 +7605,6 @@ const char* GetBatchReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.timeout_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.GetBatchReq.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -7891,16 +7684,6 @@ uint8_t* GetBatchReq::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_timeout_ms(), target);
   }
 
-  // string run_id = 3;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.GetBatchReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        3, this->_internal_run_id(), target);
-  }
-
   // string consumer_instance_id = 4;
   if (!this->_internal_consumer_instance_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -7945,13 +7728,6 @@ size_t GetBatchReq::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // string run_id = 3;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
 
   // string consumer_instance_id = 4;
   if (!this->_internal_consumer_instance_id().empty()) {
@@ -8004,9 +7780,6 @@ void GetBatchReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_consumer_instance_id().empty()) {
     _this->_internal_set_consumer_instance_id(from._internal_consumer_instance_id());
   }
@@ -8044,10 +7817,6 @@ void GetBatchReq::InternalSwap(GetBatchReq* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.consumer_instance_id_, lhs_arena,
       &other->_impl_.consumer_instance_id_, rhs_arena
@@ -8674,22 +8443,13 @@ AckBatchReq::AckBatchReq(const AckBatchReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   AckBatchReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.delivery_id_){}
     , decltype(_impl_.train_update_id_){}
     , decltype(_impl_.disposition_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -8723,17 +8483,12 @@ inline void AckBatchReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.delivery_id_){}
     , decltype(_impl_.train_update_id_){}
     , decltype(_impl_.disposition_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -8759,7 +8514,6 @@ AckBatchReq::~AckBatchReq() {
 
 inline void AckBatchReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.consumer_instance_id_.Destroy();
   _impl_.delivery_id_.Destroy();
   _impl_.train_update_id_.Destroy();
@@ -8775,7 +8529,6 @@ void AckBatchReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.consumer_instance_id_.ClearToEmpty();
   _impl_.delivery_id_.ClearToEmpty();
   _impl_.train_update_id_.ClearToEmpty();
@@ -8789,16 +8542,6 @@ const char* AckBatchReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.AckBatchReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // string consumer_instance_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
@@ -8867,16 +8610,6 @@ uint8_t* AckBatchReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.AckBatchReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // string consumer_instance_id = 2;
   if (!this->_internal_consumer_instance_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -8930,13 +8663,6 @@ size_t AckBatchReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string consumer_instance_id = 2;
   if (!this->_internal_consumer_instance_id().empty()) {
     total_size += 1 +
@@ -8982,9 +8708,6 @@ void AckBatchReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_consumer_instance_id().empty()) {
     _this->_internal_set_consumer_instance_id(from._internal_consumer_instance_id());
   }
@@ -9016,10 +8739,6 @@ void AckBatchReq::InternalSwap(AckBatchReq* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.consumer_instance_id_, lhs_arena,
       &other->_impl_.consumer_instance_id_, rhs_arena
@@ -9057,21 +8776,12 @@ NackBatchReq::NackBatchReq(const NackBatchReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   NackBatchReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.delivery_id_){}
     , decltype(_impl_.reason_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -9104,16 +8814,11 @@ inline void NackBatchReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.delivery_id_){}
     , decltype(_impl_.reason_){}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -9139,7 +8844,6 @@ NackBatchReq::~NackBatchReq() {
 
 inline void NackBatchReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.consumer_instance_id_.Destroy();
   _impl_.delivery_id_.Destroy();
   _impl_.reason_.Destroy();
@@ -9155,7 +8859,6 @@ void NackBatchReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.consumer_instance_id_.ClearToEmpty();
   _impl_.delivery_id_.ClearToEmpty();
   _impl_.reason_.ClearToEmpty();
@@ -9168,16 +8871,6 @@ const char* NackBatchReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.NackBatchReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // string consumer_instance_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
@@ -9237,16 +8930,6 @@ uint8_t* NackBatchReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.NackBatchReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // string consumer_instance_id = 2;
   if (!this->_internal_consumer_instance_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -9293,13 +8976,6 @@ size_t NackBatchReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string consumer_instance_id = 2;
   if (!this->_internal_consumer_instance_id().empty()) {
     total_size += 1 +
@@ -9339,9 +9015,6 @@ void NackBatchReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_consumer_instance_id().empty()) {
     _this->_internal_set_consumer_instance_id(from._internal_consumer_instance_id());
   }
@@ -9370,10 +9043,6 @@ void NackBatchReq::InternalSwap(NackBatchReq* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.consumer_instance_id_, lhs_arena,
       &other->_impl_.consumer_instance_id_, rhs_arena
@@ -9410,21 +9079,12 @@ RenewLeaseReq::RenewLeaseReq(const RenewLeaseReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   RenewLeaseReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.delivery_id_){}
     , decltype(_impl_.lease_timeout_ms_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -9450,16 +9110,11 @@ inline void RenewLeaseReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.consumer_instance_id_){}
+      decltype(_impl_.consumer_instance_id_){}
     , decltype(_impl_.delivery_id_){}
     , decltype(_impl_.lease_timeout_ms_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.consumer_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.consumer_instance_id_.Set("", GetArenaForAllocation());
@@ -9481,7 +9136,6 @@ RenewLeaseReq::~RenewLeaseReq() {
 
 inline void RenewLeaseReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.consumer_instance_id_.Destroy();
   _impl_.delivery_id_.Destroy();
 }
@@ -9496,7 +9150,6 @@ void RenewLeaseReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.consumer_instance_id_.ClearToEmpty();
   _impl_.delivery_id_.ClearToEmpty();
   _impl_.lease_timeout_ms_ = 0;
@@ -9509,16 +9162,6 @@ const char* RenewLeaseReq::_InternalParse(const char* ptr, ::_pbi::ParseContext*
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.RenewLeaseReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // string consumer_instance_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
@@ -9576,16 +9219,6 @@ uint8_t* RenewLeaseReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.RenewLeaseReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // string consumer_instance_id = 2;
   if (!this->_internal_consumer_instance_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -9628,13 +9261,6 @@ size_t RenewLeaseReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string consumer_instance_id = 2;
   if (!this->_internal_consumer_instance_id().empty()) {
     total_size += 1 +
@@ -9672,9 +9298,6 @@ void RenewLeaseReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_consumer_instance_id().empty()) {
     _this->_internal_set_consumer_instance_id(from._internal_consumer_instance_id());
   }
@@ -9703,10 +9326,6 @@ void RenewLeaseReq::InternalSwap(RenewLeaseReq* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.consumer_instance_id_, lhs_arena,
       &other->_impl_.consumer_instance_id_, rhs_arena
@@ -10197,194 +9816,31 @@ class DistributorStatusReq::_Internal {
 
 DistributorStatusReq::DistributorStatusReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
   // @@protoc_insertion_point(arena_constructor:maze.DistributorStatusReq)
 }
 DistributorStatusReq::DistributorStatusReq(const DistributorStatusReq& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
   DistributorStatusReq* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   // @@protoc_insertion_point(copy_constructor:maze.DistributorStatusReq)
 }
 
-inline void DistributorStatusReq::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-  };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
 
-DistributorStatusReq::~DistributorStatusReq() {
-  // @@protoc_insertion_point(destructor:maze.DistributorStatusReq)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
-  SharedDtor();
-}
 
-inline void DistributorStatusReq::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
-}
 
-void DistributorStatusReq::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void DistributorStatusReq::Clear() {
-// @@protoc_insertion_point(message_clear_start:maze.DistributorStatusReq)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.run_id_.ClearToEmpty();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* DistributorStatusReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.DistributorStatusReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* DistributorStatusReq::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:maze.DistributorStatusReq)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.DistributorStatusReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:maze.DistributorStatusReq)
-  return target;
-}
-
-size_t DistributorStatusReq::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:maze.DistributorStatusReq)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DistributorStatusReq::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    DistributorStatusReq::MergeImpl
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DistributorStatusReq::GetClassData() const { return &_class_data_; }
 
 
-void DistributorStatusReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<DistributorStatusReq*>(&to_msg);
-  auto& from = static_cast<const DistributorStatusReq&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:maze.DistributorStatusReq)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
 
-void DistributorStatusReq::CopyFrom(const DistributorStatusReq& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:maze.DistributorStatusReq)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
 
-bool DistributorStatusReq::IsInitialized() const {
-  return true;
-}
 
-void DistributorStatusReq::InternalSwap(DistributorStatusReq* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-}
 
 ::PROTOBUF_NAMESPACE_ID::Metadata DistributorStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
@@ -10836,7 +10292,6 @@ DistributorStatusRsp::DistributorStatusRsp(const DistributorStatusRsp& from)
   DistributorStatusRsp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.behavior_versions_){from._impl_.behavior_versions_}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.distributor_instance_id_){}
     , decltype(_impl_.last_error_){}
     , decltype(_impl_.push_sample_count_){}
@@ -10884,14 +10339,6 @@ DistributorStatusRsp::DistributorStatusRsp(const DistributorStatusRsp& from)
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.distributor_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.distributor_instance_id_.Set("", GetArenaForAllocation());
@@ -10920,7 +10367,6 @@ inline void DistributorStatusRsp::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.behavior_versions_){arena}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.distributor_instance_id_){}
     , decltype(_impl_.last_error_){}
     , decltype(_impl_.push_sample_count_){int64_t{0}}
@@ -10967,10 +10413,6 @@ inline void DistributorStatusRsp::SharedCtor(
     , decltype(_impl_.pressure_state_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.distributor_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.distributor_instance_id_.Set("", GetArenaForAllocation());
@@ -10993,7 +10435,6 @@ DistributorStatusRsp::~DistributorStatusRsp() {
 inline void DistributorStatusRsp::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.behavior_versions_.~RepeatedPtrField();
-  _impl_.run_id_.Destroy();
   _impl_.distributor_instance_id_.Destroy();
   _impl_.last_error_.Destroy();
 }
@@ -11009,7 +10450,6 @@ void DistributorStatusRsp::Clear() {
   (void) cached_has_bits;
 
   _impl_.behavior_versions_.Clear();
-  _impl_.run_id_.ClearToEmpty();
   _impl_.distributor_instance_id_.ClearToEmpty();
   _impl_.last_error_.ClearToEmpty();
   ::memset(&_impl_.push_sample_count_, 0, static_cast<size_t>(
@@ -11093,16 +10533,6 @@ const char* DistributorStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseC
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
           _impl_.protocol_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.DistributorStatusRsp.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -11487,16 +10917,6 @@ uint8_t* DistributorStatusRsp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(9, this->_internal_protocol_version(), target);
   }
 
-  // string run_id = 10;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.DistributorStatusRsp.run_id");
-    target = stream->WriteStringMaybeAliased(
-        10, this->_internal_run_id(), target);
-  }
-
   // string distributor_instance_id = 11;
   if (!this->_internal_distributor_instance_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -11745,13 +11165,6 @@ size_t DistributorStatusRsp::ByteSizeLong() const {
   for (const auto& msg : this->_impl_.behavior_versions_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
-  }
-
-  // string run_id = 10;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
   }
 
   // string distributor_instance_id = 11;
@@ -12054,9 +11467,6 @@ void DistributorStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, c
   (void) cached_has_bits;
 
   _this->_impl_.behavior_versions_.MergeFrom(from._impl_.behavior_versions_);
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_distributor_instance_id().empty()) {
     _this->_internal_set_distributor_instance_id(from._internal_distributor_instance_id());
   }
@@ -12210,10 +11620,6 @@ void DistributorStatusRsp::InternalSwap(DistributorStatusRsp* other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.behavior_versions_.InternalSwap(&other->_impl_.behavior_versions_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.distributor_instance_id_, lhs_arena,
       &other->_impl_.distributor_instance_id_, rhs_arena
   );
@@ -12243,45 +11649,78 @@ class AIServerStatusReq::_Internal {
 
 AIServerStatusReq::AIServerStatusReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
   // @@protoc_insertion_point(arena_constructor:maze.AIServerStatusReq)
 }
 AIServerStatusReq::AIServerStatusReq(const AIServerStatusReq& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
   AIServerStatusReq* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   // @@protoc_insertion_point(copy_constructor:maze.AIServerStatusReq)
 }
 
-inline void AIServerStatusReq::SharedCtor(
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AIServerStatusReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AIServerStatusReq::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusReq::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
+      file_level_metadata_maze_2eproto[26]);
+}
+
+// ===================================================================
+
+class TerminationReasonCount::_Internal {
+ public:
+};
+
+TerminationReasonCount::TerminationReasonCount(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:maze.TerminationReasonCount)
+}
+TerminationReasonCount::TerminationReasonCount(const TerminationReasonCount& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TerminationReasonCount* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.count_){}
+    , decltype(_impl_.reason_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.count_, &from._impl_.count_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.reason_) -
+    reinterpret_cast<char*>(&_impl_.count_)) + sizeof(_impl_.reason_));
+  // @@protoc_insertion_point(copy_constructor:maze.TerminationReasonCount)
+}
+
+inline void TerminationReasonCount::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
+      decltype(_impl_.count_){int64_t{0}}
+    , decltype(_impl_.reason_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-AIServerStatusReq::~AIServerStatusReq() {
-  // @@protoc_insertion_point(destructor:maze.AIServerStatusReq)
+TerminationReasonCount::~TerminationReasonCount() {
+  // @@protoc_insertion_point(destructor:maze.TerminationReasonCount)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -12289,38 +11728,46 @@ AIServerStatusReq::~AIServerStatusReq() {
   SharedDtor();
 }
 
-inline void AIServerStatusReq::SharedDtor() {
+inline void TerminationReasonCount::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
 }
 
-void AIServerStatusReq::SetCachedSize(int size) const {
+void TerminationReasonCount::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void AIServerStatusReq::Clear() {
-// @@protoc_insertion_point(message_clear_start:maze.AIServerStatusReq)
+void TerminationReasonCount::Clear() {
+// @@protoc_insertion_point(message_clear_start:maze.TerminationReasonCount)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
+  ::memset(&_impl_.count_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.reason_) -
+      reinterpret_cast<char*>(&_impl_.count_)) + sizeof(_impl_.reason_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* AIServerStatusReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* TerminationReasonCount::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
+      // .maze.TerminationReason reason = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.AIServerStatusReq.run_id"));
+          _internal_set_reason(static_cast<::maze::TerminationReason>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 count = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -12347,103 +11794,777 @@ failure:
 #undef CHK_
 }
 
-uint8_t* AIServerStatusReq::_InternalSerialize(
+uint8_t* TerminationReasonCount::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:maze.AIServerStatusReq)
+  // @@protoc_insertion_point(serialize_to_array_start:maze.TerminationReasonCount)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.AIServerStatusReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
+  // .maze.TerminationReason reason = 1;
+  if (this->_internal_reason() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      1, this->_internal_reason(), target);
+  }
+
+  // int64 count = 2;
+  if (this->_internal_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(2, this->_internal_count(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:maze.AIServerStatusReq)
+  // @@protoc_insertion_point(serialize_to_array_end:maze.TerminationReasonCount)
   return target;
 }
 
-size_t AIServerStatusReq::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:maze.AIServerStatusReq)
+size_t TerminationReasonCount::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:maze.TerminationReasonCount)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
+  // int64 count = 2;
+  if (this->_internal_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_count());
+  }
+
+  // .maze.TerminationReason reason = 1;
+  if (this->_internal_reason() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_reason());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AIServerStatusReq::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TerminationReasonCount::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    AIServerStatusReq::MergeImpl
+    TerminationReasonCount::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AIServerStatusReq::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TerminationReasonCount::GetClassData() const { return &_class_data_; }
 
 
-void AIServerStatusReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<AIServerStatusReq*>(&to_msg);
-  auto& from = static_cast<const AIServerStatusReq&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:maze.AIServerStatusReq)
+void TerminationReasonCount::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TerminationReasonCount*>(&to_msg);
+  auto& from = static_cast<const TerminationReasonCount&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:maze.TerminationReasonCount)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
+  if (from._internal_count() != 0) {
+    _this->_internal_set_count(from._internal_count());
+  }
+  if (from._internal_reason() != 0) {
+    _this->_internal_set_reason(from._internal_reason());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void AIServerStatusReq::CopyFrom(const AIServerStatusReq& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:maze.AIServerStatusReq)
+void TerminationReasonCount::CopyFrom(const TerminationReasonCount& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:maze.TerminationReasonCount)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool AIServerStatusReq::IsInitialized() const {
+bool TerminationReasonCount::IsInitialized() const {
   return true;
 }
 
-void AIServerStatusReq::InternalSwap(AIServerStatusReq* other) {
+void TerminationReasonCount::InternalSwap(TerminationReasonCount* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TerminationReasonCount, _impl_.reason_)
+      + sizeof(TerminationReasonCount::_impl_.reason_)
+      - PROTOBUF_FIELD_OFFSET(TerminationReasonCount, _impl_.count_)>(
+          reinterpret_cast<char*>(&_impl_.count_),
+          reinterpret_cast<char*>(&other->_impl_.count_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusReq::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata TerminationReasonCount::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[26]);
+      file_level_metadata_maze_2eproto[27]);
+}
+
+// ===================================================================
+
+EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse() {}
+EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+    : SuperType(arena) {}
+void EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::MergeFrom(const EpisodeMetrics_RewardComponentMeanEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::PROTOBUF_NAMESPACE_ID::Metadata EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
+      file_level_metadata_maze_2eproto[28]);
+}
+
+// ===================================================================
+
+class EpisodeMetrics::_Internal {
+ public:
+};
+
+EpisodeMetrics::EpisodeMetrics(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  if (arena != nullptr && !is_message_owned) {
+    arena->OwnCustomDestructor(this, &EpisodeMetrics::ArenaDtor);
+  }
+  // @@protoc_insertion_point(arena_constructor:maze.EpisodeMetrics)
+}
+EpisodeMetrics::EpisodeMetrics(const EpisodeMetrics& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  EpisodeMetrics* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.termination_counts_){from._impl_.termination_counts_}
+    , /*decltype(_impl_.reward_component_mean_)*/{}
+    , decltype(_impl_.completed_episode_count_){}
+    , decltype(_impl_.completed_agent_count_){}
+    , decltype(_impl_.mean_agent_return_){}
+    , decltype(_impl_.min_agent_return_){}
+    , decltype(_impl_.max_agent_return_){}
+    , decltype(_impl_.agent_success_count_){}
+    , decltype(_impl_.agent_success_rate_){}
+    , decltype(_impl_.environment_any_success_count_){}
+    , decltype(_impl_.environment_any_success_rate_){}
+    , decltype(_impl_.environment_all_success_count_){}
+    , decltype(_impl_.environment_all_success_rate_){}
+    , decltype(_impl_.excluded_episode_count_){}
+    , decltype(_impl_.configured_window_size_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.reward_component_mean_.MergeFrom(from._impl_.reward_component_mean_);
+  ::memcpy(&_impl_.completed_episode_count_, &from._impl_.completed_episode_count_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.configured_window_size_) -
+    reinterpret_cast<char*>(&_impl_.completed_episode_count_)) + sizeof(_impl_.configured_window_size_));
+  // @@protoc_insertion_point(copy_constructor:maze.EpisodeMetrics)
+}
+
+inline void EpisodeMetrics::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.termination_counts_){arena}
+    , /*decltype(_impl_.reward_component_mean_)*/{::_pbi::ArenaInitialized(), arena}
+    , decltype(_impl_.completed_episode_count_){int64_t{0}}
+    , decltype(_impl_.completed_agent_count_){int64_t{0}}
+    , decltype(_impl_.mean_agent_return_){0}
+    , decltype(_impl_.min_agent_return_){0}
+    , decltype(_impl_.max_agent_return_){0}
+    , decltype(_impl_.agent_success_count_){int64_t{0}}
+    , decltype(_impl_.agent_success_rate_){0}
+    , decltype(_impl_.environment_any_success_count_){int64_t{0}}
+    , decltype(_impl_.environment_any_success_rate_){0}
+    , decltype(_impl_.environment_all_success_count_){int64_t{0}}
+    , decltype(_impl_.environment_all_success_rate_){0}
+    , decltype(_impl_.excluded_episode_count_){int64_t{0}}
+    , decltype(_impl_.configured_window_size_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+EpisodeMetrics::~EpisodeMetrics() {
+  // @@protoc_insertion_point(destructor:maze.EpisodeMetrics)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    ArenaDtor(this);
+    return;
+  }
+  SharedDtor();
+}
+
+inline void EpisodeMetrics::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.termination_counts_.~RepeatedPtrField();
+  _impl_.reward_component_mean_.Destruct();
+  _impl_.reward_component_mean_.~MapField();
+}
+
+void EpisodeMetrics::ArenaDtor(void* object) {
+  EpisodeMetrics* _this = reinterpret_cast< EpisodeMetrics* >(object);
+  _this->_impl_.reward_component_mean_.Destruct();
+}
+void EpisodeMetrics::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void EpisodeMetrics::Clear() {
+// @@protoc_insertion_point(message_clear_start:maze.EpisodeMetrics)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.termination_counts_.Clear();
+  _impl_.reward_component_mean_.Clear();
+  ::memset(&_impl_.completed_episode_count_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.configured_window_size_) -
+      reinterpret_cast<char*>(&_impl_.completed_episode_count_)) + sizeof(_impl_.configured_window_size_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* EpisodeMetrics::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 configured_window_size = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.configured_window_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 completed_episode_count = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.completed_episode_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 completed_agent_count = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.completed_agent_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // double mean_agent_return = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 33)) {
+          _impl_.mean_agent_return_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // double min_agent_return = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 41)) {
+          _impl_.min_agent_return_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // double max_agent_return = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 49)) {
+          _impl_.max_agent_return_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 agent_success_count = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.agent_success_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // double agent_success_rate = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 65)) {
+          _impl_.agent_success_rate_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 environment_any_success_count = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
+          _impl_.environment_any_success_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // double environment_any_success_rate = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 81)) {
+          _impl_.environment_any_success_rate_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 environment_all_success_count = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
+          _impl_.environment_all_success_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // double environment_all_success_rate = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 97)) {
+          _impl_.environment_all_success_rate_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 excluded_episode_count = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
+          _impl_.excluded_episode_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .maze.TerminationReasonCount termination_counts = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_termination_counts(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<114>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // map<string, double> reward_component_mean = 15;
+      case 15:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 122)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(&_impl_.reward_component_mean_, ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<122>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* EpisodeMetrics::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:maze.EpisodeMetrics)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 configured_window_size = 1;
+  if (this->_internal_configured_window_size() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_configured_window_size(), target);
+  }
+
+  // int64 completed_episode_count = 2;
+  if (this->_internal_completed_episode_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(2, this->_internal_completed_episode_count(), target);
+  }
+
+  // int64 completed_agent_count = 3;
+  if (this->_internal_completed_agent_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(3, this->_internal_completed_agent_count(), target);
+  }
+
+  // double mean_agent_return = 4;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_mean_agent_return = this->_internal_mean_agent_return();
+  uint64_t raw_mean_agent_return;
+  memcpy(&raw_mean_agent_return, &tmp_mean_agent_return, sizeof(tmp_mean_agent_return));
+  if (raw_mean_agent_return != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(4, this->_internal_mean_agent_return(), target);
+  }
+
+  // double min_agent_return = 5;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_min_agent_return = this->_internal_min_agent_return();
+  uint64_t raw_min_agent_return;
+  memcpy(&raw_min_agent_return, &tmp_min_agent_return, sizeof(tmp_min_agent_return));
+  if (raw_min_agent_return != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(5, this->_internal_min_agent_return(), target);
+  }
+
+  // double max_agent_return = 6;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_max_agent_return = this->_internal_max_agent_return();
+  uint64_t raw_max_agent_return;
+  memcpy(&raw_max_agent_return, &tmp_max_agent_return, sizeof(tmp_max_agent_return));
+  if (raw_max_agent_return != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(6, this->_internal_max_agent_return(), target);
+  }
+
+  // int64 agent_success_count = 7;
+  if (this->_internal_agent_success_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(7, this->_internal_agent_success_count(), target);
+  }
+
+  // double agent_success_rate = 8;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_agent_success_rate = this->_internal_agent_success_rate();
+  uint64_t raw_agent_success_rate;
+  memcpy(&raw_agent_success_rate, &tmp_agent_success_rate, sizeof(tmp_agent_success_rate));
+  if (raw_agent_success_rate != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(8, this->_internal_agent_success_rate(), target);
+  }
+
+  // int64 environment_any_success_count = 9;
+  if (this->_internal_environment_any_success_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(9, this->_internal_environment_any_success_count(), target);
+  }
+
+  // double environment_any_success_rate = 10;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_environment_any_success_rate = this->_internal_environment_any_success_rate();
+  uint64_t raw_environment_any_success_rate;
+  memcpy(&raw_environment_any_success_rate, &tmp_environment_any_success_rate, sizeof(tmp_environment_any_success_rate));
+  if (raw_environment_any_success_rate != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(10, this->_internal_environment_any_success_rate(), target);
+  }
+
+  // int64 environment_all_success_count = 11;
+  if (this->_internal_environment_all_success_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(11, this->_internal_environment_all_success_count(), target);
+  }
+
+  // double environment_all_success_rate = 12;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_environment_all_success_rate = this->_internal_environment_all_success_rate();
+  uint64_t raw_environment_all_success_rate;
+  memcpy(&raw_environment_all_success_rate, &tmp_environment_all_success_rate, sizeof(tmp_environment_all_success_rate));
+  if (raw_environment_all_success_rate != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(12, this->_internal_environment_all_success_rate(), target);
+  }
+
+  // int64 excluded_episode_count = 13;
+  if (this->_internal_excluded_episode_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(13, this->_internal_excluded_episode_count(), target);
+  }
+
+  // repeated .maze.TerminationReasonCount termination_counts = 14;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_termination_counts_size()); i < n; i++) {
+    const auto& repfield = this->_internal_termination_counts(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(14, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // map<string, double> reward_component_mean = 15;
+  if (!this->_internal_reward_component_mean().empty()) {
+    using MapType = ::_pb::Map<std::string, double>;
+    using WireHelper = EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::Funcs;
+    const auto& map_field = this->_internal_reward_component_mean();
+    auto check_utf8 = [](const MapType::value_type& entry) {
+      (void)entry;
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.first.data(), static_cast<int>(entry.first.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "maze.EpisodeMetrics.RewardComponentMeanEntry.key");
+    };
+
+    if (stream->IsSerializationDeterministic() && map_field.size() > 1) {
+      for (const auto& entry : ::_pbi::MapSorterPtr<MapType>(map_field)) {
+        target = WireHelper::InternalSerialize(15, entry.first, entry.second, target, stream);
+        check_utf8(entry);
+      }
+    } else {
+      for (const auto& entry : map_field) {
+        target = WireHelper::InternalSerialize(15, entry.first, entry.second, target, stream);
+        check_utf8(entry);
+      }
+    }
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:maze.EpisodeMetrics)
+  return target;
+}
+
+size_t EpisodeMetrics::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:maze.EpisodeMetrics)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .maze.TerminationReasonCount termination_counts = 14;
+  total_size += 1UL * this->_internal_termination_counts_size();
+  for (const auto& msg : this->_impl_.termination_counts_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // map<string, double> reward_component_mean = 15;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_reward_component_mean_size());
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, double >::const_iterator
+      it = this->_internal_reward_component_mean().begin();
+      it != this->_internal_reward_component_mean().end(); ++it) {
+    total_size += EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+  }
+
+  // int64 completed_episode_count = 2;
+  if (this->_internal_completed_episode_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_completed_episode_count());
+  }
+
+  // int64 completed_agent_count = 3;
+  if (this->_internal_completed_agent_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_completed_agent_count());
+  }
+
+  // double mean_agent_return = 4;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_mean_agent_return = this->_internal_mean_agent_return();
+  uint64_t raw_mean_agent_return;
+  memcpy(&raw_mean_agent_return, &tmp_mean_agent_return, sizeof(tmp_mean_agent_return));
+  if (raw_mean_agent_return != 0) {
+    total_size += 1 + 8;
+  }
+
+  // double min_agent_return = 5;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_min_agent_return = this->_internal_min_agent_return();
+  uint64_t raw_min_agent_return;
+  memcpy(&raw_min_agent_return, &tmp_min_agent_return, sizeof(tmp_min_agent_return));
+  if (raw_min_agent_return != 0) {
+    total_size += 1 + 8;
+  }
+
+  // double max_agent_return = 6;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_max_agent_return = this->_internal_max_agent_return();
+  uint64_t raw_max_agent_return;
+  memcpy(&raw_max_agent_return, &tmp_max_agent_return, sizeof(tmp_max_agent_return));
+  if (raw_max_agent_return != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int64 agent_success_count = 7;
+  if (this->_internal_agent_success_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_agent_success_count());
+  }
+
+  // double agent_success_rate = 8;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_agent_success_rate = this->_internal_agent_success_rate();
+  uint64_t raw_agent_success_rate;
+  memcpy(&raw_agent_success_rate, &tmp_agent_success_rate, sizeof(tmp_agent_success_rate));
+  if (raw_agent_success_rate != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int64 environment_any_success_count = 9;
+  if (this->_internal_environment_any_success_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_environment_any_success_count());
+  }
+
+  // double environment_any_success_rate = 10;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_environment_any_success_rate = this->_internal_environment_any_success_rate();
+  uint64_t raw_environment_any_success_rate;
+  memcpy(&raw_environment_any_success_rate, &tmp_environment_any_success_rate, sizeof(tmp_environment_any_success_rate));
+  if (raw_environment_any_success_rate != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int64 environment_all_success_count = 11;
+  if (this->_internal_environment_all_success_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_environment_all_success_count());
+  }
+
+  // double environment_all_success_rate = 12;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_environment_all_success_rate = this->_internal_environment_all_success_rate();
+  uint64_t raw_environment_all_success_rate;
+  memcpy(&raw_environment_all_success_rate, &tmp_environment_all_success_rate, sizeof(tmp_environment_all_success_rate));
+  if (raw_environment_all_success_rate != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int64 excluded_episode_count = 13;
+  if (this->_internal_excluded_episode_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_excluded_episode_count());
+  }
+
+  // int32 configured_window_size = 1;
+  if (this->_internal_configured_window_size() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_configured_window_size());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EpisodeMetrics::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    EpisodeMetrics::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EpisodeMetrics::GetClassData() const { return &_class_data_; }
+
+
+void EpisodeMetrics::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<EpisodeMetrics*>(&to_msg);
+  auto& from = static_cast<const EpisodeMetrics&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:maze.EpisodeMetrics)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.termination_counts_.MergeFrom(from._impl_.termination_counts_);
+  _this->_impl_.reward_component_mean_.MergeFrom(from._impl_.reward_component_mean_);
+  if (from._internal_completed_episode_count() != 0) {
+    _this->_internal_set_completed_episode_count(from._internal_completed_episode_count());
+  }
+  if (from._internal_completed_agent_count() != 0) {
+    _this->_internal_set_completed_agent_count(from._internal_completed_agent_count());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_mean_agent_return = from._internal_mean_agent_return();
+  uint64_t raw_mean_agent_return;
+  memcpy(&raw_mean_agent_return, &tmp_mean_agent_return, sizeof(tmp_mean_agent_return));
+  if (raw_mean_agent_return != 0) {
+    _this->_internal_set_mean_agent_return(from._internal_mean_agent_return());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_min_agent_return = from._internal_min_agent_return();
+  uint64_t raw_min_agent_return;
+  memcpy(&raw_min_agent_return, &tmp_min_agent_return, sizeof(tmp_min_agent_return));
+  if (raw_min_agent_return != 0) {
+    _this->_internal_set_min_agent_return(from._internal_min_agent_return());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_max_agent_return = from._internal_max_agent_return();
+  uint64_t raw_max_agent_return;
+  memcpy(&raw_max_agent_return, &tmp_max_agent_return, sizeof(tmp_max_agent_return));
+  if (raw_max_agent_return != 0) {
+    _this->_internal_set_max_agent_return(from._internal_max_agent_return());
+  }
+  if (from._internal_agent_success_count() != 0) {
+    _this->_internal_set_agent_success_count(from._internal_agent_success_count());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_agent_success_rate = from._internal_agent_success_rate();
+  uint64_t raw_agent_success_rate;
+  memcpy(&raw_agent_success_rate, &tmp_agent_success_rate, sizeof(tmp_agent_success_rate));
+  if (raw_agent_success_rate != 0) {
+    _this->_internal_set_agent_success_rate(from._internal_agent_success_rate());
+  }
+  if (from._internal_environment_any_success_count() != 0) {
+    _this->_internal_set_environment_any_success_count(from._internal_environment_any_success_count());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_environment_any_success_rate = from._internal_environment_any_success_rate();
+  uint64_t raw_environment_any_success_rate;
+  memcpy(&raw_environment_any_success_rate, &tmp_environment_any_success_rate, sizeof(tmp_environment_any_success_rate));
+  if (raw_environment_any_success_rate != 0) {
+    _this->_internal_set_environment_any_success_rate(from._internal_environment_any_success_rate());
+  }
+  if (from._internal_environment_all_success_count() != 0) {
+    _this->_internal_set_environment_all_success_count(from._internal_environment_all_success_count());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_environment_all_success_rate = from._internal_environment_all_success_rate();
+  uint64_t raw_environment_all_success_rate;
+  memcpy(&raw_environment_all_success_rate, &tmp_environment_all_success_rate, sizeof(tmp_environment_all_success_rate));
+  if (raw_environment_all_success_rate != 0) {
+    _this->_internal_set_environment_all_success_rate(from._internal_environment_all_success_rate());
+  }
+  if (from._internal_excluded_episode_count() != 0) {
+    _this->_internal_set_excluded_episode_count(from._internal_excluded_episode_count());
+  }
+  if (from._internal_configured_window_size() != 0) {
+    _this->_internal_set_configured_window_size(from._internal_configured_window_size());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void EpisodeMetrics::CopyFrom(const EpisodeMetrics& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:maze.EpisodeMetrics)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool EpisodeMetrics::IsInitialized() const {
+  return true;
+}
+
+void EpisodeMetrics::InternalSwap(EpisodeMetrics* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.termination_counts_.InternalSwap(&other->_impl_.termination_counts_);
+  _impl_.reward_component_mean_.InternalSwap(&other->_impl_.reward_component_mean_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(EpisodeMetrics, _impl_.configured_window_size_)
+      + sizeof(EpisodeMetrics::_impl_.configured_window_size_)
+      - PROTOBUF_FIELD_OFFSET(EpisodeMetrics, _impl_.completed_episode_count_)>(
+          reinterpret_cast<char*>(&_impl_.completed_episode_count_),
+          reinterpret_cast<char*>(&other->_impl_.completed_episode_count_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata EpisodeMetrics::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
+      file_level_metadata_maze_2eproto[29]);
 }
 
 // ===================================================================
 
 class AIServerStatusRsp::_Internal {
  public:
+  static const ::maze::EpisodeMetrics& episode_metrics(const AIServerStatusRsp* msg);
 };
 
+const ::maze::EpisodeMetrics&
+AIServerStatusRsp::_Internal::episode_metrics(const AIServerStatusRsp* msg) {
+  return *msg->_impl_.episode_metrics_;
+}
 AIServerStatusRsp::AIServerStatusRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -12454,12 +12575,12 @@ AIServerStatusRsp::AIServerStatusRsp(const AIServerStatusRsp& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   AIServerStatusRsp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.producer_instance_id_){}
     , decltype(_impl_.loaded_model_checksum_){}
     , decltype(_impl_.last_error_){}
     , decltype(_impl_.staged_model_checksum_){}
+    , decltype(_impl_.episode_metrics_){nullptr}
     , decltype(_impl_.protocol_version_){}
     , decltype(_impl_.state_){}
     , decltype(_impl_.model_state_){}
@@ -12498,17 +12619,10 @@ AIServerStatusRsp::AIServerStatusRsp(const AIServerStatusRsp& from)
     , decltype(_impl_.model_switch_count_){}
     , decltype(_impl_.quarantined_sample_count_){}
     , decltype(_impl_.quarantined_fragment_count_){}
+    , decltype(_impl_.workload_mode_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -12549,9 +12663,12 @@ AIServerStatusRsp::AIServerStatusRsp(const AIServerStatusRsp& from)
     _this->_impl_.staged_model_checksum_.Set(from._internal_staged_model_checksum(), 
       _this->GetArenaForAllocation());
   }
+  if (from._internal_has_episode_metrics()) {
+    _this->_impl_.episode_metrics_ = new ::maze::EpisodeMetrics(*from._impl_.episode_metrics_);
+  }
   ::memcpy(&_impl_.protocol_version_, &from._impl_.protocol_version_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.quarantined_fragment_count_) -
-    reinterpret_cast<char*>(&_impl_.protocol_version_)) + sizeof(_impl_.quarantined_fragment_count_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.workload_mode_) -
+    reinterpret_cast<char*>(&_impl_.protocol_version_)) + sizeof(_impl_.workload_mode_));
   // @@protoc_insertion_point(copy_constructor:maze.AIServerStatusRsp)
 }
 
@@ -12560,12 +12677,12 @@ inline void AIServerStatusRsp::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.producer_instance_id_){}
     , decltype(_impl_.loaded_model_checksum_){}
     , decltype(_impl_.last_error_){}
     , decltype(_impl_.staged_model_checksum_){}
+    , decltype(_impl_.episode_metrics_){nullptr}
     , decltype(_impl_.protocol_version_){0u}
     , decltype(_impl_.state_){0}
     , decltype(_impl_.model_state_){0}
@@ -12604,12 +12721,9 @@ inline void AIServerStatusRsp::SharedCtor(
     , decltype(_impl_.model_switch_count_){int64_t{0}}
     , decltype(_impl_.quarantined_sample_count_){int64_t{0}}
     , decltype(_impl_.quarantined_fragment_count_){int64_t{0}}
+    , decltype(_impl_.workload_mode_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -12643,12 +12757,12 @@ AIServerStatusRsp::~AIServerStatusRsp() {
 
 inline void AIServerStatusRsp::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.aiserver_id_.Destroy();
   _impl_.producer_instance_id_.Destroy();
   _impl_.loaded_model_checksum_.Destroy();
   _impl_.last_error_.Destroy();
   _impl_.staged_model_checksum_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.episode_metrics_;
 }
 
 void AIServerStatusRsp::SetCachedSize(int size) const {
@@ -12661,15 +12775,18 @@ void AIServerStatusRsp::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.aiserver_id_.ClearToEmpty();
   _impl_.producer_instance_id_.ClearToEmpty();
   _impl_.loaded_model_checksum_.ClearToEmpty();
   _impl_.last_error_.ClearToEmpty();
   _impl_.staged_model_checksum_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.episode_metrics_ != nullptr) {
+    delete _impl_.episode_metrics_;
+  }
+  _impl_.episode_metrics_ = nullptr;
   ::memset(&_impl_.protocol_version_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.quarantined_fragment_count_) -
-      reinterpret_cast<char*>(&_impl_.protocol_version_)) + sizeof(_impl_.quarantined_fragment_count_));
+      reinterpret_cast<char*>(&_impl_.workload_mode_) -
+      reinterpret_cast<char*>(&_impl_.protocol_version_)) + sizeof(_impl_.workload_mode_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -12684,16 +12801,6 @@ const char* AIServerStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseCont
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.protocol_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.AIServerStatusRsp.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -13045,6 +13152,23 @@ const char* AIServerStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseCont
         } else
           goto handle_unusual;
         continue;
+      // .maze.WorkloadMode workload_mode = 45;
+      case 45:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_workload_mode(static_cast<::maze::WorkloadMode>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.EpisodeMetrics episode_metrics = 46;
+      case 46:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+          ptr = ctx->ParseMessage(_internal_mutable_episode_metrics(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -13078,16 +13202,6 @@ uint8_t* AIServerStatusRsp::_InternalSerialize(
   if (this->_internal_protocol_version() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_protocol_version(), target);
-  }
-
-  // string run_id = 2;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.AIServerStatusRsp.run_id");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_run_id(), target);
   }
 
   // string aiserver_id = 3;
@@ -13396,6 +13510,20 @@ uint8_t* AIServerStatusRsp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt64ToArray(44, this->_internal_quarantined_fragment_count(), target);
   }
 
+  // .maze.WorkloadMode workload_mode = 45;
+  if (this->_internal_workload_mode() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      45, this->_internal_workload_mode(), target);
+  }
+
+  // .maze.EpisodeMetrics episode_metrics = 46;
+  if (this->_internal_has_episode_metrics()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(46, _Internal::episode_metrics(this),
+        _Internal::episode_metrics(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -13411,13 +13539,6 @@ size_t AIServerStatusRsp::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // string run_id = 2;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
 
   // string aiserver_id = 3;
   if (!this->_internal_aiserver_id().empty()) {
@@ -13452,6 +13573,13 @@ size_t AIServerStatusRsp::ByteSizeLong() const {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_staged_model_checksum());
+  }
+
+  // .maze.EpisodeMetrics episode_metrics = 46;
+  if (this->_internal_has_episode_metrics()) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.episode_metrics_);
   }
 
   // uint32 protocol_version = 1;
@@ -13714,6 +13842,12 @@ size_t AIServerStatusRsp::ByteSizeLong() const {
         this->_internal_quarantined_fragment_count());
   }
 
+  // .maze.WorkloadMode workload_mode = 45;
+  if (this->_internal_workload_mode() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_workload_mode());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -13732,9 +13866,6 @@ void AIServerStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_aiserver_id().empty()) {
     _this->_internal_set_aiserver_id(from._internal_aiserver_id());
   }
@@ -13749,6 +13880,10 @@ void AIServerStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   }
   if (!from._internal_staged_model_checksum().empty()) {
     _this->_internal_set_staged_model_checksum(from._internal_staged_model_checksum());
+  }
+  if (from._internal_has_episode_metrics()) {
+    _this->_internal_mutable_episode_metrics()->::maze::EpisodeMetrics::MergeFrom(
+        from._internal_episode_metrics());
   }
   if (from._internal_protocol_version() != 0) {
     _this->_internal_set_protocol_version(from._internal_protocol_version());
@@ -13896,6 +14031,9 @@ void AIServerStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   if (from._internal_quarantined_fragment_count() != 0) {
     _this->_internal_set_quarantined_fragment_count(from._internal_quarantined_fragment_count());
   }
+  if (from._internal_workload_mode() != 0) {
+    _this->_internal_set_workload_mode(from._internal_workload_mode());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -13915,10 +14053,6 @@ void AIServerStatusRsp::InternalSwap(AIServerStatusRsp* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.aiserver_id_, lhs_arena,
       &other->_impl_.aiserver_id_, rhs_arena
@@ -13940,17 +14074,17 @@ void AIServerStatusRsp::InternalSwap(AIServerStatusRsp* other) {
       &other->_impl_.staged_model_checksum_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(AIServerStatusRsp, _impl_.quarantined_fragment_count_)
-      + sizeof(AIServerStatusRsp::_impl_.quarantined_fragment_count_)
-      - PROTOBUF_FIELD_OFFSET(AIServerStatusRsp, _impl_.protocol_version_)>(
-          reinterpret_cast<char*>(&_impl_.protocol_version_),
-          reinterpret_cast<char*>(&other->_impl_.protocol_version_));
+      PROTOBUF_FIELD_OFFSET(AIServerStatusRsp, _impl_.workload_mode_)
+      + sizeof(AIServerStatusRsp::_impl_.workload_mode_)
+      - PROTOBUF_FIELD_OFFSET(AIServerStatusRsp, _impl_.episode_metrics_)>(
+          reinterpret_cast<char*>(&_impl_.episode_metrics_),
+          reinterpret_cast<char*>(&other->_impl_.episode_metrics_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[27]);
+      file_level_metadata_maze_2eproto[30]);
 }
 
 // ===================================================================
@@ -13976,7 +14110,6 @@ ModelArtifactManifest::ModelArtifactManifest(const ModelArtifactManifest& from)
     , decltype(_impl_.value_shape_){from._impl_.value_shape_}
     , /*decltype(_impl_._value_shape_cached_byte_size_)*/{0}
     , decltype(_impl_.contract_version_){}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.artifact_uri_){}
     , decltype(_impl_.model_file_){}
     , decltype(_impl_.sha256_){}
@@ -13995,14 +14128,6 @@ ModelArtifactManifest::ModelArtifactManifest(const ModelArtifactManifest& from)
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_contract_version().empty()) {
     _this->_impl_.contract_version_.Set(from._internal_contract_version(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.artifact_uri_.InitDefault();
@@ -14047,7 +14172,6 @@ inline void ModelArtifactManifest::SharedCtor(
     , decltype(_impl_.value_shape_){arena}
     , /*decltype(_impl_._value_shape_cached_byte_size_)*/{0}
     , decltype(_impl_.contract_version_){}
-    , decltype(_impl_.run_id_){}
     , decltype(_impl_.artifact_uri_){}
     , decltype(_impl_.model_file_){}
     , decltype(_impl_.sha256_){}
@@ -14062,10 +14186,6 @@ inline void ModelArtifactManifest::SharedCtor(
   _impl_.contract_version_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.contract_version_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.artifact_uri_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -14096,7 +14216,6 @@ inline void ModelArtifactManifest::SharedDtor() {
   _impl_.action_shape_.~RepeatedField();
   _impl_.value_shape_.~RepeatedField();
   _impl_.contract_version_.Destroy();
-  _impl_.run_id_.Destroy();
   _impl_.artifact_uri_.Destroy();
   _impl_.model_file_.Destroy();
   _impl_.sha256_.Destroy();
@@ -14116,7 +14235,6 @@ void ModelArtifactManifest::Clear() {
   _impl_.action_shape_.Clear();
   _impl_.value_shape_.Clear();
   _impl_.contract_version_.ClearToEmpty();
-  _impl_.run_id_.ClearToEmpty();
   _impl_.artifact_uri_.ClearToEmpty();
   _impl_.model_file_.ClearToEmpty();
   _impl_.sha256_.ClearToEmpty();
@@ -14147,16 +14265,6 @@ const char* ModelArtifactManifest::_InternalParse(const char* ptr, ::_pbi::Parse
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "maze.ModelArtifactManifest.contract_version"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.ModelArtifactManifest.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -14306,16 +14414,6 @@ uint8_t* ModelArtifactManifest::_InternalSerialize(
       "maze.ModelArtifactManifest.contract_version");
     target = stream->WriteStringMaybeAliased(
         2, this->_internal_contract_version(), target);
-  }
-
-  // string run_id = 3;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.ModelArtifactManifest.run_id");
-    target = stream->WriteStringMaybeAliased(
-        3, this->_internal_run_id(), target);
   }
 
   // int32 model_version = 4;
@@ -14470,13 +14568,6 @@ size_t ModelArtifactManifest::ByteSizeLong() const {
         this->_internal_contract_version());
   }
 
-  // string run_id = 3;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string artifact_uri = 5;
   if (!this->_internal_artifact_uri().empty()) {
     total_size += 1 +
@@ -14552,9 +14643,6 @@ void ModelArtifactManifest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, 
   if (!from._internal_contract_version().empty()) {
     _this->_internal_set_contract_version(from._internal_contract_version());
   }
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_artifact_uri().empty()) {
     _this->_internal_set_artifact_uri(from._internal_artifact_uri());
   }
@@ -14609,10 +14697,6 @@ void ModelArtifactManifest::InternalSwap(ModelArtifactManifest* other) {
       &other->_impl_.contract_version_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.artifact_uri_, lhs_arena,
       &other->_impl_.artifact_uri_, rhs_arena
   );
@@ -14635,7 +14719,7 @@ void ModelArtifactManifest::InternalSwap(ModelArtifactManifest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelArtifactManifest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[28]);
+      file_level_metadata_maze_2eproto[31]);
 }
 
 // ===================================================================
@@ -14828,7 +14912,7 @@ void RegisterModelReq::InternalSwap(RegisterModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[29]);
+      file_level_metadata_maze_2eproto[32]);
 }
 
 // ===================================================================
@@ -15185,7 +15269,7 @@ void RegisterModelRsp::InternalSwap(RegisterModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[30]);
+      file_level_metadata_maze_2eproto[33]);
 }
 
 // ===================================================================
@@ -15204,21 +15288,12 @@ GetModelManifestReq::GetModelManifestReq(const GetModelManifestReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   GetModelManifestReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.model_version_){}
     , decltype(_impl_.latest_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -15238,16 +15313,11 @@ inline void GetModelManifestReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.model_version_){0}
     , decltype(_impl_.latest_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -15265,7 +15335,6 @@ GetModelManifestReq::~GetModelManifestReq() {
 
 inline void GetModelManifestReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.aiserver_id_.Destroy();
 }
 
@@ -15279,7 +15348,6 @@ void GetModelManifestReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.aiserver_id_.ClearToEmpty();
   ::memset(&_impl_.model_version_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.latest_) -
@@ -15293,16 +15361,6 @@ const char* GetModelManifestReq::_InternalParse(const char* ptr, ::_pbi::ParseCo
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.GetModelManifestReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // int32 model_version = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
@@ -15358,16 +15416,6 @@ uint8_t* GetModelManifestReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.GetModelManifestReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // int32 model_version = 2;
   if (this->_internal_model_version() != 0) {
     target = stream->EnsureSpace(target);
@@ -15406,13 +15454,6 @@ size_t GetModelManifestReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string aiserver_id = 3;
   if (!this->_internal_aiserver_id().empty()) {
     total_size += 1 +
@@ -15448,9 +15489,6 @@ void GetModelManifestReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_aiserver_id().empty()) {
     _this->_internal_set_aiserver_id(from._internal_aiserver_id());
   }
@@ -15480,10 +15518,6 @@ void GetModelManifestReq::InternalSwap(GetModelManifestReq* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.aiserver_id_, lhs_arena,
       &other->_impl_.aiserver_id_, rhs_arena
   );
@@ -15498,7 +15532,7 @@ void GetModelManifestReq::InternalSwap(GetModelManifestReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[31]);
+      file_level_metadata_maze_2eproto[34]);
 }
 
 // ===================================================================
@@ -15824,7 +15858,7 @@ void GetModelManifestRsp::InternalSwap(GetModelManifestRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[32]);
+      file_level_metadata_maze_2eproto[35]);
 }
 
 // ===================================================================
@@ -15843,20 +15877,11 @@ DownloadModelReq::DownloadModelReq(const DownloadModelReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   DownloadModelReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.model_version_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -15874,15 +15899,10 @@ inline void DownloadModelReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.model_version_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -15900,7 +15920,6 @@ DownloadModelReq::~DownloadModelReq() {
 
 inline void DownloadModelReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.aiserver_id_.Destroy();
 }
 
@@ -15914,7 +15933,6 @@ void DownloadModelReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.aiserver_id_.ClearToEmpty();
   _impl_.model_version_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -15926,16 +15944,6 @@ const char* DownloadModelReq::_InternalParse(const char* ptr, ::_pbi::ParseConte
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.DownloadModelReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // int32 model_version = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
@@ -15983,16 +15991,6 @@ uint8_t* DownloadModelReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.DownloadModelReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // int32 model_version = 2;
   if (this->_internal_model_version() != 0) {
     target = stream->EnsureSpace(target);
@@ -16025,13 +16023,6 @@ size_t DownloadModelReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string aiserver_id = 3;
   if (!this->_internal_aiserver_id().empty()) {
     total_size += 1 +
@@ -16062,9 +16053,6 @@ void DownloadModelReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_aiserver_id().empty()) {
     _this->_internal_set_aiserver_id(from._internal_aiserver_id());
   }
@@ -16091,10 +16079,6 @@ void DownloadModelReq::InternalSwap(DownloadModelReq* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.aiserver_id_, lhs_arena,
       &other->_impl_.aiserver_id_, rhs_arena
   );
@@ -16104,7 +16088,7 @@ void DownloadModelReq::InternalSwap(DownloadModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata DownloadModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[33]);
+      file_level_metadata_maze_2eproto[36]);
 }
 
 // ===================================================================
@@ -16123,21 +16107,12 @@ ModelChunk::ModelChunk(const ModelChunk& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   ModelChunk* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.data_){}
+      decltype(_impl_.data_){}
     , decltype(_impl_.offset_){}
     , decltype(_impl_.model_version_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.data_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.data_.Set("", GetArenaForAllocation());
@@ -16157,16 +16132,11 @@ inline void ModelChunk::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.data_){}
+      decltype(_impl_.data_){}
     , decltype(_impl_.offset_){int64_t{0}}
     , decltype(_impl_.model_version_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.data_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.data_.Set("", GetArenaForAllocation());
@@ -16184,7 +16154,6 @@ ModelChunk::~ModelChunk() {
 
 inline void ModelChunk::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.data_.Destroy();
 }
 
@@ -16198,7 +16167,6 @@ void ModelChunk::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.data_.ClearToEmpty();
   ::memset(&_impl_.offset_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.model_version_) -
@@ -16212,16 +16180,6 @@ const char* ModelChunk::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.ModelChunk.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // int32 model_version = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
@@ -16276,16 +16234,6 @@ uint8_t* ModelChunk::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.ModelChunk.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // int32 model_version = 2;
   if (this->_internal_model_version() != 0) {
     target = stream->EnsureSpace(target);
@@ -16319,13 +16267,6 @@ size_t ModelChunk::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
 
   // bytes data = 4;
   if (!this->_internal_data().empty()) {
@@ -16362,9 +16303,6 @@ void ModelChunk::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_data().empty()) {
     _this->_internal_set_data(from._internal_data());
   }
@@ -16394,10 +16332,6 @@ void ModelChunk::InternalSwap(ModelChunk* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.data_, lhs_arena,
       &other->_impl_.data_, rhs_arena
   );
@@ -16412,7 +16346,7 @@ void ModelChunk::InternalSwap(ModelChunk* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelChunk::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[34]);
+      file_level_metadata_maze_2eproto[37]);
 }
 
 // ===================================================================
@@ -16431,8 +16365,7 @@ AckModelReq::AckModelReq(const AckModelReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   AckModelReq* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.sha256_){}
     , decltype(_impl_.message_){}
     , decltype(_impl_.model_version_){}
@@ -16440,14 +16373,6 @@ AckModelReq::AckModelReq(const AckModelReq& from)
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -16483,18 +16408,13 @@ inline void AckModelReq::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.aiserver_id_){}
+      decltype(_impl_.aiserver_id_){}
     , decltype(_impl_.sha256_){}
     , decltype(_impl_.message_){}
     , decltype(_impl_.model_version_){0}
     , decltype(_impl_.load_status_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.aiserver_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.aiserver_id_.Set("", GetArenaForAllocation());
@@ -16520,7 +16440,6 @@ AckModelReq::~AckModelReq() {
 
 inline void AckModelReq::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.aiserver_id_.Destroy();
   _impl_.sha256_.Destroy();
   _impl_.message_.Destroy();
@@ -16536,7 +16455,6 @@ void AckModelReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.aiserver_id_.ClearToEmpty();
   _impl_.sha256_.ClearToEmpty();
   _impl_.message_.ClearToEmpty();
@@ -16552,16 +16470,6 @@ const char* AckModelReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.AckModelReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // string aiserver_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
@@ -16638,16 +16546,6 @@ uint8_t* AckModelReq::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.AckModelReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
   // string aiserver_id = 2;
   if (!this->_internal_aiserver_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -16707,13 +16605,6 @@ size_t AckModelReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string aiserver_id = 2;
   if (!this->_internal_aiserver_id().empty()) {
     total_size += 1 +
@@ -16764,9 +16655,6 @@ void AckModelReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_aiserver_id().empty()) {
     _this->_internal_set_aiserver_id(from._internal_aiserver_id());
   }
@@ -16802,10 +16690,6 @@ void AckModelReq::InternalSwap(AckModelReq* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.aiserver_id_, lhs_arena,
       &other->_impl_.aiserver_id_, rhs_arena
   );
@@ -16828,7 +16712,7 @@ void AckModelReq::InternalSwap(AckModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[35]);
+      file_level_metadata_maze_2eproto[38]);
 }
 
 // ===================================================================
@@ -17144,7 +17028,7 @@ void AckModelRsp::InternalSwap(AckModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[36]);
+      file_level_metadata_maze_2eproto[39]);
 }
 
 // ===================================================================
@@ -17155,199 +17039,36 @@ class ModelDistributorStatusReq::_Internal {
 
 ModelDistributorStatusReq::ModelDistributorStatusReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
   // @@protoc_insertion_point(arena_constructor:maze.ModelDistributorStatusReq)
 }
 ModelDistributorStatusReq::ModelDistributorStatusReq(const ModelDistributorStatusReq& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
   ModelDistributorStatusReq* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   // @@protoc_insertion_point(copy_constructor:maze.ModelDistributorStatusReq)
 }
 
-inline void ModelDistributorStatusReq::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-  };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
 
-ModelDistributorStatusReq::~ModelDistributorStatusReq() {
-  // @@protoc_insertion_point(destructor:maze.ModelDistributorStatusReq)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
-  SharedDtor();
-}
 
-inline void ModelDistributorStatusReq::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
-}
 
-void ModelDistributorStatusReq::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void ModelDistributorStatusReq::Clear() {
-// @@protoc_insertion_point(message_clear_start:maze.ModelDistributorStatusReq)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.run_id_.ClearToEmpty();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* ModelDistributorStatusReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string run_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.ModelDistributorStatusReq.run_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* ModelDistributorStatusReq::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:maze.ModelDistributorStatusReq)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.ModelDistributorStatusReq.run_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_run_id(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:maze.ModelDistributorStatusReq)
-  return target;
-}
-
-size_t ModelDistributorStatusReq::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:maze.ModelDistributorStatusReq)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string run_id = 1;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ModelDistributorStatusReq::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    ModelDistributorStatusReq::MergeImpl
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ModelDistributorStatusReq::GetClassData() const { return &_class_data_; }
 
 
-void ModelDistributorStatusReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<ModelDistributorStatusReq*>(&to_msg);
-  auto& from = static_cast<const ModelDistributorStatusReq&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:maze.ModelDistributorStatusReq)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
 
-void ModelDistributorStatusReq::CopyFrom(const ModelDistributorStatusReq& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:maze.ModelDistributorStatusReq)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
 
-bool ModelDistributorStatusReq::IsInitialized() const {
-  return true;
-}
 
-void ModelDistributorStatusReq::InternalSwap(ModelDistributorStatusReq* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-}
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[37]);
+      file_level_metadata_maze_2eproto[40]);
 }
 
 // ===================================================================
@@ -17366,8 +17087,7 @@ ModelDistributorStatusRsp::ModelDistributorStatusRsp(const ModelDistributorStatu
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   ModelDistributorStatusRsp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.distributor_instance_id_){}
+      decltype(_impl_.distributor_instance_id_){}
     , decltype(_impl_.latest_model_checksum_){}
     , decltype(_impl_.latest_ack_aiserver_id_){}
     , decltype(_impl_.last_error_){}
@@ -17390,14 +17110,6 @@ ModelDistributorStatusRsp::ModelDistributorStatusRsp(const ModelDistributorStatu
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_run_id().empty()) {
-    _this->_impl_.run_id_.Set(from._internal_run_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.distributor_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.distributor_instance_id_.Set("", GetArenaForAllocation());
@@ -17441,8 +17153,7 @@ inline void ModelDistributorStatusRsp::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.run_id_){}
-    , decltype(_impl_.distributor_instance_id_){}
+      decltype(_impl_.distributor_instance_id_){}
     , decltype(_impl_.latest_model_checksum_){}
     , decltype(_impl_.latest_ack_aiserver_id_){}
     , decltype(_impl_.last_error_){}
@@ -17464,10 +17175,6 @@ inline void ModelDistributorStatusRsp::SharedCtor(
     , decltype(_impl_.latest_ack_status_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.run_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.run_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.distributor_instance_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.distributor_instance_id_.Set("", GetArenaForAllocation());
@@ -17497,7 +17204,6 @@ ModelDistributorStatusRsp::~ModelDistributorStatusRsp() {
 
 inline void ModelDistributorStatusRsp::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.run_id_.Destroy();
   _impl_.distributor_instance_id_.Destroy();
   _impl_.latest_model_checksum_.Destroy();
   _impl_.latest_ack_aiserver_id_.Destroy();
@@ -17514,7 +17220,6 @@ void ModelDistributorStatusRsp::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.run_id_.ClearToEmpty();
   _impl_.distributor_instance_id_.ClearToEmpty();
   _impl_.latest_model_checksum_.ClearToEmpty();
   _impl_.latest_ack_aiserver_id_.ClearToEmpty();
@@ -17536,16 +17241,6 @@ const char* ModelDistributorStatusRsp::_InternalParse(const char* ptr, ::_pbi::P
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.protocol_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string run_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_run_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "maze.ModelDistributorStatusRsp.run_id"));
         } else
           goto handle_unusual;
         continue;
@@ -17745,16 +17440,6 @@ uint8_t* ModelDistributorStatusRsp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_protocol_version(), target);
   }
 
-  // string run_id = 2;
-  if (!this->_internal_run_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_run_id().data(), static_cast<int>(this->_internal_run_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "maze.ModelDistributorStatusRsp.run_id");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_run_id(), target);
-  }
-
   // string distributor_instance_id = 3;
   if (!this->_internal_distributor_instance_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
@@ -17902,13 +17587,6 @@ size_t ModelDistributorStatusRsp::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string run_id = 2;
-  if (!this->_internal_run_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_run_id());
-  }
-
   // string distributor_instance_id = 3;
   if (!this->_internal_distributor_instance_id().empty()) {
     total_size += 1 +
@@ -18042,9 +17720,6 @@ void ModelDistributorStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_m
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_run_id().empty()) {
-    _this->_internal_set_run_id(from._internal_run_id());
-  }
   if (!from._internal_distributor_instance_id().empty()) {
     _this->_internal_set_distributor_instance_id(from._internal_distributor_instance_id());
   }
@@ -18125,10 +17800,6 @@ void ModelDistributorStatusRsp::InternalSwap(ModelDistributorStatusRsp* other) {
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.run_id_, lhs_arena,
-      &other->_impl_.run_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.distributor_instance_id_, lhs_arena,
       &other->_impl_.distributor_instance_id_, rhs_arena
   );
@@ -18155,7 +17826,7 @@ void ModelDistributorStatusRsp::InternalSwap(ModelDistributorStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[38]);
+      file_level_metadata_maze_2eproto[41]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -18268,6 +17939,18 @@ Arena::CreateMaybeMessage< ::maze::DistributorStatusRsp >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::maze::AIServerStatusReq*
 Arena::CreateMaybeMessage< ::maze::AIServerStatusReq >(Arena* arena) {
   return Arena::CreateMessageInternal< ::maze::AIServerStatusReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::maze::TerminationReasonCount*
+Arena::CreateMaybeMessage< ::maze::TerminationReasonCount >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::maze::TerminationReasonCount >(arena);
+}
+template<> PROTOBUF_NOINLINE ::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse*
+Arena::CreateMaybeMessage< ::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::maze::EpisodeMetrics*
+Arena::CreateMaybeMessage< ::maze::EpisodeMetrics >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::maze::EpisodeMetrics >(arena);
 }
 template<> PROTOBUF_NOINLINE ::maze::AIServerStatusRsp*
 Arena::CreateMaybeMessage< ::maze::AIServerStatusRsp >(Arena* arena) {

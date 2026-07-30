@@ -21,7 +21,7 @@ struct StrategyConfig {
 // ---- 模型参数 ----
 struct ModelConfig {
     std::string local_dir     = "models/local";   // 本地模型目录（推理优先）
-    std::string p2p_dir       = "models/cache";
+    std::string local_train_dir = "models/local-train";
     std::string smoke_dir     = "models/smoke";
     std::string save_name     = "SaveModel";      // 本地保存的模型文件名（不含扩展名）
     std::string manifest_name = "manifest.json";
@@ -36,7 +36,7 @@ struct ModelDistributionConfig {
     int poll_interval_ms = 200;
     int boundary_wait_ms = 1000;
     int rpc_timeout_ms = 5000;
-    std::string contract_version = "0.3.0";
+    std::string contract_version = "0.5.0";
 };
 
 // ---- 样本分发服务连接参数 ----
@@ -52,9 +52,12 @@ struct SampleOutputConfig {
     int         health_timeout_ms = 5000;
     std::size_t outbound_max_fragments = 64;
     std::size_t outbound_max_estimated_bytes = 64ULL * 1024ULL * 1024ULL;
-    std::string run_id            = "local-run";
     std::string aiserver_id       = "aiserver-0";
     std::string env_id            = "env-0";
+};
+
+struct MetricsConfig {
+    std::size_t episode_window = 100;
 };
 
 // ---- AIServer 完整配置 ----
@@ -64,6 +67,7 @@ struct AIServerConfig {
     ModelConfig    model;
     ModelDistributionConfig model_distribution;
     SampleOutputConfig sample_output;
+    MetricsConfig metrics;
 };
 
 // ---- 配置加载器 ----
