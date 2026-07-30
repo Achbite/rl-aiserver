@@ -1,0 +1,34 @@
+ARG AISERVER_RUNTIME_IMAGE=rl-training/aiserver:test-001
+FROM ${AISERVER_RUNTIME_IMAGE}
+
+ARG ONNXRUNTIME_VERSION=1.17.0
+ARG TARGETARCH
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    git \
+    libabsl-dev \
+    libgrpc++-dev \
+    libprotobuf-dev \
+    libssl-dev \
+    make \
+    ninja-build \
+    pkg-config \
+    protobuf-compiler \
+    protobuf-compiler-grpc \
+    wget \
+    && rm -rf /var/lib/apt/lists/* && \
+    case "${TARGETARCH:-$(dpkg --print-architecture)}" in \
+        amd64) ORT_ARCH="x64" ;; \
+        arm64) ORT_ARCH="aarch64" ;; \
+        *) exit 1 ;; \
+    esac && \
+    ORT_PACKAGE="onnxruntime-linux-${ORT_ARCH}-${ONNXRUNTIME_VERSION}" && \
+    wget -q "https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/${ORT_PACKAGE}.tgz" && \
+    tar xzf "${ORT_PACKAGE}.tgz" && \
+    cp -R "${ORT_PACKAGE}"/include/* /usr/local/include/ && \
+    rm -rf "${ORT_PACKAGE}" "${ORT_PACKAGE}.tgz"
+
+WORKDIR /workspace/rl-aiserver
+ENTRYPOINT []
+CMD ["sleep", "infinity"]

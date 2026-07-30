@@ -1,0 +1,6 @@
+build*/
+_deps/
+.DS_Store
+log/
+logs/
+models/

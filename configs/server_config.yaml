@@ -1,0 +1,52 @@
+# ============================================================================
+# AIServer 配置文件 - 迷宫训练框架
+# 说明：AI 决策服务的运行参数、策略参数、网络参数集中管理
+#       修改后无需重新编译，重启 AIServer 即可生效
+# ============================================================================
+
+# --- 服务参数（gRPC 服务端配置）---
+server:
+  listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
+  max_agents: 10                  # 最大支持的 Agent 数量
+  run_mode: 2                     # 1=training, 2=local-test, 3=model-evaluation, 4=A*测试
+
+# --- 网格参数（A* 测试 + 训练共用）---
+strategy:
+  grid_size: 500                  # 网格大小 (cm)，将连续坐标离散化为网格
+  replan_interval: 10             # A* 模式下重新规划路径的帧间隔（0=仅初始规划一次）
+
+# --- 模型参数 ---
+model:
+  local_dir: "models/local"
+  p2p_dir: "models/cache"
+  smoke_dir: "models/smoke"
+  save_name: "SaveModel"          # 本地保存的模型文件名（不含扩展名）
+  manifest_name: "manifest.json"
+  startup_timeout_ms: 30000
+  expected_obs_dim: 13
+  expected_action_dim: 9
+
+model_distribution:
+  host: "maze-learner"
+  port: 9200
+  poll_interval_ms: 200
+  boundary_wait_ms: 1000
+  rpc_timeout_ms: 5000
+  contract_version: "0.3.0"
+
+# --- 样本输出参数（AIServer → SampleDistributor）---
+sample_output:
+  enabled: true
+  host: "127.0.0.1"
+  port: 9100
+  fragment_samples: 128
+  rpc_timeout_ms: 2000
+  max_attempts: 4
+  enqueue_timeout_ms: 100
+  drain_timeout_ms: 10000
+  health_timeout_ms: 5000
+  outbound_max_fragments: 64
+  outbound_max_estimated_bytes: 67108864
+  run_id: "local-run"
+  aiserver_id: "aiserver-0"
+  env_id: "env-0"

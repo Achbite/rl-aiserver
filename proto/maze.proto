@@ -1,0 +1,562 @@
+syntax = "proto3";
+
+package maze;
+
+option cc_generic_services = false;
+
+enum LifecycleResult {
+    LIFECYCLE_RESULT_UNSPECIFIED = 0;
+    LIFECYCLE_RESULT_OK = 1;
+    LIFECYCLE_RESULT_ALREADY_APPLIED = 2;
+    LIFECYCLE_RESULT_REJECTED = 3;
+}
+
+enum TerminationReason {
+    TERMINATION_REASON_UNSPECIFIED = 0;
+    TERMINATION_REASON_ACTIVE = 1;
+    TERMINATION_REASON_GOAL_REACHED = 2;
+    TERMINATION_REASON_TIME_LIMIT = 3;
+    TERMINATION_REASON_COUNTDOWN = 4;
+    TERMINATION_REASON_CLIENT_ABORT = 5;
+    TERMINATION_REASON_CHAIN_FAILURE = 6;
+}
+
+enum PushResult {
+    PUSH_RESULT_UNSPECIFIED = 0;
+    PUSH_RESULT_ACCEPTED = 1;
+    PUSH_RESULT_DUPLICATE = 2;
+    PUSH_RESULT_REJECTED_CAPACITY = 3;
+    PUSH_RESULT_REJECTED_RUN = 4;
+    PUSH_RESULT_REJECTED_INVALID = 5;
+}
+
+enum PressureState {
+    PRESSURE_STATE_UNSPECIFIED = 0;
+    PRESSURE_STATE_NORMAL = 1;
+    PRESSURE_STATE_HIGH = 2;
+    PRESSURE_STATE_FULL = 3;
+}
+
+enum GetBatchResult {
+    GET_BATCH_RESULT_UNSPECIFIED = 0;
+    GET_BATCH_RESULT_LEASED = 1;
+    GET_BATCH_RESULT_TIMEOUT = 2;
+    GET_BATCH_RESULT_BUSY = 3;
+    GET_BATCH_RESULT_REJECTED = 4;
+}
+
+enum BatchSelectionPolicy {
+    BATCH_SELECTION_POLICY_UNSPECIFIED = 0;
+    BATCH_SELECTION_POLICY_TARGET_ONLY = 1;
+    BATCH_SELECTION_POLICY_DRAIN_AVAILABLE = 2;
+}
+
+enum DeliveryResult {
+    DELIVERY_RESULT_UNSPECIFIED = 0;
+    DELIVERY_RESULT_APPLIED = 1;
+    DELIVERY_RESULT_ALREADY_APPLIED = 2;
+    DELIVERY_RESULT_EXPIRED = 3;
+    DELIVERY_RESULT_NOT_FOUND = 4;
+    DELIVERY_RESULT_REJECTED = 5;
+}
+
+enum AckDisposition {
+    ACK_DISPOSITION_UNSPECIFIED = 0;
+    ACK_DISPOSITION_TRAINED = 1;
+    ACK_DISPOSITION_STALE = 2;
+    ACK_DISPOSITION_INVALID = 3;
+    ACK_DISPOSITION_SHUTDOWN_UNTRAINED = 4;
+}
+
+enum AIServerState {
+    AISERVER_STATE_UNSPECIFIED = 0;
+    AISERVER_STATE_STARTING = 1;
+    AISERVER_STATE_READY = 2;
+    AISERVER_STATE_DEGRADED = 3;
+    AISERVER_STATE_DRAINING = 4;
+    AISERVER_STATE_STOPPED = 5;
+}
+
+enum ModelState {
+    MODEL_STATE_UNSPECIFIED = 0;
+    MODEL_STATE_WAITING = 1;
+    MODEL_STATE_READY = 2;
+    MODEL_STATE_FAILED = 3;
+}
+
+enum ModelRegisterResult {
+    MODEL_REGISTER_RESULT_UNSPECIFIED = 0;
+    MODEL_REGISTER_RESULT_REGISTERED = 1;
+    MODEL_REGISTER_RESULT_ALREADY_REGISTERED = 2;
+    MODEL_REGISTER_RESULT_REJECTED_INVALID = 3;
+    MODEL_REGISTER_RESULT_REJECTED_CONFLICT = 4;
+}
+
+enum ModelLoadStatus {
+    MODEL_LOAD_STATUS_UNSPECIFIED = 0;
+    MODEL_LOAD_STATUS_LOADED = 1;
+    MODEL_LOAD_STATUS_FAILED = 2;
+}
+
+enum ModelAckResult {
+    MODEL_ACK_RESULT_UNSPECIFIED = 0;
+    MODEL_ACK_RESULT_APPLIED = 1;
+    MODEL_ACK_RESULT_ALREADY_APPLIED = 2;
+    MODEL_ACK_RESULT_NOT_FOUND = 3;
+    MODEL_ACK_RESULT_REJECTED = 4;
+}
+
+message Vec2 {
+    float x = 1;
+    float y = 2;
+}
+
+message InitReq {
+    int32 agent_num = 1;
+    Vec2 map_size = 2;
+    Vec2 start_pos = 3;
+    Vec2 end_pos = 4;
+    int32 session_id = 5;
+    string run_id = 6;
+    string client_id = 7;
+    string env_id = 8;
+    float grid_size = 9;
+    int32 grid_cols = 10;
+    int32 grid_rows = 11;
+    Vec2 end_grid = 12;
+}
+
+message InitRsp {
+    int32 ret_code = 1;
+    LifecycleResult result = 2;
+    string message = 3;
+}
+
+message BeginEpisodeReq {
+    string run_id = 1;
+    int32 session_id = 2;
+    int32 episode_id = 3;
+}
+
+message EpisodeLifecycleRsp {
+    int32 ret_code = 1;
+    LifecycleResult result = 2;
+    string message = 3;
+    int32 episode_id = 4;
+}
+
+message AgentState {
+    int32 agent_id = 1;
+    Vec2 pos = 2;
+    bool is_done = 3;
+    repeated float obs = 4;
+    TerminationReason termination_reason = 5;
+}
+
+message UpdateReq {
+    repeated AgentState agents = 1;
+    int32 frame_id = 2;
+    int32 session_id = 3;
+    string run_id = 4;
+    int32 episode_id = 5;
+}
+
+message AgentAction {
+    int32 agent_id = 1;
+    int32 action_id = 2;
+}
+
+message UpdateRsp {
+    repeated AgentAction actions = 1;
+    bool replayed = 2;
+}
+
+message EpisodeEndReq {
+    int32 episode_id = 1;
+    int32 session_id = 2;
+    string run_id = 3;
+}
+
+message EpisodeEndRsp {
+    int32 ret_code = 1;
+    LifecycleResult result = 2;
+    string message = 3;
+}
+
+message AbortEpisodeReq {
+    string run_id = 1;
+    int32 session_id = 2;
+    int32 episode_id = 3;
+    TerminationReason reason = 4;
+    string message = 5;
+}
+
+message Sample {
+    reserved 6, 7, 8;
+    reserved "advantage", "td_return", "mask";
+
+    repeated float obs = 1;
+    int32 action = 2;
+    float reward = 3;
+    float old_log_prob = 4;
+    float old_vpred = 5;
+    map<string, float> reward_details = 9;
+    bool terminated = 10;
+    bool truncated = 11;
+    TerminationReason termination_reason = 12;
+    int64 action_frame_id = 13;
+}
+
+message SampleBatch {
+    int32 episode_id = 1;
+    int32 agent_id = 2;
+    repeated Sample samples = 3;
+    bool is_episode_end = 4;
+    int32 session_id = 5;
+    string run_id = 6;
+    string aiserver_id = 7;
+    string env_id = 8;
+    int32 fragment_id = 9;
+    int32 behavior_model_version = 10;
+    int64 created_ts_ms = 11;
+    string producer_instance_id = 12;
+    uint64 fragment_seq = 13;
+    string batch_id = 14;
+    uint32 protocol_version = 15;
+    string behavior_model_checksum = 16;
+    TerminationReason termination_reason = 17;
+    float bootstrap_value = 18;
+    bool bootstrap_valid = 19;
+    int64 first_action_frame_id = 20;
+    int64 last_action_frame_id = 21;
+}
+
+message SampleResponse {
+    int32 ret_code = 1;
+    int32 model_version = 2;
+}
+
+message PushSamplesRsp {
+    int32 ret_code = 1;
+    string message = 2;
+    int64 accepted_samples = 3;
+    int64 queue_size = 4;
+    PushResult result = 5;
+    string batch_id = 6;
+    int64 accepted_unique_samples = 7;
+    int64 resident_samples = 8;
+    int64 resident_fragments = 9;
+    int64 resident_estimated_bytes = 10;
+    PressureState pressure_state = 11;
+    string distributor_instance_id = 12;
+}
+
+message GetBatchReq {
+    int32 batch_size = 1;
+    int32 timeout_ms = 2;
+    string run_id = 3;
+    string consumer_instance_id = 4;
+    int32 lease_timeout_ms = 5;
+    int32 behavior_model_version = 6;
+    BatchSelectionPolicy selection_policy = 7;
+}
+
+message GetBatchRsp {
+    int32 ret_code = 1;
+    repeated SampleBatch batches = 2;
+    int64 queue_size = 3;
+    int64 returned_samples = 4;
+    string message = 5;
+    GetBatchResult result = 6;
+    string delivery_id = 7;
+    int64 lease_deadline_ts_ms = 8;
+    int64 returned_fragments = 9;
+    int64 actual_batch_size = 10;
+    int64 wait_ms = 11;
+    int64 leased_samples = 12;
+    string distributor_instance_id = 13;
+    int32 behavior_model_version = 14;
+}
+
+message AckBatchReq {
+    string run_id = 1;
+    string consumer_instance_id = 2;
+    string delivery_id = 3;
+    AckDisposition disposition = 4;
+    string train_update_id = 5;
+}
+
+message NackBatchReq {
+    string run_id = 1;
+    string consumer_instance_id = 2;
+    string delivery_id = 3;
+    string reason = 4;
+}
+
+message RenewLeaseReq {
+    string run_id = 1;
+    string consumer_instance_id = 2;
+    string delivery_id = 3;
+    int32 lease_timeout_ms = 4;
+}
+
+message DeliveryRsp {
+    int32 ret_code = 1;
+    DeliveryResult result = 2;
+    string message = 3;
+    string delivery_id = 4;
+    int64 affected_samples = 5;
+    int64 queue_size = 6;
+    int64 lease_deadline_ts_ms = 7;
+    AckDisposition disposition = 8;
+    string train_update_id = 9;
+}
+
+message DistributorStatusReq {
+    string run_id = 1;
+}
+
+message BehaviorVersionQueueStatus {
+    int32 behavior_model_version = 1;
+    int64 ready_samples = 2;
+    int64 ready_fragments = 3;
+    int64 leased_samples = 4;
+    int64 leased_fragments = 5;
+    int64 acked_samples = 6;
+    int64 acked_fragments = 7;
+    int64 trained_samples = 8;
+    int64 stale_samples = 9;
+    int64 invalid_samples = 10;
+    int64 shutdown_untrained_samples = 11;
+}
+
+message DistributorStatusRsp {
+    int64 push_sample_count = 1;
+    int64 consume_sample_count = 2;
+    int64 queue_size = 3;
+    int64 push_batch_count = 4;
+    int64 consume_batch_count = 5;
+    int64 drop_count = 6;
+    int64 latest_push_ts_ms = 7;
+    int64 latest_consume_ts_ms = 8;
+    uint32 protocol_version = 9;
+    string run_id = 10;
+    string distributor_instance_id = 11;
+    bool ready = 12;
+    int64 push_attempt_count = 13;
+    int64 accepted_unique_samples = 14;
+    int64 accepted_unique_batches = 15;
+    int64 duplicate_push_attempt_count = 16;
+    int64 duplicate_sample_attempts = 17;
+    int64 rejected_push_attempt_count = 18;
+    int64 rejected_sample_attempts = 19;
+    int64 acked_unique_samples = 20;
+    int64 acked_unique_batches = 21;
+    int64 ready_queue_samples = 22;
+    int64 ready_queue_fragments = 23;
+    int64 leased_samples = 24;
+    int64 leased_fragments = 25;
+    int64 resident_samples = 26;
+    int64 resident_fragments = 27;
+    int64 resident_estimated_bytes = 28;
+    int64 capacity_samples = 29;
+    int64 capacity_fragments = 30;
+    int64 capacity_estimated_bytes = 31;
+    PressureState pressure_state = 32;
+    int64 redelivery_count = 33;
+    int64 nack_count = 34;
+    int64 expired_lease_count = 35;
+    int64 latest_ack_ts_ms = 36;
+    int64 target_hit_count = 37;
+    int64 partial_get_count = 38;
+    int64 empty_timeout_count = 39;
+    string last_error = 40;
+    repeated BehaviorVersionQueueStatus behavior_versions = 41;
+    int64 trained_sample_count = 42;
+    int64 stale_sample_count = 43;
+    int64 invalid_sample_count = 44;
+    int64 shutdown_untrained_sample_count = 45;
+    int64 lease_renew_count = 46;
+}
+
+message AIServerStatusReq {
+    string run_id = 1;
+}
+
+message AIServerStatusRsp {
+    uint32 protocol_version = 1;
+    string run_id = 2;
+    string aiserver_id = 3;
+    string producer_instance_id = 4;
+    AIServerState state = 5;
+    bool ready = 6;
+    bool distributor_ready = 7;
+    ModelState model_state = 8;
+    int32 loaded_model_version = 9;
+    string loaded_model_checksum = 10;
+    int64 outbound_queue_fragments = 11;
+    int64 outbound_queue_samples = 12;
+    int64 outbound_queue_estimated_bytes = 13;
+    int64 outbound_queue_high_watermark = 14;
+    int64 produced_unique_samples = 15;
+    int64 produced_unique_batches = 16;
+    int64 push_attempt_count = 17;
+    int64 accepted_unique_samples = 18;
+    int64 duplicate_push_attempt_count = 19;
+    int64 rejected_push_attempt_count = 20;
+    int64 retry_attempt_count = 21;
+    int64 final_drop_unique_samples = 22;
+    int64 active_session_count = 23;
+    int64 active_episode_count = 24;
+    bool client_initialized = 25;
+    int64 update_rpc_count = 26;
+    double update_rpc_latency_sum_ms = 27;
+    double update_rpc_latency_max_ms = 28;
+    int64 inference_count = 29;
+    double inference_latency_sum_ms = 30;
+    double inference_latency_max_ms = 31;
+    int64 enqueue_count = 32;
+    double enqueue_latency_sum_ms = 33;
+    double enqueue_latency_max_ms = 34;
+    int64 push_rpc_count = 35;
+    double push_rpc_latency_sum_ms = 36;
+    double push_rpc_latency_max_ms = 37;
+    string last_error = 38;
+    int64 timestamp_ms = 39;
+    int32 staged_model_version = 40;
+    string staged_model_checksum = 41;
+    int64 model_switch_count = 42;
+    int64 quarantined_sample_count = 43;
+    int64 quarantined_fragment_count = 44;
+}
+
+message ModelArtifactManifest {
+    uint32 schema_version = 1;
+    string contract_version = 2;
+    string run_id = 3;
+    int32 model_version = 4;
+    string artifact_uri = 5;
+    string model_file = 6;
+    int64 size_bytes = 7;
+    string sha256 = 8;
+    repeated int64 input_shape = 9;
+    repeated int64 action_shape = 10;
+    repeated int64 value_shape = 11;
+    int64 seed = 12;
+    bool ready = 13;
+    int64 published_ts_ms = 14;
+}
+
+message RegisterModelReq {
+    ModelArtifactManifest manifest = 1;
+}
+
+message RegisterModelRsp {
+    int32 ret_code = 1;
+    ModelRegisterResult result = 2;
+    string message = 3;
+    ModelArtifactManifest manifest = 4;
+    string distributor_instance_id = 5;
+}
+
+message GetModelManifestReq {
+    string run_id = 1;
+    int32 model_version = 2;
+    string aiserver_id = 3;
+    bool latest = 4;
+}
+
+message GetModelManifestRsp {
+    int32 ret_code = 1;
+    string message = 2;
+    ModelArtifactManifest manifest = 3;
+    string distributor_instance_id = 4;
+}
+
+message DownloadModelReq {
+    string run_id = 1;
+    int32 model_version = 2;
+    string aiserver_id = 3;
+}
+
+message ModelChunk {
+    string run_id = 1;
+    int32 model_version = 2;
+    int64 offset = 3;
+    bytes data = 4;
+}
+
+message AckModelReq {
+    string run_id = 1;
+    string aiserver_id = 2;
+    int32 model_version = 3;
+    string sha256 = 4;
+    ModelLoadStatus load_status = 5;
+    string message = 6;
+}
+
+message AckModelRsp {
+    int32 ret_code = 1;
+    ModelAckResult result = 2;
+    string message = 3;
+    string distributor_instance_id = 4;
+}
+
+message ModelDistributorStatusReq {
+    string run_id = 1;
+}
+
+message ModelDistributorStatusRsp {
+    uint32 protocol_version = 1;
+    string run_id = 2;
+    string distributor_instance_id = 3;
+    bool ready = 4;
+    int64 registered_model_count = 5;
+    int32 latest_model_version = 6;
+    string latest_model_checksum = 7;
+    int64 register_attempt_count = 8;
+    int64 duplicate_register_count = 9;
+    int64 rejected_register_count = 10;
+    int64 download_request_count = 11;
+    int64 download_success_count = 12;
+    int64 download_failure_count = 13;
+    int64 bytes_served = 14;
+    int64 loaded_ack_count = 15;
+    int64 failed_ack_count = 16;
+    string latest_ack_aiserver_id = 17;
+    int32 latest_ack_model_version = 18;
+    ModelLoadStatus latest_ack_status = 19;
+    string last_error = 20;
+    int64 timestamp_ms = 21;
+}
+
+service MazeService {
+    rpc Init(InitReq) returns (InitRsp);
+    rpc BeginEpisode(BeginEpisodeReq) returns (EpisodeLifecycleRsp);
+    rpc Update(UpdateReq) returns (UpdateRsp);
+    rpc EndEpisode(EpisodeEndReq) returns (EpisodeEndRsp);
+    rpc AbortEpisode(AbortEpisodeReq) returns (EpisodeLifecycleRsp);
+    rpc GetAIServerStatus(AIServerStatusReq) returns (AIServerStatusRsp);
+}
+
+service LearnerService {
+    rpc SendSamples(SampleBatch) returns (SampleResponse);
+}
+
+service SampleDistributorService {
+    rpc PushSamples(SampleBatch) returns (PushSamplesRsp);
+    rpc GetBatch(GetBatchReq) returns (GetBatchRsp);
+    rpc AckBatch(AckBatchReq) returns (DeliveryRsp);
+    rpc NackBatch(NackBatchReq) returns (DeliveryRsp);
+    rpc RenewLease(RenewLeaseReq) returns (DeliveryRsp);
+    rpc GetStatus(DistributorStatusReq) returns (DistributorStatusRsp);
+}
+
+service ModelDistributorService {
+    rpc RegisterModel(RegisterModelReq) returns (RegisterModelRsp);
+    rpc GetModelManifest(GetModelManifestReq) returns (GetModelManifestRsp);
+    rpc DownloadModel(DownloadModelReq) returns (stream ModelChunk);
+    rpc AckModel(AckModelReq) returns (AckModelRsp);
+    rpc GetModelDistributorStatus(ModelDistributorStatusReq)
+        returns (ModelDistributorStatusRsp);
+}
