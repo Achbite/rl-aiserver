@@ -18,7 +18,7 @@ void Require(bool condition, const std::string& message) {
 void WriteManifest(const std::filesystem::path& path,
                    const std::string& checksum,
                    int input_dim,
-                   const std::string& contract_version = "0.5.0") {
+                   const std::string& contract_version = "0.6.0") {
     std::ofstream stream(path);
     stream << "{"
            << "\"schema_version\":1,"

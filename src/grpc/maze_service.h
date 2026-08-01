@@ -29,6 +29,10 @@ public:
     void BeginShutdown();
     bool IsReady() const;
 
+    grpc::Status OpenSession(grpc::ServerContext* ctx,
+                             const maze::OpenSessionReq* req,
+                             maze::OpenSessionRsp* rsp) override;
+
     grpc::Status Init(grpc::ServerContext* ctx,
                       const maze::InitReq* req,
                       maze::InitRsp* rsp) override;

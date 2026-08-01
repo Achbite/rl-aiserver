@@ -116,9 +116,51 @@ enum WorkloadMode {
     WORKLOAD_MODE_ASTAR_TEST = 4;
 }
 
+enum ReplayPolicy {
+    REPLAY_POLICY_UNSPECIFIED = 0;
+    REPLAY_POLICY_DISABLED = 1;
+    REPLAY_POLICY_RECORD_AND_SERVE = 2;
+}
+
+enum SampleBackendType {
+    SAMPLE_BACKEND_TYPE_UNSPECIFIED = 0;
+    SAMPLE_BACKEND_TYPE_LOCAL_MEMORY = 1;
+}
+
 message Vec2 {
     float x = 1;
     float y = 2;
+}
+
+message OpenSessionReq {
+    uint32 session_protocol_version = 1;
+    string client_id = 2;
+    string env_id = 3;
+    int32 session_id = 4;
+    int32 agent_num = 5;
+    Vec2 map_size = 6;
+    Vec2 start_pos = 7;
+    Vec2 end_pos = 8;
+    float grid_size = 9;
+    int32 grid_cols = 10;
+    int32 grid_rows = 11;
+    Vec2 end_grid = 12;
+    string observation_schema_id = 13;
+    string action_schema_id = 14;
+}
+
+message OpenSessionRsp {
+    int32 ret_code = 1;
+    LifecycleResult result = 2;
+    string message = 3;
+    uint32 session_protocol_version = 4;
+    int32 session_id = 5;
+    string aiserver_id = 6;
+    WorkloadMode workload_mode = 7;
+    ReplayPolicy replay_policy = 8;
+    int32 loaded_model_version = 9;
+    string observation_schema_id = 10;
+    string action_schema_id = 11;
 }
 
 message InitReq {
@@ -411,6 +453,12 @@ message DistributorStatusRsp {
     int64 invalid_sample_count = 44;
     int64 shutdown_untrained_sample_count = 45;
     int64 lease_renew_count = 46;
+    SampleBackendType backend_type = 47;
+    int32 max_concurrent_consumers = 48;
+    int32 active_consumer_count = 49;
+    int64 consumer_busy_count = 50;
+    bool ingress_ready = 51;
+    bool pool_ready = 52;
 }
 
 message AIServerStatusReq {
@@ -606,6 +654,7 @@ message ModelDistributorStatusRsp {
 }
 
 service MazeService {
+    rpc OpenSession(OpenSessionReq) returns (OpenSessionRsp);
     rpc Init(InitReq) returns (InitRsp);
     rpc BeginEpisode(BeginEpisodeReq) returns (EpisodeLifecycleRsp);
     rpc Update(UpdateReq) returns (UpdateRsp);

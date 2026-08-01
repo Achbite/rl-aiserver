@@ -41,7 +41,7 @@ int main() {
     Require(aiserver_mode::Parse("invalid") == 0,
             "invalid mode");
     Require(std::string(aiserver_mode::Workload(
-                aiserver_mode::kLocalTest)) == "inference-smoke",
+                aiserver_mode::kLocalTest)) == "local-test",
             "local-test canonical workload");
     Require(std::string(aiserver_mode::Workload(
                 aiserver_mode::kTraining)) == "training",

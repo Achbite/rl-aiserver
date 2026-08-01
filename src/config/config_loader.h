@@ -1,9 +1,12 @@
 #pragma once
 
 #include <cstddef>
+#include <filesystem>
 #include <string>
 
 #include "config/run_mode.h"
+
+inline constexpr char kLocalEvaluationModelFile[] = "SaveModel.onnx";
 
 // ---- 服务参数 ----
 struct ServerConfig {
@@ -20,15 +23,20 @@ struct StrategyConfig {
 
 // ---- 模型参数 ----
 struct ModelConfig {
-    std::string local_dir     = "models/local";   // 本地模型目录（推理优先）
+    std::string evaluation_dir = "models/local";
     std::string local_train_dir = "models/local-train";
-    std::string smoke_dir     = "models/smoke";
-    std::string save_name     = "SaveModel";      // 本地保存的模型文件名（不含扩展名）
+    std::string local_test_dir = "models/local-test";
     std::string manifest_name = "manifest.json";
     int         startup_timeout_ms = 30000;
     int         expected_obs_dim = 13;
     int         expected_action_dim = 9;
 };
+
+inline std::string LocalEvaluationModelPath(const ModelConfig& config) {
+    return (std::filesystem::path(config.evaluation_dir) /
+            kLocalEvaluationModelFile)
+        .string();
+}
 
 struct ModelDistributionConfig {
     std::string host = "maze-learner";
@@ -36,13 +44,13 @@ struct ModelDistributionConfig {
     int poll_interval_ms = 200;
     int boundary_wait_ms = 1000;
     int rpc_timeout_ms = 5000;
-    std::string contract_version = "0.5.0";
+    std::string contract_version = "0.6.0";
 };
 
-// ---- 样本分发服务连接参数 ----
+// ---- Learner Pod 样本接入服务连接参数 ----
 struct SampleOutputConfig {
-    bool        enabled           = true;                   // 是否向 SampleDistributor 推送样本
-    std::string host              = "127.0.0.1";
+    bool        enabled           = true;
+    std::string host              = "maze-learner";
     int         port              = 9100;
     int         fragment_samples  = 128;
     int         rpc_timeout_ms    = 2000;

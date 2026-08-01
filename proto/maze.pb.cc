@@ -35,6 +35,55 @@ struct Vec2DefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 Vec2DefaultTypeInternal _Vec2_default_instance_;
+PROTOBUF_CONSTEXPR OpenSessionReq::OpenSessionReq(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.client_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.env_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.observation_schema_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.action_schema_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.map_size_)*/nullptr
+  , /*decltype(_impl_.start_pos_)*/nullptr
+  , /*decltype(_impl_.end_pos_)*/nullptr
+  , /*decltype(_impl_.end_grid_)*/nullptr
+  , /*decltype(_impl_.session_protocol_version_)*/0u
+  , /*decltype(_impl_.session_id_)*/0
+  , /*decltype(_impl_.agent_num_)*/0
+  , /*decltype(_impl_.grid_size_)*/0
+  , /*decltype(_impl_.grid_cols_)*/0
+  , /*decltype(_impl_.grid_rows_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct OpenSessionReqDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR OpenSessionReqDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~OpenSessionReqDefaultTypeInternal() {}
+  union {
+    OpenSessionReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 OpenSessionReqDefaultTypeInternal _OpenSessionReq_default_instance_;
+PROTOBUF_CONSTEXPR OpenSessionRsp::OpenSessionRsp(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.aiserver_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.observation_schema_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.action_schema_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.ret_code_)*/0
+  , /*decltype(_impl_.result_)*/0
+  , /*decltype(_impl_.session_protocol_version_)*/0u
+  , /*decltype(_impl_.session_id_)*/0
+  , /*decltype(_impl_.workload_mode_)*/0
+  , /*decltype(_impl_.replay_policy_)*/0
+  , /*decltype(_impl_.loaded_model_version_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct OpenSessionRspDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR OpenSessionRspDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~OpenSessionRspDefaultTypeInternal() {}
+  union {
+    OpenSessionRsp _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 OpenSessionRspDefaultTypeInternal _OpenSessionRsp_default_instance_;
 PROTOBUF_CONSTEXPR InitReq::InitReq(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.client_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -471,8 +520,6 @@ PROTOBUF_CONSTEXPR DistributorStatusRsp::DistributorStatusRsp(
   , /*decltype(_impl_.drop_count_)*/int64_t{0}
   , /*decltype(_impl_.latest_push_ts_ms_)*/int64_t{0}
   , /*decltype(_impl_.latest_consume_ts_ms_)*/int64_t{0}
-  , /*decltype(_impl_.protocol_version_)*/0u
-  , /*decltype(_impl_.ready_)*/false
   , /*decltype(_impl_.push_attempt_count_)*/int64_t{0}
   , /*decltype(_impl_.accepted_unique_samples_)*/int64_t{0}
   , /*decltype(_impl_.accepted_unique_batches_)*/int64_t{0}
@@ -481,6 +528,8 @@ PROTOBUF_CONSTEXPR DistributorStatusRsp::DistributorStatusRsp(
   , /*decltype(_impl_.rejected_push_attempt_count_)*/int64_t{0}
   , /*decltype(_impl_.rejected_sample_attempts_)*/int64_t{0}
   , /*decltype(_impl_.acked_unique_samples_)*/int64_t{0}
+  , /*decltype(_impl_.protocol_version_)*/0u
+  , /*decltype(_impl_.pressure_state_)*/0
   , /*decltype(_impl_.acked_unique_batches_)*/int64_t{0}
   , /*decltype(_impl_.ready_queue_samples_)*/int64_t{0}
   , /*decltype(_impl_.ready_queue_fragments_)*/int64_t{0}
@@ -499,12 +548,18 @@ PROTOBUF_CONSTEXPR DistributorStatusRsp::DistributorStatusRsp(
   , /*decltype(_impl_.target_hit_count_)*/int64_t{0}
   , /*decltype(_impl_.partial_get_count_)*/int64_t{0}
   , /*decltype(_impl_.empty_timeout_count_)*/int64_t{0}
+  , /*decltype(_impl_.ready_)*/false
+  , /*decltype(_impl_.ingress_ready_)*/false
+  , /*decltype(_impl_.pool_ready_)*/false
+  , /*decltype(_impl_.backend_type_)*/0
   , /*decltype(_impl_.trained_sample_count_)*/int64_t{0}
   , /*decltype(_impl_.stale_sample_count_)*/int64_t{0}
   , /*decltype(_impl_.invalid_sample_count_)*/int64_t{0}
   , /*decltype(_impl_.shutdown_untrained_sample_count_)*/int64_t{0}
   , /*decltype(_impl_.lease_renew_count_)*/int64_t{0}
-  , /*decltype(_impl_.pressure_state_)*/0
+  , /*decltype(_impl_.max_concurrent_consumers_)*/0
+  , /*decltype(_impl_.active_consumer_count_)*/0
+  , /*decltype(_impl_.consumer_busy_count_)*/int64_t{0}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct DistributorStatusRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR DistributorStatusRspDefaultTypeInternal()
@@ -830,8 +885,8 @@ struct ModelDistributorStatusRspDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ModelDistributorStatusRspDefaultTypeInternal _ModelDistributorStatusRsp_default_instance_;
 }  // namespace maze
-static ::_pb::Metadata file_level_metadata_maze_2eproto[42];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_2eproto[14];
+static ::_pb::Metadata file_level_metadata_maze_2eproto[44];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_2eproto[16];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_maze_2eproto = nullptr;
 
 const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -843,6 +898,43 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::maze::Vec2, _impl_.x_),
   PROTOBUF_FIELD_OFFSET(::maze::Vec2, _impl_.y_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.session_protocol_version_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.client_id_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.env_id_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.session_id_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.agent_num_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.map_size_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.start_pos_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.end_pos_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.grid_size_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.grid_cols_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.grid_rows_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.end_grid_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.observation_schema_id_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionReq, _impl_.action_schema_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.ret_code_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.result_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.message_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.session_protocol_version_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.session_id_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.aiserver_id_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.workload_mode_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.replay_policy_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.loaded_model_version_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.observation_schema_id_),
+  PROTOBUF_FIELD_OFFSET(::maze::OpenSessionRsp, _impl_.action_schema_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::InitReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1179,6 +1271,12 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.invalid_sample_count_),
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.shutdown_untrained_sample_count_),
   PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.lease_renew_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.backend_type_),
+  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.max_concurrent_consumers_),
+  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.active_consumer_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.consumer_busy_count_),
+  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.ingress_ready_),
+  PROTOBUF_FIELD_OFFSET(::maze::DistributorStatusRsp, _impl_.pool_ready_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::maze::AIServerStatusReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1404,51 +1502,55 @@ const uint32_t TableStruct_maze_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::maze::Vec2)},
-  { 8, -1, -1, sizeof(::maze::InitReq)},
-  { 26, -1, -1, sizeof(::maze::InitRsp)},
-  { 35, -1, -1, sizeof(::maze::BeginEpisodeReq)},
-  { 43, -1, -1, sizeof(::maze::EpisodeLifecycleRsp)},
-  { 53, -1, -1, sizeof(::maze::AgentState)},
-  { 64, -1, -1, sizeof(::maze::UpdateReq)},
-  { 74, -1, -1, sizeof(::maze::AgentAction)},
-  { 82, -1, -1, sizeof(::maze::UpdateRsp)},
-  { 90, -1, -1, sizeof(::maze::EpisodeEndReq)},
-  { 98, -1, -1, sizeof(::maze::EpisodeEndRsp)},
-  { 107, -1, -1, sizeof(::maze::AbortEpisodeReq)},
-  { 117, 125, -1, sizeof(::maze::Sample_RewardDetailsEntry_DoNotUse)},
-  { 127, -1, -1, sizeof(::maze::Sample)},
-  { 143, -1, -1, sizeof(::maze::SampleBatch)},
-  { 169, -1, -1, sizeof(::maze::SampleResponse)},
-  { 177, -1, -1, sizeof(::maze::PushSamplesRsp)},
-  { 195, -1, -1, sizeof(::maze::GetBatchReq)},
-  { 207, -1, -1, sizeof(::maze::GetBatchRsp)},
-  { 227, -1, -1, sizeof(::maze::AckBatchReq)},
-  { 237, -1, -1, sizeof(::maze::NackBatchReq)},
-  { 246, -1, -1, sizeof(::maze::RenewLeaseReq)},
-  { 255, -1, -1, sizeof(::maze::DeliveryRsp)},
-  { 270, -1, -1, sizeof(::maze::DistributorStatusReq)},
-  { 276, -1, -1, sizeof(::maze::BehaviorVersionQueueStatus)},
-  { 293, -1, -1, sizeof(::maze::DistributorStatusRsp)},
-  { 344, -1, -1, sizeof(::maze::AIServerStatusReq)},
-  { 350, -1, -1, sizeof(::maze::TerminationReasonCount)},
-  { 358, 366, -1, sizeof(::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse)},
-  { 368, -1, -1, sizeof(::maze::EpisodeMetrics)},
-  { 389, -1, -1, sizeof(::maze::AIServerStatusRsp)},
-  { 440, -1, -1, sizeof(::maze::ModelArtifactManifest)},
-  { 459, -1, -1, sizeof(::maze::RegisterModelReq)},
-  { 466, -1, -1, sizeof(::maze::RegisterModelRsp)},
-  { 477, -1, -1, sizeof(::maze::GetModelManifestReq)},
-  { 486, -1, -1, sizeof(::maze::GetModelManifestRsp)},
-  { 496, -1, -1, sizeof(::maze::DownloadModelReq)},
-  { 504, -1, -1, sizeof(::maze::ModelChunk)},
-  { 513, -1, -1, sizeof(::maze::AckModelReq)},
-  { 524, -1, -1, sizeof(::maze::AckModelRsp)},
-  { 534, -1, -1, sizeof(::maze::ModelDistributorStatusReq)},
-  { 540, -1, -1, sizeof(::maze::ModelDistributorStatusRsp)},
+  { 8, -1, -1, sizeof(::maze::OpenSessionReq)},
+  { 28, -1, -1, sizeof(::maze::OpenSessionRsp)},
+  { 45, -1, -1, sizeof(::maze::InitReq)},
+  { 63, -1, -1, sizeof(::maze::InitRsp)},
+  { 72, -1, -1, sizeof(::maze::BeginEpisodeReq)},
+  { 80, -1, -1, sizeof(::maze::EpisodeLifecycleRsp)},
+  { 90, -1, -1, sizeof(::maze::AgentState)},
+  { 101, -1, -1, sizeof(::maze::UpdateReq)},
+  { 111, -1, -1, sizeof(::maze::AgentAction)},
+  { 119, -1, -1, sizeof(::maze::UpdateRsp)},
+  { 127, -1, -1, sizeof(::maze::EpisodeEndReq)},
+  { 135, -1, -1, sizeof(::maze::EpisodeEndRsp)},
+  { 144, -1, -1, sizeof(::maze::AbortEpisodeReq)},
+  { 154, 162, -1, sizeof(::maze::Sample_RewardDetailsEntry_DoNotUse)},
+  { 164, -1, -1, sizeof(::maze::Sample)},
+  { 180, -1, -1, sizeof(::maze::SampleBatch)},
+  { 206, -1, -1, sizeof(::maze::SampleResponse)},
+  { 214, -1, -1, sizeof(::maze::PushSamplesRsp)},
+  { 232, -1, -1, sizeof(::maze::GetBatchReq)},
+  { 244, -1, -1, sizeof(::maze::GetBatchRsp)},
+  { 264, -1, -1, sizeof(::maze::AckBatchReq)},
+  { 274, -1, -1, sizeof(::maze::NackBatchReq)},
+  { 283, -1, -1, sizeof(::maze::RenewLeaseReq)},
+  { 292, -1, -1, sizeof(::maze::DeliveryRsp)},
+  { 307, -1, -1, sizeof(::maze::DistributorStatusReq)},
+  { 313, -1, -1, sizeof(::maze::BehaviorVersionQueueStatus)},
+  { 330, -1, -1, sizeof(::maze::DistributorStatusRsp)},
+  { 387, -1, -1, sizeof(::maze::AIServerStatusReq)},
+  { 393, -1, -1, sizeof(::maze::TerminationReasonCount)},
+  { 401, 409, -1, sizeof(::maze::EpisodeMetrics_RewardComponentMeanEntry_DoNotUse)},
+  { 411, -1, -1, sizeof(::maze::EpisodeMetrics)},
+  { 432, -1, -1, sizeof(::maze::AIServerStatusRsp)},
+  { 483, -1, -1, sizeof(::maze::ModelArtifactManifest)},
+  { 502, -1, -1, sizeof(::maze::RegisterModelReq)},
+  { 509, -1, -1, sizeof(::maze::RegisterModelRsp)},
+  { 520, -1, -1, sizeof(::maze::GetModelManifestReq)},
+  { 529, -1, -1, sizeof(::maze::GetModelManifestRsp)},
+  { 539, -1, -1, sizeof(::maze::DownloadModelReq)},
+  { 547, -1, -1, sizeof(::maze::ModelChunk)},
+  { 556, -1, -1, sizeof(::maze::AckModelReq)},
+  { 567, -1, -1, sizeof(::maze::AckModelRsp)},
+  { 577, -1, -1, sizeof(::maze::ModelDistributorStatusReq)},
+  { 583, -1, -1, sizeof(::maze::ModelDistributorStatusRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
   &::maze::_Vec2_default_instance_._instance,
+  &::maze::_OpenSessionReq_default_instance_._instance,
+  &::maze::_OpenSessionRsp_default_instance_._instance,
   &::maze::_InitReq_default_instance_._instance,
   &::maze::_InitRsp_default_instance_._instance,
   &::maze::_BeginEpisodeReq_default_instance_._instance,
@@ -1494,344 +1596,373 @@ static const ::_pb::Message* const file_default_instances[] = {
 
 const char descriptor_table_protodef_maze_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\nmaze.proto\022\004maze\"\034\n\004Vec2\022\t\n\001x\030\001 \001(\002\022\t\n"
-  "\001y\030\002 \001(\002\"\275\002\n\007InitReq\022\021\n\tagent_num\030\001 \001(\005\022"
-  "\034\n\010map_size\030\002 \001(\0132\n.maze.Vec2\022\035\n\tstart_p"
-  "os\030\003 \001(\0132\n.maze.Vec2\022\033\n\007end_pos\030\004 \001(\0132\n."
-  "maze.Vec2\022\022\n\nsession_id\030\005 \001(\005\022\021\n\tclient_"
-  "id\030\007 \001(\t\022\016\n\006env_id\030\010 \001(\t\022\021\n\tgrid_size\030\t "
-  "\001(\002\022\021\n\tgrid_cols\030\n \001(\005\022\021\n\tgrid_rows\030\013 \001("
-  "\005\022\034\n\010end_grid\030\014 \001(\0132\n.maze.Vec2\022)\n\rworkl"
-  "oad_mode\030\r \001(\0162\022.maze.WorkloadModeJ\004\010\006\020\007"
-  "R\006run_id\"S\n\007InitRsp\022\020\n\010ret_code\030\001 \001(\005\022%\n"
-  "\006result\030\002 \001(\0162\025.maze.LifecycleResult\022\017\n\007"
-  "message\030\003 \001(\t\"G\n\017BeginEpisodeReq\022\022\n\nsess"
-  "ion_id\030\002 \001(\005\022\022\n\nepisode_id\030\003 \001(\005J\004\010\001\020\002R\006"
-  "run_id\"s\n\023EpisodeLifecycleRsp\022\020\n\010ret_cod"
-  "e\030\001 \001(\005\022%\n\006result\030\002 \001(\0162\025.maze.Lifecycle"
-  "Result\022\017\n\007message\030\003 \001(\t\022\022\n\nepisode_id\030\004 "
-  "\001(\005\"\212\001\n\nAgentState\022\020\n\010agent_id\030\001 \001(\005\022\027\n\003"
-  "pos\030\002 \001(\0132\n.maze.Vec2\022\017\n\007is_done\030\003 \001(\010\022\013"
-  "\n\003obs\030\004 \003(\002\0223\n\022termination_reason\030\005 \001(\0162"
-  "\027.maze.TerminationReason\"u\n\tUpdateReq\022 \n"
-  "\006agents\030\001 \003(\0132\020.maze.AgentState\022\020\n\010frame"
-  "_id\030\002 \001(\005\022\022\n\nsession_id\030\003 \001(\005\022\022\n\nepisode"
-  "_id\030\005 \001(\005J\004\010\004\020\005R\006run_id\"2\n\013AgentAction\022\020"
-  "\n\010agent_id\030\001 \001(\005\022\021\n\taction_id\030\002 \001(\005\"A\n\tU"
-  "pdateRsp\022\"\n\007actions\030\001 \003(\0132\021.maze.AgentAc"
-  "tion\022\020\n\010replayed\030\002 \001(\010\"E\n\rEpisodeEndReq\022"
-  "\022\n\nepisode_id\030\001 \001(\005\022\022\n\nsession_id\030\002 \001(\005J"
-  "\004\010\003\020\004R\006run_id\"Y\n\rEpisodeEndRsp\022\020\n\010ret_co"
-  "de\030\001 \001(\005\022%\n\006result\030\002 \001(\0162\025.maze.Lifecycl"
-  "eResult\022\017\n\007message\030\003 \001(\t\"\201\001\n\017AbortEpisod"
-  "eReq\022\022\n\nsession_id\030\002 \001(\005\022\022\n\nepisode_id\030\003"
-  " \001(\005\022\'\n\006reason\030\004 \001(\0162\027.maze.TerminationR"
-  "eason\022\017\n\007message\030\005 \001(\tJ\004\010\001\020\002R\006run_id\"\360\002\n"
-  "\006Sample\022\013\n\003obs\030\001 \003(\002\022\016\n\006action\030\002 \001(\005\022\016\n\006"
-  "reward\030\003 \001(\002\022\024\n\014old_log_prob\030\004 \001(\002\022\021\n\tol"
-  "d_vpred\030\005 \001(\002\0227\n\016reward_details\030\t \003(\0132\037."
-  "maze.Sample.RewardDetailsEntry\022\022\n\ntermin"
-  "ated\030\n \001(\010\022\021\n\ttruncated\030\013 \001(\010\0223\n\022termina"
-  "tion_reason\030\014 \001(\0162\027.maze.TerminationReas"
-  "on\022\027\n\017action_frame_id\030\r \001(\003\0324\n\022RewardDet"
-  "ailsEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\002:\0028"
-  "\001J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020\tR\tadvantageR\ttd_retur"
-  "nR\004mask\"\242\004\n\013SampleBatch\022\022\n\nepisode_id\030\001 "
-  "\001(\005\022\020\n\010agent_id\030\002 \001(\005\022\035\n\007samples\030\003 \003(\0132\014"
-  ".maze.Sample\022\026\n\016is_episode_end\030\004 \001(\010\022\022\n\n"
-  "session_id\030\005 \001(\005\022\023\n\013aiserver_id\030\007 \001(\t\022\016\n"
-  "\006env_id\030\010 \001(\t\022\023\n\013fragment_id\030\t \001(\005\022\036\n\026be"
-  "havior_model_version\030\n \001(\005\022\025\n\rcreated_ts"
-  "_ms\030\013 \001(\003\022\034\n\024producer_instance_id\030\014 \001(\t\022"
-  "\024\n\014fragment_seq\030\r \001(\004\022\020\n\010batch_id\030\016 \001(\t\022"
-  "\030\n\020protocol_version\030\017 \001(\r\022\037\n\027behavior_mo"
-  "del_checksum\030\020 \001(\t\0223\n\022termination_reason"
-  "\030\021 \001(\0162\027.maze.TerminationReason\022\027\n\017boots"
-  "trap_value\030\022 \001(\002\022\027\n\017bootstrap_valid\030\023 \001("
-  "\010\022\035\n\025first_action_frame_id\030\024 \001(\003\022\034\n\024last"
-  "_action_frame_id\030\025 \001(\003J\004\010\006\020\007R\006run_id\"9\n\016"
-  "SampleResponse\022\020\n\010ret_code\030\001 \001(\005\022\025\n\rmode"
-  "l_version\030\002 \001(\005\"\334\002\n\016PushSamplesRsp\022\020\n\010re"
-  "t_code\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\030\n\020accepte"
-  "d_samples\030\003 \001(\003\022\022\n\nqueue_size\030\004 \001(\003\022 \n\006r"
-  "esult\030\005 \001(\0162\020.maze.PushResult\022\020\n\010batch_i"
-  "d\030\006 \001(\t\022\037\n\027accepted_unique_samples\030\007 \001(\003"
-  "\022\030\n\020resident_samples\030\010 \001(\003\022\032\n\022resident_f"
-  "ragments\030\t \001(\003\022 \n\030resident_estimated_byt"
-  "es\030\n \001(\003\022+\n\016pressure_state\030\013 \001(\0162\023.maze."
-  "PressureState\022\037\n\027distributor_instance_id"
-  "\030\014 \001(\t\"\321\001\n\013GetBatchReq\022\022\n\nbatch_size\030\001 \001"
-  "(\005\022\022\n\ntimeout_ms\030\002 \001(\005\022\034\n\024consumer_insta"
-  "nce_id\030\004 \001(\t\022\030\n\020lease_timeout_ms\030\005 \001(\005\022\036"
-  "\n\026behavior_model_version\030\006 \001(\005\0224\n\020select"
-  "ion_policy\030\007 \001(\0162\032.maze.BatchSelectionPo"
-  "licyJ\004\010\003\020\004R\006run_id\"\374\002\n\013GetBatchRsp\022\020\n\010re"
-  "t_code\030\001 \001(\005\022\"\n\007batches\030\002 \003(\0132\021.maze.Sam"
-  "pleBatch\022\022\n\nqueue_size\030\003 \001(\003\022\030\n\020returned"
-  "_samples\030\004 \001(\003\022\017\n\007message\030\005 \001(\t\022$\n\006resul"
-  "t\030\006 \001(\0162\024.maze.GetBatchResult\022\023\n\013deliver"
-  "y_id\030\007 \001(\t\022\034\n\024lease_deadline_ts_ms\030\010 \001(\003"
-  "\022\032\n\022returned_fragments\030\t \001(\003\022\031\n\021actual_b"
-  "atch_size\030\n \001(\003\022\017\n\007wait_ms\030\013 \001(\003\022\026\n\016leas"
-  "ed_samples\030\014 \001(\003\022\037\n\027distributor_instance"
-  "_id\030\r \001(\t\022\036\n\026behavior_model_version\030\016 \001("
-  "\005\"\222\001\n\013AckBatchReq\022\034\n\024consumer_instance_i"
-  "d\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022)\n\013disposit"
-  "ion\030\004 \001(\0162\024.maze.AckDisposition\022\027\n\017train"
-  "_update_id\030\005 \001(\tJ\004\010\001\020\002R\006run_id\"_\n\014NackBa"
-  "tchReq\022\034\n\024consumer_instance_id\030\002 \001(\t\022\023\n\013"
-  "delivery_id\030\003 \001(\t\022\016\n\006reason\030\004 \001(\tJ\004\010\001\020\002R"
-  "\006run_id\"j\n\rRenewLeaseReq\022\034\n\024consumer_ins"
-  "tance_id\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022\030\n\020l"
-  "ease_timeout_ms\030\004 \001(\005J\004\010\001\020\002R\006run_id\"\373\001\n\013"
-  "DeliveryRsp\022\020\n\010ret_code\030\001 \001(\005\022$\n\006result\030"
-  "\002 \001(\0162\024.maze.DeliveryResult\022\017\n\007message\030\003"
-  " \001(\t\022\023\n\013delivery_id\030\004 \001(\t\022\030\n\020affected_sa"
-  "mples\030\005 \001(\003\022\022\n\nqueue_size\030\006 \001(\003\022\034\n\024lease"
-  "_deadline_ts_ms\030\007 \001(\003\022)\n\013disposition\030\010 \001"
-  "(\0162\024.maze.AckDisposition\022\027\n\017train_update"
-  "_id\030\t \001(\t\"$\n\024DistributorStatusReqJ\004\010\001\020\002R"
-  "\006run_id\"\273\002\n\032BehaviorVersionQueueStatus\022\036"
-  "\n\026behavior_model_version\030\001 \001(\005\022\025\n\rready_"
-  "samples\030\002 \001(\003\022\027\n\017ready_fragments\030\003 \001(\003\022\026"
-  "\n\016leased_samples\030\004 \001(\003\022\030\n\020leased_fragmen"
-  "ts\030\005 \001(\003\022\025\n\racked_samples\030\006 \001(\003\022\027\n\017acked"
-  "_fragments\030\007 \001(\003\022\027\n\017trained_samples\030\010 \001("
-  "\003\022\025\n\rstale_samples\030\t \001(\003\022\027\n\017invalid_samp"
-  "les\030\n \001(\003\022\"\n\032shutdown_untrained_samples\030"
-  "\013 \001(\003\"\330\n\n\024DistributorStatusRsp\022\031\n\021push_s"
-  "ample_count\030\001 \001(\003\022\034\n\024consume_sample_coun"
-  "t\030\002 \001(\003\022\022\n\nqueue_size\030\003 \001(\003\022\030\n\020push_batc"
-  "h_count\030\004 \001(\003\022\033\n\023consume_batch_count\030\005 \001"
-  "(\003\022\022\n\ndrop_count\030\006 \001(\003\022\031\n\021latest_push_ts"
-  "_ms\030\007 \001(\003\022\034\n\024latest_consume_ts_ms\030\010 \001(\003\022"
-  "\030\n\020protocol_version\030\t \001(\r\022\037\n\027distributor"
-  "_instance_id\030\013 \001(\t\022\r\n\005ready\030\014 \001(\010\022\032\n\022pus"
-  "h_attempt_count\030\r \001(\003\022\037\n\027accepted_unique"
-  "_samples\030\016 \001(\003\022\037\n\027accepted_unique_batche"
-  "s\030\017 \001(\003\022$\n\034duplicate_push_attempt_count\030"
-  "\020 \001(\003\022!\n\031duplicate_sample_attempts\030\021 \001(\003"
-  "\022#\n\033rejected_push_attempt_count\030\022 \001(\003\022 \n"
-  "\030rejected_sample_attempts\030\023 \001(\003\022\034\n\024acked"
-  "_unique_samples\030\024 \001(\003\022\034\n\024acked_unique_ba"
-  "tches\030\025 \001(\003\022\033\n\023ready_queue_samples\030\026 \001(\003"
-  "\022\035\n\025ready_queue_fragments\030\027 \001(\003\022\026\n\016lease"
-  "d_samples\030\030 \001(\003\022\030\n\020leased_fragments\030\031 \001("
-  "\003\022\030\n\020resident_samples\030\032 \001(\003\022\032\n\022resident_"
-  "fragments\030\033 \001(\003\022 \n\030resident_estimated_by"
-  "tes\030\034 \001(\003\022\030\n\020capacity_samples\030\035 \001(\003\022\032\n\022c"
-  "apacity_fragments\030\036 \001(\003\022 \n\030capacity_esti"
-  "mated_bytes\030\037 \001(\003\022+\n\016pressure_state\030  \001("
-  "\0162\023.maze.PressureState\022\030\n\020redelivery_cou"
-  "nt\030! \001(\003\022\022\n\nnack_count\030\" \001(\003\022\033\n\023expired_"
-  "lease_count\030# \001(\003\022\030\n\020latest_ack_ts_ms\030$ "
-  "\001(\003\022\030\n\020target_hit_count\030% \001(\003\022\031\n\021partial"
-  "_get_count\030& \001(\003\022\033\n\023empty_timeout_count\030"
-  "\' \001(\003\022\022\n\nlast_error\030( \001(\t\022;\n\021behavior_ve"
-  "rsions\030) \003(\0132 .maze.BehaviorVersionQueue"
-  "Status\022\034\n\024trained_sample_count\030* \001(\003\022\032\n\022"
-  "stale_sample_count\030+ \001(\003\022\034\n\024invalid_samp"
-  "le_count\030, \001(\003\022\'\n\037shutdown_untrained_sam"
-  "ple_count\030- \001(\003\022\031\n\021lease_renew_count\030. \001"
-  "(\003J\004\010\n\020\013R\006run_id\"!\n\021AIServerStatusReqJ\004\010"
-  "\001\020\002R\006run_id\"P\n\026TerminationReasonCount\022\'\n"
-  "\006reason\030\001 \001(\0162\027.maze.TerminationReason\022\r"
-  "\n\005count\030\002 \001(\003\"\366\004\n\016EpisodeMetrics\022\036\n\026conf"
-  "igured_window_size\030\001 \001(\005\022\037\n\027completed_ep"
-  "isode_count\030\002 \001(\003\022\035\n\025completed_agent_cou"
-  "nt\030\003 \001(\003\022\031\n\021mean_agent_return\030\004 \001(\001\022\030\n\020m"
-  "in_agent_return\030\005 \001(\001\022\030\n\020max_agent_retur"
-  "n\030\006 \001(\001\022\033\n\023agent_success_count\030\007 \001(\003\022\032\n\022"
-  "agent_success_rate\030\010 \001(\001\022%\n\035environment_"
-  "any_success_count\030\t \001(\003\022$\n\034environment_a"
-  "ny_success_rate\030\n \001(\001\022%\n\035environment_all"
-  "_success_count\030\013 \001(\003\022$\n\034environment_all_"
-  "success_rate\030\014 \001(\001\022\036\n\026excluded_episode_c"
-  "ount\030\r \001(\003\0228\n\022termination_counts\030\016 \003(\0132\034"
-  ".maze.TerminationReasonCount\022L\n\025reward_c"
-  "omponent_mean\030\017 \003(\0132-.maze.EpisodeMetric"
-  "s.RewardComponentMeanEntry\032:\n\030RewardComp"
-  "onentMeanEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001"
-  "(\001:\0028\001\"\244\013\n\021AIServerStatusRsp\022\030\n\020protocol"
-  "_version\030\001 \001(\r\022\023\n\013aiserver_id\030\003 \001(\t\022\034\n\024p"
-  "roducer_instance_id\030\004 \001(\t\022\"\n\005state\030\005 \001(\016"
-  "2\023.maze.AIServerState\022\r\n\005ready\030\006 \001(\010\022\031\n\021"
-  "distributor_ready\030\007 \001(\010\022%\n\013model_state\030\010"
-  " \001(\0162\020.maze.ModelState\022\034\n\024loaded_model_v"
-  "ersion\030\t \001(\005\022\035\n\025loaded_model_checksum\030\n "
-  "\001(\t\022 \n\030outbound_queue_fragments\030\013 \001(\003\022\036\n"
-  "\026outbound_queue_samples\030\014 \001(\003\022&\n\036outboun"
-  "d_queue_estimated_bytes\030\r \001(\003\022%\n\035outboun"
-  "d_queue_high_watermark\030\016 \001(\003\022\037\n\027produced"
-  "_unique_samples\030\017 \001(\003\022\037\n\027produced_unique"
-  "_batches\030\020 \001(\003\022\032\n\022push_attempt_count\030\021 \001"
-  "(\003\022\037\n\027accepted_unique_samples\030\022 \001(\003\022$\n\034d"
-  "uplicate_push_attempt_count\030\023 \001(\003\022#\n\033rej"
-  "ected_push_attempt_count\030\024 \001(\003\022\033\n\023retry_"
-  "attempt_count\030\025 \001(\003\022!\n\031final_drop_unique"
-  "_samples\030\026 \001(\003\022\034\n\024active_session_count\030\027"
-  " \001(\003\022\034\n\024active_episode_count\030\030 \001(\003\022\032\n\022cl"
-  "ient_initialized\030\031 \001(\010\022\030\n\020update_rpc_cou"
-  "nt\030\032 \001(\003\022!\n\031update_rpc_latency_sum_ms\030\033 "
-  "\001(\001\022!\n\031update_rpc_latency_max_ms\030\034 \001(\001\022\027"
-  "\n\017inference_count\030\035 \001(\003\022 \n\030inference_lat"
-  "ency_sum_ms\030\036 \001(\001\022 \n\030inference_latency_m"
-  "ax_ms\030\037 \001(\001\022\025\n\renqueue_count\030  \001(\003\022\036\n\026en"
-  "queue_latency_sum_ms\030! \001(\001\022\036\n\026enqueue_la"
-  "tency_max_ms\030\" \001(\001\022\026\n\016push_rpc_count\030# \001"
-  "(\003\022\037\n\027push_rpc_latency_sum_ms\030$ \001(\001\022\037\n\027p"
-  "ush_rpc_latency_max_ms\030% \001(\001\022\022\n\nlast_err"
-  "or\030& \001(\t\022\024\n\014timestamp_ms\030\' \001(\003\022\034\n\024staged"
-  "_model_version\030( \001(\005\022\035\n\025staged_model_che"
-  "cksum\030) \001(\t\022\032\n\022model_switch_count\030* \001(\003\022"
-  " \n\030quarantined_sample_count\030+ \001(\003\022\"\n\032qua"
-  "rantined_fragment_count\030, \001(\003\022)\n\rworkloa"
-  "d_mode\030- \001(\0162\022.maze.WorkloadMode\022-\n\017epis"
-  "ode_metrics\030. \001(\0132\024.maze.EpisodeMetricsJ"
-  "\004\010\002\020\003R\006run_id\"\262\002\n\025ModelArtifactManifest\022"
-  "\026\n\016schema_version\030\001 \001(\r\022\030\n\020contract_vers"
-  "ion\030\002 \001(\t\022\025\n\rmodel_version\030\004 \001(\005\022\024\n\014arti"
-  "fact_uri\030\005 \001(\t\022\022\n\nmodel_file\030\006 \001(\t\022\022\n\nsi"
-  "ze_bytes\030\007 \001(\003\022\016\n\006sha256\030\010 \001(\t\022\023\n\013input_"
-  "shape\030\t \003(\003\022\024\n\014action_shape\030\n \003(\003\022\023\n\013val"
-  "ue_shape\030\013 \003(\003\022\014\n\004seed\030\014 \001(\003\022\r\n\005ready\030\r "
-  "\001(\010\022\027\n\017published_ts_ms\030\016 \001(\003J\004\010\003\020\004R\006run_"
-  "id\"A\n\020RegisterModelReq\022-\n\010manifest\030\001 \001(\013"
-  "2\033.maze.ModelArtifactManifest\"\260\001\n\020Regist"
-  "erModelRsp\022\020\n\010ret_code\030\001 \001(\005\022)\n\006result\030\002"
-  " \001(\0162\031.maze.ModelRegisterResult\022\017\n\007messa"
-  "ge\030\003 \001(\t\022-\n\010manifest\030\004 \001(\0132\033.maze.ModelA"
-  "rtifactManifest\022\037\n\027distributor_instance_"
-  "id\030\005 \001(\t\"_\n\023GetModelManifestReq\022\025\n\rmodel"
-  "_version\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001(\t\022\016\n\006l"
-  "atest\030\004 \001(\010J\004\010\001\020\002R\006run_id\"\210\001\n\023GetModelMa"
-  "nifestRsp\022\020\n\010ret_code\030\001 \001(\005\022\017\n\007message\030\002"
-  " \001(\t\022-\n\010manifest\030\003 \001(\0132\033.maze.ModelArtif"
-  "actManifest\022\037\n\027distributor_instance_id\030\004"
-  " \001(\t\"L\n\020DownloadModelReq\022\025\n\rmodel_versio"
-  "n\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001(\tJ\004\010\001\020\002R\006run_"
-  "id\"O\n\nModelChunk\022\025\n\rmodel_version\030\002 \001(\005\022"
-  "\016\n\006offset\030\003 \001(\003\022\014\n\004data\030\004 \001(\014J\004\010\001\020\002R\006run"
-  "_id\"\224\001\n\013AckModelReq\022\023\n\013aiserver_id\030\002 \001(\t"
-  "\022\025\n\rmodel_version\030\003 \001(\005\022\016\n\006sha256\030\004 \001(\t\022"
-  "*\n\013load_status\030\005 \001(\0162\025.maze.ModelLoadSta"
-  "tus\022\017\n\007message\030\006 \001(\tJ\004\010\001\020\002R\006run_id\"w\n\013Ac"
-  "kModelRsp\022\020\n\010ret_code\030\001 \001(\005\022$\n\006result\030\002 "
-  "\001(\0162\024.maze.ModelAckResult\022\017\n\007message\030\003 \001"
-  "(\t\022\037\n\027distributor_instance_id\030\004 \001(\t\")\n\031M"
-  "odelDistributorStatusReqJ\004\010\001\020\002R\006run_id\"\373"
-  "\004\n\031ModelDistributorStatusRsp\022\030\n\020protocol"
-  "_version\030\001 \001(\r\022\037\n\027distributor_instance_i"
-  "d\030\003 \001(\t\022\r\n\005ready\030\004 \001(\010\022\036\n\026registered_mod"
-  "el_count\030\005 \001(\003\022\034\n\024latest_model_version\030\006"
-  " \001(\005\022\035\n\025latest_model_checksum\030\007 \001(\t\022\036\n\026r"
-  "egister_attempt_count\030\010 \001(\003\022 \n\030duplicate"
-  "_register_count\030\t \001(\003\022\037\n\027rejected_regist"
-  "er_count\030\n \001(\003\022\036\n\026download_request_count"
-  "\030\013 \001(\003\022\036\n\026download_success_count\030\014 \001(\003\022\036"
-  "\n\026download_failure_count\030\r \001(\003\022\024\n\014bytes_"
-  "served\030\016 \001(\003\022\030\n\020loaded_ack_count\030\017 \001(\003\022\030"
-  "\n\020failed_ack_count\030\020 \001(\003\022\036\n\026latest_ack_a"
-  "iserver_id\030\021 \001(\t\022 \n\030latest_ack_model_ver"
-  "sion\030\022 \001(\005\0220\n\021latest_ack_status\030\023 \001(\0162\025."
-  "maze.ModelLoadStatus\022\022\n\nlast_error\030\024 \001(\t"
-  "\022\024\n\014timestamp_ms\030\025 \001(\003J\004\010\002\020\003R\006run_id*\221\001\n"
-  "\017LifecycleResult\022 \n\034LIFECYCLE_RESULT_UNS"
-  "PECIFIED\020\000\022\027\n\023LIFECYCLE_RESULT_OK\020\001\022$\n L"
-  "IFECYCLE_RESULT_ALREADY_APPLIED\020\002\022\035\n\031LIF"
-  "ECYCLE_RESULT_REJECTED\020\003*\213\002\n\021Termination"
-  "Reason\022\"\n\036TERMINATION_REASON_UNSPECIFIED"
-  "\020\000\022\035\n\031TERMINATION_REASON_ACTIVE\020\001\022#\n\037TER"
-  "MINATION_REASON_GOAL_REACHED\020\002\022!\n\035TERMIN"
-  "ATION_REASON_TIME_LIMIT\020\003\022 \n\034TERMINATION"
-  "_REASON_COUNTDOWN\020\004\022#\n\037TERMINATION_REASO"
-  "N_CLIENT_ABORT\020\005\022$\n TERMINATION_REASON_C"
-  "HAIN_FAILURE\020\006*\303\001\n\nPushResult\022\033\n\027PUSH_RE"
-  "SULT_UNSPECIFIED\020\000\022\030\n\024PUSH_RESULT_ACCEPT"
-  "ED\020\001\022\031\n\025PUSH_RESULT_DUPLICATE\020\002\022!\n\035PUSH_"
-  "RESULT_REJECTED_CAPACITY\020\003\022 \n\034PUSH_RESUL"
-  "T_REJECTED_INVALID\020\005\"\004\010\004\020\004*\030PUSH_RESULT_"
-  "REJECTED_RUN*|\n\rPressureState\022\036\n\032PRESSUR"
-  "E_STATE_UNSPECIFIED\020\000\022\031\n\025PRESSURE_STATE_"
-  "NORMAL\020\001\022\027\n\023PRESSURE_STATE_HIGH\020\002\022\027\n\023PRE"
-  "SSURE_STATE_FULL\020\003*\247\001\n\016GetBatchResult\022 \n"
-  "\034GET_BATCH_RESULT_UNSPECIFIED\020\000\022\033\n\027GET_B"
-  "ATCH_RESULT_LEASED\020\001\022\034\n\030GET_BATCH_RESULT"
-  "_TIMEOUT\020\002\022\031\n\025GET_BATCH_RESULT_BUSY\020\003\022\035\n"
-  "\031GET_BATCH_RESULT_REJECTED\020\004*\222\001\n\024BatchSe"
-  "lectionPolicy\022&\n\"BATCH_SELECTION_POLICY_"
-  "UNSPECIFIED\020\000\022&\n\"BATCH_SELECTION_POLICY_"
-  "TARGET_ONLY\020\001\022*\n&BATCH_SELECTION_POLICY_"
-  "DRAIN_AVAILABLE\020\002*\315\001\n\016DeliveryResult\022\037\n\033"
-  "DELIVERY_RESULT_UNSPECIFIED\020\000\022\033\n\027DELIVER"
-  "Y_RESULT_APPLIED\020\001\022#\n\037DELIVERY_RESULT_AL"
-  "READY_APPLIED\020\002\022\033\n\027DELIVERY_RESULT_EXPIR"
-  "ED\020\003\022\035\n\031DELIVERY_RESULT_NOT_FOUND\020\004\022\034\n\030D"
-  "ELIVERY_RESULT_REJECTED\020\005*\256\001\n\016AckDisposi"
-  "tion\022\037\n\033ACK_DISPOSITION_UNSPECIFIED\020\000\022\033\n"
-  "\027ACK_DISPOSITION_TRAINED\020\001\022\031\n\025ACK_DISPOS"
-  "ITION_STALE\020\002\022\033\n\027ACK_DISPOSITION_INVALID"
-  "\020\003\022&\n\"ACK_DISPOSITION_SHUTDOWN_UNTRAINED"
-  "\020\004*\274\001\n\rAIServerState\022\036\n\032AISERVER_STATE_U"
-  "NSPECIFIED\020\000\022\033\n\027AISERVER_STATE_STARTING\020"
-  "\001\022\030\n\024AISERVER_STATE_READY\020\002\022\033\n\027AISERVER_"
-  "STATE_DEGRADED\020\003\022\033\n\027AISERVER_STATE_DRAIN"
-  "ING\020\004\022\032\n\026AISERVER_STATE_STOPPED\020\005*q\n\nMod"
-  "elState\022\033\n\027MODEL_STATE_UNSPECIFIED\020\000\022\027\n\023"
-  "MODEL_STATE_WAITING\020\001\022\025\n\021MODEL_STATE_REA"
-  "DY\020\002\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001\n\023ModelRe"
-  "gisterResult\022%\n!MODEL_REGISTER_RESULT_UN"
-  "SPECIFIED\020\000\022$\n MODEL_REGISTER_RESULT_REG"
-  "ISTERED\020\001\022,\n(MODEL_REGISTER_RESULT_ALREA"
-  "DY_REGISTERED\020\002\022*\n&MODEL_REGISTER_RESULT"
-  "_REJECTED_INVALID\020\003\022+\n\'MODEL_REGISTER_RE"
-  "SULT_REJECTED_CONFLICT\020\004*p\n\017ModelLoadSta"
-  "tus\022!\n\035MODEL_LOAD_STATUS_UNSPECIFIED\020\000\022\034"
-  "\n\030MODEL_LOAD_STATUS_LOADED\020\001\022\034\n\030MODEL_LO"
-  "AD_STATUS_FAILED\020\002*\265\001\n\016ModelAckResult\022 \n"
-  "\034MODEL_ACK_RESULT_UNSPECIFIED\020\000\022\034\n\030MODEL"
-  "_ACK_RESULT_APPLIED\020\001\022$\n MODEL_ACK_RESUL"
-  "T_ALREADY_APPLIED\020\002\022\036\n\032MODEL_ACK_RESULT_"
-  "NOT_FOUND\020\003\022\035\n\031MODEL_ACK_RESULT_REJECTED"
-  "\020\004*\256\001\n\014WorkloadMode\022\035\n\031WORKLOAD_MODE_UNS"
-  "PECIFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAINING\020\001\022!"
-  "\n\035WORKLOAD_MODE_INFERENCE_SMOKE\020\002\022\"\n\036WOR"
-  "KLOAD_MODE_MODEL_EVALUATION\020\003\022\034\n\030WORKLOA"
-  "D_MODE_ASTAR_TEST\020\0042\342\002\n\013MazeService\022$\n\004I"
-  "nit\022\r.maze.InitReq\032\r.maze.InitRsp\022@\n\014Beg"
-  "inEpisode\022\025.maze.BeginEpisodeReq\032\031.maze."
-  "EpisodeLifecycleRsp\022*\n\006Update\022\017.maze.Upd"
-  "ateReq\032\017.maze.UpdateRsp\0226\n\nEndEpisode\022\023."
-  "maze.EpisodeEndReq\032\023.maze.EpisodeEndRsp\022"
-  "@\n\014AbortEpisode\022\025.maze.AbortEpisodeReq\032\031"
-  ".maze.EpisodeLifecycleRsp\022E\n\021GetAIServer"
-  "Status\022\027.maze.AIServerStatusReq\032\027.maze.A"
-  "IServerStatusRsp2H\n\016LearnerService\0226\n\013Se"
-  "ndSamples\022\021.maze.SampleBatch\032\024.maze.Samp"
-  "leResponse2\345\002\n\030SampleDistributorService\022"
-  "6\n\013PushSamples\022\021.maze.SampleBatch\032\024.maze"
-  ".PushSamplesRsp\0220\n\010GetBatch\022\021.maze.GetBa"
-  "tchReq\032\021.maze.GetBatchRsp\0220\n\010AckBatch\022\021."
-  "maze.AckBatchReq\032\021.maze.DeliveryRsp\0222\n\tN"
-  "ackBatch\022\022.maze.NackBatchReq\032\021.maze.Deli"
-  "veryRsp\0224\n\nRenewLease\022\023.maze.RenewLeaseR"
-  "eq\032\021.maze.DeliveryRsp\022C\n\tGetStatus\022\032.maz"
-  "e.DistributorStatusReq\032\032.maze.Distributo"
-  "rStatusRsp2\362\002\n\027ModelDistributorService\022\?"
-  "\n\rRegisterModel\022\026.maze.RegisterModelReq\032"
-  "\026.maze.RegisterModelRsp\022H\n\020GetModelManif"
-  "est\022\031.maze.GetModelManifestReq\032\031.maze.Ge"
-  "tModelManifestRsp\022;\n\rDownloadModel\022\026.maz"
-  "e.DownloadModelReq\032\020.maze.ModelChunk0\001\0220"
-  "\n\010AckModel\022\021.maze.AckModelReq\032\021.maze.Ack"
-  "ModelRsp\022]\n\031GetModelDistributorStatus\022\037."
-  "maze.ModelDistributorStatusReq\032\037.maze.Mo"
-  "delDistributorStatusRspB\003\200\001\000b\006proto3"
+  "\001y\030\002 \001(\002\"\346\002\n\016OpenSessionReq\022 \n\030session_p"
+  "rotocol_version\030\001 \001(\r\022\021\n\tclient_id\030\002 \001(\t"
+  "\022\016\n\006env_id\030\003 \001(\t\022\022\n\nsession_id\030\004 \001(\005\022\021\n\t"
+  "agent_num\030\005 \001(\005\022\034\n\010map_size\030\006 \001(\0132\n.maze"
+  ".Vec2\022\035\n\tstart_pos\030\007 \001(\0132\n.maze.Vec2\022\033\n\007"
+  "end_pos\030\010 \001(\0132\n.maze.Vec2\022\021\n\tgrid_size\030\t"
+  " \001(\002\022\021\n\tgrid_cols\030\n \001(\005\022\021\n\tgrid_rows\030\013 \001"
+  "(\005\022\034\n\010end_grid\030\014 \001(\0132\n.maze.Vec2\022\035\n\025obse"
+  "rvation_schema_id\030\r \001(\t\022\030\n\020action_schema"
+  "_id\030\016 \001(\t\"\322\002\n\016OpenSessionRsp\022\020\n\010ret_code"
+  "\030\001 \001(\005\022%\n\006result\030\002 \001(\0162\025.maze.LifecycleR"
+  "esult\022\017\n\007message\030\003 \001(\t\022 \n\030session_protoc"
+  "ol_version\030\004 \001(\r\022\022\n\nsession_id\030\005 \001(\005\022\023\n\013"
+  "aiserver_id\030\006 \001(\t\022)\n\rworkload_mode\030\007 \001(\016"
+  "2\022.maze.WorkloadMode\022)\n\rreplay_policy\030\010 "
+  "\001(\0162\022.maze.ReplayPolicy\022\034\n\024loaded_model_"
+  "version\030\t \001(\005\022\035\n\025observation_schema_id\030\n"
+  " \001(\t\022\030\n\020action_schema_id\030\013 \001(\t\"\275\002\n\007InitR"
+  "eq\022\021\n\tagent_num\030\001 \001(\005\022\034\n\010map_size\030\002 \001(\0132"
+  "\n.maze.Vec2\022\035\n\tstart_pos\030\003 \001(\0132\n.maze.Ve"
+  "c2\022\033\n\007end_pos\030\004 \001(\0132\n.maze.Vec2\022\022\n\nsessi"
+  "on_id\030\005 \001(\005\022\021\n\tclient_id\030\007 \001(\t\022\016\n\006env_id"
+  "\030\010 \001(\t\022\021\n\tgrid_size\030\t \001(\002\022\021\n\tgrid_cols\030\n"
+  " \001(\005\022\021\n\tgrid_rows\030\013 \001(\005\022\034\n\010end_grid\030\014 \001("
+  "\0132\n.maze.Vec2\022)\n\rworkload_mode\030\r \001(\0162\022.m"
+  "aze.WorkloadModeJ\004\010\006\020\007R\006run_id\"S\n\007InitRs"
+  "p\022\020\n\010ret_code\030\001 \001(\005\022%\n\006result\030\002 \001(\0162\025.ma"
+  "ze.LifecycleResult\022\017\n\007message\030\003 \001(\t\"G\n\017B"
+  "eginEpisodeReq\022\022\n\nsession_id\030\002 \001(\005\022\022\n\nep"
+  "isode_id\030\003 \001(\005J\004\010\001\020\002R\006run_id\"s\n\023EpisodeL"
+  "ifecycleRsp\022\020\n\010ret_code\030\001 \001(\005\022%\n\006result\030"
+  "\002 \001(\0162\025.maze.LifecycleResult\022\017\n\007message\030"
+  "\003 \001(\t\022\022\n\nepisode_id\030\004 \001(\005\"\212\001\n\nAgentState"
+  "\022\020\n\010agent_id\030\001 \001(\005\022\027\n\003pos\030\002 \001(\0132\n.maze.V"
+  "ec2\022\017\n\007is_done\030\003 \001(\010\022\013\n\003obs\030\004 \003(\002\0223\n\022ter"
+  "mination_reason\030\005 \001(\0162\027.maze.Termination"
+  "Reason\"u\n\tUpdateReq\022 \n\006agents\030\001 \003(\0132\020.ma"
+  "ze.AgentState\022\020\n\010frame_id\030\002 \001(\005\022\022\n\nsessi"
+  "on_id\030\003 \001(\005\022\022\n\nepisode_id\030\005 \001(\005J\004\010\004\020\005R\006r"
+  "un_id\"2\n\013AgentAction\022\020\n\010agent_id\030\001 \001(\005\022\021"
+  "\n\taction_id\030\002 \001(\005\"A\n\tUpdateRsp\022\"\n\007action"
+  "s\030\001 \003(\0132\021.maze.AgentAction\022\020\n\010replayed\030\002"
+  " \001(\010\"E\n\rEpisodeEndReq\022\022\n\nepisode_id\030\001 \001("
+  "\005\022\022\n\nsession_id\030\002 \001(\005J\004\010\003\020\004R\006run_id\"Y\n\rE"
+  "pisodeEndRsp\022\020\n\010ret_code\030\001 \001(\005\022%\n\006result"
+  "\030\002 \001(\0162\025.maze.LifecycleResult\022\017\n\007message"
+  "\030\003 \001(\t\"\201\001\n\017AbortEpisodeReq\022\022\n\nsession_id"
+  "\030\002 \001(\005\022\022\n\nepisode_id\030\003 \001(\005\022\'\n\006reason\030\004 \001"
+  "(\0162\027.maze.TerminationReason\022\017\n\007message\030\005"
+  " \001(\tJ\004\010\001\020\002R\006run_id\"\360\002\n\006Sample\022\013\n\003obs\030\001 \003"
+  "(\002\022\016\n\006action\030\002 \001(\005\022\016\n\006reward\030\003 \001(\002\022\024\n\014ol"
+  "d_log_prob\030\004 \001(\002\022\021\n\told_vpred\030\005 \001(\002\0227\n\016r"
+  "eward_details\030\t \003(\0132\037.maze.Sample.Reward"
+  "DetailsEntry\022\022\n\nterminated\030\n \001(\010\022\021\n\ttrun"
+  "cated\030\013 \001(\010\0223\n\022termination_reason\030\014 \001(\0162"
+  "\027.maze.TerminationReason\022\027\n\017action_frame"
+  "_id\030\r \001(\003\0324\n\022RewardDetailsEntry\022\013\n\003key\030\001"
+  " \001(\t\022\r\n\005value\030\002 \001(\002:\0028\001J\004\010\006\020\007J\004\010\007\020\010J\004\010\010\020"
+  "\tR\tadvantageR\ttd_returnR\004mask\"\242\004\n\013Sample"
+  "Batch\022\022\n\nepisode_id\030\001 \001(\005\022\020\n\010agent_id\030\002 "
+  "\001(\005\022\035\n\007samples\030\003 \003(\0132\014.maze.Sample\022\026\n\016is"
+  "_episode_end\030\004 \001(\010\022\022\n\nsession_id\030\005 \001(\005\022\023"
+  "\n\013aiserver_id\030\007 \001(\t\022\016\n\006env_id\030\010 \001(\t\022\023\n\013f"
+  "ragment_id\030\t \001(\005\022\036\n\026behavior_model_versi"
+  "on\030\n \001(\005\022\025\n\rcreated_ts_ms\030\013 \001(\003\022\034\n\024produ"
+  "cer_instance_id\030\014 \001(\t\022\024\n\014fragment_seq\030\r "
+  "\001(\004\022\020\n\010batch_id\030\016 \001(\t\022\030\n\020protocol_versio"
+  "n\030\017 \001(\r\022\037\n\027behavior_model_checksum\030\020 \001(\t"
+  "\0223\n\022termination_reason\030\021 \001(\0162\027.maze.Term"
+  "inationReason\022\027\n\017bootstrap_value\030\022 \001(\002\022\027"
+  "\n\017bootstrap_valid\030\023 \001(\010\022\035\n\025first_action_"
+  "frame_id\030\024 \001(\003\022\034\n\024last_action_frame_id\030\025"
+  " \001(\003J\004\010\006\020\007R\006run_id\"9\n\016SampleResponse\022\020\n\010"
+  "ret_code\030\001 \001(\005\022\025\n\rmodel_version\030\002 \001(\005\"\334\002"
+  "\n\016PushSamplesRsp\022\020\n\010ret_code\030\001 \001(\005\022\017\n\007me"
+  "ssage\030\002 \001(\t\022\030\n\020accepted_samples\030\003 \001(\003\022\022\n"
+  "\nqueue_size\030\004 \001(\003\022 \n\006result\030\005 \001(\0162\020.maze"
+  ".PushResult\022\020\n\010batch_id\030\006 \001(\t\022\037\n\027accepte"
+  "d_unique_samples\030\007 \001(\003\022\030\n\020resident_sampl"
+  "es\030\010 \001(\003\022\032\n\022resident_fragments\030\t \001(\003\022 \n\030"
+  "resident_estimated_bytes\030\n \001(\003\022+\n\016pressu"
+  "re_state\030\013 \001(\0162\023.maze.PressureState\022\037\n\027d"
+  "istributor_instance_id\030\014 \001(\t\"\321\001\n\013GetBatc"
+  "hReq\022\022\n\nbatch_size\030\001 \001(\005\022\022\n\ntimeout_ms\030\002"
+  " \001(\005\022\034\n\024consumer_instance_id\030\004 \001(\t\022\030\n\020le"
+  "ase_timeout_ms\030\005 \001(\005\022\036\n\026behavior_model_v"
+  "ersion\030\006 \001(\005\0224\n\020selection_policy\030\007 \001(\0162\032"
+  ".maze.BatchSelectionPolicyJ\004\010\003\020\004R\006run_id"
+  "\"\374\002\n\013GetBatchRsp\022\020\n\010ret_code\030\001 \001(\005\022\"\n\007ba"
+  "tches\030\002 \003(\0132\021.maze.SampleBatch\022\022\n\nqueue_"
+  "size\030\003 \001(\003\022\030\n\020returned_samples\030\004 \001(\003\022\017\n\007"
+  "message\030\005 \001(\t\022$\n\006result\030\006 \001(\0162\024.maze.Get"
+  "BatchResult\022\023\n\013delivery_id\030\007 \001(\t\022\034\n\024leas"
+  "e_deadline_ts_ms\030\010 \001(\003\022\032\n\022returned_fragm"
+  "ents\030\t \001(\003\022\031\n\021actual_batch_size\030\n \001(\003\022\017\n"
+  "\007wait_ms\030\013 \001(\003\022\026\n\016leased_samples\030\014 \001(\003\022\037"
+  "\n\027distributor_instance_id\030\r \001(\t\022\036\n\026behav"
+  "ior_model_version\030\016 \001(\005\"\222\001\n\013AckBatchReq\022"
+  "\034\n\024consumer_instance_id\030\002 \001(\t\022\023\n\013deliver"
+  "y_id\030\003 \001(\t\022)\n\013disposition\030\004 \001(\0162\024.maze.A"
+  "ckDisposition\022\027\n\017train_update_id\030\005 \001(\tJ\004"
+  "\010\001\020\002R\006run_id\"_\n\014NackBatchReq\022\034\n\024consumer"
+  "_instance_id\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022"
+  "\016\n\006reason\030\004 \001(\tJ\004\010\001\020\002R\006run_id\"j\n\rRenewLe"
+  "aseReq\022\034\n\024consumer_instance_id\030\002 \001(\t\022\023\n\013"
+  "delivery_id\030\003 \001(\t\022\030\n\020lease_timeout_ms\030\004 "
+  "\001(\005J\004\010\001\020\002R\006run_id\"\373\001\n\013DeliveryRsp\022\020\n\010ret"
+  "_code\030\001 \001(\005\022$\n\006result\030\002 \001(\0162\024.maze.Deliv"
+  "eryResult\022\017\n\007message\030\003 \001(\t\022\023\n\013delivery_i"
+  "d\030\004 \001(\t\022\030\n\020affected_samples\030\005 \001(\003\022\022\n\nque"
+  "ue_size\030\006 \001(\003\022\034\n\024lease_deadline_ts_ms\030\007 "
+  "\001(\003\022)\n\013disposition\030\010 \001(\0162\024.maze.AckDispo"
+  "sition\022\027\n\017train_update_id\030\t \001(\t\"$\n\024Distr"
+  "ibutorStatusReqJ\004\010\001\020\002R\006run_id\"\273\002\n\032Behavi"
+  "orVersionQueueStatus\022\036\n\026behavior_model_v"
+  "ersion\030\001 \001(\005\022\025\n\rready_samples\030\002 \001(\003\022\027\n\017r"
+  "eady_fragments\030\003 \001(\003\022\026\n\016leased_samples\030\004"
+  " \001(\003\022\030\n\020leased_fragments\030\005 \001(\003\022\025\n\racked_"
+  "samples\030\006 \001(\003\022\027\n\017acked_fragments\030\007 \001(\003\022\027"
+  "\n\017trained_samples\030\010 \001(\003\022\025\n\rstale_samples"
+  "\030\t \001(\003\022\027\n\017invalid_samples\030\n \001(\003\022\"\n\032shutd"
+  "own_untrained_samples\030\013 \001(\003\"\220\014\n\024Distribu"
+  "torStatusRsp\022\031\n\021push_sample_count\030\001 \001(\003\022"
+  "\034\n\024consume_sample_count\030\002 \001(\003\022\022\n\nqueue_s"
+  "ize\030\003 \001(\003\022\030\n\020push_batch_count\030\004 \001(\003\022\033\n\023c"
+  "onsume_batch_count\030\005 \001(\003\022\022\n\ndrop_count\030\006"
+  " \001(\003\022\031\n\021latest_push_ts_ms\030\007 \001(\003\022\034\n\024lates"
+  "t_consume_ts_ms\030\010 \001(\003\022\030\n\020protocol_versio"
+  "n\030\t \001(\r\022\037\n\027distributor_instance_id\030\013 \001(\t"
+  "\022\r\n\005ready\030\014 \001(\010\022\032\n\022push_attempt_count\030\r "
+  "\001(\003\022\037\n\027accepted_unique_samples\030\016 \001(\003\022\037\n\027"
+  "accepted_unique_batches\030\017 \001(\003\022$\n\034duplica"
+  "te_push_attempt_count\030\020 \001(\003\022!\n\031duplicate"
+  "_sample_attempts\030\021 \001(\003\022#\n\033rejected_push_"
+  "attempt_count\030\022 \001(\003\022 \n\030rejected_sample_a"
+  "ttempts\030\023 \001(\003\022\034\n\024acked_unique_samples\030\024 "
+  "\001(\003\022\034\n\024acked_unique_batches\030\025 \001(\003\022\033\n\023rea"
+  "dy_queue_samples\030\026 \001(\003\022\035\n\025ready_queue_fr"
+  "agments\030\027 \001(\003\022\026\n\016leased_samples\030\030 \001(\003\022\030\n"
+  "\020leased_fragments\030\031 \001(\003\022\030\n\020resident_samp"
+  "les\030\032 \001(\003\022\032\n\022resident_fragments\030\033 \001(\003\022 \n"
+  "\030resident_estimated_bytes\030\034 \001(\003\022\030\n\020capac"
+  "ity_samples\030\035 \001(\003\022\032\n\022capacity_fragments\030"
+  "\036 \001(\003\022 \n\030capacity_estimated_bytes\030\037 \001(\003\022"
+  "+\n\016pressure_state\030  \001(\0162\023.maze.PressureS"
+  "tate\022\030\n\020redelivery_count\030! \001(\003\022\022\n\nnack_c"
+  "ount\030\" \001(\003\022\033\n\023expired_lease_count\030# \001(\003\022"
+  "\030\n\020latest_ack_ts_ms\030$ \001(\003\022\030\n\020target_hit_"
+  "count\030% \001(\003\022\031\n\021partial_get_count\030& \001(\003\022\033"
+  "\n\023empty_timeout_count\030\' \001(\003\022\022\n\nlast_erro"
+  "r\030( \001(\t\022;\n\021behavior_versions\030) \003(\0132 .maz"
+  "e.BehaviorVersionQueueStatus\022\034\n\024trained_"
+  "sample_count\030* \001(\003\022\032\n\022stale_sample_count"
+  "\030+ \001(\003\022\034\n\024invalid_sample_count\030, \001(\003\022\'\n\037"
+  "shutdown_untrained_sample_count\030- \001(\003\022\031\n"
+  "\021lease_renew_count\030. \001(\003\022-\n\014backend_type"
+  "\030/ \001(\0162\027.maze.SampleBackendType\022 \n\030max_c"
+  "oncurrent_consumers\0300 \001(\005\022\035\n\025active_cons"
+  "umer_count\0301 \001(\005\022\033\n\023consumer_busy_count\030"
+  "2 \001(\003\022\025\n\ringress_ready\0303 \001(\010\022\022\n\npool_rea"
+  "dy\0304 \001(\010J\004\010\n\020\013R\006run_id\"!\n\021AIServerStatus"
+  "ReqJ\004\010\001\020\002R\006run_id\"P\n\026TerminationReasonCo"
+  "unt\022\'\n\006reason\030\001 \001(\0162\027.maze.TerminationRe"
+  "ason\022\r\n\005count\030\002 \001(\003\"\366\004\n\016EpisodeMetrics\022\036"
+  "\n\026configured_window_size\030\001 \001(\005\022\037\n\027comple"
+  "ted_episode_count\030\002 \001(\003\022\035\n\025completed_age"
+  "nt_count\030\003 \001(\003\022\031\n\021mean_agent_return\030\004 \001("
+  "\001\022\030\n\020min_agent_return\030\005 \001(\001\022\030\n\020max_agent"
+  "_return\030\006 \001(\001\022\033\n\023agent_success_count\030\007 \001"
+  "(\003\022\032\n\022agent_success_rate\030\010 \001(\001\022%\n\035enviro"
+  "nment_any_success_count\030\t \001(\003\022$\n\034environ"
+  "ment_any_success_rate\030\n \001(\001\022%\n\035environme"
+  "nt_all_success_count\030\013 \001(\003\022$\n\034environmen"
+  "t_all_success_rate\030\014 \001(\001\022\036\n\026excluded_epi"
+  "sode_count\030\r \001(\003\0228\n\022termination_counts\030\016"
+  " \003(\0132\034.maze.TerminationReasonCount\022L\n\025re"
+  "ward_component_mean\030\017 \003(\0132-.maze.Episode"
+  "Metrics.RewardComponentMeanEntry\032:\n\030Rewa"
+  "rdComponentMeanEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005val"
+  "ue\030\002 \001(\001:\0028\001\"\244\013\n\021AIServerStatusRsp\022\030\n\020pr"
+  "otocol_version\030\001 \001(\r\022\023\n\013aiserver_id\030\003 \001("
+  "\t\022\034\n\024producer_instance_id\030\004 \001(\t\022\"\n\005state"
+  "\030\005 \001(\0162\023.maze.AIServerState\022\r\n\005ready\030\006 \001"
+  "(\010\022\031\n\021distributor_ready\030\007 \001(\010\022%\n\013model_s"
+  "tate\030\010 \001(\0162\020.maze.ModelState\022\034\n\024loaded_m"
+  "odel_version\030\t \001(\005\022\035\n\025loaded_model_check"
+  "sum\030\n \001(\t\022 \n\030outbound_queue_fragments\030\013 "
+  "\001(\003\022\036\n\026outbound_queue_samples\030\014 \001(\003\022&\n\036o"
+  "utbound_queue_estimated_bytes\030\r \001(\003\022%\n\035o"
+  "utbound_queue_high_watermark\030\016 \001(\003\022\037\n\027pr"
+  "oduced_unique_samples\030\017 \001(\003\022\037\n\027produced_"
+  "unique_batches\030\020 \001(\003\022\032\n\022push_attempt_cou"
+  "nt\030\021 \001(\003\022\037\n\027accepted_unique_samples\030\022 \001("
+  "\003\022$\n\034duplicate_push_attempt_count\030\023 \001(\003\022"
+  "#\n\033rejected_push_attempt_count\030\024 \001(\003\022\033\n\023"
+  "retry_attempt_count\030\025 \001(\003\022!\n\031final_drop_"
+  "unique_samples\030\026 \001(\003\022\034\n\024active_session_c"
+  "ount\030\027 \001(\003\022\034\n\024active_episode_count\030\030 \001(\003"
+  "\022\032\n\022client_initialized\030\031 \001(\010\022\030\n\020update_r"
+  "pc_count\030\032 \001(\003\022!\n\031update_rpc_latency_sum"
+  "_ms\030\033 \001(\001\022!\n\031update_rpc_latency_max_ms\030\034"
+  " \001(\001\022\027\n\017inference_count\030\035 \001(\003\022 \n\030inferen"
+  "ce_latency_sum_ms\030\036 \001(\001\022 \n\030inference_lat"
+  "ency_max_ms\030\037 \001(\001\022\025\n\renqueue_count\030  \001(\003"
+  "\022\036\n\026enqueue_latency_sum_ms\030! \001(\001\022\036\n\026enqu"
+  "eue_latency_max_ms\030\" \001(\001\022\026\n\016push_rpc_cou"
+  "nt\030# \001(\003\022\037\n\027push_rpc_latency_sum_ms\030$ \001("
+  "\001\022\037\n\027push_rpc_latency_max_ms\030% \001(\001\022\022\n\nla"
+  "st_error\030& \001(\t\022\024\n\014timestamp_ms\030\' \001(\003\022\034\n\024"
+  "staged_model_version\030( \001(\005\022\035\n\025staged_mod"
+  "el_checksum\030) \001(\t\022\032\n\022model_switch_count\030"
+  "* \001(\003\022 \n\030quarantined_sample_count\030+ \001(\003\022"
+  "\"\n\032quarantined_fragment_count\030, \001(\003\022)\n\rw"
+  "orkload_mode\030- \001(\0162\022.maze.WorkloadMode\022-"
+  "\n\017episode_metrics\030. \001(\0132\024.maze.EpisodeMe"
+  "tricsJ\004\010\002\020\003R\006run_id\"\262\002\n\025ModelArtifactMan"
+  "ifest\022\026\n\016schema_version\030\001 \001(\r\022\030\n\020contrac"
+  "t_version\030\002 \001(\t\022\025\n\rmodel_version\030\004 \001(\005\022\024"
+  "\n\014artifact_uri\030\005 \001(\t\022\022\n\nmodel_file\030\006 \001(\t"
+  "\022\022\n\nsize_bytes\030\007 \001(\003\022\016\n\006sha256\030\010 \001(\t\022\023\n\013"
+  "input_shape\030\t \003(\003\022\024\n\014action_shape\030\n \003(\003\022"
+  "\023\n\013value_shape\030\013 \003(\003\022\014\n\004seed\030\014 \001(\003\022\r\n\005re"
+  "ady\030\r \001(\010\022\027\n\017published_ts_ms\030\016 \001(\003J\004\010\003\020\004"
+  "R\006run_id\"A\n\020RegisterModelReq\022-\n\010manifest"
+  "\030\001 \001(\0132\033.maze.ModelArtifactManifest\"\260\001\n\020"
+  "RegisterModelRsp\022\020\n\010ret_code\030\001 \001(\005\022)\n\006re"
+  "sult\030\002 \001(\0162\031.maze.ModelRegisterResult\022\017\n"
+  "\007message\030\003 \001(\t\022-\n\010manifest\030\004 \001(\0132\033.maze."
+  "ModelArtifactManifest\022\037\n\027distributor_ins"
+  "tance_id\030\005 \001(\t\"_\n\023GetModelManifestReq\022\025\n"
+  "\rmodel_version\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001("
+  "\t\022\016\n\006latest\030\004 \001(\010J\004\010\001\020\002R\006run_id\"\210\001\n\023GetM"
+  "odelManifestRsp\022\020\n\010ret_code\030\001 \001(\005\022\017\n\007mes"
+  "sage\030\002 \001(\t\022-\n\010manifest\030\003 \001(\0132\033.maze.Mode"
+  "lArtifactManifest\022\037\n\027distributor_instanc"
+  "e_id\030\004 \001(\t\"L\n\020DownloadModelReq\022\025\n\rmodel_"
+  "version\030\002 \001(\005\022\023\n\013aiserver_id\030\003 \001(\tJ\004\010\001\020\002"
+  "R\006run_id\"O\n\nModelChunk\022\025\n\rmodel_version\030"
+  "\002 \001(\005\022\016\n\006offset\030\003 \001(\003\022\014\n\004data\030\004 \001(\014J\004\010\001\020"
+  "\002R\006run_id\"\224\001\n\013AckModelReq\022\023\n\013aiserver_id"
+  "\030\002 \001(\t\022\025\n\rmodel_version\030\003 \001(\005\022\016\n\006sha256\030"
+  "\004 \001(\t\022*\n\013load_status\030\005 \001(\0162\025.maze.ModelL"
+  "oadStatus\022\017\n\007message\030\006 \001(\tJ\004\010\001\020\002R\006run_id"
+  "\"w\n\013AckModelRsp\022\020\n\010ret_code\030\001 \001(\005\022$\n\006res"
+  "ult\030\002 \001(\0162\024.maze.ModelAckResult\022\017\n\007messa"
+  "ge\030\003 \001(\t\022\037\n\027distributor_instance_id\030\004 \001("
+  "\t\")\n\031ModelDistributorStatusReqJ\004\010\001\020\002R\006ru"
+  "n_id\"\373\004\n\031ModelDistributorStatusRsp\022\030\n\020pr"
+  "otocol_version\030\001 \001(\r\022\037\n\027distributor_inst"
+  "ance_id\030\003 \001(\t\022\r\n\005ready\030\004 \001(\010\022\036\n\026register"
+  "ed_model_count\030\005 \001(\003\022\034\n\024latest_model_ver"
+  "sion\030\006 \001(\005\022\035\n\025latest_model_checksum\030\007 \001("
+  "\t\022\036\n\026register_attempt_count\030\010 \001(\003\022 \n\030dup"
+  "licate_register_count\030\t \001(\003\022\037\n\027rejected_"
+  "register_count\030\n \001(\003\022\036\n\026download_request"
+  "_count\030\013 \001(\003\022\036\n\026download_success_count\030\014"
+  " \001(\003\022\036\n\026download_failure_count\030\r \001(\003\022\024\n\014"
+  "bytes_served\030\016 \001(\003\022\030\n\020loaded_ack_count\030\017"
+  " \001(\003\022\030\n\020failed_ack_count\030\020 \001(\003\022\036\n\026latest"
+  "_ack_aiserver_id\030\021 \001(\t\022 \n\030latest_ack_mod"
+  "el_version\030\022 \001(\005\0220\n\021latest_ack_status\030\023 "
+  "\001(\0162\025.maze.ModelLoadStatus\022\022\n\nlast_error"
+  "\030\024 \001(\t\022\024\n\014timestamp_ms\030\025 \001(\003J\004\010\002\020\003R\006run_"
+  "id*\221\001\n\017LifecycleResult\022 \n\034LIFECYCLE_RESU"
+  "LT_UNSPECIFIED\020\000\022\027\n\023LIFECYCLE_RESULT_OK\020"
+  "\001\022$\n LIFECYCLE_RESULT_ALREADY_APPLIED\020\002\022"
+  "\035\n\031LIFECYCLE_RESULT_REJECTED\020\003*\213\002\n\021Termi"
+  "nationReason\022\"\n\036TERMINATION_REASON_UNSPE"
+  "CIFIED\020\000\022\035\n\031TERMINATION_REASON_ACTIVE\020\001\022"
+  "#\n\037TERMINATION_REASON_GOAL_REACHED\020\002\022!\n\035"
+  "TERMINATION_REASON_TIME_LIMIT\020\003\022 \n\034TERMI"
+  "NATION_REASON_COUNTDOWN\020\004\022#\n\037TERMINATION"
+  "_REASON_CLIENT_ABORT\020\005\022$\n TERMINATION_RE"
+  "ASON_CHAIN_FAILURE\020\006*\303\001\n\nPushResult\022\033\n\027P"
+  "USH_RESULT_UNSPECIFIED\020\000\022\030\n\024PUSH_RESULT_"
+  "ACCEPTED\020\001\022\031\n\025PUSH_RESULT_DUPLICATE\020\002\022!\n"
+  "\035PUSH_RESULT_REJECTED_CAPACITY\020\003\022 \n\034PUSH"
+  "_RESULT_REJECTED_INVALID\020\005\"\004\010\004\020\004*\030PUSH_R"
+  "ESULT_REJECTED_RUN*|\n\rPressureState\022\036\n\032P"
+  "RESSURE_STATE_UNSPECIFIED\020\000\022\031\n\025PRESSURE_"
+  "STATE_NORMAL\020\001\022\027\n\023PRESSURE_STATE_HIGH\020\002\022"
+  "\027\n\023PRESSURE_STATE_FULL\020\003*\247\001\n\016GetBatchRes"
+  "ult\022 \n\034GET_BATCH_RESULT_UNSPECIFIED\020\000\022\033\n"
+  "\027GET_BATCH_RESULT_LEASED\020\001\022\034\n\030GET_BATCH_"
+  "RESULT_TIMEOUT\020\002\022\031\n\025GET_BATCH_RESULT_BUS"
+  "Y\020\003\022\035\n\031GET_BATCH_RESULT_REJECTED\020\004*\222\001\n\024B"
+  "atchSelectionPolicy\022&\n\"BATCH_SELECTION_P"
+  "OLICY_UNSPECIFIED\020\000\022&\n\"BATCH_SELECTION_P"
+  "OLICY_TARGET_ONLY\020\001\022*\n&BATCH_SELECTION_P"
+  "OLICY_DRAIN_AVAILABLE\020\002*\315\001\n\016DeliveryResu"
+  "lt\022\037\n\033DELIVERY_RESULT_UNSPECIFIED\020\000\022\033\n\027D"
+  "ELIVERY_RESULT_APPLIED\020\001\022#\n\037DELIVERY_RES"
+  "ULT_ALREADY_APPLIED\020\002\022\033\n\027DELIVERY_RESULT"
+  "_EXPIRED\020\003\022\035\n\031DELIVERY_RESULT_NOT_FOUND\020"
+  "\004\022\034\n\030DELIVERY_RESULT_REJECTED\020\005*\256\001\n\016AckD"
+  "isposition\022\037\n\033ACK_DISPOSITION_UNSPECIFIE"
+  "D\020\000\022\033\n\027ACK_DISPOSITION_TRAINED\020\001\022\031\n\025ACK_"
+  "DISPOSITION_STALE\020\002\022\033\n\027ACK_DISPOSITION_I"
+  "NVALID\020\003\022&\n\"ACK_DISPOSITION_SHUTDOWN_UNT"
+  "RAINED\020\004*\274\001\n\rAIServerState\022\036\n\032AISERVER_S"
+  "TATE_UNSPECIFIED\020\000\022\033\n\027AISERVER_STATE_STA"
+  "RTING\020\001\022\030\n\024AISERVER_STATE_READY\020\002\022\033\n\027AIS"
+  "ERVER_STATE_DEGRADED\020\003\022\033\n\027AISERVER_STATE"
+  "_DRAINING\020\004\022\032\n\026AISERVER_STATE_STOPPED\020\005*"
+  "q\n\nModelState\022\033\n\027MODEL_STATE_UNSPECIFIED"
+  "\020\000\022\027\n\023MODEL_STATE_WAITING\020\001\022\025\n\021MODEL_STA"
+  "TE_READY\020\002\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001\n\023M"
+  "odelRegisterResult\022%\n!MODEL_REGISTER_RES"
+  "ULT_UNSPECIFIED\020\000\022$\n MODEL_REGISTER_RESU"
+  "LT_REGISTERED\020\001\022,\n(MODEL_REGISTER_RESULT"
+  "_ALREADY_REGISTERED\020\002\022*\n&MODEL_REGISTER_"
+  "RESULT_REJECTED_INVALID\020\003\022+\n\'MODEL_REGIS"
+  "TER_RESULT_REJECTED_CONFLICT\020\004*p\n\017ModelL"
+  "oadStatus\022!\n\035MODEL_LOAD_STATUS_UNSPECIFI"
+  "ED\020\000\022\034\n\030MODEL_LOAD_STATUS_LOADED\020\001\022\034\n\030MO"
+  "DEL_LOAD_STATUS_FAILED\020\002*\265\001\n\016ModelAckRes"
+  "ult\022 \n\034MODEL_ACK_RESULT_UNSPECIFIED\020\000\022\034\n"
+  "\030MODEL_ACK_RESULT_APPLIED\020\001\022$\n MODEL_ACK"
+  "_RESULT_ALREADY_APPLIED\020\002\022\036\n\032MODEL_ACK_R"
+  "ESULT_NOT_FOUND\020\003\022\035\n\031MODEL_ACK_RESULT_RE"
+  "JECTED\020\004*\256\001\n\014WorkloadMode\022\035\n\031WORKLOAD_MO"
+  "DE_UNSPECIFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAINI"
+  "NG\020\001\022!\n\035WORKLOAD_MODE_INFERENCE_SMOKE\020\002\022"
+  "\"\n\036WORKLOAD_MODE_MODEL_EVALUATION\020\003\022\034\n\030W"
+  "ORKLOAD_MODE_ASTAR_TEST\020\004*m\n\014ReplayPolic"
+  "y\022\035\n\031REPLAY_POLICY_UNSPECIFIED\020\000\022\032\n\026REPL"
+  "AY_POLICY_DISABLED\020\001\022\"\n\036REPLAY_POLICY_RE"
+  "CORD_AND_SERVE\020\002*^\n\021SampleBackendType\022#\n"
+  "\037SAMPLE_BACKEND_TYPE_UNSPECIFIED\020\000\022$\n SA"
+  "MPLE_BACKEND_TYPE_LOCAL_MEMORY\020\0012\235\003\n\013Maz"
+  "eService\0229\n\013OpenSession\022\024.maze.OpenSessi"
+  "onReq\032\024.maze.OpenSessionRsp\022$\n\004Init\022\r.ma"
+  "ze.InitReq\032\r.maze.InitRsp\022@\n\014BeginEpisod"
+  "e\022\025.maze.BeginEpisodeReq\032\031.maze.EpisodeL"
+  "ifecycleRsp\022*\n\006Update\022\017.maze.UpdateReq\032\017"
+  ".maze.UpdateRsp\0226\n\nEndEpisode\022\023.maze.Epi"
+  "sodeEndReq\032\023.maze.EpisodeEndRsp\022@\n\014Abort"
+  "Episode\022\025.maze.AbortEpisodeReq\032\031.maze.Ep"
+  "isodeLifecycleRsp\022E\n\021GetAIServerStatus\022\027"
+  ".maze.AIServerStatusReq\032\027.maze.AIServerS"
+  "tatusRsp2H\n\016LearnerService\0226\n\013SendSample"
+  "s\022\021.maze.SampleBatch\032\024.maze.SampleRespon"
+  "se2\345\002\n\030SampleDistributorService\0226\n\013PushS"
+  "amples\022\021.maze.SampleBatch\032\024.maze.PushSam"
+  "plesRsp\0220\n\010GetBatch\022\021.maze.GetBatchReq\032\021"
+  ".maze.GetBatchRsp\0220\n\010AckBatch\022\021.maze.Ack"
+  "BatchReq\032\021.maze.DeliveryRsp\0222\n\tNackBatch"
+  "\022\022.maze.NackBatchReq\032\021.maze.DeliveryRsp\022"
+  "4\n\nRenewLease\022\023.maze.RenewLeaseReq\032\021.maz"
+  "e.DeliveryRsp\022C\n\tGetStatus\022\032.maze.Distri"
+  "butorStatusReq\032\032.maze.DistributorStatusR"
+  "sp2\362\002\n\027ModelDistributorService\022\?\n\rRegist"
+  "erModel\022\026.maze.RegisterModelReq\032\026.maze.R"
+  "egisterModelRsp\022H\n\020GetModelManifest\022\031.ma"
+  "ze.GetModelManifestReq\032\031.maze.GetModelMa"
+  "nifestRsp\022;\n\rDownloadModel\022\026.maze.Downlo"
+  "adModelReq\032\020.maze.ModelChunk0\001\0220\n\010AckMod"
+  "el\022\021.maze.AckModelReq\032\021.maze.AckModelRsp"
+  "\022]\n\031GetModelDistributorStatus\022\037.maze.Mod"
+  "elDistributorStatusReq\032\037.maze.ModelDistr"
+  "ibutorStatusRspB\003\200\001\000b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_maze_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_maze_2eproto = {
-    false, false, 13316, descriptor_table_protodef_maze_2eproto,
+    false, false, 14468, descriptor_table_protodef_maze_2eproto,
     "maze.proto",
-    &descriptor_table_maze_2eproto_once, nullptr, 0, 42,
+    &descriptor_table_maze_2eproto_once, nullptr, 0, 44,
     schemas, file_default_instances, TableStruct_maze_2eproto::offsets,
     file_level_metadata_maze_2eproto, file_level_enum_descriptors_maze_2eproto,
     file_level_service_descriptors_maze_2eproto,
@@ -2078,6 +2209,35 @@ bool WorkloadMode_IsValid(int value) {
   }
 }
 
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ReplayPolicy_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_2eproto);
+  return file_level_enum_descriptors_maze_2eproto[14];
+}
+bool ReplayPolicy_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleBackendType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_2eproto);
+  return file_level_enum_descriptors_maze_2eproto[15];
+}
+bool SampleBackendType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -2312,6 +2472,1233 @@ void Vec2::InternalSwap(Vec2* other) {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
       file_level_metadata_maze_2eproto[0]);
+}
+
+// ===================================================================
+
+class OpenSessionReq::_Internal {
+ public:
+  static const ::maze::Vec2& map_size(const OpenSessionReq* msg);
+  static const ::maze::Vec2& start_pos(const OpenSessionReq* msg);
+  static const ::maze::Vec2& end_pos(const OpenSessionReq* msg);
+  static const ::maze::Vec2& end_grid(const OpenSessionReq* msg);
+};
+
+const ::maze::Vec2&
+OpenSessionReq::_Internal::map_size(const OpenSessionReq* msg) {
+  return *msg->_impl_.map_size_;
+}
+const ::maze::Vec2&
+OpenSessionReq::_Internal::start_pos(const OpenSessionReq* msg) {
+  return *msg->_impl_.start_pos_;
+}
+const ::maze::Vec2&
+OpenSessionReq::_Internal::end_pos(const OpenSessionReq* msg) {
+  return *msg->_impl_.end_pos_;
+}
+const ::maze::Vec2&
+OpenSessionReq::_Internal::end_grid(const OpenSessionReq* msg) {
+  return *msg->_impl_.end_grid_;
+}
+OpenSessionReq::OpenSessionReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:maze.OpenSessionReq)
+}
+OpenSessionReq::OpenSessionReq(const OpenSessionReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  OpenSessionReq* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.client_id_){}
+    , decltype(_impl_.env_id_){}
+    , decltype(_impl_.observation_schema_id_){}
+    , decltype(_impl_.action_schema_id_){}
+    , decltype(_impl_.map_size_){nullptr}
+    , decltype(_impl_.start_pos_){nullptr}
+    , decltype(_impl_.end_pos_){nullptr}
+    , decltype(_impl_.end_grid_){nullptr}
+    , decltype(_impl_.session_protocol_version_){}
+    , decltype(_impl_.session_id_){}
+    , decltype(_impl_.agent_num_){}
+    , decltype(_impl_.grid_size_){}
+    , decltype(_impl_.grid_cols_){}
+    , decltype(_impl_.grid_rows_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.client_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.client_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_client_id().empty()) {
+    _this->_impl_.client_id_.Set(from._internal_client_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.env_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.env_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_env_id().empty()) {
+    _this->_impl_.env_id_.Set(from._internal_env_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.observation_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.observation_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_observation_schema_id().empty()) {
+    _this->_impl_.observation_schema_id_.Set(from._internal_observation_schema_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.action_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.action_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_action_schema_id().empty()) {
+    _this->_impl_.action_schema_id_.Set(from._internal_action_schema_id(), 
+      _this->GetArenaForAllocation());
+  }
+  if (from._internal_has_map_size()) {
+    _this->_impl_.map_size_ = new ::maze::Vec2(*from._impl_.map_size_);
+  }
+  if (from._internal_has_start_pos()) {
+    _this->_impl_.start_pos_ = new ::maze::Vec2(*from._impl_.start_pos_);
+  }
+  if (from._internal_has_end_pos()) {
+    _this->_impl_.end_pos_ = new ::maze::Vec2(*from._impl_.end_pos_);
+  }
+  if (from._internal_has_end_grid()) {
+    _this->_impl_.end_grid_ = new ::maze::Vec2(*from._impl_.end_grid_);
+  }
+  ::memcpy(&_impl_.session_protocol_version_, &from._impl_.session_protocol_version_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.grid_rows_) -
+    reinterpret_cast<char*>(&_impl_.session_protocol_version_)) + sizeof(_impl_.grid_rows_));
+  // @@protoc_insertion_point(copy_constructor:maze.OpenSessionReq)
+}
+
+inline void OpenSessionReq::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.client_id_){}
+    , decltype(_impl_.env_id_){}
+    , decltype(_impl_.observation_schema_id_){}
+    , decltype(_impl_.action_schema_id_){}
+    , decltype(_impl_.map_size_){nullptr}
+    , decltype(_impl_.start_pos_){nullptr}
+    , decltype(_impl_.end_pos_){nullptr}
+    , decltype(_impl_.end_grid_){nullptr}
+    , decltype(_impl_.session_protocol_version_){0u}
+    , decltype(_impl_.session_id_){0}
+    , decltype(_impl_.agent_num_){0}
+    , decltype(_impl_.grid_size_){0}
+    , decltype(_impl_.grid_cols_){0}
+    , decltype(_impl_.grid_rows_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.client_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.client_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.env_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.env_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.observation_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.observation_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.action_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.action_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+OpenSessionReq::~OpenSessionReq() {
+  // @@protoc_insertion_point(destructor:maze.OpenSessionReq)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void OpenSessionReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.client_id_.Destroy();
+  _impl_.env_id_.Destroy();
+  _impl_.observation_schema_id_.Destroy();
+  _impl_.action_schema_id_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.map_size_;
+  if (this != internal_default_instance()) delete _impl_.start_pos_;
+  if (this != internal_default_instance()) delete _impl_.end_pos_;
+  if (this != internal_default_instance()) delete _impl_.end_grid_;
+}
+
+void OpenSessionReq::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void OpenSessionReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:maze.OpenSessionReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.client_id_.ClearToEmpty();
+  _impl_.env_id_.ClearToEmpty();
+  _impl_.observation_schema_id_.ClearToEmpty();
+  _impl_.action_schema_id_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.map_size_ != nullptr) {
+    delete _impl_.map_size_;
+  }
+  _impl_.map_size_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.start_pos_ != nullptr) {
+    delete _impl_.start_pos_;
+  }
+  _impl_.start_pos_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.end_pos_ != nullptr) {
+    delete _impl_.end_pos_;
+  }
+  _impl_.end_pos_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.end_grid_ != nullptr) {
+    delete _impl_.end_grid_;
+  }
+  _impl_.end_grid_ = nullptr;
+  ::memset(&_impl_.session_protocol_version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.grid_rows_) -
+      reinterpret_cast<char*>(&_impl_.session_protocol_version_)) + sizeof(_impl_.grid_rows_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* OpenSessionReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 session_protocol_version = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.session_protocol_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string client_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_client_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionReq.client_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string env_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_env_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionReq.env_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 session_id = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.session_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 agent_num = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.agent_num_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.Vec2 map_size = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          ptr = ctx->ParseMessage(_internal_mutable_map_size(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.Vec2 start_pos = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          ptr = ctx->ParseMessage(_internal_mutable_start_pos(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.Vec2 end_pos = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
+          ptr = ctx->ParseMessage(_internal_mutable_end_pos(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // float grid_size = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
+          _impl_.grid_size_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 grid_cols = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 80)) {
+          _impl_.grid_cols_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 grid_rows = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
+          _impl_.grid_rows_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.Vec2 end_grid = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
+          ptr = ctx->ParseMessage(_internal_mutable_end_grid(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string observation_schema_id = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 106)) {
+          auto str = _internal_mutable_observation_schema_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionReq.observation_schema_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string action_schema_id = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+          auto str = _internal_mutable_action_schema_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionReq.action_schema_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* OpenSessionReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:maze.OpenSessionReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 session_protocol_version = 1;
+  if (this->_internal_session_protocol_version() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_session_protocol_version(), target);
+  }
+
+  // string client_id = 2;
+  if (!this->_internal_client_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_client_id().data(), static_cast<int>(this->_internal_client_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionReq.client_id");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_client_id(), target);
+  }
+
+  // string env_id = 3;
+  if (!this->_internal_env_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_env_id().data(), static_cast<int>(this->_internal_env_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionReq.env_id");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_env_id(), target);
+  }
+
+  // int32 session_id = 4;
+  if (this->_internal_session_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_session_id(), target);
+  }
+
+  // int32 agent_num = 5;
+  if (this->_internal_agent_num() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_agent_num(), target);
+  }
+
+  // .maze.Vec2 map_size = 6;
+  if (this->_internal_has_map_size()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(6, _Internal::map_size(this),
+        _Internal::map_size(this).GetCachedSize(), target, stream);
+  }
+
+  // .maze.Vec2 start_pos = 7;
+  if (this->_internal_has_start_pos()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(7, _Internal::start_pos(this),
+        _Internal::start_pos(this).GetCachedSize(), target, stream);
+  }
+
+  // .maze.Vec2 end_pos = 8;
+  if (this->_internal_has_end_pos()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(8, _Internal::end_pos(this),
+        _Internal::end_pos(this).GetCachedSize(), target, stream);
+  }
+
+  // float grid_size = 9;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_grid_size = this->_internal_grid_size();
+  uint32_t raw_grid_size;
+  memcpy(&raw_grid_size, &tmp_grid_size, sizeof(tmp_grid_size));
+  if (raw_grid_size != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_grid_size(), target);
+  }
+
+  // int32 grid_cols = 10;
+  if (this->_internal_grid_cols() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(10, this->_internal_grid_cols(), target);
+  }
+
+  // int32 grid_rows = 11;
+  if (this->_internal_grid_rows() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(11, this->_internal_grid_rows(), target);
+  }
+
+  // .maze.Vec2 end_grid = 12;
+  if (this->_internal_has_end_grid()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(12, _Internal::end_grid(this),
+        _Internal::end_grid(this).GetCachedSize(), target, stream);
+  }
+
+  // string observation_schema_id = 13;
+  if (!this->_internal_observation_schema_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_observation_schema_id().data(), static_cast<int>(this->_internal_observation_schema_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionReq.observation_schema_id");
+    target = stream->WriteStringMaybeAliased(
+        13, this->_internal_observation_schema_id(), target);
+  }
+
+  // string action_schema_id = 14;
+  if (!this->_internal_action_schema_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_action_schema_id().data(), static_cast<int>(this->_internal_action_schema_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionReq.action_schema_id");
+    target = stream->WriteStringMaybeAliased(
+        14, this->_internal_action_schema_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:maze.OpenSessionReq)
+  return target;
+}
+
+size_t OpenSessionReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:maze.OpenSessionReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string client_id = 2;
+  if (!this->_internal_client_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_client_id());
+  }
+
+  // string env_id = 3;
+  if (!this->_internal_env_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_env_id());
+  }
+
+  // string observation_schema_id = 13;
+  if (!this->_internal_observation_schema_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_observation_schema_id());
+  }
+
+  // string action_schema_id = 14;
+  if (!this->_internal_action_schema_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_action_schema_id());
+  }
+
+  // .maze.Vec2 map_size = 6;
+  if (this->_internal_has_map_size()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.map_size_);
+  }
+
+  // .maze.Vec2 start_pos = 7;
+  if (this->_internal_has_start_pos()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.start_pos_);
+  }
+
+  // .maze.Vec2 end_pos = 8;
+  if (this->_internal_has_end_pos()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.end_pos_);
+  }
+
+  // .maze.Vec2 end_grid = 12;
+  if (this->_internal_has_end_grid()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.end_grid_);
+  }
+
+  // uint32 session_protocol_version = 1;
+  if (this->_internal_session_protocol_version() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_session_protocol_version());
+  }
+
+  // int32 session_id = 4;
+  if (this->_internal_session_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_session_id());
+  }
+
+  // int32 agent_num = 5;
+  if (this->_internal_agent_num() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_agent_num());
+  }
+
+  // float grid_size = 9;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_grid_size = this->_internal_grid_size();
+  uint32_t raw_grid_size;
+  memcpy(&raw_grid_size, &tmp_grid_size, sizeof(tmp_grid_size));
+  if (raw_grid_size != 0) {
+    total_size += 1 + 4;
+  }
+
+  // int32 grid_cols = 10;
+  if (this->_internal_grid_cols() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_grid_cols());
+  }
+
+  // int32 grid_rows = 11;
+  if (this->_internal_grid_rows() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_grid_rows());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData OpenSessionReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    OpenSessionReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*OpenSessionReq::GetClassData() const { return &_class_data_; }
+
+
+void OpenSessionReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<OpenSessionReq*>(&to_msg);
+  auto& from = static_cast<const OpenSessionReq&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:maze.OpenSessionReq)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_client_id().empty()) {
+    _this->_internal_set_client_id(from._internal_client_id());
+  }
+  if (!from._internal_env_id().empty()) {
+    _this->_internal_set_env_id(from._internal_env_id());
+  }
+  if (!from._internal_observation_schema_id().empty()) {
+    _this->_internal_set_observation_schema_id(from._internal_observation_schema_id());
+  }
+  if (!from._internal_action_schema_id().empty()) {
+    _this->_internal_set_action_schema_id(from._internal_action_schema_id());
+  }
+  if (from._internal_has_map_size()) {
+    _this->_internal_mutable_map_size()->::maze::Vec2::MergeFrom(
+        from._internal_map_size());
+  }
+  if (from._internal_has_start_pos()) {
+    _this->_internal_mutable_start_pos()->::maze::Vec2::MergeFrom(
+        from._internal_start_pos());
+  }
+  if (from._internal_has_end_pos()) {
+    _this->_internal_mutable_end_pos()->::maze::Vec2::MergeFrom(
+        from._internal_end_pos());
+  }
+  if (from._internal_has_end_grid()) {
+    _this->_internal_mutable_end_grid()->::maze::Vec2::MergeFrom(
+        from._internal_end_grid());
+  }
+  if (from._internal_session_protocol_version() != 0) {
+    _this->_internal_set_session_protocol_version(from._internal_session_protocol_version());
+  }
+  if (from._internal_session_id() != 0) {
+    _this->_internal_set_session_id(from._internal_session_id());
+  }
+  if (from._internal_agent_num() != 0) {
+    _this->_internal_set_agent_num(from._internal_agent_num());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_grid_size = from._internal_grid_size();
+  uint32_t raw_grid_size;
+  memcpy(&raw_grid_size, &tmp_grid_size, sizeof(tmp_grid_size));
+  if (raw_grid_size != 0) {
+    _this->_internal_set_grid_size(from._internal_grid_size());
+  }
+  if (from._internal_grid_cols() != 0) {
+    _this->_internal_set_grid_cols(from._internal_grid_cols());
+  }
+  if (from._internal_grid_rows() != 0) {
+    _this->_internal_set_grid_rows(from._internal_grid_rows());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void OpenSessionReq::CopyFrom(const OpenSessionReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:maze.OpenSessionReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool OpenSessionReq::IsInitialized() const {
+  return true;
+}
+
+void OpenSessionReq::InternalSwap(OpenSessionReq* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.client_id_, lhs_arena,
+      &other->_impl_.client_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.env_id_, lhs_arena,
+      &other->_impl_.env_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.observation_schema_id_, lhs_arena,
+      &other->_impl_.observation_schema_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.action_schema_id_, lhs_arena,
+      &other->_impl_.action_schema_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(OpenSessionReq, _impl_.grid_rows_)
+      + sizeof(OpenSessionReq::_impl_.grid_rows_)
+      - PROTOBUF_FIELD_OFFSET(OpenSessionReq, _impl_.map_size_)>(
+          reinterpret_cast<char*>(&_impl_.map_size_),
+          reinterpret_cast<char*>(&other->_impl_.map_size_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata OpenSessionReq::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
+      file_level_metadata_maze_2eproto[1]);
+}
+
+// ===================================================================
+
+class OpenSessionRsp::_Internal {
+ public:
+};
+
+OpenSessionRsp::OpenSessionRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:maze.OpenSessionRsp)
+}
+OpenSessionRsp::OpenSessionRsp(const OpenSessionRsp& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  OpenSessionRsp* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.aiserver_id_){}
+    , decltype(_impl_.observation_schema_id_){}
+    , decltype(_impl_.action_schema_id_){}
+    , decltype(_impl_.ret_code_){}
+    , decltype(_impl_.result_){}
+    , decltype(_impl_.session_protocol_version_){}
+    , decltype(_impl_.session_id_){}
+    , decltype(_impl_.workload_mode_){}
+    , decltype(_impl_.replay_policy_){}
+    , decltype(_impl_.loaded_model_version_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_message().empty()) {
+    _this->_impl_.message_.Set(from._internal_message(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.aiserver_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.aiserver_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_aiserver_id().empty()) {
+    _this->_impl_.aiserver_id_.Set(from._internal_aiserver_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.observation_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.observation_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_observation_schema_id().empty()) {
+    _this->_impl_.observation_schema_id_.Set(from._internal_observation_schema_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.action_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.action_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_action_schema_id().empty()) {
+    _this->_impl_.action_schema_id_.Set(from._internal_action_schema_id(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.ret_code_, &from._impl_.ret_code_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.loaded_model_version_) -
+    reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.loaded_model_version_));
+  // @@protoc_insertion_point(copy_constructor:maze.OpenSessionRsp)
+}
+
+inline void OpenSessionRsp::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.aiserver_id_){}
+    , decltype(_impl_.observation_schema_id_){}
+    , decltype(_impl_.action_schema_id_){}
+    , decltype(_impl_.ret_code_){0}
+    , decltype(_impl_.result_){0}
+    , decltype(_impl_.session_protocol_version_){0u}
+    , decltype(_impl_.session_id_){0}
+    , decltype(_impl_.workload_mode_){0}
+    , decltype(_impl_.replay_policy_){0}
+    , decltype(_impl_.loaded_model_version_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.aiserver_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.aiserver_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.observation_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.observation_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.action_schema_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.action_schema_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+OpenSessionRsp::~OpenSessionRsp() {
+  // @@protoc_insertion_point(destructor:maze.OpenSessionRsp)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void OpenSessionRsp::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.message_.Destroy();
+  _impl_.aiserver_id_.Destroy();
+  _impl_.observation_schema_id_.Destroy();
+  _impl_.action_schema_id_.Destroy();
+}
+
+void OpenSessionRsp::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void OpenSessionRsp::Clear() {
+// @@protoc_insertion_point(message_clear_start:maze.OpenSessionRsp)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.message_.ClearToEmpty();
+  _impl_.aiserver_id_.ClearToEmpty();
+  _impl_.observation_schema_id_.ClearToEmpty();
+  _impl_.action_schema_id_.ClearToEmpty();
+  ::memset(&_impl_.ret_code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.loaded_model_version_) -
+      reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.loaded_model_version_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* OpenSessionRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 ret_code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.ret_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.LifecycleResult result = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_result(static_cast<::maze::LifecycleResult>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // string message = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_message();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionRsp.message"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 session_protocol_version = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.session_protocol_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 session_id = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.session_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string aiserver_id = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_aiserver_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionRsp.aiserver_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.WorkloadMode workload_mode = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_workload_mode(static_cast<::maze::WorkloadMode>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .maze.ReplayPolicy replay_policy = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_replay_policy(static_cast<::maze::ReplayPolicy>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 loaded_model_version = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
+          _impl_.loaded_model_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string observation_schema_id = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          auto str = _internal_mutable_observation_schema_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionRsp.observation_schema_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string action_schema_id = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
+          auto str = _internal_mutable_action_schema_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "maze.OpenSessionRsp.action_schema_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* OpenSessionRsp::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:maze.OpenSessionRsp)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 ret_code = 1;
+  if (this->_internal_ret_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_ret_code(), target);
+  }
+
+  // .maze.LifecycleResult result = 2;
+  if (this->_internal_result() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      2, this->_internal_result(), target);
+  }
+
+  // string message = 3;
+  if (!this->_internal_message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionRsp.message");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_message(), target);
+  }
+
+  // uint32 session_protocol_version = 4;
+  if (this->_internal_session_protocol_version() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_session_protocol_version(), target);
+  }
+
+  // int32 session_id = 5;
+  if (this->_internal_session_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_session_id(), target);
+  }
+
+  // string aiserver_id = 6;
+  if (!this->_internal_aiserver_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_aiserver_id().data(), static_cast<int>(this->_internal_aiserver_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionRsp.aiserver_id");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_aiserver_id(), target);
+  }
+
+  // .maze.WorkloadMode workload_mode = 7;
+  if (this->_internal_workload_mode() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      7, this->_internal_workload_mode(), target);
+  }
+
+  // .maze.ReplayPolicy replay_policy = 8;
+  if (this->_internal_replay_policy() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      8, this->_internal_replay_policy(), target);
+  }
+
+  // int32 loaded_model_version = 9;
+  if (this->_internal_loaded_model_version() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(9, this->_internal_loaded_model_version(), target);
+  }
+
+  // string observation_schema_id = 10;
+  if (!this->_internal_observation_schema_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_observation_schema_id().data(), static_cast<int>(this->_internal_observation_schema_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionRsp.observation_schema_id");
+    target = stream->WriteStringMaybeAliased(
+        10, this->_internal_observation_schema_id(), target);
+  }
+
+  // string action_schema_id = 11;
+  if (!this->_internal_action_schema_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_action_schema_id().data(), static_cast<int>(this->_internal_action_schema_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "maze.OpenSessionRsp.action_schema_id");
+    target = stream->WriteStringMaybeAliased(
+        11, this->_internal_action_schema_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:maze.OpenSessionRsp)
+  return target;
+}
+
+size_t OpenSessionRsp::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:maze.OpenSessionRsp)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 3;
+  if (!this->_internal_message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_message());
+  }
+
+  // string aiserver_id = 6;
+  if (!this->_internal_aiserver_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_aiserver_id());
+  }
+
+  // string observation_schema_id = 10;
+  if (!this->_internal_observation_schema_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_observation_schema_id());
+  }
+
+  // string action_schema_id = 11;
+  if (!this->_internal_action_schema_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_action_schema_id());
+  }
+
+  // int32 ret_code = 1;
+  if (this->_internal_ret_code() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_ret_code());
+  }
+
+  // .maze.LifecycleResult result = 2;
+  if (this->_internal_result() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_result());
+  }
+
+  // uint32 session_protocol_version = 4;
+  if (this->_internal_session_protocol_version() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_session_protocol_version());
+  }
+
+  // int32 session_id = 5;
+  if (this->_internal_session_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_session_id());
+  }
+
+  // .maze.WorkloadMode workload_mode = 7;
+  if (this->_internal_workload_mode() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_workload_mode());
+  }
+
+  // .maze.ReplayPolicy replay_policy = 8;
+  if (this->_internal_replay_policy() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_replay_policy());
+  }
+
+  // int32 loaded_model_version = 9;
+  if (this->_internal_loaded_model_version() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_loaded_model_version());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData OpenSessionRsp::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    OpenSessionRsp::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*OpenSessionRsp::GetClassData() const { return &_class_data_; }
+
+
+void OpenSessionRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<OpenSessionRsp*>(&to_msg);
+  auto& from = static_cast<const OpenSessionRsp&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:maze.OpenSessionRsp)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_message().empty()) {
+    _this->_internal_set_message(from._internal_message());
+  }
+  if (!from._internal_aiserver_id().empty()) {
+    _this->_internal_set_aiserver_id(from._internal_aiserver_id());
+  }
+  if (!from._internal_observation_schema_id().empty()) {
+    _this->_internal_set_observation_schema_id(from._internal_observation_schema_id());
+  }
+  if (!from._internal_action_schema_id().empty()) {
+    _this->_internal_set_action_schema_id(from._internal_action_schema_id());
+  }
+  if (from._internal_ret_code() != 0) {
+    _this->_internal_set_ret_code(from._internal_ret_code());
+  }
+  if (from._internal_result() != 0) {
+    _this->_internal_set_result(from._internal_result());
+  }
+  if (from._internal_session_protocol_version() != 0) {
+    _this->_internal_set_session_protocol_version(from._internal_session_protocol_version());
+  }
+  if (from._internal_session_id() != 0) {
+    _this->_internal_set_session_id(from._internal_session_id());
+  }
+  if (from._internal_workload_mode() != 0) {
+    _this->_internal_set_workload_mode(from._internal_workload_mode());
+  }
+  if (from._internal_replay_policy() != 0) {
+    _this->_internal_set_replay_policy(from._internal_replay_policy());
+  }
+  if (from._internal_loaded_model_version() != 0) {
+    _this->_internal_set_loaded_model_version(from._internal_loaded_model_version());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void OpenSessionRsp::CopyFrom(const OpenSessionRsp& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:maze.OpenSessionRsp)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool OpenSessionRsp::IsInitialized() const {
+  return true;
+}
+
+void OpenSessionRsp::InternalSwap(OpenSessionRsp* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.message_, lhs_arena,
+      &other->_impl_.message_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.aiserver_id_, lhs_arena,
+      &other->_impl_.aiserver_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.observation_schema_id_, lhs_arena,
+      &other->_impl_.observation_schema_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.action_schema_id_, lhs_arena,
+      &other->_impl_.action_schema_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(OpenSessionRsp, _impl_.loaded_model_version_)
+      + sizeof(OpenSessionRsp::_impl_.loaded_model_version_)
+      - PROTOBUF_FIELD_OFFSET(OpenSessionRsp, _impl_.ret_code_)>(
+          reinterpret_cast<char*>(&_impl_.ret_code_),
+          reinterpret_cast<char*>(&other->_impl_.ret_code_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata OpenSessionRsp::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
+      file_level_metadata_maze_2eproto[2]);
 }
 
 // ===================================================================
@@ -2899,7 +4286,7 @@ void InitReq::InternalSwap(InitReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata InitReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[1]);
+      file_level_metadata_maze_2eproto[3]);
 }
 
 // ===================================================================
@@ -3165,7 +4552,7 @@ void InitRsp::InternalSwap(InitRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata InitRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[2]);
+      file_level_metadata_maze_2eproto[4]);
 }
 
 // ===================================================================
@@ -3376,7 +4763,7 @@ void BeginEpisodeReq::InternalSwap(BeginEpisodeReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata BeginEpisodeReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[3]);
+      file_level_metadata_maze_2eproto[5]);
 }
 
 // ===================================================================
@@ -3666,7 +5053,7 @@ void EpisodeLifecycleRsp::InternalSwap(EpisodeLifecycleRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeLifecycleRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[4]);
+      file_level_metadata_maze_2eproto[6]);
 }
 
 // ===================================================================
@@ -3978,7 +5365,7 @@ void AgentState::InternalSwap(AgentState* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AgentState::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[5]);
+      file_level_metadata_maze_2eproto[7]);
 }
 
 // ===================================================================
@@ -4247,7 +5634,7 @@ void UpdateReq::InternalSwap(UpdateReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UpdateReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[6]);
+      file_level_metadata_maze_2eproto[8]);
 }
 
 // ===================================================================
@@ -4458,7 +5845,7 @@ void AgentAction::InternalSwap(AgentAction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AgentAction::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[7]);
+      file_level_metadata_maze_2eproto[9]);
 }
 
 // ===================================================================
@@ -4670,7 +6057,7 @@ void UpdateRsp::InternalSwap(UpdateRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UpdateRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[8]);
+      file_level_metadata_maze_2eproto[10]);
 }
 
 // ===================================================================
@@ -4881,7 +6268,7 @@ void EpisodeEndReq::InternalSwap(EpisodeEndReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeEndReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[9]);
+      file_level_metadata_maze_2eproto[11]);
 }
 
 // ===================================================================
@@ -5147,7 +6534,7 @@ void EpisodeEndRsp::InternalSwap(EpisodeEndRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeEndRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[10]);
+      file_level_metadata_maze_2eproto[12]);
 }
 
 // ===================================================================
@@ -5437,7 +6824,7 @@ void AbortEpisodeReq::InternalSwap(AbortEpisodeReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AbortEpisodeReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[11]);
+      file_level_metadata_maze_2eproto[13]);
 }
 
 // ===================================================================
@@ -5451,7 +6838,7 @@ void Sample_RewardDetailsEntry_DoNotUse::MergeFrom(const Sample_RewardDetailsEnt
 ::PROTOBUF_NAMESPACE_ID::Metadata Sample_RewardDetailsEntry_DoNotUse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[12]);
+      file_level_metadata_maze_2eproto[14]);
 }
 
 // ===================================================================
@@ -5942,7 +7329,7 @@ void Sample::InternalSwap(Sample* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Sample::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[13]);
+      file_level_metadata_maze_2eproto[15]);
 }
 
 // ===================================================================
@@ -6746,7 +8133,7 @@ void SampleBatch::InternalSwap(SampleBatch* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SampleBatch::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[14]);
+      file_level_metadata_maze_2eproto[16]);
 }
 
 // ===================================================================
@@ -6957,7 +8344,7 @@ void SampleResponse::InternalSwap(SampleResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SampleResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[15]);
+      file_level_metadata_maze_2eproto[17]);
 }
 
 // ===================================================================
@@ -7494,7 +8881,7 @@ void PushSamplesRsp::InternalSwap(PushSamplesRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PushSamplesRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[16]);
+      file_level_metadata_maze_2eproto[18]);
 }
 
 // ===================================================================
@@ -7832,7 +9219,7 @@ void GetBatchReq::InternalSwap(GetBatchReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetBatchReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[17]);
+      file_level_metadata_maze_2eproto[19]);
 }
 
 // ===================================================================
@@ -8424,7 +9811,7 @@ void GetBatchRsp::InternalSwap(GetBatchRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetBatchRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[18]);
+      file_level_metadata_maze_2eproto[20]);
 }
 
 // ===================================================================
@@ -8757,7 +10144,7 @@ void AckBatchReq::InternalSwap(AckBatchReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckBatchReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[19]);
+      file_level_metadata_maze_2eproto[21]);
 }
 
 // ===================================================================
@@ -9060,7 +10447,7 @@ void NackBatchReq::InternalSwap(NackBatchReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata NackBatchReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[20]);
+      file_level_metadata_maze_2eproto[22]);
 }
 
 // ===================================================================
@@ -9340,7 +10727,7 @@ void RenewLeaseReq::InternalSwap(RenewLeaseReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RenewLeaseReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[21]);
+      file_level_metadata_maze_2eproto[23]);
 }
 
 // ===================================================================
@@ -9805,7 +11192,7 @@ void DeliveryRsp::InternalSwap(DeliveryRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata DeliveryRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[22]);
+      file_level_metadata_maze_2eproto[24]);
 }
 
 // ===================================================================
@@ -9845,7 +11232,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DistributorStatusReq::GetClass
 ::PROTOBUF_NAMESPACE_ID::Metadata DistributorStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[23]);
+      file_level_metadata_maze_2eproto[25]);
 }
 
 // ===================================================================
@@ -10272,7 +11659,7 @@ void BehaviorVersionQueueStatus::InternalSwap(BehaviorVersionQueueStatus* other)
 ::PROTOBUF_NAMESPACE_ID::Metadata BehaviorVersionQueueStatus::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[24]);
+      file_level_metadata_maze_2eproto[26]);
 }
 
 // ===================================================================
@@ -10302,8 +11689,6 @@ DistributorStatusRsp::DistributorStatusRsp(const DistributorStatusRsp& from)
     , decltype(_impl_.drop_count_){}
     , decltype(_impl_.latest_push_ts_ms_){}
     , decltype(_impl_.latest_consume_ts_ms_){}
-    , decltype(_impl_.protocol_version_){}
-    , decltype(_impl_.ready_){}
     , decltype(_impl_.push_attempt_count_){}
     , decltype(_impl_.accepted_unique_samples_){}
     , decltype(_impl_.accepted_unique_batches_){}
@@ -10312,6 +11697,8 @@ DistributorStatusRsp::DistributorStatusRsp(const DistributorStatusRsp& from)
     , decltype(_impl_.rejected_push_attempt_count_){}
     , decltype(_impl_.rejected_sample_attempts_){}
     , decltype(_impl_.acked_unique_samples_){}
+    , decltype(_impl_.protocol_version_){}
+    , decltype(_impl_.pressure_state_){}
     , decltype(_impl_.acked_unique_batches_){}
     , decltype(_impl_.ready_queue_samples_){}
     , decltype(_impl_.ready_queue_fragments_){}
@@ -10330,12 +11717,18 @@ DistributorStatusRsp::DistributorStatusRsp(const DistributorStatusRsp& from)
     , decltype(_impl_.target_hit_count_){}
     , decltype(_impl_.partial_get_count_){}
     , decltype(_impl_.empty_timeout_count_){}
+    , decltype(_impl_.ready_){}
+    , decltype(_impl_.ingress_ready_){}
+    , decltype(_impl_.pool_ready_){}
+    , decltype(_impl_.backend_type_){}
     , decltype(_impl_.trained_sample_count_){}
     , decltype(_impl_.stale_sample_count_){}
     , decltype(_impl_.invalid_sample_count_){}
     , decltype(_impl_.shutdown_untrained_sample_count_){}
     , decltype(_impl_.lease_renew_count_){}
-    , decltype(_impl_.pressure_state_){}
+    , decltype(_impl_.max_concurrent_consumers_){}
+    , decltype(_impl_.active_consumer_count_){}
+    , decltype(_impl_.consumer_busy_count_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -10356,8 +11749,8 @@ DistributorStatusRsp::DistributorStatusRsp(const DistributorStatusRsp& from)
       _this->GetArenaForAllocation());
   }
   ::memcpy(&_impl_.push_sample_count_, &from._impl_.push_sample_count_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.pressure_state_) -
-    reinterpret_cast<char*>(&_impl_.push_sample_count_)) + sizeof(_impl_.pressure_state_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.consumer_busy_count_) -
+    reinterpret_cast<char*>(&_impl_.push_sample_count_)) + sizeof(_impl_.consumer_busy_count_));
   // @@protoc_insertion_point(copy_constructor:maze.DistributorStatusRsp)
 }
 
@@ -10377,8 +11770,6 @@ inline void DistributorStatusRsp::SharedCtor(
     , decltype(_impl_.drop_count_){int64_t{0}}
     , decltype(_impl_.latest_push_ts_ms_){int64_t{0}}
     , decltype(_impl_.latest_consume_ts_ms_){int64_t{0}}
-    , decltype(_impl_.protocol_version_){0u}
-    , decltype(_impl_.ready_){false}
     , decltype(_impl_.push_attempt_count_){int64_t{0}}
     , decltype(_impl_.accepted_unique_samples_){int64_t{0}}
     , decltype(_impl_.accepted_unique_batches_){int64_t{0}}
@@ -10387,6 +11778,8 @@ inline void DistributorStatusRsp::SharedCtor(
     , decltype(_impl_.rejected_push_attempt_count_){int64_t{0}}
     , decltype(_impl_.rejected_sample_attempts_){int64_t{0}}
     , decltype(_impl_.acked_unique_samples_){int64_t{0}}
+    , decltype(_impl_.protocol_version_){0u}
+    , decltype(_impl_.pressure_state_){0}
     , decltype(_impl_.acked_unique_batches_){int64_t{0}}
     , decltype(_impl_.ready_queue_samples_){int64_t{0}}
     , decltype(_impl_.ready_queue_fragments_){int64_t{0}}
@@ -10405,12 +11798,18 @@ inline void DistributorStatusRsp::SharedCtor(
     , decltype(_impl_.target_hit_count_){int64_t{0}}
     , decltype(_impl_.partial_get_count_){int64_t{0}}
     , decltype(_impl_.empty_timeout_count_){int64_t{0}}
+    , decltype(_impl_.ready_){false}
+    , decltype(_impl_.ingress_ready_){false}
+    , decltype(_impl_.pool_ready_){false}
+    , decltype(_impl_.backend_type_){0}
     , decltype(_impl_.trained_sample_count_){int64_t{0}}
     , decltype(_impl_.stale_sample_count_){int64_t{0}}
     , decltype(_impl_.invalid_sample_count_){int64_t{0}}
     , decltype(_impl_.shutdown_untrained_sample_count_){int64_t{0}}
     , decltype(_impl_.lease_renew_count_){int64_t{0}}
-    , decltype(_impl_.pressure_state_){0}
+    , decltype(_impl_.max_concurrent_consumers_){0}
+    , decltype(_impl_.active_consumer_count_){0}
+    , decltype(_impl_.consumer_busy_count_){int64_t{0}}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.distributor_instance_id_.InitDefault();
@@ -10453,8 +11852,8 @@ void DistributorStatusRsp::Clear() {
   _impl_.distributor_instance_id_.ClearToEmpty();
   _impl_.last_error_.ClearToEmpty();
   ::memset(&_impl_.push_sample_count_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.pressure_state_) -
-      reinterpret_cast<char*>(&_impl_.push_sample_count_)) + sizeof(_impl_.pressure_state_));
+      reinterpret_cast<char*>(&_impl_.consumer_busy_count_) -
+      reinterpret_cast<char*>(&_impl_.push_sample_count_)) + sizeof(_impl_.consumer_busy_count_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -10834,6 +12233,55 @@ const char* DistributorStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseC
         } else
           goto handle_unusual;
         continue;
+      // .maze.SampleBackendType backend_type = 47;
+      case 47:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 120)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_backend_type(static_cast<::maze::SampleBackendType>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 max_concurrent_consumers = 48;
+      case 48:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 128)) {
+          _impl_.max_concurrent_consumers_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 active_consumer_count = 49;
+      case 49:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 136)) {
+          _impl_.active_consumer_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 consumer_busy_count = 50;
+      case 50:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 144)) {
+          _impl_.consumer_busy_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool ingress_ready = 51;
+      case 51:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
+          _impl_.ingress_ready_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool pool_ready = 52;
+      case 52:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 160)) {
+          _impl_.pool_ready_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -11144,6 +12592,43 @@ uint8_t* DistributorStatusRsp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt64ToArray(46, this->_internal_lease_renew_count(), target);
   }
 
+  // .maze.SampleBackendType backend_type = 47;
+  if (this->_internal_backend_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      47, this->_internal_backend_type(), target);
+  }
+
+  // int32 max_concurrent_consumers = 48;
+  if (this->_internal_max_concurrent_consumers() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(48, this->_internal_max_concurrent_consumers(), target);
+  }
+
+  // int32 active_consumer_count = 49;
+  if (this->_internal_active_consumer_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(49, this->_internal_active_consumer_count(), target);
+  }
+
+  // int64 consumer_busy_count = 50;
+  if (this->_internal_consumer_busy_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(50, this->_internal_consumer_busy_count(), target);
+  }
+
+  // bool ingress_ready = 51;
+  if (this->_internal_ingress_ready() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(51, this->_internal_ingress_ready(), target);
+  }
+
+  // bool pool_ready = 52;
+  if (this->_internal_pool_ready() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(52, this->_internal_pool_ready(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -11221,16 +12706,6 @@ size_t DistributorStatusRsp::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_latest_consume_ts_ms());
   }
 
-  // uint32 protocol_version = 9;
-  if (this->_internal_protocol_version() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_protocol_version());
-  }
-
-  // bool ready = 12;
-  if (this->_internal_ready() != 0) {
-    total_size += 1 + 1;
-  }
-
   // int64 push_attempt_count = 13;
   if (this->_internal_push_attempt_count() != 0) {
     total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_push_attempt_count());
@@ -11279,6 +12754,17 @@ size_t DistributorStatusRsp::ByteSizeLong() const {
     total_size += 2 +
       ::_pbi::WireFormatLite::Int64Size(
         this->_internal_acked_unique_samples());
+  }
+
+  // uint32 protocol_version = 9;
+  if (this->_internal_protocol_version() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_protocol_version());
+  }
+
+  // .maze.PressureState pressure_state = 32;
+  if (this->_internal_pressure_state() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_pressure_state());
   }
 
   // int64 acked_unique_batches = 21;
@@ -11407,6 +12893,27 @@ size_t DistributorStatusRsp::ByteSizeLong() const {
         this->_internal_empty_timeout_count());
   }
 
+  // bool ready = 12;
+  if (this->_internal_ready() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool ingress_ready = 51;
+  if (this->_internal_ingress_ready() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // bool pool_ready = 52;
+  if (this->_internal_pool_ready() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // .maze.SampleBackendType backend_type = 47;
+  if (this->_internal_backend_type() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_backend_type());
+  }
+
   // int64 trained_sample_count = 42;
   if (this->_internal_trained_sample_count() != 0) {
     total_size += 2 +
@@ -11442,10 +12949,25 @@ size_t DistributorStatusRsp::ByteSizeLong() const {
         this->_internal_lease_renew_count());
   }
 
-  // .maze.PressureState pressure_state = 32;
-  if (this->_internal_pressure_state() != 0) {
+  // int32 max_concurrent_consumers = 48;
+  if (this->_internal_max_concurrent_consumers() != 0) {
     total_size += 2 +
-      ::_pbi::WireFormatLite::EnumSize(this->_internal_pressure_state());
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_max_concurrent_consumers());
+  }
+
+  // int32 active_consumer_count = 49;
+  if (this->_internal_active_consumer_count() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_active_consumer_count());
+  }
+
+  // int64 consumer_busy_count = 50;
+  if (this->_internal_consumer_busy_count() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int64Size(
+        this->_internal_consumer_busy_count());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -11497,12 +13019,6 @@ void DistributorStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, c
   if (from._internal_latest_consume_ts_ms() != 0) {
     _this->_internal_set_latest_consume_ts_ms(from._internal_latest_consume_ts_ms());
   }
-  if (from._internal_protocol_version() != 0) {
-    _this->_internal_set_protocol_version(from._internal_protocol_version());
-  }
-  if (from._internal_ready() != 0) {
-    _this->_internal_set_ready(from._internal_ready());
-  }
   if (from._internal_push_attempt_count() != 0) {
     _this->_internal_set_push_attempt_count(from._internal_push_attempt_count());
   }
@@ -11526,6 +13042,12 @@ void DistributorStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, c
   }
   if (from._internal_acked_unique_samples() != 0) {
     _this->_internal_set_acked_unique_samples(from._internal_acked_unique_samples());
+  }
+  if (from._internal_protocol_version() != 0) {
+    _this->_internal_set_protocol_version(from._internal_protocol_version());
+  }
+  if (from._internal_pressure_state() != 0) {
+    _this->_internal_set_pressure_state(from._internal_pressure_state());
   }
   if (from._internal_acked_unique_batches() != 0) {
     _this->_internal_set_acked_unique_batches(from._internal_acked_unique_batches());
@@ -11581,6 +13103,18 @@ void DistributorStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, c
   if (from._internal_empty_timeout_count() != 0) {
     _this->_internal_set_empty_timeout_count(from._internal_empty_timeout_count());
   }
+  if (from._internal_ready() != 0) {
+    _this->_internal_set_ready(from._internal_ready());
+  }
+  if (from._internal_ingress_ready() != 0) {
+    _this->_internal_set_ingress_ready(from._internal_ingress_ready());
+  }
+  if (from._internal_pool_ready() != 0) {
+    _this->_internal_set_pool_ready(from._internal_pool_ready());
+  }
+  if (from._internal_backend_type() != 0) {
+    _this->_internal_set_backend_type(from._internal_backend_type());
+  }
   if (from._internal_trained_sample_count() != 0) {
     _this->_internal_set_trained_sample_count(from._internal_trained_sample_count());
   }
@@ -11596,8 +13130,14 @@ void DistributorStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, c
   if (from._internal_lease_renew_count() != 0) {
     _this->_internal_set_lease_renew_count(from._internal_lease_renew_count());
   }
-  if (from._internal_pressure_state() != 0) {
-    _this->_internal_set_pressure_state(from._internal_pressure_state());
+  if (from._internal_max_concurrent_consumers() != 0) {
+    _this->_internal_set_max_concurrent_consumers(from._internal_max_concurrent_consumers());
+  }
+  if (from._internal_active_consumer_count() != 0) {
+    _this->_internal_set_active_consumer_count(from._internal_active_consumer_count());
+  }
+  if (from._internal_consumer_busy_count() != 0) {
+    _this->_internal_set_consumer_busy_count(from._internal_consumer_busy_count());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -11628,8 +13168,8 @@ void DistributorStatusRsp::InternalSwap(DistributorStatusRsp* other) {
       &other->_impl_.last_error_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(DistributorStatusRsp, _impl_.pressure_state_)
-      + sizeof(DistributorStatusRsp::_impl_.pressure_state_)
+      PROTOBUF_FIELD_OFFSET(DistributorStatusRsp, _impl_.consumer_busy_count_)
+      + sizeof(DistributorStatusRsp::_impl_.consumer_busy_count_)
       - PROTOBUF_FIELD_OFFSET(DistributorStatusRsp, _impl_.push_sample_count_)>(
           reinterpret_cast<char*>(&_impl_.push_sample_count_),
           reinterpret_cast<char*>(&other->_impl_.push_sample_count_));
@@ -11638,7 +13178,7 @@ void DistributorStatusRsp::InternalSwap(DistributorStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata DistributorStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[25]);
+      file_level_metadata_maze_2eproto[27]);
 }
 
 // ===================================================================
@@ -11678,7 +13218,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AIServerStatusReq::GetClassDat
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[26]);
+      file_level_metadata_maze_2eproto[28]);
 }
 
 // ===================================================================
@@ -11892,7 +13432,7 @@ void TerminationReasonCount::InternalSwap(TerminationReasonCount* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata TerminationReasonCount::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[27]);
+      file_level_metadata_maze_2eproto[29]);
 }
 
 // ===================================================================
@@ -11906,7 +13446,7 @@ void EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::MergeFrom(const EpisodeMe
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeMetrics_RewardComponentMeanEntry_DoNotUse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[28]);
+      file_level_metadata_maze_2eproto[30]);
 }
 
 // ===================================================================
@@ -12551,7 +14091,7 @@ void EpisodeMetrics::InternalSwap(EpisodeMetrics* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeMetrics::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[29]);
+      file_level_metadata_maze_2eproto[31]);
 }
 
 // ===================================================================
@@ -14084,7 +15624,7 @@ void AIServerStatusRsp::InternalSwap(AIServerStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[30]);
+      file_level_metadata_maze_2eproto[32]);
 }
 
 // ===================================================================
@@ -14719,7 +16259,7 @@ void ModelArtifactManifest::InternalSwap(ModelArtifactManifest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelArtifactManifest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[31]);
+      file_level_metadata_maze_2eproto[33]);
 }
 
 // ===================================================================
@@ -14912,7 +16452,7 @@ void RegisterModelReq::InternalSwap(RegisterModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[32]);
+      file_level_metadata_maze_2eproto[34]);
 }
 
 // ===================================================================
@@ -15269,7 +16809,7 @@ void RegisterModelRsp::InternalSwap(RegisterModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[33]);
+      file_level_metadata_maze_2eproto[35]);
 }
 
 // ===================================================================
@@ -15532,7 +17072,7 @@ void GetModelManifestReq::InternalSwap(GetModelManifestReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[34]);
+      file_level_metadata_maze_2eproto[36]);
 }
 
 // ===================================================================
@@ -15858,7 +17398,7 @@ void GetModelManifestRsp::InternalSwap(GetModelManifestRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[35]);
+      file_level_metadata_maze_2eproto[37]);
 }
 
 // ===================================================================
@@ -16088,7 +17628,7 @@ void DownloadModelReq::InternalSwap(DownloadModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata DownloadModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[36]);
+      file_level_metadata_maze_2eproto[38]);
 }
 
 // ===================================================================
@@ -16346,7 +17886,7 @@ void ModelChunk::InternalSwap(ModelChunk* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelChunk::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[37]);
+      file_level_metadata_maze_2eproto[39]);
 }
 
 // ===================================================================
@@ -16712,7 +18252,7 @@ void AckModelReq::InternalSwap(AckModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[38]);
+      file_level_metadata_maze_2eproto[40]);
 }
 
 // ===================================================================
@@ -17028,7 +18568,7 @@ void AckModelRsp::InternalSwap(AckModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[39]);
+      file_level_metadata_maze_2eproto[41]);
 }
 
 // ===================================================================
@@ -17068,7 +18608,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ModelDistributorStatusReq::Get
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[40]);
+      file_level_metadata_maze_2eproto[42]);
 }
 
 // ===================================================================
@@ -17826,7 +19366,7 @@ void ModelDistributorStatusRsp::InternalSwap(ModelDistributorStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_2eproto_getter, &descriptor_table_maze_2eproto_once,
-      file_level_metadata_maze_2eproto[41]);
+      file_level_metadata_maze_2eproto[43]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -17835,6 +19375,14 @@ PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::maze::Vec2*
 Arena::CreateMaybeMessage< ::maze::Vec2 >(Arena* arena) {
   return Arena::CreateMessageInternal< ::maze::Vec2 >(arena);
+}
+template<> PROTOBUF_NOINLINE ::maze::OpenSessionReq*
+Arena::CreateMaybeMessage< ::maze::OpenSessionReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::maze::OpenSessionReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::maze::OpenSessionRsp*
+Arena::CreateMaybeMessage< ::maze::OpenSessionRsp >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::maze::OpenSessionRsp >(arena);
 }
 template<> PROTOBUF_NOINLINE ::maze::InitReq*
 Arena::CreateMaybeMessage< ::maze::InitReq >(Arena* arena) {

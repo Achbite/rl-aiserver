@@ -108,14 +108,11 @@ static bool ApplyCommandLine(int argc,
             const char* candidate = value("--local-train-dir");
             if (!candidate) return false;
             config.model.local_train_dir = candidate;
-        } else if (argument == "--smoke-model-dir") {
-            const char* candidate = value("--smoke-model-dir");
+        } else if (argument == "--local-test-model-dir" ||
+                   argument == "--smoke-model-dir") {
+            const char* candidate = value(argument.c_str());
             if (!candidate) return false;
-            config.model.smoke_dir = candidate;
-        } else if (argument == "--local-model-dir") {
-            const char* candidate = value("--local-model-dir");
-            if (!candidate) return false;
-            config.model.local_dir = candidate;
+            config.model.local_test_dir = candidate;
         } else if (argument == "--train") {
             config.server.run_mode = aiserver_mode::kTraining;
         } else if (argument.rfind("--", 0) == 0) {
@@ -152,8 +149,8 @@ int main(int argc, char* argv[]) {
                    argument == "--model-distributor" ||
                    argument == "--sample-distributor" ||
                    argument == "--local-train-dir" ||
-                   argument == "--smoke-model-dir" ||
-                   argument == "--local-model-dir") {
+                   argument == "--local-test-model-dir" ||
+                   argument == "--smoke-model-dir") {
             ++i;
         } else if (argument.rfind("--", 0) != 0) {
             config_path = argument;
@@ -183,7 +180,7 @@ int main(int argc, char* argv[]) {
     // ---- 3. 创建 gRPC 服务 ----
     MazeServiceImpl service(cfg);
     if (!service.Start()) {
-        LOG_ERROR("Main", "AIServer 前置依赖未就绪");
+        LOG_ERROR("Main", "AIServer 启动失败，详见上方错误");
         Logger::Instance().Close();
         return 1;
     }

@@ -1,19 +1,19 @@
 {
   "files": {
-    "cpp/maze.grpc.pb.cc": "143ea7527954cf4454cb69dba7573a1464c874db189d779d8021d68a796dec6b",
-    "cpp/maze.grpc.pb.h": "be812a1c69981d6ebed7ea2743e7fae1caf7ceb0504d6e19088ca1609949e1ce",
-    "cpp/maze.pb.cc": "c5a97566be35a7350b6f040fb2a52c3f310af0f03d6cf017b7c6e386c0456086",
-    "cpp/maze.pb.h": "02f00f57fbca70ab4ce83e29019fd9663454accf7cad25cda1a17a949a5d06fc",
-    "maze.proto": "f06d12958b0745ba98a96413d77f0e25511239bfb0e81f057c6f26d685843b81",
+    "cpp/maze.grpc.pb.cc": "8a003638a23e6c4bcef381c784a8f2388ee7bad20e48026c82dbe8a40df69598",
+    "cpp/maze.grpc.pb.h": "71c52fe0added60fb131d6822790c7920ccb2ac31a318ac81baf282af25148f0",
+    "cpp/maze.pb.cc": "80c7bbfffe8de40934460f88b6c5129bc590d827d99e38d3fef288e0ff284e79",
+    "cpp/maze.pb.h": "a9b2403e770285bb9ffbac334850e140c26bfe36ea8eb548dc4d620d98ba45df",
+    "maze.proto": "d7d2433821f9cf96d0fe95d0aa2722f0c3181a7732914e5307d7d7f075fc934b",
     "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "python/maze_pb2.py": "0cba45b1407c0209446892916124a76d83d32f7cd8c03ccb3b1942b0375698d6",
-    "python/maze_pb2_grpc.py": "7aac826dec4d1400cff59f92df46125dc05d00b975ac1b8a3ca2dcfd5b2fc003"
+    "python/maze_pb2.py": "a6031bde3b6da9c0160689d1c11aa212b2b009c522169f367c47458d04bcf09a",
+    "python/maze_pb2_grpc.py": "a63a5638c7c5f769b4f2d472e7b68e16facb1038ce31d912c5e944a84db269c7"
   },
   "package": "rl-contracts",
   "platform": "linux/arm64",
   "schema_version": 1,
-  "source_commit": "e13a875b057c",
-  "source_id": "e13a875b057c-dirty-f06d12958b07",
-  "source_sha256": "f06d12958b0745ba98a96413d77f0e25511239bfb0e81f057c6f26d685843b81",
-  "version": "0.5.0"
+  "source_commit": "dd9d24e10849",
+  "source_id": "dd9d24e10849-dirty-d7d2433821f9",
+  "source_sha256": "d7d2433821f9cf96d0fe95d0aa2722f0c3181a7732914e5307d7d7f075fc934b",
+  "version": "0.6.0"
 }

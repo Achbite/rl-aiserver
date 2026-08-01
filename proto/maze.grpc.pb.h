@@ -35,6 +35,13 @@ class MazeService final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
+    virtual ::grpc::Status OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::maze::OpenSessionRsp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::maze::OpenSessionRsp>> AsyncOpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::maze::OpenSessionRsp>>(AsyncOpenSessionRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::maze::OpenSessionRsp>> PrepareAsyncOpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::maze::OpenSessionRsp>>(PrepareAsyncOpenSessionRaw(context, request, cq));
+    }
     virtual ::grpc::Status Init(::grpc::ClientContext* context, const ::maze::InitReq& request, ::maze::InitRsp* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::maze::InitRsp>> AsyncInit(::grpc::ClientContext* context, const ::maze::InitReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::maze::InitRsp>>(AsyncInitRaw(context, request, cq));
@@ -80,6 +87,8 @@ class MazeService final {
     class async_interface {
      public:
       virtual ~async_interface() {}
+      virtual void OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void Init(::grpc::ClientContext* context, const ::maze::InitReq* request, ::maze::InitRsp* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Init(::grpc::ClientContext* context, const ::maze::InitReq* request, ::maze::InitRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void BeginEpisode(::grpc::ClientContext* context, const ::maze::BeginEpisodeReq* request, ::maze::EpisodeLifecycleRsp* response, std::function<void(::grpc::Status)>) = 0;
@@ -97,6 +106,8 @@ class MazeService final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::maze::OpenSessionRsp>* AsyncOpenSessionRaw(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::maze::OpenSessionRsp>* PrepareAsyncOpenSessionRaw(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::maze::InitRsp>* AsyncInitRaw(::grpc::ClientContext* context, const ::maze::InitReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::maze::InitRsp>* PrepareAsyncInitRaw(::grpc::ClientContext* context, const ::maze::InitReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::maze::EpisodeLifecycleRsp>* AsyncBeginEpisodeRaw(::grpc::ClientContext* context, const ::maze::BeginEpisodeReq& request, ::grpc::CompletionQueue* cq) = 0;
@@ -113,6 +124,13 @@ class MazeService final {
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+    ::grpc::Status OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::maze::OpenSessionRsp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>> AsyncOpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>>(AsyncOpenSessionRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>> PrepareAsyncOpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>>(PrepareAsyncOpenSessionRaw(context, request, cq));
+    }
     ::grpc::Status Init(::grpc::ClientContext* context, const ::maze::InitReq& request, ::maze::InitRsp* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::maze::InitRsp>> AsyncInit(::grpc::ClientContext* context, const ::maze::InitReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::maze::InitRsp>>(AsyncInitRaw(context, request, cq));
@@ -158,6 +176,8 @@ class MazeService final {
     class async final :
       public StubInterface::async_interface {
      public:
+      void OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response, std::function<void(::grpc::Status)>) override;
+      void OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Init(::grpc::ClientContext* context, const ::maze::InitReq* request, ::maze::InitRsp* response, std::function<void(::grpc::Status)>) override;
       void Init(::grpc::ClientContext* context, const ::maze::InitReq* request, ::maze::InitRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
       void BeginEpisode(::grpc::ClientContext* context, const ::maze::BeginEpisodeReq* request, ::maze::EpisodeLifecycleRsp* response, std::function<void(::grpc::Status)>) override;
@@ -181,6 +201,8 @@ class MazeService final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>* AsyncOpenSessionRaw(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>* PrepareAsyncOpenSessionRaw(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::maze::InitRsp>* AsyncInitRaw(::grpc::ClientContext* context, const ::maze::InitReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::maze::InitRsp>* PrepareAsyncInitRaw(::grpc::ClientContext* context, const ::maze::InitReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::maze::EpisodeLifecycleRsp>* AsyncBeginEpisodeRaw(::grpc::ClientContext* context, const ::maze::BeginEpisodeReq& request, ::grpc::CompletionQueue* cq) override;
@@ -193,6 +215,7 @@ class MazeService final {
     ::grpc::ClientAsyncResponseReader< ::maze::EpisodeLifecycleRsp>* PrepareAsyncAbortEpisodeRaw(::grpc::ClientContext* context, const ::maze::AbortEpisodeReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::maze::AIServerStatusRsp>* AsyncGetAIServerStatusRaw(::grpc::ClientContext* context, const ::maze::AIServerStatusReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::maze::AIServerStatusRsp>* PrepareAsyncGetAIServerStatusRaw(::grpc::ClientContext* context, const ::maze::AIServerStatusReq& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_OpenSession_;
     const ::grpc::internal::RpcMethod rpcmethod_Init_;
     const ::grpc::internal::RpcMethod rpcmethod_BeginEpisode_;
     const ::grpc::internal::RpcMethod rpcmethod_Update_;
@@ -206,6 +229,7 @@ class MazeService final {
    public:
     Service();
     virtual ~Service();
+    virtual ::grpc::Status OpenSession(::grpc::ServerContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response);
     virtual ::grpc::Status Init(::grpc::ServerContext* context, const ::maze::InitReq* request, ::maze::InitRsp* response);
     virtual ::grpc::Status BeginEpisode(::grpc::ServerContext* context, const ::maze::BeginEpisodeReq* request, ::maze::EpisodeLifecycleRsp* response);
     virtual ::grpc::Status Update(::grpc::ServerContext* context, const ::maze::UpdateReq* request, ::maze::UpdateRsp* response);
@@ -214,12 +238,32 @@ class MazeService final {
     virtual ::grpc::Status GetAIServerStatus(::grpc::ServerContext* context, const ::maze::AIServerStatusReq* request, ::maze::AIServerStatusRsp* response);
   };
   template <class BaseClass>
+  class WithAsyncMethod_OpenSession : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_OpenSession() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_OpenSession() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OpenSession(::grpc::ServerContext* /*context*/, const ::maze::OpenSessionReq* /*request*/, ::maze::OpenSessionRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestOpenSession(::grpc::ServerContext* context, ::maze::OpenSessionReq* request, ::grpc::ServerAsyncResponseWriter< ::maze::OpenSessionRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_Init : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Init() {
-      ::grpc::Service::MarkMethodAsync(0);
+      ::grpc::Service::MarkMethodAsync(1);
     }
     ~WithAsyncMethod_Init() override {
       BaseClassMustBeDerivedFromService(this);
@@ -230,7 +274,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestInit(::grpc::ServerContext* context, ::maze::InitReq* request, ::grpc::ServerAsyncResponseWriter< ::maze::InitRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -239,7 +283,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_BeginEpisode() {
-      ::grpc::Service::MarkMethodAsync(1);
+      ::grpc::Service::MarkMethodAsync(2);
     }
     ~WithAsyncMethod_BeginEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -250,7 +294,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestBeginEpisode(::grpc::ServerContext* context, ::maze::BeginEpisodeReq* request, ::grpc::ServerAsyncResponseWriter< ::maze::EpisodeLifecycleRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -259,7 +303,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Update() {
-      ::grpc::Service::MarkMethodAsync(2);
+      ::grpc::Service::MarkMethodAsync(3);
     }
     ~WithAsyncMethod_Update() override {
       BaseClassMustBeDerivedFromService(this);
@@ -270,7 +314,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestUpdate(::grpc::ServerContext* context, ::maze::UpdateReq* request, ::grpc::ServerAsyncResponseWriter< ::maze::UpdateRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -279,7 +323,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_EndEpisode() {
-      ::grpc::Service::MarkMethodAsync(3);
+      ::grpc::Service::MarkMethodAsync(4);
     }
     ~WithAsyncMethod_EndEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -290,7 +334,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestEndEpisode(::grpc::ServerContext* context, ::maze::EpisodeEndReq* request, ::grpc::ServerAsyncResponseWriter< ::maze::EpisodeEndRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -299,7 +343,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_AbortEpisode() {
-      ::grpc::Service::MarkMethodAsync(4);
+      ::grpc::Service::MarkMethodAsync(5);
     }
     ~WithAsyncMethod_AbortEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -310,7 +354,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestAbortEpisode(::grpc::ServerContext* context, ::maze::AbortEpisodeReq* request, ::grpc::ServerAsyncResponseWriter< ::maze::EpisodeLifecycleRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -319,7 +363,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetAIServerStatus() {
-      ::grpc::Service::MarkMethodAsync(5);
+      ::grpc::Service::MarkMethodAsync(6);
     }
     ~WithAsyncMethod_GetAIServerStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -330,23 +374,50 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetAIServerStatus(::grpc::ServerContext* context, ::maze::AIServerStatusReq* request, ::grpc::ServerAsyncResponseWriter< ::maze::AIServerStatusRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_Init<WithAsyncMethod_BeginEpisode<WithAsyncMethod_Update<WithAsyncMethod_EndEpisode<WithAsyncMethod_AbortEpisode<WithAsyncMethod_GetAIServerStatus<Service > > > > > > AsyncService;
+  typedef WithAsyncMethod_OpenSession<WithAsyncMethod_Init<WithAsyncMethod_BeginEpisode<WithAsyncMethod_Update<WithAsyncMethod_EndEpisode<WithAsyncMethod_AbortEpisode<WithAsyncMethod_GetAIServerStatus<Service > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_OpenSession : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_OpenSession() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::maze::OpenSessionReq, ::maze::OpenSessionRsp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response) { return this->OpenSession(context, request, response); }));}
+    void SetMessageAllocatorFor_OpenSession(
+        ::grpc::MessageAllocator< ::maze::OpenSessionReq, ::maze::OpenSessionRsp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::maze::OpenSessionReq, ::maze::OpenSessionRsp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_OpenSession() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OpenSession(::grpc::ServerContext* /*context*/, const ::maze::OpenSessionReq* /*request*/, ::maze::OpenSessionRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* OpenSession(
+      ::grpc::CallbackServerContext* /*context*/, const ::maze::OpenSessionReq* /*request*/, ::maze::OpenSessionRsp* /*response*/)  { return nullptr; }
+  };
   template <class BaseClass>
   class WithCallbackMethod_Init : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Init() {
-      ::grpc::Service::MarkMethodCallback(0,
+      ::grpc::Service::MarkMethodCallback(1,
           new ::grpc::internal::CallbackUnaryHandler< ::maze::InitReq, ::maze::InitRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::maze::InitReq* request, ::maze::InitRsp* response) { return this->Init(context, request, response); }));}
     void SetMessageAllocatorFor_Init(
         ::grpc::MessageAllocator< ::maze::InitReq, ::maze::InitRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::maze::InitReq, ::maze::InitRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -367,13 +438,13 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_BeginEpisode() {
-      ::grpc::Service::MarkMethodCallback(1,
+      ::grpc::Service::MarkMethodCallback(2,
           new ::grpc::internal::CallbackUnaryHandler< ::maze::BeginEpisodeReq, ::maze::EpisodeLifecycleRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::maze::BeginEpisodeReq* request, ::maze::EpisodeLifecycleRsp* response) { return this->BeginEpisode(context, request, response); }));}
     void SetMessageAllocatorFor_BeginEpisode(
         ::grpc::MessageAllocator< ::maze::BeginEpisodeReq, ::maze::EpisodeLifecycleRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::maze::BeginEpisodeReq, ::maze::EpisodeLifecycleRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -394,13 +465,13 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Update() {
-      ::grpc::Service::MarkMethodCallback(2,
+      ::grpc::Service::MarkMethodCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::maze::UpdateReq, ::maze::UpdateRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::maze::UpdateReq* request, ::maze::UpdateRsp* response) { return this->Update(context, request, response); }));}
     void SetMessageAllocatorFor_Update(
         ::grpc::MessageAllocator< ::maze::UpdateReq, ::maze::UpdateRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::maze::UpdateReq, ::maze::UpdateRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -421,13 +492,13 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_EndEpisode() {
-      ::grpc::Service::MarkMethodCallback(3,
+      ::grpc::Service::MarkMethodCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::maze::EpisodeEndReq, ::maze::EpisodeEndRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::maze::EpisodeEndReq* request, ::maze::EpisodeEndRsp* response) { return this->EndEpisode(context, request, response); }));}
     void SetMessageAllocatorFor_EndEpisode(
         ::grpc::MessageAllocator< ::maze::EpisodeEndReq, ::maze::EpisodeEndRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::maze::EpisodeEndReq, ::maze::EpisodeEndRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -448,13 +519,13 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_AbortEpisode() {
-      ::grpc::Service::MarkMethodCallback(4,
+      ::grpc::Service::MarkMethodCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::maze::AbortEpisodeReq, ::maze::EpisodeLifecycleRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::maze::AbortEpisodeReq* request, ::maze::EpisodeLifecycleRsp* response) { return this->AbortEpisode(context, request, response); }));}
     void SetMessageAllocatorFor_AbortEpisode(
         ::grpc::MessageAllocator< ::maze::AbortEpisodeReq, ::maze::EpisodeLifecycleRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::maze::AbortEpisodeReq, ::maze::EpisodeLifecycleRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -475,13 +546,13 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_GetAIServerStatus() {
-      ::grpc::Service::MarkMethodCallback(5,
+      ::grpc::Service::MarkMethodCallback(6,
           new ::grpc::internal::CallbackUnaryHandler< ::maze::AIServerStatusReq, ::maze::AIServerStatusRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::maze::AIServerStatusReq* request, ::maze::AIServerStatusRsp* response) { return this->GetAIServerStatus(context, request, response); }));}
     void SetMessageAllocatorFor_GetAIServerStatus(
         ::grpc::MessageAllocator< ::maze::AIServerStatusReq, ::maze::AIServerStatusRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::maze::AIServerStatusReq, ::maze::AIServerStatusRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -496,15 +567,32 @@ class MazeService final {
     virtual ::grpc::ServerUnaryReactor* GetAIServerStatus(
       ::grpc::CallbackServerContext* /*context*/, const ::maze::AIServerStatusReq* /*request*/, ::maze::AIServerStatusRsp* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_Init<WithCallbackMethod_BeginEpisode<WithCallbackMethod_Update<WithCallbackMethod_EndEpisode<WithCallbackMethod_AbortEpisode<WithCallbackMethod_GetAIServerStatus<Service > > > > > > CallbackService;
+  typedef WithCallbackMethod_OpenSession<WithCallbackMethod_Init<WithCallbackMethod_BeginEpisode<WithCallbackMethod_Update<WithCallbackMethod_EndEpisode<WithCallbackMethod_AbortEpisode<WithCallbackMethod_GetAIServerStatus<Service > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_OpenSession : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_OpenSession() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_OpenSession() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OpenSession(::grpc::ServerContext* /*context*/, const ::maze::OpenSessionReq* /*request*/, ::maze::OpenSessionRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
   template <class BaseClass>
   class WithGenericMethod_Init : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Init() {
-      ::grpc::Service::MarkMethodGeneric(0);
+      ::grpc::Service::MarkMethodGeneric(1);
     }
     ~WithGenericMethod_Init() override {
       BaseClassMustBeDerivedFromService(this);
@@ -521,7 +609,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_BeginEpisode() {
-      ::grpc::Service::MarkMethodGeneric(1);
+      ::grpc::Service::MarkMethodGeneric(2);
     }
     ~WithGenericMethod_BeginEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -538,7 +626,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Update() {
-      ::grpc::Service::MarkMethodGeneric(2);
+      ::grpc::Service::MarkMethodGeneric(3);
     }
     ~WithGenericMethod_Update() override {
       BaseClassMustBeDerivedFromService(this);
@@ -555,7 +643,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_EndEpisode() {
-      ::grpc::Service::MarkMethodGeneric(3);
+      ::grpc::Service::MarkMethodGeneric(4);
     }
     ~WithGenericMethod_EndEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -572,7 +660,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_AbortEpisode() {
-      ::grpc::Service::MarkMethodGeneric(4);
+      ::grpc::Service::MarkMethodGeneric(5);
     }
     ~WithGenericMethod_AbortEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -589,7 +677,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetAIServerStatus() {
-      ::grpc::Service::MarkMethodGeneric(5);
+      ::grpc::Service::MarkMethodGeneric(6);
     }
     ~WithGenericMethod_GetAIServerStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -601,12 +689,32 @@ class MazeService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_OpenSession : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_OpenSession() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_OpenSession() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OpenSession(::grpc::ServerContext* /*context*/, const ::maze::OpenSessionReq* /*request*/, ::maze::OpenSessionRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestOpenSession(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_Init : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Init() {
-      ::grpc::Service::MarkMethodRaw(0);
+      ::grpc::Service::MarkMethodRaw(1);
     }
     ~WithRawMethod_Init() override {
       BaseClassMustBeDerivedFromService(this);
@@ -617,7 +725,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestInit(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -626,7 +734,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_BeginEpisode() {
-      ::grpc::Service::MarkMethodRaw(1);
+      ::grpc::Service::MarkMethodRaw(2);
     }
     ~WithRawMethod_BeginEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -637,7 +745,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestBeginEpisode(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -646,7 +754,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Update() {
-      ::grpc::Service::MarkMethodRaw(2);
+      ::grpc::Service::MarkMethodRaw(3);
     }
     ~WithRawMethod_Update() override {
       BaseClassMustBeDerivedFromService(this);
@@ -657,7 +765,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestUpdate(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -666,7 +774,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_EndEpisode() {
-      ::grpc::Service::MarkMethodRaw(3);
+      ::grpc::Service::MarkMethodRaw(4);
     }
     ~WithRawMethod_EndEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -677,7 +785,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestEndEpisode(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -686,7 +794,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_AbortEpisode() {
-      ::grpc::Service::MarkMethodRaw(4);
+      ::grpc::Service::MarkMethodRaw(5);
     }
     ~WithRawMethod_AbortEpisode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -697,7 +805,7 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestAbortEpisode(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -706,7 +814,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetAIServerStatus() {
-      ::grpc::Service::MarkMethodRaw(5);
+      ::grpc::Service::MarkMethodRaw(6);
     }
     ~WithRawMethod_GetAIServerStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -717,8 +825,30 @@ class MazeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetAIServerStatus(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_OpenSession : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_OpenSession() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->OpenSession(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_OpenSession() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OpenSession(::grpc::ServerContext* /*context*/, const ::maze::OpenSessionReq* /*request*/, ::maze::OpenSessionRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* OpenSession(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithRawCallbackMethod_Init : public BaseClass {
@@ -726,7 +856,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Init() {
-      ::grpc::Service::MarkMethodRawCallback(0,
+      ::grpc::Service::MarkMethodRawCallback(1,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Init(context, request, response); }));
@@ -748,7 +878,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_BeginEpisode() {
-      ::grpc::Service::MarkMethodRawCallback(1,
+      ::grpc::Service::MarkMethodRawCallback(2,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->BeginEpisode(context, request, response); }));
@@ -770,7 +900,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Update() {
-      ::grpc::Service::MarkMethodRawCallback(2,
+      ::grpc::Service::MarkMethodRawCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Update(context, request, response); }));
@@ -792,7 +922,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_EndEpisode() {
-      ::grpc::Service::MarkMethodRawCallback(3,
+      ::grpc::Service::MarkMethodRawCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->EndEpisode(context, request, response); }));
@@ -814,7 +944,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_AbortEpisode() {
-      ::grpc::Service::MarkMethodRawCallback(4,
+      ::grpc::Service::MarkMethodRawCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->AbortEpisode(context, request, response); }));
@@ -836,7 +966,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_GetAIServerStatus() {
-      ::grpc::Service::MarkMethodRawCallback(5,
+      ::grpc::Service::MarkMethodRawCallback(6,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetAIServerStatus(context, request, response); }));
@@ -853,12 +983,39 @@ class MazeService final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_OpenSession : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_OpenSession() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::maze::OpenSessionReq, ::maze::OpenSessionRsp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::maze::OpenSessionReq, ::maze::OpenSessionRsp>* streamer) {
+                       return this->StreamedOpenSession(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_OpenSession() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status OpenSession(::grpc::ServerContext* /*context*/, const ::maze::OpenSessionReq* /*request*/, ::maze::OpenSessionRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedOpenSession(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::maze::OpenSessionReq,::maze::OpenSessionRsp>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_Init : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Init() {
-      ::grpc::Service::MarkMethodStreamed(0,
+      ::grpc::Service::MarkMethodStreamed(1,
         new ::grpc::internal::StreamedUnaryHandler<
           ::maze::InitReq, ::maze::InitRsp>(
             [this](::grpc::ServerContext* context,
@@ -885,7 +1042,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_BeginEpisode() {
-      ::grpc::Service::MarkMethodStreamed(1,
+      ::grpc::Service::MarkMethodStreamed(2,
         new ::grpc::internal::StreamedUnaryHandler<
           ::maze::BeginEpisodeReq, ::maze::EpisodeLifecycleRsp>(
             [this](::grpc::ServerContext* context,
@@ -912,7 +1069,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Update() {
-      ::grpc::Service::MarkMethodStreamed(2,
+      ::grpc::Service::MarkMethodStreamed(3,
         new ::grpc::internal::StreamedUnaryHandler<
           ::maze::UpdateReq, ::maze::UpdateRsp>(
             [this](::grpc::ServerContext* context,
@@ -939,7 +1096,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_EndEpisode() {
-      ::grpc::Service::MarkMethodStreamed(3,
+      ::grpc::Service::MarkMethodStreamed(4,
         new ::grpc::internal::StreamedUnaryHandler<
           ::maze::EpisodeEndReq, ::maze::EpisodeEndRsp>(
             [this](::grpc::ServerContext* context,
@@ -966,7 +1123,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_AbortEpisode() {
-      ::grpc::Service::MarkMethodStreamed(4,
+      ::grpc::Service::MarkMethodStreamed(5,
         new ::grpc::internal::StreamedUnaryHandler<
           ::maze::AbortEpisodeReq, ::maze::EpisodeLifecycleRsp>(
             [this](::grpc::ServerContext* context,
@@ -993,7 +1150,7 @@ class MazeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetAIServerStatus() {
-      ::grpc::Service::MarkMethodStreamed(5,
+      ::grpc::Service::MarkMethodStreamed(6,
         new ::grpc::internal::StreamedUnaryHandler<
           ::maze::AIServerStatusReq, ::maze::AIServerStatusRsp>(
             [this](::grpc::ServerContext* context,
@@ -1014,9 +1171,9 @@ class MazeService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedGetAIServerStatus(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::maze::AIServerStatusReq,::maze::AIServerStatusRsp>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_Init<WithStreamedUnaryMethod_BeginEpisode<WithStreamedUnaryMethod_Update<WithStreamedUnaryMethod_EndEpisode<WithStreamedUnaryMethod_AbortEpisode<WithStreamedUnaryMethod_GetAIServerStatus<Service > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_OpenSession<WithStreamedUnaryMethod_Init<WithStreamedUnaryMethod_BeginEpisode<WithStreamedUnaryMethod_Update<WithStreamedUnaryMethod_EndEpisode<WithStreamedUnaryMethod_AbortEpisode<WithStreamedUnaryMethod_GetAIServerStatus<Service > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_Init<WithStreamedUnaryMethod_BeginEpisode<WithStreamedUnaryMethod_Update<WithStreamedUnaryMethod_EndEpisode<WithStreamedUnaryMethod_AbortEpisode<WithStreamedUnaryMethod_GetAIServerStatus<Service > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_OpenSession<WithStreamedUnaryMethod_Init<WithStreamedUnaryMethod_BeginEpisode<WithStreamedUnaryMethod_Update<WithStreamedUnaryMethod_EndEpisode<WithStreamedUnaryMethod_AbortEpisode<WithStreamedUnaryMethod_GetAIServerStatus<Service > > > > > > > StreamedService;
 };
 
 class LearnerService final {

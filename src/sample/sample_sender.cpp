@@ -30,11 +30,12 @@ bool SampleSender::ProbeDistributor() {
                          std::chrono::milliseconds(config_.health_timeout_ms));
     grpc::Status status = stub_->GetStatus(&context, request, &response);
     if (!status.ok()) {
-        MarkDegraded("SampleDistributor status failed: " + status.error_message());
+        MarkDegraded(
+            "sample ingress status failed: " + status.error_message());
         return false;
     }
-    if (!response.ready()) {
-        MarkDegraded("SampleDistributor is not ready");
+    if (!response.ready() || !response.ingress_ready()) {
+        MarkDegraded("sample ingress is not ready");
         return false;
     }
 
@@ -58,7 +59,7 @@ bool SampleSender::Start() {
     auto deadline = std::chrono::system_clock::now() +
                     std::chrono::milliseconds(config_.health_timeout_ms);
     if (!channel_->WaitForConnected(deadline)) {
-        MarkDegraded("SampleDistributor connection timeout: " + target);
+        MarkDegraded("sample ingress connection timeout: " + target);
         return false;
     }
     if (!ProbeDistributor()) {

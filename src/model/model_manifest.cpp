@@ -206,7 +206,7 @@ bool LoadModelManifestFile(const ModelConfig& config,
         error = "unsupported model manifest schema_version";
         return false;
     }
-    if (manifest.contract_version != "0.5.0") {
+    if (manifest.contract_version != "0.6.0") {
         error = "unsupported model manifest contract_version";
         return false;
     }

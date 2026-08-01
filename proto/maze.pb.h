@@ -140,6 +140,12 @@ extern ModelDistributorStatusRspDefaultTypeInternal _ModelDistributorStatusRsp_d
 class NackBatchReq;
 struct NackBatchReqDefaultTypeInternal;
 extern NackBatchReqDefaultTypeInternal _NackBatchReq_default_instance_;
+class OpenSessionReq;
+struct OpenSessionReqDefaultTypeInternal;
+extern OpenSessionReqDefaultTypeInternal _OpenSessionReq_default_instance_;
+class OpenSessionRsp;
+struct OpenSessionRspDefaultTypeInternal;
+extern OpenSessionRspDefaultTypeInternal _OpenSessionRsp_default_instance_;
 class PushSamplesRsp;
 struct PushSamplesRspDefaultTypeInternal;
 extern PushSamplesRspDefaultTypeInternal _PushSamplesRsp_default_instance_;
@@ -208,6 +214,8 @@ template<> ::maze::ModelChunk* Arena::CreateMaybeMessage<::maze::ModelChunk>(Are
 template<> ::maze::ModelDistributorStatusReq* Arena::CreateMaybeMessage<::maze::ModelDistributorStatusReq>(Arena*);
 template<> ::maze::ModelDistributorStatusRsp* Arena::CreateMaybeMessage<::maze::ModelDistributorStatusRsp>(Arena*);
 template<> ::maze::NackBatchReq* Arena::CreateMaybeMessage<::maze::NackBatchReq>(Arena*);
+template<> ::maze::OpenSessionReq* Arena::CreateMaybeMessage<::maze::OpenSessionReq>(Arena*);
+template<> ::maze::OpenSessionRsp* Arena::CreateMaybeMessage<::maze::OpenSessionRsp>(Arena*);
 template<> ::maze::PushSamplesRsp* Arena::CreateMaybeMessage<::maze::PushSamplesRsp>(Arena*);
 template<> ::maze::RegisterModelReq* Arena::CreateMaybeMessage<::maze::RegisterModelReq>(Arena*);
 template<> ::maze::RegisterModelRsp* Arena::CreateMaybeMessage<::maze::RegisterModelRsp>(Arena*);
@@ -612,6 +620,57 @@ inline bool WorkloadMode_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<WorkloadMode>(
     WorkloadMode_descriptor(), name, value);
 }
+enum ReplayPolicy : int {
+  REPLAY_POLICY_UNSPECIFIED = 0,
+  REPLAY_POLICY_DISABLED = 1,
+  REPLAY_POLICY_RECORD_AND_SERVE = 2,
+  ReplayPolicy_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  ReplayPolicy_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool ReplayPolicy_IsValid(int value);
+constexpr ReplayPolicy ReplayPolicy_MIN = REPLAY_POLICY_UNSPECIFIED;
+constexpr ReplayPolicy ReplayPolicy_MAX = REPLAY_POLICY_RECORD_AND_SERVE;
+constexpr int ReplayPolicy_ARRAYSIZE = ReplayPolicy_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ReplayPolicy_descriptor();
+template<typename T>
+inline const std::string& ReplayPolicy_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ReplayPolicy>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ReplayPolicy_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ReplayPolicy_descriptor(), enum_t_value);
+}
+inline bool ReplayPolicy_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ReplayPolicy* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ReplayPolicy>(
+    ReplayPolicy_descriptor(), name, value);
+}
+enum SampleBackendType : int {
+  SAMPLE_BACKEND_TYPE_UNSPECIFIED = 0,
+  SAMPLE_BACKEND_TYPE_LOCAL_MEMORY = 1,
+  SampleBackendType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SampleBackendType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SampleBackendType_IsValid(int value);
+constexpr SampleBackendType SampleBackendType_MIN = SAMPLE_BACKEND_TYPE_UNSPECIFIED;
+constexpr SampleBackendType SampleBackendType_MAX = SAMPLE_BACKEND_TYPE_LOCAL_MEMORY;
+constexpr int SampleBackendType_ARRAYSIZE = SampleBackendType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleBackendType_descriptor();
+template<typename T>
+inline const std::string& SampleBackendType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SampleBackendType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SampleBackendType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SampleBackendType_descriptor(), enum_t_value);
+}
+inline bool SampleBackendType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SampleBackendType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SampleBackendType>(
+    SampleBackendType_descriptor(), name, value);
+}
 // ===================================================================
 
 class Vec2 final :
@@ -773,6 +832,631 @@ class Vec2 final :
 };
 // -------------------------------------------------------------------
 
+class OpenSessionReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.OpenSessionReq) */ {
+ public:
+  inline OpenSessionReq() : OpenSessionReq(nullptr) {}
+  ~OpenSessionReq() override;
+  explicit PROTOBUF_CONSTEXPR OpenSessionReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  OpenSessionReq(const OpenSessionReq& from);
+  OpenSessionReq(OpenSessionReq&& from) noexcept
+    : OpenSessionReq() {
+    *this = ::std::move(from);
+  }
+
+  inline OpenSessionReq& operator=(const OpenSessionReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline OpenSessionReq& operator=(OpenSessionReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const OpenSessionReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const OpenSessionReq* internal_default_instance() {
+    return reinterpret_cast<const OpenSessionReq*>(
+               &_OpenSessionReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(OpenSessionReq& a, OpenSessionReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(OpenSessionReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(OpenSessionReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  OpenSessionReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<OpenSessionReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const OpenSessionReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const OpenSessionReq& from) {
+    OpenSessionReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(OpenSessionReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "maze.OpenSessionReq";
+  }
+  protected:
+  explicit OpenSessionReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kClientIdFieldNumber = 2,
+    kEnvIdFieldNumber = 3,
+    kObservationSchemaIdFieldNumber = 13,
+    kActionSchemaIdFieldNumber = 14,
+    kMapSizeFieldNumber = 6,
+    kStartPosFieldNumber = 7,
+    kEndPosFieldNumber = 8,
+    kEndGridFieldNumber = 12,
+    kSessionProtocolVersionFieldNumber = 1,
+    kSessionIdFieldNumber = 4,
+    kAgentNumFieldNumber = 5,
+    kGridSizeFieldNumber = 9,
+    kGridColsFieldNumber = 10,
+    kGridRowsFieldNumber = 11,
+  };
+  // string client_id = 2;
+  void clear_client_id();
+  const std::string& client_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_client_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_client_id();
+  PROTOBUF_NODISCARD std::string* release_client_id();
+  void set_allocated_client_id(std::string* client_id);
+  private:
+  const std::string& _internal_client_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_client_id(const std::string& value);
+  std::string* _internal_mutable_client_id();
+  public:
+
+  // string env_id = 3;
+  void clear_env_id();
+  const std::string& env_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_env_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_env_id();
+  PROTOBUF_NODISCARD std::string* release_env_id();
+  void set_allocated_env_id(std::string* env_id);
+  private:
+  const std::string& _internal_env_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_env_id(const std::string& value);
+  std::string* _internal_mutable_env_id();
+  public:
+
+  // string observation_schema_id = 13;
+  void clear_observation_schema_id();
+  const std::string& observation_schema_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_observation_schema_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_observation_schema_id();
+  PROTOBUF_NODISCARD std::string* release_observation_schema_id();
+  void set_allocated_observation_schema_id(std::string* observation_schema_id);
+  private:
+  const std::string& _internal_observation_schema_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_observation_schema_id(const std::string& value);
+  std::string* _internal_mutable_observation_schema_id();
+  public:
+
+  // string action_schema_id = 14;
+  void clear_action_schema_id();
+  const std::string& action_schema_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_action_schema_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_action_schema_id();
+  PROTOBUF_NODISCARD std::string* release_action_schema_id();
+  void set_allocated_action_schema_id(std::string* action_schema_id);
+  private:
+  const std::string& _internal_action_schema_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_action_schema_id(const std::string& value);
+  std::string* _internal_mutable_action_schema_id();
+  public:
+
+  // .maze.Vec2 map_size = 6;
+  bool has_map_size() const;
+  private:
+  bool _internal_has_map_size() const;
+  public:
+  void clear_map_size();
+  const ::maze::Vec2& map_size() const;
+  PROTOBUF_NODISCARD ::maze::Vec2* release_map_size();
+  ::maze::Vec2* mutable_map_size();
+  void set_allocated_map_size(::maze::Vec2* map_size);
+  private:
+  const ::maze::Vec2& _internal_map_size() const;
+  ::maze::Vec2* _internal_mutable_map_size();
+  public:
+  void unsafe_arena_set_allocated_map_size(
+      ::maze::Vec2* map_size);
+  ::maze::Vec2* unsafe_arena_release_map_size();
+
+  // .maze.Vec2 start_pos = 7;
+  bool has_start_pos() const;
+  private:
+  bool _internal_has_start_pos() const;
+  public:
+  void clear_start_pos();
+  const ::maze::Vec2& start_pos() const;
+  PROTOBUF_NODISCARD ::maze::Vec2* release_start_pos();
+  ::maze::Vec2* mutable_start_pos();
+  void set_allocated_start_pos(::maze::Vec2* start_pos);
+  private:
+  const ::maze::Vec2& _internal_start_pos() const;
+  ::maze::Vec2* _internal_mutable_start_pos();
+  public:
+  void unsafe_arena_set_allocated_start_pos(
+      ::maze::Vec2* start_pos);
+  ::maze::Vec2* unsafe_arena_release_start_pos();
+
+  // .maze.Vec2 end_pos = 8;
+  bool has_end_pos() const;
+  private:
+  bool _internal_has_end_pos() const;
+  public:
+  void clear_end_pos();
+  const ::maze::Vec2& end_pos() const;
+  PROTOBUF_NODISCARD ::maze::Vec2* release_end_pos();
+  ::maze::Vec2* mutable_end_pos();
+  void set_allocated_end_pos(::maze::Vec2* end_pos);
+  private:
+  const ::maze::Vec2& _internal_end_pos() const;
+  ::maze::Vec2* _internal_mutable_end_pos();
+  public:
+  void unsafe_arena_set_allocated_end_pos(
+      ::maze::Vec2* end_pos);
+  ::maze::Vec2* unsafe_arena_release_end_pos();
+
+  // .maze.Vec2 end_grid = 12;
+  bool has_end_grid() const;
+  private:
+  bool _internal_has_end_grid() const;
+  public:
+  void clear_end_grid();
+  const ::maze::Vec2& end_grid() const;
+  PROTOBUF_NODISCARD ::maze::Vec2* release_end_grid();
+  ::maze::Vec2* mutable_end_grid();
+  void set_allocated_end_grid(::maze::Vec2* end_grid);
+  private:
+  const ::maze::Vec2& _internal_end_grid() const;
+  ::maze::Vec2* _internal_mutable_end_grid();
+  public:
+  void unsafe_arena_set_allocated_end_grid(
+      ::maze::Vec2* end_grid);
+  ::maze::Vec2* unsafe_arena_release_end_grid();
+
+  // uint32 session_protocol_version = 1;
+  void clear_session_protocol_version();
+  uint32_t session_protocol_version() const;
+  void set_session_protocol_version(uint32_t value);
+  private:
+  uint32_t _internal_session_protocol_version() const;
+  void _internal_set_session_protocol_version(uint32_t value);
+  public:
+
+  // int32 session_id = 4;
+  void clear_session_id();
+  int32_t session_id() const;
+  void set_session_id(int32_t value);
+  private:
+  int32_t _internal_session_id() const;
+  void _internal_set_session_id(int32_t value);
+  public:
+
+  // int32 agent_num = 5;
+  void clear_agent_num();
+  int32_t agent_num() const;
+  void set_agent_num(int32_t value);
+  private:
+  int32_t _internal_agent_num() const;
+  void _internal_set_agent_num(int32_t value);
+  public:
+
+  // float grid_size = 9;
+  void clear_grid_size();
+  float grid_size() const;
+  void set_grid_size(float value);
+  private:
+  float _internal_grid_size() const;
+  void _internal_set_grid_size(float value);
+  public:
+
+  // int32 grid_cols = 10;
+  void clear_grid_cols();
+  int32_t grid_cols() const;
+  void set_grid_cols(int32_t value);
+  private:
+  int32_t _internal_grid_cols() const;
+  void _internal_set_grid_cols(int32_t value);
+  public:
+
+  // int32 grid_rows = 11;
+  void clear_grid_rows();
+  int32_t grid_rows() const;
+  void set_grid_rows(int32_t value);
+  private:
+  int32_t _internal_grid_rows() const;
+  void _internal_set_grid_rows(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:maze.OpenSessionReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr client_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr env_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr observation_schema_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr action_schema_id_;
+    ::maze::Vec2* map_size_;
+    ::maze::Vec2* start_pos_;
+    ::maze::Vec2* end_pos_;
+    ::maze::Vec2* end_grid_;
+    uint32_t session_protocol_version_;
+    int32_t session_id_;
+    int32_t agent_num_;
+    float grid_size_;
+    int32_t grid_cols_;
+    int32_t grid_rows_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_maze_2eproto;
+};
+// -------------------------------------------------------------------
+
+class OpenSessionRsp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.OpenSessionRsp) */ {
+ public:
+  inline OpenSessionRsp() : OpenSessionRsp(nullptr) {}
+  ~OpenSessionRsp() override;
+  explicit PROTOBUF_CONSTEXPR OpenSessionRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  OpenSessionRsp(const OpenSessionRsp& from);
+  OpenSessionRsp(OpenSessionRsp&& from) noexcept
+    : OpenSessionRsp() {
+    *this = ::std::move(from);
+  }
+
+  inline OpenSessionRsp& operator=(const OpenSessionRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline OpenSessionRsp& operator=(OpenSessionRsp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const OpenSessionRsp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const OpenSessionRsp* internal_default_instance() {
+    return reinterpret_cast<const OpenSessionRsp*>(
+               &_OpenSessionRsp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(OpenSessionRsp& a, OpenSessionRsp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(OpenSessionRsp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(OpenSessionRsp* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  OpenSessionRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<OpenSessionRsp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const OpenSessionRsp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const OpenSessionRsp& from) {
+    OpenSessionRsp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(OpenSessionRsp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "maze.OpenSessionRsp";
+  }
+  protected:
+  explicit OpenSessionRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 3,
+    kAiserverIdFieldNumber = 6,
+    kObservationSchemaIdFieldNumber = 10,
+    kActionSchemaIdFieldNumber = 11,
+    kRetCodeFieldNumber = 1,
+    kResultFieldNumber = 2,
+    kSessionProtocolVersionFieldNumber = 4,
+    kSessionIdFieldNumber = 5,
+    kWorkloadModeFieldNumber = 7,
+    kReplayPolicyFieldNumber = 8,
+    kLoadedModelVersionFieldNumber = 9,
+  };
+  // string message = 3;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // string aiserver_id = 6;
+  void clear_aiserver_id();
+  const std::string& aiserver_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_aiserver_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_aiserver_id();
+  PROTOBUF_NODISCARD std::string* release_aiserver_id();
+  void set_allocated_aiserver_id(std::string* aiserver_id);
+  private:
+  const std::string& _internal_aiserver_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_aiserver_id(const std::string& value);
+  std::string* _internal_mutable_aiserver_id();
+  public:
+
+  // string observation_schema_id = 10;
+  void clear_observation_schema_id();
+  const std::string& observation_schema_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_observation_schema_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_observation_schema_id();
+  PROTOBUF_NODISCARD std::string* release_observation_schema_id();
+  void set_allocated_observation_schema_id(std::string* observation_schema_id);
+  private:
+  const std::string& _internal_observation_schema_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_observation_schema_id(const std::string& value);
+  std::string* _internal_mutable_observation_schema_id();
+  public:
+
+  // string action_schema_id = 11;
+  void clear_action_schema_id();
+  const std::string& action_schema_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_action_schema_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_action_schema_id();
+  PROTOBUF_NODISCARD std::string* release_action_schema_id();
+  void set_allocated_action_schema_id(std::string* action_schema_id);
+  private:
+  const std::string& _internal_action_schema_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_action_schema_id(const std::string& value);
+  std::string* _internal_mutable_action_schema_id();
+  public:
+
+  // int32 ret_code = 1;
+  void clear_ret_code();
+  int32_t ret_code() const;
+  void set_ret_code(int32_t value);
+  private:
+  int32_t _internal_ret_code() const;
+  void _internal_set_ret_code(int32_t value);
+  public:
+
+  // .maze.LifecycleResult result = 2;
+  void clear_result();
+  ::maze::LifecycleResult result() const;
+  void set_result(::maze::LifecycleResult value);
+  private:
+  ::maze::LifecycleResult _internal_result() const;
+  void _internal_set_result(::maze::LifecycleResult value);
+  public:
+
+  // uint32 session_protocol_version = 4;
+  void clear_session_protocol_version();
+  uint32_t session_protocol_version() const;
+  void set_session_protocol_version(uint32_t value);
+  private:
+  uint32_t _internal_session_protocol_version() const;
+  void _internal_set_session_protocol_version(uint32_t value);
+  public:
+
+  // int32 session_id = 5;
+  void clear_session_id();
+  int32_t session_id() const;
+  void set_session_id(int32_t value);
+  private:
+  int32_t _internal_session_id() const;
+  void _internal_set_session_id(int32_t value);
+  public:
+
+  // .maze.WorkloadMode workload_mode = 7;
+  void clear_workload_mode();
+  ::maze::WorkloadMode workload_mode() const;
+  void set_workload_mode(::maze::WorkloadMode value);
+  private:
+  ::maze::WorkloadMode _internal_workload_mode() const;
+  void _internal_set_workload_mode(::maze::WorkloadMode value);
+  public:
+
+  // .maze.ReplayPolicy replay_policy = 8;
+  void clear_replay_policy();
+  ::maze::ReplayPolicy replay_policy() const;
+  void set_replay_policy(::maze::ReplayPolicy value);
+  private:
+  ::maze::ReplayPolicy _internal_replay_policy() const;
+  void _internal_set_replay_policy(::maze::ReplayPolicy value);
+  public:
+
+  // int32 loaded_model_version = 9;
+  void clear_loaded_model_version();
+  int32_t loaded_model_version() const;
+  void set_loaded_model_version(int32_t value);
+  private:
+  int32_t _internal_loaded_model_version() const;
+  void _internal_set_loaded_model_version(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:maze.OpenSessionRsp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr aiserver_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr observation_schema_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr action_schema_id_;
+    int32_t ret_code_;
+    int result_;
+    uint32_t session_protocol_version_;
+    int32_t session_id_;
+    int workload_mode_;
+    int replay_policy_;
+    int32_t loaded_model_version_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_maze_2eproto;
+};
+// -------------------------------------------------------------------
+
 class InitReq final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:maze.InitReq) */ {
  public:
@@ -821,7 +1505,7 @@ class InitReq final :
                &_InitReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    3;
 
   friend void swap(InitReq& a, InitReq& b) {
     a.Swap(&b);
@@ -1136,7 +1820,7 @@ class InitRsp final :
                &_InitRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(InitRsp& a, InitRsp& b) {
     a.Swap(&b);
@@ -1311,7 +1995,7 @@ class BeginEpisodeReq final :
                &_BeginEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    5;
 
   friend void swap(BeginEpisodeReq& a, BeginEpisodeReq& b) {
     a.Swap(&b);
@@ -1470,7 +2154,7 @@ class EpisodeLifecycleRsp final :
                &_EpisodeLifecycleRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(EpisodeLifecycleRsp& a, EpisodeLifecycleRsp& b) {
     a.Swap(&b);
@@ -1656,7 +2340,7 @@ class AgentState final :
                &_AgentState_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   friend void swap(AgentState& a, AgentState& b) {
     a.Swap(&b);
@@ -1870,7 +2554,7 @@ class UpdateReq final :
                &_UpdateReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    8;
 
   friend void swap(UpdateReq& a, UpdateReq& b) {
     a.Swap(&b);
@@ -2060,7 +2744,7 @@ class AgentAction final :
                &_AgentAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    9;
 
   friend void swap(AgentAction& a, AgentAction& b) {
     a.Swap(&b);
@@ -2219,7 +2903,7 @@ class UpdateRsp final :
                &_UpdateRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    10;
 
   friend void swap(UpdateRsp& a, UpdateRsp& b) {
     a.Swap(&b);
@@ -2387,7 +3071,7 @@ class EpisodeEndReq final :
                &_EpisodeEndReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    11;
 
   friend void swap(EpisodeEndReq& a, EpisodeEndReq& b) {
     a.Swap(&b);
@@ -2546,7 +3230,7 @@ class EpisodeEndRsp final :
                &_EpisodeEndRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    12;
 
   friend void swap(EpisodeEndRsp& a, EpisodeEndRsp& b) {
     a.Swap(&b);
@@ -2721,7 +3405,7 @@ class AbortEpisodeReq final :
                &_AbortEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    13;
 
   friend void swap(AbortEpisodeReq& a, AbortEpisodeReq& b) {
     a.Swap(&b);
@@ -2933,7 +3617,7 @@ class Sample final :
                &_Sample_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    15;
 
   friend void swap(Sample& a, Sample& b) {
     a.Swap(&b);
@@ -3208,7 +3892,7 @@ class SampleBatch final :
                &_SampleBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    16;
 
   friend void swap(SampleBatch& a, SampleBatch& b) {
     a.Swap(&b);
@@ -3599,7 +4283,7 @@ class SampleResponse final :
                &_SampleResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    17;
 
   friend void swap(SampleResponse& a, SampleResponse& b) {
     a.Swap(&b);
@@ -3758,7 +4442,7 @@ class PushSamplesRsp final :
                &_PushSamplesRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    18;
 
   friend void swap(PushSamplesRsp& a, PushSamplesRsp& b) {
     a.Swap(&b);
@@ -4042,7 +4726,7 @@ class GetBatchReq final :
                &_GetBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    19;
 
   friend void swap(GetBatchReq& a, GetBatchReq& b) {
     a.Swap(&b);
@@ -4250,7 +4934,7 @@ class GetBatchRsp final :
                &_GetBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    20;
 
   friend void swap(GetBatchRsp& a, GetBatchRsp& b) {
     a.Swap(&b);
@@ -4565,7 +5249,7 @@ class AckBatchReq final :
                &_AckBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    21;
 
   friend void swap(AckBatchReq& a, AckBatchReq& b) {
     a.Swap(&b);
@@ -4761,7 +5445,7 @@ class NackBatchReq final :
                &_NackBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    22;
 
   friend void swap(NackBatchReq& a, NackBatchReq& b) {
     a.Swap(&b);
@@ -4946,7 +5630,7 @@ class RenewLeaseReq final :
                &_RenewLeaseReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    23;
 
   friend void swap(RenewLeaseReq& a, RenewLeaseReq& b) {
     a.Swap(&b);
@@ -5126,7 +5810,7 @@ class DeliveryRsp final :
                &_DeliveryRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    24;
 
   friend void swap(DeliveryRsp& a, DeliveryRsp& b) {
     a.Swap(&b);
@@ -5376,7 +6060,7 @@ class DistributorStatusReq final :
                &_DistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    25;
 
   friend void swap(DistributorStatusReq& a, DistributorStatusReq& b) {
     a.Swap(&b);
@@ -5495,7 +6179,7 @@ class BehaviorVersionQueueStatus final :
                &_BehaviorVersionQueueStatus_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    26;
 
   friend void swap(BehaviorVersionQueueStatus& a, BehaviorVersionQueueStatus& b) {
     a.Swap(&b);
@@ -5753,7 +6437,7 @@ class DistributorStatusRsp final :
                &_DistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    27;
 
   friend void swap(DistributorStatusRsp& a, DistributorStatusRsp& b) {
     a.Swap(&b);
@@ -5837,8 +6521,6 @@ class DistributorStatusRsp final :
     kDropCountFieldNumber = 6,
     kLatestPushTsMsFieldNumber = 7,
     kLatestConsumeTsMsFieldNumber = 8,
-    kProtocolVersionFieldNumber = 9,
-    kReadyFieldNumber = 12,
     kPushAttemptCountFieldNumber = 13,
     kAcceptedUniqueSamplesFieldNumber = 14,
     kAcceptedUniqueBatchesFieldNumber = 15,
@@ -5847,6 +6529,8 @@ class DistributorStatusRsp final :
     kRejectedPushAttemptCountFieldNumber = 18,
     kRejectedSampleAttemptsFieldNumber = 19,
     kAckedUniqueSamplesFieldNumber = 20,
+    kProtocolVersionFieldNumber = 9,
+    kPressureStateFieldNumber = 32,
     kAckedUniqueBatchesFieldNumber = 21,
     kReadyQueueSamplesFieldNumber = 22,
     kReadyQueueFragmentsFieldNumber = 23,
@@ -5865,12 +6549,18 @@ class DistributorStatusRsp final :
     kTargetHitCountFieldNumber = 37,
     kPartialGetCountFieldNumber = 38,
     kEmptyTimeoutCountFieldNumber = 39,
+    kReadyFieldNumber = 12,
+    kIngressReadyFieldNumber = 51,
+    kPoolReadyFieldNumber = 52,
+    kBackendTypeFieldNumber = 47,
     kTrainedSampleCountFieldNumber = 42,
     kStaleSampleCountFieldNumber = 43,
     kInvalidSampleCountFieldNumber = 44,
     kShutdownUntrainedSampleCountFieldNumber = 45,
     kLeaseRenewCountFieldNumber = 46,
-    kPressureStateFieldNumber = 32,
+    kMaxConcurrentConsumersFieldNumber = 48,
+    kActiveConsumerCountFieldNumber = 49,
+    kConsumerBusyCountFieldNumber = 50,
   };
   // repeated .maze.BehaviorVersionQueueStatus behavior_versions = 41;
   int behavior_versions_size() const;
@@ -5990,24 +6680,6 @@ class DistributorStatusRsp final :
   void _internal_set_latest_consume_ts_ms(int64_t value);
   public:
 
-  // uint32 protocol_version = 9;
-  void clear_protocol_version();
-  uint32_t protocol_version() const;
-  void set_protocol_version(uint32_t value);
-  private:
-  uint32_t _internal_protocol_version() const;
-  void _internal_set_protocol_version(uint32_t value);
-  public:
-
-  // bool ready = 12;
-  void clear_ready();
-  bool ready() const;
-  void set_ready(bool value);
-  private:
-  bool _internal_ready() const;
-  void _internal_set_ready(bool value);
-  public:
-
   // int64 push_attempt_count = 13;
   void clear_push_attempt_count();
   int64_t push_attempt_count() const;
@@ -6078,6 +6750,24 @@ class DistributorStatusRsp final :
   private:
   int64_t _internal_acked_unique_samples() const;
   void _internal_set_acked_unique_samples(int64_t value);
+  public:
+
+  // uint32 protocol_version = 9;
+  void clear_protocol_version();
+  uint32_t protocol_version() const;
+  void set_protocol_version(uint32_t value);
+  private:
+  uint32_t _internal_protocol_version() const;
+  void _internal_set_protocol_version(uint32_t value);
+  public:
+
+  // .maze.PressureState pressure_state = 32;
+  void clear_pressure_state();
+  ::maze::PressureState pressure_state() const;
+  void set_pressure_state(::maze::PressureState value);
+  private:
+  ::maze::PressureState _internal_pressure_state() const;
+  void _internal_set_pressure_state(::maze::PressureState value);
   public:
 
   // int64 acked_unique_batches = 21;
@@ -6242,6 +6932,42 @@ class DistributorStatusRsp final :
   void _internal_set_empty_timeout_count(int64_t value);
   public:
 
+  // bool ready = 12;
+  void clear_ready();
+  bool ready() const;
+  void set_ready(bool value);
+  private:
+  bool _internal_ready() const;
+  void _internal_set_ready(bool value);
+  public:
+
+  // bool ingress_ready = 51;
+  void clear_ingress_ready();
+  bool ingress_ready() const;
+  void set_ingress_ready(bool value);
+  private:
+  bool _internal_ingress_ready() const;
+  void _internal_set_ingress_ready(bool value);
+  public:
+
+  // bool pool_ready = 52;
+  void clear_pool_ready();
+  bool pool_ready() const;
+  void set_pool_ready(bool value);
+  private:
+  bool _internal_pool_ready() const;
+  void _internal_set_pool_ready(bool value);
+  public:
+
+  // .maze.SampleBackendType backend_type = 47;
+  void clear_backend_type();
+  ::maze::SampleBackendType backend_type() const;
+  void set_backend_type(::maze::SampleBackendType value);
+  private:
+  ::maze::SampleBackendType _internal_backend_type() const;
+  void _internal_set_backend_type(::maze::SampleBackendType value);
+  public:
+
   // int64 trained_sample_count = 42;
   void clear_trained_sample_count();
   int64_t trained_sample_count() const;
@@ -6287,13 +7013,31 @@ class DistributorStatusRsp final :
   void _internal_set_lease_renew_count(int64_t value);
   public:
 
-  // .maze.PressureState pressure_state = 32;
-  void clear_pressure_state();
-  ::maze::PressureState pressure_state() const;
-  void set_pressure_state(::maze::PressureState value);
+  // int32 max_concurrent_consumers = 48;
+  void clear_max_concurrent_consumers();
+  int32_t max_concurrent_consumers() const;
+  void set_max_concurrent_consumers(int32_t value);
   private:
-  ::maze::PressureState _internal_pressure_state() const;
-  void _internal_set_pressure_state(::maze::PressureState value);
+  int32_t _internal_max_concurrent_consumers() const;
+  void _internal_set_max_concurrent_consumers(int32_t value);
+  public:
+
+  // int32 active_consumer_count = 49;
+  void clear_active_consumer_count();
+  int32_t active_consumer_count() const;
+  void set_active_consumer_count(int32_t value);
+  private:
+  int32_t _internal_active_consumer_count() const;
+  void _internal_set_active_consumer_count(int32_t value);
+  public:
+
+  // int64 consumer_busy_count = 50;
+  void clear_consumer_busy_count();
+  int64_t consumer_busy_count() const;
+  void set_consumer_busy_count(int64_t value);
+  private:
+  int64_t _internal_consumer_busy_count() const;
+  void _internal_set_consumer_busy_count(int64_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:maze.DistributorStatusRsp)
@@ -6315,8 +7059,6 @@ class DistributorStatusRsp final :
     int64_t drop_count_;
     int64_t latest_push_ts_ms_;
     int64_t latest_consume_ts_ms_;
-    uint32_t protocol_version_;
-    bool ready_;
     int64_t push_attempt_count_;
     int64_t accepted_unique_samples_;
     int64_t accepted_unique_batches_;
@@ -6325,6 +7067,8 @@ class DistributorStatusRsp final :
     int64_t rejected_push_attempt_count_;
     int64_t rejected_sample_attempts_;
     int64_t acked_unique_samples_;
+    uint32_t protocol_version_;
+    int pressure_state_;
     int64_t acked_unique_batches_;
     int64_t ready_queue_samples_;
     int64_t ready_queue_fragments_;
@@ -6343,12 +7087,18 @@ class DistributorStatusRsp final :
     int64_t target_hit_count_;
     int64_t partial_get_count_;
     int64_t empty_timeout_count_;
+    bool ready_;
+    bool ingress_ready_;
+    bool pool_ready_;
+    int backend_type_;
     int64_t trained_sample_count_;
     int64_t stale_sample_count_;
     int64_t invalid_sample_count_;
     int64_t shutdown_untrained_sample_count_;
     int64_t lease_renew_count_;
-    int pressure_state_;
+    int32_t max_concurrent_consumers_;
+    int32_t active_consumer_count_;
+    int64_t consumer_busy_count_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -6403,7 +7153,7 @@ class AIServerStatusReq final :
                &_AIServerStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    28;
 
   friend void swap(AIServerStatusReq& a, AIServerStatusReq& b) {
     a.Swap(&b);
@@ -6522,7 +7272,7 @@ class TerminationReasonCount final :
                &_TerminationReasonCount_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    29;
 
   friend void swap(TerminationReasonCount& a, TerminationReasonCount& b) {
     a.Swap(&b);
@@ -6707,7 +7457,7 @@ class EpisodeMetrics final :
                &_EpisodeMetrics_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    31;
 
   friend void swap(EpisodeMetrics& a, EpisodeMetrics& b) {
     a.Swap(&b);
@@ -7033,7 +7783,7 @@ class AIServerStatusRsp final :
                &_AIServerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    32;
 
   friend void swap(AIServerStatusRsp& a, AIServerStatusRsp& b) {
     a.Swap(&b);
@@ -7699,7 +8449,7 @@ class ModelArtifactManifest final :
                &_ModelArtifactManifest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    33;
 
   friend void swap(ModelArtifactManifest& a, ModelArtifactManifest& b) {
     a.Swap(&b);
@@ -8041,7 +8791,7 @@ class RegisterModelReq final :
                &_RegisterModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    34;
 
   friend void swap(RegisterModelReq& a, RegisterModelReq& b) {
     a.Swap(&b);
@@ -8198,7 +8948,7 @@ class RegisterModelRsp final :
                &_RegisterModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    35;
 
   friend void swap(RegisterModelRsp& a, RegisterModelRsp& b) {
     a.Swap(&b);
@@ -8409,7 +9159,7 @@ class GetModelManifestReq final :
                &_GetModelManifestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    36;
 
   friend void swap(GetModelManifestReq& a, GetModelManifestReq& b) {
     a.Swap(&b);
@@ -8584,7 +9334,7 @@ class GetModelManifestRsp final :
                &_GetModelManifestRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    37;
 
   friend void swap(GetModelManifestRsp& a, GetModelManifestRsp& b) {
     a.Swap(&b);
@@ -8784,7 +9534,7 @@ class DownloadModelReq final :
                &_DownloadModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    38;
 
   friend void swap(DownloadModelReq& a, DownloadModelReq& b) {
     a.Swap(&b);
@@ -8948,7 +9698,7 @@ class ModelChunk final :
                &_ModelChunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    39;
 
   friend void swap(ModelChunk& a, ModelChunk& b) {
     a.Swap(&b);
@@ -9123,7 +9873,7 @@ class AckModelReq final :
                &_AckModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    40;
 
   friend void swap(AckModelReq& a, AckModelReq& b) {
     a.Swap(&b);
@@ -9330,7 +10080,7 @@ class AckModelRsp final :
                &_AckModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    41;
 
   friend void swap(AckModelRsp& a, AckModelRsp& b) {
     a.Swap(&b);
@@ -9520,7 +10270,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    42;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -9639,7 +10389,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    43;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -10015,6 +10765,1034 @@ inline void Vec2::_internal_set_y(float value) {
 inline void Vec2::set_y(float value) {
   _internal_set_y(value);
   // @@protoc_insertion_point(field_set:maze.Vec2.y)
+}
+
+// -------------------------------------------------------------------
+
+// OpenSessionReq
+
+// uint32 session_protocol_version = 1;
+inline void OpenSessionReq::clear_session_protocol_version() {
+  _impl_.session_protocol_version_ = 0u;
+}
+inline uint32_t OpenSessionReq::_internal_session_protocol_version() const {
+  return _impl_.session_protocol_version_;
+}
+inline uint32_t OpenSessionReq::session_protocol_version() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.session_protocol_version)
+  return _internal_session_protocol_version();
+}
+inline void OpenSessionReq::_internal_set_session_protocol_version(uint32_t value) {
+  
+  _impl_.session_protocol_version_ = value;
+}
+inline void OpenSessionReq::set_session_protocol_version(uint32_t value) {
+  _internal_set_session_protocol_version(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.session_protocol_version)
+}
+
+// string client_id = 2;
+inline void OpenSessionReq::clear_client_id() {
+  _impl_.client_id_.ClearToEmpty();
+}
+inline const std::string& OpenSessionReq::client_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.client_id)
+  return _internal_client_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionReq::set_client_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.client_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.client_id)
+}
+inline std::string* OpenSessionReq::mutable_client_id() {
+  std::string* _s = _internal_mutable_client_id();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.client_id)
+  return _s;
+}
+inline const std::string& OpenSessionReq::_internal_client_id() const {
+  return _impl_.client_id_.Get();
+}
+inline void OpenSessionReq::_internal_set_client_id(const std::string& value) {
+  
+  _impl_.client_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::_internal_mutable_client_id() {
+  
+  return _impl_.client_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::release_client_id() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.client_id)
+  return _impl_.client_id_.Release();
+}
+inline void OpenSessionReq::set_allocated_client_id(std::string* client_id) {
+  if (client_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.client_id_.SetAllocated(client_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.client_id_.IsDefault()) {
+    _impl_.client_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.client_id)
+}
+
+// string env_id = 3;
+inline void OpenSessionReq::clear_env_id() {
+  _impl_.env_id_.ClearToEmpty();
+}
+inline const std::string& OpenSessionReq::env_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.env_id)
+  return _internal_env_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionReq::set_env_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.env_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.env_id)
+}
+inline std::string* OpenSessionReq::mutable_env_id() {
+  std::string* _s = _internal_mutable_env_id();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.env_id)
+  return _s;
+}
+inline const std::string& OpenSessionReq::_internal_env_id() const {
+  return _impl_.env_id_.Get();
+}
+inline void OpenSessionReq::_internal_set_env_id(const std::string& value) {
+  
+  _impl_.env_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::_internal_mutable_env_id() {
+  
+  return _impl_.env_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::release_env_id() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.env_id)
+  return _impl_.env_id_.Release();
+}
+inline void OpenSessionReq::set_allocated_env_id(std::string* env_id) {
+  if (env_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.env_id_.SetAllocated(env_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.env_id_.IsDefault()) {
+    _impl_.env_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.env_id)
+}
+
+// int32 session_id = 4;
+inline void OpenSessionReq::clear_session_id() {
+  _impl_.session_id_ = 0;
+}
+inline int32_t OpenSessionReq::_internal_session_id() const {
+  return _impl_.session_id_;
+}
+inline int32_t OpenSessionReq::session_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.session_id)
+  return _internal_session_id();
+}
+inline void OpenSessionReq::_internal_set_session_id(int32_t value) {
+  
+  _impl_.session_id_ = value;
+}
+inline void OpenSessionReq::set_session_id(int32_t value) {
+  _internal_set_session_id(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.session_id)
+}
+
+// int32 agent_num = 5;
+inline void OpenSessionReq::clear_agent_num() {
+  _impl_.agent_num_ = 0;
+}
+inline int32_t OpenSessionReq::_internal_agent_num() const {
+  return _impl_.agent_num_;
+}
+inline int32_t OpenSessionReq::agent_num() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.agent_num)
+  return _internal_agent_num();
+}
+inline void OpenSessionReq::_internal_set_agent_num(int32_t value) {
+  
+  _impl_.agent_num_ = value;
+}
+inline void OpenSessionReq::set_agent_num(int32_t value) {
+  _internal_set_agent_num(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.agent_num)
+}
+
+// .maze.Vec2 map_size = 6;
+inline bool OpenSessionReq::_internal_has_map_size() const {
+  return this != internal_default_instance() && _impl_.map_size_ != nullptr;
+}
+inline bool OpenSessionReq::has_map_size() const {
+  return _internal_has_map_size();
+}
+inline void OpenSessionReq::clear_map_size() {
+  if (GetArenaForAllocation() == nullptr && _impl_.map_size_ != nullptr) {
+    delete _impl_.map_size_;
+  }
+  _impl_.map_size_ = nullptr;
+}
+inline const ::maze::Vec2& OpenSessionReq::_internal_map_size() const {
+  const ::maze::Vec2* p = _impl_.map_size_;
+  return p != nullptr ? *p : reinterpret_cast<const ::maze::Vec2&>(
+      ::maze::_Vec2_default_instance_);
+}
+inline const ::maze::Vec2& OpenSessionReq::map_size() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.map_size)
+  return _internal_map_size();
+}
+inline void OpenSessionReq::unsafe_arena_set_allocated_map_size(
+    ::maze::Vec2* map_size) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.map_size_);
+  }
+  _impl_.map_size_ = map_size;
+  if (map_size) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:maze.OpenSessionReq.map_size)
+}
+inline ::maze::Vec2* OpenSessionReq::release_map_size() {
+  
+  ::maze::Vec2* temp = _impl_.map_size_;
+  _impl_.map_size_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::unsafe_arena_release_map_size() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.map_size)
+  
+  ::maze::Vec2* temp = _impl_.map_size_;
+  _impl_.map_size_ = nullptr;
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::_internal_mutable_map_size() {
+  
+  if (_impl_.map_size_ == nullptr) {
+    auto* p = CreateMaybeMessage<::maze::Vec2>(GetArenaForAllocation());
+    _impl_.map_size_ = p;
+  }
+  return _impl_.map_size_;
+}
+inline ::maze::Vec2* OpenSessionReq::mutable_map_size() {
+  ::maze::Vec2* _msg = _internal_mutable_map_size();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.map_size)
+  return _msg;
+}
+inline void OpenSessionReq::set_allocated_map_size(::maze::Vec2* map_size) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.map_size_;
+  }
+  if (map_size) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(map_size);
+    if (message_arena != submessage_arena) {
+      map_size = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, map_size, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.map_size_ = map_size;
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.map_size)
+}
+
+// .maze.Vec2 start_pos = 7;
+inline bool OpenSessionReq::_internal_has_start_pos() const {
+  return this != internal_default_instance() && _impl_.start_pos_ != nullptr;
+}
+inline bool OpenSessionReq::has_start_pos() const {
+  return _internal_has_start_pos();
+}
+inline void OpenSessionReq::clear_start_pos() {
+  if (GetArenaForAllocation() == nullptr && _impl_.start_pos_ != nullptr) {
+    delete _impl_.start_pos_;
+  }
+  _impl_.start_pos_ = nullptr;
+}
+inline const ::maze::Vec2& OpenSessionReq::_internal_start_pos() const {
+  const ::maze::Vec2* p = _impl_.start_pos_;
+  return p != nullptr ? *p : reinterpret_cast<const ::maze::Vec2&>(
+      ::maze::_Vec2_default_instance_);
+}
+inline const ::maze::Vec2& OpenSessionReq::start_pos() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.start_pos)
+  return _internal_start_pos();
+}
+inline void OpenSessionReq::unsafe_arena_set_allocated_start_pos(
+    ::maze::Vec2* start_pos) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.start_pos_);
+  }
+  _impl_.start_pos_ = start_pos;
+  if (start_pos) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:maze.OpenSessionReq.start_pos)
+}
+inline ::maze::Vec2* OpenSessionReq::release_start_pos() {
+  
+  ::maze::Vec2* temp = _impl_.start_pos_;
+  _impl_.start_pos_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::unsafe_arena_release_start_pos() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.start_pos)
+  
+  ::maze::Vec2* temp = _impl_.start_pos_;
+  _impl_.start_pos_ = nullptr;
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::_internal_mutable_start_pos() {
+  
+  if (_impl_.start_pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::maze::Vec2>(GetArenaForAllocation());
+    _impl_.start_pos_ = p;
+  }
+  return _impl_.start_pos_;
+}
+inline ::maze::Vec2* OpenSessionReq::mutable_start_pos() {
+  ::maze::Vec2* _msg = _internal_mutable_start_pos();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.start_pos)
+  return _msg;
+}
+inline void OpenSessionReq::set_allocated_start_pos(::maze::Vec2* start_pos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.start_pos_;
+  }
+  if (start_pos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(start_pos);
+    if (message_arena != submessage_arena) {
+      start_pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, start_pos, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.start_pos_ = start_pos;
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.start_pos)
+}
+
+// .maze.Vec2 end_pos = 8;
+inline bool OpenSessionReq::_internal_has_end_pos() const {
+  return this != internal_default_instance() && _impl_.end_pos_ != nullptr;
+}
+inline bool OpenSessionReq::has_end_pos() const {
+  return _internal_has_end_pos();
+}
+inline void OpenSessionReq::clear_end_pos() {
+  if (GetArenaForAllocation() == nullptr && _impl_.end_pos_ != nullptr) {
+    delete _impl_.end_pos_;
+  }
+  _impl_.end_pos_ = nullptr;
+}
+inline const ::maze::Vec2& OpenSessionReq::_internal_end_pos() const {
+  const ::maze::Vec2* p = _impl_.end_pos_;
+  return p != nullptr ? *p : reinterpret_cast<const ::maze::Vec2&>(
+      ::maze::_Vec2_default_instance_);
+}
+inline const ::maze::Vec2& OpenSessionReq::end_pos() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.end_pos)
+  return _internal_end_pos();
+}
+inline void OpenSessionReq::unsafe_arena_set_allocated_end_pos(
+    ::maze::Vec2* end_pos) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.end_pos_);
+  }
+  _impl_.end_pos_ = end_pos;
+  if (end_pos) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:maze.OpenSessionReq.end_pos)
+}
+inline ::maze::Vec2* OpenSessionReq::release_end_pos() {
+  
+  ::maze::Vec2* temp = _impl_.end_pos_;
+  _impl_.end_pos_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::unsafe_arena_release_end_pos() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.end_pos)
+  
+  ::maze::Vec2* temp = _impl_.end_pos_;
+  _impl_.end_pos_ = nullptr;
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::_internal_mutable_end_pos() {
+  
+  if (_impl_.end_pos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::maze::Vec2>(GetArenaForAllocation());
+    _impl_.end_pos_ = p;
+  }
+  return _impl_.end_pos_;
+}
+inline ::maze::Vec2* OpenSessionReq::mutable_end_pos() {
+  ::maze::Vec2* _msg = _internal_mutable_end_pos();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.end_pos)
+  return _msg;
+}
+inline void OpenSessionReq::set_allocated_end_pos(::maze::Vec2* end_pos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.end_pos_;
+  }
+  if (end_pos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(end_pos);
+    if (message_arena != submessage_arena) {
+      end_pos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, end_pos, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.end_pos_ = end_pos;
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.end_pos)
+}
+
+// float grid_size = 9;
+inline void OpenSessionReq::clear_grid_size() {
+  _impl_.grid_size_ = 0;
+}
+inline float OpenSessionReq::_internal_grid_size() const {
+  return _impl_.grid_size_;
+}
+inline float OpenSessionReq::grid_size() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.grid_size)
+  return _internal_grid_size();
+}
+inline void OpenSessionReq::_internal_set_grid_size(float value) {
+  
+  _impl_.grid_size_ = value;
+}
+inline void OpenSessionReq::set_grid_size(float value) {
+  _internal_set_grid_size(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.grid_size)
+}
+
+// int32 grid_cols = 10;
+inline void OpenSessionReq::clear_grid_cols() {
+  _impl_.grid_cols_ = 0;
+}
+inline int32_t OpenSessionReq::_internal_grid_cols() const {
+  return _impl_.grid_cols_;
+}
+inline int32_t OpenSessionReq::grid_cols() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.grid_cols)
+  return _internal_grid_cols();
+}
+inline void OpenSessionReq::_internal_set_grid_cols(int32_t value) {
+  
+  _impl_.grid_cols_ = value;
+}
+inline void OpenSessionReq::set_grid_cols(int32_t value) {
+  _internal_set_grid_cols(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.grid_cols)
+}
+
+// int32 grid_rows = 11;
+inline void OpenSessionReq::clear_grid_rows() {
+  _impl_.grid_rows_ = 0;
+}
+inline int32_t OpenSessionReq::_internal_grid_rows() const {
+  return _impl_.grid_rows_;
+}
+inline int32_t OpenSessionReq::grid_rows() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.grid_rows)
+  return _internal_grid_rows();
+}
+inline void OpenSessionReq::_internal_set_grid_rows(int32_t value) {
+  
+  _impl_.grid_rows_ = value;
+}
+inline void OpenSessionReq::set_grid_rows(int32_t value) {
+  _internal_set_grid_rows(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.grid_rows)
+}
+
+// .maze.Vec2 end_grid = 12;
+inline bool OpenSessionReq::_internal_has_end_grid() const {
+  return this != internal_default_instance() && _impl_.end_grid_ != nullptr;
+}
+inline bool OpenSessionReq::has_end_grid() const {
+  return _internal_has_end_grid();
+}
+inline void OpenSessionReq::clear_end_grid() {
+  if (GetArenaForAllocation() == nullptr && _impl_.end_grid_ != nullptr) {
+    delete _impl_.end_grid_;
+  }
+  _impl_.end_grid_ = nullptr;
+}
+inline const ::maze::Vec2& OpenSessionReq::_internal_end_grid() const {
+  const ::maze::Vec2* p = _impl_.end_grid_;
+  return p != nullptr ? *p : reinterpret_cast<const ::maze::Vec2&>(
+      ::maze::_Vec2_default_instance_);
+}
+inline const ::maze::Vec2& OpenSessionReq::end_grid() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.end_grid)
+  return _internal_end_grid();
+}
+inline void OpenSessionReq::unsafe_arena_set_allocated_end_grid(
+    ::maze::Vec2* end_grid) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.end_grid_);
+  }
+  _impl_.end_grid_ = end_grid;
+  if (end_grid) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:maze.OpenSessionReq.end_grid)
+}
+inline ::maze::Vec2* OpenSessionReq::release_end_grid() {
+  
+  ::maze::Vec2* temp = _impl_.end_grid_;
+  _impl_.end_grid_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::unsafe_arena_release_end_grid() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.end_grid)
+  
+  ::maze::Vec2* temp = _impl_.end_grid_;
+  _impl_.end_grid_ = nullptr;
+  return temp;
+}
+inline ::maze::Vec2* OpenSessionReq::_internal_mutable_end_grid() {
+  
+  if (_impl_.end_grid_ == nullptr) {
+    auto* p = CreateMaybeMessage<::maze::Vec2>(GetArenaForAllocation());
+    _impl_.end_grid_ = p;
+  }
+  return _impl_.end_grid_;
+}
+inline ::maze::Vec2* OpenSessionReq::mutable_end_grid() {
+  ::maze::Vec2* _msg = _internal_mutable_end_grid();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.end_grid)
+  return _msg;
+}
+inline void OpenSessionReq::set_allocated_end_grid(::maze::Vec2* end_grid) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.end_grid_;
+  }
+  if (end_grid) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(end_grid);
+    if (message_arena != submessage_arena) {
+      end_grid = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, end_grid, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.end_grid_ = end_grid;
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.end_grid)
+}
+
+// string observation_schema_id = 13;
+inline void OpenSessionReq::clear_observation_schema_id() {
+  _impl_.observation_schema_id_.ClearToEmpty();
+}
+inline const std::string& OpenSessionReq::observation_schema_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.observation_schema_id)
+  return _internal_observation_schema_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionReq::set_observation_schema_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.observation_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.observation_schema_id)
+}
+inline std::string* OpenSessionReq::mutable_observation_schema_id() {
+  std::string* _s = _internal_mutable_observation_schema_id();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.observation_schema_id)
+  return _s;
+}
+inline const std::string& OpenSessionReq::_internal_observation_schema_id() const {
+  return _impl_.observation_schema_id_.Get();
+}
+inline void OpenSessionReq::_internal_set_observation_schema_id(const std::string& value) {
+  
+  _impl_.observation_schema_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::_internal_mutable_observation_schema_id() {
+  
+  return _impl_.observation_schema_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::release_observation_schema_id() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.observation_schema_id)
+  return _impl_.observation_schema_id_.Release();
+}
+inline void OpenSessionReq::set_allocated_observation_schema_id(std::string* observation_schema_id) {
+  if (observation_schema_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.observation_schema_id_.SetAllocated(observation_schema_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.observation_schema_id_.IsDefault()) {
+    _impl_.observation_schema_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.observation_schema_id)
+}
+
+// string action_schema_id = 14;
+inline void OpenSessionReq::clear_action_schema_id() {
+  _impl_.action_schema_id_.ClearToEmpty();
+}
+inline const std::string& OpenSessionReq::action_schema_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionReq.action_schema_id)
+  return _internal_action_schema_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionReq::set_action_schema_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.action_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionReq.action_schema_id)
+}
+inline std::string* OpenSessionReq::mutable_action_schema_id() {
+  std::string* _s = _internal_mutable_action_schema_id();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionReq.action_schema_id)
+  return _s;
+}
+inline const std::string& OpenSessionReq::_internal_action_schema_id() const {
+  return _impl_.action_schema_id_.Get();
+}
+inline void OpenSessionReq::_internal_set_action_schema_id(const std::string& value) {
+  
+  _impl_.action_schema_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::_internal_mutable_action_schema_id() {
+  
+  return _impl_.action_schema_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionReq::release_action_schema_id() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionReq.action_schema_id)
+  return _impl_.action_schema_id_.Release();
+}
+inline void OpenSessionReq::set_allocated_action_schema_id(std::string* action_schema_id) {
+  if (action_schema_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.action_schema_id_.SetAllocated(action_schema_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.action_schema_id_.IsDefault()) {
+    _impl_.action_schema_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionReq.action_schema_id)
+}
+
+// -------------------------------------------------------------------
+
+// OpenSessionRsp
+
+// int32 ret_code = 1;
+inline void OpenSessionRsp::clear_ret_code() {
+  _impl_.ret_code_ = 0;
+}
+inline int32_t OpenSessionRsp::_internal_ret_code() const {
+  return _impl_.ret_code_;
+}
+inline int32_t OpenSessionRsp::ret_code() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.ret_code)
+  return _internal_ret_code();
+}
+inline void OpenSessionRsp::_internal_set_ret_code(int32_t value) {
+  
+  _impl_.ret_code_ = value;
+}
+inline void OpenSessionRsp::set_ret_code(int32_t value) {
+  _internal_set_ret_code(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.ret_code)
+}
+
+// .maze.LifecycleResult result = 2;
+inline void OpenSessionRsp::clear_result() {
+  _impl_.result_ = 0;
+}
+inline ::maze::LifecycleResult OpenSessionRsp::_internal_result() const {
+  return static_cast< ::maze::LifecycleResult >(_impl_.result_);
+}
+inline ::maze::LifecycleResult OpenSessionRsp::result() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.result)
+  return _internal_result();
+}
+inline void OpenSessionRsp::_internal_set_result(::maze::LifecycleResult value) {
+  
+  _impl_.result_ = value;
+}
+inline void OpenSessionRsp::set_result(::maze::LifecycleResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.result)
+}
+
+// string message = 3;
+inline void OpenSessionRsp::clear_message() {
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& OpenSessionRsp::message() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionRsp::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.message)
+}
+inline std::string* OpenSessionRsp::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionRsp.message)
+  return _s;
+}
+inline const std::string& OpenSessionRsp::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void OpenSessionRsp::_internal_set_message(const std::string& value) {
+  
+  _impl_.message_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::release_message() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionRsp.message)
+  return _impl_.message_.Release();
+}
+inline void OpenSessionRsp::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionRsp.message)
+}
+
+// uint32 session_protocol_version = 4;
+inline void OpenSessionRsp::clear_session_protocol_version() {
+  _impl_.session_protocol_version_ = 0u;
+}
+inline uint32_t OpenSessionRsp::_internal_session_protocol_version() const {
+  return _impl_.session_protocol_version_;
+}
+inline uint32_t OpenSessionRsp::session_protocol_version() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.session_protocol_version)
+  return _internal_session_protocol_version();
+}
+inline void OpenSessionRsp::_internal_set_session_protocol_version(uint32_t value) {
+  
+  _impl_.session_protocol_version_ = value;
+}
+inline void OpenSessionRsp::set_session_protocol_version(uint32_t value) {
+  _internal_set_session_protocol_version(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.session_protocol_version)
+}
+
+// int32 session_id = 5;
+inline void OpenSessionRsp::clear_session_id() {
+  _impl_.session_id_ = 0;
+}
+inline int32_t OpenSessionRsp::_internal_session_id() const {
+  return _impl_.session_id_;
+}
+inline int32_t OpenSessionRsp::session_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.session_id)
+  return _internal_session_id();
+}
+inline void OpenSessionRsp::_internal_set_session_id(int32_t value) {
+  
+  _impl_.session_id_ = value;
+}
+inline void OpenSessionRsp::set_session_id(int32_t value) {
+  _internal_set_session_id(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.session_id)
+}
+
+// string aiserver_id = 6;
+inline void OpenSessionRsp::clear_aiserver_id() {
+  _impl_.aiserver_id_.ClearToEmpty();
+}
+inline const std::string& OpenSessionRsp::aiserver_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.aiserver_id)
+  return _internal_aiserver_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionRsp::set_aiserver_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.aiserver_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.aiserver_id)
+}
+inline std::string* OpenSessionRsp::mutable_aiserver_id() {
+  std::string* _s = _internal_mutable_aiserver_id();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionRsp.aiserver_id)
+  return _s;
+}
+inline const std::string& OpenSessionRsp::_internal_aiserver_id() const {
+  return _impl_.aiserver_id_.Get();
+}
+inline void OpenSessionRsp::_internal_set_aiserver_id(const std::string& value) {
+  
+  _impl_.aiserver_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::_internal_mutable_aiserver_id() {
+  
+  return _impl_.aiserver_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::release_aiserver_id() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionRsp.aiserver_id)
+  return _impl_.aiserver_id_.Release();
+}
+inline void OpenSessionRsp::set_allocated_aiserver_id(std::string* aiserver_id) {
+  if (aiserver_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.aiserver_id_.SetAllocated(aiserver_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.aiserver_id_.IsDefault()) {
+    _impl_.aiserver_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionRsp.aiserver_id)
+}
+
+// .maze.WorkloadMode workload_mode = 7;
+inline void OpenSessionRsp::clear_workload_mode() {
+  _impl_.workload_mode_ = 0;
+}
+inline ::maze::WorkloadMode OpenSessionRsp::_internal_workload_mode() const {
+  return static_cast< ::maze::WorkloadMode >(_impl_.workload_mode_);
+}
+inline ::maze::WorkloadMode OpenSessionRsp::workload_mode() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.workload_mode)
+  return _internal_workload_mode();
+}
+inline void OpenSessionRsp::_internal_set_workload_mode(::maze::WorkloadMode value) {
+  
+  _impl_.workload_mode_ = value;
+}
+inline void OpenSessionRsp::set_workload_mode(::maze::WorkloadMode value) {
+  _internal_set_workload_mode(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.workload_mode)
+}
+
+// .maze.ReplayPolicy replay_policy = 8;
+inline void OpenSessionRsp::clear_replay_policy() {
+  _impl_.replay_policy_ = 0;
+}
+inline ::maze::ReplayPolicy OpenSessionRsp::_internal_replay_policy() const {
+  return static_cast< ::maze::ReplayPolicy >(_impl_.replay_policy_);
+}
+inline ::maze::ReplayPolicy OpenSessionRsp::replay_policy() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.replay_policy)
+  return _internal_replay_policy();
+}
+inline void OpenSessionRsp::_internal_set_replay_policy(::maze::ReplayPolicy value) {
+  
+  _impl_.replay_policy_ = value;
+}
+inline void OpenSessionRsp::set_replay_policy(::maze::ReplayPolicy value) {
+  _internal_set_replay_policy(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.replay_policy)
+}
+
+// int32 loaded_model_version = 9;
+inline void OpenSessionRsp::clear_loaded_model_version() {
+  _impl_.loaded_model_version_ = 0;
+}
+inline int32_t OpenSessionRsp::_internal_loaded_model_version() const {
+  return _impl_.loaded_model_version_;
+}
+inline int32_t OpenSessionRsp::loaded_model_version() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.loaded_model_version)
+  return _internal_loaded_model_version();
+}
+inline void OpenSessionRsp::_internal_set_loaded_model_version(int32_t value) {
+  
+  _impl_.loaded_model_version_ = value;
+}
+inline void OpenSessionRsp::set_loaded_model_version(int32_t value) {
+  _internal_set_loaded_model_version(value);
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.loaded_model_version)
+}
+
+// string observation_schema_id = 10;
+inline void OpenSessionRsp::clear_observation_schema_id() {
+  _impl_.observation_schema_id_.ClearToEmpty();
+}
+inline const std::string& OpenSessionRsp::observation_schema_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.observation_schema_id)
+  return _internal_observation_schema_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionRsp::set_observation_schema_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.observation_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.observation_schema_id)
+}
+inline std::string* OpenSessionRsp::mutable_observation_schema_id() {
+  std::string* _s = _internal_mutable_observation_schema_id();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionRsp.observation_schema_id)
+  return _s;
+}
+inline const std::string& OpenSessionRsp::_internal_observation_schema_id() const {
+  return _impl_.observation_schema_id_.Get();
+}
+inline void OpenSessionRsp::_internal_set_observation_schema_id(const std::string& value) {
+  
+  _impl_.observation_schema_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::_internal_mutable_observation_schema_id() {
+  
+  return _impl_.observation_schema_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::release_observation_schema_id() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionRsp.observation_schema_id)
+  return _impl_.observation_schema_id_.Release();
+}
+inline void OpenSessionRsp::set_allocated_observation_schema_id(std::string* observation_schema_id) {
+  if (observation_schema_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.observation_schema_id_.SetAllocated(observation_schema_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.observation_schema_id_.IsDefault()) {
+    _impl_.observation_schema_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionRsp.observation_schema_id)
+}
+
+// string action_schema_id = 11;
+inline void OpenSessionRsp::clear_action_schema_id() {
+  _impl_.action_schema_id_.ClearToEmpty();
+}
+inline const std::string& OpenSessionRsp::action_schema_id() const {
+  // @@protoc_insertion_point(field_get:maze.OpenSessionRsp.action_schema_id)
+  return _internal_action_schema_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void OpenSessionRsp::set_action_schema_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.action_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:maze.OpenSessionRsp.action_schema_id)
+}
+inline std::string* OpenSessionRsp::mutable_action_schema_id() {
+  std::string* _s = _internal_mutable_action_schema_id();
+  // @@protoc_insertion_point(field_mutable:maze.OpenSessionRsp.action_schema_id)
+  return _s;
+}
+inline const std::string& OpenSessionRsp::_internal_action_schema_id() const {
+  return _impl_.action_schema_id_.Get();
+}
+inline void OpenSessionRsp::_internal_set_action_schema_id(const std::string& value) {
+  
+  _impl_.action_schema_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::_internal_mutable_action_schema_id() {
+  
+  return _impl_.action_schema_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* OpenSessionRsp::release_action_schema_id() {
+  // @@protoc_insertion_point(field_release:maze.OpenSessionRsp.action_schema_id)
+  return _impl_.action_schema_id_.Release();
+}
+inline void OpenSessionRsp::set_allocated_action_schema_id(std::string* action_schema_id) {
+  if (action_schema_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.action_schema_id_.SetAllocated(action_schema_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.action_schema_id_.IsDefault()) {
+    _impl_.action_schema_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:maze.OpenSessionRsp.action_schema_id)
 }
 
 // -------------------------------------------------------------------
@@ -15198,6 +16976,126 @@ inline void DistributorStatusRsp::set_lease_renew_count(int64_t value) {
   // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.lease_renew_count)
 }
 
+// .maze.SampleBackendType backend_type = 47;
+inline void DistributorStatusRsp::clear_backend_type() {
+  _impl_.backend_type_ = 0;
+}
+inline ::maze::SampleBackendType DistributorStatusRsp::_internal_backend_type() const {
+  return static_cast< ::maze::SampleBackendType >(_impl_.backend_type_);
+}
+inline ::maze::SampleBackendType DistributorStatusRsp::backend_type() const {
+  // @@protoc_insertion_point(field_get:maze.DistributorStatusRsp.backend_type)
+  return _internal_backend_type();
+}
+inline void DistributorStatusRsp::_internal_set_backend_type(::maze::SampleBackendType value) {
+  
+  _impl_.backend_type_ = value;
+}
+inline void DistributorStatusRsp::set_backend_type(::maze::SampleBackendType value) {
+  _internal_set_backend_type(value);
+  // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.backend_type)
+}
+
+// int32 max_concurrent_consumers = 48;
+inline void DistributorStatusRsp::clear_max_concurrent_consumers() {
+  _impl_.max_concurrent_consumers_ = 0;
+}
+inline int32_t DistributorStatusRsp::_internal_max_concurrent_consumers() const {
+  return _impl_.max_concurrent_consumers_;
+}
+inline int32_t DistributorStatusRsp::max_concurrent_consumers() const {
+  // @@protoc_insertion_point(field_get:maze.DistributorStatusRsp.max_concurrent_consumers)
+  return _internal_max_concurrent_consumers();
+}
+inline void DistributorStatusRsp::_internal_set_max_concurrent_consumers(int32_t value) {
+  
+  _impl_.max_concurrent_consumers_ = value;
+}
+inline void DistributorStatusRsp::set_max_concurrent_consumers(int32_t value) {
+  _internal_set_max_concurrent_consumers(value);
+  // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.max_concurrent_consumers)
+}
+
+// int32 active_consumer_count = 49;
+inline void DistributorStatusRsp::clear_active_consumer_count() {
+  _impl_.active_consumer_count_ = 0;
+}
+inline int32_t DistributorStatusRsp::_internal_active_consumer_count() const {
+  return _impl_.active_consumer_count_;
+}
+inline int32_t DistributorStatusRsp::active_consumer_count() const {
+  // @@protoc_insertion_point(field_get:maze.DistributorStatusRsp.active_consumer_count)
+  return _internal_active_consumer_count();
+}
+inline void DistributorStatusRsp::_internal_set_active_consumer_count(int32_t value) {
+  
+  _impl_.active_consumer_count_ = value;
+}
+inline void DistributorStatusRsp::set_active_consumer_count(int32_t value) {
+  _internal_set_active_consumer_count(value);
+  // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.active_consumer_count)
+}
+
+// int64 consumer_busy_count = 50;
+inline void DistributorStatusRsp::clear_consumer_busy_count() {
+  _impl_.consumer_busy_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_consumer_busy_count() const {
+  return _impl_.consumer_busy_count_;
+}
+inline int64_t DistributorStatusRsp::consumer_busy_count() const {
+  // @@protoc_insertion_point(field_get:maze.DistributorStatusRsp.consumer_busy_count)
+  return _internal_consumer_busy_count();
+}
+inline void DistributorStatusRsp::_internal_set_consumer_busy_count(int64_t value) {
+  
+  _impl_.consumer_busy_count_ = value;
+}
+inline void DistributorStatusRsp::set_consumer_busy_count(int64_t value) {
+  _internal_set_consumer_busy_count(value);
+  // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.consumer_busy_count)
+}
+
+// bool ingress_ready = 51;
+inline void DistributorStatusRsp::clear_ingress_ready() {
+  _impl_.ingress_ready_ = false;
+}
+inline bool DistributorStatusRsp::_internal_ingress_ready() const {
+  return _impl_.ingress_ready_;
+}
+inline bool DistributorStatusRsp::ingress_ready() const {
+  // @@protoc_insertion_point(field_get:maze.DistributorStatusRsp.ingress_ready)
+  return _internal_ingress_ready();
+}
+inline void DistributorStatusRsp::_internal_set_ingress_ready(bool value) {
+  
+  _impl_.ingress_ready_ = value;
+}
+inline void DistributorStatusRsp::set_ingress_ready(bool value) {
+  _internal_set_ingress_ready(value);
+  // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.ingress_ready)
+}
+
+// bool pool_ready = 52;
+inline void DistributorStatusRsp::clear_pool_ready() {
+  _impl_.pool_ready_ = false;
+}
+inline bool DistributorStatusRsp::_internal_pool_ready() const {
+  return _impl_.pool_ready_;
+}
+inline bool DistributorStatusRsp::pool_ready() const {
+  // @@protoc_insertion_point(field_get:maze.DistributorStatusRsp.pool_ready)
+  return _internal_pool_ready();
+}
+inline void DistributorStatusRsp::_internal_set_pool_ready(bool value) {
+  
+  _impl_.pool_ready_ = value;
+}
+inline void DistributorStatusRsp::set_pool_ready(bool value) {
+  _internal_set_pool_ready(value);
+  // @@protoc_insertion_point(field_set:maze.DistributorStatusRsp.pool_ready)
+}
+
 // -------------------------------------------------------------------
 
 // AIServerStatusReq
@@ -18925,6 +20823,10 @@ inline void ModelDistributorStatusRsp::set_timestamp_ms(int64_t value) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -19001,6 +20903,16 @@ template <> struct is_proto_enum< ::maze::WorkloadMode> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::maze::WorkloadMode>() {
   return ::maze::WorkloadMode_descriptor();
+}
+template <> struct is_proto_enum< ::maze::ReplayPolicy> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::maze::ReplayPolicy>() {
+  return ::maze::ReplayPolicy_descriptor();
+}
+template <> struct is_proto_enum< ::maze::SampleBackendType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::maze::SampleBackendType>() {
+  return ::maze::SampleBackendType_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

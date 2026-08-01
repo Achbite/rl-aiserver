@@ -8,7 +8,7 @@
 server:
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
-  run_mode: 1                     # 1=training, 2=local-test, 3=model-evaluation, 4=A*测试
+  run_mode: 2                     # 1=training, 2=local-test, 3=model-evaluation, 4=A*测试
 
 # --- 网格参数（A* 测试 + 训练共用）---
 strategy:
@@ -17,27 +17,27 @@ strategy:
 
 # --- 模型参数 ---
 model:
-  local_dir: "models/local"
-  local_train_dir: "models/local-train"
-  smoke_dir: "models/smoke"
-  save_name: "SaveModel"          # 本地保存的模型文件名（不含扩展名）
+  evaluation_dir: "models/local"  # model-evaluation 从此目录读取 SaveModel.onnx
+  local_train_dir: "models/local-train"  # training 下载、切换模型的运行目录
+  local_test_dir: "/opt/rl/aiserver/models/local-test"  # local-test 内置模型目录，需包含 manifest.json
   manifest_name: "manifest.json"
   startup_timeout_ms: 30000
   expected_obs_dim: 13
   expected_action_dim: 9
 
+# --- 训练模型分发参数（仅 training 生效）---
 model_distribution:
   host: "maze-learner"
   port: 9200
   poll_interval_ms: 200
   boundary_wait_ms: 1000
   rpc_timeout_ms: 5000
-  contract_version: "0.5.0"
+  contract_version: "0.6.0"
 
-# --- 样本输出参数（AIServer → SampleDistributor）---
+# --- 样本输出参数（仅 training 生效，AIServer → LocalSampleService）---
 sample_output:
   enabled: true
-  host: "127.0.0.1"
+  host: "maze-learner"
   port: 9100
   fragment_samples: 128
   rpc_timeout_ms: 2000

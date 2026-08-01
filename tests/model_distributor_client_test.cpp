@@ -30,7 +30,7 @@ public:
         response->set_ret_code(0);
         auto* manifest = response->mutable_manifest();
         manifest->set_schema_version(1);
-        manifest->set_contract_version("0.5.0");
+        manifest->set_contract_version("0.6.0");
         manifest->set_model_version(0);
         manifest->set_artifact_uri("file:///models/model_v000000.onnx");
         manifest->set_model_file("model_v000000.onnx");
@@ -108,7 +108,7 @@ int main() {
     distribution.host = "127.0.0.1";
     distribution.port = selected_port;
     distribution.rpc_timeout_ms = 1000;
-    distribution.contract_version = "0.5.0";
+    distribution.contract_version = "0.6.0";
     ModelConfig model;
     model.local_train_dir = (root / "local-train").string();
     ModelDistributorClient client(distribution, model);

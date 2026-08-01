@@ -17,7 +17,7 @@ canonical_workload() {
             printf '%s\n' "training"
             ;;
         2|local-test|inference-smoke)
-            printf '%s\n' "inference-smoke"
+            printf '%s\n' "local-test"
             ;;
         3|model-evaluation)
             printf '%s\n' "model-evaluation"
@@ -98,7 +98,6 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
                 echo "--sample-distributor requires host:port" >&2
                 exit 2
             fi
-            sample_host="${address%:*}"
             sample_port="${address##*:}"
             if [[ ! "${sample_port}" =~ ^[0-9]+$ ]] ||
                [ "${sample_port}" -le 0 ] ||
@@ -106,21 +105,13 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
                 echo "--sample-distributor requires a valid TCP port" >&2
                 exit 2
             fi
-            case "${sample_host}" in
-                127.0.0.1|localhost)
-                    ;;
-                *)
-                    echo "bundled SampleDistributor requires a loopback address" >&2
-                    exit 2
-                    ;;
-            esac
-            export MAZE_SAMPLE_DISTRIBUTOR_HOST="${sample_host}"
+            export MAZE_SAMPLE_DISTRIBUTOR_HOST="${address%:*}"
             export MAZE_SAMPLE_DISTRIBUTOR_PORT="${sample_port}"
             forward_arguments+=("${argument}" "${address}")
             argument_index=$((argument_index + 2))
             ;;
-        --listen-port|--model-distributor|\
-        --smoke-model-dir|--local-model-dir)
+        --listen-port|--model-distributor|--local-test-model-dir|\
+        --smoke-model-dir)
             value_index=$((argument_index + 1))
             if [ "${value_index}" -ge "${#runtime_arguments[@]}" ] ||
                [ -z "${runtime_arguments[${value_index}]}" ]; then
@@ -174,20 +165,6 @@ fi
 export MAZE_AISERVER_RUN_MODE="${workload}"
 printf 'AIServer run mode: %s (%s)\n' "${selected_mode}" "${workload}"
 
-default_distributor_bin=""
-default_distributor_config=""
-if [ -x "${repo_dir}/sample-distributor/bin/maze_sample_distributor" ] &&
-   [ -f "${repo_dir}/sample-distributor/config/distributor_config.yaml" ]; then
-    default_distributor_bin="${repo_dir}/sample-distributor/bin/maze_sample_distributor"
-    default_distributor_config="${repo_dir}/sample-distributor/config/distributor_config.yaml"
-elif [ -x "/opt/rl/aiserver/sample-distributor/bin/maze_sample_distributor" ] &&
-     [ -f "/opt/rl/aiserver/sample-distributor/config/distributor_config.yaml" ]; then
-    default_distributor_bin="/opt/rl/aiserver/sample-distributor/bin/maze_sample_distributor"
-    default_distributor_config="/opt/rl/aiserver/sample-distributor/config/distributor_config.yaml"
-fi
-distributor_bin="${SAMPLE_DISTRIBUTOR_BIN:-${default_distributor_bin}}"
-distributor_config="${SAMPLE_DISTRIBUTOR_CONFIG:-${default_distributor_config}}"
-distributor_pid=""
 aiserver_pid=""
 stopping=0
 quiesced=0
@@ -221,8 +198,6 @@ shutdown() {
     stopping=1
     terminate_process "${aiserver_pid}" 15
     aiserver_pid=""
-    terminate_process "${distributor_pid}" 3
-    distributor_pid=""
     if [ -n "${training_lock}" ]; then
         rm -rf -- "${training_lock}"
         training_lock=""
@@ -243,7 +218,7 @@ trap quiesce USR1
 trap shutdown EXIT TERM INT
 
 case "${workload}" in
-    inference-smoke|model-evaluation|astar-test)
+    local-test|model-evaluation|astar-test)
         ;;
     training)
         if [ "$(basename "${local_train_root}")" != "local-train" ]; then
@@ -264,20 +239,6 @@ case "${workload}" in
             echo "Unsafe AIServer local-train path: ${local_train_root}" >&2
             exit 1
         fi
-        if [ -z "${distributor_bin}" ] || [ -z "${distributor_config}" ]; then
-            echo "training requires a staged SampleDistributor artifact" >&2
-            echo "Expected: ${repo_dir}/sample-distributor/bin/maze_sample_distributor" >&2
-            echo "Override with SAMPLE_DISTRIBUTOR_BIN and SAMPLE_DISTRIBUTOR_CONFIG" >&2
-            exit 1
-        fi
-        if [ ! -x "${distributor_bin}" ]; then
-            echo "SampleDistributor executable is missing: ${distributor_bin}" >&2
-            exit 1
-        fi
-        if [ ! -f "${distributor_config}" ]; then
-            echo "SampleDistributor config is missing: ${distributor_config}" >&2
-            exit 1
-        fi
         training_lock="${MAZE_TRAIN_LOCK_DIR:-${local_train_parent}/.aiserver-local-train.lock}"
         if ! mkdir "${training_lock}" 2>/dev/null; then
             echo "AIServer training is already active or its lock remains: ${training_lock}" >&2
@@ -295,30 +256,8 @@ case "${workload}" in
             "${local_train_root}/active" \
             "${local_train_root}/previous"
         export MAZE_LOCAL_TRAIN_ROOT="${local_train_root}"
-        export MAZE_SAMPLE_DISTRIBUTOR_HOST="${MAZE_SAMPLE_DISTRIBUTOR_HOST:-127.0.0.1}"
+        export MAZE_SAMPLE_DISTRIBUTOR_HOST="${MAZE_SAMPLE_DISTRIBUTOR_HOST:-maze-learner}"
         export MAZE_SAMPLE_DISTRIBUTOR_PORT="${MAZE_SAMPLE_DISTRIBUTOR_PORT:-9100}"
-        "${distributor_bin}" "${distributor_config}" &
-        distributor_pid=$!
-
-        ready=0
-        for _ in $(seq 1 100); do
-            if ! kill -0 "${distributor_pid}" 2>/dev/null; then
-                wait "${distributor_pid}"
-                exit $?
-            fi
-            if (exec 3<>"/dev/tcp/127.0.0.1/${MAZE_SAMPLE_DISTRIBUTOR_PORT}") \
-                2>/dev/null; then
-                exec 3>&-
-                exec 3<&-
-                ready=1
-                break
-            fi
-            sleep 0.1
-        done
-        if [ "${ready}" -ne 1 ]; then
-            echo "SampleDistributor readiness timeout" >&2
-            exit 1
-        fi
         ;;
     *)
         echo "unknown workload: ${workload}" >&2
@@ -331,21 +270,19 @@ if [ ! -x "${aiserver_bin}" ]; then
     exit 1
 fi
 
-"${aiserver_bin}" \
-    --config "${aiserver_config}" \
-    --workload "${workload}" \
-    "${forward_arguments[@]}" &
+if [ "${#forward_arguments[@]}" -gt 0 ]; then
+    "${aiserver_bin}" \
+        --config "${aiserver_config}" \
+        --workload "${workload}" \
+        "${forward_arguments[@]}" &
+else
+    "${aiserver_bin}" \
+        --config "${aiserver_config}" \
+        --workload "${workload}" &
+fi
 aiserver_pid=$!
 
 while [ "${stopping}" -eq 0 ]; do
-    if [ -n "${distributor_pid}" ] &&
-       ! kill -0 "${distributor_pid}" 2>/dev/null; then
-        wait "${distributor_pid}"
-        status=$?
-        distributor_pid=""
-        shutdown
-        exit "${status}"
-    fi
     if [ -n "${aiserver_pid}" ] &&
        ! kill -0 "${aiserver_pid}" 2>/dev/null; then
         wait "${aiserver_pid}"

@@ -31,7 +31,6 @@ ensure_container() {
             --network "${network_name}" \
             --network-alias "${container_name}" \
             --network-alias "maze-aiserver" \
-            --env MAZE_SMOKE_MODEL_DIR=/opt/rl/aiserver/models/smoke \
             --volume "${repo_dir}:/workspace/rl-aiserver" \
             "${dev_image}" >/dev/null
     elif [ "$(docker inspect --format '{{.State.Running}}' "${container_name}")" != "true" ]; then

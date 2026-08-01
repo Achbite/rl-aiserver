@@ -22,6 +22,7 @@
 namespace maze {
 
 static const char* MazeService_method_names[] = {
+  "/maze.MazeService/OpenSession",
   "/maze.MazeService/Init",
   "/maze.MazeService/BeginEpisode",
   "/maze.MazeService/Update",
@@ -37,13 +38,37 @@ std::unique_ptr< MazeService::Stub> MazeService::NewStub(const std::shared_ptr< 
 }
 
 MazeService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
-  : channel_(channel), rpcmethod_Init_(MazeService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_BeginEpisode_(MazeService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Update_(MazeService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_EndEpisode_(MazeService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_AbortEpisode_(MazeService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetAIServerStatus_(MazeService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  : channel_(channel), rpcmethod_OpenSession_(MazeService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Init_(MazeService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_BeginEpisode_(MazeService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Update_(MazeService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_EndEpisode_(MazeService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_AbortEpisode_(MazeService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetAIServerStatus_(MazeService_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
+
+::grpc::Status MazeService::Stub::OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::maze::OpenSessionRsp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::maze::OpenSessionReq, ::maze::OpenSessionRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_OpenSession_, context, request, response);
+}
+
+void MazeService::Stub::async::OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::maze::OpenSessionReq, ::maze::OpenSessionRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_OpenSession_, context, request, response, std::move(f));
+}
+
+void MazeService::Stub::async::OpenSession(::grpc::ClientContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_OpenSession_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>* MazeService::Stub::PrepareAsyncOpenSessionRaw(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::maze::OpenSessionRsp, ::maze::OpenSessionReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_OpenSession_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::maze::OpenSessionRsp>* MazeService::Stub::AsyncOpenSessionRaw(::grpc::ClientContext* context, const ::maze::OpenSessionReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncOpenSessionRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
 
 ::grpc::Status MazeService::Stub::Init(::grpc::ClientContext* context, const ::maze::InitReq& request, ::maze::InitRsp* response) {
   return ::grpc::internal::BlockingUnaryCall< ::maze::InitReq, ::maze::InitRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Init_, context, request, response);
@@ -187,6 +212,16 @@ MazeService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MazeService_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< MazeService::Service, ::maze::OpenSessionReq, ::maze::OpenSessionRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](MazeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::maze::OpenSessionReq* req,
+             ::maze::OpenSessionRsp* resp) {
+               return service->OpenSession(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      MazeService_method_names[1],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MazeService::Service, ::maze::InitReq, ::maze::InitRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MazeService::Service* service,
              ::grpc::ServerContext* ctx,
@@ -195,7 +230,7 @@ MazeService::Service::Service() {
                return service->Init(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MazeService_method_names[1],
+      MazeService_method_names[2],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MazeService::Service, ::maze::BeginEpisodeReq, ::maze::EpisodeLifecycleRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MazeService::Service* service,
@@ -205,7 +240,7 @@ MazeService::Service::Service() {
                return service->BeginEpisode(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MazeService_method_names[2],
+      MazeService_method_names[3],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MazeService::Service, ::maze::UpdateReq, ::maze::UpdateRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MazeService::Service* service,
@@ -215,7 +250,7 @@ MazeService::Service::Service() {
                return service->Update(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MazeService_method_names[3],
+      MazeService_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MazeService::Service, ::maze::EpisodeEndReq, ::maze::EpisodeEndRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MazeService::Service* service,
@@ -225,7 +260,7 @@ MazeService::Service::Service() {
                return service->EndEpisode(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MazeService_method_names[4],
+      MazeService_method_names[5],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MazeService::Service, ::maze::AbortEpisodeReq, ::maze::EpisodeLifecycleRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MazeService::Service* service,
@@ -235,7 +270,7 @@ MazeService::Service::Service() {
                return service->AbortEpisode(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MazeService_method_names[5],
+      MazeService_method_names[6],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MazeService::Service, ::maze::AIServerStatusReq, ::maze::AIServerStatusRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MazeService::Service* service,
@@ -247,6 +282,13 @@ MazeService::Service::Service() {
 }
 
 MazeService::Service::~Service() {
+}
+
+::grpc::Status MazeService::Service::OpenSession(::grpc::ServerContext* context, const ::maze::OpenSessionReq* request, ::maze::OpenSessionRsp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
 ::grpc::Status MazeService::Service::Init(::grpc::ServerContext* context, const ::maze::InitReq* request, ::maze::InitRsp* response) {

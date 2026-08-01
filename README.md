@@ -2,16 +2,17 @@
 
 简体中文 | [English](README.en.md)
 
-C++ 环境交互与推理服务。训练模式同时启动 SampleDistributor；推理测试模式使用镜像内置模型。
+C++ 环境交互、推理、轨迹组装与异步样本发送服务。训练模式将样本发送至 Learner Pod 的 LocalSampleService；`local-test` 使用镜像内置模型。
 
 ## 快速开始
 
-先构建 Sample Pool，并装配二进制：
+先构建 Contracts，并显式更新仓库内协议快照：
 
 ```bash
-(cd ../rl-sample-pool && bash build_artifact.sh)
-cp -R ../.workspace/artifacts/rl-sample-pool/0.5.0/linux-arm64/. \
-  sample-distributor/
+(cd ../rl-contracts && bash build_artifact.sh)
+cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/maze.proto proto/
+cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/cpp/* proto/
+cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/manifest.json proto/
 ```
 
 构建镜像：
@@ -24,7 +25,7 @@ AISERVER_IMAGE_TAG=training-001 bash build_image.sh
 
 ```bash
 make shell
-bash ./run.sh inference-smoke
+bash ./run.sh local-test
 ```
 
 启动训练模式：
@@ -33,18 +34,30 @@ bash ./run.sh inference-smoke
 bash ./run.sh training
 ```
 
+评测本地模型时，在 `configs/server_config.yaml` 中将 `model.evaluation_dir`
+指向保存点目录。该目录必须包含固定文件名 `SaveModel.onnx`：
+
+```yaml
+model:
+  evaluation_dir: "models/evaluation/000200"
+```
+
+```bash
+bash ./run.sh model-evaluation
+```
+
 完整链路建议从 `rl-framework` 启动。
 
 ## 运行模式
 
 ```text
 1 / training
-2 / inference-smoke
+2 / local-test
 3 / model-evaluation
 4 / astar-test
 ```
 
-默认 AIServer 端口为 `9002`，SampleDistributor 端口为 `9100`。
+默认 AIServer 端口为 `9002`。训练样本默认发送至 `maze-learner:9100`，模型默认从 `maze-learner:9200` 拉取。
 
 ## License
 

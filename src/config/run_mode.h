@@ -31,7 +31,7 @@ inline const char* Workload(int mode) {
         case kTraining:
             return "training";
         case kLocalTest:
-            return "inference-smoke";
+            return "local-test";
         case kModelEvaluation:
             return "model-evaluation";
         case kAstarTest:

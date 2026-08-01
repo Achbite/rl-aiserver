@@ -69,6 +69,16 @@ if(BUILD_TESTING)
         ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
     add_test(NAME run_mode_contract COMMAND run_mode_test)
+
+    add_executable(model_evaluation_config_test
+        tests/model_evaluation_config_test.cpp
+    )
+    target_include_directories(model_evaluation_config_test PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
+    add_test(NAME model_evaluation_config_contract
+             COMMAND model_evaluation_config_test)
+
     add_test(
         NAME run_launcher_mode_contract
         COMMAND bash

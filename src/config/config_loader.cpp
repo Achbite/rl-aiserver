@@ -161,22 +161,26 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     out_config.strategy.replan_interval  = SafeInt(FindValue(entries, "strategy", "replan_interval"),  10);
 
     // --- model ---
-    std::string local_dir = FindValue(entries, "model", "local_dir");
-    if (!local_dir.empty()) {
-        out_config.model.local_dir = local_dir;
+    std::string evaluation_dir =
+        FindValue(entries, "model", "evaluation_dir");
+    if (evaluation_dir.empty()) {
+        evaluation_dir = FindValue(entries, "model", "local_dir");
+    }
+    if (!evaluation_dir.empty()) {
+        out_config.model.evaluation_dir = evaluation_dir;
     }
     std::string local_train_dir =
         FindValue(entries, "model", "local_train_dir");
     if (!local_train_dir.empty()) {
         out_config.model.local_train_dir = local_train_dir;
     }
-    std::string smoke_dir = FindValue(entries, "model", "smoke_dir");
-    if (!smoke_dir.empty()) {
-        out_config.model.smoke_dir = smoke_dir;
+    std::string local_test_dir =
+        FindValue(entries, "model", "local_test_dir");
+    if (local_test_dir.empty()) {
+        local_test_dir = FindValue(entries, "model", "smoke_dir");
     }
-    std::string save_name = FindValue(entries, "model", "save_name");
-    if (!save_name.empty()) {
-        out_config.model.save_name = save_name;
+    if (!local_test_dir.empty()) {
+        out_config.model.local_test_dir = local_test_dir;
     }
     std::string manifest_name = FindValue(entries, "model", "manifest_name");
     if (!manifest_name.empty()) {
@@ -277,15 +281,18 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     if (!local_train_root.empty()) {
         out_config.model.local_train_dir = local_train_root;
     }
-    std::string smoke_model_dir =
-        GetEnvValue("MAZE_SMOKE_MODEL_DIR");
-    if (!smoke_model_dir.empty()) {
-        out_config.model.smoke_dir = smoke_model_dir;
+    std::string evaluation_model_dir =
+        GetEnvValue("MAZE_EVALUATION_MODEL_DIR");
+    if (!evaluation_model_dir.empty()) {
+        out_config.model.evaluation_dir = evaluation_model_dir;
     }
-    std::string local_model_dir =
-        GetEnvValue("MAZE_LOCAL_MODEL_DIR");
-    if (!local_model_dir.empty()) {
-        out_config.model.local_dir = local_model_dir;
+    std::string local_test_model_dir =
+        GetEnvValue("MAZE_LOCAL_TEST_MODEL_DIR");
+    if (local_test_model_dir.empty()) {
+        local_test_model_dir = GetEnvValue("MAZE_SMOKE_MODEL_DIR");
+    }
+    if (!local_test_model_dir.empty()) {
+        out_config.model.local_test_dir = local_test_model_dir;
     }
     std::string sd_host = GetEnvValue("MAZE_SAMPLE_DISTRIBUTOR_HOST");
     if (!sd_host.empty()) {
@@ -337,10 +344,11 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     LOG_INFO("Config", "strategy: grid=%d, replan=%d",
              out_config.strategy.grid_size,
              out_config.strategy.replan_interval);
-    LOG_INFO("Config", "model: local=%s, local_train=%s, smoke=%s, manifest=%s, startup_timeout_ms=%d, shape=[%d]->[%d]",
-             out_config.model.local_dir.c_str(),
+    LOG_INFO("Config", "model: evaluation_dir=%s, evaluation_file=%s, local_train=%s, local_test_dir=%s, manifest=%s, startup_timeout_ms=%d, shape=[%d]->[%d]",
+             out_config.model.evaluation_dir.c_str(),
+             kLocalEvaluationModelFile,
              out_config.model.local_train_dir.c_str(),
-             out_config.model.smoke_dir.c_str(),
+             out_config.model.local_test_dir.c_str(),
              out_config.model.manifest_name.c_str(),
              out_config.model.startup_timeout_ms,
              out_config.model.expected_obs_dim,
@@ -352,8 +360,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
              out_config.model_distribution.boundary_wait_ms,
              out_config.model_distribution.rpc_timeout_ms,
              out_config.model_distribution.contract_version.c_str());
-    LOG_INFO("Config", "sample_output: enabled=%s, target=%s:%d, fragment=%d, rpc_timeout_ms=%d, attempts=%d, queue=%zu/%zuB, aiserver_id=%s, env_id=%s",
+    const bool sample_output_active =
+        out_config.server.run_mode == aiserver_mode::kTraining &&
+        out_config.sample_output.enabled;
+    LOG_INFO("Config", "sample_output: configured_enabled=%s, active=%s, target=%s:%d, fragment=%d, rpc_timeout_ms=%d, attempts=%d, queue=%zu/%zuB, aiserver_id=%s, env_id=%s",
              out_config.sample_output.enabled ? "true" : "false",
+             sample_output_active ? "true" : "false",
              out_config.sample_output.host.c_str(),
              out_config.sample_output.port,
              out_config.sample_output.fragment_samples,

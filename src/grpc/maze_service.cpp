@@ -44,6 +44,18 @@ maze::WorkloadMode WorkloadModeForRunMode(int run_mode) {
     }
 }
 
+maze::ReplayPolicy ReplayPolicyForRunMode(int run_mode) {
+    if (run_mode == aiserver_mode::kLocalTest ||
+        run_mode == aiserver_mode::kModelEvaluation) {
+        return maze::REPLAY_POLICY_RECORD_AND_SERVE;
+    }
+    return maze::REPLAY_POLICY_DISABLED;
+}
+
+constexpr uint32_t kSessionProtocolVersion = 1;
+constexpr const char* kObservationSchemaId = "maze.observation.v1";
+constexpr const char* kActionSchemaId = "maze.action.v1";
+
 }  // namespace
 
 MazeServiceImpl::MazeServiceImpl(const AIServerConfig& config)
@@ -75,21 +87,20 @@ bool MazeServiceImpl::LoadInitialModel() {
     model_state_.store(maze::MODEL_STATE_WAITING);
 
     if (config_.server.run_mode == aiserver_mode::kModelEvaluation) {
-        std::string path = config_.model.local_dir + "/" +
-                           config_.model.save_name + ".onnx";
+        const std::string path = LocalEvaluationModelPath(config_.model);
         std::string error;
         if (!onnx_inferencer_.LoadModel(
                 path, config_.model.expected_obs_dim,
                 config_.model.expected_action_dim, &error)) {
             model_state_.store(maze::MODEL_STATE_FAILED);
-            last_error_ = "local model validation failed: " + error;
+            last_error_ = "model-evaluation model load failed: " + error;
             return false;
         }
         model_manifest_.model_path = path;
         model_manifest_.model_version = 0;
         if (!ComputeFileSha256(path, model_manifest_.sha256, error)) {
             model_state_.store(maze::MODEL_STATE_FAILED);
-            last_error_ = "local model checksum failed: " + error;
+            last_error_ = "model-evaluation model checksum failed: " + error;
             return false;
         }
         model_manifest_.ready = true;
@@ -99,12 +110,13 @@ bool MazeServiceImpl::LoadInitialModel() {
 
     if (config_.server.run_mode == aiserver_mode::kLocalTest) {
         const std::string manifest_path =
-            config_.model.smoke_dir + "/" + config_.model.manifest_name;
+            config_.model.local_test_dir + "/" +
+            config_.model.manifest_name;
         std::string error;
         if (!LoadModelManifestFile(
                 config_.model, manifest_path, model_manifest_, error)) {
             model_state_.store(maze::MODEL_STATE_FAILED);
-            last_error_ = "smoke model manifest failed: " + error;
+            last_error_ = "local-test model manifest failed: " + error;
             return false;
         }
         if (!onnx_inferencer_.LoadModel(
@@ -112,7 +124,7 @@ bool MazeServiceImpl::LoadInitialModel() {
                 config_.model.expected_obs_dim,
                 config_.model.expected_action_dim, &error)) {
             model_state_.store(maze::MODEL_STATE_FAILED);
-            last_error_ = "smoke model validation failed: " + error;
+            last_error_ = "local-test model validation failed: " + error;
             return false;
         }
         model_state_.store(maze::MODEL_STATE_READY);
@@ -279,10 +291,14 @@ bool MazeServiceImpl::Start() {
                 auto sender = sample_sender_.GetSnapshot();
                 last_error_ = sender.last_error;
                 state_.store(maze::AISERVER_STATE_DEGRADED);
+                LOG_ERROR("MazeService", "样本链路启动失败: %s",
+                          last_error_.c_str());
                 return false;
             }
             if (!LoadInitialModel()) {
                 state_.store(maze::AISERVER_STATE_DEGRADED);
+                LOG_ERROR("MazeService", "训练模型加载失败: %s",
+                          last_error_.c_str());
                 return false;
             }
         } else if (config_.server.run_mode ==
@@ -290,6 +306,8 @@ bool MazeServiceImpl::Start() {
                    config_.server.run_mode == aiserver_mode::kLocalTest) {
             if (!LoadInitialModel()) {
                 state_.store(maze::AISERVER_STATE_DEGRADED);
+                LOG_ERROR("MazeService", "启动模型加载失败: %s",
+                          last_error_.c_str());
                 return false;
             }
         }
@@ -798,24 +816,43 @@ void MazeServiceImpl::QuarantineAgentSamples(
     agent.fragment_first_action_frame_id = -1;
 }
 
-grpc::Status MazeServiceImpl::Init(
+grpc::Status MazeServiceImpl::OpenSession(
     grpc::ServerContext*,
-    const maze::InitReq* req,
-    maze::InitRsp* rsp) {
+    const maze::OpenSessionReq* req,
+    maze::OpenSessionRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
+
+    const maze::WorkloadMode expected_mode =
+        WorkloadModeForRunMode(config_.server.run_mode);
+    rsp->set_session_protocol_version(kSessionProtocolVersion);
+    rsp->set_session_id(req->session_id());
+    rsp->set_aiserver_id(config_.sample_output.aiserver_id);
+    rsp->set_workload_mode(expected_mode);
+    rsp->set_replay_policy(
+        ReplayPolicyForRunMode(config_.server.run_mode));
+    rsp->set_loaded_model_version(model_manifest_.model_version);
+    rsp->set_observation_schema_id(kObservationSchemaId);
+    rsp->set_action_schema_id(kActionSchemaId);
+
     if (!IsReady()) {
         rsp->set_ret_code(-1);
         rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
         rsp->set_message("AIServer is not ready");
         return grpc::Status::OK;
     }
-    const maze::WorkloadMode expected_mode =
-        WorkloadModeForRunMode(config_.server.run_mode);
-    if (req->workload_mode() == maze::WORKLOAD_MODE_UNSPECIFIED ||
-        req->workload_mode() != expected_mode) {
+    if (req->session_protocol_version() != kSessionProtocolVersion) {
         rsp->set_ret_code(-1);
         rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
-        rsp->set_message("Client workload does not match AIServer workload");
+        rsp->set_message("unsupported session protocol version");
+        return grpc::Status::OK;
+    }
+    if ((!req->observation_schema_id().empty() &&
+         req->observation_schema_id() != kObservationSchemaId) ||
+        (!req->action_schema_id().empty() &&
+         req->action_schema_id() != kActionSchemaId)) {
+        rsp->set_ret_code(-1);
+        rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
+        rsp->set_message("unsupported observation or action schema");
         return grpc::Status::OK;
     }
     if (req->agent_num() <= 0 ||
@@ -831,7 +868,7 @@ grpc::Status MazeServiceImpl::Init(
         bool same_identity =
             session->client_id == req->client_id() &&
             session->env_id == req->env_id() &&
-            session->workload_mode == req->workload_mode() &&
+            session->workload_mode == expected_mode &&
             session->agents.size() ==
                 static_cast<std::size_t>(req->agent_num());
         rsp->set_ret_code(same_identity ? 0 : -1);
@@ -846,7 +883,7 @@ grpc::Status MazeServiceImpl::Init(
 
     session->client_id = req->client_id();
     session->env_id = req->env_id();
-    session->workload_mode = req->workload_mode();
+    session->workload_mode = expected_mode;
     session->map_width = req->map_size().x();
     session->map_height = req->map_size().y();
     session->start_x = req->start_pos().x();
@@ -898,6 +935,44 @@ grpc::Status MazeServiceImpl::Init(
              session->client_id.c_str(), session->env_id.c_str(),
              req->agent_num());
     return grpc::Status::OK;
+}
+
+grpc::Status MazeServiceImpl::Init(
+    grpc::ServerContext* ctx,
+    const maze::InitReq* req,
+    maze::InitRsp* rsp) {
+    const maze::WorkloadMode expected_mode =
+        WorkloadModeForRunMode(config_.server.run_mode);
+    if (req->workload_mode() == maze::WORKLOAD_MODE_UNSPECIFIED ||
+        req->workload_mode() != expected_mode) {
+        rsp->set_ret_code(-1);
+        rsp->set_result(maze::LIFECYCLE_RESULT_REJECTED);
+        rsp->set_message("Client workload does not match AIServer workload");
+        return grpc::Status::OK;
+    }
+
+    maze::OpenSessionReq open_req;
+    open_req.set_session_protocol_version(kSessionProtocolVersion);
+    open_req.set_client_id(req->client_id());
+    open_req.set_env_id(req->env_id());
+    open_req.set_session_id(req->session_id());
+    open_req.set_agent_num(req->agent_num());
+    open_req.mutable_map_size()->CopyFrom(req->map_size());
+    open_req.mutable_start_pos()->CopyFrom(req->start_pos());
+    open_req.mutable_end_pos()->CopyFrom(req->end_pos());
+    open_req.set_grid_size(req->grid_size());
+    open_req.set_grid_cols(req->grid_cols());
+    open_req.set_grid_rows(req->grid_rows());
+    open_req.mutable_end_grid()->CopyFrom(req->end_grid());
+    open_req.set_observation_schema_id(kObservationSchemaId);
+    open_req.set_action_schema_id(kActionSchemaId);
+
+    maze::OpenSessionRsp open_rsp;
+    grpc::Status status = OpenSession(ctx, &open_req, &open_rsp);
+    rsp->set_ret_code(open_rsp.ret_code());
+    rsp->set_result(open_rsp.result());
+    rsp->set_message(open_rsp.message());
+    return status;
 }
 
 grpc::Status MazeServiceImpl::BeginEpisode(
