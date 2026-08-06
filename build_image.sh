@@ -15,6 +15,8 @@ platform_dir="${platform//\//-}"
 contract_dir="${repo_dir}/proto"
 smoke_model_dir="${artifact_root}/rl-smoke-model/${RL_SMOKE_MODEL_VERSION}/any"
 
+bash "${repo_dir}/scripts/verify_source_inventory.sh"
+
 if [ ! -f "${contract_dir}/manifest.json" ] ||
    [ ! -f "${contract_dir}/common.pb.cc" ] ||
    [ ! -f "${contract_dir}/training.pb.cc" ] ||

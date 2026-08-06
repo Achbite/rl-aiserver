@@ -1,7 +1,7 @@
-build*/
-_deps/
+/build*/
+/_deps/
 .DS_Store
-log/
-logs/
-models/
-sample-distributor/
+/log/
+/logs/
+/models/
+/sample-distributor/
