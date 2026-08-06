@@ -32,11 +32,19 @@ def main() -> None:
         )
 
     files = {
-        "maze.proto": "maze.proto",
-        "cpp/maze.pb.cc": "maze.pb.cc",
-        "cpp/maze.pb.h": "maze.pb.h",
-        "cpp/maze.grpc.pb.cc": "maze.grpc.pb.cc",
-        "cpp/maze.grpc.pb.h": "maze.grpc.pb.h",
+        "common.proto": "common.proto",
+        "training.proto": "training.proto",
+        "maze_task.proto": "maze_task.proto",
+        "cpp/common.pb.cc": "common.pb.cc",
+        "cpp/common.pb.h": "common.pb.h",
+        "cpp/training.pb.cc": "training.pb.cc",
+        "cpp/training.pb.h": "training.pb.h",
+        "cpp/training.grpc.pb.cc": "training.grpc.pb.cc",
+        "cpp/training.grpc.pb.h": "training.grpc.pb.h",
+        "cpp/maze_task.pb.cc": "maze_task.pb.cc",
+        "cpp/maze_task.pb.h": "maze_task.pb.h",
+        "cpp/maze_task.grpc.pb.cc": "maze_task.grpc.pb.cc",
+        "cpp/maze_task.grpc.pb.h": "maze_task.grpc.pb.h",
     }
     checksums = manifest.get("files", {})
     for artifact_name, local_name in files.items():

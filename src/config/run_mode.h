@@ -7,7 +7,7 @@ namespace aiserver_mode {
 constexpr int kTraining = 1;
 constexpr int kLocalTest = 2;
 constexpr int kModelEvaluation = 3;
-constexpr int kAstarTest = 4;
+constexpr int kMapValidation = 4;
 
 inline int Parse(const std::string& value) {
     if (value == "1" || value == "train" || value == "training") {
@@ -20,8 +20,8 @@ inline int Parse(const std::string& value) {
     if (value == "3" || value == "model-evaluation") {
         return kModelEvaluation;
     }
-    if (value == "4" || value == "astar-test") {
-        return kAstarTest;
+    if (value == "4" || value == "map-validation") {
+        return kMapValidation;
     }
     return 0;
 }
@@ -34,15 +34,15 @@ inline const char* Workload(int mode) {
             return "local-test";
         case kModelEvaluation:
             return "model-evaluation";
-        case kAstarTest:
-            return "astar-test";
+        case kMapValidation:
+            return "map-validation";
         default:
             return "unknown";
     }
 }
 
 inline bool IsValid(int mode) {
-    return mode >= kTraining && mode <= kAstarTest;
+    return mode >= kTraining && mode <= kMapValidation;
 }
 
 }  // namespace aiserver_mode

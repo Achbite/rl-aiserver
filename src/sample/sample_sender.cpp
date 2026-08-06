@@ -15,16 +15,16 @@ double ElapsedMs(std::chrono::steady_clock::time_point start) {
 
 }  // namespace
 
-SampleSender::SampleSender(SampleOutputConfig config)
-    : config_(std::move(config)) {}
+SampleSender::SampleSender(const AIServerConfig& config)
+    : config_(config.sample_output), contract_(config.contract) {}
 
 SampleSender::~SampleSender() {
     StopAndDrain();
 }
 
 bool SampleSender::ProbeDistributor() {
-    maze::DistributorStatusReq request;
-    maze::DistributorStatusRsp response;
+    training::DistributorStatusReq request;
+    training::DistributorStatusRsp response;
     grpc::ClientContext context;
     context.set_deadline(std::chrono::system_clock::now() +
                          std::chrono::milliseconds(config_.health_timeout_ms));
@@ -34,13 +34,32 @@ bool SampleSender::ProbeDistributor() {
             "sample ingress status failed: " + status.error_message());
         return false;
     }
+    const auto& contract = response.contract();
+    const bool contract_matches =
+        contract.package_name() == contract_.package_name &&
+        contract.package_version() == contract_.package_version &&
+        contract.source_digest().algorithm() ==
+            common::DIGEST_ALGORITHM_SHA256 &&
+        contract.source_digest().hex() == contract_.source_digest.hex &&
+        contract.artifact_digest().algorithm() ==
+            common::DIGEST_ALGORITHM_SHA256 &&
+        contract.artifact_digest().hex() == contract_.artifact_digest.hex &&
+        contract.platform() == contract_.platform &&
+        contract.generator_identity() == contract_.generator_identity;
+    if (!contract_matches ||
+        response.distributor().component() != "sample-pool" ||
+        response.distributor().instance_id().empty() ||
+        response.distributor().lifecycle_epoch() == 0) {
+        MarkDegraded("sample ingress identity does not match rl-contracts 0.8.0");
+        return false;
+    }
     if (!response.ready() || !response.ingress_ready()) {
         MarkDegraded("sample ingress is not ready");
         return false;
     }
 
     std::lock_guard<std::mutex> lock(mutex_);
-    distributor_instance_id_ = response.distributor_instance_id();
+    distributor_instance_id_ = response.distributor().instance_id();
     ready_ = true;
     degraded_ = false;
     last_error_.clear();
@@ -55,7 +74,7 @@ bool SampleSender::Start() {
 
     std::string target = config_.host + ":" + std::to_string(config_.port);
     channel_ = grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
-    stub_ = maze::SampleDistributorService::NewStub(channel_);
+    stub_ = training::SampleDistributorService::NewStub(channel_);
     auto deadline = std::chrono::system_clock::now() +
                     std::chrono::milliseconds(config_.health_timeout_ms);
     if (!channel_->WaitForConnected(deadline)) {
@@ -78,7 +97,7 @@ bool SampleSender::Start() {
     return true;
 }
 
-bool SampleSender::Enqueue(const maze::SampleBatch& batch) {
+bool SampleSender::Enqueue(const training::SampleBatch& batch) {
     QueueItem item;
     item.batch = batch;
     item.samples = batch.samples_size();
@@ -131,7 +150,7 @@ bool SampleSender::SendFront(const QueueItem& item,
             if (item.attempts + attempt > 0) ++retry_attempt_count_;
         }
 
-        maze::PushSamplesRsp response;
+        training::PushSamplesRsp response;
         grpc::ClientContext context;
         context.set_deadline(std::chrono::system_clock::now() +
                              std::chrono::milliseconds(config_.rpc_timeout_ms));
@@ -155,9 +174,9 @@ bool SampleSender::SendFront(const QueueItem& item,
         }
 
         if (status.ok() &&
-            (response.result() == maze::PUSH_RESULT_ACCEPTED ||
-             response.result() == maze::PUSH_RESULT_DUPLICATE)) {
-            duplicate = response.result() == maze::PUSH_RESULT_DUPLICATE;
+            (response.result() == training::PUSH_RESULT_ACCEPTED ||
+             response.result() == training::PUSH_RESULT_DUPLICATE)) {
+            duplicate = response.result() == training::PUSH_RESULT_DUPLICATE;
             return true;
         }
 
@@ -165,7 +184,7 @@ bool SampleSender::SendFront(const QueueItem& item,
             error = response.message();
             std::lock_guard<std::mutex> lock(mutex_);
             ++rejected_push_attempt_count_;
-            if (response.result() == maze::PUSH_RESULT_REJECTED_INVALID) {
+            if (response.result() == training::PUSH_RESULT_REJECTED_INVALID) {
                 return false;
             }
         } else {

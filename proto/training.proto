@@ -1,0 +1,531 @@
+syntax = "proto3";
+
+package rl.training.v1;
+
+option cc_generic_services = false;
+
+import "common.proto";
+
+// Task-neutral sample, delivery, model and observability contracts.
+
+enum TransitionEndKind {
+    TRANSITION_END_KIND_UNSPECIFIED = 0;
+    TRANSITION_END_KIND_CONTINUING = 1;
+    TRANSITION_END_KIND_ENVIRONMENT_TERMINATED = 2;
+    TRANSITION_END_KIND_EXTERNAL_TRUNCATION = 3;
+    TRANSITION_END_KIND_PRODUCER_ABORT = 4;
+}
+
+enum PushResult {
+    PUSH_RESULT_UNSPECIFIED = 0;
+    PUSH_RESULT_ACCEPTED = 1;
+    PUSH_RESULT_DUPLICATE = 2;
+    PUSH_RESULT_REJECTED_CAPACITY = 3;
+    PUSH_RESULT_REJECTED_INVALID = 4;
+    PUSH_RESULT_REJECTED_IDENTITY = 5;
+}
+
+enum PressureState {
+    PRESSURE_STATE_UNSPECIFIED = 0;
+    PRESSURE_STATE_NORMAL = 1;
+    PRESSURE_STATE_HIGH = 2;
+    PRESSURE_STATE_FULL = 3;
+}
+
+enum GetBatchResult {
+    GET_BATCH_RESULT_UNSPECIFIED = 0;
+    GET_BATCH_RESULT_LEASED = 1;
+    GET_BATCH_RESULT_TIMEOUT = 2;
+    GET_BATCH_RESULT_BUSY = 3;
+    GET_BATCH_RESULT_REJECTED = 4;
+}
+
+enum BatchSelectionPolicy {
+    BATCH_SELECTION_POLICY_UNSPECIFIED = 0;
+    BATCH_SELECTION_POLICY_TARGET_ONLY = 1;
+    BATCH_SELECTION_POLICY_DRAIN_AVAILABLE = 2;
+}
+
+enum DeliveryResult {
+    DELIVERY_RESULT_UNSPECIFIED = 0;
+    DELIVERY_RESULT_APPLIED = 1;
+    DELIVERY_RESULT_ALREADY_APPLIED = 2;
+    DELIVERY_RESULT_EXPIRED = 3;
+    DELIVERY_RESULT_NOT_FOUND = 4;
+    DELIVERY_RESULT_REJECTED = 5;
+}
+
+enum AckDisposition {
+    ACK_DISPOSITION_UNSPECIFIED = 0;
+    ACK_DISPOSITION_TRAINED = 1;
+    ACK_DISPOSITION_STALE = 2;
+    ACK_DISPOSITION_INVALID = 3;
+    ACK_DISPOSITION_SHUTDOWN_UNTRAINED = 4;
+}
+
+enum AIServerState {
+    AISERVER_STATE_UNSPECIFIED = 0;
+    AISERVER_STATE_STARTING = 1;
+    AISERVER_STATE_READY = 2;
+    AISERVER_STATE_DEGRADED = 3;
+    AISERVER_STATE_DRAINING = 4;
+    AISERVER_STATE_STOPPED = 5;
+}
+
+enum ModelState {
+    MODEL_STATE_UNSPECIFIED = 0;
+    MODEL_STATE_WAITING = 1;
+    MODEL_STATE_READY = 2;
+    MODEL_STATE_FAILED = 3;
+}
+
+enum ModelRegisterResult {
+    MODEL_REGISTER_RESULT_UNSPECIFIED = 0;
+    MODEL_REGISTER_RESULT_REGISTERED = 1;
+    MODEL_REGISTER_RESULT_ALREADY_REGISTERED = 2;
+    MODEL_REGISTER_RESULT_REJECTED_INVALID = 3;
+    MODEL_REGISTER_RESULT_REJECTED_CONFLICT = 4;
+}
+
+enum ModelLoadStatus {
+    MODEL_LOAD_STATUS_UNSPECIFIED = 0;
+    MODEL_LOAD_STATUS_LOADED = 1;
+    MODEL_LOAD_STATUS_FAILED = 2;
+}
+
+enum ModelAckResult {
+    MODEL_ACK_RESULT_UNSPECIFIED = 0;
+    MODEL_ACK_RESULT_APPLIED = 1;
+    MODEL_ACK_RESULT_ALREADY_APPLIED = 2;
+    MODEL_ACK_RESULT_NOT_FOUND = 3;
+    MODEL_ACK_RESULT_REJECTED = 4;
+}
+
+enum SampleBackendType {
+    SAMPLE_BACKEND_TYPE_UNSPECIFIED = 0;
+    SAMPLE_BACKEND_TYPE_LOCAL_MEMORY = 1;
+}
+
+enum MetricValueKind {
+    METRIC_VALUE_KIND_UNSPECIFIED = 0;
+    METRIC_VALUE_KIND_GAUGE = 1;
+    METRIC_VALUE_KIND_COUNTER = 2;
+    METRIC_VALUE_KIND_MEAN = 3;
+    METRIC_VALUE_KIND_RATE = 4;
+    METRIC_VALUE_KIND_QUANTILE = 5;
+}
+
+enum MetricAggregationKind {
+    METRIC_AGGREGATION_KIND_UNSPECIFIED = 0;
+    METRIC_AGGREGATION_KIND_NONE = 1;
+    METRIC_AGGREGATION_KIND_SUM = 2;
+    METRIC_AGGREGATION_KIND_WEIGHTED_MEAN = 3;
+    METRIC_AGGREGATION_KIND_LATEST = 4;
+    METRIC_AGGREGATION_KIND_NOT_MERGEABLE = 5;
+}
+
+enum MetricWindowKind {
+    METRIC_WINDOW_KIND_UNSPECIFIED = 0;
+    METRIC_WINDOW_KIND_INSTANT = 1;
+    METRIC_WINDOW_KIND_CUMULATIVE = 2;
+    METRIC_WINDOW_KIND_INTERVAL = 3;
+    METRIC_WINDOW_KIND_ROLLING = 4;
+}
+
+message ModelIdentity {
+    string model_lineage_id = 1;
+    uint64 model_version = 2;
+    rl.common.v1.ContentDigest artifact_digest = 3;
+    rl.common.v1.ContentDigest manifest_digest = 4;
+}
+
+message BehaviorPolicyIdentity {
+    ModelIdentity model = 1;
+    string distribution_schema_id = 2;
+    rl.common.v1.ContentDigest policy_spec_digest = 3;
+}
+
+message TrainingSemanticsIdentity {
+    string training_contract_id = 1;
+    rl.common.v1.SchemaIdentity observation_schema = 2;
+    rl.common.v1.SchemaIdentity action_schema = 3;
+    rl.common.v1.SchemaIdentity reward_schema = 4;
+    string policy_distribution_schema_id = 5;
+    string model_architecture_id = 6;
+    rl.common.v1.ContentDigest semantics_digest = 7;
+}
+
+message Sample {
+    repeated float observation = 1;
+    repeated float next_observation = 2;
+    int32 action = 3;
+    float reward = 4;
+    float old_log_probability = 5;
+    float old_value_prediction = 6;
+    bool terminated = 7;
+    bool truncated = 8;
+    TransitionEndKind end_kind = 9;
+    uint64 action_step = 10;
+}
+
+message SampleBatch {
+    string batch_id = 1;
+    // SHA-256 over deterministic SampleBatch bytes with this field cleared.
+    // A repeated batch_id with a different digest is an identity conflict.
+    rl.common.v1.ContentDigest payload_digest = 2;
+    string actor_session_id = 3;
+    string trajectory_id = 4;
+    uint32 actor_id = 5;
+    uint32 fragment_id = 6;
+    uint64 fragment_sequence = 7;
+    repeated Sample samples = 8;
+    bool trajectory_end = 9;
+    float bootstrap_value = 10;
+    bool bootstrap_valid = 11;
+    BehaviorPolicyIdentity behavior_policy = 12;
+    TrainingSemanticsIdentity training_semantics = 13;
+    rl.common.v1.ServiceInstanceIdentity producer = 14;
+    rl.common.v1.ContractIdentity contract = 15;
+    int64 created_at_unix_ms = 16;
+    uint64 first_action_step = 17;
+    uint64 last_action_step = 18;
+}
+
+message SampleResponse {
+    int32 ret_code = 1;
+    uint64 model_version = 2;
+}
+
+message PushSamplesRsp {
+    int32 ret_code = 1;
+    string message = 2;
+    int64 accepted_samples = 3;
+    int64 queue_size = 4;
+    PushResult result = 5;
+    string batch_id = 6;
+    int64 accepted_unique_samples = 7;
+    int64 resident_samples = 8;
+    int64 resident_fragments = 9;
+    int64 resident_estimated_bytes = 10;
+    PressureState pressure_state = 11;
+    rl.common.v1.ServiceInstanceIdentity distributor = 12;
+}
+
+message GetBatchReq {
+    int32 batch_size = 1;
+    int32 timeout_ms = 2;
+    rl.common.v1.ServiceInstanceIdentity consumer = 3;
+    int32 lease_timeout_ms = 4;
+    ModelIdentity target_model = 5;
+    BatchSelectionPolicy selection_policy = 6;
+    TrainingSemanticsIdentity required_semantics = 7;
+}
+
+message GetBatchRsp {
+    int32 ret_code = 1;
+    repeated SampleBatch batches = 2;
+    int64 queue_size = 3;
+    int64 returned_samples = 4;
+    string message = 5;
+    GetBatchResult result = 6;
+    string delivery_id = 7;
+    int64 lease_deadline_unix_ms = 8;
+    int64 returned_fragments = 9;
+    int64 actual_batch_size = 10;
+    int64 wait_ms = 11;
+    int64 leased_samples = 12;
+    rl.common.v1.ServiceInstanceIdentity distributor = 13;
+    BehaviorPolicyIdentity behavior_policy = 14;
+}
+
+message AckBatchReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    string delivery_id = 2;
+    AckDisposition disposition = 3;
+    string train_update_id = 4;
+}
+
+message NackBatchReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    string delivery_id = 2;
+    string reason = 3;
+}
+
+message RenewLeaseReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    string delivery_id = 2;
+    int32 lease_timeout_ms = 3;
+}
+
+message DeliveryRsp {
+    int32 ret_code = 1;
+    DeliveryResult result = 2;
+    string message = 3;
+    string delivery_id = 4;
+    int64 affected_samples = 5;
+    int64 queue_size = 6;
+    int64 lease_deadline_unix_ms = 7;
+    AckDisposition disposition = 8;
+    string train_update_id = 9;
+}
+
+message DistributorStatusReq {}
+
+message BehaviorVersionQueueStatus {
+    ModelIdentity behavior_model = 1;
+    int64 ready_samples = 2;
+    int64 ready_fragments = 3;
+    int64 leased_samples = 4;
+    int64 leased_fragments = 5;
+    int64 acked_samples = 6;
+    int64 acked_fragments = 7;
+    int64 trained_samples = 8;
+    int64 stale_samples = 9;
+    int64 invalid_samples = 10;
+    int64 shutdown_untrained_samples = 11;
+}
+
+message DistributorStatusRsp {
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity distributor = 2;
+    bool ready = 3;
+    int64 push_attempt_count = 4;
+    int64 accepted_unique_samples = 5;
+    int64 accepted_unique_batches = 6;
+    int64 duplicate_push_attempt_count = 7;
+    int64 duplicate_sample_attempts = 8;
+    int64 rejected_push_attempt_count = 9;
+    int64 rejected_sample_attempts = 10;
+    int64 acked_unique_samples = 11;
+    int64 acked_unique_batches = 12;
+    int64 ready_queue_samples = 13;
+    int64 ready_queue_fragments = 14;
+    int64 leased_samples = 15;
+    int64 leased_fragments = 16;
+    int64 resident_samples = 17;
+    int64 resident_fragments = 18;
+    int64 resident_estimated_bytes = 19;
+    int64 capacity_samples = 20;
+    int64 capacity_fragments = 21;
+    int64 capacity_estimated_bytes = 22;
+    PressureState pressure_state = 23;
+    int64 redelivery_count = 24;
+    int64 nack_count = 25;
+    int64 expired_lease_count = 26;
+    int64 latest_ack_at_unix_ms = 27;
+    int64 target_hit_count = 28;
+    int64 partial_get_count = 29;
+    int64 empty_timeout_count = 30;
+    string last_error = 31;
+    repeated BehaviorVersionQueueStatus behavior_versions = 32;
+    int64 trained_sample_count = 33;
+    int64 stale_sample_count = 34;
+    int64 invalid_sample_count = 35;
+    int64 shutdown_untrained_sample_count = 36;
+    int64 lease_renew_count = 37;
+    SampleBackendType backend_type = 38;
+    int32 max_concurrent_consumers = 39;
+    int32 active_consumer_count = 40;
+    int64 consumer_busy_count = 41;
+    bool ingress_ready = 42;
+    bool pool_ready = 43;
+    int64 timestamp_unix_ms = 44;
+}
+
+message MetricDescriptor {
+    string field_id = 1;
+    string label = 2;
+    string group = 3;
+    string dimension = 4;
+    string unit = 5;
+    string scope = 6;
+    string statistic = 7;
+    MetricValueKind value_kind = 8;
+    string owner_component = 9;
+    MetricAggregationKind aggregation_kind = 10;
+    MetricWindowKind window_kind = 11;
+    rl.common.v1.SchemaIdentity schema_identity = 12;
+}
+
+message MetricValue {
+    string field_id = 1;
+    double value = 2;
+    double sum = 3;
+    uint64 count = 4;
+    double quantile = 5;
+    int64 window_start_unix_ms = 6;
+    int64 window_end_unix_ms = 7;
+}
+
+message MetricSnapshot {
+    rl.common.v1.ServiceInstanceIdentity source = 1;
+    uint64 sequence = 2;
+    int64 timestamp_unix_ms = 3;
+    repeated MetricDescriptor descriptors = 4;
+    repeated MetricValue values = 5;
+}
+
+message AIServerStatusReq {}
+
+message AIServerStatusRsp {
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity aiserver = 2;
+    AIServerState state = 3;
+    bool ready = 4;
+    bool distributor_ready = 5;
+    ModelState model_state = 6;
+    ModelIdentity loaded_model = 7;
+    ModelIdentity staged_model = 8;
+    int64 outbound_queue_fragments = 9;
+    int64 outbound_queue_samples = 10;
+    int64 outbound_queue_estimated_bytes = 11;
+    int64 outbound_queue_high_watermark = 12;
+    int64 produced_unique_samples = 13;
+    int64 produced_unique_batches = 14;
+    int64 push_attempt_count = 15;
+    int64 accepted_unique_samples = 16;
+    int64 duplicate_push_attempt_count = 17;
+    int64 rejected_push_attempt_count = 18;
+    int64 retry_attempt_count = 19;
+    int64 final_drop_unique_samples = 20;
+    int64 active_actor_session_count = 21;
+    int64 active_trajectory_count = 22;
+    int64 inference_count = 23;
+    double inference_latency_sum_ms = 24;
+    double inference_latency_max_ms = 25;
+    int64 push_rpc_count = 26;
+    double push_rpc_latency_sum_ms = 27;
+    double push_rpc_latency_max_ms = 28;
+    int64 model_switch_count = 29;
+    int64 quarantined_sample_count = 30;
+    int64 quarantined_fragment_count = 31;
+    string last_error = 32;
+    int64 timestamp_unix_ms = 33;
+    MetricSnapshot metrics = 34;
+}
+
+message ModelArtifactManifest {
+    uint32 manifest_schema_version = 1;
+    rl.common.v1.ContractIdentity contract = 2;
+    // identity.manifest_digest is computed over deterministic manifest bytes
+    // with that nested digest cleared, avoiding a self-referential hash.
+    ModelIdentity identity = 3;
+    rl.common.v1.SchemaIdentity observation_schema = 4;
+    rl.common.v1.SchemaIdentity action_schema = 5;
+    string model_architecture_id = 6;
+    string tensor_dtype = 7;
+    repeated int64 input_shape = 8;
+    repeated int64 action_shape = 9;
+    repeated int64 value_shape = 10;
+    string artifact_uri = 11;
+    string model_file = 12;
+    int64 size_bytes = 13;
+    int64 seed = 14;
+    int64 train_updates = 15;
+    int64 trained_samples = 16;
+    rl.common.v1.ContentDigest training_config_digest = 17;
+    TrainingSemanticsIdentity training_semantics = 18;
+    int64 published_at_unix_ms = 19;
+    bool ready = 20;
+}
+
+message RegisterModelReq {
+    ModelArtifactManifest manifest = 1;
+}
+
+message RegisterModelRsp {
+    int32 ret_code = 1;
+    ModelRegisterResult result = 2;
+    string message = 3;
+    ModelArtifactManifest manifest = 4;
+    rl.common.v1.ServiceInstanceIdentity distributor = 5;
+}
+
+message GetModelManifestReq {
+    ModelIdentity requested_model = 1;
+    rl.common.v1.ServiceInstanceIdentity requester = 2;
+    bool latest_in_lineage = 3;
+}
+
+message GetModelManifestRsp {
+    int32 ret_code = 1;
+    string message = 2;
+    ModelArtifactManifest manifest = 3;
+    rl.common.v1.ServiceInstanceIdentity distributor = 4;
+}
+
+message DownloadModelReq {
+    ModelIdentity requested_model = 1;
+    rl.common.v1.ServiceInstanceIdentity requester = 2;
+}
+
+message ModelChunk {
+    ModelIdentity model = 1;
+    int64 offset = 2;
+    bytes data = 3;
+}
+
+message AckModelReq {
+    rl.common.v1.ServiceInstanceIdentity aiserver = 1;
+    ModelIdentity model = 2;
+    string load_instance_id = 3;
+    ModelLoadStatus load_status = 4;
+    string message = 5;
+}
+
+message AckModelRsp {
+    int32 ret_code = 1;
+    ModelAckResult result = 2;
+    string message = 3;
+    rl.common.v1.ServiceInstanceIdentity distributor = 4;
+}
+
+message ModelDistributorStatusReq {}
+
+message ModelDistributorStatusRsp {
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity distributor = 2;
+    bool ready = 3;
+    int64 registered_model_count = 4;
+    ModelIdentity latest_model = 5;
+    int64 register_attempt_count = 6;
+    int64 duplicate_register_count = 7;
+    int64 rejected_register_count = 8;
+    int64 download_request_count = 9;
+    int64 download_success_count = 10;
+    int64 download_failure_count = 11;
+    int64 bytes_served = 12;
+    int64 loaded_ack_count = 13;
+    int64 failed_ack_count = 14;
+    rl.common.v1.ServiceInstanceIdentity latest_ack_aiserver = 15;
+    ModelIdentity latest_ack_model = 16;
+    ModelLoadStatus latest_ack_status = 17;
+    string last_error = 18;
+    int64 timestamp_unix_ms = 19;
+}
+
+service AIServerTrainingStatusService {
+    rpc GetAIServerStatus(AIServerStatusReq) returns (AIServerStatusRsp);
+}
+
+service LearnerService {
+    rpc SendSamples(SampleBatch) returns (SampleResponse);
+}
+
+service SampleDistributorService {
+    rpc PushSamples(SampleBatch) returns (PushSamplesRsp);
+    rpc GetBatch(GetBatchReq) returns (GetBatchRsp);
+    rpc AckBatch(AckBatchReq) returns (DeliveryRsp);
+    rpc NackBatch(NackBatchReq) returns (DeliveryRsp);
+    rpc RenewLease(RenewLeaseReq) returns (DeliveryRsp);
+    rpc GetStatus(DistributorStatusReq) returns (DistributorStatusRsp);
+}
+
+service ModelDistributorService {
+    rpc RegisterModel(RegisterModelReq) returns (RegisterModelRsp);
+    rpc GetModelManifest(GetModelManifestReq) returns (GetModelManifestRsp);
+    rpc DownloadModel(DownloadModelReq) returns (stream ModelChunk);
+    rpc AckModel(AckModelReq) returns (AckModelRsp);
+    rpc GetModelDistributorStatus(ModelDistributorStatusReq)
+        returns (ModelDistributorStatusRsp);
+}

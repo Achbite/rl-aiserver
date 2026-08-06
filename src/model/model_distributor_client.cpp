@@ -43,58 +43,32 @@ bool WriteAll(int descriptor, const char* data, std::size_t size) {
 
 }  // namespace
 
-ModelDistributorClient::ModelDistributorClient(
-    const ModelDistributionConfig& distribution,
-    const ModelConfig& model)
-    : distribution_(distribution), model_(model) {
+ModelDistributorClient::ModelDistributorClient(const AIServerConfig& config)
+    : config_(config) {
     const std::string address =
-        distribution_.host + ":" + std::to_string(distribution_.port);
+        config_.model_distribution.host + ":" +
+        std::to_string(config_.model_distribution.port);
     channel_ = grpc::CreateChannel(
         address, grpc::InsecureChannelCredentials());
-    stub_ = maze::ModelDistributorService::NewStub(channel_);
+    stub_ = training::ModelDistributorService::NewStub(channel_);
 }
 
 bool ModelDistributorClient::ValidateManifest(
-    const maze::ModelArtifactManifest& source,
+    const training::ModelArtifactManifest& source,
     int expected_version,
     std::string& error) const {
-    if (source.schema_version() != 1 ||
-        source.contract_version() != distribution_.contract_version ||
-        !source.ready()) {
-        error = "model manifest version or ready state is invalid";
-        return false;
-    }
-    if ((expected_version >= 0 &&
-         source.model_version() != expected_version) ||
-        source.size_bytes() <= 0 || !IsSha256(source.sha256())) {
-        error = "model manifest identity is invalid";
-        return false;
-    }
-    if (!ShapeEquals(
-            source.input_shape(), {1, model_.expected_obs_dim}) ||
-        !ShapeEquals(
-            source.action_shape(), {1, model_.expected_action_dim}) ||
-        !ShapeEquals(source.value_shape(), {1, 1})) {
-        error = "model manifest shape does not match AIServer";
-        return false;
-    }
-    if (source.model_file().empty() ||
-        std::filesystem::path(source.model_file()).filename() !=
-            std::filesystem::path(source.model_file())) {
-        error = "model_file must be a file name";
-        return false;
-    }
-    return true;
+    return ValidateModelManifest(
+        config_, source, expected_version, error);
 }
 
 bool ModelDistributorClient::Download(
-    const maze::ModelArtifactManifest& source,
+    const training::ModelArtifactManifest& source,
     const std::string& aiserver_id,
     std::string& local_path,
     std::string& error) {
     namespace fs = std::filesystem;
     const fs::path incoming_dir =
-        fs::path(model_.local_train_dir) / "incoming";
+        fs::path(config_.model.local_train_dir) / "incoming";
     std::error_code fs_error;
     fs::create_directories(incoming_dir, fs_error);
     if (fs_error) {
@@ -112,20 +86,23 @@ bool ModelDistributorClient::Download(
         return false;
     }
 
-    maze::DownloadModelReq request;
-    request.set_model_version(source.model_version());
-    request.set_aiserver_id(aiserver_id);
+    training::DownloadModelReq request;
+    *request.mutable_requested_model() = source.identity();
+    request.mutable_requester()->set_component("aiserver");
+    request.mutable_requester()->set_instance_id(aiserver_id);
+    request.mutable_requester()->set_lifecycle_epoch(1);
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(distribution_.rpc_timeout_ms));
-    std::unique_ptr<grpc::ClientReader<maze::ModelChunk>> reader =
+        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
+    std::unique_ptr<grpc::ClientReader<training::ModelChunk>> reader =
         stub_->DownloadModel(&context, request);
     int64_t expected_offset = 0;
-    maze::ModelChunk chunk;
+    training::ModelChunk chunk;
     bool write_ok = true;
     while (reader->Read(&chunk)) {
-        if (chunk.model_version() != source.model_version() ||
+        if (chunk.model().SerializeAsString() !=
+                source.identity().SerializeAsString() ||
             chunk.offset() != expected_offset ||
             !WriteAll(descriptor, chunk.data().data(), chunk.data().size())) {
             write_ok = false;
@@ -150,7 +127,7 @@ bool ModelDistributorClient::Download(
         fs::remove(temporary, fs_error);
         return false;
     }
-    if (checksum != source.sha256()) {
+    if (checksum != source.identity().artifact_digest().hex()) {
         fs::remove(temporary, fs_error);
         error = "downloaded model checksum mismatch";
         return false;
@@ -170,15 +147,22 @@ bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
                                    bool latest,
                                    ModelManifest& manifest,
     std::string& error) {
-    maze::GetModelManifestReq request;
-    request.set_model_version(model_version);
-    request.set_aiserver_id(aiserver_id);
-    request.set_latest(latest);
-    maze::GetModelManifestRsp response;
+    training::GetModelManifestReq request;
+    request.mutable_requested_model()->set_model_lineage_id(
+        config_.model.expected_model_lineage_id);
+    if (!latest) {
+        request.mutable_requested_model()->set_model_version(
+            static_cast<uint64_t>(model_version));
+    }
+    request.mutable_requester()->set_component("aiserver");
+    request.mutable_requester()->set_instance_id(aiserver_id);
+    request.mutable_requester()->set_lifecycle_epoch(1);
+    request.set_latest_in_lineage(latest);
+    training::GetModelManifestRsp response;
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(distribution_.rpc_timeout_ms));
+        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
     const grpc::Status status =
         stub_->GetModelManifest(&context, request, &response);
     if (!status.ok() || response.ret_code() != 0 ||
@@ -189,30 +173,13 @@ bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
         return false;
     }
     const auto& source = response.manifest();
-    if (!ValidateManifest(
-            source, latest ? -1 : model_version, error)) {
+    if (!ValidateManifest(source, model_version, error)) {
         return false;
     }
 
     std::string local_path;
     if (!Download(source, aiserver_id, local_path, error)) return false;
-    manifest.schema_version = static_cast<int>(source.schema_version());
-    manifest.contract_version = source.contract_version();
-    manifest.model_version = source.model_version();
-    manifest.artifact_uri = source.artifact_uri();
-    manifest.model_file = source.model_file();
-    manifest.size_bytes = source.size_bytes();
-    manifest.sha256 = source.sha256();
-    manifest.input_shape.assign(
-        source.input_shape().begin(), source.input_shape().end());
-    manifest.action_shape.assign(
-        source.action_shape().begin(), source.action_shape().end());
-    manifest.value_shape.assign(
-        source.value_shape().begin(), source.value_shape().end());
-    manifest.seed = source.seed();
-    manifest.ready = source.ready();
-    manifest.published_ts_ms = source.published_ts_ms();
-    manifest.model_path = local_path;
+    AssignModelManifest(source, local_path, manifest);
     return true;
 }
 
@@ -237,14 +204,18 @@ bool ModelDistributorClient::GetLatestIdentity(
     int& model_version,
     std::string& checksum,
     std::string& error) {
-    maze::GetModelManifestReq request;
-    request.set_aiserver_id(aiserver_id);
-    request.set_latest(true);
-    maze::GetModelManifestRsp response;
+    training::GetModelManifestReq request;
+    request.mutable_requested_model()->set_model_lineage_id(
+        config_.model.expected_model_lineage_id);
+    request.mutable_requester()->set_component("aiserver");
+    request.mutable_requester()->set_instance_id(aiserver_id);
+    request.mutable_requester()->set_lifecycle_epoch(1);
+    request.set_latest_in_lineage(true);
+    training::GetModelManifestRsp response;
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(distribution_.rpc_timeout_ms));
+        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
     const grpc::Status status =
         stub_->GetModelManifest(&context, request, &response);
     if (!status.ok() || response.ret_code() != 0 ||
@@ -258,31 +229,34 @@ bool ModelDistributorClient::GetLatestIdentity(
     if (!ValidateManifest(source, -1, error)) {
         return false;
     }
-    model_version = source.model_version();
-    checksum = source.sha256();
+    model_version = static_cast<int>(source.identity().model_version());
+    checksum = source.identity().artifact_digest().hex();
     return true;
 }
 
 bool ModelDistributorClient::Ack(const ModelManifest& manifest,
                                  const std::string& aiserver_id,
-                                 maze::ModelLoadStatus load_status,
+                                 training::ModelLoadStatus load_status,
                                  const std::string& message,
                                  std::string& error) {
-    maze::AckModelReq request;
-    request.set_aiserver_id(aiserver_id);
-    request.set_model_version(manifest.model_version);
-    request.set_sha256(manifest.sha256);
+    training::AckModelReq request;
+    request.mutable_aiserver()->set_component("aiserver");
+    request.mutable_aiserver()->set_instance_id(aiserver_id);
+    request.mutable_aiserver()->set_lifecycle_epoch(1);
+    *request.mutable_model() = manifest.wire.identity();
+    request.set_load_instance_id(
+        aiserver_id + "-load-v" + std::to_string(manifest.model_version));
     request.set_load_status(load_status);
     request.set_message(message);
-    maze::AckModelRsp response;
+    training::AckModelRsp response;
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(distribution_.rpc_timeout_ms));
+        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
     const grpc::Status status = stub_->AckModel(&context, request, &response);
     if (!status.ok() ||
-        (response.result() != maze::MODEL_ACK_RESULT_APPLIED &&
-         response.result() != maze::MODEL_ACK_RESULT_ALREADY_APPLIED)) {
+        (response.result() != training::MODEL_ACK_RESULT_APPLIED &&
+         response.result() != training::MODEL_ACK_RESULT_ALREADY_APPLIED)) {
         error = status.ok()
                     ? response.message()
                     : "model ACK RPC failed: " + status.error_message();
@@ -297,7 +271,7 @@ bool ModelDistributorClient::Promote(
     std::string& error) {
     namespace fs = std::filesystem;
     const fs::path source = manifest.model_path;
-    const fs::path root = model_.local_train_dir;
+    const fs::path root = config_.model.local_train_dir;
     const fs::path active_dir = root / "active";
     const fs::path previous_dir = root / "previous";
     const fs::path active_path = active_dir / "model.onnx";

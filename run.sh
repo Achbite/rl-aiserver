@@ -9,7 +9,7 @@ if [ -x "${repo_dir}/bin/maze_aiserver" ]; then
 fi
 aiserver_bin="${AISERVER_BIN:-${default_aiserver_bin}}"
 aiserver_config="${AISERVER_CONFIG:-${repo_dir}/configs/server_config.yaml}"
-local_train_root="${MAZE_LOCAL_TRAIN_ROOT:-${repo_dir}/models/local-train}"
+local_train_root="${RL_LOCAL_TRAIN_ROOT:-${repo_dir}/models/local-train}"
 
 canonical_workload() {
     case "$1" in
@@ -22,8 +22,8 @@ canonical_workload() {
         3|model-evaluation)
             printf '%s\n' "model-evaluation"
             ;;
-        4|astar-test)
-            printf '%s\n' "astar-test"
+        4|map-validation)
+            printf '%s\n' "map-validation"
             ;;
         *)
             return 1
@@ -105,12 +105,13 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
                 echo "--sample-distributor requires a valid TCP port" >&2
                 exit 2
             fi
-            export MAZE_SAMPLE_DISTRIBUTOR_HOST="${address%:*}"
-            export MAZE_SAMPLE_DISTRIBUTOR_PORT="${sample_port}"
+            export RL_SAMPLE_DISTRIBUTOR_HOST="${address%:*}"
+            export RL_SAMPLE_DISTRIBUTOR_PORT="${sample_port}"
             forward_arguments+=("${argument}" "${address}")
             argument_index=$((argument_index + 2))
             ;;
         --listen-port|--model-distributor|--local-test-model-dir|\
+        --training-sample-budget|\
         --smoke-model-dir)
             value_index=$((argument_index + 1))
             if [ "${value_index}" -ge "${#runtime_arguments[@]}" ] ||
@@ -149,7 +150,7 @@ fi
 configured_mode="$(read_config_mode "${aiserver_config}")"
 selected_mode="${workload_override}"
 if [ -z "${selected_mode}" ]; then
-    selected_mode="${MAZE_WORKLOAD:-${MAZE_RUN_MODE:-${MAZE_AISERVER_RUN_MODE:-}}}"
+    selected_mode="${RL_AISERVER_RUN_MODE:-}"
 fi
 if [ -z "${selected_mode}" ]; then
     selected_mode="${configured_mode}"
@@ -162,13 +163,13 @@ if ! workload="$(canonical_workload "${selected_mode}")"; then
     echo "unknown AIServer run mode: ${selected_mode}" >&2
     exit 2
 fi
-export MAZE_AISERVER_RUN_MODE="${workload}"
+export RL_AISERVER_RUN_MODE="${workload}"
 printf 'AIServer run mode: %s (%s)\n' "${selected_mode}" "${workload}"
 
 aiserver_pid=""
 stopping=0
 quiesced=0
-quiesce_marker="${MAZE_QUIESCE_MARKER:-/tmp/rl-training-quiesced}"
+quiesce_marker="${RL_AISERVER_QUIESCE_MARKER:-/tmp/rl-training-quiesced}"
 training_lock=""
 rm -f "${quiesce_marker}"
 
@@ -218,7 +219,7 @@ trap quiesce USR1
 trap shutdown EXIT TERM INT
 
 case "${workload}" in
-    local-test|model-evaluation|astar-test)
+    local-test|model-evaluation|map-validation)
         ;;
     training)
         if [ "$(basename "${local_train_root}")" != "local-train" ]; then
@@ -239,7 +240,7 @@ case "${workload}" in
             echo "Unsafe AIServer local-train path: ${local_train_root}" >&2
             exit 1
         fi
-        training_lock="${MAZE_TRAIN_LOCK_DIR:-${local_train_parent}/.aiserver-local-train.lock}"
+        training_lock="${RL_AISERVER_TRAIN_LOCK_DIR:-${local_train_parent}/.aiserver-local-train.lock}"
         if ! mkdir "${training_lock}" 2>/dev/null; then
             echo "AIServer training is already active or its lock remains: ${training_lock}" >&2
             exit 1
@@ -255,9 +256,9 @@ case "${workload}" in
             "${local_train_root}/incoming" \
             "${local_train_root}/active" \
             "${local_train_root}/previous"
-        export MAZE_LOCAL_TRAIN_ROOT="${local_train_root}"
-        export MAZE_SAMPLE_DISTRIBUTOR_HOST="${MAZE_SAMPLE_DISTRIBUTOR_HOST:-maze-learner}"
-        export MAZE_SAMPLE_DISTRIBUTOR_PORT="${MAZE_SAMPLE_DISTRIBUTOR_PORT:-9100}"
+        export RL_LOCAL_TRAIN_ROOT="${local_train_root}"
+        export RL_SAMPLE_DISTRIBUTOR_HOST="${RL_SAMPLE_DISTRIBUTOR_HOST:-maze-learner}"
+        export RL_SAMPLE_DISTRIBUTOR_PORT="${RL_SAMPLE_DISTRIBUTOR_PORT:-9100}"
         ;;
     *)
         echo "unknown workload: ${workload}" >&2
@@ -269,6 +270,8 @@ if [ ! -x "${aiserver_bin}" ]; then
     echo "AIServer executable is missing: ${aiserver_bin}" >&2
     exit 1
 fi
+
+cd "${repo_dir}"
 
 if [ "${#forward_arguments[@]}" -gt 0 ]; then
     "${aiserver_bin}" \

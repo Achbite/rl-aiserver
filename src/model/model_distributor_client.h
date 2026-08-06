@@ -1,7 +1,8 @@
 #pragma once
 
 #include "config/config_loader.h"
-#include "maze.grpc.pb.h"
+#include "contracts/contract_namespaces.h"
+#include "training.grpc.pb.h"
 #include "model/model_manifest.h"
 
 #include <grpcpp/grpcpp.h>
@@ -11,8 +12,7 @@
 
 class ModelDistributorClient {
 public:
-    ModelDistributorClient(const ModelDistributionConfig& distribution,
-                           const ModelConfig& model);
+    explicit ModelDistributorClient(const AIServerConfig& config);
 
     bool FetchLatest(const std::string& aiserver_id,
                      ModelManifest& manifest,
@@ -30,7 +30,7 @@ public:
 
     bool Ack(const ModelManifest& manifest,
              const std::string& aiserver_id,
-             maze::ModelLoadStatus status,
+             training::ModelLoadStatus status,
              const std::string& message,
              std::string& error);
 
@@ -39,10 +39,10 @@ public:
                  std::string& error);
 
 private:
-    bool ValidateManifest(const maze::ModelArtifactManifest& source,
+    bool ValidateManifest(const training::ModelArtifactManifest& source,
                           int expected_version,
                           std::string& error) const;
-    bool Download(const maze::ModelArtifactManifest& source,
+    bool Download(const training::ModelArtifactManifest& source,
                   const std::string& aiserver_id,
                   std::string& local_path,
                   std::string& error);
@@ -52,8 +52,7 @@ private:
                ModelManifest& manifest,
                std::string& error);
 
-    ModelDistributionConfig distribution_;
-    ModelConfig model_;
+    AIServerConfig config_;
     std::shared_ptr<grpc::Channel> channel_;
-    std::unique_ptr<maze::ModelDistributorService::Stub> stub_;
+    std::unique_ptr<training::ModelDistributorService::Stub> stub_;
 };

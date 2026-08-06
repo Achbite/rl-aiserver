@@ -1,19 +1,48 @@
 {
-  "files": {
-    "cpp/maze.grpc.pb.cc": "8a003638a23e6c4bcef381c784a8f2388ee7bad20e48026c82dbe8a40df69598",
-    "cpp/maze.grpc.pb.h": "71c52fe0added60fb131d6822790c7920ccb2ac31a318ac81baf282af25148f0",
-    "cpp/maze.pb.cc": "80c7bbfffe8de40934460f88b6c5129bc590d827d99e38d3fef288e0ff284e79",
-    "cpp/maze.pb.h": "a9b2403e770285bb9ffbac334850e140c26bfe36ea8eb548dc4d620d98ba45df",
-    "maze.proto": "d7d2433821f9cf96d0fe95d0aa2722f0c3181a7732914e5307d7d7f075fc934b",
-    "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "python/maze_pb2.py": "a6031bde3b6da9c0160689d1c11aa212b2b009c522169f367c47458d04bcf09a",
-    "python/maze_pb2_grpc.py": "a63a5638c7c5f769b4f2d472e7b68e16facb1038ce31d912c5e944a84db269c7"
+  "artifact_digest": {
+    "algorithm": "sha256",
+    "hex": "71a0f13363d62b5d076c02b00e5b4b269a3e91253b190432f2e83c43cdcf7d3a"
   },
+  "contract_packages": [
+    "rl.common.v1",
+    "rl.training.v1",
+    "rl.task.maze.v1"
+  ],
+  "files": {
+    "common.proto": "6019ed0edfe5bb971869ab7bc47894345d6cdbe96fa19b25f2ba1354fd44f8de",
+    "cpp/common.grpc.pb.cc": "4f3b2a7675699d28f5bedd288561cebe540dc0776d6406cf4b45c6a9922dde86",
+    "cpp/common.grpc.pb.h": "f59710f940aa0816664e94e101a95331dcddc1b25358d0c8003a8eea6e14021e",
+    "cpp/common.pb.cc": "f60748148a57c527511a3b2f19489e76a91aaed0f65ddb90f1719cdf6bbcc25a",
+    "cpp/common.pb.h": "51f378e8c2f6669b130f4885ac00fc3ed52643fa631ae0e6523da52d2510cf5d",
+    "cpp/maze_task.grpc.pb.cc": "0acc49d19afed5f790e35bd194410934dd83b15b82b0377680ff15cb9d085da0",
+    "cpp/maze_task.grpc.pb.h": "662161d3efebbbec2cac43addec3ff0935e2704cc48004ace8a5916ea7ccf7fc",
+    "cpp/maze_task.pb.cc": "02f65db671f30b10b16a954a1213ab2decdf2555f4c4ef2963cfe6f38a949d14",
+    "cpp/maze_task.pb.h": "6e36492e21c77bbe0a0b6229d3284d5c12fa78d23b418d7055aee43028093e66",
+    "cpp/training.grpc.pb.cc": "c99b3042be471ea612fc3e512436eb28b173ce5b2ea7c524b5184ba591108c8a",
+    "cpp/training.grpc.pb.h": "a9b2176b55250095ff16eac9c2d7c5dccc61ef5a21939c1509bd68057950f274",
+    "cpp/training.pb.cc": "14c8d06b034b2ad7e4268bb8c3babc64c3bcc07b2c11491aa00386a782116b73",
+    "cpp/training.pb.h": "7e3ac6a22e8996a7cebcaefdb99749e67e83048b9328a98c414feb63df257599",
+    "generator-identity.json": "e0ff2ea349578e209b5b5d6f632c967ee8ea46c7999df5cf97502b24ca69532d",
+    "maze_task.proto": "c6a637ea499ff056bd073a93e66169fc4addbb16ec6b9d0f619a9189e5a05de7",
+    "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "python/common_pb2.py": "823786a30eff49ac558f6030d14900471ac840119b0b32cffddb5641cd0d83f0",
+    "python/common_pb2_grpc.py": "75f2f40d6df8e11299b9f9c597e2aff0d602db92286b656fc6dd10eb9b3e4424",
+    "python/maze_task_pb2.py": "2ba2d0bbcd194c9cf74ad4412dac4ad401a24f1e30d976bd8031ab340d33f795",
+    "python/maze_task_pb2_grpc.py": "bf929f4d04ed8068d6698f3741210d038f778a0a53687e997b83bef1178a0fad",
+    "python/training_pb2.py": "f7859f210b38f0525fef08031a4b2c3ec3d8b550e3efadc133f63a1ad7d48506",
+    "python/training_pb2_grpc.py": "8304b91b8a1d9b94efa9cc89e35ce77e2416a132c16f9f3498c82c84c588e7a9",
+    "training.proto": "5f08ee8f4ba99b2570734374072f006fd556f061bcfc612934cf245c234082c9"
+  },
+  "generator_identity": "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8",
   "package": "rl-contracts",
   "platform": "linux/arm64",
-  "schema_version": 1,
-  "source_commit": "dd9d24e10849",
-  "source_id": "dd9d24e10849-dirty-d7d2433821f9",
-  "source_sha256": "d7d2433821f9cf96d0fe95d0aa2722f0c3181a7732914e5307d7d7f075fc934b",
-  "version": "0.6.0"
+  "schema_version": 2,
+  "source_commit": "dac3f28dcbff",
+  "source_digest": {
+    "algorithm": "sha256",
+    "hex": "157fba14177a0727abf663c442003e2a5f5c1e297f4af97ea22b45d74cdb32b5"
+  },
+  "source_id": "contract-source-157fba14177a0727",
+  "source_tree_state": "dirty",
+  "version": "0.8.0"
 }

@@ -58,7 +58,7 @@ bool OnnxInferencer::LoadModel(const std::string& model_path,
         auto action_name = new_session->GetOutputNameAllocated(0, allocator);
         auto value_name = new_session->GetOutputNameAllocated(1, allocator);
         if (std::string(input_name.get()) != INPUT_NAME ||
-            std::string(action_name.get()) != OUTPUT_ACTION_PROBS ||
+            std::string(action_name.get()) != OUTPUT_ACTION_LOGITS ||
             std::string(value_name.get()) != OUTPUT_VALUE) {
             throw std::runtime_error("ONNX tensor names do not match the inference contract");
         }
@@ -114,7 +114,7 @@ bool OnnxInferencer::LoadModel(const std::string& model_path,
 
 // ---- 推理（线程安全，无锁读取）----
 bool OnnxInferencer::Infer(const std::vector<float>& obs, int obs_dim,
-                           std::vector<float>& action_probs, float& value) {
+                           std::vector<float>& action_logits, float& value) {
     // 原子读取 shared_ptr（与 LoadModel 端 atomic_store 配合，保证线程安全）
     auto session = std::atomic_load(&session_);
     if (!session) {
@@ -136,19 +136,19 @@ bool OnnxInferencer::Infer(const std::vector<float>& obs, int obs_dim,
 
         // ---- 执行推理 ----
         const char* input_names[] = {INPUT_NAME};
-        const char* output_names[] = {OUTPUT_ACTION_PROBS, OUTPUT_VALUE};
+        const char* output_names[] = {OUTPUT_ACTION_LOGITS, OUTPUT_VALUE};
 
         auto outputs = session->Run(
             Ort::RunOptions{nullptr},
             input_names, &input_tensor, 1,
             output_names, 2);
 
-        // ---- 解析输出：action_probs [1, action_dim] ----
-        float* probs_data = outputs[0].GetTensorMutableData<float>();
-        auto probs_shape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
-        int action_dim = static_cast<int>(probs_shape[1]);
+        // ---- 解析输出：action_logits [1, action_dim] ----
+        float* logits_data = outputs[0].GetTensorMutableData<float>();
+        auto logits_shape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
+        int action_dim = static_cast<int>(logits_shape[1]);
 
-        action_probs.assign(probs_data, probs_data + action_dim);
+        action_logits.assign(logits_data, logits_data + action_dim);
 
         // ---- 解析输出：value [1, 1] ----
         float* value_data = outputs[1].GetTensorMutableData<float>();

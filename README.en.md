@@ -10,15 +10,21 @@ Build Contracts and explicitly refresh the repository-local protocol snapshot:
 
 ```bash
 (cd ../rl-contracts && bash build_artifact.sh)
-cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/maze.proto proto/
-cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/cpp/* proto/
-cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/manifest.json proto/
+artifact=../.workspace/artifacts/rl-contracts/0.8.0/linux-arm64
+cp "${artifact}/common.proto" "${artifact}/training.proto" \
+   "${artifact}/maze_task.proto" proto/
+cp "${artifact}"/cpp/common.pb.{cc,h} proto/
+cp "${artifact}"/cpp/training.pb.{cc,h} proto/
+cp "${artifact}"/cpp/training.grpc.pb.{cc,h} proto/
+cp "${artifact}"/cpp/maze_task.pb.{cc,h} proto/
+cp "${artifact}"/cpp/maze_task.grpc.pb.{cc,h} proto/
+cp "${artifact}/manifest.json" proto/
 ```
 
 Build the image:
 
 ```bash
-AISERVER_IMAGE_TAG=training-001 bash build_image.sh
+RL_AISERVER_IMAGE_TAG=training-001 bash build_image.sh
 ```
 
 Enter the development container and start the inference smoke test:
@@ -55,7 +61,7 @@ Use `rl-framework` to start the complete workflow.
 1 / training
 2 / local-test
 3 / model-evaluation
-4 / astar-test
+4 / map-validation
 ```
 
 The default AIServer port is `9002`. Training samples are sent to `maze-learner:9100`, and models are fetched from `maze-learner:9200`.

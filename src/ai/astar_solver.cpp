@@ -1,62 +1,24 @@
 #include "ai/astar_solver.h"
 #include "log/logger.h"
 
-#include <cmath>
 #include <queue>
 #include <unordered_map>
 #include <algorithm>
 
-// ---- 初始化网格 ----
-void AStarSolver::Init(float map_width, float map_height, int grid_size) {
-    map_width_  = map_width;
-    map_height_ = map_height;
-    grid_size_  = grid_size;
-
-    grid_cols_ = static_cast<int>(std::ceil(map_width / grid_size));
-    grid_rows_ = static_cast<int>(std::ceil(map_height / grid_size));
-
-    blocked_.assign(grid_cols_ * grid_rows_, false);
-    path_.clear();
-
-    LOG_DEBUG("AStar", "网格初始化: %dx%d (格子大小=%dcm)",
-                grid_cols_, grid_rows_, grid_size_);
-}
-
-// ---- 添加墙壁障碍 ----
-void AStarSolver::AddWall(float x1, float y1, float x2, float y2, float thickness) {
-    // 计算墙壁的 AABB 包围盒（含厚度扩展）
-    float half_t = thickness * 0.5f;
-    float min_x = std::min(x1, x2) - half_t;
-    float max_x = std::max(x1, x2) + half_t;
-    float min_y = std::min(y1, y2) - half_t;
-    float max_y = std::max(y1, y2) + half_t;
-
-    // 将 AABB 映射到网格范围
-    int gx_min = std::max(0, static_cast<int>(std::floor(min_x / grid_size_)));
-    int gx_max = std::min(grid_cols_ - 1, static_cast<int>(std::floor(max_x / grid_size_)));
-    int gy_min = std::max(0, static_cast<int>(std::floor(min_y / grid_size_)));
-    int gy_max = std::min(grid_rows_ - 1, static_cast<int>(std::floor(max_y / grid_size_)));
-
-    // 标记覆盖的网格为不可通行
-    for (int gy = gy_min; gy <= gy_max; ++gy) {
-        for (int gx = gx_min; gx <= gx_max; ++gx) {
-            blocked_[gy * grid_cols_ + gx] = true;
-        }
+bool AStarSolver::InitGrid(int grid_cols, int grid_rows,
+                           const std::vector<bool>& blocked) {
+    if (grid_cols <= 0 || grid_rows <= 0 ||
+        blocked.size() !=
+            static_cast<std::size_t>(grid_cols * grid_rows)) {
+        return false;
     }
-}
-
-// ---- 连续坐标 → 网格坐标 ----
-GridPos AStarSolver::ToGrid(float x, float y) const {
-    GridPos gp;
-    gp.gx = std::max(0, std::min(grid_cols_ - 1, static_cast<int>(std::floor(x / grid_size_))));
-    gp.gy = std::max(0, std::min(grid_rows_ - 1, static_cast<int>(std::floor(y / grid_size_))));
-    return gp;
-}
-
-// ---- 网格坐标 → 连续坐标（网格中心）----
-void AStarSolver::ToWorld(const GridPos& gp, float& x, float& y) const {
-    x = (gp.gx + 0.5f) * grid_size_;
-    y = (gp.gy + 0.5f) * grid_size_;
+    grid_cols_ = grid_cols;
+    grid_rows_ = grid_rows;
+    blocked_ = blocked;
+    path_.clear();
+    LOG_DEBUG("AStar", "authoritative grid initialized: %dx%d",
+              grid_cols_, grid_rows_);
+    return true;
 }
 
 // ---- 网格是否可通行 ----
@@ -68,15 +30,13 @@ bool AStarSolver::IsWalkable(int gx, int gy) const {
 }
 
 // ---- A* 路径规划 ----
-bool AStarSolver::PlanPath(float start_x, float start_y, float end_x, float end_y) {
+bool AStarSolver::PlanPath(int start_gx, int start_gy,
+                           int goal_gx, int goal_gy) {
     path_.clear();
-
-    GridPos start = ToGrid(start_x, start_y);
-    GridPos goal  = ToGrid(end_x, end_y);
-
-    // 确保起点和终点可通行（如果被墙壁覆盖则强制清除）
-    blocked_[start.gy * grid_cols_ + start.gx] = false;
-    blocked_[goal.gy * grid_cols_ + goal.gx]   = false;
+    if (!IsWalkable(start_gx, start_gy) ||
+        !IsWalkable(goal_gx, goal_gy)) {
+        return false;
+    }
 
     // A* 节点
     struct Node {
@@ -91,11 +51,11 @@ bool AStarSolver::PlanPath(float start_x, float start_y, float end_x, float end_
         return gy * grid_cols_ + gx;
     };
 
-    // 启发式函数（八方向切比雪夫距离）
+    // 八方向 unit-cost 动作的可采纳启发式：切比雪夫距离。
     auto heuristic = [](int gx1, int gy1, int gx2, int gy2) -> float {
         int dx = std::abs(gx1 - gx2);
         int dy = std::abs(gy1 - gy2);
-        return static_cast<float>(std::max(dx, dy)) + 0.414f * static_cast<float>(std::min(dx, dy));
+        return static_cast<float>(std::max(dx, dy));
     };
 
     // 优先队列（最小 f_cost 优先）
@@ -110,14 +70,14 @@ bool AStarSolver::PlanPath(float start_x, float start_y, float end_x, float end_
     std::unordered_map<int, bool> closed;
 
     // 初始化起点
-    int start_enc = encode(start.gx, start.gy);
-    int goal_enc  = encode(goal.gx, goal.gy);
+    int start_enc = encode(start_gx, start_gy);
+    int goal_enc  = encode(goal_gx, goal_gy);
 
     Node start_node;
-    start_node.gx = start.gx;
-    start_node.gy = start.gy;
+    start_node.gx = start_gx;
+    start_node.gy = start_gy;
     start_node.g_cost = 0.0f;
-    start_node.f_cost = heuristic(start.gx, start.gy, goal.gx, goal.gy);
+    start_node.f_cost = heuristic(start_gx, start_gy, goal_gx, goal_gy);
     start_node.parent_idx = -1;
 
     all_nodes[start_enc] = start_node;
@@ -126,7 +86,6 @@ bool AStarSolver::PlanPath(float start_x, float start_y, float end_x, float end_
     // 八方向邻居偏移
     static const int dx8[] = { 0, 1, 1, 1, 0,-1,-1,-1};
     static const int dy8[] = { 1, 1, 0,-1,-1,-1, 0, 1};
-    static const float cost8[] = {1.0f, 1.414f, 1.0f, 1.414f, 1.0f, 1.414f, 1.0f, 1.414f};
 
     bool found = false;
 
@@ -163,8 +122,8 @@ bool AStarSolver::PlanPath(float start_x, float start_y, float end_x, float end_
                 }
             }
 
-            float new_g = cur_node.g_cost + cost8[d];
-            float new_f = new_g + heuristic(nx, ny, goal.gx, goal.gy);
+            float new_g = cur_node.g_cost + 1.0f;
+            float new_f = new_g + heuristic(nx, ny, goal_gx, goal_gy);
 
             auto it = all_nodes.find(nenc);
             if (it == all_nodes.end() || new_g < it->second.g_cost) {
@@ -182,7 +141,7 @@ bool AStarSolver::PlanPath(float start_x, float start_y, float end_x, float end_
 
     if (!found) {
         LOG_WARN("AStar", "未找到路径! start=(%d,%d) goal=(%d,%d)",
-                    start.gx, start.gy, goal.gx, goal.gy);
+                    start_gx, start_gy, goal_gx, goal_gy);
         return false;
     }
 

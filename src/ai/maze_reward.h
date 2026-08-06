@@ -8,8 +8,22 @@
 
 // ---- 奖励计算结果（含分项明细）----
 struct RewardDetail {
+    bool valid = true;
+    std::string error;
     float total = 0.0f;                                 // 总奖励
+    float task_total = 0.0f;                            // Goal/Timeout
+    float shaping_total = 0.0f;                         // Geodesic/First-Visit
     std::vector<std::pair<std::string, float>> items;   // 分项明细：<奖励名, 值>
+};
+
+struct MazeRewardConfig {
+    float goal_reward = 10.0f;
+    float timeout_base = -2.0f;
+    float gamma = 0.99f;
+    int potential_distance_scale = 220;
+    float stage_8x_first_visit_cap = 0.25f;
+    float stage_4x_first_visit_cap = 0.10f;
+    float stage_2x_first_visit_cap = 0.0f;
 };
 
 // ---- 迷宫奖励计算器 ----
@@ -20,13 +34,6 @@ public:
     // 计算单帧总奖励（含分项明细）
     static RewardDetail Calculate(const SessionManager::Session& session,
                                   int agent_id, int gx, int gy, bool is_done,
-                                  int agent_num);
-
-    // 计算排名奖励（Episode 结束时调用）
-    // ranking_order: Agent 完成排名顺序（先完成的在前）
-    // agent_num: 总 Agent 数量
-    // agent_id: 当前 Agent ID
-    // reached_goal: 该 Agent 是否到达终点
-    static float CalculateRankReward(const std::vector<int>& ranking_order,
-                                     int agent_num, int agent_id, bool reached_goal);
+                                  maze::MazeTerminationReason reason,
+                                  const MazeRewardConfig& config);
 };

@@ -53,6 +53,19 @@ static bool ParseAddress(const std::string& value,
     return true;
 }
 
+static bool ParseNonNegativeInt64(const std::string& value,
+                                  int64_t& result) {
+    try {
+        std::size_t consumed = 0;
+        const int64_t candidate = std::stoll(value, &consumed);
+        if (consumed != value.size() || candidate < 0) return false;
+        result = candidate;
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
 static bool ApplyCommandLine(int argc,
                              char* argv[],
                              AIServerConfig& config,
@@ -108,6 +121,15 @@ static bool ApplyCommandLine(int argc,
             const char* candidate = value("--local-train-dir");
             if (!candidate) return false;
             config.model.local_train_dir = candidate;
+        } else if (argument == "--training-sample-budget") {
+            const char* candidate = value("--training-sample-budget");
+            if (!candidate ||
+                !ParseNonNegativeInt64(
+                    candidate, config.task.training_sample_budget)) {
+                error =
+                    "--training-sample-budget must be a non-negative integer";
+                return false;
+            }
         } else if (argument == "--local-test-model-dir" ||
                    argument == "--smoke-model-dir") {
             const char* candidate = value(argument.c_str());
@@ -149,6 +171,7 @@ int main(int argc, char* argv[]) {
                    argument == "--model-distributor" ||
                    argument == "--sample-distributor" ||
                    argument == "--local-train-dir" ||
+                   argument == "--training-sample-budget" ||
                    argument == "--local-test-model-dir" ||
                    argument == "--smoke-model-dir") {
             ++i;
@@ -157,12 +180,25 @@ int main(int argc, char* argv[]) {
         }
     }
     AIServerConfig cfg;
-    LoadServerConfig(config_path, cfg);
+    if (!LoadServerConfig(config_path, cfg)) {
+        LOG_ERROR("Main", "配置加载或 0.8.0 身份校验失败: %s",
+                  config_path.c_str());
+        Logger::Instance().Close();
+        return 2;
+    }
 
     std::string argument_error;
     if (!ApplyCommandLine(
             argc, argv, cfg, config_path, argument_error)) {
         LOG_ERROR("Main", "命令参数无效: %s", argument_error.c_str());
+        Logger::Instance().Close();
+        return 2;
+    }
+    if (cfg.task.training_sample_budget > 0 &&
+        cfg.server.run_mode != aiserver_mode::kTraining) {
+        LOG_ERROR(
+            "Main",
+            "training sample budget is only valid for training workload");
         Logger::Instance().Close();
         return 2;
     }
@@ -189,7 +225,10 @@ int main(int argc, char* argv[]) {
 
     grpc::ServerBuilder builder;
     builder.AddListeningPort(listen_addr, grpc::InsecureServerCredentials());
-    builder.RegisterService(&service);
+    builder.RegisterService(
+        static_cast<maze::MazeTaskService::Service*>(&service));
+    builder.RegisterService(
+        static_cast<training::AIServerTrainingStatusService::Service*>(&service));
 
     std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
 

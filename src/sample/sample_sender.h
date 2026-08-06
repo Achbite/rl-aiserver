@@ -1,7 +1,8 @@
 #pragma once
 
 #include "config/config_loader.h"
-#include "maze.grpc.pb.h"
+#include "contracts/contract_namespaces.h"
+#include "training.grpc.pb.h"
 
 #include <grpcpp/grpcpp.h>
 
@@ -37,11 +38,11 @@ public:
         std::string last_error;
     };
 
-    explicit SampleSender(SampleOutputConfig config);
+    explicit SampleSender(const AIServerConfig& config);
     ~SampleSender();
 
     bool Start();
-    bool Enqueue(const maze::SampleBatch& batch);
+    bool Enqueue(const training::SampleBatch& batch);
     bool StopAndDrain();
 
     bool IsReady() const;
@@ -53,7 +54,7 @@ public:
 
 private:
     struct QueueItem {
-        maze::SampleBatch batch;
+        training::SampleBatch batch;
         int64_t samples = 0;
         int64_t estimated_bytes = 0;
         int attempts = 0;
@@ -66,8 +67,9 @@ private:
     void CancelActiveRpc();
 
     SampleOutputConfig config_;
+    ContractConfig contract_;
     std::shared_ptr<grpc::Channel> channel_;
-    std::unique_ptr<maze::SampleDistributorService::Stub> stub_;
+    std::unique_ptr<training::SampleDistributorService::Stub> stub_;
 
     mutable std::mutex mutex_;
     std::condition_variable queue_cv_;

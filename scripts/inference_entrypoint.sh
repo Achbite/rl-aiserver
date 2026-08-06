@@ -2,5 +2,5 @@
 
 set -euo pipefail
 
-export MAZE_WORKLOAD="${MAZE_WORKLOAD:-model-evaluation}"
+export RL_AISERVER_RUN_MODE="${RL_AISERVER_RUN_MODE:-model-evaluation}"
 exec /opt/rl/aiserver/scripts/entrypoint.sh

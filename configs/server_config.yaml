@@ -1,4 +1,59 @@
 # ============================================================================
+
+# --- 0.8.0 不可变协议身份 ---
+contract:
+  package_name: "rl-contracts"
+  package_version: "0.8.0"
+  source_digest: "157fba14177a0727abf663c442003e2a5f5c1e297f4af97ea22b45d74cdb32b5"
+  artifact_digest: "71a0f13363d62b5d076c02b00e5b4b269a3e91253b190432f2e83c43cdcf7d3a"
+  platform: "linux/arm64"
+  generator_identity: "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8"
+
+# --- Learner 与 AIServer 对齐的 task-neutral 训练语义 ---
+training_semantics:
+  training_contract_id: "maze.training.v3"
+  observation_schema_id: "maze.observation.v3"
+  observation_schema_version: 1
+  observation_schema_digest: "7cee41136020f3ffc8c6ae799f630d55d0588c6a99ab7f717eac3b3d08aa18b4"
+  action_schema_id: "maze.action.v1"
+  action_schema_version: 1
+  action_schema_digest: "ce84c564e128f98adcc48fd420ac0df5acea61774a25de8705b602464009cfd8"
+  reward_schema_id: "maze.reward.v3"
+  reward_schema_version: 1
+  reward_schema_digest: "b55437290fc9183f6197de5b4fdb493f162e08d61dde73b3415ddc9315d3c604"
+  policy_distribution_schema_id: "categorical.logits.v1"
+  model_architecture_id: "maze.mlp-17x64x64.v1"
+  semantics_digest: "bde46f61bd04857f3fb2e79a5533f866856bb832c7ae2fb50ab65c67949ca62d"
+
+policy:
+  distribution_schema_id: "categorical.logits.v1"
+  training_temperature: 1.0      # categorical temperature, unitless, >0
+  policy_spec_digest: "e1efb81040681fd13fdae439caab09778c8e0b0f6bba16b7808c30fbbb632617"
+  sampling_seed: 0               # behavior-policy RNG seed, integer >=0
+
+observation:
+  ray_max_range: 10              # local ray maximum, grid cells, >0
+
+reward:
+  goal_reward: 10.0              # terminal Goal reward
+  timeout_base: -2.0             # terminal TIME_LIMIT base reward
+  gamma: 0.99                    # PBRS discount; must equal Learner gamma
+  potential_distance_scale: 220 # D_map, geodesic steps
+  stage_8x_first_visit_cap: 0.25 # episode cap
+  stage_4x_first_visit_cap: 0.10 # episode cap
+  stage_2x_first_visit_cap: 0.0  # disabled in final stage
+
+curriculum:
+  stage_8x_sample_budget: 1000000
+  stage_4x_sample_budget: 500000
+  stage_2x_sample_budget: 500000
+  evaluation_interval_samples: 100000
+  evaluation_episodes_per_round: 25
+  stage_8x_success_threshold: 0.80
+  stage_4x_success_threshold: 0.90
+  stage_2x_success_threshold: 0.90
+  final_path_ratio_median_limit: 1.50
+  final_path_ratio_p95_limit: 2.00
 # AIServer 配置文件 - 迷宫训练框架
 # 说明：AI 决策服务的运行参数、策略参数、网络参数集中管理
 #       修改后无需重新编译，重启 AIServer 即可生效
@@ -8,7 +63,7 @@
 server:
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
-  run_mode: 2                     # 1=training, 2=local-test, 3=model-evaluation, 4=A*测试
+  run_mode: 1                     # 1=training, 2=local-test, 3=model-evaluation, 4=map-validation
 
 # --- 网格参数（A* 测试 + 训练共用）---
 strategy:
@@ -22,17 +77,33 @@ model:
   local_test_dir: "/opt/rl/aiserver/models/local-test"  # local-test 内置模型目录，需包含 manifest.json
   manifest_name: "manifest.json"
   startup_timeout_ms: 30000
-  expected_obs_dim: 13
+  expected_obs_dim: 17
   expected_action_dim: 9
+  model_architecture_id: "maze.mlp-17x64x64.v1"
+  tensor_dtype: "float32"
+  expected_model_lineage_id: "maze-fixed-map-seed-0"
+
+# --- Maze 任务所有权（Client 只能执行，不能覆盖）---
+task:
+  task_contract_id: "maze.task.v3"
+  task_id: "maze.fixed.single-map.v1"
+  task_revision: 1
+  task_config_digest: "17f885bd9ff1a20cf9fba210f1454487ea04c36251730b6d0875c4dbb5cb99d7"
+  agent_num: 4
+  fixed_map_id: "maze_117436372"
+  fixed_map_checksum_sha256: "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9"
+  action_rule_id: "maze.action.9-way.no-corner-cut.v1"
+  shortest_action_steps: 188
+  training_sample_budget: 0       # 0=课程控制；本地闭环由 AIServer 显式设为 3072
 
 # --- 训练模型分发参数（仅 training 生效）---
 model_distribution:
   host: "maze-learner"
   port: 9200
   poll_interval_ms: 200
-  boundary_wait_ms: 1000
+  boundary_wait_ms: 60000
   rpc_timeout_ms: 5000
-  contract_version: "0.6.0"
+  contract_version: "0.8.0"
 
 # --- 样本输出参数（仅 training 生效，AIServer → LocalSampleService）---
 sample_output:

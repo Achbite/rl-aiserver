@@ -10,15 +10,21 @@ C++ 环境交互、推理、轨迹组装与异步样本发送服务。训练模�
 
 ```bash
 (cd ../rl-contracts && bash build_artifact.sh)
-cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/maze.proto proto/
-cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/cpp/* proto/
-cp ../.workspace/artifacts/rl-contracts/0.6.0/linux-arm64/manifest.json proto/
+artifact=../.workspace/artifacts/rl-contracts/0.8.0/linux-arm64
+cp "${artifact}/common.proto" "${artifact}/training.proto" \
+   "${artifact}/maze_task.proto" proto/
+cp "${artifact}"/cpp/common.pb.{cc,h} proto/
+cp "${artifact}"/cpp/training.pb.{cc,h} proto/
+cp "${artifact}"/cpp/training.grpc.pb.{cc,h} proto/
+cp "${artifact}"/cpp/maze_task.pb.{cc,h} proto/
+cp "${artifact}"/cpp/maze_task.grpc.pb.{cc,h} proto/
+cp "${artifact}/manifest.json" proto/
 ```
 
 构建镜像：
 
 ```bash
-AISERVER_IMAGE_TAG=training-001 bash build_image.sh
+RL_AISERVER_IMAGE_TAG=training-001 bash build_image.sh
 ```
 
 进入开发容器并启动推理测试：
@@ -54,7 +60,7 @@ bash ./run.sh model-evaluation
 1 / training
 2 / local-test
 3 / model-evaluation
-4 / astar-test
+4 / map-validation
 ```
 
 默认 AIServer 端口为 `9002`。训练样本默认发送至 `maze-learner:9100`，模型默认从 `maze-learner:9200` 拉取。

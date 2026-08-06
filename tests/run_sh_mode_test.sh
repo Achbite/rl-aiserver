@@ -38,11 +38,11 @@ export FAKE_ARGS_FILE="${test_root}/arguments"
 bash "${repo_dir}/run.sh" >/dev/null
 assert_workload "local-test"
 
-MAZE_RUN_MODE=3 bash "${repo_dir}/run.sh" >/dev/null
+RL_AISERVER_RUN_MODE=3 bash "${repo_dir}/run.sh" >/dev/null
 assert_workload "model-evaluation"
 
-bash "${repo_dir}/run.sh" astar-test >/dev/null
-assert_workload "astar-test"
+bash "${repo_dir}/run.sh" map-validation >/dev/null
+assert_workload "map-validation"
 
 launcher_repo="${test_root}/launcher"
 mkdir -p \
@@ -55,6 +55,7 @@ printf '%s\n' "keep" >"${launcher_repo}/models/local-train/active-model"
 if ! AISERVER_BIN="${fake_aiserver}" \
    AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
    bash "${launcher_repo}/run.sh" training \
+   --training-sample-budget 3072 \
    --sample-distributor maze-learner:9100 \
    >"${test_root}/training.out" 2>&1; then
     echo "training launcher failed without a bundled SampleDistributor" >&2
@@ -67,11 +68,13 @@ if [ -e "${launcher_repo}/models/local-train/active-model" ]; then
 fi
 grep -qx -- "--sample-distributor" "${FAKE_ARGS_FILE}"
 grep -qx -- "maze-learner:9100" "${FAKE_ARGS_FILE}"
+grep -qx -- "--training-sample-budget" "${FAKE_ARGS_FILE}"
+grep -qx -- "3072" "${FAKE_ARGS_FILE}"
 
 outside_root="${test_root}/outside/local-train"
 mkdir -p "${outside_root}"
 printf '%s\n' "keep" >"${outside_root}/active-model"
-if MAZE_LOCAL_TRAIN_ROOT="${outside_root}" \
+if RL_LOCAL_TRAIN_ROOT="${outside_root}" \
    AISERVER_BIN="${fake_aiserver}" \
    AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
    bash "${launcher_repo}/run.sh" training \

@@ -36,8 +36,13 @@ int main() {
     Require(aiserver_mode::Parse("3") ==
                 aiserver_mode::kModelEvaluation,
             "model-evaluation mode");
-    Require(aiserver_mode::Parse("4") == aiserver_mode::kAstarTest,
-            "A* mode");
+    Require(aiserver_mode::Parse("4") == aiserver_mode::kMapValidation,
+            "map validation mode");
+    Require(aiserver_mode::Parse("map-validation") ==
+                aiserver_mode::kMapValidation,
+            "map validation workload");
+    Require(aiserver_mode::Parse("astar-test") == 0,
+            "removed astar-test workload alias");
     Require(aiserver_mode::Parse("invalid") == 0,
             "invalid mode");
     Require(std::string(aiserver_mode::Workload(

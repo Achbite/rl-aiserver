@@ -1,6 +1,6 @@
 #pragma once
 
-#include "maze.pb.h"
+#include "contracts/contract_namespaces.h"
 
 #include <cstdint>
 #include <deque>
@@ -12,9 +12,12 @@
 struct AgentEpisodeResult {
     double episode_return = 0.0;
     bool success = false;
-    maze::TerminationReason termination_reason =
-        maze::TERMINATION_REASON_UNSPECIFIED;
+    maze::MazeTerminationReason termination_reason =
+        maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
     int64_t transition_count = 0;
+    int64_t shortest_action_steps = 0;
+    int64_t unique_cell_count = 0;
+    int64_t blocked_move_count = 0;
     std::unordered_map<std::string, double> reward_component_sums;
 };
 
@@ -24,8 +27,11 @@ public:
 
     void AddCompleted(std::vector<AgentEpisodeResult> agents);
     void AddExcluded(std::size_t agent_count,
-                     maze::TerminationReason reason);
-    void Fill(maze::EpisodeMetrics* metrics) const;
+                     maze::MazeTerminationReason reason);
+    void Fill(training::MetricSnapshot* snapshot,
+              const common::ServiceInstanceIdentity& source,
+              uint64_t sequence,
+              int64_t timestamp_unix_ms) const;
 
 private:
     struct Entry {
