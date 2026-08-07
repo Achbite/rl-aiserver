@@ -956,6 +956,8 @@ grpc::Status MazeServiceImpl::Update(
         config_.server.run_mode == aiserver_mode::kTraining &&
         session->current_episode_mode == maze::EPISODE_MODE_TRAINING &&
         !session->training_collection_paused;
+    const bool budget_reached =
+        training_sample_budget_.reached(produced_unique_samples_);
     if (collect) {
         const bool staged_model_waiting =
             staged_model_manifest_.model_version >
@@ -975,9 +977,11 @@ grpc::Status MazeServiceImpl::Update(
                     finish();
                     return grpc::Status::OK;
                 }
-            } else if (ShouldFlushAgentFragment(
-                           cache.size(), current_fragment_samples_,
-                           staged_model_waiting)) {
+            } else if (
+                budget_reached ||
+                ShouldFlushAgentFragment(
+                    cache.size(), current_fragment_samples_,
+                    staged_model_waiting)) {
                 float bootstrap_value = 0.0f;
                 if (!InferStateValue(*session, agent,
                                      static_cast<int>(state.position().x()),
@@ -1019,7 +1023,7 @@ grpc::Status MazeServiceImpl::Update(
 
     session->last_frame_id = static_cast<int64_t>(req->frame_id());
     latest_episode_step_ = session->last_frame_id;
-    if (training_sample_budget_.reached(produced_unique_samples_)) {
+    if (budget_reached) {
         task_stop_requested_ = true;
         session->task_state = maze::TASK_STATE_STOPPING;
         rsp->set_task_stop_requested(true);
