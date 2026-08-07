@@ -151,6 +151,25 @@ if(BUILD_TESTING)
     add_test(NAME model_distributor_client_contract
              COMMAND model_distributor_client_test)
 
+    add_executable(sample_sender_freshness_test
+        tests/sample_sender_freshness_test.cpp
+        src/sample/sample_sender.cpp
+        ${PROTO_SOURCES}
+    )
+    target_include_directories(sample_sender_freshness_test PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROTO_GEN_DIR}
+        ${Protobuf_INCLUDE_DIRS}
+        ${GRPC_INCLUDE_DIRS}
+    )
+    target_link_libraries(sample_sender_freshness_test PRIVATE
+        protobuf::libprotobuf
+        ${GRPC_LIBRARIES}
+        pthread
+    )
+    add_test(NAME sample_sender_freshness_contract
+             COMMAND sample_sender_freshness_test)
+
     add_executable(fragment_boundary_test
         tests/fragment_boundary_test.cpp
     )

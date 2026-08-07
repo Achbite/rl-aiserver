@@ -602,6 +602,11 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     }
     const auto check = CheckCommand(*session, req->command(), *req, rsp);
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
+    if (!ReconcileProducerStaleSamples()) {
+        RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                      last_error_, rsp->mutable_lifecycle());
+        return grpc::Status::OK;
+    }
     if (!session->initialized ||
         session->session_state != maze::SESSION_STATE_IDLE ||
         session->episode_state == SessionManager::EpisodeState::Active ||
@@ -774,6 +779,12 @@ grpc::Status MazeServiceImpl::Update(
     const auto check = CheckCommand(*session, req->command(), *req, rsp);
     if (check != CommandCheck::Proceed) {
         if (check == CommandCheck::Replayed) rsp->set_replayed(true);
+        finish();
+        return grpc::Status::OK;
+    }
+    if (!ReconcileProducerStaleSamples()) {
+        RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                      last_error_, rsp->mutable_lifecycle());
         finish();
         return grpc::Status::OK;
     }
@@ -1330,6 +1341,7 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     const training::AIServerStatusReq*,
     training::AIServerStatusRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
+    ReconcileProducerStaleSamples();
     const auto sender = sample_sender_.GetSnapshot();
     const int64_t timestamp = NowMs();
     FillContract(config_, rsp->mutable_contract());
@@ -1382,7 +1394,8 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     rsp->set_model_switch_count(model_switch_count_);
     rsp->set_quarantined_sample_count(quarantined_sample_count_);
     rsp->set_quarantined_fragment_count(quarantined_fragment_count_);
-    rsp->set_last_error(last_error_);
+    rsp->set_last_error(
+        last_error_.empty() ? sender.last_error : last_error_);
     rsp->set_timestamp_unix_ms(timestamp);
 
     common::ServiceInstanceIdentity metric_source;

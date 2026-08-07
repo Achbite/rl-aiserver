@@ -14,6 +14,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <unordered_map>
 
 class SampleSender {
 public:
@@ -42,6 +43,7 @@ public:
         int64_t credit_wait_count = 0;
         int64_t credit_reacquire_count = 0;
         int64_t producer_stale_count = 0;
+        std::unordered_map<int, int64_t> producer_stale_samples_by_model;
         int64_t capacity_wait_ms = 0;
         std::string distributor_instance_id;
         std::string last_error;
@@ -67,6 +69,7 @@ private:
     enum class SendResult {
         kCommitted,
         kWait,
+        kProducerStale,
         kRejected,
     };
 
@@ -126,6 +129,7 @@ private:
     int64_t credit_wait_count_ = 0;
     int64_t credit_reacquire_count_ = 0;
     int64_t producer_stale_count_ = 0;
+    std::unordered_map<int, int64_t> producer_stale_samples_by_model_;
     int64_t capacity_wait_ms_ = 0;
     std::string distributor_instance_id_;
     std::string last_error_;

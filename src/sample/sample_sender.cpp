@@ -214,10 +214,8 @@ SampleSender::SendResult SampleSender::SendFront(
                     return SendResult::kWait;
                 }
                 case training::SAMPLE_CREDIT_RESULT_REJECTED_FRESHNESS: {
-                    std::lock_guard<std::mutex> lock(mutex_);
-                    ++producer_stale_count_;
                     error = credit.message();
-                    return SendResult::kRejected;
+                    return SendResult::kProducerStale;
                 }
                 default:
                     error = credit.message();
@@ -344,6 +342,33 @@ void SampleSender::SenderLoop() {
             queue_cv_.wait_for(
                 lock, std::chrono::milliseconds(std::max(1, retry_after_ms)),
                 [this]() { return force_stop_; });
+            continue;
+        }
+
+        if (result == SendResult::kProducerStale) {
+            std::lock_guard<std::mutex> lock(mutex_);
+            if (!queue_.empty() &&
+                queue_.front().batch.batch_id() == item.batch.batch_id()) {
+                queue_samples_ -= queue_.front().samples;
+                queue_estimated_bytes_ -= queue_.front().estimated_bytes;
+                producer_stale_count_ += queue_.front().samples;
+                producer_stale_samples_by_model_[static_cast<int>(
+                    queue_.front().batch.behavior_policy().model_version())] +=
+                    queue_.front().samples;
+                queue_.pop_front();
+                if (training_capacity_wait_) {
+                    capacity_wait_ms_ +=
+                        std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() -
+                            capacity_wait_started_)
+                            .count();
+                    training_capacity_wait_ = false;
+                    training_capacity_retry_after_ms_ = 0;
+                }
+                last_error_.clear();
+                space_cv_.notify_all();
+                if (queue_.empty()) drained_cv_.notify_all();
+            }
             continue;
         }
 
@@ -483,6 +508,8 @@ SampleSender::Snapshot SampleSender::GetSnapshot() const {
     snapshot.credit_wait_count = credit_wait_count_;
     snapshot.credit_reacquire_count = credit_reacquire_count_;
     snapshot.producer_stale_count = producer_stale_count_;
+    snapshot.producer_stale_samples_by_model =
+        producer_stale_samples_by_model_;
     snapshot.capacity_wait_ms = capacity_wait_ms_;
     if (training_capacity_wait_) {
         snapshot.capacity_wait_ms +=

@@ -119,6 +119,7 @@ private:
     int64_t CountCachedFragments();
     int64_t EstimateCachedBytes();
     void RecordUpdateLatency(std::chrono::steady_clock::time_point start);
+    bool ReconcileProducerStaleSamples();
     void MarkDegraded(const std::string& error);
     SingleMapModelIdentity ActiveModelIdentity() const;
     bool WriteTaskControllerReceipt(std::string& error) const;
@@ -156,6 +157,9 @@ private:
 
     int64_t produced_unique_samples_ = 0;
     std::unordered_map<int, int64_t> produced_samples_by_model_;
+    int64_t reconciled_producer_stale_samples_ = 0;
+    std::unordered_map<int, int64_t>
+        reconciled_producer_stale_samples_by_model_;
     int current_fragment_samples_ = 0;
     int64_t produced_unique_batches_ = 0;
     int64_t enqueue_count_ = 0;

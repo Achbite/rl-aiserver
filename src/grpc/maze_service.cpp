@@ -1031,6 +1031,46 @@ bool MazeServiceImpl::FinalizePendingTransition(
     return true;
 }
 
+bool MazeServiceImpl::ReconcileProducerStaleSamples() {
+    const auto sender = sample_sender_.GetSnapshot();
+    if (sender.producer_stale_count < reconciled_producer_stale_samples_) {
+        MarkDegraded("producer stale counter moved backwards");
+        return false;
+    }
+
+    int64_t delta_total = 0;
+    for (const auto& item : sender.producer_stale_samples_by_model) {
+        const int model_version = item.first;
+        const int64_t reconciled =
+            reconciled_producer_stale_samples_by_model_[model_version];
+        if (item.second < reconciled) {
+            MarkDegraded("producer stale model counter moved backwards");
+            return false;
+        }
+        const int64_t delta = item.second - reconciled;
+        if (delta == 0) continue;
+        const auto produced = produced_samples_by_model_.find(model_version);
+        if (produced == produced_samples_by_model_.end() ||
+            produced->second < delta) {
+            MarkDegraded("producer stale behavior-model accounting is inconsistent");
+            return false;
+        }
+        produced->second -= delta;
+        reconciled_producer_stale_samples_by_model_[model_version] =
+            item.second;
+        delta_total += delta;
+    }
+    if (reconciled_producer_stale_samples_ + delta_total !=
+            sender.producer_stale_count ||
+        produced_unique_samples_ < delta_total) {
+        MarkDegraded("producer stale sample accounting is inconsistent");
+        return false;
+    }
+    produced_unique_samples_ -= delta_total;
+    reconciled_producer_stale_samples_ = sender.producer_stale_count;
+    return true;
+}
+
 void MazeServiceImpl::FillSampleBatchMetadata(
     training::SampleBatch& batch,
     const SessionManager::Session& session,
