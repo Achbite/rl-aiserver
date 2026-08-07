@@ -142,6 +142,7 @@ private:
     int StageMultiplier() const;
     int64_t StageBudget() const;
     int64_t StageEffectiveBudget() const;
+    int64_t FinalCollectionThreshold() const;
     double StageSuccessThreshold() const;
     void StartEvaluation(const SingleMapModelIdentity& model,
                          int64_t produced_samples,

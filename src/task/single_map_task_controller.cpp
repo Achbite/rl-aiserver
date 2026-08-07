@@ -135,6 +135,22 @@ int64_t SingleMapTaskController::StageEffectiveBudget() const {
     return budget - budget % config_.sample_quantum;
 }
 
+int64_t SingleMapTaskController::FinalCollectionThreshold() const {
+    const int64_t budget = StageEffectiveBudget();
+    const int64_t quantum = config_.sample_quantum;
+    if (budget <= quantum) return quantum;
+
+    // Collection is observed after a complete producer quantum has been
+    // flushed. Reserve one quantum for the current incomplete learner window
+    // and one for that bounded observation delay, so the hard stage cap cannot
+    // be crossed while preserving whole fragments.
+    const int64_t guard = quantum <=
+                                  std::numeric_limits<int64_t>::max() / 2
+                              ? quantum * 2
+                              : std::numeric_limits<int64_t>::max();
+    return std::max(quantum, budget > guard ? budget - guard : quantum);
+}
+
 double SingleMapTaskController::StageSuccessThreshold() const {
     switch (stage_) {
         case maze::CURRICULUM_STAGE_8X:
@@ -205,7 +221,7 @@ bool SingleMapTaskController::PlanNextEpisode(
         const bool samples_drained =
             active_model.trained_samples == produced_samples;
         const bool final_attempt =
-            stage_samples >= StageEffectiveBudget();
+            stage_samples >= FinalCollectionThreshold();
         const bool periodic_evaluation =
             active_model.trained_samples >=
             next_evaluation_trained_samples_;
@@ -261,7 +277,7 @@ bool SingleMapTaskController::ShouldPauseTrainingCollection(
     const bool periodic_evaluation =
         active_model.trained_samples >= next_evaluation_trained_samples_;
     const bool final_evaluation =
-        stage_samples >= StageEffectiveBudget();
+        stage_samples >= FinalCollectionThreshold();
     const int64_t untrained_samples =
         produced_samples - active_model.trained_samples;
     should_pause =

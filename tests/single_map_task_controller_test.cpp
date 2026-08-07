@@ -164,6 +164,24 @@ int main() {
         Model(1953, 999936), 999936, plan, error));
     assert(plan.episode_mode == maze::EPISODE_MODE_EVALUATION_ARGMAX);
 
+    // Whole-fragment ingress and a bounded variable learner batch must stop at
+    // the last safe trainable window instead of crossing the hard stage cap.
+    SingleMapTaskControllerConfig bounded_config;
+    bounded_config.evaluation_interval_samples = 2000000;
+    SingleMapTaskController bounded_cap(bounded_config);
+    error.clear();
+    assert(bounded_cap.Initialize(188, Model(0, 0), 0, error));
+    assert(bounded_cap.ShouldPauseTrainingCollection(
+        Model(1950, 998400), 998900, should_pause, error));
+    assert(!should_pause);
+    assert(bounded_cap.ShouldPauseTrainingCollection(
+        Model(1950, 998400), 999028, should_pause, error));
+    assert(should_pause);
+    assert(bounded_cap.PlanNextEpisode(
+        Model(1951, 999028), 999028, plan, error));
+    assert(plan.episode_mode == maze::EPISODE_MODE_EVALUATION_ARGMAX);
+    assert(bounded_cap.GetSnapshot().stage_produced_samples == 999028);
+
     // Sample Pool freshness is resolved after production. Reconcile that
     // explicit disposition inside the current stage without weakening the
     // monotonic counter check used by later updates.
