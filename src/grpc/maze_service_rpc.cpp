@@ -970,10 +970,10 @@ grpc::Status MazeServiceImpl::Update(
         !session->training_collection_paused;
     const bool budget_reached =
         training_sample_budget_.reached(produced_unique_samples_);
+    const bool staged_model_waiting =
+        staged_model_manifest_.model_version >
+        model_manifest_.model_version;
     if (collect) {
-        const bool staged_model_waiting =
-            staged_model_manifest_.model_version >
-            model_manifest_.model_version;
         for (const auto& state : req->agents()) {
             const int agent_id = static_cast<int>(state.agent_id());
             auto& agent = session->agents[agent_id];
@@ -1011,12 +1011,14 @@ grpc::Status MazeServiceImpl::Update(
                 }
             }
         }
-        if (staged_model_waiting && !ActivateStagedModel()) {
-            RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
-                          last_error_, rsp->mutable_lifecycle());
-            finish();
-            return grpc::Status::OK;
-        }
+    }
+    if (staged_model_waiting && !ActivateStagedModel()) {
+        RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                      last_error_, rsp->mutable_lifecycle());
+        finish();
+        return grpc::Status::OK;
+    }
+    if (training_episode) {
         bool should_pause = false;
         std::string controller_error;
         if (!task_controller_.ShouldPauseTrainingCollection(
@@ -1024,11 +1026,36 @@ grpc::Status MazeServiceImpl::Update(
                 should_pause, controller_error)) {
             MarkDegraded("TaskController collection check failed: " +
                          controller_error);
-            RejectCommand(*session,
-                          maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+            RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
                           last_error_, rsp->mutable_lifecycle());
             finish();
             return grpc::Status::OK;
+        }
+
+        if (collect && should_pause) {
+            for (const auto& state : req->agents()) {
+                const int agent_id = static_cast<int>(state.agent_id());
+                auto& cache = session->agent_sample_caches[agent_id];
+                if (cache.empty()) continue;
+                auto& agent = session->agents[agent_id];
+                float bootstrap_value = 0.0f;
+                if (!InferStateValue(*session, agent,
+                                     static_cast<int>(state.position().x()),
+                                     static_cast<int>(state.position().y()),
+                                     static_cast<int64_t>(req->frame_id()),
+                                     bootstrap_value) ||
+                    !FlushAgentSamples(
+                        *session, agent_id, false,
+                        maze::MAZE_TERMINATION_REASON_ACTIVE,
+                        bootstrap_value, true)) {
+                    RejectCommand(
+                        *session,
+                        maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                        last_error_, rsp->mutable_lifecycle());
+                    finish();
+                    return grpc::Status::OK;
+                }
+            }
         }
         session->training_collection_paused = should_pause;
     }

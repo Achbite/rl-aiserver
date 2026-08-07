@@ -180,6 +180,29 @@ int main() {
     assert(!should_pause);
     assert(!freshness.ReconcileDiscardedTrainingSamples(513, error));
 
+    // Once evaluation is due, collection alternates between pause-and-drain
+    // and filling a stranded sub-batch remainder. This reaches an exact empty
+    // ledger without admitting partial PPO updates.
+    SingleMapTaskController periodic;
+    error.clear();
+    assert(periodic.Initialize(188, Model(0, 0), 0, error));
+    assert(periodic.ShouldPauseTrainingCollection(
+        Model(196, 100352), 100608, should_pause, error));
+    assert(!should_pause);
+    assert(periodic.ShouldPauseTrainingCollection(
+        Model(196, 100352), 100864, should_pause, error));
+    assert(should_pause);
+    assert(periodic.ReconcileDiscardedTrainingSamples(128, error));
+    assert(periodic.ShouldPauseTrainingCollection(
+        Model(196, 100352), 100736, should_pause, error));
+    assert(!should_pause);
+    assert(periodic.ShouldPauseTrainingCollection(
+        Model(196, 100352), 100864, should_pause, error));
+    assert(should_pause);
+    assert(periodic.ShouldPauseTrainingCollection(
+        Model(197, 100864), 100864, should_pause, error));
+    assert(should_pause);
+
     std::cout << "single-map task controller contract passed\n";
     return 0;
 }

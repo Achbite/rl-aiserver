@@ -258,15 +258,16 @@ bool SingleMapTaskController::ShouldPauseTrainingCollection(
         error = "single-map stage sample budget was exceeded";
         return false;
     }
-    if (active_model.trained_samples != produced_samples) {
-        return true;
-    }
-
     const bool periodic_evaluation =
         active_model.trained_samples >= next_evaluation_trained_samples_;
     const bool final_evaluation =
         stage_samples >= StageEffectiveBudget();
-    should_pause = periodic_evaluation || final_evaluation;
+    const int64_t untrained_samples =
+        produced_samples - active_model.trained_samples;
+    should_pause =
+        (periodic_evaluation || final_evaluation) &&
+        (untrained_samples == 0 ||
+         untrained_samples >= config_.sample_quantum);
     return true;
 }
 
