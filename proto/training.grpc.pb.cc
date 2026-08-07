@@ -146,6 +146,11 @@ LearnerService::Service::~Service() {
 
 
 static const char* SampleDistributorService_method_names[] = {
+  "/rl.training.v1.SampleDistributorService/UpsertSampleDemand",
+  "/rl.training.v1.SampleDistributorService/ReleaseSampleDemand",
+  "/rl.training.v1.SampleDistributorService/GetSampleDemandStatus",
+  "/rl.training.v1.SampleDistributorService/AcquireSampleCredit",
+  "/rl.training.v1.SampleDistributorService/ReleaseSampleCredit",
   "/rl.training.v1.SampleDistributorService/PushSamples",
   "/rl.training.v1.SampleDistributorService/GetBatch",
   "/rl.training.v1.SampleDistributorService/AckBatch",
@@ -161,31 +166,151 @@ std::unique_ptr< SampleDistributorService::Stub> SampleDistributorService::NewSt
 }
 
 SampleDistributorService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
-  : channel_(channel), rpcmethod_PushSamples_(SampleDistributorService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetBatch_(SampleDistributorService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_AckBatch_(SampleDistributorService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_NackBatch_(SampleDistributorService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_RenewLease_(SampleDistributorService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetStatus_(SampleDistributorService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  : channel_(channel), rpcmethod_UpsertSampleDemand_(SampleDistributorService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ReleaseSampleDemand_(SampleDistributorService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetSampleDemandStatus_(SampleDistributorService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_AcquireSampleCredit_(SampleDistributorService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ReleaseSampleCredit_(SampleDistributorService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PushSamples_(SampleDistributorService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetBatch_(SampleDistributorService_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_AckBatch_(SampleDistributorService_method_names[7], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_NackBatch_(SampleDistributorService_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_RenewLease_(SampleDistributorService_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetStatus_(SampleDistributorService_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status SampleDistributorService::Stub::PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::rl::training::v1::PushSamplesRsp* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PushSamples_, context, request, response);
+::grpc::Status SampleDistributorService::Stub::UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::rl::training::v1::SampleDemandRsp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_UpsertSampleDemand_, context, request, response);
 }
 
-void SampleDistributorService::Stub::async::PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PushSamples_, context, request, response, std::move(f));
+void SampleDistributorService::Stub::async::UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UpsertSampleDemand_, context, request, response, std::move(f));
 }
 
-void SampleDistributorService::Stub::async::PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response, ::grpc::ClientUnaryReactor* reactor) {
+void SampleDistributorService::Stub::async::UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UpsertSampleDemand_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* SampleDistributorService::Stub::PrepareAsyncUpsertSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::SampleDemandRsp, ::rl::training::v1::UpsertSampleDemandReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_UpsertSampleDemand_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* SampleDistributorService::Stub::AsyncUpsertSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncUpsertSampleDemandRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status SampleDistributorService::Stub::ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::rl::training::v1::SampleDemandRsp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ReleaseSampleDemand_, context, request, response);
+}
+
+void SampleDistributorService::Stub::async::ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ReleaseSampleDemand_, context, request, response, std::move(f));
+}
+
+void SampleDistributorService::Stub::async::ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ReleaseSampleDemand_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* SampleDistributorService::Stub::PrepareAsyncReleaseSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::SampleDemandRsp, ::rl::training::v1::ReleaseSampleDemandReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ReleaseSampleDemand_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* SampleDistributorService::Stub::AsyncReleaseSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncReleaseSampleDemandRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status SampleDistributorService::Stub::GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::rl::training::v1::SampleDemandStatusRsp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetSampleDemandStatus_, context, request, response);
+}
+
+void SampleDistributorService::Stub::async::GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetSampleDemandStatus_, context, request, response, std::move(f));
+}
+
+void SampleDistributorService::Stub::async::GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetSampleDemandStatus_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>* SampleDistributorService::Stub::PrepareAsyncGetSampleDemandStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::SampleDemandStatusRsp, ::rl::training::v1::GetSampleDemandStatusReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GetSampleDemandStatus_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>* SampleDistributorService::Stub::AsyncGetSampleDemandStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGetSampleDemandStatusRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status SampleDistributorService::Stub::AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::rl::training::v1::SampleCreditGrant* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_AcquireSampleCredit_, context, request, response);
+}
+
+void SampleDistributorService::Stub::async::AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_AcquireSampleCredit_, context, request, response, std::move(f));
+}
+
+void SampleDistributorService::Stub::async::AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_AcquireSampleCredit_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>* SampleDistributorService::Stub::PrepareAsyncAcquireSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::SampleCreditGrant, ::rl::training::v1::AcquireSampleCreditReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_AcquireSampleCredit_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>* SampleDistributorService::Stub::AsyncAcquireSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncAcquireSampleCreditRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status SampleDistributorService::Stub::ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::rl::training::v1::ReleaseSampleCreditRsp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ReleaseSampleCredit_, context, request, response);
+}
+
+void SampleDistributorService::Stub::async::ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ReleaseSampleCredit_, context, request, response, std::move(f));
+}
+
+void SampleDistributorService::Stub::async::ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ReleaseSampleCredit_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>* SampleDistributorService::Stub::PrepareAsyncReleaseSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::ReleaseSampleCreditRsp, ::rl::training::v1::ReleaseSampleCreditReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ReleaseSampleCredit_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>* SampleDistributorService::Stub::AsyncReleaseSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncReleaseSampleCreditRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status SampleDistributorService::Stub::PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::rl::training::v1::PushSamplesRsp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PushSamples_, context, request, response);
+}
+
+void SampleDistributorService::Stub::async::PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PushSamples_, context, request, response, std::move(f));
+}
+
+void SampleDistributorService::Stub::async::PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PushSamples_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* SampleDistributorService::Stub::PrepareAsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::PushSamplesRsp, ::rl::training::v1::SampleBatch, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PushSamples_, context, request);
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* SampleDistributorService::Stub::PrepareAsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::PushSamplesRsp, ::rl::training::v1::PushSamplesReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PushSamples_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* SampleDistributorService::Stub::AsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* SampleDistributorService::Stub::AsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncPushSamplesRaw(context, request, cq);
   result->StartCall();
@@ -311,15 +436,65 @@ SampleDistributorService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       SampleDistributorService_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](SampleDistributorService::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::rl::training::v1::SampleBatch* req,
+             const ::rl::training::v1::UpsertSampleDemandReq* req,
+             ::rl::training::v1::SampleDemandRsp* resp) {
+               return service->UpsertSampleDemand(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      SampleDistributorService_method_names[1],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](SampleDistributorService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::rl::training::v1::ReleaseSampleDemandReq* req,
+             ::rl::training::v1::SampleDemandRsp* resp) {
+               return service->ReleaseSampleDemand(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      SampleDistributorService_method_names[2],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](SampleDistributorService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::rl::training::v1::GetSampleDemandStatusReq* req,
+             ::rl::training::v1::SampleDemandStatusRsp* resp) {
+               return service->GetSampleDemandStatus(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      SampleDistributorService_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](SampleDistributorService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::rl::training::v1::AcquireSampleCreditReq* req,
+             ::rl::training::v1::SampleCreditGrant* resp) {
+               return service->AcquireSampleCredit(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      SampleDistributorService_method_names[4],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](SampleDistributorService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::rl::training::v1::ReleaseSampleCreditReq* req,
+             ::rl::training::v1::ReleaseSampleCreditRsp* resp) {
+               return service->ReleaseSampleCredit(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      SampleDistributorService_method_names[5],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](SampleDistributorService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::rl::training::v1::PushSamplesReq* req,
              ::rl::training::v1::PushSamplesRsp* resp) {
                return service->PushSamples(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      SampleDistributorService_method_names[1],
+      SampleDistributorService_method_names[6],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::GetBatchReq, ::rl::training::v1::GetBatchRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](SampleDistributorService::Service* service,
@@ -329,7 +504,7 @@ SampleDistributorService::Service::Service() {
                return service->GetBatch(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      SampleDistributorService_method_names[2],
+      SampleDistributorService_method_names[7],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::AckBatchReq, ::rl::training::v1::DeliveryRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](SampleDistributorService::Service* service,
@@ -339,7 +514,7 @@ SampleDistributorService::Service::Service() {
                return service->AckBatch(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      SampleDistributorService_method_names[3],
+      SampleDistributorService_method_names[8],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::NackBatchReq, ::rl::training::v1::DeliveryRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](SampleDistributorService::Service* service,
@@ -349,7 +524,7 @@ SampleDistributorService::Service::Service() {
                return service->NackBatch(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      SampleDistributorService_method_names[4],
+      SampleDistributorService_method_names[9],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::RenewLeaseReq, ::rl::training::v1::DeliveryRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](SampleDistributorService::Service* service,
@@ -359,7 +534,7 @@ SampleDistributorService::Service::Service() {
                return service->RenewLease(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      SampleDistributorService_method_names[5],
+      SampleDistributorService_method_names[10],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< SampleDistributorService::Service, ::rl::training::v1::DistributorStatusReq, ::rl::training::v1::DistributorStatusRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](SampleDistributorService::Service* service,
@@ -373,7 +548,42 @@ SampleDistributorService::Service::Service() {
 SampleDistributorService::Service::~Service() {
 }
 
-::grpc::Status SampleDistributorService::Service::PushSamples(::grpc::ServerContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response) {
+::grpc::Status SampleDistributorService::Service::UpsertSampleDemand(::grpc::ServerContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status SampleDistributorService::Service::ReleaseSampleDemand(::grpc::ServerContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status SampleDistributorService::Service::GetSampleDemandStatus(::grpc::ServerContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status SampleDistributorService::Service::AcquireSampleCredit(::grpc::ServerContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status SampleDistributorService::Service::ReleaseSampleCredit(::grpc::ServerContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status SampleDistributorService::Service::PushSamples(::grpc::ServerContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response) {
   (void) context;
   (void) request;
   (void) response;

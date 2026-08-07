@@ -47,10 +47,10 @@ bool SampleSender::ProbeDistributor() {
         contract.platform() == contract_.platform &&
         contract.generator_identity() == contract_.generator_identity;
     if (!contract_matches ||
-        response.distributor().component() != "sample-pool" ||
+        response.distributor().component() != "sample-distributor" ||
         response.distributor().instance_id().empty() ||
         response.distributor().lifecycle_epoch() == 0) {
-        MarkDegraded("sample ingress identity does not match rl-contracts 0.9.1");
+        MarkDegraded("sample ingress identity does not match rl-contracts 0.10.0");
         return false;
     }
     if (!response.ready() || !response.ingress_ready()) {
@@ -90,6 +90,8 @@ bool SampleSender::Start() {
         accepting_ = true;
         stop_requested_ = false;
         force_stop_ = false;
+        training_capacity_wait_ = false;
+        training_capacity_retry_after_ms_ = 0;
     }
     sender_thread_ = std::thread(&SampleSender::SenderLoop, this);
     LOG_INFO("SampleSender", "就绪: target=%s, distributor_instance_id=%s",
@@ -130,12 +132,15 @@ bool SampleSender::Enqueue(const training::SampleBatch& batch) {
     return true;
 }
 
-bool SampleSender::SendFront(const QueueItem& item,
-                             bool& duplicate,
-                             int& attempts_used,
-                             std::string& error) {
+SampleSender::SendResult SampleSender::SendFront(
+    const QueueItem& item,
+    bool& duplicate,
+    int& attempts_used,
+    int& retry_after_ms,
+    std::string& error) {
     duplicate = false;
     attempts_used = 0;
+    retry_after_ms = 0;
     const int attempts = std::max(1, config_.max_attempts);
 
     for (int attempt = 0; attempt < attempts; ++attempt) {
@@ -143,14 +148,93 @@ bool SampleSender::SendFront(const QueueItem& item,
             std::lock_guard<std::mutex> lock(mutex_);
             if (force_stop_) {
                 error = "sender forced to stop";
-                return false;
+                return SendResult::kRejected;
             }
-            ++push_attempt_count_;
+            ++credit_request_count_;
             ++attempts_used;
             if (item.attempts + attempt > 0) ++retry_attempt_count_;
         }
 
+        training::AcquireSampleCreditReq credit_request;
+        credit_request.set_request_id(item.batch.batch_id() + "-credit");
+        *credit_request.mutable_producer() = item.batch.producer();
+        *credit_request.mutable_contract() = item.batch.contract();
+        credit_request.set_batch_id(item.batch.batch_id());
+        *credit_request.mutable_payload_digest() = item.batch.payload_digest();
+        *credit_request.mutable_behavior_policy() =
+            item.batch.behavior_policy();
+        *credit_request.mutable_training_semantics() =
+            item.batch.training_semantics();
+        credit_request.set_sample_count(item.samples);
+        credit_request.set_fragment_count(1);
+        credit_request.set_estimated_bytes(item.batch.ByteSizeLong());
+        credit_request.set_created_at_unix_ms(
+            item.batch.created_at_unix_ms());
+
+        training::SampleCreditGrant credit;
+        grpc::ClientContext credit_context;
+        credit_context.set_deadline(
+            std::chrono::system_clock::now() +
+            std::chrono::milliseconds(config_.rpc_timeout_ms));
+        {
+            std::lock_guard<std::mutex> rpc_lock(rpc_mutex_);
+            active_rpc_ = &credit_context;
+        }
+        grpc::Status credit_status =
+            stub_->AcquireSampleCredit(&credit_context, credit_request, &credit);
+        {
+            std::lock_guard<std::mutex> rpc_lock(rpc_mutex_);
+            active_rpc_ = nullptr;
+        }
+        if (!credit_status.ok()) {
+            error = credit_status.error_message();
+            if (attempt + 1 < attempts) {
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(50 * (attempt + 1)));
+                continue;
+            }
+            return SendResult::kRejected;
+        }
+        if (credit.result() != training::SAMPLE_CREDIT_RESULT_GRANTED) {
+            switch (credit.result()) {
+                case training::SAMPLE_CREDIT_RESULT_WAIT_NO_DEMAND:
+                case training::SAMPLE_CREDIT_RESULT_WAIT_INFLIGHT_LIMIT:
+                case training::SAMPLE_CREDIT_RESULT_WAIT_CAPACITY:
+                case training::SAMPLE_CREDIT_RESULT_WAIT_DRAINING: {
+                    std::lock_guard<std::mutex> lock(mutex_);
+                    ++credit_wait_count_;
+                    retry_after_ms = std::max(1, credit.retry_after_ms());
+                    training_capacity_retry_after_ms_ = retry_after_ms;
+                    if (!training_capacity_wait_) {
+                        training_capacity_wait_ = true;
+                        capacity_wait_started_ =
+                            std::chrono::steady_clock::now();
+                    }
+                    last_error_.clear();
+                    return SendResult::kWait;
+                }
+                case training::SAMPLE_CREDIT_RESULT_REJECTED_FRESHNESS: {
+                    std::lock_guard<std::mutex> lock(mutex_);
+                    ++producer_stale_count_;
+                    error = credit.message();
+                    return SendResult::kRejected;
+                }
+                default:
+                    error = credit.message();
+                    return SendResult::kRejected;
+            }
+        }
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            ++credit_grant_count_;
+            if (attempt > 0 || item.attempts > 0) ++credit_reacquire_count_;
+            ++push_attempt_count_;
+        }
+
         training::PushSamplesRsp response;
+        training::PushSamplesReq push_request;
+        push_request.set_credit_id(credit.credit_id());
+        *push_request.mutable_batch() = item.batch;
         grpc::ClientContext context;
         context.set_deadline(std::chrono::system_clock::now() +
                              std::chrono::milliseconds(config_.rpc_timeout_ms));
@@ -160,7 +244,8 @@ bool SampleSender::SendFront(const QueueItem& item,
         }
 
         auto start = std::chrono::steady_clock::now();
-        grpc::Status status = stub_->PushSamples(&context, item.batch, &response);
+        grpc::Status status =
+            stub_->PushSamples(&context, push_request, &response);
         double latency_ms = ElapsedMs(start);
         {
             std::lock_guard<std::mutex> rpc_lock(rpc_mutex_);
@@ -177,15 +262,31 @@ bool SampleSender::SendFront(const QueueItem& item,
             (response.result() == training::PUSH_RESULT_ACCEPTED ||
              response.result() == training::PUSH_RESULT_DUPLICATE)) {
             duplicate = response.result() == training::PUSH_RESULT_DUPLICATE;
-            return true;
+            std::lock_guard<std::mutex> lock(mutex_);
+            if (training_capacity_wait_) {
+                capacity_wait_ms_ +=
+                    std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() -
+                        capacity_wait_started_)
+                        .count();
+                training_capacity_wait_ = false;
+                training_capacity_retry_after_ms_ = 0;
+            }
+            return SendResult::kCommitted;
         }
 
         if (status.ok()) {
             error = response.message();
             std::lock_guard<std::mutex> lock(mutex_);
             ++rejected_push_attempt_count_;
-            if (response.result() == training::PUSH_RESULT_REJECTED_INVALID) {
-                return false;
+            if (response.result() == training::PUSH_RESULT_REJECTED_INVALID ||
+                response.result() == training::PUSH_RESULT_REJECTED_IDENTITY) {
+                if (response.result() ==
+                        training::PUSH_RESULT_REJECTED_IDENTITY &&
+                    attempt + 1 < attempts) {
+                    continue;
+                }
+                return SendResult::kRejected;
             }
         } else {
             error = status.error_message();
@@ -196,7 +297,7 @@ bool SampleSender::SendFront(const QueueItem& item,
                 std::chrono::milliseconds(50 * (attempt + 1)));
         }
     }
-    return false;
+    return SendResult::kRejected;
 }
 
 void SampleSender::SenderLoop() {
@@ -215,20 +316,34 @@ void SampleSender::SenderLoop() {
 
         bool duplicate = false;
         int attempts_used = 0;
+        int retry_after_ms = 0;
         std::string error;
-        if (SendFront(item, duplicate, attempts_used, error)) {
+        const SendResult result = SendFront(
+            item, duplicate, attempts_used, retry_after_ms, error);
+        if (result == SendResult::kCommitted) {
             std::lock_guard<std::mutex> lock(mutex_);
             if (!queue_.empty() &&
                 queue_.front().batch.batch_id() == item.batch.batch_id()) {
                 queue_samples_ -= queue_.front().samples;
                 queue_estimated_bytes_ -= queue_.front().estimated_bytes;
                 queue_.pop_front();
-                accepted_unique_samples_ += item.samples;
-                ++accepted_unique_batches_;
-                if (duplicate) ++duplicate_push_attempt_count_;
+                if (duplicate) {
+                    ++duplicate_push_attempt_count_;
+                } else {
+                    accepted_unique_samples_ += item.samples;
+                    ++accepted_unique_batches_;
+                }
                 space_cv_.notify_all();
                 if (queue_.empty()) drained_cv_.notify_all();
             }
+            continue;
+        }
+
+        if (result == SendResult::kWait) {
+            std::unique_lock<std::mutex> lock(mutex_);
+            queue_cv_.wait_for(
+                lock, std::chrono::milliseconds(std::max(1, retry_after_ms)),
+                [this]() { return force_stop_; });
             continue;
         }
 
@@ -307,8 +422,26 @@ bool SampleSender::IsDegraded() const {
     return degraded_;
 }
 
+bool SampleSender::IsWaitingForTrainingCapacity() const {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return training_capacity_wait_;
+}
+
+int SampleSender::TrainingCapacityRetryAfterMs() const {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return training_capacity_retry_after_ms_;
+}
+
 void SampleSender::MarkDegraded(const std::string& error) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (training_capacity_wait_) {
+        capacity_wait_ms_ +=
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now() - capacity_wait_started_)
+                .count();
+        training_capacity_wait_ = false;
+        training_capacity_retry_after_ms_ = 0;
+    }
     degraded_ = true;
     last_error_ = error;
     space_cv_.notify_all();
@@ -328,6 +461,8 @@ SampleSender::Snapshot SampleSender::GetSnapshot() const {
     Snapshot snapshot;
     snapshot.ready = ready_;
     snapshot.degraded = degraded_;
+    snapshot.training_capacity_wait = training_capacity_wait_;
+    snapshot.retry_after_ms = training_capacity_retry_after_ms_;
     snapshot.queue_fragments = queue_.size();
     snapshot.queue_samples = queue_samples_;
     snapshot.queue_estimated_bytes = queue_estimated_bytes_;
@@ -343,6 +478,18 @@ SampleSender::Snapshot SampleSender::GetSnapshot() const {
     snapshot.push_rpc_count = push_rpc_count_;
     snapshot.push_rpc_latency_sum_ms = push_rpc_latency_sum_ms_;
     snapshot.push_rpc_latency_max_ms = push_rpc_latency_max_ms_;
+    snapshot.credit_request_count = credit_request_count_;
+    snapshot.credit_grant_count = credit_grant_count_;
+    snapshot.credit_wait_count = credit_wait_count_;
+    snapshot.credit_reacquire_count = credit_reacquire_count_;
+    snapshot.producer_stale_count = producer_stale_count_;
+    snapshot.capacity_wait_ms = capacity_wait_ms_;
+    if (training_capacity_wait_) {
+        snapshot.capacity_wait_ms +=
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now() - capacity_wait_started_)
+                .count();
+    }
     snapshot.distributor_instance_id = distributor_instance_id_;
     snapshot.last_error = last_error_;
     return snapshot;

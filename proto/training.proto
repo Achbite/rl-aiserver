@@ -25,6 +25,46 @@ enum PushResult {
     PUSH_RESULT_REJECTED_IDENTITY = 5;
 }
 
+enum SampleDemandResult {
+    SAMPLE_DEMAND_RESULT_UNSPECIFIED = 0;
+    SAMPLE_DEMAND_RESULT_APPLIED = 1;
+    SAMPLE_DEMAND_RESULT_ALREADY_APPLIED = 2;
+    SAMPLE_DEMAND_RESULT_RELEASED = 3;
+    SAMPLE_DEMAND_RESULT_NOT_FOUND = 4;
+    SAMPLE_DEMAND_RESULT_REJECTED_INVALID = 5;
+    SAMPLE_DEMAND_RESULT_REJECTED_IDENTITY = 6;
+    SAMPLE_DEMAND_RESULT_REJECTED_STALE_EPOCH = 7;
+}
+
+enum SampleCreditResult {
+    SAMPLE_CREDIT_RESULT_UNSPECIFIED = 0;
+    SAMPLE_CREDIT_RESULT_GRANTED = 1;
+    SAMPLE_CREDIT_RESULT_WAIT_NO_DEMAND = 2;
+    SAMPLE_CREDIT_RESULT_WAIT_INFLIGHT_LIMIT = 3;
+    SAMPLE_CREDIT_RESULT_WAIT_CAPACITY = 4;
+    SAMPLE_CREDIT_RESULT_WAIT_DRAINING = 5;
+    SAMPLE_CREDIT_RESULT_REJECTED_IDENTITY = 6;
+    SAMPLE_CREDIT_RESULT_REJECTED_SEMANTICS = 7;
+    SAMPLE_CREDIT_RESULT_REJECTED_FRESHNESS = 8;
+    SAMPLE_CREDIT_RESULT_REJECTED_INVALID = 9;
+}
+
+enum SampleCreditState {
+    SAMPLE_CREDIT_STATE_UNSPECIFIED = 0;
+    SAMPLE_CREDIT_STATE_RESERVED = 1;
+    SAMPLE_CREDIT_STATE_COMMITTED = 2;
+    SAMPLE_CREDIT_STATE_RELEASED = 3;
+    SAMPLE_CREDIT_STATE_EXPIRED = 4;
+    SAMPLE_CREDIT_STATE_REVOKED = 5;
+}
+
+enum SampleCreditReleaseReason {
+    SAMPLE_CREDIT_RELEASE_REASON_UNSPECIFIED = 0;
+    SAMPLE_CREDIT_RELEASE_REASON_PRODUCER_ABORT = 1;
+    SAMPLE_CREDIT_RELEASE_REASON_SHUTDOWN = 2;
+    SAMPLE_CREDIT_RELEASE_REASON_SUPERSEDED = 3;
+}
+
 enum PressureState {
     PRESSURE_STATE_UNSPECIFIED = 0;
     PRESSURE_STATE_NORMAL = 1;
@@ -220,6 +260,122 @@ message SampleResponse {
     uint64 model_version = 2;
 }
 
+// A short-lived, task-neutral declaration of the Learner's current training
+// intake window. Refreshing an unchanged demand extends its expiry; changing
+// immutable fields requires a strictly newer demand_epoch.
+message SampleDemand {
+    string demand_id = 1;
+    uint64 demand_epoch = 2;
+    rl.common.v1.ServiceInstanceIdentity consumer = 3;
+    rl.common.v1.ContractIdentity contract = 4;
+    TrainingSemanticsIdentity training_semantics = 5;
+    SampleFreshnessPolicy freshness = 6;
+    BatchAssemblySpec assembly = 7;
+    int64 max_buffered_samples = 8;
+    int64 max_buffered_fragments = 9;
+    int64 max_buffered_estimated_bytes = 10;
+    int64 expires_at_unix_ms = 11;
+}
+
+message UpsertSampleDemandReq {
+    SampleDemand demand = 1;
+}
+
+message ReleaseSampleDemandReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    rl.common.v1.ContractIdentity contract = 2;
+    string demand_id = 3;
+    uint64 demand_epoch = 4;
+}
+
+message GetSampleDemandStatusReq {
+    rl.common.v1.ServiceInstanceIdentity requester = 1;
+    string demand_id = 2;
+}
+
+message SampleDemandRsp {
+    int32 ret_code = 1;
+    SampleDemandResult result = 2;
+    string message = 3;
+    SampleDemand demand = 4;
+    int64 reserved_samples = 5;
+    int64 reserved_fragments = 6;
+    int64 reserved_estimated_bytes = 7;
+    rl.common.v1.ServiceInstanceIdentity distributor = 8;
+}
+
+message SampleDemandStatusRsp {
+    int32 ret_code = 1;
+    SampleDemandResult result = 2;
+    string message = 3;
+    bool active = 4;
+    SampleDemand demand = 5;
+    int64 demand_age_ms = 6;
+    int64 reserved_samples = 7;
+    int64 reserved_fragments = 8;
+    int64 reserved_estimated_bytes = 9;
+    rl.common.v1.ServiceInstanceIdentity distributor = 10;
+}
+
+// One credit reserves capacity for exactly one immutable SampleBatch. The
+// payload digest and all identity fields are rechecked when the batch commits.
+message AcquireSampleCreditReq {
+    string request_id = 1;
+    rl.common.v1.ServiceInstanceIdentity producer = 2;
+    rl.common.v1.ContractIdentity contract = 3;
+    string batch_id = 4;
+    rl.common.v1.ContentDigest payload_digest = 5;
+    BehaviorPolicyReference behavior_policy = 6;
+    TrainingSemanticsIdentity training_semantics = 7;
+    int64 sample_count = 8;
+    int64 fragment_count = 9;
+    int64 estimated_bytes = 10;
+    int64 created_at_unix_ms = 11;
+}
+
+message SampleCreditGrant {
+    int32 ret_code = 1;
+    SampleCreditResult result = 2;
+    string message = 3;
+    string request_id = 4;
+    string credit_id = 5;
+    string demand_id = 6;
+    uint64 demand_epoch = 7;
+    string batch_id = 8;
+    rl.common.v1.ContentDigest payload_digest = 9;
+    int64 granted_samples = 10;
+    int64 granted_fragments = 11;
+    int64 granted_estimated_bytes = 12;
+    int64 expires_at_unix_ms = 13;
+    int32 retry_after_ms = 14;
+    PressureState pressure_state = 15;
+    rl.common.v1.ServiceInstanceIdentity distributor = 16;
+    SampleCreditState state = 17;
+}
+
+message ReleaseSampleCreditReq {
+    rl.common.v1.ServiceInstanceIdentity producer = 1;
+    rl.common.v1.ContractIdentity contract = 2;
+    string credit_id = 3;
+    string batch_id = 4;
+    rl.common.v1.ContentDigest payload_digest = 5;
+    SampleCreditReleaseReason reason = 6;
+}
+
+message ReleaseSampleCreditRsp {
+    int32 ret_code = 1;
+    SampleCreditResult result = 2;
+    string message = 3;
+    string credit_id = 4;
+    SampleCreditState state = 5;
+    rl.common.v1.ServiceInstanceIdentity distributor = 6;
+}
+
+message PushSamplesReq {
+    string credit_id = 1;
+    SampleBatch batch = 2;
+}
+
 message PushSamplesRsp {
     int32 ret_code = 1;
     string message = 2;
@@ -359,6 +515,24 @@ message DistributorStatusRsp {
     int64 oldest_ready_sample_age_ms = 45;
     uint64 minimum_ready_model_version = 46;
     uint64 maximum_ready_model_version = 47;
+    int64 active_demand_count = 48;
+    uint64 active_demand_epoch = 49;
+    int64 active_demand_age_ms = 50;
+    int64 reserved_samples = 51;
+    int64 reserved_fragments = 52;
+    int64 reserved_estimated_bytes = 53;
+    int64 credit_request_count = 54;
+    int64 credit_grant_count = 55;
+    int64 credit_commit_count = 56;
+    int64 credit_release_count = 57;
+    int64 credit_expire_count = 58;
+    int64 credit_revoke_count = 59;
+    int64 credit_wait_no_demand_count = 60;
+    int64 credit_wait_inflight_limit_count = 61;
+    int64 credit_wait_capacity_count = 62;
+    int64 credit_wait_draining_count = 63;
+    int64 demand_upsert_count = 64;
+    int64 demand_release_count = 65;
 }
 
 message MetricDescriptor {
@@ -431,6 +605,13 @@ message AIServerStatusRsp {
     string last_error = 32;
     int64 timestamp_unix_ms = 33;
     MetricSnapshot metrics = 34;
+    int64 credit_request_count = 35;
+    int64 credit_grant_count = 36;
+    int64 credit_wait_count = 37;
+    int64 credit_reacquire_count = 38;
+    int64 producer_stale_count = 39;
+    int64 capacity_wait_ms = 40;
+    bool training_capacity_wait = 41;
 }
 
 message ModelArtifactManifest {
@@ -542,7 +723,15 @@ service LearnerService {
 }
 
 service SampleDistributorService {
-    rpc PushSamples(SampleBatch) returns (PushSamplesRsp);
+    rpc UpsertSampleDemand(UpsertSampleDemandReq) returns (SampleDemandRsp);
+    rpc ReleaseSampleDemand(ReleaseSampleDemandReq) returns (SampleDemandRsp);
+    rpc GetSampleDemandStatus(GetSampleDemandStatusReq)
+        returns (SampleDemandStatusRsp);
+    rpc AcquireSampleCredit(AcquireSampleCreditReq)
+        returns (SampleCreditGrant);
+    rpc ReleaseSampleCredit(ReleaseSampleCreditReq)
+        returns (ReleaseSampleCreditRsp);
+    rpc PushSamples(PushSamplesReq) returns (PushSamplesRsp);
     rpc GetBatch(GetBatchReq) returns (GetBatchRsp);
     rpc AckBatch(AckBatchReq) returns (DeliveryRsp);
     rpc NackBatch(NackBatchReq) returns (DeliveryRsp);

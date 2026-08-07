@@ -73,9 +73,9 @@ std::string DeterministicBytes(const google::protobuf::MessageLite& message) {
 AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
     AIServerConfig config;
     config.contract.source_digest.hex =
-        "861575536f18342fd427661c8f21b7b98994913e1e1c998f87fce5ee1490d438";
+        "fc1bf2e3dfd804431f2528d8da53227e55ca9b58b32fc95327558d91cebb3b97";
     config.contract.artifact_digest.hex =
-        "b8e8cdabf05b15b830b27edd1555904269202042756ecf0ed8158184e57ce8f6";
+        "d90083d97e377230f50c820d040a5d83ce7435dc88c4f948c222c86ac4a429ae";
     config.contract.generator_identity =
         "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8";
     config.training_semantics.observation_schema = {

@@ -166,12 +166,13 @@ enum LifecycleResult : int {
   LIFECYCLE_RESULT_APPLIED = 1,
   LIFECYCLE_RESULT_ALREADY_APPLIED = 2,
   LIFECYCLE_RESULT_REJECTED = 3,
+  LIFECYCLE_RESULT_WAIT = 4,
   LifecycleResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   LifecycleResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool LifecycleResult_IsValid(int value);
 constexpr LifecycleResult LifecycleResult_MIN = LIFECYCLE_RESULT_UNSPECIFIED;
-constexpr LifecycleResult LifecycleResult_MAX = LIFECYCLE_RESULT_REJECTED;
+constexpr LifecycleResult LifecycleResult_MAX = LIFECYCLE_RESULT_WAIT;
 constexpr int LifecycleResult_ARRAYSIZE = LifecycleResult_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LifecycleResult_descriptor();
@@ -483,6 +484,32 @@ inline bool MazeTerminationReason_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MazeTerminationReason* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MazeTerminationReason>(
     MazeTerminationReason_descriptor(), name, value);
+}
+enum EnvironmentControl : int {
+  ENVIRONMENT_CONTROL_UNSPECIFIED = 0,
+  ENVIRONMENT_CONTROL_ADVANCE = 1,
+  ENVIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPACITY = 2,
+  EnvironmentControl_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  EnvironmentControl_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool EnvironmentControl_IsValid(int value);
+constexpr EnvironmentControl EnvironmentControl_MIN = ENVIRONMENT_CONTROL_UNSPECIFIED;
+constexpr EnvironmentControl EnvironmentControl_MAX = ENVIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPACITY;
+constexpr int EnvironmentControl_ARRAYSIZE = EnvironmentControl_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EnvironmentControl_descriptor();
+template<typename T>
+inline const std::string& EnvironmentControl_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, EnvironmentControl>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function EnvironmentControl_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    EnvironmentControl_descriptor(), enum_t_value);
+}
+inline bool EnvironmentControl_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, EnvironmentControl* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EnvironmentControl>(
+    EnvironmentControl_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -4571,6 +4598,8 @@ class UpdateRsp final :
     kReplayedFieldNumber = 3,
     kTaskStopRequestedFieldNumber = 4,
     kTaskStopReasonFieldNumber = 5,
+    kEnvironmentControlFieldNumber = 6,
+    kRetryAfterMsFieldNumber = 7,
   };
   // repeated .rl.task.maze.v1.AgentAction actions = 2;
   int actions_size() const;
@@ -4635,6 +4664,24 @@ class UpdateRsp final :
   void _internal_set_task_stop_reason(::rl::task::maze::v1::MazeTerminationReason value);
   public:
 
+  // .rl.task.maze.v1.EnvironmentControl environment_control = 6;
+  void clear_environment_control();
+  ::rl::task::maze::v1::EnvironmentControl environment_control() const;
+  void set_environment_control(::rl::task::maze::v1::EnvironmentControl value);
+  private:
+  ::rl::task::maze::v1::EnvironmentControl _internal_environment_control() const;
+  void _internal_set_environment_control(::rl::task::maze::v1::EnvironmentControl value);
+  public:
+
+  // int32 retry_after_ms = 7;
+  void clear_retry_after_ms();
+  int32_t retry_after_ms() const;
+  void set_retry_after_ms(int32_t value);
+  private:
+  int32_t _internal_retry_after_ms() const;
+  void _internal_set_retry_after_ms(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.UpdateRsp)
  private:
   class _Internal;
@@ -4648,6 +4695,8 @@ class UpdateRsp final :
     bool replayed_;
     bool task_stop_requested_;
     int task_stop_reason_;
+    int environment_control_;
+    int32_t retry_after_ms_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -10476,6 +10525,46 @@ inline void UpdateRsp::set_task_stop_reason(::rl::task::maze::v1::MazeTerminatio
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.task_stop_reason)
 }
 
+// .rl.task.maze.v1.EnvironmentControl environment_control = 6;
+inline void UpdateRsp::clear_environment_control() {
+  _impl_.environment_control_ = 0;
+}
+inline ::rl::task::maze::v1::EnvironmentControl UpdateRsp::_internal_environment_control() const {
+  return static_cast< ::rl::task::maze::v1::EnvironmentControl >(_impl_.environment_control_);
+}
+inline ::rl::task::maze::v1::EnvironmentControl UpdateRsp::environment_control() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.environment_control)
+  return _internal_environment_control();
+}
+inline void UpdateRsp::_internal_set_environment_control(::rl::task::maze::v1::EnvironmentControl value) {
+  
+  _impl_.environment_control_ = value;
+}
+inline void UpdateRsp::set_environment_control(::rl::task::maze::v1::EnvironmentControl value) {
+  _internal_set_environment_control(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.environment_control)
+}
+
+// int32 retry_after_ms = 7;
+inline void UpdateRsp::clear_retry_after_ms() {
+  _impl_.retry_after_ms_ = 0;
+}
+inline int32_t UpdateRsp::_internal_retry_after_ms() const {
+  return _impl_.retry_after_ms_;
+}
+inline int32_t UpdateRsp::retry_after_ms() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.retry_after_ms)
+  return _internal_retry_after_ms();
+}
+inline void UpdateRsp::_internal_set_retry_after_ms(int32_t value) {
+  
+  _impl_.retry_after_ms_ = value;
+}
+inline void UpdateRsp::set_retry_after_ms(int32_t value) {
+  _internal_set_retry_after_ms(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.retry_after_ms)
+}
+
 // -------------------------------------------------------------------
 
 // EndEpisodeReq
@@ -11225,6 +11314,11 @@ template <> struct is_proto_enum< ::rl::task::maze::v1::MazeTerminationReason> :
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::MazeTerminationReason>() {
   return ::rl::task::maze::v1::MazeTerminationReason_descriptor();
+}
+template <> struct is_proto_enum< ::rl::task::maze::v1::EnvironmentControl> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::EnvironmentControl>() {
+  return ::rl::task::maze::v1::EnvironmentControl_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

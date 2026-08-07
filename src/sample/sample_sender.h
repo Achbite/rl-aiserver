@@ -6,6 +6,7 @@
 
 #include <grpcpp/grpcpp.h>
 
+#include <chrono>
 #include <condition_variable>
 #include <cstdint>
 #include <deque>
@@ -19,6 +20,8 @@ public:
     struct Snapshot {
         bool ready = false;
         bool degraded = false;
+        bool training_capacity_wait = false;
+        int retry_after_ms = 0;
         std::size_t queue_fragments = 0;
         int64_t queue_samples = 0;
         int64_t queue_estimated_bytes = 0;
@@ -34,6 +37,12 @@ public:
         int64_t push_rpc_count = 0;
         double push_rpc_latency_sum_ms = 0.0;
         double push_rpc_latency_max_ms = 0.0;
+        int64_t credit_request_count = 0;
+        int64_t credit_grant_count = 0;
+        int64_t credit_wait_count = 0;
+        int64_t credit_reacquire_count = 0;
+        int64_t producer_stale_count = 0;
+        int64_t capacity_wait_ms = 0;
         std::string distributor_instance_id;
         std::string last_error;
     };
@@ -47,12 +56,20 @@ public:
 
     bool IsReady() const;
     bool IsDegraded() const;
+    bool IsWaitingForTrainingCapacity() const;
+    int TrainingCapacityRetryAfterMs() const;
     void MarkDegraded(const std::string& error);
     void RecordFinalDrop(int64_t samples, int64_t batches,
                          const std::string& error);
     Snapshot GetSnapshot() const;
 
 private:
+    enum class SendResult {
+        kCommitted,
+        kWait,
+        kRejected,
+    };
+
     struct QueueItem {
         training::SampleBatch batch;
         int64_t samples = 0;
@@ -62,8 +79,9 @@ private:
 
     bool ProbeDistributor();
     void SenderLoop();
-    bool SendFront(const QueueItem& item, bool& duplicate,
-                   int& attempts_used, std::string& error);
+    SendResult SendFront(const QueueItem& item, bool& duplicate,
+                         int& attempts_used, int& retry_after_ms,
+                         std::string& error);
     void CancelActiveRpc();
 
     SampleOutputConfig config_;
@@ -83,6 +101,9 @@ private:
     bool force_stop_ = false;
     bool ready_ = false;
     bool degraded_ = false;
+    bool training_capacity_wait_ = false;
+    int training_capacity_retry_after_ms_ = 0;
+    std::chrono::steady_clock::time_point capacity_wait_started_{};
     std::thread sender_thread_;
 
     mutable std::mutex rpc_mutex_;
@@ -100,6 +121,12 @@ private:
     int64_t push_rpc_count_ = 0;
     double push_rpc_latency_sum_ms_ = 0.0;
     double push_rpc_latency_max_ms_ = 0.0;
+    int64_t credit_request_count_ = 0;
+    int64_t credit_grant_count_ = 0;
+    int64_t credit_wait_count_ = 0;
+    int64_t credit_reacquire_count_ = 0;
+    int64_t producer_stale_count_ = 0;
+    int64_t capacity_wait_ms_ = 0;
     std::string distributor_instance_id_;
     std::string last_error_;
 };

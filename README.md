@@ -13,7 +13,7 @@ C++ 环境交互、推理、轨迹组装与异步样本发送服务。训练模�
 bash scripts/sync_contract_snapshot.sh
 ```
 
-同步入口从 `artifact_versions.env` 读取显式的 `0.9.1` 与 `linux/arm64`，在替换前后
+同步入口从 `artifact_versions.env` 读取显式的 `0.10.0` 与 `linux/arm64`，在替换前后
 校验 manifest、全部制品文件和仓库快照。它不会发现 `latest`，也不会调用本机
 `protoc` 重新生成代码。
 

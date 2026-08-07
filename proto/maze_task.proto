@@ -15,6 +15,9 @@ enum LifecycleResult {
     LIFECYCLE_RESULT_APPLIED = 1;
     LIFECYCLE_RESULT_ALREADY_APPLIED = 2;
     LIFECYCLE_RESULT_REJECTED = 3;
+    // Flow-control response: the command was not applied and the Client must
+    // retry the identical command after retry_after_ms.
+    LIFECYCLE_RESULT_WAIT = 4;
 }
 
 enum LifecycleErrorCode {
@@ -111,6 +114,12 @@ enum MazeTerminationReason {
     MAZE_TERMINATION_REASON_CLIENT_ABORT = 4;
     MAZE_TERMINATION_REASON_CHAIN_FAILURE = 5;
     MAZE_TERMINATION_REASON_TASK_STOP = 6;
+}
+
+enum EnvironmentControl {
+    ENVIRONMENT_CONTROL_UNSPECIFIED = 0;
+    ENVIRONMENT_CONTROL_ADVANCE = 1;
+    ENVIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPACITY = 2;
 }
 
 message TaskIdentity {
@@ -280,6 +289,8 @@ message UpdateRsp {
     bool replayed = 3;
     bool task_stop_requested = 4;
     MazeTerminationReason task_stop_reason = 5;
+    EnvironmentControl environment_control = 6;
+    int32 retry_after_ms = 7;
 }
 
 message EndEpisodeReq {

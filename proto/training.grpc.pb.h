@@ -451,11 +451,46 @@ class SampleDistributorService final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::rl::training::v1::PushSamplesRsp* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>> AsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
+    virtual ::grpc::Status UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::rl::training::v1::SampleDemandRsp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>> AsyncUpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>>(AsyncUpsertSampleDemandRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>> PrepareAsyncUpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>>(PrepareAsyncUpsertSampleDemandRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::rl::training::v1::SampleDemandRsp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>> AsyncReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>>(AsyncReleaseSampleDemandRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>> PrepareAsyncReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>>(PrepareAsyncReleaseSampleDemandRaw(context, request, cq));
+    }
+    virtual ::grpc::Status GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::rl::training::v1::SampleDemandStatusRsp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandStatusRsp>> AsyncGetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandStatusRsp>>(AsyncGetSampleDemandStatusRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandStatusRsp>> PrepareAsyncGetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandStatusRsp>>(PrepareAsyncGetSampleDemandStatusRaw(context, request, cq));
+    }
+    virtual ::grpc::Status AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::rl::training::v1::SampleCreditGrant* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleCreditGrant>> AsyncAcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleCreditGrant>>(AsyncAcquireSampleCreditRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleCreditGrant>> PrepareAsyncAcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleCreditGrant>>(PrepareAsyncAcquireSampleCreditRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::rl::training::v1::ReleaseSampleCreditRsp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ReleaseSampleCreditRsp>> AsyncReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ReleaseSampleCreditRsp>>(AsyncReleaseSampleCreditRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ReleaseSampleCreditRsp>> PrepareAsyncReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ReleaseSampleCreditRsp>>(PrepareAsyncReleaseSampleCreditRaw(context, request, cq));
+    }
+    virtual ::grpc::Status PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::rl::training::v1::PushSamplesRsp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>> AsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>>(AsyncPushSamplesRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>> PrepareAsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>> PrepareAsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>>(PrepareAsyncPushSamplesRaw(context, request, cq));
     }
     virtual ::grpc::Status GetBatch(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq& request, ::rl::training::v1::GetBatchRsp* response) = 0;
@@ -496,8 +531,18 @@ class SampleDistributorService final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void GetBatch(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq* request, ::rl::training::v1::GetBatchRsp* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetBatch(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq* request, ::rl::training::v1::GetBatchRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void AckBatch(::grpc::ClientContext* context, const ::rl::training::v1::AckBatchReq* request, ::rl::training::v1::DeliveryRsp* response, std::function<void(::grpc::Status)>) = 0;
@@ -513,8 +558,18 @@ class SampleDistributorService final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>* AsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>* PrepareAsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>* AsyncUpsertSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>* PrepareAsyncUpsertSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>* AsyncReleaseSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandRsp>* PrepareAsyncReleaseSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandStatusRsp>* AsyncGetSampleDemandStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleDemandStatusRsp>* PrepareAsyncGetSampleDemandStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleCreditGrant>* AsyncAcquireSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::SampleCreditGrant>* PrepareAsyncAcquireSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ReleaseSampleCreditRsp>* AsyncReleaseSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ReleaseSampleCreditRsp>* PrepareAsyncReleaseSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>* AsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::PushSamplesRsp>* PrepareAsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetBatchRsp>* AsyncGetBatchRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetBatchRsp>* PrepareAsyncGetBatchRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::DeliveryRsp>* AsyncAckBatchRaw(::grpc::ClientContext* context, const ::rl::training::v1::AckBatchReq& request, ::grpc::CompletionQueue* cq) = 0;
@@ -529,11 +584,46 @@ class SampleDistributorService final {
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::rl::training::v1::PushSamplesRsp* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>> AsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
+    ::grpc::Status UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::rl::training::v1::SampleDemandRsp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>> AsyncUpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>>(AsyncUpsertSampleDemandRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>> PrepareAsyncUpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>>(PrepareAsyncUpsertSampleDemandRaw(context, request, cq));
+    }
+    ::grpc::Status ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::rl::training::v1::SampleDemandRsp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>> AsyncReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>>(AsyncReleaseSampleDemandRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>> PrepareAsyncReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>>(PrepareAsyncReleaseSampleDemandRaw(context, request, cq));
+    }
+    ::grpc::Status GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::rl::training::v1::SampleDemandStatusRsp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>> AsyncGetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>>(AsyncGetSampleDemandStatusRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>> PrepareAsyncGetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>>(PrepareAsyncGetSampleDemandStatusRaw(context, request, cq));
+    }
+    ::grpc::Status AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::rl::training::v1::SampleCreditGrant* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>> AsyncAcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>>(AsyncAcquireSampleCreditRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>> PrepareAsyncAcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>>(PrepareAsyncAcquireSampleCreditRaw(context, request, cq));
+    }
+    ::grpc::Status ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::rl::training::v1::ReleaseSampleCreditRsp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>> AsyncReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>>(AsyncReleaseSampleCreditRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>> PrepareAsyncReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>>(PrepareAsyncReleaseSampleCreditRaw(context, request, cq));
+    }
+    ::grpc::Status PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::rl::training::v1::PushSamplesRsp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>> AsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>>(AsyncPushSamplesRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>> PrepareAsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>> PrepareAsyncPushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>>(PrepareAsyncPushSamplesRaw(context, request, cq));
     }
     ::grpc::Status GetBatch(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq& request, ::rl::training::v1::GetBatchRsp* response) override;
@@ -574,8 +664,18 @@ class SampleDistributorService final {
     class async final :
       public StubInterface::async_interface {
      public:
-      void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response, std::function<void(::grpc::Status)>) override;
-      void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, std::function<void(::grpc::Status)>) override;
+      void UpsertSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, std::function<void(::grpc::Status)>) override;
+      void ReleaseSampleDemand(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response, std::function<void(::grpc::Status)>) override;
+      void GetSampleDemandStatus(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response, std::function<void(::grpc::Status)>) override;
+      void AcquireSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response, std::function<void(::grpc::Status)>) override;
+      void ReleaseSampleCredit(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response, std::function<void(::grpc::Status)>) override;
+      void PushSamples(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
       void GetBatch(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq* request, ::rl::training::v1::GetBatchRsp* response, std::function<void(::grpc::Status)>) override;
       void GetBatch(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq* request, ::rl::training::v1::GetBatchRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
       void AckBatch(::grpc::ClientContext* context, const ::rl::training::v1::AckBatchReq* request, ::rl::training::v1::DeliveryRsp* response, std::function<void(::grpc::Status)>) override;
@@ -597,8 +697,18 @@ class SampleDistributorService final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* AsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* PrepareAsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* AsyncUpsertSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* PrepareAsyncUpsertSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::UpsertSampleDemandReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* AsyncReleaseSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandRsp>* PrepareAsyncReleaseSampleDemandRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleDemandReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>* AsyncGetSampleDemandStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleDemandStatusRsp>* PrepareAsyncGetSampleDemandStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetSampleDemandStatusReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>* AsyncAcquireSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleCreditGrant>* PrepareAsyncAcquireSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::AcquireSampleCreditReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>* AsyncReleaseSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ReleaseSampleCreditRsp>* PrepareAsyncReleaseSampleCreditRaw(::grpc::ClientContext* context, const ::rl::training::v1::ReleaseSampleCreditReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* AsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::PushSamplesRsp>* PrepareAsyncPushSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::PushSamplesReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetBatchRsp>* AsyncGetBatchRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetBatchRsp>* PrepareAsyncGetBatchRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetBatchReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::DeliveryRsp>* AsyncAckBatchRaw(::grpc::ClientContext* context, const ::rl::training::v1::AckBatchReq& request, ::grpc::CompletionQueue* cq) override;
@@ -609,6 +719,11 @@ class SampleDistributorService final {
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::DeliveryRsp>* PrepareAsyncRenewLeaseRaw(::grpc::ClientContext* context, const ::rl::training::v1::RenewLeaseReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::DistributorStatusRsp>* AsyncGetStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::DistributorStatusReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::DistributorStatusRsp>* PrepareAsyncGetStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::DistributorStatusReq& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_UpsertSampleDemand_;
+    const ::grpc::internal::RpcMethod rpcmethod_ReleaseSampleDemand_;
+    const ::grpc::internal::RpcMethod rpcmethod_GetSampleDemandStatus_;
+    const ::grpc::internal::RpcMethod rpcmethod_AcquireSampleCredit_;
+    const ::grpc::internal::RpcMethod rpcmethod_ReleaseSampleCredit_;
     const ::grpc::internal::RpcMethod rpcmethod_PushSamples_;
     const ::grpc::internal::RpcMethod rpcmethod_GetBatch_;
     const ::grpc::internal::RpcMethod rpcmethod_AckBatch_;
@@ -622,7 +737,12 @@ class SampleDistributorService final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status PushSamples(::grpc::ServerContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response);
+    virtual ::grpc::Status UpsertSampleDemand(::grpc::ServerContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response);
+    virtual ::grpc::Status ReleaseSampleDemand(::grpc::ServerContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response);
+    virtual ::grpc::Status GetSampleDemandStatus(::grpc::ServerContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response);
+    virtual ::grpc::Status AcquireSampleCredit(::grpc::ServerContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response);
+    virtual ::grpc::Status ReleaseSampleCredit(::grpc::ServerContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response);
+    virtual ::grpc::Status PushSamples(::grpc::ServerContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response);
     virtual ::grpc::Status GetBatch(::grpc::ServerContext* context, const ::rl::training::v1::GetBatchReq* request, ::rl::training::v1::GetBatchRsp* response);
     virtual ::grpc::Status AckBatch(::grpc::ServerContext* context, const ::rl::training::v1::AckBatchReq* request, ::rl::training::v1::DeliveryRsp* response);
     virtual ::grpc::Status NackBatch(::grpc::ServerContext* context, const ::rl::training::v1::NackBatchReq* request, ::rl::training::v1::DeliveryRsp* response);
@@ -630,23 +750,123 @@ class SampleDistributorService final {
     virtual ::grpc::Status GetStatus(::grpc::ServerContext* context, const ::rl::training::v1::DistributorStatusReq* request, ::rl::training::v1::DistributorStatusRsp* response);
   };
   template <class BaseClass>
+  class WithAsyncMethod_UpsertSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_UpsertSampleDemand() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_UpsertSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpsertSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::UpsertSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUpsertSampleDemand(::grpc::ServerContext* context, ::rl::training::v1::UpsertSampleDemandReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::SampleDemandRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ReleaseSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ReleaseSampleDemand() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_ReleaseSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestReleaseSampleDemand(::grpc::ServerContext* context, ::rl::training::v1::ReleaseSampleDemandReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::SampleDemandRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetSampleDemandStatus : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetSampleDemandStatus() {
+      ::grpc::Service::MarkMethodAsync(2);
+    }
+    ~WithAsyncMethod_GetSampleDemandStatus() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetSampleDemandStatus(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetSampleDemandStatusReq* /*request*/, ::rl::training::v1::SampleDemandStatusRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetSampleDemandStatus(::grpc::ServerContext* context, ::rl::training::v1::GetSampleDemandStatusReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::SampleDemandStatusRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_AcquireSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_AcquireSampleCredit() {
+      ::grpc::Service::MarkMethodAsync(3);
+    }
+    ~WithAsyncMethod_AcquireSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AcquireSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::AcquireSampleCreditReq* /*request*/, ::rl::training::v1::SampleCreditGrant* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestAcquireSampleCredit(::grpc::ServerContext* context, ::rl::training::v1::AcquireSampleCreditReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::SampleCreditGrant>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ReleaseSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ReleaseSampleCredit() {
+      ::grpc::Service::MarkMethodAsync(4);
+    }
+    ~WithAsyncMethod_ReleaseSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleCreditReq* /*request*/, ::rl::training::v1::ReleaseSampleCreditRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestReleaseSampleCredit(::grpc::ServerContext* context, ::rl::training::v1::ReleaseSampleCreditReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::ReleaseSampleCreditRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_PushSamples : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_PushSamples() {
-      ::grpc::Service::MarkMethodAsync(0);
+      ::grpc::Service::MarkMethodAsync(5);
     }
     ~WithAsyncMethod_PushSamples() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::SampleBatch* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
+    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::PushSamplesReq* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestPushSamples(::grpc::ServerContext* context, ::rl::training::v1::SampleBatch* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::PushSamplesRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestPushSamples(::grpc::ServerContext* context, ::rl::training::v1::PushSamplesReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::PushSamplesRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -655,7 +875,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetBatch() {
-      ::grpc::Service::MarkMethodAsync(1);
+      ::grpc::Service::MarkMethodAsync(6);
     }
     ~WithAsyncMethod_GetBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -666,7 +886,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetBatch(::grpc::ServerContext* context, ::rl::training::v1::GetBatchReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::GetBatchRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -675,7 +895,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_AckBatch() {
-      ::grpc::Service::MarkMethodAsync(2);
+      ::grpc::Service::MarkMethodAsync(7);
     }
     ~WithAsyncMethod_AckBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -686,7 +906,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestAckBatch(::grpc::ServerContext* context, ::rl::training::v1::AckBatchReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::DeliveryRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -695,7 +915,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_NackBatch() {
-      ::grpc::Service::MarkMethodAsync(3);
+      ::grpc::Service::MarkMethodAsync(8);
     }
     ~WithAsyncMethod_NackBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -706,7 +926,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestNackBatch(::grpc::ServerContext* context, ::rl::training::v1::NackBatchReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::DeliveryRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -715,7 +935,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_RenewLease() {
-      ::grpc::Service::MarkMethodAsync(4);
+      ::grpc::Service::MarkMethodAsync(9);
     }
     ~WithAsyncMethod_RenewLease() override {
       BaseClassMustBeDerivedFromService(this);
@@ -726,7 +946,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestRenewLease(::grpc::ServerContext* context, ::rl::training::v1::RenewLeaseReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::DeliveryRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -735,7 +955,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetStatus() {
-      ::grpc::Service::MarkMethodAsync(5);
+      ::grpc::Service::MarkMethodAsync(10);
     }
     ~WithAsyncMethod_GetStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -746,36 +966,171 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetStatus(::grpc::ServerContext* context, ::rl::training::v1::DistributorStatusReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::DistributorStatusRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_PushSamples<WithAsyncMethod_GetBatch<WithAsyncMethod_AckBatch<WithAsyncMethod_NackBatch<WithAsyncMethod_RenewLease<WithAsyncMethod_GetStatus<Service > > > > > > AsyncService;
+  typedef WithAsyncMethod_UpsertSampleDemand<WithAsyncMethod_ReleaseSampleDemand<WithAsyncMethod_GetSampleDemandStatus<WithAsyncMethod_AcquireSampleCredit<WithAsyncMethod_ReleaseSampleCredit<WithAsyncMethod_PushSamples<WithAsyncMethod_GetBatch<WithAsyncMethod_AckBatch<WithAsyncMethod_NackBatch<WithAsyncMethod_RenewLease<WithAsyncMethod_GetStatus<Service > > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_UpsertSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_UpsertSampleDemand() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::UpsertSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response) { return this->UpsertSampleDemand(context, request, response); }));}
+    void SetMessageAllocatorFor_UpsertSampleDemand(
+        ::grpc::MessageAllocator< ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_UpsertSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpsertSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::UpsertSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* UpsertSampleDemand(
+      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::UpsertSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ReleaseSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ReleaseSampleDemand() {
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::ReleaseSampleDemandReq* request, ::rl::training::v1::SampleDemandRsp* response) { return this->ReleaseSampleDemand(context, request, response); }));}
+    void SetMessageAllocatorFor_ReleaseSampleDemand(
+        ::grpc::MessageAllocator< ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ReleaseSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ReleaseSampleDemand(
+      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_GetSampleDemandStatus : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetSampleDemandStatus() {
+      ::grpc::Service::MarkMethodCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::GetSampleDemandStatusReq* request, ::rl::training::v1::SampleDemandStatusRsp* response) { return this->GetSampleDemandStatus(context, request, response); }));}
+    void SetMessageAllocatorFor_GetSampleDemandStatus(
+        ::grpc::MessageAllocator< ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetSampleDemandStatus() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetSampleDemandStatus(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetSampleDemandStatusReq* /*request*/, ::rl::training::v1::SampleDemandStatusRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetSampleDemandStatus(
+      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::GetSampleDemandStatusReq* /*request*/, ::rl::training::v1::SampleDemandStatusRsp* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_AcquireSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_AcquireSampleCredit() {
+      ::grpc::Service::MarkMethodCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::AcquireSampleCreditReq* request, ::rl::training::v1::SampleCreditGrant* response) { return this->AcquireSampleCredit(context, request, response); }));}
+    void SetMessageAllocatorFor_AcquireSampleCredit(
+        ::grpc::MessageAllocator< ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_AcquireSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AcquireSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::AcquireSampleCreditReq* /*request*/, ::rl::training::v1::SampleCreditGrant* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* AcquireSampleCredit(
+      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::AcquireSampleCreditReq* /*request*/, ::rl::training::v1::SampleCreditGrant* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ReleaseSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ReleaseSampleCredit() {
+      ::grpc::Service::MarkMethodCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::ReleaseSampleCreditReq* request, ::rl::training::v1::ReleaseSampleCreditRsp* response) { return this->ReleaseSampleCredit(context, request, response); }));}
+    void SetMessageAllocatorFor_ReleaseSampleCredit(
+        ::grpc::MessageAllocator< ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ReleaseSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleCreditReq* /*request*/, ::rl::training::v1::ReleaseSampleCreditRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ReleaseSampleCredit(
+      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleCreditReq* /*request*/, ::rl::training::v1::ReleaseSampleCreditRsp* /*response*/)  { return nullptr; }
+  };
   template <class BaseClass>
   class WithCallbackMethod_PushSamples : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_PushSamples() {
-      ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp>(
+      ::grpc::Service::MarkMethodCallback(5,
+          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::PushSamplesRsp* response) { return this->PushSamples(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::PushSamplesReq* request, ::rl::training::v1::PushSamplesRsp* response) { return this->PushSamples(context, request, response); }));}
     void SetMessageAllocatorFor_PushSamples(
-        ::grpc::MessageAllocator< ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp>*>(handler)
+        ::grpc::MessageAllocator< ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_PushSamples() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::SampleBatch* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
+    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::PushSamplesReq* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* PushSamples(
-      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::SampleBatch* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::PushSamplesReq* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_GetBatch : public BaseClass {
@@ -783,13 +1138,13 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_GetBatch() {
-      ::grpc::Service::MarkMethodCallback(1,
+      ::grpc::Service::MarkMethodCallback(6,
           new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::GetBatchReq, ::rl::training::v1::GetBatchRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::rl::training::v1::GetBatchReq* request, ::rl::training::v1::GetBatchRsp* response) { return this->GetBatch(context, request, response); }));}
     void SetMessageAllocatorFor_GetBatch(
         ::grpc::MessageAllocator< ::rl::training::v1::GetBatchReq, ::rl::training::v1::GetBatchRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::GetBatchReq, ::rl::training::v1::GetBatchRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -810,13 +1165,13 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_AckBatch() {
-      ::grpc::Service::MarkMethodCallback(2,
+      ::grpc::Service::MarkMethodCallback(7,
           new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::AckBatchReq, ::rl::training::v1::DeliveryRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::rl::training::v1::AckBatchReq* request, ::rl::training::v1::DeliveryRsp* response) { return this->AckBatch(context, request, response); }));}
     void SetMessageAllocatorFor_AckBatch(
         ::grpc::MessageAllocator< ::rl::training::v1::AckBatchReq, ::rl::training::v1::DeliveryRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::AckBatchReq, ::rl::training::v1::DeliveryRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -837,13 +1192,13 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_NackBatch() {
-      ::grpc::Service::MarkMethodCallback(3,
+      ::grpc::Service::MarkMethodCallback(8,
           new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::NackBatchReq, ::rl::training::v1::DeliveryRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::rl::training::v1::NackBatchReq* request, ::rl::training::v1::DeliveryRsp* response) { return this->NackBatch(context, request, response); }));}
     void SetMessageAllocatorFor_NackBatch(
         ::grpc::MessageAllocator< ::rl::training::v1::NackBatchReq, ::rl::training::v1::DeliveryRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(8);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::NackBatchReq, ::rl::training::v1::DeliveryRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -864,13 +1219,13 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_RenewLease() {
-      ::grpc::Service::MarkMethodCallback(4,
+      ::grpc::Service::MarkMethodCallback(9,
           new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::RenewLeaseReq, ::rl::training::v1::DeliveryRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::rl::training::v1::RenewLeaseReq* request, ::rl::training::v1::DeliveryRsp* response) { return this->RenewLease(context, request, response); }));}
     void SetMessageAllocatorFor_RenewLease(
         ::grpc::MessageAllocator< ::rl::training::v1::RenewLeaseReq, ::rl::training::v1::DeliveryRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(9);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::RenewLeaseReq, ::rl::training::v1::DeliveryRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -891,13 +1246,13 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_GetStatus() {
-      ::grpc::Service::MarkMethodCallback(5,
+      ::grpc::Service::MarkMethodCallback(10,
           new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::DistributorStatusReq, ::rl::training::v1::DistributorStatusRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::rl::training::v1::DistributorStatusReq* request, ::rl::training::v1::DistributorStatusRsp* response) { return this->GetStatus(context, request, response); }));}
     void SetMessageAllocatorFor_GetStatus(
         ::grpc::MessageAllocator< ::rl::training::v1::DistributorStatusReq, ::rl::training::v1::DistributorStatusRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::DistributorStatusReq, ::rl::training::v1::DistributorStatusRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -912,21 +1267,106 @@ class SampleDistributorService final {
     virtual ::grpc::ServerUnaryReactor* GetStatus(
       ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::DistributorStatusReq* /*request*/, ::rl::training::v1::DistributorStatusRsp* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_PushSamples<WithCallbackMethod_GetBatch<WithCallbackMethod_AckBatch<WithCallbackMethod_NackBatch<WithCallbackMethod_RenewLease<WithCallbackMethod_GetStatus<Service > > > > > > CallbackService;
+  typedef WithCallbackMethod_UpsertSampleDemand<WithCallbackMethod_ReleaseSampleDemand<WithCallbackMethod_GetSampleDemandStatus<WithCallbackMethod_AcquireSampleCredit<WithCallbackMethod_ReleaseSampleCredit<WithCallbackMethod_PushSamples<WithCallbackMethod_GetBatch<WithCallbackMethod_AckBatch<WithCallbackMethod_NackBatch<WithCallbackMethod_RenewLease<WithCallbackMethod_GetStatus<Service > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_UpsertSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_UpsertSampleDemand() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_UpsertSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpsertSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::UpsertSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ReleaseSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ReleaseSampleDemand() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_ReleaseSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_GetSampleDemandStatus : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetSampleDemandStatus() {
+      ::grpc::Service::MarkMethodGeneric(2);
+    }
+    ~WithGenericMethod_GetSampleDemandStatus() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetSampleDemandStatus(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetSampleDemandStatusReq* /*request*/, ::rl::training::v1::SampleDemandStatusRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_AcquireSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_AcquireSampleCredit() {
+      ::grpc::Service::MarkMethodGeneric(3);
+    }
+    ~WithGenericMethod_AcquireSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AcquireSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::AcquireSampleCreditReq* /*request*/, ::rl::training::v1::SampleCreditGrant* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ReleaseSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ReleaseSampleCredit() {
+      ::grpc::Service::MarkMethodGeneric(4);
+    }
+    ~WithGenericMethod_ReleaseSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleCreditReq* /*request*/, ::rl::training::v1::ReleaseSampleCreditRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
   template <class BaseClass>
   class WithGenericMethod_PushSamples : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_PushSamples() {
-      ::grpc::Service::MarkMethodGeneric(0);
+      ::grpc::Service::MarkMethodGeneric(5);
     }
     ~WithGenericMethod_PushSamples() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::SampleBatch* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
+    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::PushSamplesReq* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -937,7 +1377,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetBatch() {
-      ::grpc::Service::MarkMethodGeneric(1);
+      ::grpc::Service::MarkMethodGeneric(6);
     }
     ~WithGenericMethod_GetBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -954,7 +1394,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_AckBatch() {
-      ::grpc::Service::MarkMethodGeneric(2);
+      ::grpc::Service::MarkMethodGeneric(7);
     }
     ~WithGenericMethod_AckBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -971,7 +1411,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_NackBatch() {
-      ::grpc::Service::MarkMethodGeneric(3);
+      ::grpc::Service::MarkMethodGeneric(8);
     }
     ~WithGenericMethod_NackBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -988,7 +1428,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_RenewLease() {
-      ::grpc::Service::MarkMethodGeneric(4);
+      ::grpc::Service::MarkMethodGeneric(9);
     }
     ~WithGenericMethod_RenewLease() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1005,7 +1445,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetStatus() {
-      ::grpc::Service::MarkMethodGeneric(5);
+      ::grpc::Service::MarkMethodGeneric(10);
     }
     ~WithGenericMethod_GetStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1017,23 +1457,123 @@ class SampleDistributorService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_UpsertSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_UpsertSampleDemand() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_UpsertSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpsertSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::UpsertSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestUpsertSampleDemand(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ReleaseSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ReleaseSampleDemand() {
+      ::grpc::Service::MarkMethodRaw(1);
+    }
+    ~WithRawMethod_ReleaseSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestReleaseSampleDemand(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetSampleDemandStatus : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetSampleDemandStatus() {
+      ::grpc::Service::MarkMethodRaw(2);
+    }
+    ~WithRawMethod_GetSampleDemandStatus() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetSampleDemandStatus(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetSampleDemandStatusReq* /*request*/, ::rl::training::v1::SampleDemandStatusRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetSampleDemandStatus(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_AcquireSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_AcquireSampleCredit() {
+      ::grpc::Service::MarkMethodRaw(3);
+    }
+    ~WithRawMethod_AcquireSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AcquireSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::AcquireSampleCreditReq* /*request*/, ::rl::training::v1::SampleCreditGrant* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestAcquireSampleCredit(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ReleaseSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ReleaseSampleCredit() {
+      ::grpc::Service::MarkMethodRaw(4);
+    }
+    ~WithRawMethod_ReleaseSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleCreditReq* /*request*/, ::rl::training::v1::ReleaseSampleCreditRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestReleaseSampleCredit(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_PushSamples : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_PushSamples() {
-      ::grpc::Service::MarkMethodRaw(0);
+      ::grpc::Service::MarkMethodRaw(5);
     }
     ~WithRawMethod_PushSamples() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::SampleBatch* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
+    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::PushSamplesReq* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPushSamples(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1042,7 +1582,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetBatch() {
-      ::grpc::Service::MarkMethodRaw(1);
+      ::grpc::Service::MarkMethodRaw(6);
     }
     ~WithRawMethod_GetBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1053,7 +1593,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetBatch(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1062,7 +1602,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_AckBatch() {
-      ::grpc::Service::MarkMethodRaw(2);
+      ::grpc::Service::MarkMethodRaw(7);
     }
     ~WithRawMethod_AckBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1073,7 +1613,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestAckBatch(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1082,7 +1622,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_NackBatch() {
-      ::grpc::Service::MarkMethodRaw(3);
+      ::grpc::Service::MarkMethodRaw(8);
     }
     ~WithRawMethod_NackBatch() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1093,7 +1633,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestNackBatch(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1102,7 +1642,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_RenewLease() {
-      ::grpc::Service::MarkMethodRaw(4);
+      ::grpc::Service::MarkMethodRaw(9);
     }
     ~WithRawMethod_RenewLease() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1113,7 +1653,7 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestRenewLease(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1122,7 +1662,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetStatus() {
-      ::grpc::Service::MarkMethodRaw(5);
+      ::grpc::Service::MarkMethodRaw(10);
     }
     ~WithRawMethod_GetStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1133,8 +1673,118 @@ class SampleDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetStatus(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
     }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_UpsertSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_UpsertSampleDemand() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->UpsertSampleDemand(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_UpsertSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status UpsertSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::UpsertSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* UpsertSampleDemand(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ReleaseSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ReleaseSampleDemand() {
+      ::grpc::Service::MarkMethodRawCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ReleaseSampleDemand(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ReleaseSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ReleaseSampleDemand(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetSampleDemandStatus : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetSampleDemandStatus() {
+      ::grpc::Service::MarkMethodRawCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetSampleDemandStatus(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetSampleDemandStatus() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetSampleDemandStatus(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetSampleDemandStatusReq* /*request*/, ::rl::training::v1::SampleDemandStatusRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetSampleDemandStatus(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_AcquireSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_AcquireSampleCredit() {
+      ::grpc::Service::MarkMethodRawCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->AcquireSampleCredit(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_AcquireSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AcquireSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::AcquireSampleCreditReq* /*request*/, ::rl::training::v1::SampleCreditGrant* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* AcquireSampleCredit(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ReleaseSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ReleaseSampleCredit() {
+      ::grpc::Service::MarkMethodRawCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ReleaseSampleCredit(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ReleaseSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReleaseSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleCreditReq* /*request*/, ::rl::training::v1::ReleaseSampleCreditRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ReleaseSampleCredit(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithRawCallbackMethod_PushSamples : public BaseClass {
@@ -1142,7 +1792,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_PushSamples() {
-      ::grpc::Service::MarkMethodRawCallback(0,
+      ::grpc::Service::MarkMethodRawCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->PushSamples(context, request, response); }));
@@ -1151,7 +1801,7 @@ class SampleDistributorService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::SampleBatch* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
+    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::PushSamplesReq* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1164,7 +1814,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_GetBatch() {
-      ::grpc::Service::MarkMethodRawCallback(1,
+      ::grpc::Service::MarkMethodRawCallback(6,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetBatch(context, request, response); }));
@@ -1186,7 +1836,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_AckBatch() {
-      ::grpc::Service::MarkMethodRawCallback(2,
+      ::grpc::Service::MarkMethodRawCallback(7,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->AckBatch(context, request, response); }));
@@ -1208,7 +1858,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_NackBatch() {
-      ::grpc::Service::MarkMethodRawCallback(3,
+      ::grpc::Service::MarkMethodRawCallback(8,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->NackBatch(context, request, response); }));
@@ -1230,7 +1880,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_RenewLease() {
-      ::grpc::Service::MarkMethodRawCallback(4,
+      ::grpc::Service::MarkMethodRawCallback(9,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->RenewLease(context, request, response); }));
@@ -1252,7 +1902,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_GetStatus() {
-      ::grpc::Service::MarkMethodRawCallback(5,
+      ::grpc::Service::MarkMethodRawCallback(10,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetStatus(context, request, response); }));
@@ -1269,17 +1919,152 @@ class SampleDistributorService final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_UpsertSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_UpsertSampleDemand() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::rl::training::v1::UpsertSampleDemandReq, ::rl::training::v1::SampleDemandRsp>* streamer) {
+                       return this->StreamedUpsertSampleDemand(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_UpsertSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status UpsertSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::UpsertSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedUpsertSampleDemand(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::UpsertSampleDemandReq,::rl::training::v1::SampleDemandRsp>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ReleaseSampleDemand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ReleaseSampleDemand() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::rl::training::v1::ReleaseSampleDemandReq, ::rl::training::v1::SampleDemandRsp>* streamer) {
+                       return this->StreamedReleaseSampleDemand(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ReleaseSampleDemand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ReleaseSampleDemand(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleDemandReq* /*request*/, ::rl::training::v1::SampleDemandRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedReleaseSampleDemand(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::ReleaseSampleDemandReq,::rl::training::v1::SampleDemandRsp>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetSampleDemandStatus : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetSampleDemandStatus() {
+      ::grpc::Service::MarkMethodStreamed(2,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::rl::training::v1::GetSampleDemandStatusReq, ::rl::training::v1::SampleDemandStatusRsp>* streamer) {
+                       return this->StreamedGetSampleDemandStatus(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetSampleDemandStatus() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetSampleDemandStatus(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetSampleDemandStatusReq* /*request*/, ::rl::training::v1::SampleDemandStatusRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetSampleDemandStatus(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::GetSampleDemandStatusReq,::rl::training::v1::SampleDemandStatusRsp>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_AcquireSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_AcquireSampleCredit() {
+      ::grpc::Service::MarkMethodStreamed(3,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::rl::training::v1::AcquireSampleCreditReq, ::rl::training::v1::SampleCreditGrant>* streamer) {
+                       return this->StreamedAcquireSampleCredit(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_AcquireSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status AcquireSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::AcquireSampleCreditReq* /*request*/, ::rl::training::v1::SampleCreditGrant* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedAcquireSampleCredit(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::AcquireSampleCreditReq,::rl::training::v1::SampleCreditGrant>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ReleaseSampleCredit : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ReleaseSampleCredit() {
+      ::grpc::Service::MarkMethodStreamed(4,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::rl::training::v1::ReleaseSampleCreditReq, ::rl::training::v1::ReleaseSampleCreditRsp>* streamer) {
+                       return this->StreamedReleaseSampleCredit(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ReleaseSampleCredit() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ReleaseSampleCredit(::grpc::ServerContext* /*context*/, const ::rl::training::v1::ReleaseSampleCreditReq* /*request*/, ::rl::training::v1::ReleaseSampleCreditRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedReleaseSampleCredit(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::ReleaseSampleCreditReq,::rl::training::v1::ReleaseSampleCreditRsp>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_PushSamples : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_PushSamples() {
-      ::grpc::Service::MarkMethodStreamed(0,
+      ::grpc::Service::MarkMethodStreamed(5,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp>(
+          ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::rl::training::v1::SampleBatch, ::rl::training::v1::PushSamplesRsp>* streamer) {
+                     ::rl::training::v1::PushSamplesReq, ::rl::training::v1::PushSamplesRsp>* streamer) {
                        return this->StreamedPushSamples(context,
                          streamer);
                   }));
@@ -1288,12 +2073,12 @@ class SampleDistributorService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::SampleBatch* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
+    ::grpc::Status PushSamples(::grpc::ServerContext* /*context*/, const ::rl::training::v1::PushSamplesReq* /*request*/, ::rl::training::v1::PushSamplesRsp* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedPushSamples(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::SampleBatch,::rl::training::v1::PushSamplesRsp>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedPushSamples(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::PushSamplesReq,::rl::training::v1::PushSamplesRsp>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetBatch : public BaseClass {
@@ -1301,7 +2086,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetBatch() {
-      ::grpc::Service::MarkMethodStreamed(1,
+      ::grpc::Service::MarkMethodStreamed(6,
         new ::grpc::internal::StreamedUnaryHandler<
           ::rl::training::v1::GetBatchReq, ::rl::training::v1::GetBatchRsp>(
             [this](::grpc::ServerContext* context,
@@ -1328,7 +2113,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_AckBatch() {
-      ::grpc::Service::MarkMethodStreamed(2,
+      ::grpc::Service::MarkMethodStreamed(7,
         new ::grpc::internal::StreamedUnaryHandler<
           ::rl::training::v1::AckBatchReq, ::rl::training::v1::DeliveryRsp>(
             [this](::grpc::ServerContext* context,
@@ -1355,7 +2140,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_NackBatch() {
-      ::grpc::Service::MarkMethodStreamed(3,
+      ::grpc::Service::MarkMethodStreamed(8,
         new ::grpc::internal::StreamedUnaryHandler<
           ::rl::training::v1::NackBatchReq, ::rl::training::v1::DeliveryRsp>(
             [this](::grpc::ServerContext* context,
@@ -1382,7 +2167,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_RenewLease() {
-      ::grpc::Service::MarkMethodStreamed(4,
+      ::grpc::Service::MarkMethodStreamed(9,
         new ::grpc::internal::StreamedUnaryHandler<
           ::rl::training::v1::RenewLeaseReq, ::rl::training::v1::DeliveryRsp>(
             [this](::grpc::ServerContext* context,
@@ -1409,7 +2194,7 @@ class SampleDistributorService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetStatus() {
-      ::grpc::Service::MarkMethodStreamed(5,
+      ::grpc::Service::MarkMethodStreamed(10,
         new ::grpc::internal::StreamedUnaryHandler<
           ::rl::training::v1::DistributorStatusReq, ::rl::training::v1::DistributorStatusRsp>(
             [this](::grpc::ServerContext* context,
@@ -1430,9 +2215,9 @@ class SampleDistributorService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedGetStatus(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::DistributorStatusReq,::rl::training::v1::DistributorStatusRsp>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_PushSamples<WithStreamedUnaryMethod_GetBatch<WithStreamedUnaryMethod_AckBatch<WithStreamedUnaryMethod_NackBatch<WithStreamedUnaryMethod_RenewLease<WithStreamedUnaryMethod_GetStatus<Service > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_UpsertSampleDemand<WithStreamedUnaryMethod_ReleaseSampleDemand<WithStreamedUnaryMethod_GetSampleDemandStatus<WithStreamedUnaryMethod_AcquireSampleCredit<WithStreamedUnaryMethod_ReleaseSampleCredit<WithStreamedUnaryMethod_PushSamples<WithStreamedUnaryMethod_GetBatch<WithStreamedUnaryMethod_AckBatch<WithStreamedUnaryMethod_NackBatch<WithStreamedUnaryMethod_RenewLease<WithStreamedUnaryMethod_GetStatus<Service > > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_PushSamples<WithStreamedUnaryMethod_GetBatch<WithStreamedUnaryMethod_AckBatch<WithStreamedUnaryMethod_NackBatch<WithStreamedUnaryMethod_RenewLease<WithStreamedUnaryMethod_GetStatus<Service > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_UpsertSampleDemand<WithStreamedUnaryMethod_ReleaseSampleDemand<WithStreamedUnaryMethod_GetSampleDemandStatus<WithStreamedUnaryMethod_AcquireSampleCredit<WithStreamedUnaryMethod_ReleaseSampleCredit<WithStreamedUnaryMethod_PushSamples<WithStreamedUnaryMethod_GetBatch<WithStreamedUnaryMethod_AckBatch<WithStreamedUnaryMethod_NackBatch<WithStreamedUnaryMethod_RenewLease<WithStreamedUnaryMethod_GetStatus<Service > > > > > > > > > > > StreamedService;
 };
 
 class ModelDistributorService final {

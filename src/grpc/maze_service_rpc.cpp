@@ -559,8 +559,7 @@ grpc::Status MazeServiceImpl::Init(
             }
         }
     }
-    if (config_.server.run_mode == aiserver_mode::kTraining &&
-        !training_sample_budget_.enabled()) {
+    if (config_.server.run_mode == aiserver_mode::kTraining) {
         if (!task_controller_.Initialize(
                 session->shortest_action_steps, ActiveModelIdentity(),
                 produced_unique_samples_, error) ||
@@ -620,37 +619,23 @@ grpc::Status MazeServiceImpl::BeginEpisode(
         plan.curriculum_stage = maze::CURRICULUM_STAGE_COMPLETE;
         plan.model = ActiveModelIdentity();
     } else if (config_.server.run_mode == aiserver_mode::kTraining) {
-        if (training_sample_budget_.enabled()) {
-            if (!ActivateStagedModel()) {
-                RejectCommand(*session,
-                              maze::LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
-                              "staged model could not be activated",
-                              rsp->mutable_lifecycle());
-                return grpc::Status::OK;
-            }
-            plan.episode_mode = maze::EPISODE_MODE_TRAINING;
-            plan.curriculum_stage = maze::CURRICULUM_STAGE_8X;
-            plan.max_steps = session->shortest_action_steps * 8;
-            plan.model = ActiveModelIdentity();
-        } else {
-            const auto snapshot = task_controller_.GetSnapshot();
-            if (!snapshot.evaluation_active && !snapshot.complete &&
-                !snapshot.failed && !ActivateStagedModel()) {
-                RejectCommand(*session,
-                              maze::LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
-                              "staged model could not be activated",
-                              rsp->mutable_lifecycle());
-                return grpc::Status::OK;
-            }
-            if (!task_controller_.PlanNextEpisode(
-                    ActiveModelIdentity(), produced_unique_samples_,
-                    plan, error)) {
-                MarkDegraded("TaskController planning failed: " + error);
-                RejectCommand(*session,
-                              maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
-                              last_error_, rsp->mutable_lifecycle());
-                return grpc::Status::OK;
-            }
+        const auto snapshot = task_controller_.GetSnapshot();
+        if (!snapshot.evaluation_active && !snapshot.complete &&
+            !snapshot.failed && !ActivateStagedModel()) {
+            RejectCommand(*session,
+                          maze::LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
+                          "staged model could not be activated",
+                          rsp->mutable_lifecycle());
+            return grpc::Status::OK;
+        }
+        if (!task_controller_.PlanNextEpisode(
+                ActiveModelIdentity(), produced_unique_samples_,
+                plan, error)) {
+            MarkDegraded("TaskController planning failed: " + error);
+            RejectCommand(*session,
+                          maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                          last_error_, rsp->mutable_lifecycle());
+            return grpc::Status::OK;
         }
     } else {
         plan.episode_mode =
@@ -775,6 +760,7 @@ grpc::Status MazeServiceImpl::Update(
     const maze::UpdateReq* req,
     maze::UpdateRsp* rsp) {
     const auto rpc_start = std::chrono::steady_clock::now();
+    rsp->set_environment_control(maze::ENVIRONMENT_CONTROL_ADVANCE);
     std::unique_lock<std::mutex> lock(mutex_);
     auto finish = [&]() { RecordUpdateLatency(rpc_start); };
     auto* session = session_mgr_.GetSession(req->command().session_id());
@@ -835,6 +821,21 @@ grpc::Status MazeServiceImpl::Update(
         RejectCommand(*session,
                       maze::LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
                       "evaluation behavior policy identity changed",
+                      rsp->mutable_lifecycle());
+        finish();
+        return grpc::Status::OK;
+    }
+    if (config_.server.run_mode == aiserver_mode::kTraining &&
+        training_episode &&
+        sample_sender_.IsWaitingForTrainingCapacity()) {
+        rsp->set_environment_control(
+            maze::ENVIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPACITY);
+        rsp->set_retry_after_ms(std::max(
+            1, sample_sender_.TrainingCapacityRetryAfterMs()));
+        FillLifecycle(*session, session->last_command_sequence,
+                      maze::LIFECYCLE_RESULT_WAIT,
+                      maze::LIFECYCLE_ERROR_CODE_UNSPECIFIED,
+                      "waiting for Learner sample capacity",
                       rsp->mutable_lifecycle());
         finish();
         return grpc::Status::OK;
@@ -1000,22 +1001,20 @@ grpc::Status MazeServiceImpl::Update(
             finish();
             return grpc::Status::OK;
         }
-        if (!training_sample_budget_.enabled()) {
-            bool should_pause = false;
-            std::string controller_error;
-            if (!task_controller_.ShouldPauseTrainingCollection(
-                    ActiveModelIdentity(), produced_unique_samples_,
-                    should_pause, controller_error)) {
-                MarkDegraded("TaskController collection check failed: " +
-                             controller_error);
-                RejectCommand(*session,
-                              maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
-                              last_error_, rsp->mutable_lifecycle());
-                finish();
-                return grpc::Status::OK;
-            }
-            session->training_collection_paused = should_pause;
+        bool should_pause = false;
+        std::string controller_error;
+        if (!task_controller_.ShouldPauseTrainingCollection(
+                ActiveModelIdentity(), produced_unique_samples_,
+                should_pause, controller_error)) {
+            MarkDegraded("TaskController collection check failed: " +
+                         controller_error);
+            RejectCommand(*session,
+                          maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                          last_error_, rsp->mutable_lifecycle());
+            finish();
+            return grpc::Status::OK;
         }
+        session->training_collection_paused = should_pause;
     }
 
     session->last_frame_id = static_cast<int64_t>(req->frame_id());
@@ -1134,8 +1133,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
     episode_metrics_.AddCompleted(std::move(metric_agents));
 
     if (config_.server.run_mode == aiserver_mode::kTraining &&
-        session->current_episode_mode != maze::EPISODE_MODE_TRAINING &&
-        !training_sample_budget_.enabled()) {
+        session->current_episode_mode != maze::EPISODE_MODE_TRAINING) {
         SingleMapModelIdentity pinned;
         pinned.model_version = session->evaluation_pinned_model_version;
         pinned.model_checksum = session->evaluation_pinned_model_checksum;
@@ -1369,6 +1367,13 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     rsp->set_push_rpc_count(sender.push_rpc_count);
     rsp->set_push_rpc_latency_sum_ms(sender.push_rpc_latency_sum_ms);
     rsp->set_push_rpc_latency_max_ms(sender.push_rpc_latency_max_ms);
+    rsp->set_credit_request_count(sender.credit_request_count);
+    rsp->set_credit_grant_count(sender.credit_grant_count);
+    rsp->set_credit_wait_count(sender.credit_wait_count);
+    rsp->set_credit_reacquire_count(sender.credit_reacquire_count);
+    rsp->set_producer_stale_count(sender.producer_stale_count);
+    rsp->set_capacity_wait_ms(sender.capacity_wait_ms);
+    rsp->set_training_capacity_wait(sender.training_capacity_wait);
     rsp->set_model_switch_count(model_switch_count_);
     rsp->set_quarantined_sample_count(quarantined_sample_count_);
     rsp->set_quarantined_fragment_count(quarantined_fragment_count_);

@@ -65,6 +65,9 @@ extern AckModelReqDefaultTypeInternal _AckModelReq_default_instance_;
 class AckModelRsp;
 struct AckModelRspDefaultTypeInternal;
 extern AckModelRspDefaultTypeInternal _AckModelRsp_default_instance_;
+class AcquireSampleCreditReq;
+struct AcquireSampleCreditReqDefaultTypeInternal;
+extern AcquireSampleCreditReqDefaultTypeInternal _AcquireSampleCreditReq_default_instance_;
 class BatchAssemblySpec;
 struct BatchAssemblySpecDefaultTypeInternal;
 extern BatchAssemblySpecDefaultTypeInternal _BatchAssemblySpec_default_instance_;
@@ -98,6 +101,9 @@ extern GetModelManifestReqDefaultTypeInternal _GetModelManifestReq_default_insta
 class GetModelManifestRsp;
 struct GetModelManifestRspDefaultTypeInternal;
 extern GetModelManifestRspDefaultTypeInternal _GetModelManifestRsp_default_instance_;
+class GetSampleDemandStatusReq;
+struct GetSampleDemandStatusReqDefaultTypeInternal;
+extern GetSampleDemandStatusReqDefaultTypeInternal _GetSampleDemandStatusReq_default_instance_;
 class MetricDescriptor;
 struct MetricDescriptorDefaultTypeInternal;
 extern MetricDescriptorDefaultTypeInternal _MetricDescriptor_default_instance_;
@@ -125,6 +131,9 @@ extern ModelIdentityDefaultTypeInternal _ModelIdentity_default_instance_;
 class NackBatchReq;
 struct NackBatchReqDefaultTypeInternal;
 extern NackBatchReqDefaultTypeInternal _NackBatchReq_default_instance_;
+class PushSamplesReq;
+struct PushSamplesReqDefaultTypeInternal;
+extern PushSamplesReqDefaultTypeInternal _PushSamplesReq_default_instance_;
 class PushSamplesRsp;
 struct PushSamplesRspDefaultTypeInternal;
 extern PushSamplesRspDefaultTypeInternal _PushSamplesRsp_default_instance_;
@@ -134,6 +143,15 @@ extern RegisterModelReqDefaultTypeInternal _RegisterModelReq_default_instance_;
 class RegisterModelRsp;
 struct RegisterModelRspDefaultTypeInternal;
 extern RegisterModelRspDefaultTypeInternal _RegisterModelRsp_default_instance_;
+class ReleaseSampleCreditReq;
+struct ReleaseSampleCreditReqDefaultTypeInternal;
+extern ReleaseSampleCreditReqDefaultTypeInternal _ReleaseSampleCreditReq_default_instance_;
+class ReleaseSampleCreditRsp;
+struct ReleaseSampleCreditRspDefaultTypeInternal;
+extern ReleaseSampleCreditRspDefaultTypeInternal _ReleaseSampleCreditRsp_default_instance_;
+class ReleaseSampleDemandReq;
+struct ReleaseSampleDemandReqDefaultTypeInternal;
+extern ReleaseSampleDemandReqDefaultTypeInternal _ReleaseSampleDemandReq_default_instance_;
 class RenewLeaseReq;
 struct RenewLeaseReqDefaultTypeInternal;
 extern RenewLeaseReqDefaultTypeInternal _RenewLeaseReq_default_instance_;
@@ -143,6 +161,18 @@ extern SampleDefaultTypeInternal _Sample_default_instance_;
 class SampleBatch;
 struct SampleBatchDefaultTypeInternal;
 extern SampleBatchDefaultTypeInternal _SampleBatch_default_instance_;
+class SampleCreditGrant;
+struct SampleCreditGrantDefaultTypeInternal;
+extern SampleCreditGrantDefaultTypeInternal _SampleCreditGrant_default_instance_;
+class SampleDemand;
+struct SampleDemandDefaultTypeInternal;
+extern SampleDemandDefaultTypeInternal _SampleDemand_default_instance_;
+class SampleDemandRsp;
+struct SampleDemandRspDefaultTypeInternal;
+extern SampleDemandRspDefaultTypeInternal _SampleDemandRsp_default_instance_;
+class SampleDemandStatusRsp;
+struct SampleDemandStatusRspDefaultTypeInternal;
+extern SampleDemandStatusRspDefaultTypeInternal _SampleDemandStatusRsp_default_instance_;
 class SampleFreshnessPolicy;
 struct SampleFreshnessPolicyDefaultTypeInternal;
 extern SampleFreshnessPolicyDefaultTypeInternal _SampleFreshnessPolicy_default_instance_;
@@ -152,6 +182,9 @@ extern SampleResponseDefaultTypeInternal _SampleResponse_default_instance_;
 class TrainingSemanticsIdentity;
 struct TrainingSemanticsIdentityDefaultTypeInternal;
 extern TrainingSemanticsIdentityDefaultTypeInternal _TrainingSemanticsIdentity_default_instance_;
+class UpsertSampleDemandReq;
+struct UpsertSampleDemandReqDefaultTypeInternal;
+extern UpsertSampleDemandReqDefaultTypeInternal _UpsertSampleDemandReq_default_instance_;
 }  // namespace v1
 }  // namespace training
 }  // namespace rl
@@ -161,6 +194,7 @@ template<> ::rl::training::v1::AIServerStatusRsp* Arena::CreateMaybeMessage<::rl
 template<> ::rl::training::v1::AckBatchReq* Arena::CreateMaybeMessage<::rl::training::v1::AckBatchReq>(Arena*);
 template<> ::rl::training::v1::AckModelReq* Arena::CreateMaybeMessage<::rl::training::v1::AckModelReq>(Arena*);
 template<> ::rl::training::v1::AckModelRsp* Arena::CreateMaybeMessage<::rl::training::v1::AckModelRsp>(Arena*);
+template<> ::rl::training::v1::AcquireSampleCreditReq* Arena::CreateMaybeMessage<::rl::training::v1::AcquireSampleCreditReq>(Arena*);
 template<> ::rl::training::v1::BatchAssemblySpec* Arena::CreateMaybeMessage<::rl::training::v1::BatchAssemblySpec>(Arena*);
 template<> ::rl::training::v1::BehaviorPolicyReference* Arena::CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(Arena*);
 template<> ::rl::training::v1::BehaviorVersionQueueStatus* Arena::CreateMaybeMessage<::rl::training::v1::BehaviorVersionQueueStatus>(Arena*);
@@ -172,6 +206,7 @@ template<> ::rl::training::v1::GetBatchReq* Arena::CreateMaybeMessage<::rl::trai
 template<> ::rl::training::v1::GetBatchRsp* Arena::CreateMaybeMessage<::rl::training::v1::GetBatchRsp>(Arena*);
 template<> ::rl::training::v1::GetModelManifestReq* Arena::CreateMaybeMessage<::rl::training::v1::GetModelManifestReq>(Arena*);
 template<> ::rl::training::v1::GetModelManifestRsp* Arena::CreateMaybeMessage<::rl::training::v1::GetModelManifestRsp>(Arena*);
+template<> ::rl::training::v1::GetSampleDemandStatusReq* Arena::CreateMaybeMessage<::rl::training::v1::GetSampleDemandStatusReq>(Arena*);
 template<> ::rl::training::v1::MetricDescriptor* Arena::CreateMaybeMessage<::rl::training::v1::MetricDescriptor>(Arena*);
 template<> ::rl::training::v1::MetricSnapshot* Arena::CreateMaybeMessage<::rl::training::v1::MetricSnapshot>(Arena*);
 template<> ::rl::training::v1::MetricValue* Arena::CreateMaybeMessage<::rl::training::v1::MetricValue>(Arena*);
@@ -181,15 +216,24 @@ template<> ::rl::training::v1::ModelDistributorStatusReq* Arena::CreateMaybeMess
 template<> ::rl::training::v1::ModelDistributorStatusRsp* Arena::CreateMaybeMessage<::rl::training::v1::ModelDistributorStatusRsp>(Arena*);
 template<> ::rl::training::v1::ModelIdentity* Arena::CreateMaybeMessage<::rl::training::v1::ModelIdentity>(Arena*);
 template<> ::rl::training::v1::NackBatchReq* Arena::CreateMaybeMessage<::rl::training::v1::NackBatchReq>(Arena*);
+template<> ::rl::training::v1::PushSamplesReq* Arena::CreateMaybeMessage<::rl::training::v1::PushSamplesReq>(Arena*);
 template<> ::rl::training::v1::PushSamplesRsp* Arena::CreateMaybeMessage<::rl::training::v1::PushSamplesRsp>(Arena*);
 template<> ::rl::training::v1::RegisterModelReq* Arena::CreateMaybeMessage<::rl::training::v1::RegisterModelReq>(Arena*);
 template<> ::rl::training::v1::RegisterModelRsp* Arena::CreateMaybeMessage<::rl::training::v1::RegisterModelRsp>(Arena*);
+template<> ::rl::training::v1::ReleaseSampleCreditReq* Arena::CreateMaybeMessage<::rl::training::v1::ReleaseSampleCreditReq>(Arena*);
+template<> ::rl::training::v1::ReleaseSampleCreditRsp* Arena::CreateMaybeMessage<::rl::training::v1::ReleaseSampleCreditRsp>(Arena*);
+template<> ::rl::training::v1::ReleaseSampleDemandReq* Arena::CreateMaybeMessage<::rl::training::v1::ReleaseSampleDemandReq>(Arena*);
 template<> ::rl::training::v1::RenewLeaseReq* Arena::CreateMaybeMessage<::rl::training::v1::RenewLeaseReq>(Arena*);
 template<> ::rl::training::v1::Sample* Arena::CreateMaybeMessage<::rl::training::v1::Sample>(Arena*);
 template<> ::rl::training::v1::SampleBatch* Arena::CreateMaybeMessage<::rl::training::v1::SampleBatch>(Arena*);
+template<> ::rl::training::v1::SampleCreditGrant* Arena::CreateMaybeMessage<::rl::training::v1::SampleCreditGrant>(Arena*);
+template<> ::rl::training::v1::SampleDemand* Arena::CreateMaybeMessage<::rl::training::v1::SampleDemand>(Arena*);
+template<> ::rl::training::v1::SampleDemandRsp* Arena::CreateMaybeMessage<::rl::training::v1::SampleDemandRsp>(Arena*);
+template<> ::rl::training::v1::SampleDemandStatusRsp* Arena::CreateMaybeMessage<::rl::training::v1::SampleDemandStatusRsp>(Arena*);
 template<> ::rl::training::v1::SampleFreshnessPolicy* Arena::CreateMaybeMessage<::rl::training::v1::SampleFreshnessPolicy>(Arena*);
 template<> ::rl::training::v1::SampleResponse* Arena::CreateMaybeMessage<::rl::training::v1::SampleResponse>(Arena*);
 template<> ::rl::training::v1::TrainingSemanticsIdentity* Arena::CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(Arena*);
+template<> ::rl::training::v1::UpsertSampleDemandReq* Arena::CreateMaybeMessage<::rl::training::v1::UpsertSampleDemandReq>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace rl {
 namespace training {
@@ -251,6 +295,126 @@ inline bool PushResult_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, PushResult* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<PushResult>(
     PushResult_descriptor(), name, value);
+}
+enum SampleDemandResult : int {
+  SAMPLE_DEMAND_RESULT_UNSPECIFIED = 0,
+  SAMPLE_DEMAND_RESULT_APPLIED = 1,
+  SAMPLE_DEMAND_RESULT_ALREADY_APPLIED = 2,
+  SAMPLE_DEMAND_RESULT_RELEASED = 3,
+  SAMPLE_DEMAND_RESULT_NOT_FOUND = 4,
+  SAMPLE_DEMAND_RESULT_REJECTED_INVALID = 5,
+  SAMPLE_DEMAND_RESULT_REJECTED_IDENTITY = 6,
+  SAMPLE_DEMAND_RESULT_REJECTED_STALE_EPOCH = 7,
+  SampleDemandResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SampleDemandResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SampleDemandResult_IsValid(int value);
+constexpr SampleDemandResult SampleDemandResult_MIN = SAMPLE_DEMAND_RESULT_UNSPECIFIED;
+constexpr SampleDemandResult SampleDemandResult_MAX = SAMPLE_DEMAND_RESULT_REJECTED_STALE_EPOCH;
+constexpr int SampleDemandResult_ARRAYSIZE = SampleDemandResult_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleDemandResult_descriptor();
+template<typename T>
+inline const std::string& SampleDemandResult_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SampleDemandResult>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SampleDemandResult_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SampleDemandResult_descriptor(), enum_t_value);
+}
+inline bool SampleDemandResult_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SampleDemandResult* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SampleDemandResult>(
+    SampleDemandResult_descriptor(), name, value);
+}
+enum SampleCreditResult : int {
+  SAMPLE_CREDIT_RESULT_UNSPECIFIED = 0,
+  SAMPLE_CREDIT_RESULT_GRANTED = 1,
+  SAMPLE_CREDIT_RESULT_WAIT_NO_DEMAND = 2,
+  SAMPLE_CREDIT_RESULT_WAIT_INFLIGHT_LIMIT = 3,
+  SAMPLE_CREDIT_RESULT_WAIT_CAPACITY = 4,
+  SAMPLE_CREDIT_RESULT_WAIT_DRAINING = 5,
+  SAMPLE_CREDIT_RESULT_REJECTED_IDENTITY = 6,
+  SAMPLE_CREDIT_RESULT_REJECTED_SEMANTICS = 7,
+  SAMPLE_CREDIT_RESULT_REJECTED_FRESHNESS = 8,
+  SAMPLE_CREDIT_RESULT_REJECTED_INVALID = 9,
+  SampleCreditResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SampleCreditResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SampleCreditResult_IsValid(int value);
+constexpr SampleCreditResult SampleCreditResult_MIN = SAMPLE_CREDIT_RESULT_UNSPECIFIED;
+constexpr SampleCreditResult SampleCreditResult_MAX = SAMPLE_CREDIT_RESULT_REJECTED_INVALID;
+constexpr int SampleCreditResult_ARRAYSIZE = SampleCreditResult_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleCreditResult_descriptor();
+template<typename T>
+inline const std::string& SampleCreditResult_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SampleCreditResult>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SampleCreditResult_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SampleCreditResult_descriptor(), enum_t_value);
+}
+inline bool SampleCreditResult_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SampleCreditResult* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SampleCreditResult>(
+    SampleCreditResult_descriptor(), name, value);
+}
+enum SampleCreditState : int {
+  SAMPLE_CREDIT_STATE_UNSPECIFIED = 0,
+  SAMPLE_CREDIT_STATE_RESERVED = 1,
+  SAMPLE_CREDIT_STATE_COMMITTED = 2,
+  SAMPLE_CREDIT_STATE_RELEASED = 3,
+  SAMPLE_CREDIT_STATE_EXPIRED = 4,
+  SAMPLE_CREDIT_STATE_REVOKED = 5,
+  SampleCreditState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SampleCreditState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SampleCreditState_IsValid(int value);
+constexpr SampleCreditState SampleCreditState_MIN = SAMPLE_CREDIT_STATE_UNSPECIFIED;
+constexpr SampleCreditState SampleCreditState_MAX = SAMPLE_CREDIT_STATE_REVOKED;
+constexpr int SampleCreditState_ARRAYSIZE = SampleCreditState_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleCreditState_descriptor();
+template<typename T>
+inline const std::string& SampleCreditState_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SampleCreditState>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SampleCreditState_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SampleCreditState_descriptor(), enum_t_value);
+}
+inline bool SampleCreditState_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SampleCreditState* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SampleCreditState>(
+    SampleCreditState_descriptor(), name, value);
+}
+enum SampleCreditReleaseReason : int {
+  SAMPLE_CREDIT_RELEASE_REASON_UNSPECIFIED = 0,
+  SAMPLE_CREDIT_RELEASE_REASON_PRODUCER_ABORT = 1,
+  SAMPLE_CREDIT_RELEASE_REASON_SHUTDOWN = 2,
+  SAMPLE_CREDIT_RELEASE_REASON_SUPERSEDED = 3,
+  SampleCreditReleaseReason_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SampleCreditReleaseReason_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SampleCreditReleaseReason_IsValid(int value);
+constexpr SampleCreditReleaseReason SampleCreditReleaseReason_MIN = SAMPLE_CREDIT_RELEASE_REASON_UNSPECIFIED;
+constexpr SampleCreditReleaseReason SampleCreditReleaseReason_MAX = SAMPLE_CREDIT_RELEASE_REASON_SUPERSEDED;
+constexpr int SampleCreditReleaseReason_ARRAYSIZE = SampleCreditReleaseReason_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleCreditReleaseReason_descriptor();
+template<typename T>
+inline const std::string& SampleCreditReleaseReason_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SampleCreditReleaseReason>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SampleCreditReleaseReason_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SampleCreditReleaseReason_descriptor(), enum_t_value);
+}
+inline bool SampleCreditReleaseReason_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SampleCreditReleaseReason* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SampleCreditReleaseReason>(
+    SampleCreditReleaseReason_descriptor(), name, value);
 }
 enum PressureState : int {
   PRESSURE_STATE_UNSPECIFIED = 0,
@@ -2538,6 +2702,2681 @@ class SampleResponse final :
 };
 // -------------------------------------------------------------------
 
+class SampleDemand final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SampleDemand) */ {
+ public:
+  inline SampleDemand() : SampleDemand(nullptr) {}
+  ~SampleDemand() override;
+  explicit PROTOBUF_CONSTEXPR SampleDemand(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SampleDemand(const SampleDemand& from);
+  SampleDemand(SampleDemand&& from) noexcept
+    : SampleDemand() {
+    *this = ::std::move(from);
+  }
+
+  inline SampleDemand& operator=(const SampleDemand& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SampleDemand& operator=(SampleDemand&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SampleDemand& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SampleDemand* internal_default_instance() {
+    return reinterpret_cast<const SampleDemand*>(
+               &_SampleDemand_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  friend void swap(SampleDemand& a, SampleDemand& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SampleDemand* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SampleDemand* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SampleDemand* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SampleDemand>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SampleDemand& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SampleDemand& from) {
+    SampleDemand::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SampleDemand* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.SampleDemand";
+  }
+  protected:
+  explicit SampleDemand(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDemandIdFieldNumber = 1,
+    kConsumerFieldNumber = 3,
+    kContractFieldNumber = 4,
+    kTrainingSemanticsFieldNumber = 5,
+    kFreshnessFieldNumber = 6,
+    kAssemblyFieldNumber = 7,
+    kDemandEpochFieldNumber = 2,
+    kMaxBufferedSamplesFieldNumber = 8,
+    kMaxBufferedFragmentsFieldNumber = 9,
+    kMaxBufferedEstimatedBytesFieldNumber = 10,
+    kExpiresAtUnixMsFieldNumber = 11,
+  };
+  // string demand_id = 1;
+  void clear_demand_id();
+  const std::string& demand_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_demand_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_demand_id();
+  PROTOBUF_NODISCARD std::string* release_demand_id();
+  void set_allocated_demand_id(std::string* demand_id);
+  private:
+  const std::string& _internal_demand_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_demand_id(const std::string& value);
+  std::string* _internal_mutable_demand_id();
+  public:
+
+  // .rl.common.v1.ServiceInstanceIdentity consumer = 3;
+  bool has_consumer() const;
+  private:
+  bool _internal_has_consumer() const;
+  public:
+  void clear_consumer();
+  const ::rl::common::v1::ServiceInstanceIdentity& consumer() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_consumer();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_consumer();
+  void set_allocated_consumer(::rl::common::v1::ServiceInstanceIdentity* consumer);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_consumer() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_consumer();
+  public:
+  void unsafe_arena_set_allocated_consumer(
+      ::rl::common::v1::ServiceInstanceIdentity* consumer);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_consumer();
+
+  // .rl.common.v1.ContractIdentity contract = 4;
+  bool has_contract() const;
+  private:
+  bool _internal_has_contract() const;
+  public:
+  void clear_contract();
+  const ::rl::common::v1::ContractIdentity& contract() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
+  ::rl::common::v1::ContractIdentity* mutable_contract();
+  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
+  private:
+  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
+  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
+  public:
+  void unsafe_arena_set_allocated_contract(
+      ::rl::common::v1::ContractIdentity* contract);
+  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
+
+  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 5;
+  bool has_training_semantics() const;
+  private:
+  bool _internal_has_training_semantics() const;
+  public:
+  void clear_training_semantics();
+  const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::TrainingSemanticsIdentity* release_training_semantics();
+  ::rl::training::v1::TrainingSemanticsIdentity* mutable_training_semantics();
+  void set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
+  private:
+  const ::rl::training::v1::TrainingSemanticsIdentity& _internal_training_semantics() const;
+  ::rl::training::v1::TrainingSemanticsIdentity* _internal_mutable_training_semantics();
+  public:
+  void unsafe_arena_set_allocated_training_semantics(
+      ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
+  ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
+
+  // .rl.training.v1.SampleFreshnessPolicy freshness = 6;
+  bool has_freshness() const;
+  private:
+  bool _internal_has_freshness() const;
+  public:
+  void clear_freshness();
+  const ::rl::training::v1::SampleFreshnessPolicy& freshness() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::SampleFreshnessPolicy* release_freshness();
+  ::rl::training::v1::SampleFreshnessPolicy* mutable_freshness();
+  void set_allocated_freshness(::rl::training::v1::SampleFreshnessPolicy* freshness);
+  private:
+  const ::rl::training::v1::SampleFreshnessPolicy& _internal_freshness() const;
+  ::rl::training::v1::SampleFreshnessPolicy* _internal_mutable_freshness();
+  public:
+  void unsafe_arena_set_allocated_freshness(
+      ::rl::training::v1::SampleFreshnessPolicy* freshness);
+  ::rl::training::v1::SampleFreshnessPolicy* unsafe_arena_release_freshness();
+
+  // .rl.training.v1.BatchAssemblySpec assembly = 7;
+  bool has_assembly() const;
+  private:
+  bool _internal_has_assembly() const;
+  public:
+  void clear_assembly();
+  const ::rl::training::v1::BatchAssemblySpec& assembly() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::BatchAssemblySpec* release_assembly();
+  ::rl::training::v1::BatchAssemblySpec* mutable_assembly();
+  void set_allocated_assembly(::rl::training::v1::BatchAssemblySpec* assembly);
+  private:
+  const ::rl::training::v1::BatchAssemblySpec& _internal_assembly() const;
+  ::rl::training::v1::BatchAssemblySpec* _internal_mutable_assembly();
+  public:
+  void unsafe_arena_set_allocated_assembly(
+      ::rl::training::v1::BatchAssemblySpec* assembly);
+  ::rl::training::v1::BatchAssemblySpec* unsafe_arena_release_assembly();
+
+  // uint64 demand_epoch = 2;
+  void clear_demand_epoch();
+  uint64_t demand_epoch() const;
+  void set_demand_epoch(uint64_t value);
+  private:
+  uint64_t _internal_demand_epoch() const;
+  void _internal_set_demand_epoch(uint64_t value);
+  public:
+
+  // int64 max_buffered_samples = 8;
+  void clear_max_buffered_samples();
+  int64_t max_buffered_samples() const;
+  void set_max_buffered_samples(int64_t value);
+  private:
+  int64_t _internal_max_buffered_samples() const;
+  void _internal_set_max_buffered_samples(int64_t value);
+  public:
+
+  // int64 max_buffered_fragments = 9;
+  void clear_max_buffered_fragments();
+  int64_t max_buffered_fragments() const;
+  void set_max_buffered_fragments(int64_t value);
+  private:
+  int64_t _internal_max_buffered_fragments() const;
+  void _internal_set_max_buffered_fragments(int64_t value);
+  public:
+
+  // int64 max_buffered_estimated_bytes = 10;
+  void clear_max_buffered_estimated_bytes();
+  int64_t max_buffered_estimated_bytes() const;
+  void set_max_buffered_estimated_bytes(int64_t value);
+  private:
+  int64_t _internal_max_buffered_estimated_bytes() const;
+  void _internal_set_max_buffered_estimated_bytes(int64_t value);
+  public:
+
+  // int64 expires_at_unix_ms = 11;
+  void clear_expires_at_unix_ms();
+  int64_t expires_at_unix_ms() const;
+  void set_expires_at_unix_ms(int64_t value);
+  private:
+  int64_t _internal_expires_at_unix_ms() const;
+  void _internal_set_expires_at_unix_ms(int64_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.SampleDemand)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr demand_id_;
+    ::rl::common::v1::ServiceInstanceIdentity* consumer_;
+    ::rl::common::v1::ContractIdentity* contract_;
+    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
+    ::rl::training::v1::SampleFreshnessPolicy* freshness_;
+    ::rl::training::v1::BatchAssemblySpec* assembly_;
+    uint64_t demand_epoch_;
+    int64_t max_buffered_samples_;
+    int64_t max_buffered_fragments_;
+    int64_t max_buffered_estimated_bytes_;
+    int64_t expires_at_unix_ms_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UpsertSampleDemandReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.UpsertSampleDemandReq) */ {
+ public:
+  inline UpsertSampleDemandReq() : UpsertSampleDemandReq(nullptr) {}
+  ~UpsertSampleDemandReq() override;
+  explicit PROTOBUF_CONSTEXPR UpsertSampleDemandReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UpsertSampleDemandReq(const UpsertSampleDemandReq& from);
+  UpsertSampleDemandReq(UpsertSampleDemandReq&& from) noexcept
+    : UpsertSampleDemandReq() {
+    *this = ::std::move(from);
+  }
+
+  inline UpsertSampleDemandReq& operator=(const UpsertSampleDemandReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UpsertSampleDemandReq& operator=(UpsertSampleDemandReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UpsertSampleDemandReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UpsertSampleDemandReq* internal_default_instance() {
+    return reinterpret_cast<const UpsertSampleDemandReq*>(
+               &_UpsertSampleDemandReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(UpsertSampleDemandReq& a, UpsertSampleDemandReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UpsertSampleDemandReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UpsertSampleDemandReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  UpsertSampleDemandReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<UpsertSampleDemandReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UpsertSampleDemandReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const UpsertSampleDemandReq& from) {
+    UpsertSampleDemandReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UpsertSampleDemandReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.UpsertSampleDemandReq";
+  }
+  protected:
+  explicit UpsertSampleDemandReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDemandFieldNumber = 1,
+  };
+  // .rl.training.v1.SampleDemand demand = 1;
+  bool has_demand() const;
+  private:
+  bool _internal_has_demand() const;
+  public:
+  void clear_demand();
+  const ::rl::training::v1::SampleDemand& demand() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::SampleDemand* release_demand();
+  ::rl::training::v1::SampleDemand* mutable_demand();
+  void set_allocated_demand(::rl::training::v1::SampleDemand* demand);
+  private:
+  const ::rl::training::v1::SampleDemand& _internal_demand() const;
+  ::rl::training::v1::SampleDemand* _internal_mutable_demand();
+  public:
+  void unsafe_arena_set_allocated_demand(
+      ::rl::training::v1::SampleDemand* demand);
+  ::rl::training::v1::SampleDemand* unsafe_arena_release_demand();
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.UpsertSampleDemandReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::rl::training::v1::SampleDemand* demand_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ReleaseSampleDemandReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.ReleaseSampleDemandReq) */ {
+ public:
+  inline ReleaseSampleDemandReq() : ReleaseSampleDemandReq(nullptr) {}
+  ~ReleaseSampleDemandReq() override;
+  explicit PROTOBUF_CONSTEXPR ReleaseSampleDemandReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ReleaseSampleDemandReq(const ReleaseSampleDemandReq& from);
+  ReleaseSampleDemandReq(ReleaseSampleDemandReq&& from) noexcept
+    : ReleaseSampleDemandReq() {
+    *this = ::std::move(from);
+  }
+
+  inline ReleaseSampleDemandReq& operator=(const ReleaseSampleDemandReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ReleaseSampleDemandReq& operator=(ReleaseSampleDemandReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ReleaseSampleDemandReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ReleaseSampleDemandReq* internal_default_instance() {
+    return reinterpret_cast<const ReleaseSampleDemandReq*>(
+               &_ReleaseSampleDemandReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(ReleaseSampleDemandReq& a, ReleaseSampleDemandReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ReleaseSampleDemandReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ReleaseSampleDemandReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ReleaseSampleDemandReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ReleaseSampleDemandReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ReleaseSampleDemandReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ReleaseSampleDemandReq& from) {
+    ReleaseSampleDemandReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ReleaseSampleDemandReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.ReleaseSampleDemandReq";
+  }
+  protected:
+  explicit ReleaseSampleDemandReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDemandIdFieldNumber = 3,
+    kConsumerFieldNumber = 1,
+    kContractFieldNumber = 2,
+    kDemandEpochFieldNumber = 4,
+  };
+  // string demand_id = 3;
+  void clear_demand_id();
+  const std::string& demand_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_demand_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_demand_id();
+  PROTOBUF_NODISCARD std::string* release_demand_id();
+  void set_allocated_demand_id(std::string* demand_id);
+  private:
+  const std::string& _internal_demand_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_demand_id(const std::string& value);
+  std::string* _internal_mutable_demand_id();
+  public:
+
+  // .rl.common.v1.ServiceInstanceIdentity consumer = 1;
+  bool has_consumer() const;
+  private:
+  bool _internal_has_consumer() const;
+  public:
+  void clear_consumer();
+  const ::rl::common::v1::ServiceInstanceIdentity& consumer() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_consumer();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_consumer();
+  void set_allocated_consumer(::rl::common::v1::ServiceInstanceIdentity* consumer);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_consumer() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_consumer();
+  public:
+  void unsafe_arena_set_allocated_consumer(
+      ::rl::common::v1::ServiceInstanceIdentity* consumer);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_consumer();
+
+  // .rl.common.v1.ContractIdentity contract = 2;
+  bool has_contract() const;
+  private:
+  bool _internal_has_contract() const;
+  public:
+  void clear_contract();
+  const ::rl::common::v1::ContractIdentity& contract() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
+  ::rl::common::v1::ContractIdentity* mutable_contract();
+  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
+  private:
+  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
+  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
+  public:
+  void unsafe_arena_set_allocated_contract(
+      ::rl::common::v1::ContractIdentity* contract);
+  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
+
+  // uint64 demand_epoch = 4;
+  void clear_demand_epoch();
+  uint64_t demand_epoch() const;
+  void set_demand_epoch(uint64_t value);
+  private:
+  uint64_t _internal_demand_epoch() const;
+  void _internal_set_demand_epoch(uint64_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.ReleaseSampleDemandReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr demand_id_;
+    ::rl::common::v1::ServiceInstanceIdentity* consumer_;
+    ::rl::common::v1::ContractIdentity* contract_;
+    uint64_t demand_epoch_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GetSampleDemandStatusReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.GetSampleDemandStatusReq) */ {
+ public:
+  inline GetSampleDemandStatusReq() : GetSampleDemandStatusReq(nullptr) {}
+  ~GetSampleDemandStatusReq() override;
+  explicit PROTOBUF_CONSTEXPR GetSampleDemandStatusReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetSampleDemandStatusReq(const GetSampleDemandStatusReq& from);
+  GetSampleDemandStatusReq(GetSampleDemandStatusReq&& from) noexcept
+    : GetSampleDemandStatusReq() {
+    *this = ::std::move(from);
+  }
+
+  inline GetSampleDemandStatusReq& operator=(const GetSampleDemandStatusReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetSampleDemandStatusReq& operator=(GetSampleDemandStatusReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetSampleDemandStatusReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetSampleDemandStatusReq* internal_default_instance() {
+    return reinterpret_cast<const GetSampleDemandStatusReq*>(
+               &_GetSampleDemandStatusReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(GetSampleDemandStatusReq& a, GetSampleDemandStatusReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetSampleDemandStatusReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetSampleDemandStatusReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetSampleDemandStatusReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetSampleDemandStatusReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetSampleDemandStatusReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const GetSampleDemandStatusReq& from) {
+    GetSampleDemandStatusReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetSampleDemandStatusReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.GetSampleDemandStatusReq";
+  }
+  protected:
+  explicit GetSampleDemandStatusReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDemandIdFieldNumber = 2,
+    kRequesterFieldNumber = 1,
+  };
+  // string demand_id = 2;
+  void clear_demand_id();
+  const std::string& demand_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_demand_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_demand_id();
+  PROTOBUF_NODISCARD std::string* release_demand_id();
+  void set_allocated_demand_id(std::string* demand_id);
+  private:
+  const std::string& _internal_demand_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_demand_id(const std::string& value);
+  std::string* _internal_mutable_demand_id();
+  public:
+
+  // .rl.common.v1.ServiceInstanceIdentity requester = 1;
+  bool has_requester() const;
+  private:
+  bool _internal_has_requester() const;
+  public:
+  void clear_requester();
+  const ::rl::common::v1::ServiceInstanceIdentity& requester() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_requester();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_requester();
+  void set_allocated_requester(::rl::common::v1::ServiceInstanceIdentity* requester);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_requester() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_requester();
+  public:
+  void unsafe_arena_set_allocated_requester(
+      ::rl::common::v1::ServiceInstanceIdentity* requester);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_requester();
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.GetSampleDemandStatusReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr demand_id_;
+    ::rl::common::v1::ServiceInstanceIdentity* requester_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SampleDemandRsp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SampleDemandRsp) */ {
+ public:
+  inline SampleDemandRsp() : SampleDemandRsp(nullptr) {}
+  ~SampleDemandRsp() override;
+  explicit PROTOBUF_CONSTEXPR SampleDemandRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SampleDemandRsp(const SampleDemandRsp& from);
+  SampleDemandRsp(SampleDemandRsp&& from) noexcept
+    : SampleDemandRsp() {
+    *this = ::std::move(from);
+  }
+
+  inline SampleDemandRsp& operator=(const SampleDemandRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SampleDemandRsp& operator=(SampleDemandRsp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SampleDemandRsp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SampleDemandRsp* internal_default_instance() {
+    return reinterpret_cast<const SampleDemandRsp*>(
+               &_SampleDemandRsp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(SampleDemandRsp& a, SampleDemandRsp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SampleDemandRsp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SampleDemandRsp* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SampleDemandRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SampleDemandRsp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SampleDemandRsp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SampleDemandRsp& from) {
+    SampleDemandRsp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SampleDemandRsp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.SampleDemandRsp";
+  }
+  protected:
+  explicit SampleDemandRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 3,
+    kDemandFieldNumber = 4,
+    kDistributorFieldNumber = 8,
+    kRetCodeFieldNumber = 1,
+    kResultFieldNumber = 2,
+    kReservedSamplesFieldNumber = 5,
+    kReservedFragmentsFieldNumber = 6,
+    kReservedEstimatedBytesFieldNumber = 7,
+  };
+  // string message = 3;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // .rl.training.v1.SampleDemand demand = 4;
+  bool has_demand() const;
+  private:
+  bool _internal_has_demand() const;
+  public:
+  void clear_demand();
+  const ::rl::training::v1::SampleDemand& demand() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::SampleDemand* release_demand();
+  ::rl::training::v1::SampleDemand* mutable_demand();
+  void set_allocated_demand(::rl::training::v1::SampleDemand* demand);
+  private:
+  const ::rl::training::v1::SampleDemand& _internal_demand() const;
+  ::rl::training::v1::SampleDemand* _internal_mutable_demand();
+  public:
+  void unsafe_arena_set_allocated_demand(
+      ::rl::training::v1::SampleDemand* demand);
+  ::rl::training::v1::SampleDemand* unsafe_arena_release_demand();
+
+  // .rl.common.v1.ServiceInstanceIdentity distributor = 8;
+  bool has_distributor() const;
+  private:
+  bool _internal_has_distributor() const;
+  public:
+  void clear_distributor();
+  const ::rl::common::v1::ServiceInstanceIdentity& distributor() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_distributor();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_distributor();
+  void set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_distributor() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_distributor();
+  public:
+  void unsafe_arena_set_allocated_distributor(
+      ::rl::common::v1::ServiceInstanceIdentity* distributor);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_distributor();
+
+  // int32 ret_code = 1;
+  void clear_ret_code();
+  int32_t ret_code() const;
+  void set_ret_code(int32_t value);
+  private:
+  int32_t _internal_ret_code() const;
+  void _internal_set_ret_code(int32_t value);
+  public:
+
+  // .rl.training.v1.SampleDemandResult result = 2;
+  void clear_result();
+  ::rl::training::v1::SampleDemandResult result() const;
+  void set_result(::rl::training::v1::SampleDemandResult value);
+  private:
+  ::rl::training::v1::SampleDemandResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::SampleDemandResult value);
+  public:
+
+  // int64 reserved_samples = 5;
+  void clear_reserved_samples();
+  int64_t reserved_samples() const;
+  void set_reserved_samples(int64_t value);
+  private:
+  int64_t _internal_reserved_samples() const;
+  void _internal_set_reserved_samples(int64_t value);
+  public:
+
+  // int64 reserved_fragments = 6;
+  void clear_reserved_fragments();
+  int64_t reserved_fragments() const;
+  void set_reserved_fragments(int64_t value);
+  private:
+  int64_t _internal_reserved_fragments() const;
+  void _internal_set_reserved_fragments(int64_t value);
+  public:
+
+  // int64 reserved_estimated_bytes = 7;
+  void clear_reserved_estimated_bytes();
+  int64_t reserved_estimated_bytes() const;
+  void set_reserved_estimated_bytes(int64_t value);
+  private:
+  int64_t _internal_reserved_estimated_bytes() const;
+  void _internal_set_reserved_estimated_bytes(int64_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.SampleDemandRsp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    ::rl::training::v1::SampleDemand* demand_;
+    ::rl::common::v1::ServiceInstanceIdentity* distributor_;
+    int32_t ret_code_;
+    int result_;
+    int64_t reserved_samples_;
+    int64_t reserved_fragments_;
+    int64_t reserved_estimated_bytes_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SampleDemandStatusRsp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SampleDemandStatusRsp) */ {
+ public:
+  inline SampleDemandStatusRsp() : SampleDemandStatusRsp(nullptr) {}
+  ~SampleDemandStatusRsp() override;
+  explicit PROTOBUF_CONSTEXPR SampleDemandStatusRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SampleDemandStatusRsp(const SampleDemandStatusRsp& from);
+  SampleDemandStatusRsp(SampleDemandStatusRsp&& from) noexcept
+    : SampleDemandStatusRsp() {
+    *this = ::std::move(from);
+  }
+
+  inline SampleDemandStatusRsp& operator=(const SampleDemandStatusRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SampleDemandStatusRsp& operator=(SampleDemandStatusRsp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SampleDemandStatusRsp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SampleDemandStatusRsp* internal_default_instance() {
+    return reinterpret_cast<const SampleDemandStatusRsp*>(
+               &_SampleDemandStatusRsp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(SampleDemandStatusRsp& a, SampleDemandStatusRsp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SampleDemandStatusRsp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SampleDemandStatusRsp* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SampleDemandStatusRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SampleDemandStatusRsp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SampleDemandStatusRsp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SampleDemandStatusRsp& from) {
+    SampleDemandStatusRsp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SampleDemandStatusRsp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.SampleDemandStatusRsp";
+  }
+  protected:
+  explicit SampleDemandStatusRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 3,
+    kDemandFieldNumber = 5,
+    kDistributorFieldNumber = 10,
+    kRetCodeFieldNumber = 1,
+    kResultFieldNumber = 2,
+    kDemandAgeMsFieldNumber = 6,
+    kReservedSamplesFieldNumber = 7,
+    kReservedFragmentsFieldNumber = 8,
+    kReservedEstimatedBytesFieldNumber = 9,
+    kActiveFieldNumber = 4,
+  };
+  // string message = 3;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // .rl.training.v1.SampleDemand demand = 5;
+  bool has_demand() const;
+  private:
+  bool _internal_has_demand() const;
+  public:
+  void clear_demand();
+  const ::rl::training::v1::SampleDemand& demand() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::SampleDemand* release_demand();
+  ::rl::training::v1::SampleDemand* mutable_demand();
+  void set_allocated_demand(::rl::training::v1::SampleDemand* demand);
+  private:
+  const ::rl::training::v1::SampleDemand& _internal_demand() const;
+  ::rl::training::v1::SampleDemand* _internal_mutable_demand();
+  public:
+  void unsafe_arena_set_allocated_demand(
+      ::rl::training::v1::SampleDemand* demand);
+  ::rl::training::v1::SampleDemand* unsafe_arena_release_demand();
+
+  // .rl.common.v1.ServiceInstanceIdentity distributor = 10;
+  bool has_distributor() const;
+  private:
+  bool _internal_has_distributor() const;
+  public:
+  void clear_distributor();
+  const ::rl::common::v1::ServiceInstanceIdentity& distributor() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_distributor();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_distributor();
+  void set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_distributor() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_distributor();
+  public:
+  void unsafe_arena_set_allocated_distributor(
+      ::rl::common::v1::ServiceInstanceIdentity* distributor);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_distributor();
+
+  // int32 ret_code = 1;
+  void clear_ret_code();
+  int32_t ret_code() const;
+  void set_ret_code(int32_t value);
+  private:
+  int32_t _internal_ret_code() const;
+  void _internal_set_ret_code(int32_t value);
+  public:
+
+  // .rl.training.v1.SampleDemandResult result = 2;
+  void clear_result();
+  ::rl::training::v1::SampleDemandResult result() const;
+  void set_result(::rl::training::v1::SampleDemandResult value);
+  private:
+  ::rl::training::v1::SampleDemandResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::SampleDemandResult value);
+  public:
+
+  // int64 demand_age_ms = 6;
+  void clear_demand_age_ms();
+  int64_t demand_age_ms() const;
+  void set_demand_age_ms(int64_t value);
+  private:
+  int64_t _internal_demand_age_ms() const;
+  void _internal_set_demand_age_ms(int64_t value);
+  public:
+
+  // int64 reserved_samples = 7;
+  void clear_reserved_samples();
+  int64_t reserved_samples() const;
+  void set_reserved_samples(int64_t value);
+  private:
+  int64_t _internal_reserved_samples() const;
+  void _internal_set_reserved_samples(int64_t value);
+  public:
+
+  // int64 reserved_fragments = 8;
+  void clear_reserved_fragments();
+  int64_t reserved_fragments() const;
+  void set_reserved_fragments(int64_t value);
+  private:
+  int64_t _internal_reserved_fragments() const;
+  void _internal_set_reserved_fragments(int64_t value);
+  public:
+
+  // int64 reserved_estimated_bytes = 9;
+  void clear_reserved_estimated_bytes();
+  int64_t reserved_estimated_bytes() const;
+  void set_reserved_estimated_bytes(int64_t value);
+  private:
+  int64_t _internal_reserved_estimated_bytes() const;
+  void _internal_set_reserved_estimated_bytes(int64_t value);
+  public:
+
+  // bool active = 4;
+  void clear_active();
+  bool active() const;
+  void set_active(bool value);
+  private:
+  bool _internal_active() const;
+  void _internal_set_active(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.SampleDemandStatusRsp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    ::rl::training::v1::SampleDemand* demand_;
+    ::rl::common::v1::ServiceInstanceIdentity* distributor_;
+    int32_t ret_code_;
+    int result_;
+    int64_t demand_age_ms_;
+    int64_t reserved_samples_;
+    int64_t reserved_fragments_;
+    int64_t reserved_estimated_bytes_;
+    bool active_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class AcquireSampleCreditReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.AcquireSampleCreditReq) */ {
+ public:
+  inline AcquireSampleCreditReq() : AcquireSampleCreditReq(nullptr) {}
+  ~AcquireSampleCreditReq() override;
+  explicit PROTOBUF_CONSTEXPR AcquireSampleCreditReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  AcquireSampleCreditReq(const AcquireSampleCreditReq& from);
+  AcquireSampleCreditReq(AcquireSampleCreditReq&& from) noexcept
+    : AcquireSampleCreditReq() {
+    *this = ::std::move(from);
+  }
+
+  inline AcquireSampleCreditReq& operator=(const AcquireSampleCreditReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline AcquireSampleCreditReq& operator=(AcquireSampleCreditReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const AcquireSampleCreditReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const AcquireSampleCreditReq* internal_default_instance() {
+    return reinterpret_cast<const AcquireSampleCreditReq*>(
+               &_AcquireSampleCreditReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(AcquireSampleCreditReq& a, AcquireSampleCreditReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(AcquireSampleCreditReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(AcquireSampleCreditReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  AcquireSampleCreditReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<AcquireSampleCreditReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const AcquireSampleCreditReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const AcquireSampleCreditReq& from) {
+    AcquireSampleCreditReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(AcquireSampleCreditReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.AcquireSampleCreditReq";
+  }
+  protected:
+  explicit AcquireSampleCreditReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kRequestIdFieldNumber = 1,
+    kBatchIdFieldNumber = 4,
+    kProducerFieldNumber = 2,
+    kContractFieldNumber = 3,
+    kPayloadDigestFieldNumber = 5,
+    kBehaviorPolicyFieldNumber = 6,
+    kTrainingSemanticsFieldNumber = 7,
+    kSampleCountFieldNumber = 8,
+    kFragmentCountFieldNumber = 9,
+    kEstimatedBytesFieldNumber = 10,
+    kCreatedAtUnixMsFieldNumber = 11,
+  };
+  // string request_id = 1;
+  void clear_request_id();
+  const std::string& request_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_request_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_request_id();
+  PROTOBUF_NODISCARD std::string* release_request_id();
+  void set_allocated_request_id(std::string* request_id);
+  private:
+  const std::string& _internal_request_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_request_id(const std::string& value);
+  std::string* _internal_mutable_request_id();
+  public:
+
+  // string batch_id = 4;
+  void clear_batch_id();
+  const std::string& batch_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_batch_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_batch_id();
+  PROTOBUF_NODISCARD std::string* release_batch_id();
+  void set_allocated_batch_id(std::string* batch_id);
+  private:
+  const std::string& _internal_batch_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_batch_id(const std::string& value);
+  std::string* _internal_mutable_batch_id();
+  public:
+
+  // .rl.common.v1.ServiceInstanceIdentity producer = 2;
+  bool has_producer() const;
+  private:
+  bool _internal_has_producer() const;
+  public:
+  void clear_producer();
+  const ::rl::common::v1::ServiceInstanceIdentity& producer() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_producer();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_producer();
+  void set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_producer() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_producer();
+  public:
+  void unsafe_arena_set_allocated_producer(
+      ::rl::common::v1::ServiceInstanceIdentity* producer);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_producer();
+
+  // .rl.common.v1.ContractIdentity contract = 3;
+  bool has_contract() const;
+  private:
+  bool _internal_has_contract() const;
+  public:
+  void clear_contract();
+  const ::rl::common::v1::ContractIdentity& contract() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
+  ::rl::common::v1::ContractIdentity* mutable_contract();
+  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
+  private:
+  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
+  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
+  public:
+  void unsafe_arena_set_allocated_contract(
+      ::rl::common::v1::ContractIdentity* contract);
+  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
+
+  // .rl.common.v1.ContentDigest payload_digest = 5;
+  bool has_payload_digest() const;
+  private:
+  bool _internal_has_payload_digest() const;
+  public:
+  void clear_payload_digest();
+  const ::rl::common::v1::ContentDigest& payload_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_payload_digest();
+  ::rl::common::v1::ContentDigest* mutable_payload_digest();
+  void set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_payload_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_payload_digest();
+  public:
+  void unsafe_arena_set_allocated_payload_digest(
+      ::rl::common::v1::ContentDigest* payload_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
+
+  // .rl.training.v1.BehaviorPolicyReference behavior_policy = 6;
+  bool has_behavior_policy() const;
+  private:
+  bool _internal_has_behavior_policy() const;
+  public:
+  void clear_behavior_policy();
+  const ::rl::training::v1::BehaviorPolicyReference& behavior_policy() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::BehaviorPolicyReference* release_behavior_policy();
+  ::rl::training::v1::BehaviorPolicyReference* mutable_behavior_policy();
+  void set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy);
+  private:
+  const ::rl::training::v1::BehaviorPolicyReference& _internal_behavior_policy() const;
+  ::rl::training::v1::BehaviorPolicyReference* _internal_mutable_behavior_policy();
+  public:
+  void unsafe_arena_set_allocated_behavior_policy(
+      ::rl::training::v1::BehaviorPolicyReference* behavior_policy);
+  ::rl::training::v1::BehaviorPolicyReference* unsafe_arena_release_behavior_policy();
+
+  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 7;
+  bool has_training_semantics() const;
+  private:
+  bool _internal_has_training_semantics() const;
+  public:
+  void clear_training_semantics();
+  const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::TrainingSemanticsIdentity* release_training_semantics();
+  ::rl::training::v1::TrainingSemanticsIdentity* mutable_training_semantics();
+  void set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
+  private:
+  const ::rl::training::v1::TrainingSemanticsIdentity& _internal_training_semantics() const;
+  ::rl::training::v1::TrainingSemanticsIdentity* _internal_mutable_training_semantics();
+  public:
+  void unsafe_arena_set_allocated_training_semantics(
+      ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
+  ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
+
+  // int64 sample_count = 8;
+  void clear_sample_count();
+  int64_t sample_count() const;
+  void set_sample_count(int64_t value);
+  private:
+  int64_t _internal_sample_count() const;
+  void _internal_set_sample_count(int64_t value);
+  public:
+
+  // int64 fragment_count = 9;
+  void clear_fragment_count();
+  int64_t fragment_count() const;
+  void set_fragment_count(int64_t value);
+  private:
+  int64_t _internal_fragment_count() const;
+  void _internal_set_fragment_count(int64_t value);
+  public:
+
+  // int64 estimated_bytes = 10;
+  void clear_estimated_bytes();
+  int64_t estimated_bytes() const;
+  void set_estimated_bytes(int64_t value);
+  private:
+  int64_t _internal_estimated_bytes() const;
+  void _internal_set_estimated_bytes(int64_t value);
+  public:
+
+  // int64 created_at_unix_ms = 11;
+  void clear_created_at_unix_ms();
+  int64_t created_at_unix_ms() const;
+  void set_created_at_unix_ms(int64_t value);
+  private:
+  int64_t _internal_created_at_unix_ms() const;
+  void _internal_set_created_at_unix_ms(int64_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.AcquireSampleCreditReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr request_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr batch_id_;
+    ::rl::common::v1::ServiceInstanceIdentity* producer_;
+    ::rl::common::v1::ContractIdentity* contract_;
+    ::rl::common::v1::ContentDigest* payload_digest_;
+    ::rl::training::v1::BehaviorPolicyReference* behavior_policy_;
+    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
+    int64_t sample_count_;
+    int64_t fragment_count_;
+    int64_t estimated_bytes_;
+    int64_t created_at_unix_ms_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SampleCreditGrant final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SampleCreditGrant) */ {
+ public:
+  inline SampleCreditGrant() : SampleCreditGrant(nullptr) {}
+  ~SampleCreditGrant() override;
+  explicit PROTOBUF_CONSTEXPR SampleCreditGrant(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SampleCreditGrant(const SampleCreditGrant& from);
+  SampleCreditGrant(SampleCreditGrant&& from) noexcept
+    : SampleCreditGrant() {
+    *this = ::std::move(from);
+  }
+
+  inline SampleCreditGrant& operator=(const SampleCreditGrant& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SampleCreditGrant& operator=(SampleCreditGrant&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SampleCreditGrant& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SampleCreditGrant* internal_default_instance() {
+    return reinterpret_cast<const SampleCreditGrant*>(
+               &_SampleCreditGrant_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    15;
+
+  friend void swap(SampleCreditGrant& a, SampleCreditGrant& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SampleCreditGrant* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SampleCreditGrant* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SampleCreditGrant* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SampleCreditGrant>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SampleCreditGrant& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SampleCreditGrant& from) {
+    SampleCreditGrant::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SampleCreditGrant* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.SampleCreditGrant";
+  }
+  protected:
+  explicit SampleCreditGrant(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 3,
+    kRequestIdFieldNumber = 4,
+    kCreditIdFieldNumber = 5,
+    kDemandIdFieldNumber = 6,
+    kBatchIdFieldNumber = 8,
+    kPayloadDigestFieldNumber = 9,
+    kDistributorFieldNumber = 16,
+    kRetCodeFieldNumber = 1,
+    kResultFieldNumber = 2,
+    kDemandEpochFieldNumber = 7,
+    kGrantedSamplesFieldNumber = 10,
+    kGrantedFragmentsFieldNumber = 11,
+    kGrantedEstimatedBytesFieldNumber = 12,
+    kExpiresAtUnixMsFieldNumber = 13,
+    kRetryAfterMsFieldNumber = 14,
+    kPressureStateFieldNumber = 15,
+    kStateFieldNumber = 17,
+  };
+  // string message = 3;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // string request_id = 4;
+  void clear_request_id();
+  const std::string& request_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_request_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_request_id();
+  PROTOBUF_NODISCARD std::string* release_request_id();
+  void set_allocated_request_id(std::string* request_id);
+  private:
+  const std::string& _internal_request_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_request_id(const std::string& value);
+  std::string* _internal_mutable_request_id();
+  public:
+
+  // string credit_id = 5;
+  void clear_credit_id();
+  const std::string& credit_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_credit_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_credit_id();
+  PROTOBUF_NODISCARD std::string* release_credit_id();
+  void set_allocated_credit_id(std::string* credit_id);
+  private:
+  const std::string& _internal_credit_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_credit_id(const std::string& value);
+  std::string* _internal_mutable_credit_id();
+  public:
+
+  // string demand_id = 6;
+  void clear_demand_id();
+  const std::string& demand_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_demand_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_demand_id();
+  PROTOBUF_NODISCARD std::string* release_demand_id();
+  void set_allocated_demand_id(std::string* demand_id);
+  private:
+  const std::string& _internal_demand_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_demand_id(const std::string& value);
+  std::string* _internal_mutable_demand_id();
+  public:
+
+  // string batch_id = 8;
+  void clear_batch_id();
+  const std::string& batch_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_batch_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_batch_id();
+  PROTOBUF_NODISCARD std::string* release_batch_id();
+  void set_allocated_batch_id(std::string* batch_id);
+  private:
+  const std::string& _internal_batch_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_batch_id(const std::string& value);
+  std::string* _internal_mutable_batch_id();
+  public:
+
+  // .rl.common.v1.ContentDigest payload_digest = 9;
+  bool has_payload_digest() const;
+  private:
+  bool _internal_has_payload_digest() const;
+  public:
+  void clear_payload_digest();
+  const ::rl::common::v1::ContentDigest& payload_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_payload_digest();
+  ::rl::common::v1::ContentDigest* mutable_payload_digest();
+  void set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_payload_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_payload_digest();
+  public:
+  void unsafe_arena_set_allocated_payload_digest(
+      ::rl::common::v1::ContentDigest* payload_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
+
+  // .rl.common.v1.ServiceInstanceIdentity distributor = 16;
+  bool has_distributor() const;
+  private:
+  bool _internal_has_distributor() const;
+  public:
+  void clear_distributor();
+  const ::rl::common::v1::ServiceInstanceIdentity& distributor() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_distributor();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_distributor();
+  void set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_distributor() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_distributor();
+  public:
+  void unsafe_arena_set_allocated_distributor(
+      ::rl::common::v1::ServiceInstanceIdentity* distributor);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_distributor();
+
+  // int32 ret_code = 1;
+  void clear_ret_code();
+  int32_t ret_code() const;
+  void set_ret_code(int32_t value);
+  private:
+  int32_t _internal_ret_code() const;
+  void _internal_set_ret_code(int32_t value);
+  public:
+
+  // .rl.training.v1.SampleCreditResult result = 2;
+  void clear_result();
+  ::rl::training::v1::SampleCreditResult result() const;
+  void set_result(::rl::training::v1::SampleCreditResult value);
+  private:
+  ::rl::training::v1::SampleCreditResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::SampleCreditResult value);
+  public:
+
+  // uint64 demand_epoch = 7;
+  void clear_demand_epoch();
+  uint64_t demand_epoch() const;
+  void set_demand_epoch(uint64_t value);
+  private:
+  uint64_t _internal_demand_epoch() const;
+  void _internal_set_demand_epoch(uint64_t value);
+  public:
+
+  // int64 granted_samples = 10;
+  void clear_granted_samples();
+  int64_t granted_samples() const;
+  void set_granted_samples(int64_t value);
+  private:
+  int64_t _internal_granted_samples() const;
+  void _internal_set_granted_samples(int64_t value);
+  public:
+
+  // int64 granted_fragments = 11;
+  void clear_granted_fragments();
+  int64_t granted_fragments() const;
+  void set_granted_fragments(int64_t value);
+  private:
+  int64_t _internal_granted_fragments() const;
+  void _internal_set_granted_fragments(int64_t value);
+  public:
+
+  // int64 granted_estimated_bytes = 12;
+  void clear_granted_estimated_bytes();
+  int64_t granted_estimated_bytes() const;
+  void set_granted_estimated_bytes(int64_t value);
+  private:
+  int64_t _internal_granted_estimated_bytes() const;
+  void _internal_set_granted_estimated_bytes(int64_t value);
+  public:
+
+  // int64 expires_at_unix_ms = 13;
+  void clear_expires_at_unix_ms();
+  int64_t expires_at_unix_ms() const;
+  void set_expires_at_unix_ms(int64_t value);
+  private:
+  int64_t _internal_expires_at_unix_ms() const;
+  void _internal_set_expires_at_unix_ms(int64_t value);
+  public:
+
+  // int32 retry_after_ms = 14;
+  void clear_retry_after_ms();
+  int32_t retry_after_ms() const;
+  void set_retry_after_ms(int32_t value);
+  private:
+  int32_t _internal_retry_after_ms() const;
+  void _internal_set_retry_after_ms(int32_t value);
+  public:
+
+  // .rl.training.v1.PressureState pressure_state = 15;
+  void clear_pressure_state();
+  ::rl::training::v1::PressureState pressure_state() const;
+  void set_pressure_state(::rl::training::v1::PressureState value);
+  private:
+  ::rl::training::v1::PressureState _internal_pressure_state() const;
+  void _internal_set_pressure_state(::rl::training::v1::PressureState value);
+  public:
+
+  // .rl.training.v1.SampleCreditState state = 17;
+  void clear_state();
+  ::rl::training::v1::SampleCreditState state() const;
+  void set_state(::rl::training::v1::SampleCreditState value);
+  private:
+  ::rl::training::v1::SampleCreditState _internal_state() const;
+  void _internal_set_state(::rl::training::v1::SampleCreditState value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.SampleCreditGrant)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr request_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr credit_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr demand_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr batch_id_;
+    ::rl::common::v1::ContentDigest* payload_digest_;
+    ::rl::common::v1::ServiceInstanceIdentity* distributor_;
+    int32_t ret_code_;
+    int result_;
+    uint64_t demand_epoch_;
+    int64_t granted_samples_;
+    int64_t granted_fragments_;
+    int64_t granted_estimated_bytes_;
+    int64_t expires_at_unix_ms_;
+    int32_t retry_after_ms_;
+    int pressure_state_;
+    int state_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ReleaseSampleCreditReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.ReleaseSampleCreditReq) */ {
+ public:
+  inline ReleaseSampleCreditReq() : ReleaseSampleCreditReq(nullptr) {}
+  ~ReleaseSampleCreditReq() override;
+  explicit PROTOBUF_CONSTEXPR ReleaseSampleCreditReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ReleaseSampleCreditReq(const ReleaseSampleCreditReq& from);
+  ReleaseSampleCreditReq(ReleaseSampleCreditReq&& from) noexcept
+    : ReleaseSampleCreditReq() {
+    *this = ::std::move(from);
+  }
+
+  inline ReleaseSampleCreditReq& operator=(const ReleaseSampleCreditReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ReleaseSampleCreditReq& operator=(ReleaseSampleCreditReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ReleaseSampleCreditReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ReleaseSampleCreditReq* internal_default_instance() {
+    return reinterpret_cast<const ReleaseSampleCreditReq*>(
+               &_ReleaseSampleCreditReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(ReleaseSampleCreditReq& a, ReleaseSampleCreditReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ReleaseSampleCreditReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ReleaseSampleCreditReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ReleaseSampleCreditReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ReleaseSampleCreditReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ReleaseSampleCreditReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ReleaseSampleCreditReq& from) {
+    ReleaseSampleCreditReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ReleaseSampleCreditReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.ReleaseSampleCreditReq";
+  }
+  protected:
+  explicit ReleaseSampleCreditReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCreditIdFieldNumber = 3,
+    kBatchIdFieldNumber = 4,
+    kProducerFieldNumber = 1,
+    kContractFieldNumber = 2,
+    kPayloadDigestFieldNumber = 5,
+    kReasonFieldNumber = 6,
+  };
+  // string credit_id = 3;
+  void clear_credit_id();
+  const std::string& credit_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_credit_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_credit_id();
+  PROTOBUF_NODISCARD std::string* release_credit_id();
+  void set_allocated_credit_id(std::string* credit_id);
+  private:
+  const std::string& _internal_credit_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_credit_id(const std::string& value);
+  std::string* _internal_mutable_credit_id();
+  public:
+
+  // string batch_id = 4;
+  void clear_batch_id();
+  const std::string& batch_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_batch_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_batch_id();
+  PROTOBUF_NODISCARD std::string* release_batch_id();
+  void set_allocated_batch_id(std::string* batch_id);
+  private:
+  const std::string& _internal_batch_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_batch_id(const std::string& value);
+  std::string* _internal_mutable_batch_id();
+  public:
+
+  // .rl.common.v1.ServiceInstanceIdentity producer = 1;
+  bool has_producer() const;
+  private:
+  bool _internal_has_producer() const;
+  public:
+  void clear_producer();
+  const ::rl::common::v1::ServiceInstanceIdentity& producer() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_producer();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_producer();
+  void set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_producer() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_producer();
+  public:
+  void unsafe_arena_set_allocated_producer(
+      ::rl::common::v1::ServiceInstanceIdentity* producer);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_producer();
+
+  // .rl.common.v1.ContractIdentity contract = 2;
+  bool has_contract() const;
+  private:
+  bool _internal_has_contract() const;
+  public:
+  void clear_contract();
+  const ::rl::common::v1::ContractIdentity& contract() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
+  ::rl::common::v1::ContractIdentity* mutable_contract();
+  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
+  private:
+  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
+  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
+  public:
+  void unsafe_arena_set_allocated_contract(
+      ::rl::common::v1::ContractIdentity* contract);
+  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
+
+  // .rl.common.v1.ContentDigest payload_digest = 5;
+  bool has_payload_digest() const;
+  private:
+  bool _internal_has_payload_digest() const;
+  public:
+  void clear_payload_digest();
+  const ::rl::common::v1::ContentDigest& payload_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_payload_digest();
+  ::rl::common::v1::ContentDigest* mutable_payload_digest();
+  void set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_payload_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_payload_digest();
+  public:
+  void unsafe_arena_set_allocated_payload_digest(
+      ::rl::common::v1::ContentDigest* payload_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
+
+  // .rl.training.v1.SampleCreditReleaseReason reason = 6;
+  void clear_reason();
+  ::rl::training::v1::SampleCreditReleaseReason reason() const;
+  void set_reason(::rl::training::v1::SampleCreditReleaseReason value);
+  private:
+  ::rl::training::v1::SampleCreditReleaseReason _internal_reason() const;
+  void _internal_set_reason(::rl::training::v1::SampleCreditReleaseReason value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.ReleaseSampleCreditReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr credit_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr batch_id_;
+    ::rl::common::v1::ServiceInstanceIdentity* producer_;
+    ::rl::common::v1::ContractIdentity* contract_;
+    ::rl::common::v1::ContentDigest* payload_digest_;
+    int reason_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ReleaseSampleCreditRsp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.ReleaseSampleCreditRsp) */ {
+ public:
+  inline ReleaseSampleCreditRsp() : ReleaseSampleCreditRsp(nullptr) {}
+  ~ReleaseSampleCreditRsp() override;
+  explicit PROTOBUF_CONSTEXPR ReleaseSampleCreditRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ReleaseSampleCreditRsp(const ReleaseSampleCreditRsp& from);
+  ReleaseSampleCreditRsp(ReleaseSampleCreditRsp&& from) noexcept
+    : ReleaseSampleCreditRsp() {
+    *this = ::std::move(from);
+  }
+
+  inline ReleaseSampleCreditRsp& operator=(const ReleaseSampleCreditRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ReleaseSampleCreditRsp& operator=(ReleaseSampleCreditRsp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ReleaseSampleCreditRsp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ReleaseSampleCreditRsp* internal_default_instance() {
+    return reinterpret_cast<const ReleaseSampleCreditRsp*>(
+               &_ReleaseSampleCreditRsp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  friend void swap(ReleaseSampleCreditRsp& a, ReleaseSampleCreditRsp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ReleaseSampleCreditRsp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ReleaseSampleCreditRsp* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ReleaseSampleCreditRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ReleaseSampleCreditRsp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ReleaseSampleCreditRsp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ReleaseSampleCreditRsp& from) {
+    ReleaseSampleCreditRsp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ReleaseSampleCreditRsp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.ReleaseSampleCreditRsp";
+  }
+  protected:
+  explicit ReleaseSampleCreditRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 3,
+    kCreditIdFieldNumber = 4,
+    kDistributorFieldNumber = 6,
+    kRetCodeFieldNumber = 1,
+    kResultFieldNumber = 2,
+    kStateFieldNumber = 5,
+  };
+  // string message = 3;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // string credit_id = 4;
+  void clear_credit_id();
+  const std::string& credit_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_credit_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_credit_id();
+  PROTOBUF_NODISCARD std::string* release_credit_id();
+  void set_allocated_credit_id(std::string* credit_id);
+  private:
+  const std::string& _internal_credit_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_credit_id(const std::string& value);
+  std::string* _internal_mutable_credit_id();
+  public:
+
+  // .rl.common.v1.ServiceInstanceIdentity distributor = 6;
+  bool has_distributor() const;
+  private:
+  bool _internal_has_distributor() const;
+  public:
+  void clear_distributor();
+  const ::rl::common::v1::ServiceInstanceIdentity& distributor() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_distributor();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_distributor();
+  void set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_distributor() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_distributor();
+  public:
+  void unsafe_arena_set_allocated_distributor(
+      ::rl::common::v1::ServiceInstanceIdentity* distributor);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_distributor();
+
+  // int32 ret_code = 1;
+  void clear_ret_code();
+  int32_t ret_code() const;
+  void set_ret_code(int32_t value);
+  private:
+  int32_t _internal_ret_code() const;
+  void _internal_set_ret_code(int32_t value);
+  public:
+
+  // .rl.training.v1.SampleCreditResult result = 2;
+  void clear_result();
+  ::rl::training::v1::SampleCreditResult result() const;
+  void set_result(::rl::training::v1::SampleCreditResult value);
+  private:
+  ::rl::training::v1::SampleCreditResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::SampleCreditResult value);
+  public:
+
+  // .rl.training.v1.SampleCreditState state = 5;
+  void clear_state();
+  ::rl::training::v1::SampleCreditState state() const;
+  void set_state(::rl::training::v1::SampleCreditState value);
+  private:
+  ::rl::training::v1::SampleCreditState _internal_state() const;
+  void _internal_set_state(::rl::training::v1::SampleCreditState value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.ReleaseSampleCreditRsp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr credit_id_;
+    ::rl::common::v1::ServiceInstanceIdentity* distributor_;
+    int32_t ret_code_;
+    int result_;
+    int state_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PushSamplesReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.PushSamplesReq) */ {
+ public:
+  inline PushSamplesReq() : PushSamplesReq(nullptr) {}
+  ~PushSamplesReq() override;
+  explicit PROTOBUF_CONSTEXPR PushSamplesReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PushSamplesReq(const PushSamplesReq& from);
+  PushSamplesReq(PushSamplesReq&& from) noexcept
+    : PushSamplesReq() {
+    *this = ::std::move(from);
+  }
+
+  inline PushSamplesReq& operator=(const PushSamplesReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PushSamplesReq& operator=(PushSamplesReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PushSamplesReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PushSamplesReq* internal_default_instance() {
+    return reinterpret_cast<const PushSamplesReq*>(
+               &_PushSamplesReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    18;
+
+  friend void swap(PushSamplesReq& a, PushSamplesReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PushSamplesReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PushSamplesReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PushSamplesReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PushSamplesReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PushSamplesReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const PushSamplesReq& from) {
+    PushSamplesReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PushSamplesReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.PushSamplesReq";
+  }
+  protected:
+  explicit PushSamplesReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCreditIdFieldNumber = 1,
+    kBatchFieldNumber = 2,
+  };
+  // string credit_id = 1;
+  void clear_credit_id();
+  const std::string& credit_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_credit_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_credit_id();
+  PROTOBUF_NODISCARD std::string* release_credit_id();
+  void set_allocated_credit_id(std::string* credit_id);
+  private:
+  const std::string& _internal_credit_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_credit_id(const std::string& value);
+  std::string* _internal_mutable_credit_id();
+  public:
+
+  // .rl.training.v1.SampleBatch batch = 2;
+  bool has_batch() const;
+  private:
+  bool _internal_has_batch() const;
+  public:
+  void clear_batch();
+  const ::rl::training::v1::SampleBatch& batch() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::SampleBatch* release_batch();
+  ::rl::training::v1::SampleBatch* mutable_batch();
+  void set_allocated_batch(::rl::training::v1::SampleBatch* batch);
+  private:
+  const ::rl::training::v1::SampleBatch& _internal_batch() const;
+  ::rl::training::v1::SampleBatch* _internal_mutable_batch();
+  public:
+  void unsafe_arena_set_allocated_batch(
+      ::rl::training::v1::SampleBatch* batch);
+  ::rl::training::v1::SampleBatch* unsafe_arena_release_batch();
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.PushSamplesReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr credit_id_;
+    ::rl::training::v1::SampleBatch* batch_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
 class PushSamplesRsp final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.PushSamplesRsp) */ {
  public:
@@ -2586,7 +5425,7 @@ class PushSamplesRsp final :
                &_PushSamplesRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    19;
 
   friend void swap(PushSamplesRsp& a, PushSamplesRsp& b) {
     a.Swap(&b);
@@ -2874,7 +5713,7 @@ class GetBatchReq final :
                &_GetBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    20;
 
   friend void swap(GetBatchReq& a, GetBatchReq& b) {
     a.Swap(&b);
@@ -3113,7 +5952,7 @@ class GetBatchRsp final :
                &_GetBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    21;
 
   friend void swap(GetBatchRsp& a, GetBatchRsp& b) {
     a.Swap(&b);
@@ -3465,7 +6304,7 @@ class AckBatchReq final :
                &_AckBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    22;
 
   friend void swap(AckBatchReq& a, AckBatchReq& b) {
     a.Swap(&b);
@@ -3665,7 +6504,7 @@ class NackBatchReq final :
                &_NackBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    23;
 
   friend void swap(NackBatchReq& a, NackBatchReq& b) {
     a.Swap(&b);
@@ -3854,7 +6693,7 @@ class RenewLeaseReq final :
                &_RenewLeaseReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    24;
 
   friend void swap(RenewLeaseReq& a, RenewLeaseReq& b) {
     a.Swap(&b);
@@ -4038,7 +6877,7 @@ class DeliveryRsp final :
                &_DeliveryRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    25;
 
   friend void swap(DeliveryRsp& a, DeliveryRsp& b) {
     a.Swap(&b);
@@ -4288,7 +7127,7 @@ class DistributorStatusReq final :
                &_DistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    26;
 
   friend void swap(DistributorStatusReq& a, DistributorStatusReq& b) {
     a.Swap(&b);
@@ -4407,7 +7246,7 @@ class BehaviorVersionQueueStatus final :
                &_BehaviorVersionQueueStatus_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    27;
 
   friend void swap(BehaviorVersionQueueStatus& a, BehaviorVersionQueueStatus& b) {
     a.Swap(&b);
@@ -4674,7 +7513,7 @@ class DistributorStatusRsp final :
                &_DistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    28;
 
   friend void swap(DistributorStatusRsp& a, DistributorStatusRsp& b) {
     a.Swap(&b);
@@ -4793,6 +7632,24 @@ class DistributorStatusRsp final :
     kOldestReadySampleAgeMsFieldNumber = 45,
     kMinimumReadyModelVersionFieldNumber = 46,
     kMaximumReadyModelVersionFieldNumber = 47,
+    kActiveDemandCountFieldNumber = 48,
+    kActiveDemandEpochFieldNumber = 49,
+    kActiveDemandAgeMsFieldNumber = 50,
+    kReservedSamplesFieldNumber = 51,
+    kReservedFragmentsFieldNumber = 52,
+    kReservedEstimatedBytesFieldNumber = 53,
+    kCreditRequestCountFieldNumber = 54,
+    kCreditGrantCountFieldNumber = 55,
+    kCreditCommitCountFieldNumber = 56,
+    kCreditReleaseCountFieldNumber = 57,
+    kCreditExpireCountFieldNumber = 58,
+    kCreditRevokeCountFieldNumber = 59,
+    kCreditWaitNoDemandCountFieldNumber = 60,
+    kCreditWaitInflightLimitCountFieldNumber = 61,
+    kCreditWaitCapacityCountFieldNumber = 62,
+    kCreditWaitDrainingCountFieldNumber = 63,
+    kDemandUpsertCountFieldNumber = 64,
+    kDemandReleaseCountFieldNumber = 65,
     kActiveConsumerCountFieldNumber = 40,
   };
   // repeated .rl.training.v1.BehaviorVersionQueueStatus behavior_versions = 32;
@@ -5241,6 +8098,168 @@ class DistributorStatusRsp final :
   void _internal_set_maximum_ready_model_version(uint64_t value);
   public:
 
+  // int64 active_demand_count = 48;
+  void clear_active_demand_count();
+  int64_t active_demand_count() const;
+  void set_active_demand_count(int64_t value);
+  private:
+  int64_t _internal_active_demand_count() const;
+  void _internal_set_active_demand_count(int64_t value);
+  public:
+
+  // uint64 active_demand_epoch = 49;
+  void clear_active_demand_epoch();
+  uint64_t active_demand_epoch() const;
+  void set_active_demand_epoch(uint64_t value);
+  private:
+  uint64_t _internal_active_demand_epoch() const;
+  void _internal_set_active_demand_epoch(uint64_t value);
+  public:
+
+  // int64 active_demand_age_ms = 50;
+  void clear_active_demand_age_ms();
+  int64_t active_demand_age_ms() const;
+  void set_active_demand_age_ms(int64_t value);
+  private:
+  int64_t _internal_active_demand_age_ms() const;
+  void _internal_set_active_demand_age_ms(int64_t value);
+  public:
+
+  // int64 reserved_samples = 51;
+  void clear_reserved_samples();
+  int64_t reserved_samples() const;
+  void set_reserved_samples(int64_t value);
+  private:
+  int64_t _internal_reserved_samples() const;
+  void _internal_set_reserved_samples(int64_t value);
+  public:
+
+  // int64 reserved_fragments = 52;
+  void clear_reserved_fragments();
+  int64_t reserved_fragments() const;
+  void set_reserved_fragments(int64_t value);
+  private:
+  int64_t _internal_reserved_fragments() const;
+  void _internal_set_reserved_fragments(int64_t value);
+  public:
+
+  // int64 reserved_estimated_bytes = 53;
+  void clear_reserved_estimated_bytes();
+  int64_t reserved_estimated_bytes() const;
+  void set_reserved_estimated_bytes(int64_t value);
+  private:
+  int64_t _internal_reserved_estimated_bytes() const;
+  void _internal_set_reserved_estimated_bytes(int64_t value);
+  public:
+
+  // int64 credit_request_count = 54;
+  void clear_credit_request_count();
+  int64_t credit_request_count() const;
+  void set_credit_request_count(int64_t value);
+  private:
+  int64_t _internal_credit_request_count() const;
+  void _internal_set_credit_request_count(int64_t value);
+  public:
+
+  // int64 credit_grant_count = 55;
+  void clear_credit_grant_count();
+  int64_t credit_grant_count() const;
+  void set_credit_grant_count(int64_t value);
+  private:
+  int64_t _internal_credit_grant_count() const;
+  void _internal_set_credit_grant_count(int64_t value);
+  public:
+
+  // int64 credit_commit_count = 56;
+  void clear_credit_commit_count();
+  int64_t credit_commit_count() const;
+  void set_credit_commit_count(int64_t value);
+  private:
+  int64_t _internal_credit_commit_count() const;
+  void _internal_set_credit_commit_count(int64_t value);
+  public:
+
+  // int64 credit_release_count = 57;
+  void clear_credit_release_count();
+  int64_t credit_release_count() const;
+  void set_credit_release_count(int64_t value);
+  private:
+  int64_t _internal_credit_release_count() const;
+  void _internal_set_credit_release_count(int64_t value);
+  public:
+
+  // int64 credit_expire_count = 58;
+  void clear_credit_expire_count();
+  int64_t credit_expire_count() const;
+  void set_credit_expire_count(int64_t value);
+  private:
+  int64_t _internal_credit_expire_count() const;
+  void _internal_set_credit_expire_count(int64_t value);
+  public:
+
+  // int64 credit_revoke_count = 59;
+  void clear_credit_revoke_count();
+  int64_t credit_revoke_count() const;
+  void set_credit_revoke_count(int64_t value);
+  private:
+  int64_t _internal_credit_revoke_count() const;
+  void _internal_set_credit_revoke_count(int64_t value);
+  public:
+
+  // int64 credit_wait_no_demand_count = 60;
+  void clear_credit_wait_no_demand_count();
+  int64_t credit_wait_no_demand_count() const;
+  void set_credit_wait_no_demand_count(int64_t value);
+  private:
+  int64_t _internal_credit_wait_no_demand_count() const;
+  void _internal_set_credit_wait_no_demand_count(int64_t value);
+  public:
+
+  // int64 credit_wait_inflight_limit_count = 61;
+  void clear_credit_wait_inflight_limit_count();
+  int64_t credit_wait_inflight_limit_count() const;
+  void set_credit_wait_inflight_limit_count(int64_t value);
+  private:
+  int64_t _internal_credit_wait_inflight_limit_count() const;
+  void _internal_set_credit_wait_inflight_limit_count(int64_t value);
+  public:
+
+  // int64 credit_wait_capacity_count = 62;
+  void clear_credit_wait_capacity_count();
+  int64_t credit_wait_capacity_count() const;
+  void set_credit_wait_capacity_count(int64_t value);
+  private:
+  int64_t _internal_credit_wait_capacity_count() const;
+  void _internal_set_credit_wait_capacity_count(int64_t value);
+  public:
+
+  // int64 credit_wait_draining_count = 63;
+  void clear_credit_wait_draining_count();
+  int64_t credit_wait_draining_count() const;
+  void set_credit_wait_draining_count(int64_t value);
+  private:
+  int64_t _internal_credit_wait_draining_count() const;
+  void _internal_set_credit_wait_draining_count(int64_t value);
+  public:
+
+  // int64 demand_upsert_count = 64;
+  void clear_demand_upsert_count();
+  int64_t demand_upsert_count() const;
+  void set_demand_upsert_count(int64_t value);
+  private:
+  int64_t _internal_demand_upsert_count() const;
+  void _internal_set_demand_upsert_count(int64_t value);
+  public:
+
+  // int64 demand_release_count = 65;
+  void clear_demand_release_count();
+  int64_t demand_release_count() const;
+  void set_demand_release_count(int64_t value);
+  private:
+  int64_t _internal_demand_release_count() const;
+  void _internal_set_demand_release_count(int64_t value);
+  public:
+
   // int32 active_consumer_count = 40;
   void clear_active_consumer_count();
   int32_t active_consumer_count() const;
@@ -5304,6 +8323,24 @@ class DistributorStatusRsp final :
     int64_t oldest_ready_sample_age_ms_;
     uint64_t minimum_ready_model_version_;
     uint64_t maximum_ready_model_version_;
+    int64_t active_demand_count_;
+    uint64_t active_demand_epoch_;
+    int64_t active_demand_age_ms_;
+    int64_t reserved_samples_;
+    int64_t reserved_fragments_;
+    int64_t reserved_estimated_bytes_;
+    int64_t credit_request_count_;
+    int64_t credit_grant_count_;
+    int64_t credit_commit_count_;
+    int64_t credit_release_count_;
+    int64_t credit_expire_count_;
+    int64_t credit_revoke_count_;
+    int64_t credit_wait_no_demand_count_;
+    int64_t credit_wait_inflight_limit_count_;
+    int64_t credit_wait_capacity_count_;
+    int64_t credit_wait_draining_count_;
+    int64_t demand_upsert_count_;
+    int64_t demand_release_count_;
     int32_t active_consumer_count_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -5360,7 +8397,7 @@ class MetricDescriptor final :
                &_MetricDescriptor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    29;
 
   friend void swap(MetricDescriptor& a, MetricDescriptor& b) {
     a.Swap(&b);
@@ -5678,7 +8715,7 @@ class MetricValue final :
                &_MetricValue_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    30;
 
   friend void swap(MetricValue& a, MetricValue& b) {
     a.Swap(&b);
@@ -5897,7 +8934,7 @@ class MetricSnapshot final :
                &_MetricSnapshot_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    31;
 
   friend void swap(MetricSnapshot& a, MetricSnapshot& b) {
     a.Swap(&b);
@@ -6115,7 +9152,7 @@ class AIServerStatusReq final :
                &_AIServerStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    32;
 
   friend void swap(AIServerStatusReq& a, AIServerStatusReq& b) {
     a.Swap(&b);
@@ -6234,7 +9271,7 @@ class AIServerStatusRsp final :
                &_AIServerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    33;
 
   friend void swap(AIServerStatusRsp& a, AIServerStatusRsp& b) {
     a.Swap(&b);
@@ -6314,8 +9351,7 @@ class AIServerStatusRsp final :
     kStagedModelFieldNumber = 8,
     kMetricsFieldNumber = 34,
     kStateFieldNumber = 3,
-    kReadyFieldNumber = 4,
-    kDistributorReadyFieldNumber = 5,
+    kModelStateFieldNumber = 6,
     kOutboundQueueFragmentsFieldNumber = 9,
     kOutboundQueueSamplesFieldNumber = 10,
     kOutboundQueueEstimatedBytesFieldNumber = 11,
@@ -6340,7 +9376,15 @@ class AIServerStatusRsp final :
     kQuarantinedSampleCountFieldNumber = 30,
     kQuarantinedFragmentCountFieldNumber = 31,
     kTimestampUnixMsFieldNumber = 33,
-    kModelStateFieldNumber = 6,
+    kCreditRequestCountFieldNumber = 35,
+    kCreditGrantCountFieldNumber = 36,
+    kCreditWaitCountFieldNumber = 37,
+    kCreditReacquireCountFieldNumber = 38,
+    kProducerStaleCountFieldNumber = 39,
+    kCapacityWaitMsFieldNumber = 40,
+    kReadyFieldNumber = 4,
+    kDistributorReadyFieldNumber = 5,
+    kTrainingCapacityWaitFieldNumber = 41,
   };
   // string last_error = 32;
   void clear_last_error();
@@ -6455,22 +9499,13 @@ class AIServerStatusRsp final :
   void _internal_set_state(::rl::training::v1::AIServerState value);
   public:
 
-  // bool ready = 4;
-  void clear_ready();
-  bool ready() const;
-  void set_ready(bool value);
+  // .rl.training.v1.ModelState model_state = 6;
+  void clear_model_state();
+  ::rl::training::v1::ModelState model_state() const;
+  void set_model_state(::rl::training::v1::ModelState value);
   private:
-  bool _internal_ready() const;
-  void _internal_set_ready(bool value);
-  public:
-
-  // bool distributor_ready = 5;
-  void clear_distributor_ready();
-  bool distributor_ready() const;
-  void set_distributor_ready(bool value);
-  private:
-  bool _internal_distributor_ready() const;
-  void _internal_set_distributor_ready(bool value);
+  ::rl::training::v1::ModelState _internal_model_state() const;
+  void _internal_set_model_state(::rl::training::v1::ModelState value);
   public:
 
   // int64 outbound_queue_fragments = 9;
@@ -6689,13 +9724,85 @@ class AIServerStatusRsp final :
   void _internal_set_timestamp_unix_ms(int64_t value);
   public:
 
-  // .rl.training.v1.ModelState model_state = 6;
-  void clear_model_state();
-  ::rl::training::v1::ModelState model_state() const;
-  void set_model_state(::rl::training::v1::ModelState value);
+  // int64 credit_request_count = 35;
+  void clear_credit_request_count();
+  int64_t credit_request_count() const;
+  void set_credit_request_count(int64_t value);
   private:
-  ::rl::training::v1::ModelState _internal_model_state() const;
-  void _internal_set_model_state(::rl::training::v1::ModelState value);
+  int64_t _internal_credit_request_count() const;
+  void _internal_set_credit_request_count(int64_t value);
+  public:
+
+  // int64 credit_grant_count = 36;
+  void clear_credit_grant_count();
+  int64_t credit_grant_count() const;
+  void set_credit_grant_count(int64_t value);
+  private:
+  int64_t _internal_credit_grant_count() const;
+  void _internal_set_credit_grant_count(int64_t value);
+  public:
+
+  // int64 credit_wait_count = 37;
+  void clear_credit_wait_count();
+  int64_t credit_wait_count() const;
+  void set_credit_wait_count(int64_t value);
+  private:
+  int64_t _internal_credit_wait_count() const;
+  void _internal_set_credit_wait_count(int64_t value);
+  public:
+
+  // int64 credit_reacquire_count = 38;
+  void clear_credit_reacquire_count();
+  int64_t credit_reacquire_count() const;
+  void set_credit_reacquire_count(int64_t value);
+  private:
+  int64_t _internal_credit_reacquire_count() const;
+  void _internal_set_credit_reacquire_count(int64_t value);
+  public:
+
+  // int64 producer_stale_count = 39;
+  void clear_producer_stale_count();
+  int64_t producer_stale_count() const;
+  void set_producer_stale_count(int64_t value);
+  private:
+  int64_t _internal_producer_stale_count() const;
+  void _internal_set_producer_stale_count(int64_t value);
+  public:
+
+  // int64 capacity_wait_ms = 40;
+  void clear_capacity_wait_ms();
+  int64_t capacity_wait_ms() const;
+  void set_capacity_wait_ms(int64_t value);
+  private:
+  int64_t _internal_capacity_wait_ms() const;
+  void _internal_set_capacity_wait_ms(int64_t value);
+  public:
+
+  // bool ready = 4;
+  void clear_ready();
+  bool ready() const;
+  void set_ready(bool value);
+  private:
+  bool _internal_ready() const;
+  void _internal_set_ready(bool value);
+  public:
+
+  // bool distributor_ready = 5;
+  void clear_distributor_ready();
+  bool distributor_ready() const;
+  void set_distributor_ready(bool value);
+  private:
+  bool _internal_distributor_ready() const;
+  void _internal_set_distributor_ready(bool value);
+  public:
+
+  // bool training_capacity_wait = 41;
+  void clear_training_capacity_wait();
+  bool training_capacity_wait() const;
+  void set_training_capacity_wait(bool value);
+  private:
+  bool _internal_training_capacity_wait() const;
+  void _internal_set_training_capacity_wait(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.AIServerStatusRsp)
@@ -6713,8 +9820,7 @@ class AIServerStatusRsp final :
     ::rl::training::v1::ModelIdentity* staged_model_;
     ::rl::training::v1::MetricSnapshot* metrics_;
     int state_;
-    bool ready_;
-    bool distributor_ready_;
+    int model_state_;
     int64_t outbound_queue_fragments_;
     int64_t outbound_queue_samples_;
     int64_t outbound_queue_estimated_bytes_;
@@ -6739,7 +9845,15 @@ class AIServerStatusRsp final :
     int64_t quarantined_sample_count_;
     int64_t quarantined_fragment_count_;
     int64_t timestamp_unix_ms_;
-    int model_state_;
+    int64_t credit_request_count_;
+    int64_t credit_grant_count_;
+    int64_t credit_wait_count_;
+    int64_t credit_reacquire_count_;
+    int64_t producer_stale_count_;
+    int64_t capacity_wait_ms_;
+    bool ready_;
+    bool distributor_ready_;
+    bool training_capacity_wait_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -6795,7 +9909,7 @@ class ModelArtifactManifest final :
                &_ModelArtifactManifest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    34;
 
   friend void swap(ModelArtifactManifest& a, ModelArtifactManifest& b) {
     a.Swap(&b);
@@ -7268,7 +10382,7 @@ class RegisterModelReq final :
                &_RegisterModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    35;
 
   friend void swap(RegisterModelReq& a, RegisterModelReq& b) {
     a.Swap(&b);
@@ -7425,7 +10539,7 @@ class RegisterModelRsp final :
                &_RegisterModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    36;
 
   friend void swap(RegisterModelRsp& a, RegisterModelRsp& b) {
     a.Swap(&b);
@@ -7640,7 +10754,7 @@ class GetModelManifestReq final :
                &_GetModelManifestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    37;
 
   friend void swap(GetModelManifestReq& a, GetModelManifestReq& b) {
     a.Swap(&b);
@@ -7828,7 +10942,7 @@ class GetModelManifestRsp final :
                &_GetModelManifestRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    38;
 
   friend void swap(GetModelManifestRsp& a, GetModelManifestRsp& b) {
     a.Swap(&b);
@@ -8032,7 +11146,7 @@ class DownloadModelReq final :
                &_DownloadModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    39;
 
   friend void swap(DownloadModelReq& a, DownloadModelReq& b) {
     a.Swap(&b);
@@ -8209,7 +11323,7 @@ class ModelChunk final :
                &_ModelChunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    40;
 
   friend void swap(ModelChunk& a, ModelChunk& b) {
     a.Swap(&b);
@@ -8393,7 +11507,7 @@ class AckModelReq final :
                &_AckModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    41;
 
   friend void swap(AckModelReq& a, AckModelReq& b) {
     a.Swap(&b);
@@ -8613,7 +11727,7 @@ class AckModelRsp final :
                &_AckModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    42;
 
   friend void swap(AckModelRsp& a, AckModelRsp& b) {
     a.Swap(&b);
@@ -8807,7 +11921,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    43;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -8926,7 +12040,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    44;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -11648,6 +14762,3790 @@ inline void SampleResponse::_internal_set_model_version(uint64_t value) {
 inline void SampleResponse::set_model_version(uint64_t value) {
   _internal_set_model_version(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.SampleResponse.model_version)
+}
+
+// -------------------------------------------------------------------
+
+// SampleDemand
+
+// string demand_id = 1;
+inline void SampleDemand::clear_demand_id() {
+  _impl_.demand_id_.ClearToEmpty();
+}
+inline const std::string& SampleDemand::demand_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.demand_id)
+  return _internal_demand_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleDemand::set_demand_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.demand_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemand.demand_id)
+}
+inline std::string* SampleDemand::mutable_demand_id() {
+  std::string* _s = _internal_mutable_demand_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemand.demand_id)
+  return _s;
+}
+inline const std::string& SampleDemand::_internal_demand_id() const {
+  return _impl_.demand_id_.Get();
+}
+inline void SampleDemand::_internal_set_demand_id(const std::string& value) {
+  
+  _impl_.demand_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleDemand::_internal_mutable_demand_id() {
+  
+  return _impl_.demand_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleDemand::release_demand_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemand.demand_id)
+  return _impl_.demand_id_.Release();
+}
+inline void SampleDemand::set_allocated_demand_id(std::string* demand_id) {
+  if (demand_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.demand_id_.SetAllocated(demand_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.demand_id_.IsDefault()) {
+    _impl_.demand_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemand.demand_id)
+}
+
+// uint64 demand_epoch = 2;
+inline void SampleDemand::clear_demand_epoch() {
+  _impl_.demand_epoch_ = uint64_t{0u};
+}
+inline uint64_t SampleDemand::_internal_demand_epoch() const {
+  return _impl_.demand_epoch_;
+}
+inline uint64_t SampleDemand::demand_epoch() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.demand_epoch)
+  return _internal_demand_epoch();
+}
+inline void SampleDemand::_internal_set_demand_epoch(uint64_t value) {
+  
+  _impl_.demand_epoch_ = value;
+}
+inline void SampleDemand::set_demand_epoch(uint64_t value) {
+  _internal_set_demand_epoch(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemand.demand_epoch)
+}
+
+// .rl.common.v1.ServiceInstanceIdentity consumer = 3;
+inline bool SampleDemand::_internal_has_consumer() const {
+  return this != internal_default_instance() && _impl_.consumer_ != nullptr;
+}
+inline bool SampleDemand::has_consumer() const {
+  return _internal_has_consumer();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleDemand::_internal_consumer() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.consumer_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleDemand::consumer() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.consumer)
+  return _internal_consumer();
+}
+inline void SampleDemand::unsafe_arena_set_allocated_consumer(
+    ::rl::common::v1::ServiceInstanceIdentity* consumer) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.consumer_);
+  }
+  _impl_.consumer_ = consumer;
+  if (consumer) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemand.consumer)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemand::release_consumer() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.consumer_;
+  _impl_.consumer_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemand::unsafe_arena_release_consumer() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemand.consumer)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.consumer_;
+  _impl_.consumer_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemand::_internal_mutable_consumer() {
+  
+  if (_impl_.consumer_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.consumer_ = p;
+  }
+  return _impl_.consumer_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemand::mutable_consumer() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_consumer();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemand.consumer)
+  return _msg;
+}
+inline void SampleDemand::set_allocated_consumer(::rl::common::v1::ServiceInstanceIdentity* consumer) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.consumer_);
+  }
+  if (consumer) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(consumer));
+    if (message_arena != submessage_arena) {
+      consumer = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, consumer, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.consumer_ = consumer;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemand.consumer)
+}
+
+// .rl.common.v1.ContractIdentity contract = 4;
+inline bool SampleDemand::_internal_has_contract() const {
+  return this != internal_default_instance() && _impl_.contract_ != nullptr;
+}
+inline bool SampleDemand::has_contract() const {
+  return _internal_has_contract();
+}
+inline const ::rl::common::v1::ContractIdentity& SampleDemand::_internal_contract() const {
+  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
+      ::rl::common::v1::_ContractIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ContractIdentity& SampleDemand::contract() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.contract)
+  return _internal_contract();
+}
+inline void SampleDemand::unsafe_arena_set_allocated_contract(
+    ::rl::common::v1::ContractIdentity* contract) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  _impl_.contract_ = contract;
+  if (contract) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemand.contract)
+}
+inline ::rl::common::v1::ContractIdentity* SampleDemand::release_contract() {
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* SampleDemand::unsafe_arena_release_contract() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemand.contract)
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* SampleDemand::_internal_mutable_contract() {
+  
+  if (_impl_.contract_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
+    _impl_.contract_ = p;
+  }
+  return _impl_.contract_;
+}
+inline ::rl::common::v1::ContractIdentity* SampleDemand::mutable_contract() {
+  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemand.contract)
+  return _msg;
+}
+inline void SampleDemand::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  if (contract) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
+    if (message_arena != submessage_arena) {
+      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, contract, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.contract_ = contract;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemand.contract)
+}
+
+// .rl.training.v1.TrainingSemanticsIdentity training_semantics = 5;
+inline bool SampleDemand::_internal_has_training_semantics() const {
+  return this != internal_default_instance() && _impl_.training_semantics_ != nullptr;
+}
+inline bool SampleDemand::has_training_semantics() const {
+  return _internal_has_training_semantics();
+}
+inline void SampleDemand::clear_training_semantics() {
+  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
+    delete _impl_.training_semantics_;
+  }
+  _impl_.training_semantics_ = nullptr;
+}
+inline const ::rl::training::v1::TrainingSemanticsIdentity& SampleDemand::_internal_training_semantics() const {
+  const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.training_semantics_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
+      ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
+}
+inline const ::rl::training::v1::TrainingSemanticsIdentity& SampleDemand::training_semantics() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.training_semantics)
+  return _internal_training_semantics();
+}
+inline void SampleDemand::unsafe_arena_set_allocated_training_semantics(
+    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_semantics_);
+  }
+  _impl_.training_semantics_ = training_semantics;
+  if (training_semantics) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemand.training_semantics)
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* SampleDemand::release_training_semantics() {
+  
+  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
+  _impl_.training_semantics_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* SampleDemand::unsafe_arena_release_training_semantics() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemand.training_semantics)
+  
+  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
+  _impl_.training_semantics_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* SampleDemand::_internal_mutable_training_semantics() {
+  
+  if (_impl_.training_semantics_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
+    _impl_.training_semantics_ = p;
+  }
+  return _impl_.training_semantics_;
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* SampleDemand::mutable_training_semantics() {
+  ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_training_semantics();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemand.training_semantics)
+  return _msg;
+}
+inline void SampleDemand::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.training_semantics_;
+  }
+  if (training_semantics) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(training_semantics);
+    if (message_arena != submessage_arena) {
+      training_semantics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, training_semantics, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.training_semantics_ = training_semantics;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemand.training_semantics)
+}
+
+// .rl.training.v1.SampleFreshnessPolicy freshness = 6;
+inline bool SampleDemand::_internal_has_freshness() const {
+  return this != internal_default_instance() && _impl_.freshness_ != nullptr;
+}
+inline bool SampleDemand::has_freshness() const {
+  return _internal_has_freshness();
+}
+inline void SampleDemand::clear_freshness() {
+  if (GetArenaForAllocation() == nullptr && _impl_.freshness_ != nullptr) {
+    delete _impl_.freshness_;
+  }
+  _impl_.freshness_ = nullptr;
+}
+inline const ::rl::training::v1::SampleFreshnessPolicy& SampleDemand::_internal_freshness() const {
+  const ::rl::training::v1::SampleFreshnessPolicy* p = _impl_.freshness_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::SampleFreshnessPolicy&>(
+      ::rl::training::v1::_SampleFreshnessPolicy_default_instance_);
+}
+inline const ::rl::training::v1::SampleFreshnessPolicy& SampleDemand::freshness() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.freshness)
+  return _internal_freshness();
+}
+inline void SampleDemand::unsafe_arena_set_allocated_freshness(
+    ::rl::training::v1::SampleFreshnessPolicy* freshness) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.freshness_);
+  }
+  _impl_.freshness_ = freshness;
+  if (freshness) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemand.freshness)
+}
+inline ::rl::training::v1::SampleFreshnessPolicy* SampleDemand::release_freshness() {
+  
+  ::rl::training::v1::SampleFreshnessPolicy* temp = _impl_.freshness_;
+  _impl_.freshness_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::SampleFreshnessPolicy* SampleDemand::unsafe_arena_release_freshness() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemand.freshness)
+  
+  ::rl::training::v1::SampleFreshnessPolicy* temp = _impl_.freshness_;
+  _impl_.freshness_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::SampleFreshnessPolicy* SampleDemand::_internal_mutable_freshness() {
+  
+  if (_impl_.freshness_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::SampleFreshnessPolicy>(GetArenaForAllocation());
+    _impl_.freshness_ = p;
+  }
+  return _impl_.freshness_;
+}
+inline ::rl::training::v1::SampleFreshnessPolicy* SampleDemand::mutable_freshness() {
+  ::rl::training::v1::SampleFreshnessPolicy* _msg = _internal_mutable_freshness();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemand.freshness)
+  return _msg;
+}
+inline void SampleDemand::set_allocated_freshness(::rl::training::v1::SampleFreshnessPolicy* freshness) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.freshness_;
+  }
+  if (freshness) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(freshness);
+    if (message_arena != submessage_arena) {
+      freshness = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, freshness, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.freshness_ = freshness;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemand.freshness)
+}
+
+// .rl.training.v1.BatchAssemblySpec assembly = 7;
+inline bool SampleDemand::_internal_has_assembly() const {
+  return this != internal_default_instance() && _impl_.assembly_ != nullptr;
+}
+inline bool SampleDemand::has_assembly() const {
+  return _internal_has_assembly();
+}
+inline void SampleDemand::clear_assembly() {
+  if (GetArenaForAllocation() == nullptr && _impl_.assembly_ != nullptr) {
+    delete _impl_.assembly_;
+  }
+  _impl_.assembly_ = nullptr;
+}
+inline const ::rl::training::v1::BatchAssemblySpec& SampleDemand::_internal_assembly() const {
+  const ::rl::training::v1::BatchAssemblySpec* p = _impl_.assembly_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::BatchAssemblySpec&>(
+      ::rl::training::v1::_BatchAssemblySpec_default_instance_);
+}
+inline const ::rl::training::v1::BatchAssemblySpec& SampleDemand::assembly() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.assembly)
+  return _internal_assembly();
+}
+inline void SampleDemand::unsafe_arena_set_allocated_assembly(
+    ::rl::training::v1::BatchAssemblySpec* assembly) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.assembly_);
+  }
+  _impl_.assembly_ = assembly;
+  if (assembly) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemand.assembly)
+}
+inline ::rl::training::v1::BatchAssemblySpec* SampleDemand::release_assembly() {
+  
+  ::rl::training::v1::BatchAssemblySpec* temp = _impl_.assembly_;
+  _impl_.assembly_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::BatchAssemblySpec* SampleDemand::unsafe_arena_release_assembly() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemand.assembly)
+  
+  ::rl::training::v1::BatchAssemblySpec* temp = _impl_.assembly_;
+  _impl_.assembly_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::BatchAssemblySpec* SampleDemand::_internal_mutable_assembly() {
+  
+  if (_impl_.assembly_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::BatchAssemblySpec>(GetArenaForAllocation());
+    _impl_.assembly_ = p;
+  }
+  return _impl_.assembly_;
+}
+inline ::rl::training::v1::BatchAssemblySpec* SampleDemand::mutable_assembly() {
+  ::rl::training::v1::BatchAssemblySpec* _msg = _internal_mutable_assembly();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemand.assembly)
+  return _msg;
+}
+inline void SampleDemand::set_allocated_assembly(::rl::training::v1::BatchAssemblySpec* assembly) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.assembly_;
+  }
+  if (assembly) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(assembly);
+    if (message_arena != submessage_arena) {
+      assembly = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, assembly, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.assembly_ = assembly;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemand.assembly)
+}
+
+// int64 max_buffered_samples = 8;
+inline void SampleDemand::clear_max_buffered_samples() {
+  _impl_.max_buffered_samples_ = int64_t{0};
+}
+inline int64_t SampleDemand::_internal_max_buffered_samples() const {
+  return _impl_.max_buffered_samples_;
+}
+inline int64_t SampleDemand::max_buffered_samples() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.max_buffered_samples)
+  return _internal_max_buffered_samples();
+}
+inline void SampleDemand::_internal_set_max_buffered_samples(int64_t value) {
+  
+  _impl_.max_buffered_samples_ = value;
+}
+inline void SampleDemand::set_max_buffered_samples(int64_t value) {
+  _internal_set_max_buffered_samples(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemand.max_buffered_samples)
+}
+
+// int64 max_buffered_fragments = 9;
+inline void SampleDemand::clear_max_buffered_fragments() {
+  _impl_.max_buffered_fragments_ = int64_t{0};
+}
+inline int64_t SampleDemand::_internal_max_buffered_fragments() const {
+  return _impl_.max_buffered_fragments_;
+}
+inline int64_t SampleDemand::max_buffered_fragments() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.max_buffered_fragments)
+  return _internal_max_buffered_fragments();
+}
+inline void SampleDemand::_internal_set_max_buffered_fragments(int64_t value) {
+  
+  _impl_.max_buffered_fragments_ = value;
+}
+inline void SampleDemand::set_max_buffered_fragments(int64_t value) {
+  _internal_set_max_buffered_fragments(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemand.max_buffered_fragments)
+}
+
+// int64 max_buffered_estimated_bytes = 10;
+inline void SampleDemand::clear_max_buffered_estimated_bytes() {
+  _impl_.max_buffered_estimated_bytes_ = int64_t{0};
+}
+inline int64_t SampleDemand::_internal_max_buffered_estimated_bytes() const {
+  return _impl_.max_buffered_estimated_bytes_;
+}
+inline int64_t SampleDemand::max_buffered_estimated_bytes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.max_buffered_estimated_bytes)
+  return _internal_max_buffered_estimated_bytes();
+}
+inline void SampleDemand::_internal_set_max_buffered_estimated_bytes(int64_t value) {
+  
+  _impl_.max_buffered_estimated_bytes_ = value;
+}
+inline void SampleDemand::set_max_buffered_estimated_bytes(int64_t value) {
+  _internal_set_max_buffered_estimated_bytes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemand.max_buffered_estimated_bytes)
+}
+
+// int64 expires_at_unix_ms = 11;
+inline void SampleDemand::clear_expires_at_unix_ms() {
+  _impl_.expires_at_unix_ms_ = int64_t{0};
+}
+inline int64_t SampleDemand::_internal_expires_at_unix_ms() const {
+  return _impl_.expires_at_unix_ms_;
+}
+inline int64_t SampleDemand::expires_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemand.expires_at_unix_ms)
+  return _internal_expires_at_unix_ms();
+}
+inline void SampleDemand::_internal_set_expires_at_unix_ms(int64_t value) {
+  
+  _impl_.expires_at_unix_ms_ = value;
+}
+inline void SampleDemand::set_expires_at_unix_ms(int64_t value) {
+  _internal_set_expires_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemand.expires_at_unix_ms)
+}
+
+// -------------------------------------------------------------------
+
+// UpsertSampleDemandReq
+
+// .rl.training.v1.SampleDemand demand = 1;
+inline bool UpsertSampleDemandReq::_internal_has_demand() const {
+  return this != internal_default_instance() && _impl_.demand_ != nullptr;
+}
+inline bool UpsertSampleDemandReq::has_demand() const {
+  return _internal_has_demand();
+}
+inline void UpsertSampleDemandReq::clear_demand() {
+  if (GetArenaForAllocation() == nullptr && _impl_.demand_ != nullptr) {
+    delete _impl_.demand_;
+  }
+  _impl_.demand_ = nullptr;
+}
+inline const ::rl::training::v1::SampleDemand& UpsertSampleDemandReq::_internal_demand() const {
+  const ::rl::training::v1::SampleDemand* p = _impl_.demand_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::SampleDemand&>(
+      ::rl::training::v1::_SampleDemand_default_instance_);
+}
+inline const ::rl::training::v1::SampleDemand& UpsertSampleDemandReq::demand() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.UpsertSampleDemandReq.demand)
+  return _internal_demand();
+}
+inline void UpsertSampleDemandReq::unsafe_arena_set_allocated_demand(
+    ::rl::training::v1::SampleDemand* demand) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.demand_);
+  }
+  _impl_.demand_ = demand;
+  if (demand) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.UpsertSampleDemandReq.demand)
+}
+inline ::rl::training::v1::SampleDemand* UpsertSampleDemandReq::release_demand() {
+  
+  ::rl::training::v1::SampleDemand* temp = _impl_.demand_;
+  _impl_.demand_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::SampleDemand* UpsertSampleDemandReq::unsafe_arena_release_demand() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.UpsertSampleDemandReq.demand)
+  
+  ::rl::training::v1::SampleDemand* temp = _impl_.demand_;
+  _impl_.demand_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::SampleDemand* UpsertSampleDemandReq::_internal_mutable_demand() {
+  
+  if (_impl_.demand_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::SampleDemand>(GetArenaForAllocation());
+    _impl_.demand_ = p;
+  }
+  return _impl_.demand_;
+}
+inline ::rl::training::v1::SampleDemand* UpsertSampleDemandReq::mutable_demand() {
+  ::rl::training::v1::SampleDemand* _msg = _internal_mutable_demand();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.UpsertSampleDemandReq.demand)
+  return _msg;
+}
+inline void UpsertSampleDemandReq::set_allocated_demand(::rl::training::v1::SampleDemand* demand) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.demand_;
+  }
+  if (demand) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(demand);
+    if (message_arena != submessage_arena) {
+      demand = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, demand, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.demand_ = demand;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.UpsertSampleDemandReq.demand)
+}
+
+// -------------------------------------------------------------------
+
+// ReleaseSampleDemandReq
+
+// .rl.common.v1.ServiceInstanceIdentity consumer = 1;
+inline bool ReleaseSampleDemandReq::_internal_has_consumer() const {
+  return this != internal_default_instance() && _impl_.consumer_ != nullptr;
+}
+inline bool ReleaseSampleDemandReq::has_consumer() const {
+  return _internal_has_consumer();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& ReleaseSampleDemandReq::_internal_consumer() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.consumer_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& ReleaseSampleDemandReq::consumer() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleDemandReq.consumer)
+  return _internal_consumer();
+}
+inline void ReleaseSampleDemandReq::unsafe_arena_set_allocated_consumer(
+    ::rl::common::v1::ServiceInstanceIdentity* consumer) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.consumer_);
+  }
+  _impl_.consumer_ = consumer;
+  if (consumer) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ReleaseSampleDemandReq.consumer)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleDemandReq::release_consumer() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.consumer_;
+  _impl_.consumer_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleDemandReq::unsafe_arena_release_consumer() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleDemandReq.consumer)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.consumer_;
+  _impl_.consumer_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleDemandReq::_internal_mutable_consumer() {
+  
+  if (_impl_.consumer_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.consumer_ = p;
+  }
+  return _impl_.consumer_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleDemandReq::mutable_consumer() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_consumer();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleDemandReq.consumer)
+  return _msg;
+}
+inline void ReleaseSampleDemandReq::set_allocated_consumer(::rl::common::v1::ServiceInstanceIdentity* consumer) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.consumer_);
+  }
+  if (consumer) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(consumer));
+    if (message_arena != submessage_arena) {
+      consumer = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, consumer, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.consumer_ = consumer;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleDemandReq.consumer)
+}
+
+// .rl.common.v1.ContractIdentity contract = 2;
+inline bool ReleaseSampleDemandReq::_internal_has_contract() const {
+  return this != internal_default_instance() && _impl_.contract_ != nullptr;
+}
+inline bool ReleaseSampleDemandReq::has_contract() const {
+  return _internal_has_contract();
+}
+inline const ::rl::common::v1::ContractIdentity& ReleaseSampleDemandReq::_internal_contract() const {
+  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
+      ::rl::common::v1::_ContractIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ContractIdentity& ReleaseSampleDemandReq::contract() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleDemandReq.contract)
+  return _internal_contract();
+}
+inline void ReleaseSampleDemandReq::unsafe_arena_set_allocated_contract(
+    ::rl::common::v1::ContractIdentity* contract) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  _impl_.contract_ = contract;
+  if (contract) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ReleaseSampleDemandReq.contract)
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleDemandReq::release_contract() {
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleDemandReq::unsafe_arena_release_contract() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleDemandReq.contract)
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleDemandReq::_internal_mutable_contract() {
+  
+  if (_impl_.contract_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
+    _impl_.contract_ = p;
+  }
+  return _impl_.contract_;
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleDemandReq::mutable_contract() {
+  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleDemandReq.contract)
+  return _msg;
+}
+inline void ReleaseSampleDemandReq::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  if (contract) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
+    if (message_arena != submessage_arena) {
+      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, contract, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.contract_ = contract;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleDemandReq.contract)
+}
+
+// string demand_id = 3;
+inline void ReleaseSampleDemandReq::clear_demand_id() {
+  _impl_.demand_id_.ClearToEmpty();
+}
+inline const std::string& ReleaseSampleDemandReq::demand_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleDemandReq.demand_id)
+  return _internal_demand_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ReleaseSampleDemandReq::set_demand_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.demand_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleDemandReq.demand_id)
+}
+inline std::string* ReleaseSampleDemandReq::mutable_demand_id() {
+  std::string* _s = _internal_mutable_demand_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleDemandReq.demand_id)
+  return _s;
+}
+inline const std::string& ReleaseSampleDemandReq::_internal_demand_id() const {
+  return _impl_.demand_id_.Get();
+}
+inline void ReleaseSampleDemandReq::_internal_set_demand_id(const std::string& value) {
+  
+  _impl_.demand_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleDemandReq::_internal_mutable_demand_id() {
+  
+  return _impl_.demand_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleDemandReq::release_demand_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleDemandReq.demand_id)
+  return _impl_.demand_id_.Release();
+}
+inline void ReleaseSampleDemandReq::set_allocated_demand_id(std::string* demand_id) {
+  if (demand_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.demand_id_.SetAllocated(demand_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.demand_id_.IsDefault()) {
+    _impl_.demand_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleDemandReq.demand_id)
+}
+
+// uint64 demand_epoch = 4;
+inline void ReleaseSampleDemandReq::clear_demand_epoch() {
+  _impl_.demand_epoch_ = uint64_t{0u};
+}
+inline uint64_t ReleaseSampleDemandReq::_internal_demand_epoch() const {
+  return _impl_.demand_epoch_;
+}
+inline uint64_t ReleaseSampleDemandReq::demand_epoch() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleDemandReq.demand_epoch)
+  return _internal_demand_epoch();
+}
+inline void ReleaseSampleDemandReq::_internal_set_demand_epoch(uint64_t value) {
+  
+  _impl_.demand_epoch_ = value;
+}
+inline void ReleaseSampleDemandReq::set_demand_epoch(uint64_t value) {
+  _internal_set_demand_epoch(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleDemandReq.demand_epoch)
+}
+
+// -------------------------------------------------------------------
+
+// GetSampleDemandStatusReq
+
+// .rl.common.v1.ServiceInstanceIdentity requester = 1;
+inline bool GetSampleDemandStatusReq::_internal_has_requester() const {
+  return this != internal_default_instance() && _impl_.requester_ != nullptr;
+}
+inline bool GetSampleDemandStatusReq::has_requester() const {
+  return _internal_has_requester();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& GetSampleDemandStatusReq::_internal_requester() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.requester_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& GetSampleDemandStatusReq::requester() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetSampleDemandStatusReq.requester)
+  return _internal_requester();
+}
+inline void GetSampleDemandStatusReq::unsafe_arena_set_allocated_requester(
+    ::rl::common::v1::ServiceInstanceIdentity* requester) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.requester_);
+  }
+  _impl_.requester_ = requester;
+  if (requester) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetSampleDemandStatusReq.requester)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetSampleDemandStatusReq::release_requester() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.requester_;
+  _impl_.requester_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetSampleDemandStatusReq::unsafe_arena_release_requester() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetSampleDemandStatusReq.requester)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.requester_;
+  _impl_.requester_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetSampleDemandStatusReq::_internal_mutable_requester() {
+  
+  if (_impl_.requester_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.requester_ = p;
+  }
+  return _impl_.requester_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetSampleDemandStatusReq::mutable_requester() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_requester();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetSampleDemandStatusReq.requester)
+  return _msg;
+}
+inline void GetSampleDemandStatusReq::set_allocated_requester(::rl::common::v1::ServiceInstanceIdentity* requester) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.requester_);
+  }
+  if (requester) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(requester));
+    if (message_arena != submessage_arena) {
+      requester = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, requester, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.requester_ = requester;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetSampleDemandStatusReq.requester)
+}
+
+// string demand_id = 2;
+inline void GetSampleDemandStatusReq::clear_demand_id() {
+  _impl_.demand_id_.ClearToEmpty();
+}
+inline const std::string& GetSampleDemandStatusReq::demand_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetSampleDemandStatusReq.demand_id)
+  return _internal_demand_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void GetSampleDemandStatusReq::set_demand_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.demand_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetSampleDemandStatusReq.demand_id)
+}
+inline std::string* GetSampleDemandStatusReq::mutable_demand_id() {
+  std::string* _s = _internal_mutable_demand_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetSampleDemandStatusReq.demand_id)
+  return _s;
+}
+inline const std::string& GetSampleDemandStatusReq::_internal_demand_id() const {
+  return _impl_.demand_id_.Get();
+}
+inline void GetSampleDemandStatusReq::_internal_set_demand_id(const std::string& value) {
+  
+  _impl_.demand_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* GetSampleDemandStatusReq::_internal_mutable_demand_id() {
+  
+  return _impl_.demand_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* GetSampleDemandStatusReq::release_demand_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetSampleDemandStatusReq.demand_id)
+  return _impl_.demand_id_.Release();
+}
+inline void GetSampleDemandStatusReq::set_allocated_demand_id(std::string* demand_id) {
+  if (demand_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.demand_id_.SetAllocated(demand_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.demand_id_.IsDefault()) {
+    _impl_.demand_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetSampleDemandStatusReq.demand_id)
+}
+
+// -------------------------------------------------------------------
+
+// SampleDemandRsp
+
+// int32 ret_code = 1;
+inline void SampleDemandRsp::clear_ret_code() {
+  _impl_.ret_code_ = 0;
+}
+inline int32_t SampleDemandRsp::_internal_ret_code() const {
+  return _impl_.ret_code_;
+}
+inline int32_t SampleDemandRsp::ret_code() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.ret_code)
+  return _internal_ret_code();
+}
+inline void SampleDemandRsp::_internal_set_ret_code(int32_t value) {
+  
+  _impl_.ret_code_ = value;
+}
+inline void SampleDemandRsp::set_ret_code(int32_t value) {
+  _internal_set_ret_code(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandRsp.ret_code)
+}
+
+// .rl.training.v1.SampleDemandResult result = 2;
+inline void SampleDemandRsp::clear_result() {
+  _impl_.result_ = 0;
+}
+inline ::rl::training::v1::SampleDemandResult SampleDemandRsp::_internal_result() const {
+  return static_cast< ::rl::training::v1::SampleDemandResult >(_impl_.result_);
+}
+inline ::rl::training::v1::SampleDemandResult SampleDemandRsp::result() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.result)
+  return _internal_result();
+}
+inline void SampleDemandRsp::_internal_set_result(::rl::training::v1::SampleDemandResult value) {
+  
+  _impl_.result_ = value;
+}
+inline void SampleDemandRsp::set_result(::rl::training::v1::SampleDemandResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandRsp.result)
+}
+
+// string message = 3;
+inline void SampleDemandRsp::clear_message() {
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& SampleDemandRsp::message() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleDemandRsp::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandRsp.message)
+}
+inline std::string* SampleDemandRsp::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemandRsp.message)
+  return _s;
+}
+inline const std::string& SampleDemandRsp::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void SampleDemandRsp::_internal_set_message(const std::string& value) {
+  
+  _impl_.message_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleDemandRsp::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleDemandRsp::release_message() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemandRsp.message)
+  return _impl_.message_.Release();
+}
+inline void SampleDemandRsp::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemandRsp.message)
+}
+
+// .rl.training.v1.SampleDemand demand = 4;
+inline bool SampleDemandRsp::_internal_has_demand() const {
+  return this != internal_default_instance() && _impl_.demand_ != nullptr;
+}
+inline bool SampleDemandRsp::has_demand() const {
+  return _internal_has_demand();
+}
+inline void SampleDemandRsp::clear_demand() {
+  if (GetArenaForAllocation() == nullptr && _impl_.demand_ != nullptr) {
+    delete _impl_.demand_;
+  }
+  _impl_.demand_ = nullptr;
+}
+inline const ::rl::training::v1::SampleDemand& SampleDemandRsp::_internal_demand() const {
+  const ::rl::training::v1::SampleDemand* p = _impl_.demand_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::SampleDemand&>(
+      ::rl::training::v1::_SampleDemand_default_instance_);
+}
+inline const ::rl::training::v1::SampleDemand& SampleDemandRsp::demand() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.demand)
+  return _internal_demand();
+}
+inline void SampleDemandRsp::unsafe_arena_set_allocated_demand(
+    ::rl::training::v1::SampleDemand* demand) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.demand_);
+  }
+  _impl_.demand_ = demand;
+  if (demand) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemandRsp.demand)
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandRsp::release_demand() {
+  
+  ::rl::training::v1::SampleDemand* temp = _impl_.demand_;
+  _impl_.demand_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandRsp::unsafe_arena_release_demand() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemandRsp.demand)
+  
+  ::rl::training::v1::SampleDemand* temp = _impl_.demand_;
+  _impl_.demand_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandRsp::_internal_mutable_demand() {
+  
+  if (_impl_.demand_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::SampleDemand>(GetArenaForAllocation());
+    _impl_.demand_ = p;
+  }
+  return _impl_.demand_;
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandRsp::mutable_demand() {
+  ::rl::training::v1::SampleDemand* _msg = _internal_mutable_demand();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemandRsp.demand)
+  return _msg;
+}
+inline void SampleDemandRsp::set_allocated_demand(::rl::training::v1::SampleDemand* demand) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.demand_;
+  }
+  if (demand) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(demand);
+    if (message_arena != submessage_arena) {
+      demand = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, demand, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.demand_ = demand;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemandRsp.demand)
+}
+
+// int64 reserved_samples = 5;
+inline void SampleDemandRsp::clear_reserved_samples() {
+  _impl_.reserved_samples_ = int64_t{0};
+}
+inline int64_t SampleDemandRsp::_internal_reserved_samples() const {
+  return _impl_.reserved_samples_;
+}
+inline int64_t SampleDemandRsp::reserved_samples() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.reserved_samples)
+  return _internal_reserved_samples();
+}
+inline void SampleDemandRsp::_internal_set_reserved_samples(int64_t value) {
+  
+  _impl_.reserved_samples_ = value;
+}
+inline void SampleDemandRsp::set_reserved_samples(int64_t value) {
+  _internal_set_reserved_samples(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandRsp.reserved_samples)
+}
+
+// int64 reserved_fragments = 6;
+inline void SampleDemandRsp::clear_reserved_fragments() {
+  _impl_.reserved_fragments_ = int64_t{0};
+}
+inline int64_t SampleDemandRsp::_internal_reserved_fragments() const {
+  return _impl_.reserved_fragments_;
+}
+inline int64_t SampleDemandRsp::reserved_fragments() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.reserved_fragments)
+  return _internal_reserved_fragments();
+}
+inline void SampleDemandRsp::_internal_set_reserved_fragments(int64_t value) {
+  
+  _impl_.reserved_fragments_ = value;
+}
+inline void SampleDemandRsp::set_reserved_fragments(int64_t value) {
+  _internal_set_reserved_fragments(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandRsp.reserved_fragments)
+}
+
+// int64 reserved_estimated_bytes = 7;
+inline void SampleDemandRsp::clear_reserved_estimated_bytes() {
+  _impl_.reserved_estimated_bytes_ = int64_t{0};
+}
+inline int64_t SampleDemandRsp::_internal_reserved_estimated_bytes() const {
+  return _impl_.reserved_estimated_bytes_;
+}
+inline int64_t SampleDemandRsp::reserved_estimated_bytes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.reserved_estimated_bytes)
+  return _internal_reserved_estimated_bytes();
+}
+inline void SampleDemandRsp::_internal_set_reserved_estimated_bytes(int64_t value) {
+  
+  _impl_.reserved_estimated_bytes_ = value;
+}
+inline void SampleDemandRsp::set_reserved_estimated_bytes(int64_t value) {
+  _internal_set_reserved_estimated_bytes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandRsp.reserved_estimated_bytes)
+}
+
+// .rl.common.v1.ServiceInstanceIdentity distributor = 8;
+inline bool SampleDemandRsp::_internal_has_distributor() const {
+  return this != internal_default_instance() && _impl_.distributor_ != nullptr;
+}
+inline bool SampleDemandRsp::has_distributor() const {
+  return _internal_has_distributor();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleDemandRsp::_internal_distributor() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.distributor_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleDemandRsp::distributor() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandRsp.distributor)
+  return _internal_distributor();
+}
+inline void SampleDemandRsp::unsafe_arena_set_allocated_distributor(
+    ::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  _impl_.distributor_ = distributor;
+  if (distributor) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemandRsp.distributor)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandRsp::release_distributor() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandRsp::unsafe_arena_release_distributor() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemandRsp.distributor)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandRsp::_internal_mutable_distributor() {
+  
+  if (_impl_.distributor_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.distributor_ = p;
+  }
+  return _impl_.distributor_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandRsp::mutable_distributor() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_distributor();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemandRsp.distributor)
+  return _msg;
+}
+inline void SampleDemandRsp::set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  if (distributor) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(distributor));
+    if (message_arena != submessage_arena) {
+      distributor = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, distributor, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.distributor_ = distributor;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemandRsp.distributor)
+}
+
+// -------------------------------------------------------------------
+
+// SampleDemandStatusRsp
+
+// int32 ret_code = 1;
+inline void SampleDemandStatusRsp::clear_ret_code() {
+  _impl_.ret_code_ = 0;
+}
+inline int32_t SampleDemandStatusRsp::_internal_ret_code() const {
+  return _impl_.ret_code_;
+}
+inline int32_t SampleDemandStatusRsp::ret_code() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.ret_code)
+  return _internal_ret_code();
+}
+inline void SampleDemandStatusRsp::_internal_set_ret_code(int32_t value) {
+  
+  _impl_.ret_code_ = value;
+}
+inline void SampleDemandStatusRsp::set_ret_code(int32_t value) {
+  _internal_set_ret_code(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.ret_code)
+}
+
+// .rl.training.v1.SampleDemandResult result = 2;
+inline void SampleDemandStatusRsp::clear_result() {
+  _impl_.result_ = 0;
+}
+inline ::rl::training::v1::SampleDemandResult SampleDemandStatusRsp::_internal_result() const {
+  return static_cast< ::rl::training::v1::SampleDemandResult >(_impl_.result_);
+}
+inline ::rl::training::v1::SampleDemandResult SampleDemandStatusRsp::result() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.result)
+  return _internal_result();
+}
+inline void SampleDemandStatusRsp::_internal_set_result(::rl::training::v1::SampleDemandResult value) {
+  
+  _impl_.result_ = value;
+}
+inline void SampleDemandStatusRsp::set_result(::rl::training::v1::SampleDemandResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.result)
+}
+
+// string message = 3;
+inline void SampleDemandStatusRsp::clear_message() {
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& SampleDemandStatusRsp::message() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleDemandStatusRsp::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.message)
+}
+inline std::string* SampleDemandStatusRsp::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemandStatusRsp.message)
+  return _s;
+}
+inline const std::string& SampleDemandStatusRsp::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void SampleDemandStatusRsp::_internal_set_message(const std::string& value) {
+  
+  _impl_.message_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleDemandStatusRsp::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleDemandStatusRsp::release_message() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemandStatusRsp.message)
+  return _impl_.message_.Release();
+}
+inline void SampleDemandStatusRsp::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemandStatusRsp.message)
+}
+
+// bool active = 4;
+inline void SampleDemandStatusRsp::clear_active() {
+  _impl_.active_ = false;
+}
+inline bool SampleDemandStatusRsp::_internal_active() const {
+  return _impl_.active_;
+}
+inline bool SampleDemandStatusRsp::active() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.active)
+  return _internal_active();
+}
+inline void SampleDemandStatusRsp::_internal_set_active(bool value) {
+  
+  _impl_.active_ = value;
+}
+inline void SampleDemandStatusRsp::set_active(bool value) {
+  _internal_set_active(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.active)
+}
+
+// .rl.training.v1.SampleDemand demand = 5;
+inline bool SampleDemandStatusRsp::_internal_has_demand() const {
+  return this != internal_default_instance() && _impl_.demand_ != nullptr;
+}
+inline bool SampleDemandStatusRsp::has_demand() const {
+  return _internal_has_demand();
+}
+inline void SampleDemandStatusRsp::clear_demand() {
+  if (GetArenaForAllocation() == nullptr && _impl_.demand_ != nullptr) {
+    delete _impl_.demand_;
+  }
+  _impl_.demand_ = nullptr;
+}
+inline const ::rl::training::v1::SampleDemand& SampleDemandStatusRsp::_internal_demand() const {
+  const ::rl::training::v1::SampleDemand* p = _impl_.demand_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::SampleDemand&>(
+      ::rl::training::v1::_SampleDemand_default_instance_);
+}
+inline const ::rl::training::v1::SampleDemand& SampleDemandStatusRsp::demand() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.demand)
+  return _internal_demand();
+}
+inline void SampleDemandStatusRsp::unsafe_arena_set_allocated_demand(
+    ::rl::training::v1::SampleDemand* demand) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.demand_);
+  }
+  _impl_.demand_ = demand;
+  if (demand) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemandStatusRsp.demand)
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandStatusRsp::release_demand() {
+  
+  ::rl::training::v1::SampleDemand* temp = _impl_.demand_;
+  _impl_.demand_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandStatusRsp::unsafe_arena_release_demand() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemandStatusRsp.demand)
+  
+  ::rl::training::v1::SampleDemand* temp = _impl_.demand_;
+  _impl_.demand_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandStatusRsp::_internal_mutable_demand() {
+  
+  if (_impl_.demand_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::SampleDemand>(GetArenaForAllocation());
+    _impl_.demand_ = p;
+  }
+  return _impl_.demand_;
+}
+inline ::rl::training::v1::SampleDemand* SampleDemandStatusRsp::mutable_demand() {
+  ::rl::training::v1::SampleDemand* _msg = _internal_mutable_demand();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemandStatusRsp.demand)
+  return _msg;
+}
+inline void SampleDemandStatusRsp::set_allocated_demand(::rl::training::v1::SampleDemand* demand) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.demand_;
+  }
+  if (demand) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(demand);
+    if (message_arena != submessage_arena) {
+      demand = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, demand, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.demand_ = demand;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemandStatusRsp.demand)
+}
+
+// int64 demand_age_ms = 6;
+inline void SampleDemandStatusRsp::clear_demand_age_ms() {
+  _impl_.demand_age_ms_ = int64_t{0};
+}
+inline int64_t SampleDemandStatusRsp::_internal_demand_age_ms() const {
+  return _impl_.demand_age_ms_;
+}
+inline int64_t SampleDemandStatusRsp::demand_age_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.demand_age_ms)
+  return _internal_demand_age_ms();
+}
+inline void SampleDemandStatusRsp::_internal_set_demand_age_ms(int64_t value) {
+  
+  _impl_.demand_age_ms_ = value;
+}
+inline void SampleDemandStatusRsp::set_demand_age_ms(int64_t value) {
+  _internal_set_demand_age_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.demand_age_ms)
+}
+
+// int64 reserved_samples = 7;
+inline void SampleDemandStatusRsp::clear_reserved_samples() {
+  _impl_.reserved_samples_ = int64_t{0};
+}
+inline int64_t SampleDemandStatusRsp::_internal_reserved_samples() const {
+  return _impl_.reserved_samples_;
+}
+inline int64_t SampleDemandStatusRsp::reserved_samples() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.reserved_samples)
+  return _internal_reserved_samples();
+}
+inline void SampleDemandStatusRsp::_internal_set_reserved_samples(int64_t value) {
+  
+  _impl_.reserved_samples_ = value;
+}
+inline void SampleDemandStatusRsp::set_reserved_samples(int64_t value) {
+  _internal_set_reserved_samples(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.reserved_samples)
+}
+
+// int64 reserved_fragments = 8;
+inline void SampleDemandStatusRsp::clear_reserved_fragments() {
+  _impl_.reserved_fragments_ = int64_t{0};
+}
+inline int64_t SampleDemandStatusRsp::_internal_reserved_fragments() const {
+  return _impl_.reserved_fragments_;
+}
+inline int64_t SampleDemandStatusRsp::reserved_fragments() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.reserved_fragments)
+  return _internal_reserved_fragments();
+}
+inline void SampleDemandStatusRsp::_internal_set_reserved_fragments(int64_t value) {
+  
+  _impl_.reserved_fragments_ = value;
+}
+inline void SampleDemandStatusRsp::set_reserved_fragments(int64_t value) {
+  _internal_set_reserved_fragments(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.reserved_fragments)
+}
+
+// int64 reserved_estimated_bytes = 9;
+inline void SampleDemandStatusRsp::clear_reserved_estimated_bytes() {
+  _impl_.reserved_estimated_bytes_ = int64_t{0};
+}
+inline int64_t SampleDemandStatusRsp::_internal_reserved_estimated_bytes() const {
+  return _impl_.reserved_estimated_bytes_;
+}
+inline int64_t SampleDemandStatusRsp::reserved_estimated_bytes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.reserved_estimated_bytes)
+  return _internal_reserved_estimated_bytes();
+}
+inline void SampleDemandStatusRsp::_internal_set_reserved_estimated_bytes(int64_t value) {
+  
+  _impl_.reserved_estimated_bytes_ = value;
+}
+inline void SampleDemandStatusRsp::set_reserved_estimated_bytes(int64_t value) {
+  _internal_set_reserved_estimated_bytes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleDemandStatusRsp.reserved_estimated_bytes)
+}
+
+// .rl.common.v1.ServiceInstanceIdentity distributor = 10;
+inline bool SampleDemandStatusRsp::_internal_has_distributor() const {
+  return this != internal_default_instance() && _impl_.distributor_ != nullptr;
+}
+inline bool SampleDemandStatusRsp::has_distributor() const {
+  return _internal_has_distributor();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleDemandStatusRsp::_internal_distributor() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.distributor_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleDemandStatusRsp::distributor() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleDemandStatusRsp.distributor)
+  return _internal_distributor();
+}
+inline void SampleDemandStatusRsp::unsafe_arena_set_allocated_distributor(
+    ::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  _impl_.distributor_ = distributor;
+  if (distributor) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleDemandStatusRsp.distributor)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandStatusRsp::release_distributor() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandStatusRsp::unsafe_arena_release_distributor() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleDemandStatusRsp.distributor)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandStatusRsp::_internal_mutable_distributor() {
+  
+  if (_impl_.distributor_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.distributor_ = p;
+  }
+  return _impl_.distributor_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleDemandStatusRsp::mutable_distributor() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_distributor();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleDemandStatusRsp.distributor)
+  return _msg;
+}
+inline void SampleDemandStatusRsp::set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  if (distributor) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(distributor));
+    if (message_arena != submessage_arena) {
+      distributor = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, distributor, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.distributor_ = distributor;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleDemandStatusRsp.distributor)
+}
+
+// -------------------------------------------------------------------
+
+// AcquireSampleCreditReq
+
+// string request_id = 1;
+inline void AcquireSampleCreditReq::clear_request_id() {
+  _impl_.request_id_.ClearToEmpty();
+}
+inline const std::string& AcquireSampleCreditReq::request_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.request_id)
+  return _internal_request_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void AcquireSampleCreditReq::set_request_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.request_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.AcquireSampleCreditReq.request_id)
+}
+inline std::string* AcquireSampleCreditReq::mutable_request_id() {
+  std::string* _s = _internal_mutable_request_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AcquireSampleCreditReq.request_id)
+  return _s;
+}
+inline const std::string& AcquireSampleCreditReq::_internal_request_id() const {
+  return _impl_.request_id_.Get();
+}
+inline void AcquireSampleCreditReq::_internal_set_request_id(const std::string& value) {
+  
+  _impl_.request_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* AcquireSampleCreditReq::_internal_mutable_request_id() {
+  
+  return _impl_.request_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* AcquireSampleCreditReq::release_request_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AcquireSampleCreditReq.request_id)
+  return _impl_.request_id_.Release();
+}
+inline void AcquireSampleCreditReq::set_allocated_request_id(std::string* request_id) {
+  if (request_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.request_id_.SetAllocated(request_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.request_id_.IsDefault()) {
+    _impl_.request_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AcquireSampleCreditReq.request_id)
+}
+
+// .rl.common.v1.ServiceInstanceIdentity producer = 2;
+inline bool AcquireSampleCreditReq::_internal_has_producer() const {
+  return this != internal_default_instance() && _impl_.producer_ != nullptr;
+}
+inline bool AcquireSampleCreditReq::has_producer() const {
+  return _internal_has_producer();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& AcquireSampleCreditReq::_internal_producer() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.producer_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& AcquireSampleCreditReq::producer() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.producer)
+  return _internal_producer();
+}
+inline void AcquireSampleCreditReq::unsafe_arena_set_allocated_producer(
+    ::rl::common::v1::ServiceInstanceIdentity* producer) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
+  }
+  _impl_.producer_ = producer;
+  if (producer) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AcquireSampleCreditReq.producer)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* AcquireSampleCreditReq::release_producer() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
+  _impl_.producer_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* AcquireSampleCreditReq::unsafe_arena_release_producer() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AcquireSampleCreditReq.producer)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
+  _impl_.producer_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* AcquireSampleCreditReq::_internal_mutable_producer() {
+  
+  if (_impl_.producer_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.producer_ = p;
+  }
+  return _impl_.producer_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* AcquireSampleCreditReq::mutable_producer() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_producer();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AcquireSampleCreditReq.producer)
+  return _msg;
+}
+inline void AcquireSampleCreditReq::set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
+  }
+  if (producer) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(producer));
+    if (message_arena != submessage_arena) {
+      producer = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, producer, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.producer_ = producer;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AcquireSampleCreditReq.producer)
+}
+
+// .rl.common.v1.ContractIdentity contract = 3;
+inline bool AcquireSampleCreditReq::_internal_has_contract() const {
+  return this != internal_default_instance() && _impl_.contract_ != nullptr;
+}
+inline bool AcquireSampleCreditReq::has_contract() const {
+  return _internal_has_contract();
+}
+inline const ::rl::common::v1::ContractIdentity& AcquireSampleCreditReq::_internal_contract() const {
+  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
+      ::rl::common::v1::_ContractIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ContractIdentity& AcquireSampleCreditReq::contract() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.contract)
+  return _internal_contract();
+}
+inline void AcquireSampleCreditReq::unsafe_arena_set_allocated_contract(
+    ::rl::common::v1::ContractIdentity* contract) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  _impl_.contract_ = contract;
+  if (contract) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AcquireSampleCreditReq.contract)
+}
+inline ::rl::common::v1::ContractIdentity* AcquireSampleCreditReq::release_contract() {
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* AcquireSampleCreditReq::unsafe_arena_release_contract() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AcquireSampleCreditReq.contract)
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* AcquireSampleCreditReq::_internal_mutable_contract() {
+  
+  if (_impl_.contract_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
+    _impl_.contract_ = p;
+  }
+  return _impl_.contract_;
+}
+inline ::rl::common::v1::ContractIdentity* AcquireSampleCreditReq::mutable_contract() {
+  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AcquireSampleCreditReq.contract)
+  return _msg;
+}
+inline void AcquireSampleCreditReq::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  if (contract) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
+    if (message_arena != submessage_arena) {
+      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, contract, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.contract_ = contract;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AcquireSampleCreditReq.contract)
+}
+
+// string batch_id = 4;
+inline void AcquireSampleCreditReq::clear_batch_id() {
+  _impl_.batch_id_.ClearToEmpty();
+}
+inline const std::string& AcquireSampleCreditReq::batch_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.batch_id)
+  return _internal_batch_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void AcquireSampleCreditReq::set_batch_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.batch_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.AcquireSampleCreditReq.batch_id)
+}
+inline std::string* AcquireSampleCreditReq::mutable_batch_id() {
+  std::string* _s = _internal_mutable_batch_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AcquireSampleCreditReq.batch_id)
+  return _s;
+}
+inline const std::string& AcquireSampleCreditReq::_internal_batch_id() const {
+  return _impl_.batch_id_.Get();
+}
+inline void AcquireSampleCreditReq::_internal_set_batch_id(const std::string& value) {
+  
+  _impl_.batch_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* AcquireSampleCreditReq::_internal_mutable_batch_id() {
+  
+  return _impl_.batch_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* AcquireSampleCreditReq::release_batch_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AcquireSampleCreditReq.batch_id)
+  return _impl_.batch_id_.Release();
+}
+inline void AcquireSampleCreditReq::set_allocated_batch_id(std::string* batch_id) {
+  if (batch_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.batch_id_.SetAllocated(batch_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.batch_id_.IsDefault()) {
+    _impl_.batch_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AcquireSampleCreditReq.batch_id)
+}
+
+// .rl.common.v1.ContentDigest payload_digest = 5;
+inline bool AcquireSampleCreditReq::_internal_has_payload_digest() const {
+  return this != internal_default_instance() && _impl_.payload_digest_ != nullptr;
+}
+inline bool AcquireSampleCreditReq::has_payload_digest() const {
+  return _internal_has_payload_digest();
+}
+inline const ::rl::common::v1::ContentDigest& AcquireSampleCreditReq::_internal_payload_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.payload_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& AcquireSampleCreditReq::payload_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.payload_digest)
+  return _internal_payload_digest();
+}
+inline void AcquireSampleCreditReq::unsafe_arena_set_allocated_payload_digest(
+    ::rl::common::v1::ContentDigest* payload_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  _impl_.payload_digest_ = payload_digest;
+  if (payload_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AcquireSampleCreditReq.payload_digest)
+}
+inline ::rl::common::v1::ContentDigest* AcquireSampleCreditReq::release_payload_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* AcquireSampleCreditReq::unsafe_arena_release_payload_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AcquireSampleCreditReq.payload_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* AcquireSampleCreditReq::_internal_mutable_payload_digest() {
+  
+  if (_impl_.payload_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.payload_digest_ = p;
+  }
+  return _impl_.payload_digest_;
+}
+inline ::rl::common::v1::ContentDigest* AcquireSampleCreditReq::mutable_payload_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_payload_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AcquireSampleCreditReq.payload_digest)
+  return _msg;
+}
+inline void AcquireSampleCreditReq::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  if (payload_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(payload_digest));
+    if (message_arena != submessage_arena) {
+      payload_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, payload_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.payload_digest_ = payload_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AcquireSampleCreditReq.payload_digest)
+}
+
+// .rl.training.v1.BehaviorPolicyReference behavior_policy = 6;
+inline bool AcquireSampleCreditReq::_internal_has_behavior_policy() const {
+  return this != internal_default_instance() && _impl_.behavior_policy_ != nullptr;
+}
+inline bool AcquireSampleCreditReq::has_behavior_policy() const {
+  return _internal_has_behavior_policy();
+}
+inline void AcquireSampleCreditReq::clear_behavior_policy() {
+  if (GetArenaForAllocation() == nullptr && _impl_.behavior_policy_ != nullptr) {
+    delete _impl_.behavior_policy_;
+  }
+  _impl_.behavior_policy_ = nullptr;
+}
+inline const ::rl::training::v1::BehaviorPolicyReference& AcquireSampleCreditReq::_internal_behavior_policy() const {
+  const ::rl::training::v1::BehaviorPolicyReference* p = _impl_.behavior_policy_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::BehaviorPolicyReference&>(
+      ::rl::training::v1::_BehaviorPolicyReference_default_instance_);
+}
+inline const ::rl::training::v1::BehaviorPolicyReference& AcquireSampleCreditReq::behavior_policy() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.behavior_policy)
+  return _internal_behavior_policy();
+}
+inline void AcquireSampleCreditReq::unsafe_arena_set_allocated_behavior_policy(
+    ::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_policy_);
+  }
+  _impl_.behavior_policy_ = behavior_policy;
+  if (behavior_policy) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AcquireSampleCreditReq.behavior_policy)
+}
+inline ::rl::training::v1::BehaviorPolicyReference* AcquireSampleCreditReq::release_behavior_policy() {
+  
+  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
+  _impl_.behavior_policy_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::BehaviorPolicyReference* AcquireSampleCreditReq::unsafe_arena_release_behavior_policy() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AcquireSampleCreditReq.behavior_policy)
+  
+  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
+  _impl_.behavior_policy_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::BehaviorPolicyReference* AcquireSampleCreditReq::_internal_mutable_behavior_policy() {
+  
+  if (_impl_.behavior_policy_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(GetArenaForAllocation());
+    _impl_.behavior_policy_ = p;
+  }
+  return _impl_.behavior_policy_;
+}
+inline ::rl::training::v1::BehaviorPolicyReference* AcquireSampleCreditReq::mutable_behavior_policy() {
+  ::rl::training::v1::BehaviorPolicyReference* _msg = _internal_mutable_behavior_policy();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AcquireSampleCreditReq.behavior_policy)
+  return _msg;
+}
+inline void AcquireSampleCreditReq::set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.behavior_policy_;
+  }
+  if (behavior_policy) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(behavior_policy);
+    if (message_arena != submessage_arena) {
+      behavior_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, behavior_policy, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.behavior_policy_ = behavior_policy;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AcquireSampleCreditReq.behavior_policy)
+}
+
+// .rl.training.v1.TrainingSemanticsIdentity training_semantics = 7;
+inline bool AcquireSampleCreditReq::_internal_has_training_semantics() const {
+  return this != internal_default_instance() && _impl_.training_semantics_ != nullptr;
+}
+inline bool AcquireSampleCreditReq::has_training_semantics() const {
+  return _internal_has_training_semantics();
+}
+inline void AcquireSampleCreditReq::clear_training_semantics() {
+  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
+    delete _impl_.training_semantics_;
+  }
+  _impl_.training_semantics_ = nullptr;
+}
+inline const ::rl::training::v1::TrainingSemanticsIdentity& AcquireSampleCreditReq::_internal_training_semantics() const {
+  const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.training_semantics_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
+      ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
+}
+inline const ::rl::training::v1::TrainingSemanticsIdentity& AcquireSampleCreditReq::training_semantics() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.training_semantics)
+  return _internal_training_semantics();
+}
+inline void AcquireSampleCreditReq::unsafe_arena_set_allocated_training_semantics(
+    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_semantics_);
+  }
+  _impl_.training_semantics_ = training_semantics;
+  if (training_semantics) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AcquireSampleCreditReq.training_semantics)
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* AcquireSampleCreditReq::release_training_semantics() {
+  
+  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
+  _impl_.training_semantics_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* AcquireSampleCreditReq::unsafe_arena_release_training_semantics() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AcquireSampleCreditReq.training_semantics)
+  
+  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
+  _impl_.training_semantics_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* AcquireSampleCreditReq::_internal_mutable_training_semantics() {
+  
+  if (_impl_.training_semantics_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
+    _impl_.training_semantics_ = p;
+  }
+  return _impl_.training_semantics_;
+}
+inline ::rl::training::v1::TrainingSemanticsIdentity* AcquireSampleCreditReq::mutable_training_semantics() {
+  ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_training_semantics();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AcquireSampleCreditReq.training_semantics)
+  return _msg;
+}
+inline void AcquireSampleCreditReq::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.training_semantics_;
+  }
+  if (training_semantics) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(training_semantics);
+    if (message_arena != submessage_arena) {
+      training_semantics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, training_semantics, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.training_semantics_ = training_semantics;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AcquireSampleCreditReq.training_semantics)
+}
+
+// int64 sample_count = 8;
+inline void AcquireSampleCreditReq::clear_sample_count() {
+  _impl_.sample_count_ = int64_t{0};
+}
+inline int64_t AcquireSampleCreditReq::_internal_sample_count() const {
+  return _impl_.sample_count_;
+}
+inline int64_t AcquireSampleCreditReq::sample_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.sample_count)
+  return _internal_sample_count();
+}
+inline void AcquireSampleCreditReq::_internal_set_sample_count(int64_t value) {
+  
+  _impl_.sample_count_ = value;
+}
+inline void AcquireSampleCreditReq::set_sample_count(int64_t value) {
+  _internal_set_sample_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AcquireSampleCreditReq.sample_count)
+}
+
+// int64 fragment_count = 9;
+inline void AcquireSampleCreditReq::clear_fragment_count() {
+  _impl_.fragment_count_ = int64_t{0};
+}
+inline int64_t AcquireSampleCreditReq::_internal_fragment_count() const {
+  return _impl_.fragment_count_;
+}
+inline int64_t AcquireSampleCreditReq::fragment_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.fragment_count)
+  return _internal_fragment_count();
+}
+inline void AcquireSampleCreditReq::_internal_set_fragment_count(int64_t value) {
+  
+  _impl_.fragment_count_ = value;
+}
+inline void AcquireSampleCreditReq::set_fragment_count(int64_t value) {
+  _internal_set_fragment_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AcquireSampleCreditReq.fragment_count)
+}
+
+// int64 estimated_bytes = 10;
+inline void AcquireSampleCreditReq::clear_estimated_bytes() {
+  _impl_.estimated_bytes_ = int64_t{0};
+}
+inline int64_t AcquireSampleCreditReq::_internal_estimated_bytes() const {
+  return _impl_.estimated_bytes_;
+}
+inline int64_t AcquireSampleCreditReq::estimated_bytes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.estimated_bytes)
+  return _internal_estimated_bytes();
+}
+inline void AcquireSampleCreditReq::_internal_set_estimated_bytes(int64_t value) {
+  
+  _impl_.estimated_bytes_ = value;
+}
+inline void AcquireSampleCreditReq::set_estimated_bytes(int64_t value) {
+  _internal_set_estimated_bytes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AcquireSampleCreditReq.estimated_bytes)
+}
+
+// int64 created_at_unix_ms = 11;
+inline void AcquireSampleCreditReq::clear_created_at_unix_ms() {
+  _impl_.created_at_unix_ms_ = int64_t{0};
+}
+inline int64_t AcquireSampleCreditReq::_internal_created_at_unix_ms() const {
+  return _impl_.created_at_unix_ms_;
+}
+inline int64_t AcquireSampleCreditReq::created_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AcquireSampleCreditReq.created_at_unix_ms)
+  return _internal_created_at_unix_ms();
+}
+inline void AcquireSampleCreditReq::_internal_set_created_at_unix_ms(int64_t value) {
+  
+  _impl_.created_at_unix_ms_ = value;
+}
+inline void AcquireSampleCreditReq::set_created_at_unix_ms(int64_t value) {
+  _internal_set_created_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AcquireSampleCreditReq.created_at_unix_ms)
+}
+
+// -------------------------------------------------------------------
+
+// SampleCreditGrant
+
+// int32 ret_code = 1;
+inline void SampleCreditGrant::clear_ret_code() {
+  _impl_.ret_code_ = 0;
+}
+inline int32_t SampleCreditGrant::_internal_ret_code() const {
+  return _impl_.ret_code_;
+}
+inline int32_t SampleCreditGrant::ret_code() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.ret_code)
+  return _internal_ret_code();
+}
+inline void SampleCreditGrant::_internal_set_ret_code(int32_t value) {
+  
+  _impl_.ret_code_ = value;
+}
+inline void SampleCreditGrant::set_ret_code(int32_t value) {
+  _internal_set_ret_code(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.ret_code)
+}
+
+// .rl.training.v1.SampleCreditResult result = 2;
+inline void SampleCreditGrant::clear_result() {
+  _impl_.result_ = 0;
+}
+inline ::rl::training::v1::SampleCreditResult SampleCreditGrant::_internal_result() const {
+  return static_cast< ::rl::training::v1::SampleCreditResult >(_impl_.result_);
+}
+inline ::rl::training::v1::SampleCreditResult SampleCreditGrant::result() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.result)
+  return _internal_result();
+}
+inline void SampleCreditGrant::_internal_set_result(::rl::training::v1::SampleCreditResult value) {
+  
+  _impl_.result_ = value;
+}
+inline void SampleCreditGrant::set_result(::rl::training::v1::SampleCreditResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.result)
+}
+
+// string message = 3;
+inline void SampleCreditGrant::clear_message() {
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& SampleCreditGrant::message() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleCreditGrant::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.message)
+}
+inline std::string* SampleCreditGrant::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleCreditGrant.message)
+  return _s;
+}
+inline const std::string& SampleCreditGrant::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void SampleCreditGrant::_internal_set_message(const std::string& value) {
+  
+  _impl_.message_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::release_message() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleCreditGrant.message)
+  return _impl_.message_.Release();
+}
+inline void SampleCreditGrant::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleCreditGrant.message)
+}
+
+// string request_id = 4;
+inline void SampleCreditGrant::clear_request_id() {
+  _impl_.request_id_.ClearToEmpty();
+}
+inline const std::string& SampleCreditGrant::request_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.request_id)
+  return _internal_request_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleCreditGrant::set_request_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.request_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.request_id)
+}
+inline std::string* SampleCreditGrant::mutable_request_id() {
+  std::string* _s = _internal_mutable_request_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleCreditGrant.request_id)
+  return _s;
+}
+inline const std::string& SampleCreditGrant::_internal_request_id() const {
+  return _impl_.request_id_.Get();
+}
+inline void SampleCreditGrant::_internal_set_request_id(const std::string& value) {
+  
+  _impl_.request_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::_internal_mutable_request_id() {
+  
+  return _impl_.request_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::release_request_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleCreditGrant.request_id)
+  return _impl_.request_id_.Release();
+}
+inline void SampleCreditGrant::set_allocated_request_id(std::string* request_id) {
+  if (request_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.request_id_.SetAllocated(request_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.request_id_.IsDefault()) {
+    _impl_.request_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleCreditGrant.request_id)
+}
+
+// string credit_id = 5;
+inline void SampleCreditGrant::clear_credit_id() {
+  _impl_.credit_id_.ClearToEmpty();
+}
+inline const std::string& SampleCreditGrant::credit_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.credit_id)
+  return _internal_credit_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleCreditGrant::set_credit_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.credit_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.credit_id)
+}
+inline std::string* SampleCreditGrant::mutable_credit_id() {
+  std::string* _s = _internal_mutable_credit_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleCreditGrant.credit_id)
+  return _s;
+}
+inline const std::string& SampleCreditGrant::_internal_credit_id() const {
+  return _impl_.credit_id_.Get();
+}
+inline void SampleCreditGrant::_internal_set_credit_id(const std::string& value) {
+  
+  _impl_.credit_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::_internal_mutable_credit_id() {
+  
+  return _impl_.credit_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::release_credit_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleCreditGrant.credit_id)
+  return _impl_.credit_id_.Release();
+}
+inline void SampleCreditGrant::set_allocated_credit_id(std::string* credit_id) {
+  if (credit_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.credit_id_.SetAllocated(credit_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.credit_id_.IsDefault()) {
+    _impl_.credit_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleCreditGrant.credit_id)
+}
+
+// string demand_id = 6;
+inline void SampleCreditGrant::clear_demand_id() {
+  _impl_.demand_id_.ClearToEmpty();
+}
+inline const std::string& SampleCreditGrant::demand_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.demand_id)
+  return _internal_demand_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleCreditGrant::set_demand_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.demand_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.demand_id)
+}
+inline std::string* SampleCreditGrant::mutable_demand_id() {
+  std::string* _s = _internal_mutable_demand_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleCreditGrant.demand_id)
+  return _s;
+}
+inline const std::string& SampleCreditGrant::_internal_demand_id() const {
+  return _impl_.demand_id_.Get();
+}
+inline void SampleCreditGrant::_internal_set_demand_id(const std::string& value) {
+  
+  _impl_.demand_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::_internal_mutable_demand_id() {
+  
+  return _impl_.demand_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::release_demand_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleCreditGrant.demand_id)
+  return _impl_.demand_id_.Release();
+}
+inline void SampleCreditGrant::set_allocated_demand_id(std::string* demand_id) {
+  if (demand_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.demand_id_.SetAllocated(demand_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.demand_id_.IsDefault()) {
+    _impl_.demand_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleCreditGrant.demand_id)
+}
+
+// uint64 demand_epoch = 7;
+inline void SampleCreditGrant::clear_demand_epoch() {
+  _impl_.demand_epoch_ = uint64_t{0u};
+}
+inline uint64_t SampleCreditGrant::_internal_demand_epoch() const {
+  return _impl_.demand_epoch_;
+}
+inline uint64_t SampleCreditGrant::demand_epoch() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.demand_epoch)
+  return _internal_demand_epoch();
+}
+inline void SampleCreditGrant::_internal_set_demand_epoch(uint64_t value) {
+  
+  _impl_.demand_epoch_ = value;
+}
+inline void SampleCreditGrant::set_demand_epoch(uint64_t value) {
+  _internal_set_demand_epoch(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.demand_epoch)
+}
+
+// string batch_id = 8;
+inline void SampleCreditGrant::clear_batch_id() {
+  _impl_.batch_id_.ClearToEmpty();
+}
+inline const std::string& SampleCreditGrant::batch_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.batch_id)
+  return _internal_batch_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SampleCreditGrant::set_batch_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.batch_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.batch_id)
+}
+inline std::string* SampleCreditGrant::mutable_batch_id() {
+  std::string* _s = _internal_mutable_batch_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleCreditGrant.batch_id)
+  return _s;
+}
+inline const std::string& SampleCreditGrant::_internal_batch_id() const {
+  return _impl_.batch_id_.Get();
+}
+inline void SampleCreditGrant::_internal_set_batch_id(const std::string& value) {
+  
+  _impl_.batch_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::_internal_mutable_batch_id() {
+  
+  return _impl_.batch_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SampleCreditGrant::release_batch_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleCreditGrant.batch_id)
+  return _impl_.batch_id_.Release();
+}
+inline void SampleCreditGrant::set_allocated_batch_id(std::string* batch_id) {
+  if (batch_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.batch_id_.SetAllocated(batch_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.batch_id_.IsDefault()) {
+    _impl_.batch_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleCreditGrant.batch_id)
+}
+
+// .rl.common.v1.ContentDigest payload_digest = 9;
+inline bool SampleCreditGrant::_internal_has_payload_digest() const {
+  return this != internal_default_instance() && _impl_.payload_digest_ != nullptr;
+}
+inline bool SampleCreditGrant::has_payload_digest() const {
+  return _internal_has_payload_digest();
+}
+inline const ::rl::common::v1::ContentDigest& SampleCreditGrant::_internal_payload_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.payload_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& SampleCreditGrant::payload_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.payload_digest)
+  return _internal_payload_digest();
+}
+inline void SampleCreditGrant::unsafe_arena_set_allocated_payload_digest(
+    ::rl::common::v1::ContentDigest* payload_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  _impl_.payload_digest_ = payload_digest;
+  if (payload_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleCreditGrant.payload_digest)
+}
+inline ::rl::common::v1::ContentDigest* SampleCreditGrant::release_payload_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* SampleCreditGrant::unsafe_arena_release_payload_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleCreditGrant.payload_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* SampleCreditGrant::_internal_mutable_payload_digest() {
+  
+  if (_impl_.payload_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.payload_digest_ = p;
+  }
+  return _impl_.payload_digest_;
+}
+inline ::rl::common::v1::ContentDigest* SampleCreditGrant::mutable_payload_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_payload_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleCreditGrant.payload_digest)
+  return _msg;
+}
+inline void SampleCreditGrant::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  if (payload_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(payload_digest));
+    if (message_arena != submessage_arena) {
+      payload_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, payload_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.payload_digest_ = payload_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleCreditGrant.payload_digest)
+}
+
+// int64 granted_samples = 10;
+inline void SampleCreditGrant::clear_granted_samples() {
+  _impl_.granted_samples_ = int64_t{0};
+}
+inline int64_t SampleCreditGrant::_internal_granted_samples() const {
+  return _impl_.granted_samples_;
+}
+inline int64_t SampleCreditGrant::granted_samples() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.granted_samples)
+  return _internal_granted_samples();
+}
+inline void SampleCreditGrant::_internal_set_granted_samples(int64_t value) {
+  
+  _impl_.granted_samples_ = value;
+}
+inline void SampleCreditGrant::set_granted_samples(int64_t value) {
+  _internal_set_granted_samples(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.granted_samples)
+}
+
+// int64 granted_fragments = 11;
+inline void SampleCreditGrant::clear_granted_fragments() {
+  _impl_.granted_fragments_ = int64_t{0};
+}
+inline int64_t SampleCreditGrant::_internal_granted_fragments() const {
+  return _impl_.granted_fragments_;
+}
+inline int64_t SampleCreditGrant::granted_fragments() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.granted_fragments)
+  return _internal_granted_fragments();
+}
+inline void SampleCreditGrant::_internal_set_granted_fragments(int64_t value) {
+  
+  _impl_.granted_fragments_ = value;
+}
+inline void SampleCreditGrant::set_granted_fragments(int64_t value) {
+  _internal_set_granted_fragments(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.granted_fragments)
+}
+
+// int64 granted_estimated_bytes = 12;
+inline void SampleCreditGrant::clear_granted_estimated_bytes() {
+  _impl_.granted_estimated_bytes_ = int64_t{0};
+}
+inline int64_t SampleCreditGrant::_internal_granted_estimated_bytes() const {
+  return _impl_.granted_estimated_bytes_;
+}
+inline int64_t SampleCreditGrant::granted_estimated_bytes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.granted_estimated_bytes)
+  return _internal_granted_estimated_bytes();
+}
+inline void SampleCreditGrant::_internal_set_granted_estimated_bytes(int64_t value) {
+  
+  _impl_.granted_estimated_bytes_ = value;
+}
+inline void SampleCreditGrant::set_granted_estimated_bytes(int64_t value) {
+  _internal_set_granted_estimated_bytes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.granted_estimated_bytes)
+}
+
+// int64 expires_at_unix_ms = 13;
+inline void SampleCreditGrant::clear_expires_at_unix_ms() {
+  _impl_.expires_at_unix_ms_ = int64_t{0};
+}
+inline int64_t SampleCreditGrant::_internal_expires_at_unix_ms() const {
+  return _impl_.expires_at_unix_ms_;
+}
+inline int64_t SampleCreditGrant::expires_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.expires_at_unix_ms)
+  return _internal_expires_at_unix_ms();
+}
+inline void SampleCreditGrant::_internal_set_expires_at_unix_ms(int64_t value) {
+  
+  _impl_.expires_at_unix_ms_ = value;
+}
+inline void SampleCreditGrant::set_expires_at_unix_ms(int64_t value) {
+  _internal_set_expires_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.expires_at_unix_ms)
+}
+
+// int32 retry_after_ms = 14;
+inline void SampleCreditGrant::clear_retry_after_ms() {
+  _impl_.retry_after_ms_ = 0;
+}
+inline int32_t SampleCreditGrant::_internal_retry_after_ms() const {
+  return _impl_.retry_after_ms_;
+}
+inline int32_t SampleCreditGrant::retry_after_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.retry_after_ms)
+  return _internal_retry_after_ms();
+}
+inline void SampleCreditGrant::_internal_set_retry_after_ms(int32_t value) {
+  
+  _impl_.retry_after_ms_ = value;
+}
+inline void SampleCreditGrant::set_retry_after_ms(int32_t value) {
+  _internal_set_retry_after_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.retry_after_ms)
+}
+
+// .rl.training.v1.PressureState pressure_state = 15;
+inline void SampleCreditGrant::clear_pressure_state() {
+  _impl_.pressure_state_ = 0;
+}
+inline ::rl::training::v1::PressureState SampleCreditGrant::_internal_pressure_state() const {
+  return static_cast< ::rl::training::v1::PressureState >(_impl_.pressure_state_);
+}
+inline ::rl::training::v1::PressureState SampleCreditGrant::pressure_state() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.pressure_state)
+  return _internal_pressure_state();
+}
+inline void SampleCreditGrant::_internal_set_pressure_state(::rl::training::v1::PressureState value) {
+  
+  _impl_.pressure_state_ = value;
+}
+inline void SampleCreditGrant::set_pressure_state(::rl::training::v1::PressureState value) {
+  _internal_set_pressure_state(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.pressure_state)
+}
+
+// .rl.common.v1.ServiceInstanceIdentity distributor = 16;
+inline bool SampleCreditGrant::_internal_has_distributor() const {
+  return this != internal_default_instance() && _impl_.distributor_ != nullptr;
+}
+inline bool SampleCreditGrant::has_distributor() const {
+  return _internal_has_distributor();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleCreditGrant::_internal_distributor() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.distributor_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SampleCreditGrant::distributor() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.distributor)
+  return _internal_distributor();
+}
+inline void SampleCreditGrant::unsafe_arena_set_allocated_distributor(
+    ::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  _impl_.distributor_ = distributor;
+  if (distributor) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleCreditGrant.distributor)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleCreditGrant::release_distributor() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleCreditGrant::unsafe_arena_release_distributor() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SampleCreditGrant.distributor)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleCreditGrant::_internal_mutable_distributor() {
+  
+  if (_impl_.distributor_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.distributor_ = p;
+  }
+  return _impl_.distributor_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SampleCreditGrant::mutable_distributor() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_distributor();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleCreditGrant.distributor)
+  return _msg;
+}
+inline void SampleCreditGrant::set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  if (distributor) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(distributor));
+    if (message_arena != submessage_arena) {
+      distributor = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, distributor, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.distributor_ = distributor;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleCreditGrant.distributor)
+}
+
+// .rl.training.v1.SampleCreditState state = 17;
+inline void SampleCreditGrant::clear_state() {
+  _impl_.state_ = 0;
+}
+inline ::rl::training::v1::SampleCreditState SampleCreditGrant::_internal_state() const {
+  return static_cast< ::rl::training::v1::SampleCreditState >(_impl_.state_);
+}
+inline ::rl::training::v1::SampleCreditState SampleCreditGrant::state() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SampleCreditGrant.state)
+  return _internal_state();
+}
+inline void SampleCreditGrant::_internal_set_state(::rl::training::v1::SampleCreditState value) {
+  
+  _impl_.state_ = value;
+}
+inline void SampleCreditGrant::set_state(::rl::training::v1::SampleCreditState value) {
+  _internal_set_state(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SampleCreditGrant.state)
+}
+
+// -------------------------------------------------------------------
+
+// ReleaseSampleCreditReq
+
+// .rl.common.v1.ServiceInstanceIdentity producer = 1;
+inline bool ReleaseSampleCreditReq::_internal_has_producer() const {
+  return this != internal_default_instance() && _impl_.producer_ != nullptr;
+}
+inline bool ReleaseSampleCreditReq::has_producer() const {
+  return _internal_has_producer();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& ReleaseSampleCreditReq::_internal_producer() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.producer_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& ReleaseSampleCreditReq::producer() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditReq.producer)
+  return _internal_producer();
+}
+inline void ReleaseSampleCreditReq::unsafe_arena_set_allocated_producer(
+    ::rl::common::v1::ServiceInstanceIdentity* producer) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
+  }
+  _impl_.producer_ = producer;
+  if (producer) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ReleaseSampleCreditReq.producer)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditReq::release_producer() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
+  _impl_.producer_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditReq::unsafe_arena_release_producer() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditReq.producer)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
+  _impl_.producer_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditReq::_internal_mutable_producer() {
+  
+  if (_impl_.producer_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.producer_ = p;
+  }
+  return _impl_.producer_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditReq::mutable_producer() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_producer();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditReq.producer)
+  return _msg;
+}
+inline void ReleaseSampleCreditReq::set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
+  }
+  if (producer) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(producer));
+    if (message_arena != submessage_arena) {
+      producer = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, producer, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.producer_ = producer;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditReq.producer)
+}
+
+// .rl.common.v1.ContractIdentity contract = 2;
+inline bool ReleaseSampleCreditReq::_internal_has_contract() const {
+  return this != internal_default_instance() && _impl_.contract_ != nullptr;
+}
+inline bool ReleaseSampleCreditReq::has_contract() const {
+  return _internal_has_contract();
+}
+inline const ::rl::common::v1::ContractIdentity& ReleaseSampleCreditReq::_internal_contract() const {
+  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
+      ::rl::common::v1::_ContractIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ContractIdentity& ReleaseSampleCreditReq::contract() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditReq.contract)
+  return _internal_contract();
+}
+inline void ReleaseSampleCreditReq::unsafe_arena_set_allocated_contract(
+    ::rl::common::v1::ContractIdentity* contract) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  _impl_.contract_ = contract;
+  if (contract) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ReleaseSampleCreditReq.contract)
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleCreditReq::release_contract() {
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleCreditReq::unsafe_arena_release_contract() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditReq.contract)
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleCreditReq::_internal_mutable_contract() {
+  
+  if (_impl_.contract_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
+    _impl_.contract_ = p;
+  }
+  return _impl_.contract_;
+}
+inline ::rl::common::v1::ContractIdentity* ReleaseSampleCreditReq::mutable_contract() {
+  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditReq.contract)
+  return _msg;
+}
+inline void ReleaseSampleCreditReq::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  if (contract) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
+    if (message_arena != submessage_arena) {
+      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, contract, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.contract_ = contract;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditReq.contract)
+}
+
+// string credit_id = 3;
+inline void ReleaseSampleCreditReq::clear_credit_id() {
+  _impl_.credit_id_.ClearToEmpty();
+}
+inline const std::string& ReleaseSampleCreditReq::credit_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditReq.credit_id)
+  return _internal_credit_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ReleaseSampleCreditReq::set_credit_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.credit_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditReq.credit_id)
+}
+inline std::string* ReleaseSampleCreditReq::mutable_credit_id() {
+  std::string* _s = _internal_mutable_credit_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditReq.credit_id)
+  return _s;
+}
+inline const std::string& ReleaseSampleCreditReq::_internal_credit_id() const {
+  return _impl_.credit_id_.Get();
+}
+inline void ReleaseSampleCreditReq::_internal_set_credit_id(const std::string& value) {
+  
+  _impl_.credit_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditReq::_internal_mutable_credit_id() {
+  
+  return _impl_.credit_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditReq::release_credit_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditReq.credit_id)
+  return _impl_.credit_id_.Release();
+}
+inline void ReleaseSampleCreditReq::set_allocated_credit_id(std::string* credit_id) {
+  if (credit_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.credit_id_.SetAllocated(credit_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.credit_id_.IsDefault()) {
+    _impl_.credit_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditReq.credit_id)
+}
+
+// string batch_id = 4;
+inline void ReleaseSampleCreditReq::clear_batch_id() {
+  _impl_.batch_id_.ClearToEmpty();
+}
+inline const std::string& ReleaseSampleCreditReq::batch_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditReq.batch_id)
+  return _internal_batch_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ReleaseSampleCreditReq::set_batch_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.batch_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditReq.batch_id)
+}
+inline std::string* ReleaseSampleCreditReq::mutable_batch_id() {
+  std::string* _s = _internal_mutable_batch_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditReq.batch_id)
+  return _s;
+}
+inline const std::string& ReleaseSampleCreditReq::_internal_batch_id() const {
+  return _impl_.batch_id_.Get();
+}
+inline void ReleaseSampleCreditReq::_internal_set_batch_id(const std::string& value) {
+  
+  _impl_.batch_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditReq::_internal_mutable_batch_id() {
+  
+  return _impl_.batch_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditReq::release_batch_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditReq.batch_id)
+  return _impl_.batch_id_.Release();
+}
+inline void ReleaseSampleCreditReq::set_allocated_batch_id(std::string* batch_id) {
+  if (batch_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.batch_id_.SetAllocated(batch_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.batch_id_.IsDefault()) {
+    _impl_.batch_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditReq.batch_id)
+}
+
+// .rl.common.v1.ContentDigest payload_digest = 5;
+inline bool ReleaseSampleCreditReq::_internal_has_payload_digest() const {
+  return this != internal_default_instance() && _impl_.payload_digest_ != nullptr;
+}
+inline bool ReleaseSampleCreditReq::has_payload_digest() const {
+  return _internal_has_payload_digest();
+}
+inline const ::rl::common::v1::ContentDigest& ReleaseSampleCreditReq::_internal_payload_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.payload_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& ReleaseSampleCreditReq::payload_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditReq.payload_digest)
+  return _internal_payload_digest();
+}
+inline void ReleaseSampleCreditReq::unsafe_arena_set_allocated_payload_digest(
+    ::rl::common::v1::ContentDigest* payload_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  _impl_.payload_digest_ = payload_digest;
+  if (payload_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ReleaseSampleCreditReq.payload_digest)
+}
+inline ::rl::common::v1::ContentDigest* ReleaseSampleCreditReq::release_payload_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* ReleaseSampleCreditReq::unsafe_arena_release_payload_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditReq.payload_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* ReleaseSampleCreditReq::_internal_mutable_payload_digest() {
+  
+  if (_impl_.payload_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.payload_digest_ = p;
+  }
+  return _impl_.payload_digest_;
+}
+inline ::rl::common::v1::ContentDigest* ReleaseSampleCreditReq::mutable_payload_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_payload_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditReq.payload_digest)
+  return _msg;
+}
+inline void ReleaseSampleCreditReq::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  if (payload_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(payload_digest));
+    if (message_arena != submessage_arena) {
+      payload_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, payload_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.payload_digest_ = payload_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditReq.payload_digest)
+}
+
+// .rl.training.v1.SampleCreditReleaseReason reason = 6;
+inline void ReleaseSampleCreditReq::clear_reason() {
+  _impl_.reason_ = 0;
+}
+inline ::rl::training::v1::SampleCreditReleaseReason ReleaseSampleCreditReq::_internal_reason() const {
+  return static_cast< ::rl::training::v1::SampleCreditReleaseReason >(_impl_.reason_);
+}
+inline ::rl::training::v1::SampleCreditReleaseReason ReleaseSampleCreditReq::reason() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditReq.reason)
+  return _internal_reason();
+}
+inline void ReleaseSampleCreditReq::_internal_set_reason(::rl::training::v1::SampleCreditReleaseReason value) {
+  
+  _impl_.reason_ = value;
+}
+inline void ReleaseSampleCreditReq::set_reason(::rl::training::v1::SampleCreditReleaseReason value) {
+  _internal_set_reason(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditReq.reason)
+}
+
+// -------------------------------------------------------------------
+
+// ReleaseSampleCreditRsp
+
+// int32 ret_code = 1;
+inline void ReleaseSampleCreditRsp::clear_ret_code() {
+  _impl_.ret_code_ = 0;
+}
+inline int32_t ReleaseSampleCreditRsp::_internal_ret_code() const {
+  return _impl_.ret_code_;
+}
+inline int32_t ReleaseSampleCreditRsp::ret_code() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditRsp.ret_code)
+  return _internal_ret_code();
+}
+inline void ReleaseSampleCreditRsp::_internal_set_ret_code(int32_t value) {
+  
+  _impl_.ret_code_ = value;
+}
+inline void ReleaseSampleCreditRsp::set_ret_code(int32_t value) {
+  _internal_set_ret_code(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditRsp.ret_code)
+}
+
+// .rl.training.v1.SampleCreditResult result = 2;
+inline void ReleaseSampleCreditRsp::clear_result() {
+  _impl_.result_ = 0;
+}
+inline ::rl::training::v1::SampleCreditResult ReleaseSampleCreditRsp::_internal_result() const {
+  return static_cast< ::rl::training::v1::SampleCreditResult >(_impl_.result_);
+}
+inline ::rl::training::v1::SampleCreditResult ReleaseSampleCreditRsp::result() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditRsp.result)
+  return _internal_result();
+}
+inline void ReleaseSampleCreditRsp::_internal_set_result(::rl::training::v1::SampleCreditResult value) {
+  
+  _impl_.result_ = value;
+}
+inline void ReleaseSampleCreditRsp::set_result(::rl::training::v1::SampleCreditResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditRsp.result)
+}
+
+// string message = 3;
+inline void ReleaseSampleCreditRsp::clear_message() {
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& ReleaseSampleCreditRsp::message() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditRsp.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ReleaseSampleCreditRsp::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditRsp.message)
+}
+inline std::string* ReleaseSampleCreditRsp::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditRsp.message)
+  return _s;
+}
+inline const std::string& ReleaseSampleCreditRsp::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void ReleaseSampleCreditRsp::_internal_set_message(const std::string& value) {
+  
+  _impl_.message_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditRsp::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditRsp::release_message() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditRsp.message)
+  return _impl_.message_.Release();
+}
+inline void ReleaseSampleCreditRsp::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditRsp.message)
+}
+
+// string credit_id = 4;
+inline void ReleaseSampleCreditRsp::clear_credit_id() {
+  _impl_.credit_id_.ClearToEmpty();
+}
+inline const std::string& ReleaseSampleCreditRsp::credit_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditRsp.credit_id)
+  return _internal_credit_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ReleaseSampleCreditRsp::set_credit_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.credit_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditRsp.credit_id)
+}
+inline std::string* ReleaseSampleCreditRsp::mutable_credit_id() {
+  std::string* _s = _internal_mutable_credit_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditRsp.credit_id)
+  return _s;
+}
+inline const std::string& ReleaseSampleCreditRsp::_internal_credit_id() const {
+  return _impl_.credit_id_.Get();
+}
+inline void ReleaseSampleCreditRsp::_internal_set_credit_id(const std::string& value) {
+  
+  _impl_.credit_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditRsp::_internal_mutable_credit_id() {
+  
+  return _impl_.credit_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ReleaseSampleCreditRsp::release_credit_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditRsp.credit_id)
+  return _impl_.credit_id_.Release();
+}
+inline void ReleaseSampleCreditRsp::set_allocated_credit_id(std::string* credit_id) {
+  if (credit_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.credit_id_.SetAllocated(credit_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.credit_id_.IsDefault()) {
+    _impl_.credit_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditRsp.credit_id)
+}
+
+// .rl.training.v1.SampleCreditState state = 5;
+inline void ReleaseSampleCreditRsp::clear_state() {
+  _impl_.state_ = 0;
+}
+inline ::rl::training::v1::SampleCreditState ReleaseSampleCreditRsp::_internal_state() const {
+  return static_cast< ::rl::training::v1::SampleCreditState >(_impl_.state_);
+}
+inline ::rl::training::v1::SampleCreditState ReleaseSampleCreditRsp::state() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditRsp.state)
+  return _internal_state();
+}
+inline void ReleaseSampleCreditRsp::_internal_set_state(::rl::training::v1::SampleCreditState value) {
+  
+  _impl_.state_ = value;
+}
+inline void ReleaseSampleCreditRsp::set_state(::rl::training::v1::SampleCreditState value) {
+  _internal_set_state(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ReleaseSampleCreditRsp.state)
+}
+
+// .rl.common.v1.ServiceInstanceIdentity distributor = 6;
+inline bool ReleaseSampleCreditRsp::_internal_has_distributor() const {
+  return this != internal_default_instance() && _impl_.distributor_ != nullptr;
+}
+inline bool ReleaseSampleCreditRsp::has_distributor() const {
+  return _internal_has_distributor();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& ReleaseSampleCreditRsp::_internal_distributor() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.distributor_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& ReleaseSampleCreditRsp::distributor() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ReleaseSampleCreditRsp.distributor)
+  return _internal_distributor();
+}
+inline void ReleaseSampleCreditRsp::unsafe_arena_set_allocated_distributor(
+    ::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  _impl_.distributor_ = distributor;
+  if (distributor) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ReleaseSampleCreditRsp.distributor)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditRsp::release_distributor() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditRsp::unsafe_arena_release_distributor() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ReleaseSampleCreditRsp.distributor)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditRsp::_internal_mutable_distributor() {
+  
+  if (_impl_.distributor_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.distributor_ = p;
+  }
+  return _impl_.distributor_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* ReleaseSampleCreditRsp::mutable_distributor() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_distributor();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ReleaseSampleCreditRsp.distributor)
+  return _msg;
+}
+inline void ReleaseSampleCreditRsp::set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  if (distributor) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(distributor));
+    if (message_arena != submessage_arena) {
+      distributor = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, distributor, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.distributor_ = distributor;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ReleaseSampleCreditRsp.distributor)
+}
+
+// -------------------------------------------------------------------
+
+// PushSamplesReq
+
+// string credit_id = 1;
+inline void PushSamplesReq::clear_credit_id() {
+  _impl_.credit_id_.ClearToEmpty();
+}
+inline const std::string& PushSamplesReq::credit_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesReq.credit_id)
+  return _internal_credit_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void PushSamplesReq::set_credit_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.credit_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesReq.credit_id)
+}
+inline std::string* PushSamplesReq::mutable_credit_id() {
+  std::string* _s = _internal_mutable_credit_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesReq.credit_id)
+  return _s;
+}
+inline const std::string& PushSamplesReq::_internal_credit_id() const {
+  return _impl_.credit_id_.Get();
+}
+inline void PushSamplesReq::_internal_set_credit_id(const std::string& value) {
+  
+  _impl_.credit_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* PushSamplesReq::_internal_mutable_credit_id() {
+  
+  return _impl_.credit_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* PushSamplesReq::release_credit_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesReq.credit_id)
+  return _impl_.credit_id_.Release();
+}
+inline void PushSamplesReq::set_allocated_credit_id(std::string* credit_id) {
+  if (credit_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.credit_id_.SetAllocated(credit_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.credit_id_.IsDefault()) {
+    _impl_.credit_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesReq.credit_id)
+}
+
+// .rl.training.v1.SampleBatch batch = 2;
+inline bool PushSamplesReq::_internal_has_batch() const {
+  return this != internal_default_instance() && _impl_.batch_ != nullptr;
+}
+inline bool PushSamplesReq::has_batch() const {
+  return _internal_has_batch();
+}
+inline void PushSamplesReq::clear_batch() {
+  if (GetArenaForAllocation() == nullptr && _impl_.batch_ != nullptr) {
+    delete _impl_.batch_;
+  }
+  _impl_.batch_ = nullptr;
+}
+inline const ::rl::training::v1::SampleBatch& PushSamplesReq::_internal_batch() const {
+  const ::rl::training::v1::SampleBatch* p = _impl_.batch_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::SampleBatch&>(
+      ::rl::training::v1::_SampleBatch_default_instance_);
+}
+inline const ::rl::training::v1::SampleBatch& PushSamplesReq::batch() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesReq.batch)
+  return _internal_batch();
+}
+inline void PushSamplesReq::unsafe_arena_set_allocated_batch(
+    ::rl::training::v1::SampleBatch* batch) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.batch_);
+  }
+  _impl_.batch_ = batch;
+  if (batch) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.PushSamplesReq.batch)
+}
+inline ::rl::training::v1::SampleBatch* PushSamplesReq::release_batch() {
+  
+  ::rl::training::v1::SampleBatch* temp = _impl_.batch_;
+  _impl_.batch_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::SampleBatch* PushSamplesReq::unsafe_arena_release_batch() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesReq.batch)
+  
+  ::rl::training::v1::SampleBatch* temp = _impl_.batch_;
+  _impl_.batch_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::SampleBatch* PushSamplesReq::_internal_mutable_batch() {
+  
+  if (_impl_.batch_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::SampleBatch>(GetArenaForAllocation());
+    _impl_.batch_ = p;
+  }
+  return _impl_.batch_;
+}
+inline ::rl::training::v1::SampleBatch* PushSamplesReq::mutable_batch() {
+  ::rl::training::v1::SampleBatch* _msg = _internal_mutable_batch();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesReq.batch)
+  return _msg;
+}
+inline void PushSamplesReq::set_allocated_batch(::rl::training::v1::SampleBatch* batch) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.batch_;
+  }
+  if (batch) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(batch);
+    if (message_arena != submessage_arena) {
+      batch = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, batch, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.batch_ = batch;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesReq.batch)
 }
 
 // -------------------------------------------------------------------
@@ -15160,6 +22058,366 @@ inline void DistributorStatusRsp::set_maximum_ready_model_version(uint64_t value
   // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.maximum_ready_model_version)
 }
 
+// int64 active_demand_count = 48;
+inline void DistributorStatusRsp::clear_active_demand_count() {
+  _impl_.active_demand_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_active_demand_count() const {
+  return _impl_.active_demand_count_;
+}
+inline int64_t DistributorStatusRsp::active_demand_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.active_demand_count)
+  return _internal_active_demand_count();
+}
+inline void DistributorStatusRsp::_internal_set_active_demand_count(int64_t value) {
+  
+  _impl_.active_demand_count_ = value;
+}
+inline void DistributorStatusRsp::set_active_demand_count(int64_t value) {
+  _internal_set_active_demand_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.active_demand_count)
+}
+
+// uint64 active_demand_epoch = 49;
+inline void DistributorStatusRsp::clear_active_demand_epoch() {
+  _impl_.active_demand_epoch_ = uint64_t{0u};
+}
+inline uint64_t DistributorStatusRsp::_internal_active_demand_epoch() const {
+  return _impl_.active_demand_epoch_;
+}
+inline uint64_t DistributorStatusRsp::active_demand_epoch() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.active_demand_epoch)
+  return _internal_active_demand_epoch();
+}
+inline void DistributorStatusRsp::_internal_set_active_demand_epoch(uint64_t value) {
+  
+  _impl_.active_demand_epoch_ = value;
+}
+inline void DistributorStatusRsp::set_active_demand_epoch(uint64_t value) {
+  _internal_set_active_demand_epoch(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.active_demand_epoch)
+}
+
+// int64 active_demand_age_ms = 50;
+inline void DistributorStatusRsp::clear_active_demand_age_ms() {
+  _impl_.active_demand_age_ms_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_active_demand_age_ms() const {
+  return _impl_.active_demand_age_ms_;
+}
+inline int64_t DistributorStatusRsp::active_demand_age_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.active_demand_age_ms)
+  return _internal_active_demand_age_ms();
+}
+inline void DistributorStatusRsp::_internal_set_active_demand_age_ms(int64_t value) {
+  
+  _impl_.active_demand_age_ms_ = value;
+}
+inline void DistributorStatusRsp::set_active_demand_age_ms(int64_t value) {
+  _internal_set_active_demand_age_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.active_demand_age_ms)
+}
+
+// int64 reserved_samples = 51;
+inline void DistributorStatusRsp::clear_reserved_samples() {
+  _impl_.reserved_samples_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_reserved_samples() const {
+  return _impl_.reserved_samples_;
+}
+inline int64_t DistributorStatusRsp::reserved_samples() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.reserved_samples)
+  return _internal_reserved_samples();
+}
+inline void DistributorStatusRsp::_internal_set_reserved_samples(int64_t value) {
+  
+  _impl_.reserved_samples_ = value;
+}
+inline void DistributorStatusRsp::set_reserved_samples(int64_t value) {
+  _internal_set_reserved_samples(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.reserved_samples)
+}
+
+// int64 reserved_fragments = 52;
+inline void DistributorStatusRsp::clear_reserved_fragments() {
+  _impl_.reserved_fragments_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_reserved_fragments() const {
+  return _impl_.reserved_fragments_;
+}
+inline int64_t DistributorStatusRsp::reserved_fragments() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.reserved_fragments)
+  return _internal_reserved_fragments();
+}
+inline void DistributorStatusRsp::_internal_set_reserved_fragments(int64_t value) {
+  
+  _impl_.reserved_fragments_ = value;
+}
+inline void DistributorStatusRsp::set_reserved_fragments(int64_t value) {
+  _internal_set_reserved_fragments(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.reserved_fragments)
+}
+
+// int64 reserved_estimated_bytes = 53;
+inline void DistributorStatusRsp::clear_reserved_estimated_bytes() {
+  _impl_.reserved_estimated_bytes_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_reserved_estimated_bytes() const {
+  return _impl_.reserved_estimated_bytes_;
+}
+inline int64_t DistributorStatusRsp::reserved_estimated_bytes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.reserved_estimated_bytes)
+  return _internal_reserved_estimated_bytes();
+}
+inline void DistributorStatusRsp::_internal_set_reserved_estimated_bytes(int64_t value) {
+  
+  _impl_.reserved_estimated_bytes_ = value;
+}
+inline void DistributorStatusRsp::set_reserved_estimated_bytes(int64_t value) {
+  _internal_set_reserved_estimated_bytes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.reserved_estimated_bytes)
+}
+
+// int64 credit_request_count = 54;
+inline void DistributorStatusRsp::clear_credit_request_count() {
+  _impl_.credit_request_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_request_count() const {
+  return _impl_.credit_request_count_;
+}
+inline int64_t DistributorStatusRsp::credit_request_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_request_count)
+  return _internal_credit_request_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_request_count(int64_t value) {
+  
+  _impl_.credit_request_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_request_count(int64_t value) {
+  _internal_set_credit_request_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_request_count)
+}
+
+// int64 credit_grant_count = 55;
+inline void DistributorStatusRsp::clear_credit_grant_count() {
+  _impl_.credit_grant_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_grant_count() const {
+  return _impl_.credit_grant_count_;
+}
+inline int64_t DistributorStatusRsp::credit_grant_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_grant_count)
+  return _internal_credit_grant_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_grant_count(int64_t value) {
+  
+  _impl_.credit_grant_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_grant_count(int64_t value) {
+  _internal_set_credit_grant_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_grant_count)
+}
+
+// int64 credit_commit_count = 56;
+inline void DistributorStatusRsp::clear_credit_commit_count() {
+  _impl_.credit_commit_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_commit_count() const {
+  return _impl_.credit_commit_count_;
+}
+inline int64_t DistributorStatusRsp::credit_commit_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_commit_count)
+  return _internal_credit_commit_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_commit_count(int64_t value) {
+  
+  _impl_.credit_commit_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_commit_count(int64_t value) {
+  _internal_set_credit_commit_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_commit_count)
+}
+
+// int64 credit_release_count = 57;
+inline void DistributorStatusRsp::clear_credit_release_count() {
+  _impl_.credit_release_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_release_count() const {
+  return _impl_.credit_release_count_;
+}
+inline int64_t DistributorStatusRsp::credit_release_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_release_count)
+  return _internal_credit_release_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_release_count(int64_t value) {
+  
+  _impl_.credit_release_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_release_count(int64_t value) {
+  _internal_set_credit_release_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_release_count)
+}
+
+// int64 credit_expire_count = 58;
+inline void DistributorStatusRsp::clear_credit_expire_count() {
+  _impl_.credit_expire_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_expire_count() const {
+  return _impl_.credit_expire_count_;
+}
+inline int64_t DistributorStatusRsp::credit_expire_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_expire_count)
+  return _internal_credit_expire_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_expire_count(int64_t value) {
+  
+  _impl_.credit_expire_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_expire_count(int64_t value) {
+  _internal_set_credit_expire_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_expire_count)
+}
+
+// int64 credit_revoke_count = 59;
+inline void DistributorStatusRsp::clear_credit_revoke_count() {
+  _impl_.credit_revoke_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_revoke_count() const {
+  return _impl_.credit_revoke_count_;
+}
+inline int64_t DistributorStatusRsp::credit_revoke_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_revoke_count)
+  return _internal_credit_revoke_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_revoke_count(int64_t value) {
+  
+  _impl_.credit_revoke_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_revoke_count(int64_t value) {
+  _internal_set_credit_revoke_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_revoke_count)
+}
+
+// int64 credit_wait_no_demand_count = 60;
+inline void DistributorStatusRsp::clear_credit_wait_no_demand_count() {
+  _impl_.credit_wait_no_demand_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_wait_no_demand_count() const {
+  return _impl_.credit_wait_no_demand_count_;
+}
+inline int64_t DistributorStatusRsp::credit_wait_no_demand_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_wait_no_demand_count)
+  return _internal_credit_wait_no_demand_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_wait_no_demand_count(int64_t value) {
+  
+  _impl_.credit_wait_no_demand_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_wait_no_demand_count(int64_t value) {
+  _internal_set_credit_wait_no_demand_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_wait_no_demand_count)
+}
+
+// int64 credit_wait_inflight_limit_count = 61;
+inline void DistributorStatusRsp::clear_credit_wait_inflight_limit_count() {
+  _impl_.credit_wait_inflight_limit_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_wait_inflight_limit_count() const {
+  return _impl_.credit_wait_inflight_limit_count_;
+}
+inline int64_t DistributorStatusRsp::credit_wait_inflight_limit_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_wait_inflight_limit_count)
+  return _internal_credit_wait_inflight_limit_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_wait_inflight_limit_count(int64_t value) {
+  
+  _impl_.credit_wait_inflight_limit_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_wait_inflight_limit_count(int64_t value) {
+  _internal_set_credit_wait_inflight_limit_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_wait_inflight_limit_count)
+}
+
+// int64 credit_wait_capacity_count = 62;
+inline void DistributorStatusRsp::clear_credit_wait_capacity_count() {
+  _impl_.credit_wait_capacity_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_wait_capacity_count() const {
+  return _impl_.credit_wait_capacity_count_;
+}
+inline int64_t DistributorStatusRsp::credit_wait_capacity_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_wait_capacity_count)
+  return _internal_credit_wait_capacity_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_wait_capacity_count(int64_t value) {
+  
+  _impl_.credit_wait_capacity_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_wait_capacity_count(int64_t value) {
+  _internal_set_credit_wait_capacity_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_wait_capacity_count)
+}
+
+// int64 credit_wait_draining_count = 63;
+inline void DistributorStatusRsp::clear_credit_wait_draining_count() {
+  _impl_.credit_wait_draining_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_credit_wait_draining_count() const {
+  return _impl_.credit_wait_draining_count_;
+}
+inline int64_t DistributorStatusRsp::credit_wait_draining_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.credit_wait_draining_count)
+  return _internal_credit_wait_draining_count();
+}
+inline void DistributorStatusRsp::_internal_set_credit_wait_draining_count(int64_t value) {
+  
+  _impl_.credit_wait_draining_count_ = value;
+}
+inline void DistributorStatusRsp::set_credit_wait_draining_count(int64_t value) {
+  _internal_set_credit_wait_draining_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.credit_wait_draining_count)
+}
+
+// int64 demand_upsert_count = 64;
+inline void DistributorStatusRsp::clear_demand_upsert_count() {
+  _impl_.demand_upsert_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_demand_upsert_count() const {
+  return _impl_.demand_upsert_count_;
+}
+inline int64_t DistributorStatusRsp::demand_upsert_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.demand_upsert_count)
+  return _internal_demand_upsert_count();
+}
+inline void DistributorStatusRsp::_internal_set_demand_upsert_count(int64_t value) {
+  
+  _impl_.demand_upsert_count_ = value;
+}
+inline void DistributorStatusRsp::set_demand_upsert_count(int64_t value) {
+  _internal_set_demand_upsert_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.demand_upsert_count)
+}
+
+// int64 demand_release_count = 65;
+inline void DistributorStatusRsp::clear_demand_release_count() {
+  _impl_.demand_release_count_ = int64_t{0};
+}
+inline int64_t DistributorStatusRsp::_internal_demand_release_count() const {
+  return _impl_.demand_release_count_;
+}
+inline int64_t DistributorStatusRsp::demand_release_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DistributorStatusRsp.demand_release_count)
+  return _internal_demand_release_count();
+}
+inline void DistributorStatusRsp::_internal_set_demand_release_count(int64_t value) {
+  
+  _impl_.demand_release_count_ = value;
+}
+inline void DistributorStatusRsp::set_demand_release_count(int64_t value) {
+  _internal_set_demand_release_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DistributorStatusRsp.demand_release_count)
+}
+
 // -------------------------------------------------------------------
 
 // MetricDescriptor
@@ -17148,6 +24406,146 @@ inline void AIServerStatusRsp::set_allocated_metrics(::rl::training::v1::MetricS
   }
   _impl_.metrics_ = metrics;
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.metrics)
+}
+
+// int64 credit_request_count = 35;
+inline void AIServerStatusRsp::clear_credit_request_count() {
+  _impl_.credit_request_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_credit_request_count() const {
+  return _impl_.credit_request_count_;
+}
+inline int64_t AIServerStatusRsp::credit_request_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.credit_request_count)
+  return _internal_credit_request_count();
+}
+inline void AIServerStatusRsp::_internal_set_credit_request_count(int64_t value) {
+  
+  _impl_.credit_request_count_ = value;
+}
+inline void AIServerStatusRsp::set_credit_request_count(int64_t value) {
+  _internal_set_credit_request_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.credit_request_count)
+}
+
+// int64 credit_grant_count = 36;
+inline void AIServerStatusRsp::clear_credit_grant_count() {
+  _impl_.credit_grant_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_credit_grant_count() const {
+  return _impl_.credit_grant_count_;
+}
+inline int64_t AIServerStatusRsp::credit_grant_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.credit_grant_count)
+  return _internal_credit_grant_count();
+}
+inline void AIServerStatusRsp::_internal_set_credit_grant_count(int64_t value) {
+  
+  _impl_.credit_grant_count_ = value;
+}
+inline void AIServerStatusRsp::set_credit_grant_count(int64_t value) {
+  _internal_set_credit_grant_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.credit_grant_count)
+}
+
+// int64 credit_wait_count = 37;
+inline void AIServerStatusRsp::clear_credit_wait_count() {
+  _impl_.credit_wait_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_credit_wait_count() const {
+  return _impl_.credit_wait_count_;
+}
+inline int64_t AIServerStatusRsp::credit_wait_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.credit_wait_count)
+  return _internal_credit_wait_count();
+}
+inline void AIServerStatusRsp::_internal_set_credit_wait_count(int64_t value) {
+  
+  _impl_.credit_wait_count_ = value;
+}
+inline void AIServerStatusRsp::set_credit_wait_count(int64_t value) {
+  _internal_set_credit_wait_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.credit_wait_count)
+}
+
+// int64 credit_reacquire_count = 38;
+inline void AIServerStatusRsp::clear_credit_reacquire_count() {
+  _impl_.credit_reacquire_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_credit_reacquire_count() const {
+  return _impl_.credit_reacquire_count_;
+}
+inline int64_t AIServerStatusRsp::credit_reacquire_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.credit_reacquire_count)
+  return _internal_credit_reacquire_count();
+}
+inline void AIServerStatusRsp::_internal_set_credit_reacquire_count(int64_t value) {
+  
+  _impl_.credit_reacquire_count_ = value;
+}
+inline void AIServerStatusRsp::set_credit_reacquire_count(int64_t value) {
+  _internal_set_credit_reacquire_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.credit_reacquire_count)
+}
+
+// int64 producer_stale_count = 39;
+inline void AIServerStatusRsp::clear_producer_stale_count() {
+  _impl_.producer_stale_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_producer_stale_count() const {
+  return _impl_.producer_stale_count_;
+}
+inline int64_t AIServerStatusRsp::producer_stale_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.producer_stale_count)
+  return _internal_producer_stale_count();
+}
+inline void AIServerStatusRsp::_internal_set_producer_stale_count(int64_t value) {
+  
+  _impl_.producer_stale_count_ = value;
+}
+inline void AIServerStatusRsp::set_producer_stale_count(int64_t value) {
+  _internal_set_producer_stale_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.producer_stale_count)
+}
+
+// int64 capacity_wait_ms = 40;
+inline void AIServerStatusRsp::clear_capacity_wait_ms() {
+  _impl_.capacity_wait_ms_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_capacity_wait_ms() const {
+  return _impl_.capacity_wait_ms_;
+}
+inline int64_t AIServerStatusRsp::capacity_wait_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.capacity_wait_ms)
+  return _internal_capacity_wait_ms();
+}
+inline void AIServerStatusRsp::_internal_set_capacity_wait_ms(int64_t value) {
+  
+  _impl_.capacity_wait_ms_ = value;
+}
+inline void AIServerStatusRsp::set_capacity_wait_ms(int64_t value) {
+  _internal_set_capacity_wait_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.capacity_wait_ms)
+}
+
+// bool training_capacity_wait = 41;
+inline void AIServerStatusRsp::clear_training_capacity_wait() {
+  _impl_.training_capacity_wait_ = false;
+}
+inline bool AIServerStatusRsp::_internal_training_capacity_wait() const {
+  return _impl_.training_capacity_wait_;
+}
+inline bool AIServerStatusRsp::training_capacity_wait() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.training_capacity_wait)
+  return _internal_training_capacity_wait();
+}
+inline void AIServerStatusRsp::_internal_set_training_capacity_wait(bool value) {
+  
+  _impl_.training_capacity_wait_ = value;
+}
+inline void AIServerStatusRsp::set_training_capacity_wait(bool value) {
+  _internal_set_training_capacity_wait(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.training_capacity_wait)
 }
 
 // -------------------------------------------------------------------
@@ -20609,6 +28007,28 @@ inline void ModelDistributorStatusRsp::set_timestamp_unix_ms(int64_t value) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -20627,6 +28047,26 @@ template <> struct is_proto_enum< ::rl::training::v1::PushResult> : ::std::true_
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::PushResult>() {
   return ::rl::training::v1::PushResult_descriptor();
+}
+template <> struct is_proto_enum< ::rl::training::v1::SampleDemandResult> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SampleDemandResult>() {
+  return ::rl::training::v1::SampleDemandResult_descriptor();
+}
+template <> struct is_proto_enum< ::rl::training::v1::SampleCreditResult> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SampleCreditResult>() {
+  return ::rl::training::v1::SampleCreditResult_descriptor();
+}
+template <> struct is_proto_enum< ::rl::training::v1::SampleCreditState> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SampleCreditState>() {
+  return ::rl::training::v1::SampleCreditState_descriptor();
+}
+template <> struct is_proto_enum< ::rl::training::v1::SampleCreditReleaseReason> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SampleCreditReleaseReason>() {
+  return ::rl::training::v1::SampleCreditReleaseReason_descriptor();
 }
 template <> struct is_proto_enum< ::rl::training::v1::PressureState> : ::std::true_type {};
 template <>

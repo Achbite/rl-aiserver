@@ -679,11 +679,11 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     };
     const bool immutable_identity_valid =
         out_config.contract.package_name == "rl-contracts" &&
-        out_config.contract.package_version == "0.9.1" &&
+        out_config.contract.package_version == "0.10.0" &&
         out_config.contract.source_digest.hex ==
-            "861575536f18342fd427661c8f21b7b98994913e1e1c998f87fce5ee1490d438" &&
+            "fc1bf2e3dfd804431f2528d8da53227e55ca9b58b32fc95327558d91cebb3b97" &&
         out_config.contract.artifact_digest.hex ==
-            "b8e8cdabf05b15b830b27edd1555904269202042756ecf0ed8158184e57ce8f6" &&
+            "d90083d97e377230f50c820d040a5d83ce7435dc88c4f948c222c86ac4a429ae" &&
         out_config.contract.platform == "linux/arm64" &&
         out_config.contract.generator_identity ==
             "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8" &&
@@ -722,7 +722,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         !digest_valid(out_config.training_semantics.reward_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.semantics_digest) ||
         !digest_valid(out_config.policy.policy_spec_digest)) {
-        LOG_ERROR("Config", "0.9.1 contract/training identity mismatch");
+        LOG_ERROR("Config", "0.10.0 contract/training identity mismatch");
         return false;
     }
     if (out_config.task.task_contract_id != "maze.task.v3" ||
@@ -812,7 +812,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     out_config.curriculum.agent_num = out_config.task.agent_num;
     out_config.curriculum.sample_quantum = fragment_quantum;
     if (fragment_quantum != 512 || out_config.server.max_agents < 4 ||
-        out_config.model_distribution.contract_version != "0.9.1" ||
+        out_config.model_distribution.contract_version != "0.10.0" ||
         (out_config.task.training_sample_budget > 0 &&
          out_config.task.training_sample_budget % fragment_quantum != 0)) {
         LOG_ERROR("Config", "sample quantum or runtime contract mismatch");

@@ -348,6 +348,8 @@ PROTOBUF_CONSTEXPR UpdateRsp::UpdateRsp(
   , /*decltype(_impl_.replayed_)*/false
   , /*decltype(_impl_.task_stop_requested_)*/false
   , /*decltype(_impl_.task_stop_reason_)*/0
+  , /*decltype(_impl_.environment_control_)*/0
+  , /*decltype(_impl_.retry_after_ms_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct UpdateRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR UpdateRspDefaultTypeInternal()
@@ -443,7 +445,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace task
 }  // namespace rl
 static ::_pb::Metadata file_level_metadata_maze_5ftask_2eproto[25];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_5ftask_2eproto[11];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_5ftask_2eproto[12];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_maze_5ftask_2eproto = nullptr;
 
 const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -666,6 +668,8 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_.replayed_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_.task_stop_requested_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_.task_stop_reason_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_.environment_control_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_.retry_after_ms_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EndEpisodeReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -731,12 +735,12 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 191, -1, -1, sizeof(::rl::task::maze::v1::UpdateReq)},
   { 200, -1, -1, sizeof(::rl::task::maze::v1::AgentAction)},
   { 208, -1, -1, sizeof(::rl::task::maze::v1::UpdateRsp)},
-  { 219, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
-  { 226, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
-  { 233, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
-  { 242, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
-  { 249, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
-  { 256, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
+  { 221, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
+  { 228, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
+  { 235, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
+  { 244, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
+  { 251, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
+  { 258, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -873,110 +877,116 @@ const char descriptor_table_protodef_maze_5ftask_2eproto[] PROTOBUF_SECTION_VARI
   "aze.v1.LifecycleCommand\022\020\n\010frame_id\030\002 \001("
   "\004\022+\n\006agents\030\003 \003(\0132\033.rl.task.maze.v1.Agen"
   "tState\"2\n\013AgentAction\022\020\n\010agent_id\030\001 \001(\r\022"
-  "\021\n\taction_id\030\002 \001(\005\"\337\001\n\tUpdateRsp\0222\n\tlife"
+  "\021\n\taction_id\030\002 \001(\005\"\271\002\n\tUpdateRsp\0222\n\tlife"
   "cycle\030\001 \001(\0132\037.rl.task.maze.v1.LifecycleR"
   "eply\022-\n\007actions\030\002 \003(\0132\034.rl.task.maze.v1."
   "AgentAction\022\020\n\010replayed\030\003 \001(\010\022\033\n\023task_st"
   "op_requested\030\004 \001(\010\022@\n\020task_stop_reason\030\005"
   " \001(\0162&.rl.task.maze.v1.MazeTerminationRe"
-  "ason\"C\n\rEndEpisodeReq\0222\n\007command\030\001 \001(\0132!"
-  ".rl.task.maze.v1.LifecycleCommand\"C\n\rEnd"
-  "EpisodeRsp\0222\n\tlifecycle\030\001 \001(\0132\037.rl.task."
-  "maze.v1.LifecycleReply\"\216\001\n\017AbortEpisodeR"
-  "eq\0222\n\007command\030\001 \001(\0132!.rl.task.maze.v1.Li"
-  "fecycleCommand\0226\n\006reason\030\002 \001(\0162&.rl.task"
-  ".maze.v1.MazeTerminationReason\022\017\n\007messag"
-  "e\030\003 \001(\t\"E\n\017AbortEpisodeRsp\0222\n\tlifecycle\030"
-  "\001 \001(\0132\037.rl.task.maze.v1.LifecycleReply\"E"
-  "\n\017CloseSessionReq\0222\n\007command\030\001 \001(\0132!.rl."
-  "task.maze.v1.LifecycleCommand\"E\n\017CloseSe"
-  "ssionRsp\0222\n\tlifecycle\030\001 \001(\0132\037.rl.task.ma"
-  "ze.v1.LifecycleReply*\226\001\n\017LifecycleResult"
-  "\022 \n\034LIFECYCLE_RESULT_UNSPECIFIED\020\000\022\034\n\030LI"
-  "FECYCLE_RESULT_APPLIED\020\001\022$\n LIFECYCLE_RE"
-  "SULT_ALREADY_APPLIED\020\002\022\035\n\031LIFECYCLE_RESU"
-  "LT_REJECTED\020\003*\351\003\n\022LifecycleErrorCode\022$\n "
-  "LIFECYCLE_ERROR_CODE_UNSPECIFIED\020\000\022)\n%LI"
-  "FECYCLE_ERROR_CODE_INVALID_IDENTITY\020\001\022\'\n"
-  "#LIFECYCLE_ERROR_CODE_INVALID_DIGEST\020\002\022+"
-  "\n\'LIFECYCLE_ERROR_CODE_UNSUPPORTED_SCHEM"
-  "A\020\003\022$\n LIFECYCLE_ERROR_CODE_STALE_EPOCH\020"
-  "\004\022%\n!LIFECYCLE_ERROR_CODE_OUT_OF_ORDER\020\005"
-  "\022-\n)LIFECYCLE_ERROR_CODE_IDEMPOTENCY_CON"
-  "FLICT\020\006\022\'\n#LIFECYCLE_ERROR_CODE_STATE_CO"
-  "NFLICT\020\007\022/\n+LIFECYCLE_ERROR_CODE_TASK_RE"
-  "VISION_MISMATCH\020\010\022$\n LIFECYCLE_ERROR_COD"
-  "E_MAP_INVALID\020\t\0220\n,LIFECYCLE_ERROR_CODE_"
-  "MODEL_IDENTITY_MISMATCH\020\n*\361\001\n\tTaskState\022"
-  "\032\n\026TASK_STATE_UNSPECIFIED\020\000\022\026\n\022TASK_STAT"
-  "E_CREATED\020\001\022\033\n\027TASK_STATE_INITIALIZING\020\002"
-  "\022\027\n\023TASK_STATE_TRAINING\020\003\022\031\n\025TASK_STATE_"
-  "EVALUATING\020\004\022\027\n\023TASK_STATE_STOPPING\020\005\022\026\n"
-  "\022TASK_STATE_STOPPED\020\006\022\027\n\023TASK_STATE_COMP"
-  "LETE\020\007\022\025\n\021TASK_STATE_FAILED\020\010*\327\001\n\014Sessio"
-  "nState\022\035\n\031SESSION_STATE_UNSPECIFIED\020\000\022\030\n"
-  "\024SESSION_STATE_OPENED\020\001\022\037\n\033SESSION_STATE"
-  "_MAP_VALIDATED\020\002\022\026\n\022SESSION_STATE_IDLE\020\003"
-  "\022 \n\034SESSION_STATE_EPISODE_ACTIVE\020\004\022\031\n\025SE"
-  "SSION_STATE_CLOSING\020\005\022\030\n\024SESSION_STATE_C"
-  "LOSED\020\006*\301\001\n\014EpisodeState\022\035\n\031EPISODE_STAT"
-  "E_UNSPECIFIED\020\000\022\032\n\026EPISODE_STATE_ASSIGNE"
-  "D\020\001\022\031\n\025EPISODE_STATE_RUNNING\020\002\022#\n\037EPISOD"
-  "E_STATE_TERMINAL_REPORTED\020\003\022\033\n\027EPISODE_S"
-  "TATE_COMMITTED\020\004\022\031\n\025EPISODE_STATE_ABORTE"
-  "D\020\005*\252\002\n\017EvaluationState\022 \n\034EVALUATION_ST"
-  "ATE_UNSPECIFIED\020\000\022\035\n\031EVALUATION_STATE_IN"
-  "ACTIVE\020\001\022\035\n\031EVALUATION_STATE_DRAINING\020\002\022"
-  "!\n\035EVALUATION_STATE_MODEL_PINNED\020\003\022#\n\037EV"
-  "ALUATION_STATE_ARGMAX_ROUND_1\020\004\022#\n\037EVALU"
-  "ATION_STATE_ARGMAX_ROUND_2\020\005\022*\n&EVALUATI"
-  "ON_STATE_STOCHASTIC_DIAGNOSTIC\020\006\022\036\n\032EVAL"
-  "UATION_STATE_COMMITTED\020\007*\222\001\n\013EpisodeMode"
-  "\022\034\n\030EPISODE_MODE_UNSPECIFIED\020\000\022\031\n\025EPISOD"
-  "E_MODE_TRAINING\020\001\022\"\n\036EPISODE_MODE_EVALUA"
-  "TION_ARGMAX\020\002\022&\n\"EPISODE_MODE_EVALUATION"
-  "_STOCHASTIC\020\003*\272\001\n\017CurriculumStage\022 \n\034CUR"
-  "RICULUM_STAGE_UNSPECIFIED\020\000\022\027\n\023CURRICULU"
-  "M_STAGE_8X\020\001\022\027\n\023CURRICULUM_STAGE_4X\020\002\022\027\n"
-  "\023CURRICULUM_STAGE_2X\020\003\022\035\n\031CURRICULUM_STA"
-  "GE_COMPLETE\020\004\022\033\n\027CURRICULUM_STAGE_FAILED"
-  "\020\005*\262\001\n\014WorkloadMode\022\035\n\031WORKLOAD_MODE_UNS"
-  "PECIFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAINING\020\001\022!"
-  "\n\035WORKLOAD_MODE_INFERENCE_SMOKE\020\002\022\"\n\036WOR"
-  "KLOAD_MODE_MODEL_EVALUATION\020\003\022 \n\034WORKLOA"
-  "D_MODE_MAP_VALIDATION\020\004*m\n\014ReplayPolicy\022"
-  "\035\n\031REPLAY_POLICY_UNSPECIFIED\020\000\022\032\n\026REPLAY"
-  "_POLICY_DISABLED\020\001\022\"\n\036REPLAY_POLICY_RECO"
-  "RD_AND_SERVE\020\002*\262\002\n\025MazeTerminationReason"
-  "\022\'\n#MAZE_TERMINATION_REASON_UNSPECIFIED\020"
-  "\000\022\"\n\036MAZE_TERMINATION_REASON_ACTIVE\020\001\022(\n"
-  "$MAZE_TERMINATION_REASON_GOAL_REACHED\020\002\022"
-  "&\n\"MAZE_TERMINATION_REASON_TIME_LIMIT\020\003\022"
-  "(\n$MAZE_TERMINATION_REASON_CLIENT_ABORT\020"
-  "\004\022)\n%MAZE_TERMINATION_REASON_CHAIN_FAILU"
-  "RE\020\005\022%\n!MAZE_TERMINATION_REASON_TASK_STO"
-  "P\020\0062\252\004\n\017MazeTaskService\022O\n\013OpenSession\022\037"
-  ".rl.task.maze.v1.OpenSessionReq\032\037.rl.tas"
-  "k.maze.v1.OpenSessionRsp\022:\n\004Init\022\030.rl.ta"
-  "sk.maze.v1.InitReq\032\030.rl.task.maze.v1.Ini"
-  "tRsp\022R\n\014BeginEpisode\022 .rl.task.maze.v1.B"
-  "eginEpisodeReq\032 .rl.task.maze.v1.BeginEp"
-  "isodeRsp\022@\n\006Update\022\032.rl.task.maze.v1.Upd"
-  "ateReq\032\032.rl.task.maze.v1.UpdateRsp\022L\n\nEn"
-  "dEpisode\022\036.rl.task.maze.v1.EndEpisodeReq"
-  "\032\036.rl.task.maze.v1.EndEpisodeRsp\022R\n\014Abor"
-  "tEpisode\022 .rl.task.maze.v1.AbortEpisodeR"
-  "eq\032 .rl.task.maze.v1.AbortEpisodeRsp\022R\n\014"
-  "CloseSession\022 .rl.task.maze.v1.CloseSess"
-  "ionReq\032 .rl.task.maze.v1.CloseSessionRsp"
-  "B\003\200\001\000b\006proto3"
+  "ason\022@\n\023environment_control\030\006 \001(\0162#.rl.t"
+  "ask.maze.v1.EnvironmentControl\022\026\n\016retry_"
+  "after_ms\030\007 \001(\005\"C\n\rEndEpisodeReq\0222\n\007comma"
+  "nd\030\001 \001(\0132!.rl.task.maze.v1.LifecycleComm"
+  "and\"C\n\rEndEpisodeRsp\0222\n\tlifecycle\030\001 \001(\0132"
+  "\037.rl.task.maze.v1.LifecycleReply\"\216\001\n\017Abo"
+  "rtEpisodeReq\0222\n\007command\030\001 \001(\0132!.rl.task."
+  "maze.v1.LifecycleCommand\0226\n\006reason\030\002 \001(\016"
+  "2&.rl.task.maze.v1.MazeTerminationReason"
+  "\022\017\n\007message\030\003 \001(\t\"E\n\017AbortEpisodeRsp\0222\n\t"
+  "lifecycle\030\001 \001(\0132\037.rl.task.maze.v1.Lifecy"
+  "cleReply\"E\n\017CloseSessionReq\0222\n\007command\030\001"
+  " \001(\0132!.rl.task.maze.v1.LifecycleCommand\""
+  "E\n\017CloseSessionRsp\0222\n\tlifecycle\030\001 \001(\0132\037."
+  "rl.task.maze.v1.LifecycleReply*\261\001\n\017Lifec"
+  "ycleResult\022 \n\034LIFECYCLE_RESULT_UNSPECIFI"
+  "ED\020\000\022\034\n\030LIFECYCLE_RESULT_APPLIED\020\001\022$\n LI"
+  "FECYCLE_RESULT_ALREADY_APPLIED\020\002\022\035\n\031LIFE"
+  "CYCLE_RESULT_REJECTED\020\003\022\031\n\025LIFECYCLE_RES"
+  "ULT_WAIT\020\004*\351\003\n\022LifecycleErrorCode\022$\n LIF"
+  "ECYCLE_ERROR_CODE_UNSPECIFIED\020\000\022)\n%LIFEC"
+  "YCLE_ERROR_CODE_INVALID_IDENTITY\020\001\022\'\n#LI"
+  "FECYCLE_ERROR_CODE_INVALID_DIGEST\020\002\022+\n\'L"
+  "IFECYCLE_ERROR_CODE_UNSUPPORTED_SCHEMA\020\003"
+  "\022$\n LIFECYCLE_ERROR_CODE_STALE_EPOCH\020\004\022%"
+  "\n!LIFECYCLE_ERROR_CODE_OUT_OF_ORDER\020\005\022-\n"
+  ")LIFECYCLE_ERROR_CODE_IDEMPOTENCY_CONFLI"
+  "CT\020\006\022\'\n#LIFECYCLE_ERROR_CODE_STATE_CONFL"
+  "ICT\020\007\022/\n+LIFECYCLE_ERROR_CODE_TASK_REVIS"
+  "ION_MISMATCH\020\010\022$\n LIFECYCLE_ERROR_CODE_M"
+  "AP_INVALID\020\t\0220\n,LIFECYCLE_ERROR_CODE_MOD"
+  "EL_IDENTITY_MISMATCH\020\n*\361\001\n\tTaskState\022\032\n\026"
+  "TASK_STATE_UNSPECIFIED\020\000\022\026\n\022TASK_STATE_C"
+  "REATED\020\001\022\033\n\027TASK_STATE_INITIALIZING\020\002\022\027\n"
+  "\023TASK_STATE_TRAINING\020\003\022\031\n\025TASK_STATE_EVA"
+  "LUATING\020\004\022\027\n\023TASK_STATE_STOPPING\020\005\022\026\n\022TA"
+  "SK_STATE_STOPPED\020\006\022\027\n\023TASK_STATE_COMPLET"
+  "E\020\007\022\025\n\021TASK_STATE_FAILED\020\010*\327\001\n\014SessionSt"
+  "ate\022\035\n\031SESSION_STATE_UNSPECIFIED\020\000\022\030\n\024SE"
+  "SSION_STATE_OPENED\020\001\022\037\n\033SESSION_STATE_MA"
+  "P_VALIDATED\020\002\022\026\n\022SESSION_STATE_IDLE\020\003\022 \n"
+  "\034SESSION_STATE_EPISODE_ACTIVE\020\004\022\031\n\025SESSI"
+  "ON_STATE_CLOSING\020\005\022\030\n\024SESSION_STATE_CLOS"
+  "ED\020\006*\301\001\n\014EpisodeState\022\035\n\031EPISODE_STATE_U"
+  "NSPECIFIED\020\000\022\032\n\026EPISODE_STATE_ASSIGNED\020\001"
+  "\022\031\n\025EPISODE_STATE_RUNNING\020\002\022#\n\037EPISODE_S"
+  "TATE_TERMINAL_REPORTED\020\003\022\033\n\027EPISODE_STAT"
+  "E_COMMITTED\020\004\022\031\n\025EPISODE_STATE_ABORTED\020\005"
+  "*\252\002\n\017EvaluationState\022 \n\034EVALUATION_STATE"
+  "_UNSPECIFIED\020\000\022\035\n\031EVALUATION_STATE_INACT"
+  "IVE\020\001\022\035\n\031EVALUATION_STATE_DRAINING\020\002\022!\n\035"
+  "EVALUATION_STATE_MODEL_PINNED\020\003\022#\n\037EVALU"
+  "ATION_STATE_ARGMAX_ROUND_1\020\004\022#\n\037EVALUATI"
+  "ON_STATE_ARGMAX_ROUND_2\020\005\022*\n&EVALUATION_"
+  "STATE_STOCHASTIC_DIAGNOSTIC\020\006\022\036\n\032EVALUAT"
+  "ION_STATE_COMMITTED\020\007*\222\001\n\013EpisodeMode\022\034\n"
+  "\030EPISODE_MODE_UNSPECIFIED\020\000\022\031\n\025EPISODE_M"
+  "ODE_TRAINING\020\001\022\"\n\036EPISODE_MODE_EVALUATIO"
+  "N_ARGMAX\020\002\022&\n\"EPISODE_MODE_EVALUATION_ST"
+  "OCHASTIC\020\003*\272\001\n\017CurriculumStage\022 \n\034CURRIC"
+  "ULUM_STAGE_UNSPECIFIED\020\000\022\027\n\023CURRICULUM_S"
+  "TAGE_8X\020\001\022\027\n\023CURRICULUM_STAGE_4X\020\002\022\027\n\023CU"
+  "RRICULUM_STAGE_2X\020\003\022\035\n\031CURRICULUM_STAGE_"
+  "COMPLETE\020\004\022\033\n\027CURRICULUM_STAGE_FAILED\020\005*"
+  "\262\001\n\014WorkloadMode\022\035\n\031WORKLOAD_MODE_UNSPEC"
+  "IFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAINING\020\001\022!\n\035W"
+  "ORKLOAD_MODE_INFERENCE_SMOKE\020\002\022\"\n\036WORKLO"
+  "AD_MODE_MODEL_EVALUATION\020\003\022 \n\034WORKLOAD_M"
+  "ODE_MAP_VALIDATION\020\004*m\n\014ReplayPolicy\022\035\n\031"
+  "REPLAY_POLICY_UNSPECIFIED\020\000\022\032\n\026REPLAY_PO"
+  "LICY_DISABLED\020\001\022\"\n\036REPLAY_POLICY_RECORD_"
+  "AND_SERVE\020\002*\262\002\n\025MazeTerminationReason\022\'\n"
+  "#MAZE_TERMINATION_REASON_UNSPECIFIED\020\000\022\""
+  "\n\036MAZE_TERMINATION_REASON_ACTIVE\020\001\022(\n$MA"
+  "ZE_TERMINATION_REASON_GOAL_REACHED\020\002\022&\n\""
+  "MAZE_TERMINATION_REASON_TIME_LIMIT\020\003\022(\n$"
+  "MAZE_TERMINATION_REASON_CLIENT_ABORT\020\004\022)"
+  "\n%MAZE_TERMINATION_REASON_CHAIN_FAILURE\020"
+  "\005\022%\n!MAZE_TERMINATION_REASON_TASK_STOP\020\006"
+  "*\216\001\n\022EnvironmentControl\022#\n\037ENVIRONMENT_C"
+  "ONTROL_UNSPECIFIED\020\000\022\037\n\033ENVIRONMENT_CONT"
+  "ROL_ADVANCE\020\001\0222\n.ENVIRONMENT_CONTROL_WAI"
+  "T_FOR_TRAINING_CAPACITY\020\0022\252\004\n\017MazeTaskSe"
+  "rvice\022O\n\013OpenSession\022\037.rl.task.maze.v1.O"
+  "penSessionReq\032\037.rl.task.maze.v1.OpenSess"
+  "ionRsp\022:\n\004Init\022\030.rl.task.maze.v1.InitReq"
+  "\032\030.rl.task.maze.v1.InitRsp\022R\n\014BeginEpiso"
+  "de\022 .rl.task.maze.v1.BeginEpisodeReq\032 .r"
+  "l.task.maze.v1.BeginEpisodeRsp\022@\n\006Update"
+  "\022\032.rl.task.maze.v1.UpdateReq\032\032.rl.task.m"
+  "aze.v1.UpdateRsp\022L\n\nEndEpisode\022\036.rl.task"
+  ".maze.v1.EndEpisodeReq\032\036.rl.task.maze.v1"
+  ".EndEpisodeRsp\022R\n\014AbortEpisode\022 .rl.task"
+  ".maze.v1.AbortEpisodeReq\032 .rl.task.maze."
+  "v1.AbortEpisodeRsp\022R\n\014CloseSession\022 .rl."
+  "task.maze.v1.CloseSessionReq\032 .rl.task.m"
+  "aze.v1.CloseSessionRspB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_maze_5ftask_2eproto_deps[1] = {
   &::descriptor_table_common_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_maze_5ftask_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_maze_5ftask_2eproto = {
-    false, false, 8053, descriptor_table_protodef_maze_5ftask_2eproto,
+    false, false, 8315, descriptor_table_protodef_maze_5ftask_2eproto,
     "maze_task.proto",
     &descriptor_table_maze_5ftask_2eproto_once, descriptor_table_maze_5ftask_2eproto_deps, 1, 25,
     schemas, file_default_instances, TableStruct_maze_5ftask_2eproto::offsets,
@@ -1003,6 +1013,7 @@ bool LifecycleResult_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
       return true;
     default:
       return false;
@@ -1189,6 +1200,21 @@ bool MazeTerminationReason_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EnvironmentControl_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
+  return file_level_enum_descriptors_maze_5ftask_2eproto[11];
+}
+bool EnvironmentControl_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -7711,6 +7737,8 @@ UpdateRsp::UpdateRsp(const UpdateRsp& from)
     , decltype(_impl_.replayed_){}
     , decltype(_impl_.task_stop_requested_){}
     , decltype(_impl_.task_stop_reason_){}
+    , decltype(_impl_.environment_control_){}
+    , decltype(_impl_.retry_after_ms_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -7718,8 +7746,8 @@ UpdateRsp::UpdateRsp(const UpdateRsp& from)
     _this->_impl_.lifecycle_ = new ::rl::task::maze::v1::LifecycleReply(*from._impl_.lifecycle_);
   }
   ::memcpy(&_impl_.replayed_, &from._impl_.replayed_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.task_stop_reason_) -
-    reinterpret_cast<char*>(&_impl_.replayed_)) + sizeof(_impl_.task_stop_reason_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.retry_after_ms_) -
+    reinterpret_cast<char*>(&_impl_.replayed_)) + sizeof(_impl_.retry_after_ms_));
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.UpdateRsp)
 }
 
@@ -7733,6 +7761,8 @@ inline void UpdateRsp::SharedCtor(
     , decltype(_impl_.replayed_){false}
     , decltype(_impl_.task_stop_requested_){false}
     , decltype(_impl_.task_stop_reason_){0}
+    , decltype(_impl_.environment_control_){0}
+    , decltype(_impl_.retry_after_ms_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -7768,8 +7798,8 @@ void UpdateRsp::Clear() {
   }
   _impl_.lifecycle_ = nullptr;
   ::memset(&_impl_.replayed_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.task_stop_reason_) -
-      reinterpret_cast<char*>(&_impl_.replayed_)) + sizeof(_impl_.task_stop_reason_));
+      reinterpret_cast<char*>(&_impl_.retry_after_ms_) -
+      reinterpret_cast<char*>(&_impl_.replayed_)) + sizeof(_impl_.retry_after_ms_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -7822,6 +7852,23 @@ const char* UpdateRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_task_stop_reason(static_cast<::rl::task::maze::v1::MazeTerminationReason>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.task.maze.v1.EnvironmentControl environment_control = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_environment_control(static_cast<::rl::task::maze::v1::EnvironmentControl>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 retry_after_ms = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.retry_after_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -7888,6 +7935,19 @@ uint8_t* UpdateRsp::_InternalSerialize(
       5, this->_internal_task_stop_reason(), target);
   }
 
+  // .rl.task.maze.v1.EnvironmentControl environment_control = 6;
+  if (this->_internal_environment_control() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      6, this->_internal_environment_control(), target);
+  }
+
+  // int32 retry_after_ms = 7;
+  if (this->_internal_retry_after_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(7, this->_internal_retry_after_ms(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -7934,6 +7994,17 @@ size_t UpdateRsp::ByteSizeLong() const {
       ::_pbi::WireFormatLite::EnumSize(this->_internal_task_stop_reason());
   }
 
+  // .rl.task.maze.v1.EnvironmentControl environment_control = 6;
+  if (this->_internal_environment_control() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_environment_control());
+  }
+
+  // int32 retry_after_ms = 7;
+  if (this->_internal_retry_after_ms() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_retry_after_ms());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -7966,6 +8037,12 @@ void UpdateRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
   if (from._internal_task_stop_reason() != 0) {
     _this->_internal_set_task_stop_reason(from._internal_task_stop_reason());
   }
+  if (from._internal_environment_control() != 0) {
+    _this->_internal_set_environment_control(from._internal_environment_control());
+  }
+  if (from._internal_retry_after_ms() != 0) {
+    _this->_internal_set_retry_after_ms(from._internal_retry_after_ms());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -7985,8 +8062,8 @@ void UpdateRsp::InternalSwap(UpdateRsp* other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.actions_.InternalSwap(&other->_impl_.actions_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(UpdateRsp, _impl_.task_stop_reason_)
-      + sizeof(UpdateRsp::_impl_.task_stop_reason_)
+      PROTOBUF_FIELD_OFFSET(UpdateRsp, _impl_.retry_after_ms_)
+      + sizeof(UpdateRsp::_impl_.retry_after_ms_)
       - PROTOBUF_FIELD_OFFSET(UpdateRsp, _impl_.lifecycle_)>(
           reinterpret_cast<char*>(&_impl_.lifecycle_),
           reinterpret_cast<char*>(&other->_impl_.lifecycle_));
