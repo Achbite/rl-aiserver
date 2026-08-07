@@ -227,21 +227,20 @@ CommandCheck CheckCommand(SessionManager::Session& session,
         return CommandCheck::Rejected;
     }
     const std::string payload = request.SerializeAsString();
-    const auto existing = session.command_payloads.find(
-        command.idempotency_key());
-    if (existing != session.command_payloads.end()) {
-        if (existing->second != payload) {
+    const auto replay_decision = session.command_replay.Classify(
+        command.command_sequence(), session.last_command_sequence,
+        command.idempotency_key(), payload);
+    if (replay_decision ==
+        LifecycleReplayDecision::IdempotencyConflict) {
             FillLifecycle(session, session.last_command_sequence,
                           maze::LIFECYCLE_RESULT_REJECTED,
                           maze::LIFECYCLE_ERROR_CODE_IDEMPOTENCY_CONFLICT,
                           "idempotency key was reused with a different payload",
                           reply);
             return CommandCheck::Rejected;
-        }
-        const auto cached = session.command_responses.find(
-            command.idempotency_key());
-        if (cached == session.command_responses.end() ||
-            !response->ParseFromString(cached->second)) {
+    }
+    if (replay_decision == LifecycleReplayDecision::Replay) {
+        if (!response->ParseFromString(session.command_replay.response())) {
             FillLifecycle(session, session.last_command_sequence,
                           maze::LIFECYCLE_RESULT_REJECTED,
                           maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
@@ -253,6 +252,13 @@ CommandCheck CheckCommand(SessionManager::Session& session,
         response->mutable_lifecycle()->set_message(
             "command was already applied");
         return CommandCheck::Replayed;
+    }
+    if (replay_decision == LifecycleReplayDecision::OutOfOrder) {
+        FillLifecycle(session, session.last_command_sequence,
+                      maze::LIFECYCLE_RESULT_REJECTED,
+                      maze::LIFECYCLE_ERROR_CODE_OUT_OF_ORDER,
+                      "command sequence is not contiguous", reply);
+        return CommandCheck::Rejected;
     }
     if (!SameTask(command.task(), session.task) ||
         command.session_id() != session.session_id) {
@@ -267,13 +273,6 @@ CommandCheck CheckCommand(SessionManager::Session& session,
                       maze::LIFECYCLE_RESULT_REJECTED,
                       maze::LIFECYCLE_ERROR_CODE_STALE_EPOCH,
                       "lifecycle epoch does not match", reply);
-        return CommandCheck::Rejected;
-    }
-    if (command.command_sequence() != session.last_command_sequence + 1) {
-        FillLifecycle(session, session.last_command_sequence,
-                      maze::LIFECYCLE_RESULT_REJECTED,
-                      maze::LIFECYCLE_ERROR_CODE_OUT_OF_ORDER,
-                      "command sequence is not contiguous", reply);
         return CommandCheck::Rejected;
     }
     if (command.expected_task_state() != session.task_state ||
@@ -300,10 +299,9 @@ void CommitCommand(SessionManager::Session& session,
                   maze::LIFECYCLE_RESULT_APPLIED,
                   maze::LIFECYCLE_ERROR_CODE_UNSPECIFIED,
                   message, response->mutable_lifecycle());
-    session.command_payloads[command.idempotency_key()] =
-        request.SerializeAsString();
-    session.command_responses[command.idempotency_key()] =
-        response->SerializeAsString();
+    session.command_replay.Store(
+        command.command_sequence(), command.idempotency_key(),
+        request.SerializeAsString(), response->SerializeAsString());
 }
 
 void RejectCommand(const SessionManager::Session& session,
@@ -1202,8 +1200,6 @@ grpc::Status MazeServiceImpl::EndEpisode(
     }
 
     session->episode_state = SessionManager::EpisodeState::Ended;
-    session->episode_history[session->current_episode_id] =
-        SessionManager::EpisodeState::Ended;
     session->session_state = maze::SESSION_STATE_IDLE;
     session->protocol_episode_state = maze::EPISODE_STATE_COMMITTED;
     if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING) {
@@ -1267,8 +1263,6 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     }
     episode_metrics_.AddExcluded(session->agents.size(), req->reason());
     session->episode_state = SessionManager::EpisodeState::Aborted;
-    session->episode_history[session->current_episode_id] =
-        SessionManager::EpisodeState::Aborted;
     session->session_state = maze::SESSION_STATE_IDLE;
     session->protocol_episode_state = maze::EPISODE_STATE_ABORTED;
     session->evaluation_state = maze::EVALUATION_STATE_INACTIVE;

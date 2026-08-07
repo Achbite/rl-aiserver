@@ -758,7 +758,6 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
                                         const std::string& episode_id) {
     session.current_episode_id = episode_id;
     session.episode_state = SessionManager::EpisodeState::Active;
-    session.episode_history[episode_id] = SessionManager::EpisodeState::Active;
     session.last_frame_id = -1;
     session.training_collection_paused = false;
     session.last_actions.clear();

@@ -3,6 +3,7 @@
 #include "ai/astar_solver.h"
 #include "contracts/contract_namespaces.h"
 #include "model/behavior_policy_scope.h"
+#include "session/lifecycle_replay_window.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -86,8 +87,7 @@ public:
         maze::EvaluationState evaluation_state =
             maze::EVALUATION_STATE_INACTIVE;
         std::string current_evaluation_id;
-        std::unordered_map<std::string, std::string> command_payloads;
-        std::unordered_map<std::string, std::string> command_responses;
+        LifecycleReplayWindow command_replay;
         std::string map_id;
         std::string map_checksum_sha256;
         int shortest_action_steps = 0;
@@ -97,7 +97,6 @@ public:
         std::unordered_map<int, AgentRuntime> agents;   // agent_id → 运行时状态
         std::string current_episode_id;
         EpisodeState episode_state = EpisodeState::None;
-        std::unordered_map<std::string, EpisodeState> episode_history;
         int64_t last_frame_id = -1;
         std::vector<maze::AgentAction> last_actions;
         std::unordered_map<int, std::vector<training::Sample>> agent_sample_caches;  // agent_id → 样本缓存（多 Agent 隔离）

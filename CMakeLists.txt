@@ -179,6 +179,15 @@ if(BUILD_TESTING)
     add_test(NAME fragment_boundary_contract
              COMMAND fragment_boundary_test)
 
+    add_executable(lifecycle_replay_window_test
+        tests/lifecycle_replay_window_test.cpp
+    )
+    target_include_directories(lifecycle_replay_window_test PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
+    add_test(NAME lifecycle_replay_window_contract
+             COMMAND lifecycle_replay_window_test)
+
     add_executable(sample_producer_identity_test
         tests/sample_producer_identity_test.cpp
         ${PROTO_GEN_DIR}/common.pb.cc
