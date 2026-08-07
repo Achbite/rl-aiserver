@@ -1031,55 +1031,91 @@ bool MazeServiceImpl::FinalizePendingTransition(
     return true;
 }
 
-bool MazeServiceImpl::ReconcileProducerStaleSamples() {
+bool MazeServiceImpl::ReconcileDiscardedTrainingSamples() {
     const auto sender = sample_sender_.GetSnapshot();
     if (sender.producer_stale_count < reconciled_producer_stale_samples_) {
         MarkDegraded("producer stale counter moved backwards");
         return false;
     }
 
-    int64_t delta_total = 0;
-    std::vector<std::pair<int, int64_t>> deltas;
-    for (const auto& item : sender.producer_stale_samples_by_model) {
-        const int model_version = item.first;
-        const int64_t reconciled =
-            reconciled_producer_stale_samples_by_model_[model_version];
-        if (item.second < reconciled) {
-            MarkDegraded("producer stale model counter moved backwards");
-            return false;
+    if (sender.pool_stale_count < reconciled_pool_stale_samples_) {
+        MarkDegraded("sample pool stale counter moved backwards");
+        return false;
+    }
+
+    int64_t producer_delta_total = 0;
+    int64_t pool_delta_total = 0;
+    std::unordered_map<int, int64_t> deltas;
+    const auto collect_deltas = [this, &deltas](
+        const std::unordered_map<int, int64_t>& current,
+        const std::unordered_map<int, int64_t>& reconciled,
+        const char* source,
+        int64_t& delta_total) {
+        for (const auto& item : current) {
+            const auto previous = reconciled.find(item.first);
+            const int64_t previous_value =
+                previous == reconciled.end() ? 0 : previous->second;
+            if (item.second < previous_value) {
+                MarkDegraded(std::string(source) +
+                             " behavior-model counter moved backwards");
+                return false;
+            }
+            const int64_t delta = item.second - previous_value;
+            if (delta == 0) continue;
+            deltas[item.first] += delta;
+            delta_total += delta;
         }
-        const int64_t delta = item.second - reconciled;
-        if (delta == 0) continue;
+        return true;
+    };
+    if (!collect_deltas(sender.producer_stale_samples_by_model,
+                        reconciled_producer_stale_samples_by_model_,
+                        "producer stale", producer_delta_total) ||
+        !collect_deltas(sender.pool_stale_samples_by_model,
+                        reconciled_pool_stale_samples_by_model_,
+                        "sample pool stale", pool_delta_total)) {
+        return false;
+    }
+    if (reconciled_producer_stale_samples_ + producer_delta_total !=
+            sender.producer_stale_count ||
+        reconciled_pool_stale_samples_ + pool_delta_total !=
+            sender.pool_stale_count) {
+        MarkDegraded("discarded sample source accounting is inconsistent");
+        return false;
+    }
+
+    const int64_t delta_total = producer_delta_total + pool_delta_total;
+    for (const auto& item : deltas) {
+        const int model_version = item.first;
         const auto produced = produced_samples_by_model_.find(model_version);
         if (produced == produced_samples_by_model_.end() ||
-            produced->second < delta) {
-            MarkDegraded("producer stale behavior-model accounting is inconsistent");
+            produced->second < item.second) {
+            MarkDegraded(
+                "discarded sample behavior-model accounting is inconsistent");
             return false;
         }
-        deltas.emplace_back(model_version, delta);
-        delta_total += delta;
     }
-    if (reconciled_producer_stale_samples_ + delta_total !=
-            sender.producer_stale_count ||
-        produced_unique_samples_ < delta_total) {
-        MarkDegraded("producer stale sample accounting is inconsistent");
+    if (produced_unique_samples_ < delta_total) {
+        MarkDegraded("discarded sample accounting is inconsistent");
         return false;
     }
     std::string controller_error;
     if (delta_total > 0 &&
         !task_controller_.ReconcileDiscardedTrainingSamples(
             delta_total, controller_error)) {
-        MarkDegraded("producer stale task accounting is inconsistent: " +
+        MarkDegraded("discarded sample task accounting is inconsistent: " +
                      controller_error);
         return false;
     }
     for (const auto& delta : deltas) {
         produced_samples_by_model_[delta.first] -= delta.second;
-        reconciled_producer_stale_samples_by_model_[delta.first] +=
-            delta.second;
     }
     produced_unique_samples_ -= delta_total;
     reconciled_producer_stale_samples_ = sender.producer_stale_count;
+    reconciled_producer_stale_samples_by_model_ =
+        sender.producer_stale_samples_by_model;
+    reconciled_pool_stale_samples_ = sender.pool_stale_count;
+    reconciled_pool_stale_samples_by_model_ =
+        sender.pool_stale_samples_by_model;
     return true;
 }
 

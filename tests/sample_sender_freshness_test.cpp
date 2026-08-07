@@ -114,6 +114,35 @@ private:
     ContractConfig contract_;
 };
 
+class PoolStaleReportingDistributor final
+    : public training::SampleDistributorService::Service {
+public:
+    explicit PoolStaleReportingDistributor(ContractConfig contract)
+        : contract_(std::move(contract)) {}
+
+    grpc::Status GetStatus(
+        grpc::ServerContext*, const training::DistributorStatusReq*,
+        training::DistributorStatusRsp* response) override {
+        FillContract(contract_, response->mutable_contract());
+        response->mutable_distributor()->set_component("sample-distributor");
+        response->mutable_distributor()->set_instance_id(
+            "pool-stale-distributor");
+        response->mutable_distributor()->set_lifecycle_epoch(1);
+        response->set_ready(true);
+        response->set_ingress_ready(true);
+        const int64_t stale = status_calls_.fetch_add(1) == 0 ? 4 : 12;
+        response->set_stale_sample_count(stale);
+        auto* version = response->add_behavior_versions();
+        version->mutable_behavior_policy()->set_model_version(139);
+        version->set_stale_samples(stale);
+        return grpc::Status::OK;
+    }
+
+private:
+    ContractConfig contract_;
+    std::atomic<int> status_calls_{0};
+};
+
 void VerifyFrameAtomicCapacityWait(AIServerConfig config) {
     CapacityWaitingDistributor service(config.contract);
     grpc::ServerBuilder builder;
@@ -153,6 +182,44 @@ void VerifyFrameAtomicCapacityWait(AIServerConfig config) {
 
     sender.MarkDegraded("test shutdown");
     sender.StopAndDrain();
+    server->Shutdown();
+    server->Wait();
+}
+
+void VerifyPoolStaleStatusPolling(AIServerConfig config) {
+    PoolStaleReportingDistributor service(config.contract);
+    grpc::ServerBuilder builder;
+    int port = 0;
+    builder.AddListeningPort("127.0.0.1:0",
+                             grpc::InsecureServerCredentials(), &port);
+    builder.RegisterService(&service);
+    std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
+    Require(server != nullptr && port > 0,
+            "pool stale distributor did not start");
+
+    config.sample_output.port = port;
+    config.sample_output.status_poll_interval_ms = 10;
+    SampleSender sender(config);
+    Require(sender.Start(), "pool stale sender did not start");
+
+    SampleSender::Snapshot snapshot;
+    const auto deadline = std::chrono::steady_clock::now() +
+                          std::chrono::seconds(2);
+    do {
+        snapshot = sender.GetSnapshot();
+        if (snapshot.pool_stale_count == 8) break;
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    } while (std::chrono::steady_clock::now() < deadline);
+
+    Require(snapshot.pool_stale_count == 8,
+            "pool stale status did not exclude the startup baseline");
+    Require(snapshot.pool_stale_samples_by_model.at(139) == 8,
+            "pool stale status lost behavior model identity");
+    Require(snapshot.ready && !snapshot.degraded &&
+                snapshot.last_error.empty(),
+            "valid pool stale status degraded the sender");
+
+    Require(sender.StopAndDrain(), "pool stale sender did not drain");
     server->Shutdown();
     server->Wait();
 }
@@ -215,5 +282,6 @@ int main() {
     server->Shutdown();
     server->Wait();
     VerifyFrameAtomicCapacityWait(config);
+    VerifyPoolStaleStatusPolling(config);
     return 0;
 }

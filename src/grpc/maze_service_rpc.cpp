@@ -602,7 +602,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     }
     const auto check = CheckCommand(*session, req->command(), *req, rsp);
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
-    if (!ReconcileProducerStaleSamples()) {
+    if (!ReconcileDiscardedTrainingSamples()) {
         RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
                       last_error_, rsp->mutable_lifecycle());
         return grpc::Status::OK;
@@ -782,7 +782,7 @@ grpc::Status MazeServiceImpl::Update(
         finish();
         return grpc::Status::OK;
     }
-    if (!ReconcileProducerStaleSamples()) {
+    if (!ReconcileDiscardedTrainingSamples()) {
         RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
                       last_error_, rsp->mutable_lifecycle());
         finish();
@@ -1368,7 +1368,7 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     const training::AIServerStatusReq*,
     training::AIServerStatusRsp* rsp) {
     std::lock_guard<std::mutex> lock(mutex_);
-    ReconcileProducerStaleSamples();
+    ReconcileDiscardedTrainingSamples();
     const auto sender = sample_sender_.GetSnapshot();
     const int64_t timestamp = NowMs();
     FillContract(config_, rsp->mutable_contract());

@@ -44,6 +44,11 @@ public:
         int64_t credit_reacquire_count = 0;
         int64_t producer_stale_count = 0;
         std::unordered_map<int, int64_t> producer_stale_samples_by_model;
+        // The current A3 topology has exactly one Server Pod. Distributor
+        // status has no producer dimension, so these deltas must not be used
+        // as per-producer accounting once multiple producers share a Pool.
+        int64_t pool_stale_count = 0;
+        std::unordered_map<int, int64_t> pool_stale_samples_by_model;
         int64_t capacity_wait_ms = 0;
         std::string distributor_instance_id;
         std::string last_error;
@@ -81,6 +86,14 @@ private:
     };
 
     bool ProbeDistributor();
+    bool RefreshDistributorStatus();
+    bool ValidateDistributorStatus(
+        const training::DistributorStatusRsp& response,
+        std::string& error) const;
+    bool ApplyDistributorStatus(
+        const training::DistributorStatusRsp& response,
+        bool initialize_baseline,
+        std::string& error);
     void SenderLoop();
     SendResult SendFront(const QueueItem& item, bool& duplicate,
                          int& attempts_used, int& retry_after_ms,
@@ -132,7 +145,13 @@ private:
     int64_t credit_reacquire_count_ = 0;
     int64_t producer_stale_count_ = 0;
     std::unordered_map<int, int64_t> producer_stale_samples_by_model_;
+    // Startup-relative Pool dispositions for the single-producer A3 runtime.
+    int64_t pool_stale_baseline_count_ = 0;
+    std::unordered_map<int, int64_t> pool_stale_baseline_by_model_;
+    int64_t pool_stale_count_ = 0;
+    std::unordered_map<int, int64_t> pool_stale_samples_by_model_;
     int64_t capacity_wait_ms_ = 0;
     std::string distributor_instance_id_;
+    uint64_t distributor_lifecycle_epoch_ = 0;
     std::string last_error_;
 };

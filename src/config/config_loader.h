@@ -135,6 +135,7 @@ struct SampleOutputConfig {
     int         enqueue_timeout_ms = 100;
     int         drain_timeout_ms  = 10000;
     int         health_timeout_ms = 5000;
+    int         status_poll_interval_ms = 200;
     std::size_t outbound_max_fragments = 64;
     std::size_t outbound_max_estimated_bytes = 64ULL * 1024ULL * 1024ULL;
     std::string aiserver_id       = "aiserver-0";

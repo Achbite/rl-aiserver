@@ -305,6 +305,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"sample_output", "enqueue_timeout_ms"},
         {"sample_output", "drain_timeout_ms"},
         {"sample_output", "health_timeout_ms"},
+        {"sample_output", "status_poll_interval_ms"},
         {"sample_output", "outbound_max_fragments"},
         {"sample_output", "outbound_max_estimated_bytes"},
         {"metrics", "episode_window"},
@@ -575,6 +576,9 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         SafeInt(FindValue(entries, "sample_output", "drain_timeout_ms"), 10000);
     out_config.sample_output.health_timeout_ms =
         SafeInt(FindValue(entries, "sample_output", "health_timeout_ms"), 5000);
+    out_config.sample_output.status_poll_interval_ms =
+        SafeInt(FindValue(entries, "sample_output", "status_poll_interval_ms"),
+                200);
     out_config.sample_output.outbound_max_fragments =
         SafeSize(FindValue(entries, "sample_output", "outbound_max_fragments"), 64);
     out_config.sample_output.outbound_max_estimated_bytes =
@@ -658,6 +662,9 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         EnvInt("RL_SAMPLE_ENQUEUE_TIMEOUT_MS", out_config.sample_output.enqueue_timeout_ms);
     out_config.sample_output.drain_timeout_ms =
         EnvInt("RL_SAMPLE_DRAIN_TIMEOUT_MS", out_config.sample_output.drain_timeout_ms);
+    out_config.sample_output.status_poll_interval_ms =
+        EnvInt("RL_SAMPLE_STATUS_POLL_INTERVAL_MS",
+               out_config.sample_output.status_poll_interval_ms);
     out_config.model.startup_timeout_ms =
         EnvInt("RL_MODEL_STARTUP_TIMEOUT_MS", out_config.model.startup_timeout_ms);
     out_config.model_distribution.poll_interval_ms =
@@ -783,6 +790,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.sample_output.enqueue_timeout_ms > 0 &&
         out_config.sample_output.drain_timeout_ms > 0 &&
         out_config.sample_output.health_timeout_ms > 0 &&
+        out_config.sample_output.status_poll_interval_ms > 0 &&
         out_config.sample_output.outbound_max_fragments >=
             static_cast<std::size_t>(out_config.task.agent_num) &&
         out_config.sample_output.outbound_max_estimated_bytes > 0 &&
@@ -854,13 +862,14 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     const bool sample_output_active =
         out_config.server.run_mode == aiserver_mode::kTraining &&
         out_config.sample_output.enabled;
-    LOG_INFO("Config", "sample_output: configured_enabled=%s, active=%s, target=%s:%d, fragment=%d, rpc_timeout_ms=%d, attempts=%d, queue=%zu/%zuB, aiserver_id=%s, env_id=%s",
+    LOG_INFO("Config", "sample_output: configured_enabled=%s, active=%s, target=%s:%d, fragment=%d, rpc_timeout_ms=%d, status_poll_interval_ms=%d, attempts=%d, queue=%zu/%zuB, aiserver_id=%s, env_id=%s",
              out_config.sample_output.enabled ? "true" : "false",
              sample_output_active ? "true" : "false",
              out_config.sample_output.host.c_str(),
              out_config.sample_output.port,
              out_config.sample_output.fragment_samples,
              out_config.sample_output.rpc_timeout_ms,
+             out_config.sample_output.status_poll_interval_ms,
              out_config.sample_output.max_attempts,
              out_config.sample_output.outbound_max_fragments,
              out_config.sample_output.outbound_max_estimated_bytes,

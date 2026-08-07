@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <limits>
 
 namespace {
 
@@ -37,6 +38,25 @@ bool SampleSender::ProbeDistributor() {
             "sample ingress status failed: " + status.error_message());
         return false;
     }
+    std::string error;
+    if (!ValidateDistributorStatus(response, error) ||
+        !ApplyDistributorStatus(response, true, error)) {
+        MarkDegraded(error);
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(mutex_);
+    distributor_instance_id_ = response.distributor().instance_id();
+    distributor_lifecycle_epoch_ = response.distributor().lifecycle_epoch();
+    ready_ = true;
+    degraded_ = false;
+    last_error_.clear();
+    return true;
+}
+
+bool SampleSender::ValidateDistributorStatus(
+    const training::DistributorStatusRsp& response,
+    std::string& error) const {
     const auto& contract = response.contract();
     const bool contract_matches =
         contract.package_name() == contract_.package_name &&
@@ -53,19 +73,122 @@ bool SampleSender::ProbeDistributor() {
         response.distributor().component() != "sample-distributor" ||
         response.distributor().instance_id().empty() ||
         response.distributor().lifecycle_epoch() == 0) {
-        MarkDegraded("sample ingress identity does not match rl-contracts 0.10.0");
+        error = "sample ingress identity does not match rl-contracts 0.10.0";
         return false;
     }
     if (!response.ready() || !response.ingress_ready()) {
-        MarkDegraded("sample ingress is not ready");
+        error = "sample ingress is not ready";
+        return false;
+    }
+    return true;
+}
+
+bool SampleSender::ApplyDistributorStatus(
+    const training::DistributorStatusRsp& response,
+    bool initialize_baseline,
+    std::string& error) {
+    std::unordered_map<int, int64_t> current_by_model;
+    int64_t current_sum = 0;
+    for (const auto& status : response.behavior_versions()) {
+        const int64_t stale = status.stale_samples();
+        if (stale < 0 ||
+            stale > std::numeric_limits<int64_t>::max() - current_sum ||
+            status.behavior_policy().model_version() >
+                static_cast<uint64_t>(std::numeric_limits<int>::max())) {
+            error = "sample ingress returned invalid stale accounting";
+            return false;
+        }
+        const int version = static_cast<int>(
+            status.behavior_policy().model_version());
+        if (current_by_model[version] >
+            std::numeric_limits<int64_t>::max() - stale) {
+            error = "sample ingress stale accounting overflowed";
+            return false;
+        }
+        current_by_model[version] += stale;
+        current_sum += stale;
+    }
+    if (response.stale_sample_count() < 0 ||
+        current_sum != response.stale_sample_count()) {
+        error = "sample ingress stale accounting does not balance";
         return false;
     }
 
     std::lock_guard<std::mutex> lock(mutex_);
-    distributor_instance_id_ = response.distributor().instance_id();
-    ready_ = true;
-    degraded_ = false;
-    last_error_.clear();
+    if (initialize_baseline) {
+        pool_stale_baseline_count_ = response.stale_sample_count();
+        pool_stale_baseline_by_model_ = std::move(current_by_model);
+        pool_stale_count_ = 0;
+        pool_stale_samples_by_model_.clear();
+        return true;
+    }
+    if (response.distributor().instance_id() != distributor_instance_id_ ||
+        response.distributor().lifecycle_epoch() !=
+            distributor_lifecycle_epoch_) {
+        error = "sample ingress identity changed during training";
+        return false;
+    }
+    if (response.stale_sample_count() < pool_stale_baseline_count_) {
+        error = "sample ingress stale counter moved backwards";
+        return false;
+    }
+
+    std::unordered_map<int, int64_t> delta_by_model;
+    int64_t delta_sum = 0;
+    for (const auto& baseline : pool_stale_baseline_by_model_) {
+        const auto current = current_by_model.find(baseline.first);
+        if (current == current_by_model.end() ||
+            current->second < baseline.second) {
+            error = "sample ingress behavior stale counter moved backwards";
+            return false;
+        }
+    }
+    for (const auto& current : current_by_model) {
+        const auto baseline = pool_stale_baseline_by_model_.find(current.first);
+        const int64_t baseline_value =
+            baseline == pool_stale_baseline_by_model_.end()
+                ? 0
+                : baseline->second;
+        const int64_t delta = current.second - baseline_value;
+        if (delta > 0) delta_by_model.emplace(current.first, delta);
+        delta_sum += delta;
+    }
+    if (delta_sum !=
+        response.stale_sample_count() - pool_stale_baseline_count_) {
+        error = "sample ingress stale delta does not balance";
+        return false;
+    }
+    pool_stale_count_ = delta_sum;
+    pool_stale_samples_by_model_ = std::move(delta_by_model);
+    return true;
+}
+
+bool SampleSender::RefreshDistributorStatus() {
+    training::DistributorStatusReq request;
+    training::DistributorStatusRsp response;
+    grpc::ClientContext context;
+    context.set_deadline(std::chrono::system_clock::now() +
+                         std::chrono::milliseconds(config_.rpc_timeout_ms));
+    {
+        std::lock_guard<std::mutex> rpc_lock(rpc_mutex_);
+        active_rpc_ = &context;
+    }
+    const grpc::Status status = stub_->GetStatus(&context, request, &response);
+    {
+        std::lock_guard<std::mutex> rpc_lock(rpc_mutex_);
+        active_rpc_ = nullptr;
+    }
+    if (!status.ok()) {
+        MarkDegraded("sample ingress status refresh failed: " +
+                     status.error_message());
+        return false;
+    }
+    std::string error;
+    if (!ValidateDistributorStatus(response, error) ||
+        !ApplyDistributorStatus(response, false, error)) {
+        MarkDegraded(error);
+        return false;
+    }
     return true;
 }
 
@@ -306,11 +429,19 @@ void SampleSender::SenderLoop() {
         QueueItem item;
         {
             std::unique_lock<std::mutex> lock(mutex_);
-            queue_cv_.wait(lock, [this]() {
-                return force_stop_ || !queue_.empty() || stop_requested_;
-            });
+            const bool signaled = queue_cv_.wait_for(
+                lock,
+                std::chrono::milliseconds(config_.status_poll_interval_ms),
+                [this]() {
+                    return force_stop_ || !queue_.empty() || stop_requested_;
+                });
             if (force_stop_ || (stop_requested_ && queue_.empty())) {
                 break;
+            }
+            if (!signaled && queue_.empty()) {
+                lock.unlock();
+                if (!RefreshDistributorStatus()) break;
+                continue;
             }
             item = queue_.front();
         }
@@ -541,6 +672,8 @@ SampleSender::Snapshot SampleSender::GetSnapshot() const {
     snapshot.producer_stale_count = producer_stale_count_;
     snapshot.producer_stale_samples_by_model =
         producer_stale_samples_by_model_;
+    snapshot.pool_stale_count = pool_stale_count_;
+    snapshot.pool_stale_samples_by_model = pool_stale_samples_by_model_;
     snapshot.capacity_wait_ms = capacity_wait_ms_;
     if (training_capacity_wait_) {
         snapshot.capacity_wait_ms +=

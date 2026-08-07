@@ -115,6 +115,7 @@ sample_output:
   enqueue_timeout_ms: 100
   drain_timeout_ms: 10000
   health_timeout_ms: 5000
+  status_poll_interval_ms: 200  # 回读 Pool 处置账目，避免 stale 尾批阻塞评测排空
   outbound_max_fragments: 64
   outbound_max_estimated_bytes: 67108864
   aiserver_id: "aiserver-0"
