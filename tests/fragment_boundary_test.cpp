@@ -6,6 +6,15 @@
 #include <vector>
 
 int main() {
+    if (!ShouldFetchModelCandidate(10, -1, 11) ||
+        ShouldFetchModelCandidate(10, -1, 10) ||
+        ShouldFetchModelCandidate(10, 11, 12) ||
+        ShouldFetchModelCandidate(10, 11, 11)) {
+        std::cerr <<
+            "a staged model must own the download/ACK transaction until activation\n";
+        return 1;
+    }
+
     std::vector<ActiveBehaviorPolicyState> episodes;
     if (!ActiveEpisodesAllowFragmentPolicySwitch(episodes)) {
         std::cerr << "no active episode must allow a staged model switch\n";

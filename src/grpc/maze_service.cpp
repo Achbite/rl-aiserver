@@ -454,8 +454,8 @@ void MazeServiceImpl::ModelWatchLoop() {
         if (model_distributor_.GetLatestIdentity(
                 config_.sample_output.aiserver_id,
                 latest_version, latest_checksum, error) &&
-            latest_version > active_version &&
-            latest_version > staged_version) {
+            ShouldFetchModelCandidate(
+                active_version, staged_version, latest_version)) {
             const int requested_version = latest_version;
             ModelManifest candidate;
             if (model_distributor_.FetchVersion(
@@ -479,17 +479,10 @@ void MazeServiceImpl::ModelWatchLoop() {
                         validation_error;
                 } else {
                     std::lock_guard<std::mutex> lock(mutex_);
-                    if (candidate.model_version > model_manifest_.model_version &&
-                        candidate.model_version >
-                            staged_model_manifest_.model_version) {
-                        if (staged_model_manifest_.model_version >= 0 &&
-                            staged_model_manifest_.model_path !=
-                                candidate.model_path) {
-                            std::error_code remove_error;
-                            std::filesystem::remove(
-                                staged_model_manifest_.model_path,
-                                remove_error);
-                        }
+                    if (ShouldFetchModelCandidate(
+                            model_manifest_.model_version,
+                            staged_model_manifest_.model_version,
+                            candidate.model_version)) {
                         staged_model_manifest_ = std::move(candidate);
                         LOG_INFO(
                             "MazeService",
@@ -499,6 +492,10 @@ void MazeServiceImpl::ModelWatchLoop() {
                         if (CanActivateStagedModel()) {
                             ActivateStagedModel();
                         }
+                    } else {
+                        std::error_code remove_error;
+                        std::filesystem::remove(
+                            candidate.model_path, remove_error);
                     }
                 }
             }
