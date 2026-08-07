@@ -270,6 +270,36 @@ bool SingleMapTaskController::ShouldPauseTrainingCollection(
     return true;
 }
 
+bool SingleMapTaskController::ReconcileDiscardedTrainingSamples(
+    int64_t sample_count,
+    std::string& error) {
+    if (!initialized_ || sample_count < 0) {
+        error = "single-map discarded sample disposition is invalid";
+        return false;
+    }
+    if (sample_count == 0) return true;
+    if (evaluation_.active ||
+        stage_ == maze::CURRICULUM_STAGE_COMPLETE ||
+        stage_ == maze::CURRICULUM_STAGE_FAILED) {
+        error = "single-map samples cannot be discarded outside training";
+        return false;
+    }
+    if (latest_produced_samples_ < stage_start_produced_samples_ ||
+        sample_count >
+            latest_produced_samples_ - stage_start_produced_samples_) {
+        error = "single-map discarded samples exceed the current stage";
+        return false;
+    }
+
+    // Producer freshness is decided asynchronously by the Sample Pool. A
+    // rejected fragment was tentatively counted when its transitions were
+    // created, so rewind the current-stage ledger before evaluating the next
+    // monotonic counter snapshot. Evaluation can only start after this ledger
+    // and the Learner trained-sample identity are fully drained.
+    latest_produced_samples_ -= sample_count;
+    return true;
+}
+
 double SingleMapTaskController::SuccessRate(
     const EvaluationRound& round) {
     if (round.agent_episodes <= 0) return 0.0;

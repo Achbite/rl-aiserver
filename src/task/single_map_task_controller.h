@@ -104,6 +104,9 @@ public:
         bool& should_pause,
         std::string& error);
 
+    bool ReconcileDiscardedTrainingSamples(int64_t sample_count,
+                                           std::string& error);
+
     bool RecordEvaluationEpisode(
         maze::EpisodeMode episode_mode,
         const SingleMapModelIdentity& model,

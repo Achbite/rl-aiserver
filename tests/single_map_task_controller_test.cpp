@@ -164,6 +164,22 @@ int main() {
         Model(1953, 999936), 999936, plan, error));
     assert(plan.episode_mode == maze::EPISODE_MODE_EVALUATION_ARGMAX);
 
+    // Sample Pool freshness is resolved after production. Reconcile that
+    // explicit disposition inside the current stage without weakening the
+    // monotonic counter check used by later updates.
+    SingleMapTaskController freshness;
+    error.clear();
+    assert(freshness.Initialize(188, Model(0, 0), 0, error));
+    assert(freshness.ShouldPauseTrainingCollection(
+        Model(1, 512), 640, should_pause, error));
+    assert(!should_pause);
+    assert(freshness.ReconcileDiscardedTrainingSamples(128, error));
+    assert(freshness.GetSnapshot().stage_produced_samples == 512);
+    assert(freshness.ShouldPauseTrainingCollection(
+        Model(1, 512), 512, should_pause, error));
+    assert(!should_pause);
+    assert(!freshness.ReconcileDiscardedTrainingSamples(513, error));
+
     std::cout << "single-map task controller contract passed\n";
     return 0;
 }

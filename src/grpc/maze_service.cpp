@@ -1039,6 +1039,7 @@ bool MazeServiceImpl::ReconcileProducerStaleSamples() {
     }
 
     int64_t delta_total = 0;
+    std::vector<std::pair<int, int64_t>> deltas;
     for (const auto& item : sender.producer_stale_samples_by_model) {
         const int model_version = item.first;
         const int64_t reconciled =
@@ -1055,9 +1056,7 @@ bool MazeServiceImpl::ReconcileProducerStaleSamples() {
             MarkDegraded("producer stale behavior-model accounting is inconsistent");
             return false;
         }
-        produced->second -= delta;
-        reconciled_producer_stale_samples_by_model_[model_version] =
-            item.second;
+        deltas.emplace_back(model_version, delta);
         delta_total += delta;
     }
     if (reconciled_producer_stale_samples_ + delta_total !=
@@ -1065,6 +1064,19 @@ bool MazeServiceImpl::ReconcileProducerStaleSamples() {
         produced_unique_samples_ < delta_total) {
         MarkDegraded("producer stale sample accounting is inconsistent");
         return false;
+    }
+    std::string controller_error;
+    if (delta_total > 0 &&
+        !task_controller_.ReconcileDiscardedTrainingSamples(
+            delta_total, controller_error)) {
+        MarkDegraded("producer stale task accounting is inconsistent: " +
+                     controller_error);
+        return false;
+    }
+    for (const auto& delta : deltas) {
+        produced_samples_by_model_[delta.first] -= delta.second;
+        reconciled_producer_stale_samples_by_model_[delta.first] +=
+            delta.second;
     }
     produced_unique_samples_ -= delta_total;
     reconciled_producer_stale_samples_ = sender.producer_stale_count;
