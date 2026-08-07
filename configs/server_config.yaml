@@ -1,11 +1,11 @@
 # ============================================================================
 
-# --- 0.8.0 不可变协议身份 ---
+# --- 0.9.1 候选协议身份 ---
 contract:
   package_name: "rl-contracts"
-  package_version: "0.8.0"
-  source_digest: "157fba14177a0727abf663c442003e2a5f5c1e297f4af97ea22b45d74cdb32b5"
-  artifact_digest: "71a0f13363d62b5d076c02b00e5b4b269a3e91253b190432f2e83c43cdcf7d3a"
+  package_version: "0.9.1"
+  source_digest: "861575536f18342fd427661c8f21b7b98994913e1e1c998f87fce5ee1490d438"
+  artifact_digest: "b8e8cdabf05b15b830b27edd1555904269202042756ecf0ed8158184e57ce8f6"
   platform: "linux/arm64"
   generator_identity: "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8"
 
@@ -18,12 +18,12 @@ training_semantics:
   action_schema_id: "maze.action.v1"
   action_schema_version: 1
   action_schema_digest: "ce84c564e128f98adcc48fd420ac0df5acea61774a25de8705b602464009cfd8"
-  reward_schema_id: "maze.reward.v3"
+  reward_schema_id: "maze.reward.v4"
   reward_schema_version: 1
-  reward_schema_digest: "b55437290fc9183f6197de5b4fdb493f162e08d61dde73b3415ddc9315d3c604"
+  reward_schema_digest: "ed284084b79413473d5053b6d3f69320d2a4639c81451ba598ca45ac8ce15929"
   policy_distribution_schema_id: "categorical.logits.v1"
   model_architecture_id: "maze.mlp-17x64x64.v1"
-  semantics_digest: "bde46f61bd04857f3fb2e79a5533f866856bb832c7ae2fb50ab65c67949ca62d"
+  semantics_digest: "6cd834542f8263135b4bfd069f372ddfdb99334060d305f58b00ce56eea10b4c"
 
 policy:
   distribution_schema_id: "categorical.logits.v1"
@@ -35,13 +35,13 @@ observation:
   ray_max_range: 10              # local ray maximum, grid cells, >0
 
 reward:
-  goal_reward: 10.0              # terminal Goal reward
-  timeout_base: -2.0             # terminal TIME_LIMIT base reward
-  gamma: 0.99                    # PBRS discount; must equal Learner gamma
-  potential_distance_scale: 220 # D_map, geodesic steps
-  stage_8x_first_visit_cap: 0.25 # episode cap
-  stage_4x_first_visit_cap: 0.10 # episode cap
-  stage_2x_first_visit_cap: 0.0  # disabled in final stage
+  goal_reward: 10.0                       # reward; only GOAL_REACHED, >0
+  timeout_penalty: -2.0                   # reward; only TIME_LIMIT, <0
+  progress_budget: 1.0                    # episode reward budget; >=0
+  stage_8x_first_visit_budget: 0.75       # episode reward budget; >= 4x
+  stage_4x_first_visit_budget: 0.25       # episode reward budget; >= 2x
+  stage_2x_first_visit_budget: 0.0        # episode reward budget; final stage =0
+  wasted_action_penalty: -0.002           # reward/action; Stay or collision, <0
 
 curriculum:
   stage_8x_sample_budget: 1000000
@@ -87,8 +87,8 @@ model:
 task:
   task_contract_id: "maze.task.v3"
   task_id: "maze.fixed.single-map.v1"
-  task_revision: 1
-  task_config_digest: "17f885bd9ff1a20cf9fba210f1454487ea04c36251730b6d0875c4dbb5cb99d7"
+  task_revision: 2
+  task_config_digest: "f16411393f778b7a2ffaf688e80f138dc33bd0709f47190c3f7b0f5946178b5b"
   agent_num: 4
   fixed_map_id: "maze_117436372"
   fixed_map_checksum_sha256: "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9"
@@ -101,9 +101,8 @@ model_distribution:
   host: "maze-learner"
   port: 9200
   poll_interval_ms: 200
-  boundary_wait_ms: 60000
   rpc_timeout_ms: 5000
-  contract_version: "0.8.0"
+  contract_version: "0.9.1"
 
 # --- 样本输出参数（仅 training 生效，AIServer → LocalSampleService）---
 sample_output:

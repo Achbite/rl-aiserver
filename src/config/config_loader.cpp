@@ -232,12 +232,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
         {"reward", "goal_reward"},
-        {"reward", "timeout_base"},
-        {"reward", "gamma"},
-        {"reward", "potential_distance_scale"},
-        {"reward", "stage_8x_first_visit_cap"},
-        {"reward", "stage_4x_first_visit_cap"},
-        {"reward", "stage_2x_first_visit_cap"},
+        {"reward", "timeout_penalty"},
+        {"reward", "progress_budget"},
+        {"reward", "stage_8x_first_visit_budget"},
+        {"reward", "stage_4x_first_visit_budget"},
+        {"reward", "stage_2x_first_visit_budget"},
+        {"reward", "wasted_action_penalty"},
         {"curriculum", "stage_8x_sample_budget"},
         {"curriculum", "stage_4x_sample_budget"},
         {"curriculum", "stage_2x_sample_budget"},
@@ -278,7 +278,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"training_semantics", "reward_schema_version"},
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
-        {"reward", "potential_distance_scale"},
         {"curriculum", "stage_8x_sample_budget"},
         {"curriculum", "stage_4x_sample_budget"},
         {"curriculum", "stage_2x_sample_budget"},
@@ -298,7 +297,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"task", "training_sample_budget"},
         {"model_distribution", "port"},
         {"model_distribution", "poll_interval_ms"},
-        {"model_distribution", "boundary_wait_ms"},
         {"model_distribution", "rpc_timeout_ms"},
         {"sample_output", "port"},
         {"sample_output", "fragment_samples"},
@@ -324,11 +322,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     const std::pair<const char*, const char*> finite_fields[] = {
         {"policy", "training_temperature"},
         {"reward", "goal_reward"},
-        {"reward", "timeout_base"},
-        {"reward", "gamma"},
-        {"reward", "stage_8x_first_visit_cap"},
-        {"reward", "stage_4x_first_visit_cap"},
-        {"reward", "stage_2x_first_visit_cap"},
+        {"reward", "timeout_penalty"},
+        {"reward", "progress_budget"},
+        {"reward", "stage_8x_first_visit_budget"},
+        {"reward", "stage_4x_first_visit_budget"},
+        {"reward", "stage_2x_first_visit_budget"},
+        {"reward", "wasted_action_penalty"},
         {"curriculum", "stage_8x_success_threshold"},
         {"curriculum", "stage_4x_success_threshold"},
         {"curriculum", "stage_2x_success_threshold"},
@@ -410,21 +409,22 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
 
     out_config.reward.goal_reward = static_cast<float>(SafeDouble(
         FindValue(entries, "reward", "goal_reward"), 0.0));
-    out_config.reward.timeout_base = static_cast<float>(SafeDouble(
-        FindValue(entries, "reward", "timeout_base"), 0.0));
-    out_config.reward.gamma = static_cast<float>(SafeDouble(
-        FindValue(entries, "reward", "gamma"), 0.0));
-    out_config.reward.potential_distance_scale = SafeInt(
-        FindValue(entries, "reward", "potential_distance_scale"), 0);
-    out_config.reward.stage_8x_first_visit_cap = static_cast<float>(
+    out_config.reward.timeout_penalty = static_cast<float>(SafeDouble(
+        FindValue(entries, "reward", "timeout_penalty"), 0.0));
+    out_config.reward.progress_budget = static_cast<float>(SafeDouble(
+        FindValue(entries, "reward", "progress_budget"), -1.0));
+    out_config.reward.stage_8x_first_visit_budget = static_cast<float>(
         SafeDouble(FindValue(entries, "reward",
-                             "stage_8x_first_visit_cap"), -1.0));
-    out_config.reward.stage_4x_first_visit_cap = static_cast<float>(
+                             "stage_8x_first_visit_budget"), -1.0));
+    out_config.reward.stage_4x_first_visit_budget = static_cast<float>(
         SafeDouble(FindValue(entries, "reward",
-                             "stage_4x_first_visit_cap"), -1.0));
-    out_config.reward.stage_2x_first_visit_cap = static_cast<float>(
+                             "stage_4x_first_visit_budget"), -1.0));
+    out_config.reward.stage_2x_first_visit_budget = static_cast<float>(
         SafeDouble(FindValue(entries, "reward",
-                             "stage_2x_first_visit_cap"), -1.0));
+                             "stage_2x_first_visit_budget"), -1.0));
+    out_config.reward.wasted_action_penalty = static_cast<float>(
+        SafeDouble(FindValue(entries, "reward",
+                             "wasted_action_penalty"), 0.0));
 
     out_config.curriculum.stage_8x_sample_budget = SafeInt64(
         FindValue(entries, "curriculum", "stage_8x_sample_budget"),
@@ -548,8 +548,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         FindValue(entries, "model_distribution", "port"), 9200);
     out_config.model_distribution.poll_interval_ms = SafeInt(
         FindValue(entries, "model_distribution", "poll_interval_ms"), 200);
-    out_config.model_distribution.boundary_wait_ms = SafeInt(
-        FindValue(entries, "model_distribution", "boundary_wait_ms"), 60000);
     out_config.model_distribution.rpc_timeout_ms = SafeInt(
         FindValue(entries, "model_distribution", "rpc_timeout_ms"), 5000);
     std::string contract_version =
@@ -666,10 +664,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         EnvInt(
             "RL_MODEL_POLL_INTERVAL_MS",
             out_config.model_distribution.poll_interval_ms);
-    out_config.model_distribution.boundary_wait_ms =
-        EnvInt(
-            "RL_MODEL_BOUNDARY_WAIT_MS",
-            out_config.model_distribution.boundary_wait_ms);
     out_config.task.training_sample_budget = SafeInt64(
         GetEnvValue("RL_TRAINING_SAMPLE_BUDGET"),
         out_config.task.training_sample_budget);
@@ -685,11 +679,11 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     };
     const bool immutable_identity_valid =
         out_config.contract.package_name == "rl-contracts" &&
-        out_config.contract.package_version == "0.8.0" &&
+        out_config.contract.package_version == "0.9.1" &&
         out_config.contract.source_digest.hex ==
-            "157fba14177a0727abf663c442003e2a5f5c1e297f4af97ea22b45d74cdb32b5" &&
+            "861575536f18342fd427661c8f21b7b98994913e1e1c998f87fce5ee1490d438" &&
         out_config.contract.artifact_digest.hex ==
-            "71a0f13363d62b5d076c02b00e5b4b269a3e91253b190432f2e83c43cdcf7d3a" &&
+            "b8e8cdabf05b15b830b27edd1555904269202042756ecf0ed8158184e57ce8f6" &&
         out_config.contract.platform == "linux/arm64" &&
         out_config.contract.generator_identity ==
             "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8" &&
@@ -706,16 +700,16 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.training_semantics.action_schema.canonical_digest.hex ==
             "ce84c564e128f98adcc48fd420ac0df5acea61774a25de8705b602464009cfd8" &&
         out_config.training_semantics.reward_schema.schema_id ==
-            "maze.reward.v3" &&
+            "maze.reward.v4" &&
         out_config.training_semantics.reward_schema.schema_version == 1 &&
         out_config.training_semantics.reward_schema.canonical_digest.hex ==
-            "b55437290fc9183f6197de5b4fdb493f162e08d61dde73b3415ddc9315d3c604" &&
+            "ed284084b79413473d5053b6d3f69320d2a4639c81451ba598ca45ac8ce15929" &&
         out_config.training_semantics.policy_distribution_schema_id ==
             "categorical.logits.v1" &&
         out_config.training_semantics.model_architecture_id ==
             "maze.mlp-17x64x64.v1" &&
         out_config.training_semantics.semantics_digest.hex ==
-            "bde46f61bd04857f3fb2e79a5533f866856bb832c7ae2fb50ab65c67949ca62d" &&
+            "6cd834542f8263135b4bfd069f372ddfdb99334060d305f58b00ce56eea10b4c" &&
         out_config.policy.distribution_schema_id ==
             "categorical.logits.v1" &&
         out_config.policy.policy_spec_digest.hex ==
@@ -728,15 +722,15 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         !digest_valid(out_config.training_semantics.reward_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.semantics_digest) ||
         !digest_valid(out_config.policy.policy_spec_digest)) {
-        LOG_ERROR("Config", "0.8.0 contract/training identity mismatch");
+        LOG_ERROR("Config", "0.9.1 contract/training identity mismatch");
         return false;
     }
     if (out_config.task.task_contract_id != "maze.task.v3" ||
         out_config.task.task_id != "maze.fixed.single-map.v1" ||
-        out_config.task.task_revision != 1 ||
+        out_config.task.task_revision != 2 ||
         !digest_valid(out_config.task.task_config_digest) ||
         out_config.task.task_config_digest.hex !=
-            "17f885bd9ff1a20cf9fba210f1454487ea04c36251730b6d0875c4dbb5cb99d7" ||
+            "f16411393f778b7a2ffaf688e80f138dc33bd0709f47190c3f7b0f5946178b5b" ||
         out_config.task.agent_num != 4 ||
         out_config.task.fixed_map_id != "maze_117436372" ||
         out_config.task.fixed_map_checksum_sha256 !=
@@ -756,13 +750,17 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.policy.training_temperature != 1.0 ||
         out_config.observation.ray_max_range <= 0 ||
         std::fabs(out_config.reward.goal_reward - 10.0f) > 1e-6f ||
-        std::fabs(out_config.reward.timeout_base + 2.0f) > 1e-6f ||
-        std::fabs(out_config.reward.gamma - 0.99f) > 1e-6f ||
-        out_config.reward.potential_distance_scale != 220 ||
-        std::fabs(out_config.reward.stage_8x_first_visit_cap - 0.25f) > 1e-6f ||
-        std::fabs(out_config.reward.stage_4x_first_visit_cap - 0.10f) > 1e-6f ||
-        std::fabs(out_config.reward.stage_2x_first_visit_cap) > 1e-6f) {
-        LOG_ERROR("Config", "model, policy, observation or Reward V3 mismatch");
+        std::fabs(out_config.reward.timeout_penalty + 2.0f) > 1e-6f ||
+        std::fabs(out_config.reward.progress_budget - 1.0f) > 1e-6f ||
+        std::fabs(out_config.reward.stage_8x_first_visit_budget - 0.75f) > 1e-6f ||
+        std::fabs(out_config.reward.stage_4x_first_visit_budget - 0.25f) > 1e-6f ||
+        std::fabs(out_config.reward.stage_2x_first_visit_budget) > 1e-6f ||
+        std::fabs(out_config.reward.wasted_action_penalty + 0.002f) > 1e-6f ||
+        out_config.reward.timeout_penalty +
+                out_config.reward.progress_budget +
+                out_config.reward.stage_8x_first_visit_budget >=
+            0.0f) {
+        LOG_ERROR("Config", "model, policy, observation or Reward V4 mismatch");
         return false;
     }
     const bool runtime_values_valid =
@@ -776,7 +774,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.model_distribution.port > 0 &&
         out_config.model_distribution.port <= 65535 &&
         out_config.model_distribution.poll_interval_ms > 0 &&
-        out_config.model_distribution.boundary_wait_ms > 0 &&
         out_config.model_distribution.rpc_timeout_ms > 0 &&
         out_config.sample_output.port > 0 &&
         out_config.sample_output.port <= 65535 &&
@@ -815,7 +812,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     out_config.curriculum.agent_num = out_config.task.agent_num;
     out_config.curriculum.sample_quantum = fragment_quantum;
     if (fragment_quantum != 512 || out_config.server.max_agents < 4 ||
-        out_config.model_distribution.contract_version != "0.8.0" ||
+        out_config.model_distribution.contract_version != "0.9.1" ||
         (out_config.task.training_sample_budget > 0 &&
          out_config.task.training_sample_budget % fragment_quantum != 0)) {
         LOG_ERROR("Config", "sample quantum or runtime contract mismatch");
@@ -847,11 +844,10 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
              out_config.task.fixed_map_id.c_str(),
              static_cast<long long>(
                  out_config.task.training_sample_budget));
-    LOG_INFO("Config", "model_distribution: target=%s:%d, poll_interval_ms=%d, boundary_wait_ms=%d, rpc_timeout_ms=%d, contract=%s",
+    LOG_INFO("Config", "model_distribution: target=%s:%d, poll_interval_ms=%d, rpc_timeout_ms=%d, contract=%s",
              out_config.model_distribution.host.c_str(),
              out_config.model_distribution.port,
              out_config.model_distribution.poll_interval_ms,
-             out_config.model_distribution.boundary_wait_ms,
              out_config.model_distribution.rpc_timeout_ms,
              out_config.model_distribution.contract_version.c_str());
     const bool sample_output_active =

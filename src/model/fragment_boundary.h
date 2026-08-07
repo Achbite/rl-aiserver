@@ -8,7 +8,7 @@ struct FragmentBoundaryState {
     bool has_pending_batch = false;
 };
 
-inline bool AllAgentsAtFragmentBoundary(
+inline bool AllLocalAgentsAtFragmentBoundary(
     const std::vector<FragmentBoundaryState>& agents) {
     for (const auto& agent : agents) {
         if (agent.has_pending_action ||

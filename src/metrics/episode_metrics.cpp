@@ -1,7 +1,10 @@
 #include "metrics/episode_metrics.h"
 
+#include "task/single_map_task_controller.h"
+
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include <limits>
 #include <map>
 #include <utility>
@@ -80,6 +83,47 @@ void AddGauge(training::MetricSnapshot* snapshot,
     value->set_field_id(field_id);
     value->set_value(measurement);
     value->set_window_end_unix_ms(timestamp);
+}
+
+void AddTaskDescriptor(
+    training::MetricSnapshot* snapshot,
+    const std::string& field_id,
+    const std::string& label,
+    const std::string& dimension,
+    const std::string& unit,
+    const std::string& statistic,
+    training::MetricValueKind value_kind,
+    training::MetricAggregationKind aggregation,
+    training::MetricWindowKind window) {
+    auto* descriptor = snapshot->add_descriptors();
+    descriptor->set_field_id(field_id);
+    descriptor->set_label(label);
+    descriptor->set_group(
+        field_id.rfind("server.evaluation.", 0) == 0
+            ? "episode_success"
+            : "training_depth");
+    descriptor->set_dimension(dimension);
+    descriptor->set_unit(unit);
+    descriptor->set_scope("server_pod");
+    descriptor->set_statistic(statistic);
+    descriptor->set_value_kind(value_kind);
+    descriptor->set_owner_component("maze-task-adapter");
+    descriptor->set_aggregation_kind(aggregation);
+    descriptor->set_window_kind(window);
+    FillMetricSchema(descriptor->mutable_schema_identity());
+}
+
+double CurriculumMultiplier(maze::CurriculumStage stage) {
+    switch (stage) {
+        case maze::CURRICULUM_STAGE_8X:
+            return 8.0;
+        case maze::CURRICULUM_STAGE_4X:
+            return 4.0;
+        case maze::CURRICULUM_STAGE_2X:
+            return 2.0;
+        default:
+            return 0.0;
+    }
 }
 
 }  // namespace
@@ -222,5 +266,108 @@ void EpisodeMetricsWindow::Fill(
                       training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
         AddMean(snapshot, field_id, item.second, reward_transitions,
                 timestamp_unix_ms);
+    }
+}
+
+void AppendSingleMapTaskMetrics(
+    training::MetricSnapshot* snapshot,
+    const SingleMapTaskSnapshot& task,
+    bool has_completed_evaluation,
+    int64_t timestamp_unix_ms) {
+    AddTaskDescriptor(
+        snapshot, "server.task.curriculum.multiplier.v1", "Curriculum",
+        "curriculum_multiplier", "x", "latest",
+        training::METRIC_VALUE_KIND_GAUGE,
+        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
+        training::METRIC_WINDOW_KIND_INSTANT);
+    AddTaskDescriptor(
+        snapshot, "server.task.stage_produced_samples.v1", "Stage Samples",
+        "sample_count", "samples", "total",
+        training::METRIC_VALUE_KIND_COUNTER,
+        training::METRIC_AGGREGATION_KIND_SUM,
+        training::METRIC_WINDOW_KIND_CUMULATIVE);
+    AddTaskDescriptor(
+        snapshot, "server.task.stage_sample_budget.v1",
+        "Stage Sample Budget", "sample_count", "samples", "latest",
+        training::METRIC_VALUE_KIND_GAUGE,
+        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
+        training::METRIC_WINDOW_KIND_INSTANT);
+    AddTaskDescriptor(
+        snapshot, "server.task.next_evaluation_trained_samples.v1",
+        "Next Evaluation", "sample_count", "samples", "latest",
+        training::METRIC_VALUE_KIND_GAUGE,
+        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
+        training::METRIC_WINDOW_KIND_INSTANT);
+    AddTaskDescriptor(
+        snapshot, "server.evaluation.episode_in_round.v1",
+        "Evaluation Episode", "episode_count", "episode", "latest",
+        training::METRIC_VALUE_KIND_GAUGE,
+        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
+        training::METRIC_WINDOW_KIND_INSTANT);
+
+    const char* success_ids[] = {
+        "server.evaluation.argmax_round_1_success_rate.v1",
+        "server.evaluation.argmax_round_2_success_rate.v1",
+        "server.evaluation.stochastic_success_rate.v1",
+    };
+    const char* success_labels[] = {
+        "Argmax Round 1 Success",
+        "Argmax Round 2 Success",
+        "Stochastic Success",
+    };
+    for (int index = 0; index < 3; ++index) {
+        AddTaskDescriptor(
+            snapshot, success_ids[index], success_labels[index], "ratio",
+            "ratio", "mean", training::METRIC_VALUE_KIND_GAUGE,
+            training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
+            training::METRIC_WINDOW_KIND_INSTANT);
+    }
+    AddTaskDescriptor(
+        snapshot, "server.evaluation.path_ratio_median.v1",
+        "Argmax Path Ratio Median", "ratio", "ratio", "median",
+        training::METRIC_VALUE_KIND_GAUGE,
+        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
+        training::METRIC_WINDOW_KIND_INSTANT);
+    AddTaskDescriptor(
+        snapshot, "server.evaluation.path_ratio_p95.v1",
+        "Argmax Path Ratio p95", "ratio", "ratio", "p95",
+        training::METRIC_VALUE_KIND_GAUGE,
+        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
+        training::METRIC_WINDOW_KIND_INSTANT);
+
+    if (!task.initialized) return;
+    AddGauge(snapshot, "server.task.curriculum.multiplier.v1",
+             CurriculumMultiplier(task.curriculum_stage), timestamp_unix_ms);
+    AddGauge(snapshot, "server.task.stage_produced_samples.v1",
+             static_cast<double>(task.stage_produced_samples),
+             timestamp_unix_ms);
+    AddGauge(snapshot, "server.task.stage_sample_budget.v1",
+             static_cast<double>(task.stage_sample_budget),
+             timestamp_unix_ms);
+    AddGauge(snapshot, "server.task.next_evaluation_trained_samples.v1",
+             static_cast<double>(task.next_evaluation_trained_samples),
+             timestamp_unix_ms);
+    if (task.evaluation_active) {
+        AddGauge(snapshot, "server.evaluation.episode_in_round.v1",
+                 static_cast<double>(task.evaluation_episode_in_round),
+                 timestamp_unix_ms);
+    }
+    if (!has_completed_evaluation) return;
+    AddGauge(snapshot,
+             "server.evaluation.argmax_round_1_success_rate.v1",
+             task.latest_argmax_round_1_success_rate, timestamp_unix_ms);
+    AddGauge(snapshot,
+             "server.evaluation.argmax_round_2_success_rate.v1",
+             task.latest_argmax_round_2_success_rate, timestamp_unix_ms);
+    AddGauge(snapshot,
+             "server.evaluation.stochastic_success_rate.v1",
+             task.latest_stochastic_success_rate, timestamp_unix_ms);
+    if (std::isfinite(task.latest_path_ratio_median)) {
+        AddGauge(snapshot, "server.evaluation.path_ratio_median.v1",
+                 task.latest_path_ratio_median, timestamp_unix_ms);
+    }
+    if (std::isfinite(task.latest_path_ratio_p95)) {
+        AddGauge(snapshot, "server.evaluation.path_ratio_p95.v1",
+                 task.latest_path_ratio_p95, timestamp_unix_ms);
     }
 }

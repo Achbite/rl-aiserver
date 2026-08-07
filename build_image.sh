@@ -35,6 +35,7 @@ python3 - \
     "${contract_dir}/manifest.json" \
     "${smoke_model_dir}/manifest.json" \
     "${RL_CONTRACTS_VERSION}" \
+    "${RL_CONTRACTS_PLATFORM}" \
     "${RL_SMOKE_MODEL_VERSION}" \
     <<'PY'
 import hashlib
@@ -83,10 +84,15 @@ def verify_contract_files(root, manifest):
         if actual_checksum != expected_checksum:
             raise SystemExit(f"Repository-local contract checksum mismatch: {path}")
 
-if contract.get("package") != "rl-contracts" or contract.get("version") != sys.argv[3]:
+if (
+    contract.get("schema_version") != 2
+    or contract.get("package") != "rl-contracts"
+    or contract.get("version") != sys.argv[3]
+    or contract.get("platform") != sys.argv[4]
+):
     raise SystemExit("Contract artifact identity is invalid")
 verify_contract_files(contract_path.parent, contract)
-if smoke.get("package") != "rl-smoke-model" or smoke.get("version") != sys.argv[4]:
+if smoke.get("package") != "rl-smoke-model" or smoke.get("version") != sys.argv[5]:
     raise SystemExit("Smoke model artifact identity is invalid")
 expected_contract = {
     "package_name": contract["package"],

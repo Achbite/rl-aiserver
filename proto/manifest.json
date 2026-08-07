@@ -1,7 +1,7 @@
 {
   "artifact_digest": {
     "algorithm": "sha256",
-    "hex": "71a0f13363d62b5d076c02b00e5b4b269a3e91253b190432f2e83c43cdcf7d3a"
+    "hex": "b8e8cdabf05b15b830b27edd1555904269202042756ecf0ed8158184e57ce8f6"
   },
   "contract_packages": [
     "rl.common.v1",
@@ -20,8 +20,8 @@
     "cpp/maze_task.pb.h": "6e36492e21c77bbe0a0b6229d3284d5c12fa78d23b418d7055aee43028093e66",
     "cpp/training.grpc.pb.cc": "c99b3042be471ea612fc3e512436eb28b173ce5b2ea7c524b5184ba591108c8a",
     "cpp/training.grpc.pb.h": "a9b2176b55250095ff16eac9c2d7c5dccc61ef5a21939c1509bd68057950f274",
-    "cpp/training.pb.cc": "14c8d06b034b2ad7e4268bb8c3babc64c3bcc07b2c11491aa00386a782116b73",
-    "cpp/training.pb.h": "7e3ac6a22e8996a7cebcaefdb99749e67e83048b9328a98c414feb63df257599",
+    "cpp/training.pb.cc": "d89a26ff31784edf7b3f1eebebb3e4163d815c8d41c783988b36b53f531635a9",
+    "cpp/training.pb.h": "19de5ca94a88fe8a9061d764e3e7a426aee39de3e5f5b005d11cfd09f6feee5e",
     "generator-identity.json": "e0ff2ea349578e209b5b5d6f632c967ee8ea46c7999df5cf97502b24ca69532d",
     "maze_task.proto": "c6a637ea499ff056bd073a93e66169fc4addbb16ec6b9d0f619a9189e5a05de7",
     "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -29,20 +29,20 @@
     "python/common_pb2_grpc.py": "75f2f40d6df8e11299b9f9c597e2aff0d602db92286b656fc6dd10eb9b3e4424",
     "python/maze_task_pb2.py": "2ba2d0bbcd194c9cf74ad4412dac4ad401a24f1e30d976bd8031ab340d33f795",
     "python/maze_task_pb2_grpc.py": "bf929f4d04ed8068d6698f3741210d038f778a0a53687e997b83bef1178a0fad",
-    "python/training_pb2.py": "f7859f210b38f0525fef08031a4b2c3ec3d8b550e3efadc133f63a1ad7d48506",
+    "python/training_pb2.py": "fa84c0f31b19ed04e22c00bd97e2f75d7dd12482f05dcc7667d29092656c979e",
     "python/training_pb2_grpc.py": "8304b91b8a1d9b94efa9cc89e35ce77e2416a132c16f9f3498c82c84c588e7a9",
-    "training.proto": "5f08ee8f4ba99b2570734374072f006fd556f061bcfc612934cf245c234082c9"
+    "training.proto": "0de2437776e2b44c82455d48c6a8b8f92773ee705734ae045c47681c6536feaa"
   },
   "generator_identity": "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8",
   "package": "rl-contracts",
   "platform": "linux/arm64",
   "schema_version": 2,
-  "source_commit": "dac3f28dcbff",
+  "source_commit": "b37c3300f5c9",
   "source_digest": {
     "algorithm": "sha256",
-    "hex": "157fba14177a0727abf663c442003e2a5f5c1e297f4af97ea22b45d74cdb32b5"
+    "hex": "861575536f18342fd427661c8f21b7b98994913e1e1c998f87fce5ee1490d438"
   },
-  "source_id": "contract-source-157fba14177a0727",
+  "source_id": "contract-source-861575536f18342f",
   "source_tree_state": "dirty",
-  "version": "0.8.0"
+  "version": "0.9.1"
 }

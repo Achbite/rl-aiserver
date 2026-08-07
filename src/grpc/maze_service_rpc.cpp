@@ -695,11 +695,27 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     session->curriculum_stage = plan.curriculum_stage;
     session->current_episode_mode = plan.episode_mode;
     session->current_max_steps = plan.max_steps;
-    session->pinned_model_version = plan.model.model_version;
-    session->pinned_model_checksum = plan.model.model_checksum;
-    session->pinned_model_lineage_id = model_manifest_.model_lineage_id;
-    session->pinned_model_manifest_digest = model_manifest_.manifest_digest;
-    session->pinned_model_trained_samples = plan.model.trained_samples;
+    const bool training_episode =
+        plan.episode_mode == maze::EPISODE_MODE_TRAINING;
+    session->behavior_policy_scope =
+        training_episode
+            ? BehaviorPolicyScope::TrainingFragment
+            : BehaviorPolicyScope::EvaluationEpisode;
+    session->evaluation_pinned_model_version = -1;
+    session->evaluation_pinned_model_checksum.clear();
+    session->evaluation_pinned_model_lineage_id.clear();
+    session->evaluation_pinned_model_manifest_digest.clear();
+    session->evaluation_pinned_model_trained_samples = 0;
+    if (!training_episode) {
+        session->evaluation_pinned_model_version = plan.model.model_version;
+        session->evaluation_pinned_model_checksum = plan.model.model_checksum;
+        session->evaluation_pinned_model_lineage_id =
+            model_manifest_.model_lineage_id;
+        session->evaluation_pinned_model_manifest_digest =
+            model_manifest_.manifest_digest;
+        session->evaluation_pinned_model_trained_samples =
+            plan.model.trained_samples;
+    }
     ResetEpisodeState(*session, episode_id);
     session->session_state = maze::SESSION_STATE_EPISODE_ACTIVE;
     session->protocol_episode_state = maze::EPISODE_STATE_RUNNING;
@@ -729,7 +745,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
         plan.episode_mode == maze::EPISODE_MODE_TRAINING);
     FillBehaviorPolicy(config_, model_manifest_,
                        assignment->mutable_behavior_policy());
-    if (plan.episode_mode != maze::EPISODE_MODE_TRAINING) {
+    if (!training_episode) {
         session->current_evaluation_id =
             "maze-evaluation-v" + std::to_string(plan.model.model_version);
         auto* evaluation = assignment->mutable_evaluation();
@@ -746,8 +762,11 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     } else {
         session->current_evaluation_id.clear();
     }
-    CommitCommand(*session, req->command(), *req, rsp,
-                  "episode assigned with a pinned behavior policy");
+    CommitCommand(
+        *session, req->command(), *req, rsp,
+        training_episode
+            ? "training episode assigned with fragment-scoped behavior policy"
+            : "evaluation episode assigned with episode-pinned behavior policy");
     return grpc::Status::OK;
 }
 
@@ -792,14 +811,26 @@ grpc::Status MazeServiceImpl::Update(
         finish();
         return grpc::Status::OK;
     }
-    const bool evaluation_episode =
-        session->current_episode_mode != maze::EPISODE_MODE_TRAINING;
-    if (evaluation_episode &&
-        (session->pinned_model_version != model_manifest_.model_version ||
-         session->pinned_model_checksum != model_manifest_.sha256 ||
-         session->pinned_model_lineage_id !=
+    const bool training_episode =
+        session->current_episode_mode == maze::EPISODE_MODE_TRAINING;
+    const BehaviorPolicyScope expected_policy_scope =
+        training_episode
+            ? BehaviorPolicyScope::TrainingFragment
+            : BehaviorPolicyScope::EvaluationEpisode;
+    if (session->behavior_policy_scope != expected_policy_scope) {
+        RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                      "episode mode and behavior policy scope disagree",
+                      rsp->mutable_lifecycle());
+        finish();
+        return grpc::Status::OK;
+    }
+    if (!training_episode &&
+        (session->evaluation_pinned_model_version !=
+             model_manifest_.model_version ||
+         session->evaluation_pinned_model_checksum != model_manifest_.sha256 ||
+         session->evaluation_pinned_model_lineage_id !=
              model_manifest_.model_lineage_id ||
-         session->pinned_model_manifest_digest !=
+         session->evaluation_pinned_model_manifest_digest !=
              model_manifest_.manifest_digest)) {
         RejectCommand(*session,
                       maze::LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
@@ -925,9 +956,9 @@ grpc::Status MazeServiceImpl::Update(
         session->current_episode_mode == maze::EPISODE_MODE_TRAINING &&
         !session->training_collection_paused;
     if (collect) {
-        const bool at_model_sample_boundary = IsModelSampleBoundary(
-            produced_unique_samples_,
-            training_sample_budget_.sample_quantum());
+        const bool staged_model_waiting =
+            staged_model_manifest_.model_version >
+            model_manifest_.model_version;
         for (const auto& state : req->agents()) {
             const int agent_id = static_cast<int>(state.agent_id());
             auto& agent = session->agents[agent_id];
@@ -945,8 +976,7 @@ grpc::Status MazeServiceImpl::Update(
                 }
             } else if (ShouldFlushAgentFragment(
                            cache.size(), current_fragment_samples_,
-                           produced_unique_samples_,
-                           training_sample_budget_.sample_quantum())) {
+                           staged_model_waiting)) {
                 float bootstrap_value = 0.0f;
                 if (!InferStateValue(*session, agent,
                                      static_cast<int>(state.position().x()),
@@ -964,8 +994,7 @@ grpc::Status MazeServiceImpl::Update(
                 }
             }
         }
-        if (at_model_sample_boundary &&
-            !SynchronizeModelAtSampleBoundary(lock)) {
+        if (staged_model_waiting && !ActivateStagedModel()) {
             RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
                           last_error_, rsp->mutable_lifecycle());
             finish();
@@ -1108,9 +1137,10 @@ grpc::Status MazeServiceImpl::EndEpisode(
         session->current_episode_mode != maze::EPISODE_MODE_TRAINING &&
         !training_sample_budget_.enabled()) {
         SingleMapModelIdentity pinned;
-        pinned.model_version = session->pinned_model_version;
-        pinned.model_checksum = session->pinned_model_checksum;
-        pinned.trained_samples = session->pinned_model_trained_samples;
+        pinned.model_version = session->evaluation_pinned_model_version;
+        pinned.model_checksum = session->evaluation_pinned_model_checksum;
+        pinned.trained_samples =
+            session->evaluation_pinned_model_trained_samples;
         std::string error;
         if (!task_controller_.RecordEvaluationEpisode(
                 session->current_episode_mode, pinned,
@@ -1152,6 +1182,12 @@ grpc::Status MazeServiceImpl::EndEpisode(
         }
         session->evaluation_state = maze::EVALUATION_STATE_COMMITTED;
     }
+    session->behavior_policy_scope = BehaviorPolicyScope::Unspecified;
+    session->evaluation_pinned_model_version = -1;
+    session->evaluation_pinned_model_checksum.clear();
+    session->evaluation_pinned_model_lineage_id.clear();
+    session->evaluation_pinned_model_manifest_digest.clear();
+    session->evaluation_pinned_model_trained_samples = 0;
     CommitCommand(*session, req->command(), *req, rsp,
                   "Episode outcome and metrics committed");
     return grpc::Status::OK;
@@ -1195,6 +1231,12 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     session->session_state = maze::SESSION_STATE_IDLE;
     session->protocol_episode_state = maze::EPISODE_STATE_ABORTED;
     session->evaluation_state = maze::EVALUATION_STATE_INACTIVE;
+    session->behavior_policy_scope = BehaviorPolicyScope::Unspecified;
+    session->evaluation_pinned_model_version = -1;
+    session->evaluation_pinned_model_checksum.clear();
+    session->evaluation_pinned_model_lineage_id.clear();
+    session->evaluation_pinned_model_manifest_digest.clear();
+    session->evaluation_pinned_model_trained_samples = 0;
     session->task_state =
         req->reason() == maze::MAZE_TERMINATION_REASON_TASK_STOP
             ? maze::TASK_STATE_COMPLETE
@@ -1339,6 +1381,10 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     episode_metrics_.Fill(rsp->mutable_metrics(), metric_source,
                           next_metric_sequence_.fetch_add(1), timestamp);
     auto* metrics = rsp->mutable_metrics();
+    const auto task_snapshot = task_controller_.GetSnapshot();
+    AppendSingleMapTaskMetrics(
+        metrics, task_snapshot, !task_controller_.history().empty(),
+        timestamp);
     AddMetricDescriptor(metrics, "server.episode.max_steps.current.v1",
                         "Episode Max Steps", "episode_success", "count",
                         "step", "latest", training::METRIC_VALUE_KIND_GAUGE,

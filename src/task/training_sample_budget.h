@@ -24,7 +24,7 @@ public:
             return false;
         }
         if (requested_samples_ > 0 && effective_samples_ == 0) {
-            error = "training sample budget is smaller than one global fragment";
+            error = "training sample budget is smaller than one sample quantum";
             return false;
         }
         return true;

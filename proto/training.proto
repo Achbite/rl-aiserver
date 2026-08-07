@@ -40,10 +40,14 @@ enum GetBatchResult {
     GET_BATCH_RESULT_REJECTED = 4;
 }
 
-enum BatchSelectionPolicy {
-    BATCH_SELECTION_POLICY_UNSPECIFIED = 0;
-    BATCH_SELECTION_POLICY_TARGET_ONLY = 1;
-    BATCH_SELECTION_POLICY_DRAIN_AVAILABLE = 2;
+enum BatchAssemblyMode {
+    BATCH_ASSEMBLY_MODE_UNSPECIFIED = 0;
+    // Wait for target_samples and lease complete fragments without exceeding
+    // max_samples. A delivery may contain multiple compatible behavior models.
+    BATCH_ASSEMBLY_MODE_TARGET_BOUNDED = 1;
+    // Lease the compatible fragments currently available. Used only for an
+    // explicit shutdown drain; ordinary training must use TARGET_BOUNDED.
+    BATCH_ASSEMBLY_MODE_DRAIN_AVAILABLE = 2;
 }
 
 enum DeliveryResult {
@@ -139,10 +143,30 @@ message ModelIdentity {
     rl.common.v1.ContentDigest manifest_digest = 4;
 }
 
-message BehaviorPolicyIdentity {
-    ModelIdentity model = 1;
-    string distribution_schema_id = 2;
-    rl.common.v1.ContentDigest policy_spec_digest = 3;
+// Lightweight identity recorded on generated samples. Artifact and manifest
+// digests remain mandatory at model distribution/load boundaries, but are not
+// used to force every asynchronously produced fragment into one exact artifact
+// bucket at the Sample Pool.
+message BehaviorPolicyReference {
+    string model_lineage_id = 1;
+    uint64 model_version = 2;
+    string distribution_schema_id = 3;
+    rl.common.v1.ContentDigest policy_spec_digest = 4;
+}
+
+message SampleFreshnessPolicy {
+    string model_lineage_id = 1;
+    uint64 reference_model_version = 2;
+    uint32 max_version_lag = 3;
+    int64 max_sample_age_ms = 4;
+    string distribution_schema_id = 5;
+    rl.common.v1.ContentDigest policy_spec_digest = 6;
+}
+
+message BatchAssemblySpec {
+    int32 target_samples = 1;
+    int32 max_samples = 2;
+    BatchAssemblyMode mode = 3;
 }
 
 message TrainingSemanticsIdentity {
@@ -182,7 +206,7 @@ message SampleBatch {
     bool trajectory_end = 9;
     float bootstrap_value = 10;
     bool bootstrap_valid = 11;
-    BehaviorPolicyIdentity behavior_policy = 12;
+    BehaviorPolicyReference behavior_policy = 12;
     TrainingSemanticsIdentity training_semantics = 13;
     rl.common.v1.ServiceInstanceIdentity producer = 14;
     rl.common.v1.ContractIdentity contract = 15;
@@ -212,12 +236,11 @@ message PushSamplesRsp {
 }
 
 message GetBatchReq {
-    int32 batch_size = 1;
+    BatchAssemblySpec assembly = 1;
     int32 timeout_ms = 2;
     rl.common.v1.ServiceInstanceIdentity consumer = 3;
     int32 lease_timeout_ms = 4;
-    ModelIdentity target_model = 5;
-    BatchSelectionPolicy selection_policy = 6;
+    SampleFreshnessPolicy freshness = 5;
     TrainingSemanticsIdentity required_semantics = 7;
 }
 
@@ -235,7 +258,10 @@ message GetBatchRsp {
     int64 wait_ms = 11;
     int64 leased_samples = 12;
     rl.common.v1.ServiceInstanceIdentity distributor = 13;
-    BehaviorPolicyIdentity behavior_policy = 14;
+    uint64 minimum_behavior_model_version = 14;
+    uint64 maximum_behavior_model_version = 15;
+    int64 oldest_sample_created_at_unix_ms = 16;
+    int64 newest_sample_created_at_unix_ms = 17;
 }
 
 message AckBatchReq {
@@ -272,7 +298,7 @@ message DeliveryRsp {
 message DistributorStatusReq {}
 
 message BehaviorVersionQueueStatus {
-    ModelIdentity behavior_model = 1;
+    BehaviorPolicyReference behavior_policy = 1;
     int64 ready_samples = 2;
     int64 ready_fragments = 3;
     int64 leased_samples = 4;
@@ -330,6 +356,9 @@ message DistributorStatusRsp {
     bool ingress_ready = 42;
     bool pool_ready = 43;
     int64 timestamp_unix_ms = 44;
+    int64 oldest_ready_sample_age_ms = 45;
+    uint64 minimum_ready_model_version = 46;
+    uint64 maximum_ready_model_version = 47;
 }
 
 message MetricDescriptor {

@@ -2,37 +2,16 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <unordered_map>
-
-inline bool IsModelSampleBoundary(int64_t produced_samples,
-                                  int64_t sample_quantum) {
-    return produced_samples > 0 && sample_quantum > 0 &&
-           produced_samples % sample_quantum == 0;
-}
-
 inline bool ShouldFlushAgentFragment(
     std::size_t cached_samples,
     int configured_fragment_samples,
-    int64_t produced_samples,
-    int64_t sample_quantum) {
+    bool staged_model_waiting) {
     if (cached_samples == 0 || configured_fragment_samples <= 0) {
         return false;
     }
     return cached_samples >=
                static_cast<std::size_t>(configured_fragment_samples) ||
-           IsModelSampleBoundary(produced_samples, sample_quantum);
-}
-
-inline int SelectModelBoundaryTarget(
-    int initial_model_version,
-    int64_t sample_quantum,
-    const std::unordered_map<int, int64_t>& produced_samples_by_model) {
-    int64_t trainable_updates = 0;
-    for (const auto& item : produced_samples_by_model) {
-        trainable_updates += item.second / sample_quantum;
-    }
-    return initial_model_version +
-        static_cast<int>(trainable_updates);
+           staged_model_waiting;
 }
 
 inline int SelectPerAgentFragmentSamples(

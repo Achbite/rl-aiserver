@@ -243,7 +243,7 @@ ContentDigest::ContentDigest(const ContentDigest& from)
     _impl_.hex_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_hex().empty()) {
-    _this->_impl_.hex_.Set(from._internal_hex(),
+    _this->_impl_.hex_.Set(from._internal_hex(), 
       _this->GetArenaForAllocation());
   }
   _this->_impl_.algorithm_ = from._impl_.algorithm_;
@@ -490,7 +490,7 @@ ContractIdentity::ContractIdentity(const ContractIdentity& from)
     _impl_.package_name_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_package_name().empty()) {
-    _this->_impl_.package_name_.Set(from._internal_package_name(),
+    _this->_impl_.package_name_.Set(from._internal_package_name(), 
       _this->GetArenaForAllocation());
   }
   _impl_.package_version_.InitDefault();
@@ -498,7 +498,7 @@ ContractIdentity::ContractIdentity(const ContractIdentity& from)
     _impl_.package_version_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_package_version().empty()) {
-    _this->_impl_.package_version_.Set(from._internal_package_version(),
+    _this->_impl_.package_version_.Set(from._internal_package_version(), 
       _this->GetArenaForAllocation());
   }
   _impl_.platform_.InitDefault();
@@ -506,7 +506,7 @@ ContractIdentity::ContractIdentity(const ContractIdentity& from)
     _impl_.platform_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_platform().empty()) {
-    _this->_impl_.platform_.Set(from._internal_platform(),
+    _this->_impl_.platform_.Set(from._internal_platform(), 
       _this->GetArenaForAllocation());
   }
   _impl_.generator_identity_.InitDefault();
@@ -514,7 +514,7 @@ ContractIdentity::ContractIdentity(const ContractIdentity& from)
     _impl_.generator_identity_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_generator_identity().empty()) {
-    _this->_impl_.generator_identity_.Set(from._internal_generator_identity(),
+    _this->_impl_.generator_identity_.Set(from._internal_generator_identity(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_source_digest()) {
@@ -923,7 +923,7 @@ SchemaIdentity::SchemaIdentity(const SchemaIdentity& from)
     _impl_.schema_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_schema_id().empty()) {
-    _this->_impl_.schema_id_.Set(from._internal_schema_id(),
+    _this->_impl_.schema_id_.Set(from._internal_schema_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_canonical_digest()) {
@@ -1194,7 +1194,7 @@ ServiceInstanceIdentity::ServiceInstanceIdentity(const ServiceInstanceIdentity& 
     _impl_.component_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_component().empty()) {
-    _this->_impl_.component_.Set(from._internal_component(),
+    _this->_impl_.component_.Set(from._internal_component(), 
       _this->GetArenaForAllocation());
   }
   _impl_.instance_id_.InitDefault();
@@ -1202,7 +1202,7 @@ ServiceInstanceIdentity::ServiceInstanceIdentity(const ServiceInstanceIdentity& 
     _impl_.instance_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_instance_id().empty()) {
-    _this->_impl_.instance_id_.Set(from._internal_instance_id(),
+    _this->_impl_.instance_id_.Set(from._internal_instance_id(), 
       _this->GetArenaForAllocation());
   }
   _this->_impl_.lifecycle_epoch_ = from._impl_.lifecycle_epoch_;

@@ -50,7 +50,7 @@ bool SampleSender::ProbeDistributor() {
         response.distributor().component() != "sample-pool" ||
         response.distributor().instance_id().empty() ||
         response.distributor().lifecycle_epoch() == 0) {
-        MarkDegraded("sample ingress identity does not match rl-contracts 0.8.0");
+        MarkDegraded("sample ingress identity does not match rl-contracts 0.9.1");
         return false;
     }
     if (!response.ready() || !response.ingress_ready()) {

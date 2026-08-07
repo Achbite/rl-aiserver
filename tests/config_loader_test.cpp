@@ -59,9 +59,14 @@ int main(int argc, char* argv[]) {
             "valid config was rejected");
     Require(!LoadDocument(
                 root, "bad-revision.yaml",
-                ReplaceOnce(valid, "  task_revision: 1\n",
-                            "  task_revision: 1suffix\n")),
+                ReplaceOnce(valid, "  task_revision: 2\n",
+                            "  task_revision: 2suffix\n")),
             "malformed task revision did not fail closed");
+    Require(!LoadDocument(
+                root, "bad-failure-budget.yaml",
+                ReplaceOnce(valid, "  timeout_penalty: -2.0",
+                            "  timeout_penalty: -1.0")),
+            "unsafe TIME_LIMIT failure budget did not fail closed");
     Require(!LoadDocument(
                 root, "bad-temperature.yaml",
                 ReplaceOnce(valid, "  training_temperature: 1.0",

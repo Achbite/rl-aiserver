@@ -24,22 +24,15 @@ bool DistanceAt(const SessionManager::Session& session,
     return distance >= 0;
 }
 
-float Potential(int distance, int maximum_distance) {
-    return std::clamp(
-        1.0f - static_cast<float>(distance) /
-                   static_cast<float>(maximum_distance),
-        0.0f, 1.0f);
-}
-
-float FirstVisitCap(maze::CurriculumStage stage,
-                    const MazeRewardConfig& config) {
+float FirstVisitBudget(maze::CurriculumStage stage,
+                       const MazeRewardConfig& config) {
     switch (stage) {
         case maze::CURRICULUM_STAGE_8X:
-            return config.stage_8x_first_visit_cap;
+            return config.stage_8x_first_visit_budget;
         case maze::CURRICULUM_STAGE_4X:
-            return config.stage_4x_first_visit_cap;
+            return config.stage_4x_first_visit_budget;
         case maze::CURRICULUM_STAGE_2X:
-            return 0.0f;
+            return config.stage_2x_first_visit_budget;
         default:
             return 0.0f;
     }
@@ -68,12 +61,30 @@ RewardDetail MazeReward::Calculate(
         return Invalid("reward transition has no previous state");
     }
     if (session.shortest_action_steps <= 0 ||
-        config.potential_distance_scale < session.shortest_action_steps ||
+        agent.episode_start_geodesic_distance <= 0 ||
         !std::isfinite(config.goal_reward) ||
-        !std::isfinite(config.timeout_base) ||
-        !std::isfinite(config.gamma) || config.gamma <= 0.0f ||
-        config.gamma > 1.0f) {
-        return Invalid("reward map or episode horizon is invalid");
+        !std::isfinite(config.timeout_penalty) ||
+        !std::isfinite(config.progress_budget) ||
+        !std::isfinite(config.stage_8x_first_visit_budget) ||
+        !std::isfinite(config.stage_4x_first_visit_budget) ||
+        !std::isfinite(config.stage_2x_first_visit_budget) ||
+        !std::isfinite(config.wasted_action_penalty) ||
+        config.goal_reward <= 0.0f ||
+        config.timeout_penalty >= 0.0f ||
+        config.progress_budget < 0.0f ||
+        config.stage_8x_first_visit_budget < 0.0f ||
+        config.stage_4x_first_visit_budget < 0.0f ||
+        config.stage_2x_first_visit_budget < 0.0f ||
+        config.stage_8x_first_visit_budget <
+            config.stage_4x_first_visit_budget ||
+        config.stage_4x_first_visit_budget <
+            config.stage_2x_first_visit_budget ||
+        config.stage_2x_first_visit_budget != 0.0f ||
+        config.wasted_action_penalty >= 0.0f ||
+        config.timeout_penalty + config.progress_budget +
+                config.stage_8x_first_visit_budget >=
+            0.0f) {
+        return Invalid("Reward V4 configuration or episode distance is invalid");
     }
     if (is_done != IsTaskTerminal(reason)) {
         return Invalid("reward termination reason is inconsistent");
@@ -81,6 +92,10 @@ RewardDetail MazeReward::Calculate(
     if (reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED &&
         (gx != session.end_gx || gy != session.end_gy)) {
         return Invalid("goal termination was reported outside the goal cell");
+    }
+    if (reason != maze::MAZE_TERMINATION_REASON_GOAL_REACHED &&
+        gx == session.end_gx && gy == session.end_gy) {
+        return Invalid("goal cell requires GOAL_REACHED termination");
     }
     if (reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT &&
         gx == session.end_gx && gy == session.end_gy) {
@@ -94,6 +109,9 @@ RewardDetail MazeReward::Calculate(
         !DistanceAt(session, gx, gy, current_distance)) {
         return Invalid("reward transition entered an unreachable map cell");
     }
+    if (std::abs(previous_distance - current_distance) > 1) {
+        return Invalid("reward transition has an illegal geodesic distance delta");
+    }
 
     RewardDetail detail;
     const bool goal =
@@ -101,26 +119,19 @@ RewardDetail MazeReward::Calculate(
     const bool timeout =
         reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
     const float goal_reward = goal ? config.goal_reward : 0.0f;
-    const float timeout_base = timeout ? config.timeout_base : 0.0f;
-    const float timeout_progress = timeout
-        ? static_cast<float>(session.shortest_action_steps - current_distance) /
-              static_cast<float>(session.shortest_action_steps)
-        : 0.0f;
+    const float timeout_penalty =
+        timeout ? config.timeout_penalty : 0.0f;
+    const float distance_normalizer = static_cast<float>(
+        agent.episode_start_geodesic_distance);
+    const float geodesic_progress =
+        config.progress_budget *
+        static_cast<float>(previous_distance - current_distance) /
+        distance_normalizer;
 
-    const float previous_potential = Potential(
-        previous_distance, config.potential_distance_scale);
-    const float next_potential = is_done
-                                     ? 0.0f
-                                     : Potential(
-                                           current_distance,
-                                           config.potential_distance_scale);
-    const float geodesic_pbrs =
-        config.gamma * next_potential - previous_potential;
-
-    const float first_visit_cap =
-        FirstVisitCap(session.curriculum_stage, config);
-    const float first_visit_scale = first_visit_cap /
-        static_cast<float>(session.shortest_action_steps);
+    const float first_visit_budget =
+        FirstVisitBudget(session.curriculum_stage, config);
+    const float first_visit_scale =
+        first_visit_budget / distance_normalizer;
     float first_visit_bonus = 0.0f;
     const bool moved = gx != agent.prev_grid_x || gy != agent.prev_grid_y;
     if (moved && agent.current_state_first_visit &&
@@ -128,17 +139,19 @@ RewardDetail MazeReward::Calculate(
         first_visit_bonus = std::min(
             first_visit_scale,
             std::max(0.0f,
-                     first_visit_cap - agent.first_visit_bonus_total));
+                     first_visit_budget - agent.first_visit_bonus_total));
     }
+    const float wasted_action_penalty =
+        moved ? 0.0f : config.wasted_action_penalty;
 
     detail.items.emplace_back("goal_reward", goal_reward);
-    detail.items.emplace_back("timeout_base", timeout_base);
-    detail.items.emplace_back("timeout_progress", timeout_progress);
-    detail.items.emplace_back("geodesic_pbrs", geodesic_pbrs);
+    detail.items.emplace_back("timeout_penalty", timeout_penalty);
+    detail.items.emplace_back("geodesic_progress", geodesic_progress);
     detail.items.emplace_back("first_visit_bonus", first_visit_bonus);
-    detail.task_total =
-        goal_reward + timeout_base + timeout_progress;
-    detail.shaping_total = geodesic_pbrs + first_visit_bonus;
+    detail.items.emplace_back("wasted_action_penalty", wasted_action_penalty);
+    detail.task_total = goal_reward + timeout_penalty;
+    detail.shaping_total =
+        geodesic_progress + first_visit_bonus + wasted_action_penalty;
     detail.total = detail.task_total + detail.shaping_total;
 
     if (!std::isfinite(detail.total) ||

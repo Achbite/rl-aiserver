@@ -254,6 +254,12 @@ if(BUILD_TESTING)
         protobuf::libprotobuf
     )
     add_test(NAME reward_contract COMMAND reward_contract_test)
+    add_test(
+        NAME reward_identity_contract
+        COMMAND python3
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/reward_identity_contract.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/configs/server_config.yaml
+    )
 
     add_executable(maze_map_contract_test
         tests/maze_map_contract_test.cpp

@@ -431,7 +431,6 @@ void MazeServiceImpl::StartModelWatcher() {
 
 void MazeServiceImpl::StopModelWatcher() {
     model_watch_stop_.store(true);
-    model_condition_.notify_all();
     if (model_watch_thread_.joinable()) {
         model_watch_thread_.join();
     }
@@ -457,7 +456,7 @@ void MazeServiceImpl::ModelWatchLoop() {
                 latest_version, latest_checksum, error) &&
             latest_version > active_version &&
             latest_version > staged_version) {
-            const int requested_version = active_version + 1;
+            const int requested_version = latest_version;
             ModelManifest candidate;
             if (model_distributor_.FetchVersion(
                     config_.sample_output.aiserver_id,
@@ -480,10 +479,17 @@ void MazeServiceImpl::ModelWatchLoop() {
                         validation_error;
                 } else {
                     std::lock_guard<std::mutex> lock(mutex_);
-                    if (candidate.model_version ==
-                            model_manifest_.model_version + 1 &&
+                    if (candidate.model_version > model_manifest_.model_version &&
                         candidate.model_version >
                             staged_model_manifest_.model_version) {
+                        if (staged_model_manifest_.model_version >= 0 &&
+                            staged_model_manifest_.model_path !=
+                                candidate.model_path) {
+                            std::error_code remove_error;
+                            std::filesystem::remove(
+                                staged_model_manifest_.model_path,
+                                remove_error);
+                        }
                         staged_model_manifest_ = std::move(candidate);
                         LOG_INFO(
                             "MazeService",
@@ -493,7 +499,6 @@ void MazeServiceImpl::ModelWatchLoop() {
                         if (CanActivateStagedModel()) {
                             ActivateStagedModel();
                         }
-                        model_condition_.notify_all();
                     }
                 }
             }
@@ -525,13 +530,6 @@ bool MazeServiceImpl::Start() {
                           last_error_.c_str());
                 return false;
             }
-            if (config_.model_distribution.boundary_wait_ms <= 0) {
-                last_error_ =
-                    "model boundary wait must be positive in training";
-                state_.store(training::AISERVER_STATE_DEGRADED);
-                LOG_ERROR("MazeService", "%s", last_error_.c_str());
-                return false;
-            }
             if (!sample_sender_.Start()) {
                 auto sender = sample_sender_.GetSnapshot();
                 last_error_ = sender.last_error;
@@ -546,8 +544,6 @@ bool MazeServiceImpl::Start() {
                           last_error_.c_str());
                 return false;
             }
-            initial_training_model_version_ =
-                model_manifest_.model_version;
             if (training_sample_budget_.enabled()) {
                 LOG_INFO(
                     "MazeService",
@@ -628,7 +624,7 @@ void MazeServiceImpl::BeginShutdown() {
     }
 }
 
-bool MazeServiceImpl::AtGlobalFragmentBoundary() {
+bool MazeServiceImpl::AtLocalFragmentBoundary() {
     std::vector<FragmentBoundaryState> agents;
     for (const auto& session_id : session_mgr_.GetSessionIds()) {
         SessionManager::Session* session =
@@ -650,22 +646,37 @@ bool MazeServiceImpl::AtGlobalFragmentBoundary() {
             });
         }
     }
-    return AllAgentsAtFragmentBoundary(agents);
+    return AllLocalAgentsAtFragmentBoundary(agents);
+}
+
+bool MazeServiceImpl::ActiveEpisodesAllowModelActivation() {
+    std::vector<ActiveBehaviorPolicyState> episodes;
+    for (const auto& session_id : session_mgr_.GetSessionIds()) {
+        const SessionManager::Session* session =
+            session_mgr_.GetSession(session_id);
+        if (!session) continue;
+        episodes.push_back(ActiveBehaviorPolicyState{
+            session->episode_state == SessionManager::EpisodeState::Active,
+            session->behavior_policy_scope,
+        });
+    }
+    return ActiveEpisodesAllowFragmentPolicySwitch(episodes);
 }
 
 bool MazeServiceImpl::CanActivateStagedModel() {
     const auto task = task_controller_.GetSnapshot();
     return staged_model_manifest_.model_version >= 0 &&
            !task.evaluation_active && !task.complete && !task.failed &&
-           AtGlobalFragmentBoundary();
+           ActiveEpisodesAllowModelActivation() &&
+           AtLocalFragmentBoundary();
 }
 
 bool MazeServiceImpl::ActivateStagedModel() {
     if (!CanActivateStagedModel()) return true;
 
-    if (staged_model_manifest_.model_version !=
-        model_manifest_.model_version + 1) {
-        MarkDegraded("staged model version is not contiguous");
+    if (staged_model_manifest_.model_version <=
+        model_manifest_.model_version) {
+        MarkDegraded("staged model is not newer than the active model");
         return false;
     }
 
@@ -714,58 +725,6 @@ bool MazeServiceImpl::ActivateStagedModel() {
     return true;
 }
 
-bool MazeServiceImpl::SynchronizeModelAtSampleBoundary(
-    std::unique_lock<std::mutex>& lock) {
-    if (initial_training_model_version_ < 0) {
-        MarkDegraded("initial training model identity is unavailable");
-        return false;
-    }
-
-    while (true) {
-        const int desired_version = SelectModelBoundaryTarget(
-            initial_training_model_version_,
-            training_sample_budget_.sample_quantum(),
-            produced_samples_by_model_);
-        if (desired_version < model_manifest_.model_version) {
-            MarkDegraded(
-                "loaded model advanced beyond the selected model boundary");
-            return false;
-        }
-        if (model_manifest_.model_version == desired_version) {
-            return true;
-        }
-
-        const int expected_version = model_manifest_.model_version + 1;
-        const bool ready = model_condition_.wait_for(
-            lock,
-            std::chrono::milliseconds(
-                config_.model_distribution.boundary_wait_ms),
-            [this, expected_version]() {
-                return model_watch_stop_.load() ||
-                       model_manifest_.model_version >= expected_version ||
-                       staged_model_manifest_.model_version == expected_version;
-            });
-        if (!ready || model_watch_stop_.load()) {
-            MarkDegraded(
-                "timed out waiting for contiguous model v" +
-                std::to_string(expected_version));
-            return false;
-        }
-        if (model_manifest_.model_version < expected_version) {
-            if (staged_model_manifest_.model_version != expected_version ||
-                !ActivateStagedModel()) {
-                MarkDegraded(
-                    "contiguous staged model was not activatable");
-                return false;
-            }
-        }
-        if (model_manifest_.model_version != expected_version) {
-            MarkDegraded("model boundary activation was not contiguous");
-            return false;
-        }
-    }
-}
-
 void MazeServiceImpl::RefreshFragmentSampleTarget(
     const SessionManager::Session& session) {
     bool all_agents_active = !session.agents.empty();
@@ -775,12 +734,8 @@ void MazeServiceImpl::RefreshFragmentSampleTarget(
             break;
         }
     }
-    const auto count = produced_samples_by_model_.find(
-        model_manifest_.model_version);
-    const int64_t active_model_samples =
-        count == produced_samples_by_model_.end() ? 0 : count->second;
     current_fragment_samples_ = SelectPerAgentFragmentSamples(
-        active_model_samples,
+        produced_unique_samples_,
         training_sample_budget_.sample_quantum(),
         config_.task.agent_num,
         config_.sample_output.fragment_samples,
@@ -836,6 +791,12 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
             session.start_gy * session.grid_cols + session.start_gx);
         agent.current_state_first_visit = false;
         agent.first_visit_bonus_total = 0.0f;
+        const std::size_t start_index = static_cast<std::size_t>(
+            session.start_gy * session.grid_cols + session.start_gx);
+        agent.episode_start_geodesic_distance =
+            start_index < session.geodesic_distance.size()
+                ? session.geodesic_distance[start_index]
+                : -1;
         agent.observation_grid_x = session.start_gx;
         agent.observation_grid_y = session.start_gy;
         agent.last_move_blocked = false;
@@ -1085,22 +1046,14 @@ void MazeServiceImpl::FillSampleBatchMetadata(
     batch.set_fragment_sequence(sequence);
     batch.set_fragment_id(static_cast<uint32_t>(
         sequence % std::numeric_limits<uint32_t>::max()));
-    auto* model = batch.mutable_behavior_policy()->mutable_model();
-    model->set_model_lineage_id(agent.fragment_model_lineage_id);
-    model->set_model_version(
+    auto* policy = batch.mutable_behavior_policy();
+    policy->set_model_lineage_id(agent.fragment_model_lineage_id);
+    policy->set_model_version(
         static_cast<uint64_t>(agent.fragment_model_version));
-    model->mutable_artifact_digest()->set_algorithm(
-        common::DIGEST_ALGORITHM_SHA256);
-    model->mutable_artifact_digest()->set_hex(
-        agent.fragment_model_checksum);
-    model->mutable_manifest_digest()->set_algorithm(
-        common::DIGEST_ALGORITHM_SHA256);
-    model->mutable_manifest_digest()->set_hex(
-        agent.fragment_model_manifest_digest);
-    batch.mutable_behavior_policy()->set_distribution_schema_id(
+    policy->set_distribution_schema_id(
         config_.policy.distribution_schema_id);
     FillDigest(config_.policy.policy_spec_digest,
-               batch.mutable_behavior_policy()->mutable_policy_spec_digest());
+               policy->mutable_policy_spec_digest());
     FillTrainingSemantics(config_, batch.mutable_training_semantics());
     aiserver_contract::FillSampleProducerIdentity(
         producer_instance_id_, 1, batch.mutable_producer());

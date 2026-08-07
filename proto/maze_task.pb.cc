@@ -1248,7 +1248,7 @@ TaskIdentity::TaskIdentity(const TaskIdentity& from)
     _impl_.task_contract_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_task_contract_id().empty()) {
-    _this->_impl_.task_contract_id_.Set(from._internal_task_contract_id(),
+    _this->_impl_.task_contract_id_.Set(from._internal_task_contract_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.task_id_.InitDefault();
@@ -1256,7 +1256,7 @@ TaskIdentity::TaskIdentity(const TaskIdentity& from)
     _impl_.task_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_task_id().empty()) {
-    _this->_impl_.task_id_.Set(from._internal_task_id(),
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.fixed_map_id_.InitDefault();
@@ -1264,7 +1264,7 @@ TaskIdentity::TaskIdentity(const TaskIdentity& from)
     _impl_.fixed_map_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_fixed_map_id().empty()) {
-    _this->_impl_.fixed_map_id_.Set(from._internal_fixed_map_id(),
+    _this->_impl_.fixed_map_id_.Set(from._internal_fixed_map_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_task_config_digest()) {
@@ -1688,7 +1688,7 @@ BehaviorPolicyBinding::BehaviorPolicyBinding(const BehaviorPolicyBinding& from)
     _impl_.model_lineage_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_model_lineage_id().empty()) {
-    _this->_impl_.model_lineage_id_.Set(from._internal_model_lineage_id(),
+    _this->_impl_.model_lineage_id_.Set(from._internal_model_lineage_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.distribution_schema_id_.InitDefault();
@@ -1696,7 +1696,7 @@ BehaviorPolicyBinding::BehaviorPolicyBinding(const BehaviorPolicyBinding& from)
     _impl_.distribution_schema_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_distribution_schema_id().empty()) {
-    _this->_impl_.distribution_schema_id_.Set(from._internal_distribution_schema_id(),
+    _this->_impl_.distribution_schema_id_.Set(from._internal_distribution_schema_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_model_artifact_digest()) {
@@ -2120,7 +2120,7 @@ MazeTaskSpec::MazeTaskSpec(const MazeTaskSpec& from)
     _impl_.fixed_map_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_fixed_map_id().empty()) {
-    _this->_impl_.fixed_map_id_.Set(from._internal_fixed_map_id(),
+    _this->_impl_.fixed_map_id_.Set(from._internal_fixed_map_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.action_rule_id_.InitDefault();
@@ -2128,7 +2128,7 @@ MazeTaskSpec::MazeTaskSpec(const MazeTaskSpec& from)
     _impl_.action_rule_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_action_rule_id().empty()) {
-    _this->_impl_.action_rule_id_.Set(from._internal_action_rule_id(),
+    _this->_impl_.action_rule_id_.Set(from._internal_action_rule_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_identity()) {
@@ -2566,7 +2566,7 @@ MapDescriptor::MapDescriptor(const MapDescriptor& from)
     _impl_.map_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_map_id().empty()) {
-    _this->_impl_.map_id_.Set(from._internal_map_id(),
+    _this->_impl_.map_id_.Set(from._internal_map_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.blocked_bitmap_.InitDefault();
@@ -2574,7 +2574,7 @@ MapDescriptor::MapDescriptor(const MapDescriptor& from)
     _impl_.blocked_bitmap_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_blocked_bitmap().empty()) {
-    _this->_impl_.blocked_bitmap_.Set(from._internal_blocked_bitmap(),
+    _this->_impl_.blocked_bitmap_.Set(from._internal_blocked_bitmap(), 
       _this->GetArenaForAllocation());
   }
   _impl_.action_rule_id_.InitDefault();
@@ -2582,7 +2582,7 @@ MapDescriptor::MapDescriptor(const MapDescriptor& from)
     _impl_.action_rule_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_action_rule_id().empty()) {
-    _this->_impl_.action_rule_id_.Set(from._internal_action_rule_id(),
+    _this->_impl_.action_rule_id_.Set(from._internal_action_rule_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_canonical_digest()) {
@@ -3131,7 +3131,7 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
     _impl_.session_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_session_id().empty()) {
-    _this->_impl_.session_id_.Set(from._internal_session_id(),
+    _this->_impl_.session_id_.Set(from._internal_session_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.episode_id_.InitDefault();
@@ -3139,7 +3139,7 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
     _impl_.episode_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_episode_id().empty()) {
-    _this->_impl_.episode_id_.Set(from._internal_episode_id(),
+    _this->_impl_.episode_id_.Set(from._internal_episode_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.evaluation_id_.InitDefault();
@@ -3147,7 +3147,7 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
     _impl_.evaluation_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_evaluation_id().empty()) {
-    _this->_impl_.evaluation_id_.Set(from._internal_evaluation_id(),
+    _this->_impl_.evaluation_id_.Set(from._internal_evaluation_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.idempotency_key_.InitDefault();
@@ -3155,7 +3155,7 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
     _impl_.idempotency_key_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_idempotency_key().empty()) {
-    _this->_impl_.idempotency_key_.Set(from._internal_idempotency_key(),
+    _this->_impl_.idempotency_key_.Set(from._internal_idempotency_key(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_task()) {
@@ -3686,7 +3686,7 @@ LifecycleReply::LifecycleReply(const LifecycleReply& from)
     _impl_.message_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_message().empty()) {
-    _this->_impl_.message_.Set(from._internal_message(),
+    _this->_impl_.message_.Set(from._internal_message(), 
       _this->GetArenaForAllocation());
   }
   ::memcpy(&_impl_.ret_code_, &from._impl_.ret_code_,
@@ -4126,7 +4126,7 @@ OpenSessionReq::OpenSessionReq(const OpenSessionReq& from)
     _impl_.environment_instance_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_environment_instance_id().empty()) {
-    _this->_impl_.environment_instance_id_.Set(from._internal_environment_instance_id(),
+    _this->_impl_.environment_instance_id_.Set(from._internal_environment_instance_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.idempotency_key_.InitDefault();
@@ -4134,7 +4134,7 @@ OpenSessionReq::OpenSessionReq(const OpenSessionReq& from)
     _impl_.idempotency_key_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_idempotency_key().empty()) {
-    _this->_impl_.idempotency_key_.Set(from._internal_idempotency_key(),
+    _this->_impl_.idempotency_key_.Set(from._internal_idempotency_key(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_client()) {
@@ -4548,7 +4548,7 @@ OpenSessionRsp::OpenSessionRsp(const OpenSessionRsp& from)
     _impl_.session_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_session_id().empty()) {
-    _this->_impl_.session_id_.Set(from._internal_session_id(),
+    _this->_impl_.session_id_.Set(from._internal_session_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_lifecycle()) {
@@ -5485,7 +5485,7 @@ EvaluationAssignment::EvaluationAssignment(const EvaluationAssignment& from)
     _impl_.evaluation_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_evaluation_id().empty()) {
-    _this->_impl_.evaluation_id_.Set(from._internal_evaluation_id(),
+    _this->_impl_.evaluation_id_.Set(from._internal_evaluation_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_pinned_policy()) {
@@ -5830,7 +5830,7 @@ EpisodeAssignment::EpisodeAssignment(const EpisodeAssignment& from)
     _impl_.episode_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_episode_id().empty()) {
-    _this->_impl_.episode_id_.Set(from._internal_episode_id(),
+    _this->_impl_.episode_id_.Set(from._internal_episode_id(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_task()) {
@@ -8416,7 +8416,7 @@ AbortEpisodeReq::AbortEpisodeReq(const AbortEpisodeReq& from)
     _impl_.message_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_message().empty()) {
-    _this->_impl_.message_.Set(from._internal_message(),
+    _this->_impl_.message_.Set(from._internal_message(), 
       _this->GetArenaForAllocation());
   }
   if (from._internal_has_command()) {

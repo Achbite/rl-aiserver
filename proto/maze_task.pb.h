@@ -5644,7 +5644,7 @@ inline const std::string& TaskIdentity::task_contract_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void TaskIdentity::set_task_contract_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.task_contract_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskIdentity.task_contract_id)
 }
@@ -5657,11 +5657,11 @@ inline const std::string& TaskIdentity::_internal_task_contract_id() const {
   return _impl_.task_contract_id_.Get();
 }
 inline void TaskIdentity::_internal_set_task_contract_id(const std::string& value) {
-
+  
   _impl_.task_contract_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* TaskIdentity::_internal_mutable_task_contract_id() {
-
+  
   return _impl_.task_contract_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* TaskIdentity::release_task_contract_id() {
@@ -5670,9 +5670,9 @@ inline std::string* TaskIdentity::release_task_contract_id() {
 }
 inline void TaskIdentity::set_allocated_task_contract_id(std::string* task_contract_id) {
   if (task_contract_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.task_contract_id_.SetAllocated(task_contract_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -5694,7 +5694,7 @@ inline const std::string& TaskIdentity::task_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void TaskIdentity::set_task_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.task_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskIdentity.task_id)
 }
@@ -5707,11 +5707,11 @@ inline const std::string& TaskIdentity::_internal_task_id() const {
   return _impl_.task_id_.Get();
 }
 inline void TaskIdentity::_internal_set_task_id(const std::string& value) {
-
+  
   _impl_.task_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* TaskIdentity::_internal_mutable_task_id() {
-
+  
   return _impl_.task_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* TaskIdentity::release_task_id() {
@@ -5720,9 +5720,9 @@ inline std::string* TaskIdentity::release_task_id() {
 }
 inline void TaskIdentity::set_allocated_task_id(std::string* task_id) {
   if (task_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.task_id_.SetAllocated(task_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -5745,7 +5745,7 @@ inline uint64_t TaskIdentity::task_revision() const {
   return _internal_task_revision();
 }
 inline void TaskIdentity::_internal_set_task_revision(uint64_t value) {
-
+  
   _impl_.task_revision_ = value;
 }
 inline void TaskIdentity::set_task_revision(uint64_t value) {
@@ -5776,14 +5776,14 @@ inline void TaskIdentity::unsafe_arena_set_allocated_task_config_digest(
   }
   _impl_.task_config_digest_ = task_config_digest;
   if (task_config_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.TaskIdentity.task_config_digest)
 }
 inline ::rl::common::v1::ContentDigest* TaskIdentity::release_task_config_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.task_config_digest_;
   _impl_.task_config_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -5799,13 +5799,13 @@ inline ::rl::common::v1::ContentDigest* TaskIdentity::release_task_config_digest
 }
 inline ::rl::common::v1::ContentDigest* TaskIdentity::unsafe_arena_release_task_config_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskIdentity.task_config_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.task_config_digest_;
   _impl_.task_config_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* TaskIdentity::_internal_mutable_task_config_digest() {
-
+  
   if (_impl_.task_config_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.task_config_digest_ = p;
@@ -5830,9 +5830,9 @@ inline void TaskIdentity::set_allocated_task_config_digest(::rl::common::v1::Con
       task_config_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, task_config_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.task_config_digest_ = task_config_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.task_config_digest)
@@ -5849,7 +5849,7 @@ inline const std::string& TaskIdentity::fixed_map_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void TaskIdentity::set_fixed_map_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.fixed_map_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskIdentity.fixed_map_id)
 }
@@ -5862,11 +5862,11 @@ inline const std::string& TaskIdentity::_internal_fixed_map_id() const {
   return _impl_.fixed_map_id_.Get();
 }
 inline void TaskIdentity::_internal_set_fixed_map_id(const std::string& value) {
-
+  
   _impl_.fixed_map_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* TaskIdentity::_internal_mutable_fixed_map_id() {
-
+  
   return _impl_.fixed_map_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* TaskIdentity::release_fixed_map_id() {
@@ -5875,9 +5875,9 @@ inline std::string* TaskIdentity::release_fixed_map_id() {
 }
 inline void TaskIdentity::set_allocated_fixed_map_id(std::string* fixed_map_id) {
   if (fixed_map_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.fixed_map_id_.SetAllocated(fixed_map_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -5911,14 +5911,14 @@ inline void TaskIdentity::unsafe_arena_set_allocated_fixed_map_digest(
   }
   _impl_.fixed_map_digest_ = fixed_map_digest;
   if (fixed_map_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
 }
 inline ::rl::common::v1::ContentDigest* TaskIdentity::release_fixed_map_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.fixed_map_digest_;
   _impl_.fixed_map_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -5934,13 +5934,13 @@ inline ::rl::common::v1::ContentDigest* TaskIdentity::release_fixed_map_digest()
 }
 inline ::rl::common::v1::ContentDigest* TaskIdentity::unsafe_arena_release_fixed_map_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.fixed_map_digest_;
   _impl_.fixed_map_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* TaskIdentity::_internal_mutable_fixed_map_digest() {
-
+  
   if (_impl_.fixed_map_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.fixed_map_digest_ = p;
@@ -5965,9 +5965,9 @@ inline void TaskIdentity::set_allocated_fixed_map_digest(::rl::common::v1::Conte
       fixed_map_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, fixed_map_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.fixed_map_digest_ = fixed_map_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
@@ -5988,7 +5988,7 @@ inline const std::string& BehaviorPolicyBinding::model_lineage_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void BehaviorPolicyBinding::set_model_lineage_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.model_lineage_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.BehaviorPolicyBinding.model_lineage_id)
 }
@@ -6001,11 +6001,11 @@ inline const std::string& BehaviorPolicyBinding::_internal_model_lineage_id() co
   return _impl_.model_lineage_id_.Get();
 }
 inline void BehaviorPolicyBinding::_internal_set_model_lineage_id(const std::string& value) {
-
+  
   _impl_.model_lineage_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* BehaviorPolicyBinding::_internal_mutable_model_lineage_id() {
-
+  
   return _impl_.model_lineage_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* BehaviorPolicyBinding::release_model_lineage_id() {
@@ -6014,9 +6014,9 @@ inline std::string* BehaviorPolicyBinding::release_model_lineage_id() {
 }
 inline void BehaviorPolicyBinding::set_allocated_model_lineage_id(std::string* model_lineage_id) {
   if (model_lineage_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.model_lineage_id_.SetAllocated(model_lineage_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -6039,7 +6039,7 @@ inline uint64_t BehaviorPolicyBinding::model_version() const {
   return _internal_model_version();
 }
 inline void BehaviorPolicyBinding::_internal_set_model_version(uint64_t value) {
-
+  
   _impl_.model_version_ = value;
 }
 inline void BehaviorPolicyBinding::set_model_version(uint64_t value) {
@@ -6070,14 +6070,14 @@ inline void BehaviorPolicyBinding::unsafe_arena_set_allocated_model_artifact_dig
   }
   _impl_.model_artifact_digest_ = model_artifact_digest;
   if (model_artifact_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_model_artifact_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.model_artifact_digest_;
   _impl_.model_artifact_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -6093,13 +6093,13 @@ inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_model_art
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::unsafe_arena_release_model_artifact_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.model_artifact_digest_;
   _impl_.model_artifact_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::_internal_mutable_model_artifact_digest() {
-
+  
   if (_impl_.model_artifact_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.model_artifact_digest_ = p;
@@ -6124,9 +6124,9 @@ inline void BehaviorPolicyBinding::set_allocated_model_artifact_digest(::rl::com
       model_artifact_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, model_artifact_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.model_artifact_digest_ = model_artifact_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
@@ -6155,14 +6155,14 @@ inline void BehaviorPolicyBinding::unsafe_arena_set_allocated_model_manifest_dig
   }
   _impl_.model_manifest_digest_ = model_manifest_digest;
   if (model_manifest_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_model_manifest_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.model_manifest_digest_;
   _impl_.model_manifest_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -6178,13 +6178,13 @@ inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_model_man
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::unsafe_arena_release_model_manifest_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.model_manifest_digest_;
   _impl_.model_manifest_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::_internal_mutable_model_manifest_digest() {
-
+  
   if (_impl_.model_manifest_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.model_manifest_digest_ = p;
@@ -6209,9 +6209,9 @@ inline void BehaviorPolicyBinding::set_allocated_model_manifest_digest(::rl::com
       model_manifest_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, model_manifest_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.model_manifest_digest_ = model_manifest_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
@@ -6228,7 +6228,7 @@ inline const std::string& BehaviorPolicyBinding::distribution_schema_id() const 
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void BehaviorPolicyBinding::set_distribution_schema_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.distribution_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.BehaviorPolicyBinding.distribution_schema_id)
 }
@@ -6241,11 +6241,11 @@ inline const std::string& BehaviorPolicyBinding::_internal_distribution_schema_i
   return _impl_.distribution_schema_id_.Get();
 }
 inline void BehaviorPolicyBinding::_internal_set_distribution_schema_id(const std::string& value) {
-
+  
   _impl_.distribution_schema_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* BehaviorPolicyBinding::_internal_mutable_distribution_schema_id() {
-
+  
   return _impl_.distribution_schema_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* BehaviorPolicyBinding::release_distribution_schema_id() {
@@ -6254,9 +6254,9 @@ inline std::string* BehaviorPolicyBinding::release_distribution_schema_id() {
 }
 inline void BehaviorPolicyBinding::set_allocated_distribution_schema_id(std::string* distribution_schema_id) {
   if (distribution_schema_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.distribution_schema_id_.SetAllocated(distribution_schema_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -6290,14 +6290,14 @@ inline void BehaviorPolicyBinding::unsafe_arena_set_allocated_policy_spec_digest
   }
   _impl_.policy_spec_digest_ = policy_spec_digest;
   if (policy_spec_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_policy_spec_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
   _impl_.policy_spec_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -6313,13 +6313,13 @@ inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_policy_sp
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::unsafe_arena_release_policy_spec_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
   _impl_.policy_spec_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::_internal_mutable_policy_spec_digest() {
-
+  
   if (_impl_.policy_spec_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.policy_spec_digest_ = p;
@@ -6344,9 +6344,9 @@ inline void BehaviorPolicyBinding::set_allocated_policy_spec_digest(::rl::common
       policy_spec_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, policy_spec_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.policy_spec_digest_ = policy_spec_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
@@ -6385,14 +6385,14 @@ inline void MazeTaskSpec::unsafe_arena_set_allocated_identity(
   }
   _impl_.identity_ = identity;
   if (identity) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.identity)
 }
 inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::release_identity() {
-
+  
   ::rl::task::maze::v1::TaskIdentity* temp = _impl_.identity_;
   _impl_.identity_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -6408,13 +6408,13 @@ inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::release_identity() {
 }
 inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::unsafe_arena_release_identity() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.identity)
-
+  
   ::rl::task::maze::v1::TaskIdentity* temp = _impl_.identity_;
   _impl_.identity_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::_internal_mutable_identity() {
-
+  
   if (_impl_.identity_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::TaskIdentity>(GetArenaForAllocation());
     _impl_.identity_ = p;
@@ -6438,9 +6438,9 @@ inline void MazeTaskSpec::set_allocated_identity(::rl::task::maze::v1::TaskIdent
       identity = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, identity, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.identity_ = identity;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.identity)
@@ -6458,7 +6458,7 @@ inline uint32_t MazeTaskSpec::agent_count() const {
   return _internal_agent_count();
 }
 inline void MazeTaskSpec::_internal_set_agent_count(uint32_t value) {
-
+  
   _impl_.agent_count_ = value;
 }
 inline void MazeTaskSpec::set_agent_count(uint32_t value) {
@@ -6477,7 +6477,7 @@ inline const std::string& MazeTaskSpec::fixed_map_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void MazeTaskSpec::set_fixed_map_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.fixed_map_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MazeTaskSpec.fixed_map_id)
 }
@@ -6490,11 +6490,11 @@ inline const std::string& MazeTaskSpec::_internal_fixed_map_id() const {
   return _impl_.fixed_map_id_.Get();
 }
 inline void MazeTaskSpec::_internal_set_fixed_map_id(const std::string& value) {
-
+  
   _impl_.fixed_map_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* MazeTaskSpec::_internal_mutable_fixed_map_id() {
-
+  
   return _impl_.fixed_map_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* MazeTaskSpec::release_fixed_map_id() {
@@ -6503,9 +6503,9 @@ inline std::string* MazeTaskSpec::release_fixed_map_id() {
 }
 inline void MazeTaskSpec::set_allocated_fixed_map_id(std::string* fixed_map_id) {
   if (fixed_map_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.fixed_map_id_.SetAllocated(fixed_map_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -6539,14 +6539,14 @@ inline void MazeTaskSpec::unsafe_arena_set_allocated_expected_map_digest(
   }
   _impl_.expected_map_digest_ = expected_map_digest;
   if (expected_map_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
 }
 inline ::rl::common::v1::ContentDigest* MazeTaskSpec::release_expected_map_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.expected_map_digest_;
   _impl_.expected_map_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -6562,13 +6562,13 @@ inline ::rl::common::v1::ContentDigest* MazeTaskSpec::release_expected_map_diges
 }
 inline ::rl::common::v1::ContentDigest* MazeTaskSpec::unsafe_arena_release_expected_map_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.expected_map_digest_;
   _impl_.expected_map_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* MazeTaskSpec::_internal_mutable_expected_map_digest() {
-
+  
   if (_impl_.expected_map_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.expected_map_digest_ = p;
@@ -6593,9 +6593,9 @@ inline void MazeTaskSpec::set_allocated_expected_map_digest(::rl::common::v1::Co
       expected_map_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, expected_map_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.expected_map_digest_ = expected_map_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
@@ -6624,14 +6624,14 @@ inline void MazeTaskSpec::unsafe_arena_set_allocated_observation_schema(
   }
   _impl_.observation_schema_ = observation_schema;
   if (observation_schema) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.observation_schema)
 }
 inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::release_observation_schema() {
-
+  
   ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
   _impl_.observation_schema_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -6647,13 +6647,13 @@ inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::release_observation_schem
 }
 inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::unsafe_arena_release_observation_schema() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.observation_schema)
-
+  
   ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
   _impl_.observation_schema_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::_internal_mutable_observation_schema() {
-
+  
   if (_impl_.observation_schema_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
     _impl_.observation_schema_ = p;
@@ -6678,9 +6678,9 @@ inline void MazeTaskSpec::set_allocated_observation_schema(::rl::common::v1::Sch
       observation_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, observation_schema, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.observation_schema_ = observation_schema;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.observation_schema)
@@ -6709,14 +6709,14 @@ inline void MazeTaskSpec::unsafe_arena_set_allocated_action_schema(
   }
   _impl_.action_schema_ = action_schema;
   if (action_schema) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.action_schema)
 }
 inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::release_action_schema() {
-
+  
   ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
   _impl_.action_schema_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -6732,13 +6732,13 @@ inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::release_action_schema() {
 }
 inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::unsafe_arena_release_action_schema() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.action_schema)
-
+  
   ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
   _impl_.action_schema_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::_internal_mutable_action_schema() {
-
+  
   if (_impl_.action_schema_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
     _impl_.action_schema_ = p;
@@ -6763,9 +6763,9 @@ inline void MazeTaskSpec::set_allocated_action_schema(::rl::common::v1::SchemaId
       action_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, action_schema, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.action_schema_ = action_schema;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.action_schema)
@@ -6782,7 +6782,7 @@ inline const std::string& MazeTaskSpec::action_rule_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void MazeTaskSpec::set_action_rule_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.action_rule_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MazeTaskSpec.action_rule_id)
 }
@@ -6795,11 +6795,11 @@ inline const std::string& MazeTaskSpec::_internal_action_rule_id() const {
   return _impl_.action_rule_id_.Get();
 }
 inline void MazeTaskSpec::_internal_set_action_rule_id(const std::string& value) {
-
+  
   _impl_.action_rule_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* MazeTaskSpec::_internal_mutable_action_rule_id() {
-
+  
   return _impl_.action_rule_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* MazeTaskSpec::release_action_rule_id() {
@@ -6808,9 +6808,9 @@ inline std::string* MazeTaskSpec::release_action_rule_id() {
 }
 inline void MazeTaskSpec::set_allocated_action_rule_id(std::string* action_rule_id) {
   if (action_rule_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.action_rule_id_.SetAllocated(action_rule_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -6836,7 +6836,7 @@ inline const std::string& MapDescriptor::map_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void MapDescriptor::set_map_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.map_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.map_id)
 }
@@ -6849,11 +6849,11 @@ inline const std::string& MapDescriptor::_internal_map_id() const {
   return _impl_.map_id_.Get();
 }
 inline void MapDescriptor::_internal_set_map_id(const std::string& value) {
-
+  
   _impl_.map_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* MapDescriptor::_internal_mutable_map_id() {
-
+  
   return _impl_.map_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* MapDescriptor::release_map_id() {
@@ -6862,9 +6862,9 @@ inline std::string* MapDescriptor::release_map_id() {
 }
 inline void MapDescriptor::set_allocated_map_id(std::string* map_id) {
   if (map_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.map_id_.SetAllocated(map_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -6887,7 +6887,7 @@ inline uint32_t MapDescriptor::format_version() const {
   return _internal_format_version();
 }
 inline void MapDescriptor::_internal_set_format_version(uint32_t value) {
-
+  
   _impl_.format_version_ = value;
 }
 inline void MapDescriptor::set_format_version(uint32_t value) {
@@ -6907,7 +6907,7 @@ inline uint32_t MapDescriptor::grid_columns() const {
   return _internal_grid_columns();
 }
 inline void MapDescriptor::_internal_set_grid_columns(uint32_t value) {
-
+  
   _impl_.grid_columns_ = value;
 }
 inline void MapDescriptor::set_grid_columns(uint32_t value) {
@@ -6927,7 +6927,7 @@ inline uint32_t MapDescriptor::grid_rows() const {
   return _internal_grid_rows();
 }
 inline void MapDescriptor::_internal_set_grid_rows(uint32_t value) {
-
+  
   _impl_.grid_rows_ = value;
 }
 inline void MapDescriptor::set_grid_rows(uint32_t value) {
@@ -6947,7 +6947,7 @@ inline uint32_t MapDescriptor::grid_size_microunits() const {
   return _internal_grid_size_microunits();
 }
 inline void MapDescriptor::_internal_set_grid_size_microunits(uint32_t value) {
-
+  
   _impl_.grid_size_microunits_ = value;
 }
 inline void MapDescriptor::set_grid_size_microunits(uint32_t value) {
@@ -6967,7 +6967,7 @@ inline int32_t MapDescriptor::start_grid_x() const {
   return _internal_start_grid_x();
 }
 inline void MapDescriptor::_internal_set_start_grid_x(int32_t value) {
-
+  
   _impl_.start_grid_x_ = value;
 }
 inline void MapDescriptor::set_start_grid_x(int32_t value) {
@@ -6987,7 +6987,7 @@ inline int32_t MapDescriptor::start_grid_y() const {
   return _internal_start_grid_y();
 }
 inline void MapDescriptor::_internal_set_start_grid_y(int32_t value) {
-
+  
   _impl_.start_grid_y_ = value;
 }
 inline void MapDescriptor::set_start_grid_y(int32_t value) {
@@ -7007,7 +7007,7 @@ inline int32_t MapDescriptor::goal_grid_x() const {
   return _internal_goal_grid_x();
 }
 inline void MapDescriptor::_internal_set_goal_grid_x(int32_t value) {
-
+  
   _impl_.goal_grid_x_ = value;
 }
 inline void MapDescriptor::set_goal_grid_x(int32_t value) {
@@ -7027,7 +7027,7 @@ inline int32_t MapDescriptor::goal_grid_y() const {
   return _internal_goal_grid_y();
 }
 inline void MapDescriptor::_internal_set_goal_grid_y(int32_t value) {
-
+  
   _impl_.goal_grid_y_ = value;
 }
 inline void MapDescriptor::set_goal_grid_y(int32_t value) {
@@ -7046,7 +7046,7 @@ inline const std::string& MapDescriptor::blocked_bitmap() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void MapDescriptor::set_blocked_bitmap(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.blocked_bitmap_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.blocked_bitmap)
 }
@@ -7059,11 +7059,11 @@ inline const std::string& MapDescriptor::_internal_blocked_bitmap() const {
   return _impl_.blocked_bitmap_.Get();
 }
 inline void MapDescriptor::_internal_set_blocked_bitmap(const std::string& value) {
-
+  
   _impl_.blocked_bitmap_.Set(value, GetArenaForAllocation());
 }
 inline std::string* MapDescriptor::_internal_mutable_blocked_bitmap() {
-
+  
   return _impl_.blocked_bitmap_.Mutable(GetArenaForAllocation());
 }
 inline std::string* MapDescriptor::release_blocked_bitmap() {
@@ -7072,9 +7072,9 @@ inline std::string* MapDescriptor::release_blocked_bitmap() {
 }
 inline void MapDescriptor::set_allocated_blocked_bitmap(std::string* blocked_bitmap) {
   if (blocked_bitmap != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.blocked_bitmap_.SetAllocated(blocked_bitmap, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -7108,14 +7108,14 @@ inline void MapDescriptor::unsafe_arena_set_allocated_canonical_digest(
   }
   _impl_.canonical_digest_ = canonical_digest;
   if (canonical_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MapDescriptor.canonical_digest)
 }
 inline ::rl::common::v1::ContentDigest* MapDescriptor::release_canonical_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.canonical_digest_;
   _impl_.canonical_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -7131,13 +7131,13 @@ inline ::rl::common::v1::ContentDigest* MapDescriptor::release_canonical_digest(
 }
 inline ::rl::common::v1::ContentDigest* MapDescriptor::unsafe_arena_release_canonical_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.MapDescriptor.canonical_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.canonical_digest_;
   _impl_.canonical_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* MapDescriptor::_internal_mutable_canonical_digest() {
-
+  
   if (_impl_.canonical_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.canonical_digest_ = p;
@@ -7162,9 +7162,9 @@ inline void MapDescriptor::set_allocated_canonical_digest(::rl::common::v1::Cont
       canonical_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, canonical_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.canonical_digest_ = canonical_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MapDescriptor.canonical_digest)
@@ -7182,7 +7182,7 @@ inline uint32_t MapDescriptor::shortest_action_steps() const {
   return _internal_shortest_action_steps();
 }
 inline void MapDescriptor::_internal_set_shortest_action_steps(uint32_t value) {
-
+  
   _impl_.shortest_action_steps_ = value;
 }
 inline void MapDescriptor::set_shortest_action_steps(uint32_t value) {
@@ -7201,7 +7201,7 @@ inline const std::string& MapDescriptor::action_rule_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void MapDescriptor::set_action_rule_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.action_rule_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.action_rule_id)
 }
@@ -7214,11 +7214,11 @@ inline const std::string& MapDescriptor::_internal_action_rule_id() const {
   return _impl_.action_rule_id_.Get();
 }
 inline void MapDescriptor::_internal_set_action_rule_id(const std::string& value) {
-
+  
   _impl_.action_rule_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* MapDescriptor::_internal_mutable_action_rule_id() {
-
+  
   return _impl_.action_rule_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* MapDescriptor::release_action_rule_id() {
@@ -7227,9 +7227,9 @@ inline std::string* MapDescriptor::release_action_rule_id() {
 }
 inline void MapDescriptor::set_allocated_action_rule_id(std::string* action_rule_id) {
   if (action_rule_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.action_rule_id_.SetAllocated(action_rule_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -7273,14 +7273,14 @@ inline void LifecycleCommand::unsafe_arena_set_allocated_task(
   }
   _impl_.task_ = task;
   if (task) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.LifecycleCommand.task)
 }
 inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::release_task() {
-
+  
   ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
   _impl_.task_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -7296,13 +7296,13 @@ inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::release_task() {
 }
 inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::unsafe_arena_release_task() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.LifecycleCommand.task)
-
+  
   ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
   _impl_.task_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::_internal_mutable_task() {
-
+  
   if (_impl_.task_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::TaskIdentity>(GetArenaForAllocation());
     _impl_.task_ = p;
@@ -7326,9 +7326,9 @@ inline void LifecycleCommand::set_allocated_task(::rl::task::maze::v1::TaskIdent
       task = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, task, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.task_ = task;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleCommand.task)
@@ -7345,7 +7345,7 @@ inline const std::string& LifecycleCommand::session_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void LifecycleCommand::set_session_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.session_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.session_id)
 }
@@ -7358,11 +7358,11 @@ inline const std::string& LifecycleCommand::_internal_session_id() const {
   return _impl_.session_id_.Get();
 }
 inline void LifecycleCommand::_internal_set_session_id(const std::string& value) {
-
+  
   _impl_.session_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::_internal_mutable_session_id() {
-
+  
   return _impl_.session_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::release_session_id() {
@@ -7371,9 +7371,9 @@ inline std::string* LifecycleCommand::release_session_id() {
 }
 inline void LifecycleCommand::set_allocated_session_id(std::string* session_id) {
   if (session_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.session_id_.SetAllocated(session_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -7395,7 +7395,7 @@ inline const std::string& LifecycleCommand::episode_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void LifecycleCommand::set_episode_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.episode_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.episode_id)
 }
@@ -7408,11 +7408,11 @@ inline const std::string& LifecycleCommand::_internal_episode_id() const {
   return _impl_.episode_id_.Get();
 }
 inline void LifecycleCommand::_internal_set_episode_id(const std::string& value) {
-
+  
   _impl_.episode_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::_internal_mutable_episode_id() {
-
+  
   return _impl_.episode_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::release_episode_id() {
@@ -7421,9 +7421,9 @@ inline std::string* LifecycleCommand::release_episode_id() {
 }
 inline void LifecycleCommand::set_allocated_episode_id(std::string* episode_id) {
   if (episode_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.episode_id_.SetAllocated(episode_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -7445,7 +7445,7 @@ inline const std::string& LifecycleCommand::evaluation_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void LifecycleCommand::set_evaluation_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.evaluation_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.evaluation_id)
 }
@@ -7458,11 +7458,11 @@ inline const std::string& LifecycleCommand::_internal_evaluation_id() const {
   return _impl_.evaluation_id_.Get();
 }
 inline void LifecycleCommand::_internal_set_evaluation_id(const std::string& value) {
-
+  
   _impl_.evaluation_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::_internal_mutable_evaluation_id() {
-
+  
   return _impl_.evaluation_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::release_evaluation_id() {
@@ -7471,9 +7471,9 @@ inline std::string* LifecycleCommand::release_evaluation_id() {
 }
 inline void LifecycleCommand::set_allocated_evaluation_id(std::string* evaluation_id) {
   if (evaluation_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.evaluation_id_.SetAllocated(evaluation_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -7496,7 +7496,7 @@ inline uint64_t LifecycleCommand::lifecycle_epoch() const {
   return _internal_lifecycle_epoch();
 }
 inline void LifecycleCommand::_internal_set_lifecycle_epoch(uint64_t value) {
-
+  
   _impl_.lifecycle_epoch_ = value;
 }
 inline void LifecycleCommand::set_lifecycle_epoch(uint64_t value) {
@@ -7516,7 +7516,7 @@ inline uint64_t LifecycleCommand::command_sequence() const {
   return _internal_command_sequence();
 }
 inline void LifecycleCommand::_internal_set_command_sequence(uint64_t value) {
-
+  
   _impl_.command_sequence_ = value;
 }
 inline void LifecycleCommand::set_command_sequence(uint64_t value) {
@@ -7535,7 +7535,7 @@ inline const std::string& LifecycleCommand::idempotency_key() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void LifecycleCommand::set_idempotency_key(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.idempotency_key_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.idempotency_key)
 }
@@ -7548,11 +7548,11 @@ inline const std::string& LifecycleCommand::_internal_idempotency_key() const {
   return _impl_.idempotency_key_.Get();
 }
 inline void LifecycleCommand::_internal_set_idempotency_key(const std::string& value) {
-
+  
   _impl_.idempotency_key_.Set(value, GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::_internal_mutable_idempotency_key() {
-
+  
   return _impl_.idempotency_key_.Mutable(GetArenaForAllocation());
 }
 inline std::string* LifecycleCommand::release_idempotency_key() {
@@ -7561,9 +7561,9 @@ inline std::string* LifecycleCommand::release_idempotency_key() {
 }
 inline void LifecycleCommand::set_allocated_idempotency_key(std::string* idempotency_key) {
   if (idempotency_key != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.idempotency_key_.SetAllocated(idempotency_key, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -7586,7 +7586,7 @@ inline ::rl::task::maze::v1::TaskState LifecycleCommand::expected_task_state() c
   return _internal_expected_task_state();
 }
 inline void LifecycleCommand::_internal_set_expected_task_state(::rl::task::maze::v1::TaskState value) {
-
+  
   _impl_.expected_task_state_ = value;
 }
 inline void LifecycleCommand::set_expected_task_state(::rl::task::maze::v1::TaskState value) {
@@ -7606,7 +7606,7 @@ inline ::rl::task::maze::v1::SessionState LifecycleCommand::expected_session_sta
   return _internal_expected_session_state();
 }
 inline void LifecycleCommand::_internal_set_expected_session_state(::rl::task::maze::v1::SessionState value) {
-
+  
   _impl_.expected_session_state_ = value;
 }
 inline void LifecycleCommand::set_expected_session_state(::rl::task::maze::v1::SessionState value) {
@@ -7626,7 +7626,7 @@ inline ::rl::task::maze::v1::EpisodeState LifecycleCommand::expected_episode_sta
   return _internal_expected_episode_state();
 }
 inline void LifecycleCommand::_internal_set_expected_episode_state(::rl::task::maze::v1::EpisodeState value) {
-
+  
   _impl_.expected_episode_state_ = value;
 }
 inline void LifecycleCommand::set_expected_episode_state(::rl::task::maze::v1::EpisodeState value) {
@@ -7646,7 +7646,7 @@ inline ::rl::task::maze::v1::EvaluationState LifecycleCommand::expected_evaluati
   return _internal_expected_evaluation_state();
 }
 inline void LifecycleCommand::_internal_set_expected_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
-
+  
   _impl_.expected_evaluation_state_ = value;
 }
 inline void LifecycleCommand::set_expected_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
@@ -7670,7 +7670,7 @@ inline int32_t LifecycleReply::ret_code() const {
   return _internal_ret_code();
 }
 inline void LifecycleReply::_internal_set_ret_code(int32_t value) {
-
+  
   _impl_.ret_code_ = value;
 }
 inline void LifecycleReply::set_ret_code(int32_t value) {
@@ -7690,7 +7690,7 @@ inline ::rl::task::maze::v1::LifecycleResult LifecycleReply::result() const {
   return _internal_result();
 }
 inline void LifecycleReply::_internal_set_result(::rl::task::maze::v1::LifecycleResult value) {
-
+  
   _impl_.result_ = value;
 }
 inline void LifecycleReply::set_result(::rl::task::maze::v1::LifecycleResult value) {
@@ -7710,7 +7710,7 @@ inline ::rl::task::maze::v1::LifecycleErrorCode LifecycleReply::error_code() con
   return _internal_error_code();
 }
 inline void LifecycleReply::_internal_set_error_code(::rl::task::maze::v1::LifecycleErrorCode value) {
-
+  
   _impl_.error_code_ = value;
 }
 inline void LifecycleReply::set_error_code(::rl::task::maze::v1::LifecycleErrorCode value) {
@@ -7729,7 +7729,7 @@ inline const std::string& LifecycleReply::message() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void LifecycleReply::set_message(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.message)
 }
@@ -7742,11 +7742,11 @@ inline const std::string& LifecycleReply::_internal_message() const {
   return _impl_.message_.Get();
 }
 inline void LifecycleReply::_internal_set_message(const std::string& value) {
-
+  
   _impl_.message_.Set(value, GetArenaForAllocation());
 }
 inline std::string* LifecycleReply::_internal_mutable_message() {
-
+  
   return _impl_.message_.Mutable(GetArenaForAllocation());
 }
 inline std::string* LifecycleReply::release_message() {
@@ -7755,9 +7755,9 @@ inline std::string* LifecycleReply::release_message() {
 }
 inline void LifecycleReply::set_allocated_message(std::string* message) {
   if (message != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.message_.SetAllocated(message, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -7780,7 +7780,7 @@ inline uint64_t LifecycleReply::applied_sequence() const {
   return _internal_applied_sequence();
 }
 inline void LifecycleReply::_internal_set_applied_sequence(uint64_t value) {
-
+  
   _impl_.applied_sequence_ = value;
 }
 inline void LifecycleReply::set_applied_sequence(uint64_t value) {
@@ -7800,7 +7800,7 @@ inline ::rl::task::maze::v1::TaskState LifecycleReply::task_state() const {
   return _internal_task_state();
 }
 inline void LifecycleReply::_internal_set_task_state(::rl::task::maze::v1::TaskState value) {
-
+  
   _impl_.task_state_ = value;
 }
 inline void LifecycleReply::set_task_state(::rl::task::maze::v1::TaskState value) {
@@ -7820,7 +7820,7 @@ inline ::rl::task::maze::v1::SessionState LifecycleReply::session_state() const 
   return _internal_session_state();
 }
 inline void LifecycleReply::_internal_set_session_state(::rl::task::maze::v1::SessionState value) {
-
+  
   _impl_.session_state_ = value;
 }
 inline void LifecycleReply::set_session_state(::rl::task::maze::v1::SessionState value) {
@@ -7840,7 +7840,7 @@ inline ::rl::task::maze::v1::EpisodeState LifecycleReply::episode_state() const 
   return _internal_episode_state();
 }
 inline void LifecycleReply::_internal_set_episode_state(::rl::task::maze::v1::EpisodeState value) {
-
+  
   _impl_.episode_state_ = value;
 }
 inline void LifecycleReply::set_episode_state(::rl::task::maze::v1::EpisodeState value) {
@@ -7860,7 +7860,7 @@ inline ::rl::task::maze::v1::EvaluationState LifecycleReply::evaluation_state() 
   return _internal_evaluation_state();
 }
 inline void LifecycleReply::_internal_set_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
-
+  
   _impl_.evaluation_state_ = value;
 }
 inline void LifecycleReply::set_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
@@ -7895,14 +7895,14 @@ inline void OpenSessionReq::unsafe_arena_set_allocated_client(
   }
   _impl_.client_ = client;
   if (client) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionReq.client)
 }
 inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionReq::release_client() {
-
+  
   ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.client_;
   _impl_.client_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -7918,13 +7918,13 @@ inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionReq::release_client
 }
 inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionReq::unsafe_arena_release_client() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionReq.client)
-
+  
   ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.client_;
   _impl_.client_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionReq::_internal_mutable_client() {
-
+  
   if (_impl_.client_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
     _impl_.client_ = p;
@@ -7949,9 +7949,9 @@ inline void OpenSessionReq::set_allocated_client(::rl::common::v1::ServiceInstan
       client = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, client, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.client_ = client;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.client)
@@ -7968,7 +7968,7 @@ inline const std::string& OpenSessionReq::environment_instance_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void OpenSessionReq::set_environment_instance_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.environment_instance_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionReq.environment_instance_id)
 }
@@ -7981,11 +7981,11 @@ inline const std::string& OpenSessionReq::_internal_environment_instance_id() co
   return _impl_.environment_instance_id_.Get();
 }
 inline void OpenSessionReq::_internal_set_environment_instance_id(const std::string& value) {
-
+  
   _impl_.environment_instance_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* OpenSessionReq::_internal_mutable_environment_instance_id() {
-
+  
   return _impl_.environment_instance_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* OpenSessionReq::release_environment_instance_id() {
@@ -7994,9 +7994,9 @@ inline std::string* OpenSessionReq::release_environment_instance_id() {
 }
 inline void OpenSessionReq::set_allocated_environment_instance_id(std::string* environment_instance_id) {
   if (environment_instance_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.environment_instance_id_.SetAllocated(environment_instance_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -8139,7 +8139,7 @@ inline const std::string& OpenSessionReq::idempotency_key() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void OpenSessionReq::set_idempotency_key(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.idempotency_key_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionReq.idempotency_key)
 }
@@ -8152,11 +8152,11 @@ inline const std::string& OpenSessionReq::_internal_idempotency_key() const {
   return _impl_.idempotency_key_.Get();
 }
 inline void OpenSessionReq::_internal_set_idempotency_key(const std::string& value) {
-
+  
   _impl_.idempotency_key_.Set(value, GetArenaForAllocation());
 }
 inline std::string* OpenSessionReq::_internal_mutable_idempotency_key() {
-
+  
   return _impl_.idempotency_key_.Mutable(GetArenaForAllocation());
 }
 inline std::string* OpenSessionReq::release_idempotency_key() {
@@ -8165,9 +8165,9 @@ inline std::string* OpenSessionReq::release_idempotency_key() {
 }
 inline void OpenSessionReq::set_allocated_idempotency_key(std::string* idempotency_key) {
   if (idempotency_key != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.idempotency_key_.SetAllocated(idempotency_key, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -8211,14 +8211,14 @@ inline void OpenSessionRsp::unsafe_arena_set_allocated_lifecycle(
   }
   _impl_.lifecycle_ = lifecycle;
   if (lifecycle) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.lifecycle)
 }
 inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::release_lifecycle() {
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -8234,13 +8234,13 @@ inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::release_lifecycle()
 }
 inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::unsafe_arena_release_lifecycle() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.lifecycle)
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::_internal_mutable_lifecycle() {
-
+  
   if (_impl_.lifecycle_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
     _impl_.lifecycle_ = p;
@@ -8264,9 +8264,9 @@ inline void OpenSessionRsp::set_allocated_lifecycle(::rl::task::maze::v1::Lifecy
       lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, lifecycle, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.lifecycle_ = lifecycle;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.lifecycle)
@@ -8284,7 +8284,7 @@ inline uint32_t OpenSessionRsp::session_protocol_version() const {
   return _internal_session_protocol_version();
 }
 inline void OpenSessionRsp::_internal_set_session_protocol_version(uint32_t value) {
-
+  
   _impl_.session_protocol_version_ = value;
 }
 inline void OpenSessionRsp::set_session_protocol_version(uint32_t value) {
@@ -8303,7 +8303,7 @@ inline const std::string& OpenSessionRsp::session_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void OpenSessionRsp::set_session_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.session_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionRsp.session_id)
 }
@@ -8316,11 +8316,11 @@ inline const std::string& OpenSessionRsp::_internal_session_id() const {
   return _impl_.session_id_.Get();
 }
 inline void OpenSessionRsp::_internal_set_session_id(const std::string& value) {
-
+  
   _impl_.session_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* OpenSessionRsp::_internal_mutable_session_id() {
-
+  
   return _impl_.session_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* OpenSessionRsp::release_session_id() {
@@ -8329,9 +8329,9 @@ inline std::string* OpenSessionRsp::release_session_id() {
 }
 inline void OpenSessionRsp::set_allocated_session_id(std::string* session_id) {
   if (session_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.session_id_.SetAllocated(session_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -8354,7 +8354,7 @@ inline uint64_t OpenSessionRsp::lifecycle_epoch() const {
   return _internal_lifecycle_epoch();
 }
 inline void OpenSessionRsp::_internal_set_lifecycle_epoch(uint64_t value) {
-
+  
   _impl_.lifecycle_epoch_ = value;
 }
 inline void OpenSessionRsp::set_lifecycle_epoch(uint64_t value) {
@@ -8385,14 +8385,14 @@ inline void OpenSessionRsp::unsafe_arena_set_allocated_aiserver(
   }
   _impl_.aiserver_ = aiserver;
   if (aiserver) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.aiserver)
 }
 inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionRsp::release_aiserver() {
-
+  
   ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.aiserver_;
   _impl_.aiserver_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -8408,13 +8408,13 @@ inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionRsp::release_aiserv
 }
 inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionRsp::unsafe_arena_release_aiserver() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.aiserver)
-
+  
   ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.aiserver_;
   _impl_.aiserver_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ServiceInstanceIdentity* OpenSessionRsp::_internal_mutable_aiserver() {
-
+  
   if (_impl_.aiserver_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
     _impl_.aiserver_ = p;
@@ -8439,9 +8439,9 @@ inline void OpenSessionRsp::set_allocated_aiserver(::rl::common::v1::ServiceInst
       aiserver = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, aiserver, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.aiserver_ = aiserver;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.aiserver)
@@ -8476,14 +8476,14 @@ inline void OpenSessionRsp::unsafe_arena_set_allocated_task_spec(
   }
   _impl_.task_spec_ = task_spec;
   if (task_spec) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_spec)
 }
 inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::release_task_spec() {
-
+  
   ::rl::task::maze::v1::MazeTaskSpec* temp = _impl_.task_spec_;
   _impl_.task_spec_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -8499,13 +8499,13 @@ inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::release_task_spec() {
 }
 inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::unsafe_arena_release_task_spec() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.task_spec)
-
+  
   ::rl::task::maze::v1::MazeTaskSpec* temp = _impl_.task_spec_;
   _impl_.task_spec_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::_internal_mutable_task_spec() {
-
+  
   if (_impl_.task_spec_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::MazeTaskSpec>(GetArenaForAllocation());
     _impl_.task_spec_ = p;
@@ -8529,9 +8529,9 @@ inline void OpenSessionRsp::set_allocated_task_spec(::rl::task::maze::v1::MazeTa
       task_spec = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, task_spec, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.task_spec_ = task_spec;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_spec)
@@ -8549,7 +8549,7 @@ inline ::rl::task::maze::v1::WorkloadMode OpenSessionRsp::workload_mode() const 
   return _internal_workload_mode();
 }
 inline void OpenSessionRsp::_internal_set_workload_mode(::rl::task::maze::v1::WorkloadMode value) {
-
+  
   _impl_.workload_mode_ = value;
 }
 inline void OpenSessionRsp::set_workload_mode(::rl::task::maze::v1::WorkloadMode value) {
@@ -8569,7 +8569,7 @@ inline ::rl::task::maze::v1::ReplayPolicy OpenSessionRsp::replay_policy() const 
   return _internal_replay_policy();
 }
 inline void OpenSessionRsp::_internal_set_replay_policy(::rl::task::maze::v1::ReplayPolicy value) {
-
+  
   _impl_.replay_policy_ = value;
 }
 inline void OpenSessionRsp::set_replay_policy(::rl::task::maze::v1::ReplayPolicy value) {
@@ -8610,14 +8610,14 @@ inline void InitReq::unsafe_arena_set_allocated_command(
   }
   _impl_.command_ = command;
   if (command) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitReq.command)
 }
 inline ::rl::task::maze::v1::LifecycleCommand* InitReq::release_command() {
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -8633,13 +8633,13 @@ inline ::rl::task::maze::v1::LifecycleCommand* InitReq::release_command() {
 }
 inline ::rl::task::maze::v1::LifecycleCommand* InitReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitReq.command)
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleCommand* InitReq::_internal_mutable_command() {
-
+  
   if (_impl_.command_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
     _impl_.command_ = p;
@@ -8663,9 +8663,9 @@ inline void InitReq::set_allocated_command(::rl::task::maze::v1::LifecycleComman
       command = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, command, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.command_ = command;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitReq.command)
@@ -8700,14 +8700,14 @@ inline void InitReq::unsafe_arena_set_allocated_map(
   }
   _impl_.map_ = map;
   if (map) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitReq.map)
 }
 inline ::rl::task::maze::v1::MapDescriptor* InitReq::release_map() {
-
+  
   ::rl::task::maze::v1::MapDescriptor* temp = _impl_.map_;
   _impl_.map_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -8723,13 +8723,13 @@ inline ::rl::task::maze::v1::MapDescriptor* InitReq::release_map() {
 }
 inline ::rl::task::maze::v1::MapDescriptor* InitReq::unsafe_arena_release_map() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitReq.map)
-
+  
   ::rl::task::maze::v1::MapDescriptor* temp = _impl_.map_;
   _impl_.map_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::MapDescriptor* InitReq::_internal_mutable_map() {
-
+  
   if (_impl_.map_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::MapDescriptor>(GetArenaForAllocation());
     _impl_.map_ = p;
@@ -8753,9 +8753,9 @@ inline void InitReq::set_allocated_map(::rl::task::maze::v1::MapDescriptor* map)
       map = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, map, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.map_ = map;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitReq.map)
@@ -8794,14 +8794,14 @@ inline void InitRsp::unsafe_arena_set_allocated_lifecycle(
   }
   _impl_.lifecycle_ = lifecycle;
   if (lifecycle) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitRsp.lifecycle)
 }
 inline ::rl::task::maze::v1::LifecycleReply* InitRsp::release_lifecycle() {
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -8817,13 +8817,13 @@ inline ::rl::task::maze::v1::LifecycleReply* InitRsp::release_lifecycle() {
 }
 inline ::rl::task::maze::v1::LifecycleReply* InitRsp::unsafe_arena_release_lifecycle() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitRsp.lifecycle)
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleReply* InitRsp::_internal_mutable_lifecycle() {
-
+  
   if (_impl_.lifecycle_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
     _impl_.lifecycle_ = p;
@@ -8847,9 +8847,9 @@ inline void InitRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleRepl
       lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, lifecycle, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.lifecycle_ = lifecycle;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitRsp.lifecycle)
@@ -8878,14 +8878,14 @@ inline void InitRsp::unsafe_arena_set_allocated_accepted_map_digest(
   }
   _impl_.accepted_map_digest_ = accepted_map_digest;
   if (accepted_map_digest) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitRsp.accepted_map_digest)
 }
 inline ::rl::common::v1::ContentDigest* InitRsp::release_accepted_map_digest() {
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.accepted_map_digest_;
   _impl_.accepted_map_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -8901,13 +8901,13 @@ inline ::rl::common::v1::ContentDigest* InitRsp::release_accepted_map_digest() {
 }
 inline ::rl::common::v1::ContentDigest* InitRsp::unsafe_arena_release_accepted_map_digest() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitRsp.accepted_map_digest)
-
+  
   ::rl::common::v1::ContentDigest* temp = _impl_.accepted_map_digest_;
   _impl_.accepted_map_digest_ = nullptr;
   return temp;
 }
 inline ::rl::common::v1::ContentDigest* InitRsp::_internal_mutable_accepted_map_digest() {
-
+  
   if (_impl_.accepted_map_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
     _impl_.accepted_map_digest_ = p;
@@ -8932,9 +8932,9 @@ inline void InitRsp::set_allocated_accepted_map_digest(::rl::common::v1::Content
       accepted_map_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, accepted_map_digest, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.accepted_map_digest_ = accepted_map_digest;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitRsp.accepted_map_digest)
@@ -8952,7 +8952,7 @@ inline uint32_t InitRsp::verified_shortest_action_steps() const {
   return _internal_verified_shortest_action_steps();
 }
 inline void InitRsp::_internal_set_verified_shortest_action_steps(uint32_t value) {
-
+  
   _impl_.verified_shortest_action_steps_ = value;
 }
 inline void InitRsp::set_verified_shortest_action_steps(uint32_t value) {
@@ -8975,7 +8975,7 @@ inline const std::string& EvaluationAssignment::evaluation_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void EvaluationAssignment::set_evaluation_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.evaluation_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EvaluationAssignment.evaluation_id)
 }
@@ -8988,11 +8988,11 @@ inline const std::string& EvaluationAssignment::_internal_evaluation_id() const 
   return _impl_.evaluation_id_.Get();
 }
 inline void EvaluationAssignment::_internal_set_evaluation_id(const std::string& value) {
-
+  
   _impl_.evaluation_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* EvaluationAssignment::_internal_mutable_evaluation_id() {
-
+  
   return _impl_.evaluation_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* EvaluationAssignment::release_evaluation_id() {
@@ -9001,9 +9001,9 @@ inline std::string* EvaluationAssignment::release_evaluation_id() {
 }
 inline void EvaluationAssignment::set_allocated_evaluation_id(std::string* evaluation_id) {
   if (evaluation_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.evaluation_id_.SetAllocated(evaluation_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -9026,7 +9026,7 @@ inline uint32_t EvaluationAssignment::evaluation_round() const {
   return _internal_evaluation_round();
 }
 inline void EvaluationAssignment::_internal_set_evaluation_round(uint32_t value) {
-
+  
   _impl_.evaluation_round_ = value;
 }
 inline void EvaluationAssignment::set_evaluation_round(uint32_t value) {
@@ -9046,7 +9046,7 @@ inline ::rl::task::maze::v1::EvaluationState EvaluationAssignment::state() const
   return _internal_state();
 }
 inline void EvaluationAssignment::_internal_set_state(::rl::task::maze::v1::EvaluationState value) {
-
+  
   _impl_.state_ = value;
 }
 inline void EvaluationAssignment::set_state(::rl::task::maze::v1::EvaluationState value) {
@@ -9083,14 +9083,14 @@ inline void EvaluationAssignment::unsafe_arena_set_allocated_pinned_policy(
   }
   _impl_.pinned_policy_ = pinned_policy;
   if (pinned_policy) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
 }
 inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::release_pinned_policy() {
-
+  
   ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.pinned_policy_;
   _impl_.pinned_policy_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9106,13 +9106,13 @@ inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::releas
 }
 inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::unsafe_arena_release_pinned_policy() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
-
+  
   ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.pinned_policy_;
   _impl_.pinned_policy_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::_internal_mutable_pinned_policy() {
-
+  
   if (_impl_.pinned_policy_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::BehaviorPolicyBinding>(GetArenaForAllocation());
     _impl_.pinned_policy_ = p;
@@ -9136,9 +9136,9 @@ inline void EvaluationAssignment::set_allocated_pinned_policy(::rl::task::maze::
       pinned_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, pinned_policy, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.pinned_policy_ = pinned_policy;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
@@ -9156,7 +9156,7 @@ inline bool EvaluationAssignment::training_sample_emission_allowed() const {
   return _internal_training_sample_emission_allowed();
 }
 inline void EvaluationAssignment::_internal_set_training_sample_emission_allowed(bool value) {
-
+  
   _impl_.training_sample_emission_allowed_ = value;
 }
 inline void EvaluationAssignment::set_training_sample_emission_allowed(bool value) {
@@ -9179,7 +9179,7 @@ inline const std::string& EpisodeAssignment::episode_id() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void EpisodeAssignment::set_episode_id(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.episode_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.episode_id)
 }
@@ -9192,11 +9192,11 @@ inline const std::string& EpisodeAssignment::_internal_episode_id() const {
   return _impl_.episode_id_.Get();
 }
 inline void EpisodeAssignment::_internal_set_episode_id(const std::string& value) {
-
+  
   _impl_.episode_id_.Set(value, GetArenaForAllocation());
 }
 inline std::string* EpisodeAssignment::_internal_mutable_episode_id() {
-
+  
   return _impl_.episode_id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* EpisodeAssignment::release_episode_id() {
@@ -9205,9 +9205,9 @@ inline std::string* EpisodeAssignment::release_episode_id() {
 }
 inline void EpisodeAssignment::set_allocated_episode_id(std::string* episode_id) {
   if (episode_id != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.episode_id_.SetAllocated(episode_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -9247,14 +9247,14 @@ inline void EpisodeAssignment::unsafe_arena_set_allocated_task(
   }
   _impl_.task_ = task;
   if (task) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.task)
 }
 inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::release_task() {
-
+  
   ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
   _impl_.task_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9270,13 +9270,13 @@ inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::release_task() {
 }
 inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::unsafe_arena_release_task() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.task)
-
+  
   ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
   _impl_.task_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::_internal_mutable_task() {
-
+  
   if (_impl_.task_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::TaskIdentity>(GetArenaForAllocation());
     _impl_.task_ = p;
@@ -9300,9 +9300,9 @@ inline void EpisodeAssignment::set_allocated_task(::rl::task::maze::v1::TaskIden
       task = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, task, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.task_ = task;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.task)
@@ -9320,7 +9320,7 @@ inline ::rl::task::maze::v1::EpisodeMode EpisodeAssignment::mode() const {
   return _internal_mode();
 }
 inline void EpisodeAssignment::_internal_set_mode(::rl::task::maze::v1::EpisodeMode value) {
-
+  
   _impl_.mode_ = value;
 }
 inline void EpisodeAssignment::set_mode(::rl::task::maze::v1::EpisodeMode value) {
@@ -9340,7 +9340,7 @@ inline ::rl::task::maze::v1::CurriculumStage EpisodeAssignment::curriculum_stage
   return _internal_curriculum_stage();
 }
 inline void EpisodeAssignment::_internal_set_curriculum_stage(::rl::task::maze::v1::CurriculumStage value) {
-
+  
   _impl_.curriculum_stage_ = value;
 }
 inline void EpisodeAssignment::set_curriculum_stage(::rl::task::maze::v1::CurriculumStage value) {
@@ -9360,7 +9360,7 @@ inline uint32_t EpisodeAssignment::max_steps() const {
   return _internal_max_steps();
 }
 inline void EpisodeAssignment::_internal_set_max_steps(uint32_t value) {
-
+  
   _impl_.max_steps_ = value;
 }
 inline void EpisodeAssignment::set_max_steps(uint32_t value) {
@@ -9380,7 +9380,7 @@ inline bool EpisodeAssignment::continue_task() const {
   return _internal_continue_task();
 }
 inline void EpisodeAssignment::_internal_set_continue_task(bool value) {
-
+  
   _impl_.continue_task_ = value;
 }
 inline void EpisodeAssignment::set_continue_task(bool value) {
@@ -9417,14 +9417,14 @@ inline void EpisodeAssignment::unsafe_arena_set_allocated_behavior_policy(
   }
   _impl_.behavior_policy_ = behavior_policy;
   if (behavior_policy) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
 }
 inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::release_behavior_policy() {
-
+  
   ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.behavior_policy_;
   _impl_.behavior_policy_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9440,13 +9440,13 @@ inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::release_b
 }
 inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::unsafe_arena_release_behavior_policy() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
-
+  
   ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.behavior_policy_;
   _impl_.behavior_policy_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::_internal_mutable_behavior_policy() {
-
+  
   if (_impl_.behavior_policy_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::BehaviorPolicyBinding>(GetArenaForAllocation());
     _impl_.behavior_policy_ = p;
@@ -9470,9 +9470,9 @@ inline void EpisodeAssignment::set_allocated_behavior_policy(::rl::task::maze::v
       behavior_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, behavior_policy, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.behavior_policy_ = behavior_policy;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
@@ -9490,7 +9490,7 @@ inline bool EpisodeAssignment::collect_training_samples() const {
   return _internal_collect_training_samples();
 }
 inline void EpisodeAssignment::_internal_set_collect_training_samples(bool value) {
-
+  
   _impl_.collect_training_samples_ = value;
 }
 inline void EpisodeAssignment::set_collect_training_samples(bool value) {
@@ -9527,14 +9527,14 @@ inline void EpisodeAssignment::unsafe_arena_set_allocated_evaluation(
   }
   _impl_.evaluation_ = evaluation;
   if (evaluation) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation)
 }
 inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::release_evaluation() {
-
+  
   ::rl::task::maze::v1::EvaluationAssignment* temp = _impl_.evaluation_;
   _impl_.evaluation_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9550,13 +9550,13 @@ inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::release_ev
 }
 inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::unsafe_arena_release_evaluation() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.evaluation)
-
+  
   ::rl::task::maze::v1::EvaluationAssignment* temp = _impl_.evaluation_;
   _impl_.evaluation_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::_internal_mutable_evaluation() {
-
+  
   if (_impl_.evaluation_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::EvaluationAssignment>(GetArenaForAllocation());
     _impl_.evaluation_ = p;
@@ -9580,9 +9580,9 @@ inline void EpisodeAssignment::set_allocated_evaluation(::rl::task::maze::v1::Ev
       evaluation = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, evaluation, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.evaluation_ = evaluation;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation)
@@ -9621,14 +9621,14 @@ inline void BeginEpisodeReq::unsafe_arena_set_allocated_command(
   }
   _impl_.command_ = command;
   if (command) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeReq.command)
 }
 inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::release_command() {
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9644,13 +9644,13 @@ inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::release_command(
 }
 inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeReq.command)
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::_internal_mutable_command() {
-
+  
   if (_impl_.command_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
     _impl_.command_ = p;
@@ -9674,9 +9674,9 @@ inline void BeginEpisodeReq::set_allocated_command(::rl::task::maze::v1::Lifecyc
       command = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, command, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.command_ = command;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BeginEpisodeReq.command)
@@ -9715,14 +9715,14 @@ inline void BeginEpisodeRsp::unsafe_arena_set_allocated_lifecycle(
   }
   _impl_.lifecycle_ = lifecycle;
   if (lifecycle) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
 }
 inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::release_lifecycle() {
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9738,13 +9738,13 @@ inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::release_lifecycle(
 }
 inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::unsafe_arena_release_lifecycle() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::_internal_mutable_lifecycle() {
-
+  
   if (_impl_.lifecycle_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
     _impl_.lifecycle_ = p;
@@ -9768,9 +9768,9 @@ inline void BeginEpisodeRsp::set_allocated_lifecycle(::rl::task::maze::v1::Lifec
       lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, lifecycle, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.lifecycle_ = lifecycle;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
@@ -9805,14 +9805,14 @@ inline void BeginEpisodeRsp::unsafe_arena_set_allocated_assignment(
   }
   _impl_.assignment_ = assignment;
   if (assignment) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.assignment)
 }
 inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::release_assignment() {
-
+  
   ::rl::task::maze::v1::EpisodeAssignment* temp = _impl_.assignment_;
   _impl_.assignment_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9828,13 +9828,13 @@ inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::release_assignm
 }
 inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::unsafe_arena_release_assignment() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeRsp.assignment)
-
+  
   ::rl::task::maze::v1::EpisodeAssignment* temp = _impl_.assignment_;
   _impl_.assignment_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::_internal_mutable_assignment() {
-
+  
   if (_impl_.assignment_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::EpisodeAssignment>(GetArenaForAllocation());
     _impl_.assignment_ = p;
@@ -9858,9 +9858,9 @@ inline void BeginEpisodeRsp::set_allocated_assignment(::rl::task::maze::v1::Epis
       assignment = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, assignment, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.assignment_ = assignment;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.assignment)
@@ -9882,7 +9882,7 @@ inline float Vec2::x() const {
   return _internal_x();
 }
 inline void Vec2::_internal_set_x(float value) {
-
+  
   _impl_.x_ = value;
 }
 inline void Vec2::set_x(float value) {
@@ -9902,7 +9902,7 @@ inline float Vec2::y() const {
   return _internal_y();
 }
 inline void Vec2::_internal_set_y(float value) {
-
+  
   _impl_.y_ = value;
 }
 inline void Vec2::set_y(float value) {
@@ -9926,7 +9926,7 @@ inline uint32_t AgentState::agent_id() const {
   return _internal_agent_id();
 }
 inline void AgentState::_internal_set_agent_id(uint32_t value) {
-
+  
   _impl_.agent_id_ = value;
 }
 inline void AgentState::set_agent_id(uint32_t value) {
@@ -9963,14 +9963,14 @@ inline void AgentState::unsafe_arena_set_allocated_position(
   }
   _impl_.position_ = position;
   if (position) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.AgentState.position)
 }
 inline ::rl::task::maze::v1::Vec2* AgentState::release_position() {
-
+  
   ::rl::task::maze::v1::Vec2* temp = _impl_.position_;
   _impl_.position_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -9986,13 +9986,13 @@ inline ::rl::task::maze::v1::Vec2* AgentState::release_position() {
 }
 inline ::rl::task::maze::v1::Vec2* AgentState::unsafe_arena_release_position() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.AgentState.position)
-
+  
   ::rl::task::maze::v1::Vec2* temp = _impl_.position_;
   _impl_.position_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::Vec2* AgentState::_internal_mutable_position() {
-
+  
   if (_impl_.position_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::Vec2>(GetArenaForAllocation());
     _impl_.position_ = p;
@@ -10016,9 +10016,9 @@ inline void AgentState::set_allocated_position(::rl::task::maze::v1::Vec2* posit
       position = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, position, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.position_ = position;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.AgentState.position)
@@ -10036,7 +10036,7 @@ inline bool AgentState::is_done() const {
   return _internal_is_done();
 }
 inline void AgentState::_internal_set_is_done(bool value) {
-
+  
   _impl_.is_done_ = value;
 }
 inline void AgentState::set_is_done(bool value) {
@@ -10056,7 +10056,7 @@ inline ::rl::task::maze::v1::MazeTerminationReason AgentState::termination_reaso
   return _internal_termination_reason();
 }
 inline void AgentState::_internal_set_termination_reason(::rl::task::maze::v1::MazeTerminationReason value) {
-
+  
   _impl_.termination_reason_ = value;
 }
 inline void AgentState::set_termination_reason(::rl::task::maze::v1::MazeTerminationReason value) {
@@ -10076,7 +10076,7 @@ inline bool AgentState::last_move_blocked() const {
   return _internal_last_move_blocked();
 }
 inline void AgentState::_internal_set_last_move_blocked(bool value) {
-
+  
   _impl_.last_move_blocked_ = value;
 }
 inline void AgentState::set_last_move_blocked(bool value) {
@@ -10117,14 +10117,14 @@ inline void UpdateReq::unsafe_arena_set_allocated_command(
   }
   _impl_.command_ = command;
   if (command) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateReq.command)
 }
 inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::release_command() {
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -10140,13 +10140,13 @@ inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::release_command() {
 }
 inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateReq.command)
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::_internal_mutable_command() {
-
+  
   if (_impl_.command_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
     _impl_.command_ = p;
@@ -10170,9 +10170,9 @@ inline void UpdateReq::set_allocated_command(::rl::task::maze::v1::LifecycleComm
       command = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, command, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.command_ = command;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.UpdateReq.command)
@@ -10190,7 +10190,7 @@ inline uint64_t UpdateReq::frame_id() const {
   return _internal_frame_id();
 }
 inline void UpdateReq::_internal_set_frame_id(uint64_t value) {
-
+  
   _impl_.frame_id_ = value;
 }
 inline void UpdateReq::set_frame_id(uint64_t value) {
@@ -10254,7 +10254,7 @@ inline uint32_t AgentAction::agent_id() const {
   return _internal_agent_id();
 }
 inline void AgentAction::_internal_set_agent_id(uint32_t value) {
-
+  
   _impl_.agent_id_ = value;
 }
 inline void AgentAction::set_agent_id(uint32_t value) {
@@ -10274,7 +10274,7 @@ inline int32_t AgentAction::action_id() const {
   return _internal_action_id();
 }
 inline void AgentAction::_internal_set_action_id(int32_t value) {
-
+  
   _impl_.action_id_ = value;
 }
 inline void AgentAction::set_action_id(int32_t value) {
@@ -10315,14 +10315,14 @@ inline void UpdateRsp::unsafe_arena_set_allocated_lifecycle(
   }
   _impl_.lifecycle_ = lifecycle;
   if (lifecycle) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateRsp.lifecycle)
 }
 inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::release_lifecycle() {
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -10338,13 +10338,13 @@ inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::release_lifecycle() {
 }
 inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::unsafe_arena_release_lifecycle() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateRsp.lifecycle)
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::_internal_mutable_lifecycle() {
-
+  
   if (_impl_.lifecycle_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
     _impl_.lifecycle_ = p;
@@ -10368,9 +10368,9 @@ inline void UpdateRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleRe
       lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, lifecycle, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.lifecycle_ = lifecycle;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.UpdateRsp.lifecycle)
@@ -10428,7 +10428,7 @@ inline bool UpdateRsp::replayed() const {
   return _internal_replayed();
 }
 inline void UpdateRsp::_internal_set_replayed(bool value) {
-
+  
   _impl_.replayed_ = value;
 }
 inline void UpdateRsp::set_replayed(bool value) {
@@ -10448,7 +10448,7 @@ inline bool UpdateRsp::task_stop_requested() const {
   return _internal_task_stop_requested();
 }
 inline void UpdateRsp::_internal_set_task_stop_requested(bool value) {
-
+  
   _impl_.task_stop_requested_ = value;
 }
 inline void UpdateRsp::set_task_stop_requested(bool value) {
@@ -10468,7 +10468,7 @@ inline ::rl::task::maze::v1::MazeTerminationReason UpdateRsp::task_stop_reason()
   return _internal_task_stop_reason();
 }
 inline void UpdateRsp::_internal_set_task_stop_reason(::rl::task::maze::v1::MazeTerminationReason value) {
-
+  
   _impl_.task_stop_reason_ = value;
 }
 inline void UpdateRsp::set_task_stop_reason(::rl::task::maze::v1::MazeTerminationReason value) {
@@ -10509,14 +10509,14 @@ inline void EndEpisodeReq::unsafe_arena_set_allocated_command(
   }
   _impl_.command_ = command;
   if (command) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EndEpisodeReq.command)
 }
 inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::release_command() {
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -10532,13 +10532,13 @@ inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::release_command() 
 }
 inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.EndEpisodeReq.command)
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::_internal_mutable_command() {
-
+  
   if (_impl_.command_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
     _impl_.command_ = p;
@@ -10562,9 +10562,9 @@ inline void EndEpisodeReq::set_allocated_command(::rl::task::maze::v1::Lifecycle
       command = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, command, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.command_ = command;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EndEpisodeReq.command)
@@ -10603,14 +10603,14 @@ inline void EndEpisodeRsp::unsafe_arena_set_allocated_lifecycle(
   }
   _impl_.lifecycle_ = lifecycle;
   if (lifecycle) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
 }
 inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::release_lifecycle() {
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -10626,13 +10626,13 @@ inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::release_lifecycle() 
 }
 inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::unsafe_arena_release_lifecycle() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::_internal_mutable_lifecycle() {
-
+  
   if (_impl_.lifecycle_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
     _impl_.lifecycle_ = p;
@@ -10656,9 +10656,9 @@ inline void EndEpisodeRsp::set_allocated_lifecycle(::rl::task::maze::v1::Lifecyc
       lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, lifecycle, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.lifecycle_ = lifecycle;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
@@ -10697,14 +10697,14 @@ inline void AbortEpisodeReq::unsafe_arena_set_allocated_command(
   }
   _impl_.command_ = command;
   if (command) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.AbortEpisodeReq.command)
 }
 inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::release_command() {
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -10720,13 +10720,13 @@ inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::release_command(
 }
 inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.AbortEpisodeReq.command)
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::_internal_mutable_command() {
-
+  
   if (_impl_.command_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
     _impl_.command_ = p;
@@ -10750,9 +10750,9 @@ inline void AbortEpisodeReq::set_allocated_command(::rl::task::maze::v1::Lifecyc
       command = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, command, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.command_ = command;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.AbortEpisodeReq.command)
@@ -10770,7 +10770,7 @@ inline ::rl::task::maze::v1::MazeTerminationReason AbortEpisodeReq::reason() con
   return _internal_reason();
 }
 inline void AbortEpisodeReq::_internal_set_reason(::rl::task::maze::v1::MazeTerminationReason value) {
-
+  
   _impl_.reason_ = value;
 }
 inline void AbortEpisodeReq::set_reason(::rl::task::maze::v1::MazeTerminationReason value) {
@@ -10789,7 +10789,7 @@ inline const std::string& AbortEpisodeReq::message() const {
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void AbortEpisodeReq::set_message(ArgT0&& arg0, ArgT... args) {
-
+ 
  _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.AbortEpisodeReq.message)
 }
@@ -10802,11 +10802,11 @@ inline const std::string& AbortEpisodeReq::_internal_message() const {
   return _impl_.message_.Get();
 }
 inline void AbortEpisodeReq::_internal_set_message(const std::string& value) {
-
+  
   _impl_.message_.Set(value, GetArenaForAllocation());
 }
 inline std::string* AbortEpisodeReq::_internal_mutable_message() {
-
+  
   return _impl_.message_.Mutable(GetArenaForAllocation());
 }
 inline std::string* AbortEpisodeReq::release_message() {
@@ -10815,9 +10815,9 @@ inline std::string* AbortEpisodeReq::release_message() {
 }
 inline void AbortEpisodeReq::set_allocated_message(std::string* message) {
   if (message != nullptr) {
-
+    
   } else {
-
+    
   }
   _impl_.message_.SetAllocated(message, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -10861,14 +10861,14 @@ inline void AbortEpisodeRsp::unsafe_arena_set_allocated_lifecycle(
   }
   _impl_.lifecycle_ = lifecycle;
   if (lifecycle) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
 }
 inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::release_lifecycle() {
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -10884,13 +10884,13 @@ inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::release_lifecycle(
 }
 inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::unsafe_arena_release_lifecycle() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::_internal_mutable_lifecycle() {
-
+  
   if (_impl_.lifecycle_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
     _impl_.lifecycle_ = p;
@@ -10914,9 +10914,9 @@ inline void AbortEpisodeRsp::set_allocated_lifecycle(::rl::task::maze::v1::Lifec
       lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, lifecycle, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.lifecycle_ = lifecycle;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
@@ -10955,14 +10955,14 @@ inline void CloseSessionReq::unsafe_arena_set_allocated_command(
   }
   _impl_.command_ = command;
   if (command) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.CloseSessionReq.command)
 }
 inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::release_command() {
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -10978,13 +10978,13 @@ inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::release_command(
 }
 inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.CloseSessionReq.command)
-
+  
   ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::_internal_mutable_command() {
-
+  
   if (_impl_.command_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
     _impl_.command_ = p;
@@ -11008,9 +11008,9 @@ inline void CloseSessionReq::set_allocated_command(::rl::task::maze::v1::Lifecyc
       command = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, command, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.command_ = command;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.CloseSessionReq.command)
@@ -11049,14 +11049,14 @@ inline void CloseSessionRsp::unsafe_arena_set_allocated_lifecycle(
   }
   _impl_.lifecycle_ = lifecycle;
   if (lifecycle) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.CloseSessionRsp.lifecycle)
 }
 inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::release_lifecycle() {
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
@@ -11072,13 +11072,13 @@ inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::release_lifecycle(
 }
 inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::unsafe_arena_release_lifecycle() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.CloseSessionRsp.lifecycle)
-
+  
   ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
   _impl_.lifecycle_ = nullptr;
   return temp;
 }
 inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::_internal_mutable_lifecycle() {
-
+  
   if (_impl_.lifecycle_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
     _impl_.lifecycle_ = p;
@@ -11102,9 +11102,9 @@ inline void CloseSessionRsp::set_allocated_lifecycle(::rl::task::maze::v1::Lifec
       lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, lifecycle, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   _impl_.lifecycle_ = lifecycle;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.CloseSessionRsp.lifecycle)

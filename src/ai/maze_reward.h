@@ -18,12 +18,12 @@ struct RewardDetail {
 
 struct MazeRewardConfig {
     float goal_reward = 10.0f;
-    float timeout_base = -2.0f;
-    float gamma = 0.99f;
-    int potential_distance_scale = 220;
-    float stage_8x_first_visit_cap = 0.25f;
-    float stage_4x_first_visit_cap = 0.10f;
-    float stage_2x_first_visit_cap = 0.0f;
+    float timeout_penalty = -2.0f;
+    float progress_budget = 1.0f;
+    float stage_8x_first_visit_budget = 0.75f;
+    float stage_4x_first_visit_budget = 0.25f;
+    float stage_2x_first_visit_budget = 0.0f;
+    float wasted_action_penalty = -0.002f;
 };
 
 // ---- 迷宫奖励计算器 ----

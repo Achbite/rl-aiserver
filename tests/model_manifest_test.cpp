@@ -69,9 +69,9 @@ std::string Sha256(const std::string& payload) {
 AIServerConfig Config(const std::filesystem::path& root) {
     AIServerConfig config;
     config.contract.source_digest.hex =
-        "157fba14177a0727abf663c442003e2a5f5c1e297f4af97ea22b45d74cdb32b5";
+        "861575536f18342fd427661c8f21b7b98994913e1e1c998f87fce5ee1490d438";
     config.contract.artifact_digest.hex =
-        "71a0f13363d62b5d076c02b00e5b4b269a3e91253b190432f2e83c43cdcf7d3a";
+        "b8e8cdabf05b15b830b27edd1555904269202042756ecf0ed8158184e57ce8f6";
     config.contract.generator_identity =
         "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8";
     config.training_semantics.observation_schema = {
@@ -81,10 +81,10 @@ AIServerConfig Config(const std::filesystem::path& root) {
         "maze.action.v1", 1,
         {"sha256", "ce84c564e128f98adcc48fd420ac0df5acea61774a25de8705b602464009cfd8"}};
     config.training_semantics.reward_schema = {
-        "maze.reward.v3", 1,
-        {"sha256", "b55437290fc9183f6197de5b4fdb493f162e08d61dde73b3415ddc9315d3c604"}};
+        "maze.reward.v4", 1,
+        {"sha256", "ed284084b79413473d5053b6d3f69320d2a4639c81451ba598ca45ac8ce15929"}};
     config.training_semantics.semantics_digest.hex =
-        "bde46f61bd04857f3fb2e79a5533f866856bb832c7ae2fb50ab65c67949ca62d";
+        "6cd834542f8263135b4bfd069f372ddfdb99334060d305f58b00ce56eea10b4c";
     config.model.local_train_dir = (root / "local-train").string();
     return config;
 }
@@ -245,7 +245,7 @@ int main() {
     WriteManifest(active_dir / "manifest.json", valid);
     ModelManifest loaded;
     Require(LoadModelManifest(config, loaded, error),
-            "load valid 0.8.0 manifest: " + error);
+            "load valid 0.9.1 manifest: " + error);
     Require(loaded.model_version == 0 && loaded.sha256 == checksum &&
                 loaded.observation_schema_id == "maze.observation.v3",
             "preserve model and schema identity");

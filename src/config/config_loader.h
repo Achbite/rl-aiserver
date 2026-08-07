@@ -53,7 +53,7 @@ struct SchemaConfig {
 
 struct ContractConfig {
     std::string package_name = "rl-contracts";
-    std::string package_version = "0.8.0";
+    std::string package_version = "0.9.1";
     DigestConfig source_digest;
     DigestConfig artifact_digest;
     std::string platform = "linux/arm64";
@@ -98,9 +98,8 @@ struct ModelDistributionConfig {
     std::string host = "maze-learner";
     int port = 9200;
     int poll_interval_ms = 200;
-    int boundary_wait_ms = 60000;
     int rpc_timeout_ms = 5000;
-    std::string contract_version = "0.8.0";
+    std::string contract_version = "0.9.1";
 };
 
 // Maze task ownership belongs to AIServer. Client configuration cannot
@@ -108,10 +107,10 @@ struct ModelDistributionConfig {
 struct MazeTaskConfig {
     std::string task_contract_id = "maze.task.v3";
     std::string task_id = "maze.fixed.single-map.v1";
-    uint64_t task_revision = 1;
+    uint64_t task_revision = 2;
     DigestConfig task_config_digest{
         "sha256",
-        "17f885bd9ff1a20cf9fba210f1454487ea04c36251730b6d0875c4dbb5cb99d7"};
+        "f16411393f778b7a2ffaf688e80f138dc33bd0709f47190c3f7b0f5946178b5b"};
     int agent_num = 4;
     std::string fixed_map_id = "maze_117436372";
     std::string fixed_map_checksum_sha256 =

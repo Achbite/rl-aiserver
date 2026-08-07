@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
     }
     AIServerConfig cfg;
     if (!LoadServerConfig(config_path, cfg)) {
-        LOG_ERROR("Main", "配置加载或 0.8.0 身份校验失败: %s",
+        LOG_ERROR("Main", "配置加载或 0.9.1 身份校验失败: %s",
                   config_path.c_str());
         Logger::Instance().Close();
         return 2;

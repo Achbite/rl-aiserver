@@ -17,7 +17,6 @@
 
 #include <atomic>
 #include <chrono>
-#include <condition_variable>
 #include <cstdint>
 #include <mutex>
 #include <random>
@@ -74,10 +73,9 @@ private:
     void StopModelWatcher();
     void ModelWatchLoop();
     bool ActivateStagedModel();
-    bool AtGlobalFragmentBoundary();
+    bool AtLocalFragmentBoundary();
+    bool ActiveEpisodesAllowModelActivation();
     bool CanActivateStagedModel();
-    bool SynchronizeModelAtSampleBoundary(
-        std::unique_lock<std::mutex>& lock);
     void RefreshFragmentSampleTarget(
         const SessionManager::Session& session);
     void InitAgentSolver(SessionManager::AgentRuntime& agent,
@@ -130,7 +128,6 @@ private:
     AIServerConfig config_;
     SessionManager session_mgr_;
     mutable std::mutex mutex_;
-    std::condition_variable model_condition_;
     SampleSender sample_sender_;
     EpisodeMetricsWindow episode_metrics_;
     OnnxInferencer onnx_inferencer_;
@@ -156,7 +153,6 @@ private:
     bool shutdown_started_ = false;
     bool client_initialized_ = false;
     bool task_stop_requested_ = false;
-    int initial_training_model_version_ = -1;
 
     int64_t produced_unique_samples_ = 0;
     std::unordered_map<int, int64_t> produced_samples_by_model_;

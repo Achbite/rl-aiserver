@@ -6,20 +6,18 @@ C++ environment-interaction, inference, trajectory assembly, and asynchronous sa
 
 ## Quick Start
 
-Build Contracts and explicitly refresh the repository-local protocol snapshot:
+Build Contracts, then synchronize the repository-local protocol snapshot from
+the immutable artifact selected by an explicit version and platform:
 
 ```bash
 (cd ../rl-contracts && bash build_artifact.sh)
-artifact=../.workspace/artifacts/rl-contracts/0.8.0/linux-arm64
-cp "${artifact}/common.proto" "${artifact}/training.proto" \
-   "${artifact}/maze_task.proto" proto/
-cp "${artifact}"/cpp/common.pb.{cc,h} proto/
-cp "${artifact}"/cpp/training.pb.{cc,h} proto/
-cp "${artifact}"/cpp/training.grpc.pb.{cc,h} proto/
-cp "${artifact}"/cpp/maze_task.pb.{cc,h} proto/
-cp "${artifact}"/cpp/maze_task.grpc.pb.{cc,h} proto/
-cp "${artifact}/manifest.json" proto/
+bash scripts/sync_contract_snapshot.sh
 ```
+
+The synchronization entrypoint reads the explicit `0.9.1` and `linux/arm64`
+identity from `artifact_versions.env`, verifies the manifest, every artifact
+file, and the staged snapshot before and after replacement. It neither discovers
+`latest` nor invokes a host `protoc` to regenerate code.
 
 Build the image:
 
@@ -65,6 +63,12 @@ Use `rl-framework` to start the complete workflow.
 ```
 
 The default AIServer port is `9002`. Training samples are sent to `maze-learner:9100`, and models are fetched from `maze-learner:9200`.
+
+Training activates a new model only after every active Agent in the current
+AIServer reaches a fragment boundary; there is no cross-Server-Pod switch
+barrier. Every `SampleBatch` carries the `BehaviorPolicyReference` that produced
+it. Evaluation pins the full model identity for the complete Episode and
+releases it only after commit or abort.
 
 ## License
 

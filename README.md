@@ -6,20 +6,16 @@ C++ 环境交互、推理、轨迹组装与异步样本发送服务。训练模�
 
 ## 快速开始
 
-先构建 Contracts，并显式更新仓库内协议快照：
+先构建 Contracts，并从固定版本和平台的不可变制品同步仓库内协议快照：
 
 ```bash
 (cd ../rl-contracts && bash build_artifact.sh)
-artifact=../.workspace/artifacts/rl-contracts/0.8.0/linux-arm64
-cp "${artifact}/common.proto" "${artifact}/training.proto" \
-   "${artifact}/maze_task.proto" proto/
-cp "${artifact}"/cpp/common.pb.{cc,h} proto/
-cp "${artifact}"/cpp/training.pb.{cc,h} proto/
-cp "${artifact}"/cpp/training.grpc.pb.{cc,h} proto/
-cp "${artifact}"/cpp/maze_task.pb.{cc,h} proto/
-cp "${artifact}"/cpp/maze_task.grpc.pb.{cc,h} proto/
-cp "${artifact}/manifest.json" proto/
+bash scripts/sync_contract_snapshot.sh
 ```
+
+同步入口从 `artifact_versions.env` 读取显式的 `0.9.1` 与 `linux/arm64`，在替换前后
+校验 manifest、全部制品文件和仓库快照。它不会发现 `latest`，也不会调用本机
+`protoc` 重新生成代码。
 
 构建镜像：
 
@@ -64,6 +60,11 @@ bash ./run.sh model-evaluation
 ```
 
 默认 AIServer 端口为 `9002`。训练样本默认发送至 `maze-learner:9100`，模型默认从 `maze-learner:9200` 拉取。
+
+训练模式只在当前 AIServer 内所有活跃 Agent 到达 fragment 边界后切换模型，
+不要求多个 Server Pod 同步切换。每个 `SampleBatch` 携带实际
+`BehaviorPolicyReference`；评测模式在整个 Episode 内固定完整模型身份，
+评测结束或中止后才允许切换。
 
 ## License
 

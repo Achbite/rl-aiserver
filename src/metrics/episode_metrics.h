@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <vector>
 
+struct SingleMapTaskSnapshot;
+
 struct AgentEpisodeResult {
     double episode_return = 0.0;
     bool success = false;
@@ -45,3 +47,12 @@ private:
     mutable std::mutex mutex_;
     std::deque<Entry> entries_;
 };
+
+// Appends task-control metrics to the same AIServer snapshot as episode
+// metrics. Values that do not yet exist (for example, evaluation results
+// before the first completed campaign) are deliberately omitted.
+void AppendSingleMapTaskMetrics(
+    training::MetricSnapshot* snapshot,
+    const SingleMapTaskSnapshot& task,
+    bool has_completed_evaluation,
+    int64_t timestamp_unix_ms);

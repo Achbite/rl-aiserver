@@ -2,6 +2,7 @@
 
 #include "ai/astar_solver.h"
 #include "contracts/contract_namespaces.h"
+#include "model/behavior_policy_scope.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -56,6 +57,7 @@ public:
         std::unordered_set<int> visited;
         bool current_state_first_visit = false;
         float first_visit_bonus_total = 0.0f;
+        int episode_start_geodesic_distance = -1;
         int observation_grid_x = -1;
         int observation_grid_y = -1;
         bool last_move_blocked = false;
@@ -129,13 +131,15 @@ public:
             maze::CURRICULUM_STAGE_8X;
         maze::EpisodeMode current_episode_mode =
             maze::EPISODE_MODE_UNSPECIFIED;
+        BehaviorPolicyScope behavior_policy_scope =
+            BehaviorPolicyScope::Unspecified;
         bool training_collection_paused = false;
         int current_max_steps = 0;
-        int pinned_model_version = -1;
-        std::string pinned_model_checksum;
-        std::string pinned_model_lineage_id;
-        std::string pinned_model_manifest_digest;
-        int64_t pinned_model_trained_samples = 0;
+        int evaluation_pinned_model_version = -1;
+        std::string evaluation_pinned_model_checksum;
+        std::string evaluation_pinned_model_lineage_id;
+        std::string evaluation_pinned_model_manifest_digest;
+        int64_t evaluation_pinned_model_trained_samples = 0;
 
         // 网格是否可通行（越界视为不可通行）
         bool IsWalkable(int gx, int gy) const {

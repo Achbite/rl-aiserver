@@ -32,13 +32,13 @@ int main() {
     TrainingSampleBudget course_cap(1000000, 512);
     Require(course_cap.Validate(error), "course cap must be valid");
     Require(course_cap.effective_samples() == 999936,
-            "a maximum must round down to a trainable global boundary");
+            "a maximum must round down to a trainable sample quantum");
     Require(course_cap.effective_samples() <=
                 course_cap.requested_samples(),
             "effective cap must never exceed the requested maximum");
 
     TrainingSampleBudget too_small(128, 512);
     Require(!too_small.Validate(error),
-            "a partial global fragment budget must fail closed");
+            "a partial sample quantum budget must fail closed");
     return 0;
 }

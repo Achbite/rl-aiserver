@@ -35,7 +35,7 @@ void RequireAtomicSum(const RewardDetail& detail) {
         sum += item.second;
     }
     Require(detail.items.size() == 5,
-            "Reward V3 exposes exactly five atomic components");
+            "Reward V4 exposes exactly five atomic components");
     Require(Near(sum, detail.total),
             "PPO Reward equals the atomic component sum");
     Require(Near(detail.task_total + detail.shaping_total, detail.total),
@@ -45,12 +45,12 @@ void RequireAtomicSum(const RewardDetail& detail) {
 MazeRewardConfig RewardConfig() {
     MazeRewardConfig config;
     config.goal_reward = 10.0f;
-    config.timeout_base = -2.0f;
-    config.gamma = 0.99f;
-    config.potential_distance_scale = 220;
-    config.stage_8x_first_visit_cap = 0.25f;
-    config.stage_4x_first_visit_cap = 0.10f;
-    config.stage_2x_first_visit_cap = 0.0f;
+    config.timeout_penalty = -2.0f;
+    config.progress_budget = 1.0f;
+    config.stage_8x_first_visit_budget = 0.75f;
+    config.stage_4x_first_visit_budget = 0.25f;
+    config.stage_2x_first_visit_budget = 0.0f;
+    config.wasted_action_penalty = -0.002f;
     return config;
 }
 
@@ -71,7 +71,9 @@ SessionManager::Session MakeSession() {
         session.geodesic_distance.push_back(index);
     }
     session.agents.emplace(1, SessionManager::AgentRuntime{});
-    session.agents.at(1).visited.insert(188);
+    auto& agent = session.agents.at(1);
+    agent.visited.insert(188);
+    agent.episode_start_geodesic_distance = 188;
     return session;
 }
 
@@ -81,69 +83,100 @@ RewardDetail Transition(
     int to_x,
     bool is_done = false,
     maze::MazeTerminationReason reason =
-        maze::MAZE_TERMINATION_REASON_ACTIVE) {
+        maze::MAZE_TERMINATION_REASON_ACTIVE,
+    const MazeRewardConfig& config = RewardConfig()) {
     auto& agent = session.agents.at(1);
     agent.prev_grid_x = from_x;
     agent.prev_grid_y = 0;
     const bool moved = from_x != to_x;
     agent.current_state_first_visit =
         moved && agent.visited.insert(to_x).second;
-    return MazeReward::Calculate(
-        session, 1, to_x, 0, is_done, reason, RewardConfig());
+    RewardDetail detail = MazeReward::Calculate(
+        session, 1, to_x, 0, is_done, reason, config);
+    if (detail.valid) {
+        agent.first_visit_bonus_total +=
+            Component(detail, "first_visit_bonus");
+    }
+    return detail;
 }
 
-void TestGeodesicPbrsAndExplorationTolerance() {
+void TestProgressHasNoDistanceDependentSignFlip() {
     auto session = MakeSession();
-    const float first_visit_unit = 0.25f / 188.0f;
+    const float expected = 1.0f / 188.0f;
+    for (int distance = 188; distance > 0; --distance) {
+        const bool goal = distance == 1;
+        const auto detail = Transition(
+            session, distance, distance - 1, goal,
+            goal ? maze::MAZE_TERMINATION_REASON_GOAL_REACHED
+                 : maze::MAZE_TERMINATION_REASON_ACTIVE);
+        RequireAtomicSum(detail);
+        Require(Near(Component(detail, "geodesic_progress"), expected),
+                "every one-step approach from d=188 through d=1 has the same positive progress credit");
+    }
 
-    const auto progress = Transition(session, 188, 187);
-    RequireAtomicSum(progress);
-    Require(Component(progress, "geodesic_pbrs") > 0.0f,
-            "geodesic progress produces positive PBRS shaping");
-    Require(Near(Component(progress, "first_visit_bonus"),
-                 first_visit_unit),
-            "8x first visit uses cap divided by d-star");
+    session = MakeSession();
+    for (int distance = 1; distance < 188; ++distance) {
+        const auto detail = Transition(session, distance, distance + 1);
+        RequireAtomicSum(detail);
+        Require(Near(Component(detail, "geodesic_progress"), -expected),
+                "every one-step retreat has the same negative progress credit");
+    }
+}
 
-    const auto retreat = Transition(session, 187, 188);
-    RequireAtomicSum(retreat);
-    Require(Component(retreat, "geodesic_pbrs") < 0.0f,
-            "moving away from Goal produces negative PBRS shaping");
-    Require(Near(Component(retreat, "first_visit_bonus"), 0.0f),
-            "revisited cells do not receive exploration credit");
+void TestLoopsDetoursAndWastedActions() {
+    auto session = MakeSession();
+    const float forward = Component(
+        Transition(session, 188, 187), "geodesic_progress");
+    const float backward = Component(
+        Transition(session, 187, 188), "geodesic_progress");
+    Require(Near(forward + backward, 0.0f),
+            "geodesic progress telescopes to zero over a closed loop");
+
+    session = MakeSession();
+    auto& agent = session.agents.at(1);
+    agent.visited.clear();
+    agent.visited.insert(187);
+    const auto new_cell_detour = Transition(session, 187, 188);
+    Require(Component(new_cell_detour, "geodesic_progress") < 0.0f,
+            "moving away remains negative progress");
+    Require(Component(new_cell_detour, "first_visit_bonus") > 0.0f,
+            "a new detour cell receives bounded exploration credit");
+    Require(std::abs(new_cell_detour.shaping_total) <
+                std::abs(Component(new_cell_detour, "geodesic_progress")),
+            "first visit softens but does not reverse a one-step detour");
+
+    const auto revisit = Transition(session, 188, 187);
+    Require(Near(Component(revisit, "first_visit_bonus"), 0.0f),
+            "revisited cells receive no exploration credit");
 
     const auto stay = Transition(session, 100, 100);
-    RequireAtomicSum(stay);
-    Require(Component(stay, "geodesic_pbrs") <= 0.0f,
-            "Stay and blocked moves cannot farm positive shaping");
-
-    const float closed_loop =
-        Component(Transition(session, 188, 187), "geodesic_pbrs") +
-        Component(Transition(session, 187, 188), "geodesic_pbrs");
-    Require(closed_loop <= 0.0f,
-            "a closed loop cannot accumulate positive PBRS shaping");
+    Require(Near(Component(stay, "geodesic_progress"), 0.0f),
+            "unchanged distance has zero progress credit");
+    Require(Near(Component(stay, "wasted_action_penalty"), -0.002f),
+            "Stay or collision receives the configured wasted-action penalty");
+    Require(stay.total < 0.0f,
+            "an unchanged action cannot farm positive Reward");
 }
 
-void TestFirstVisitStagesAndCaps() {
+void TestFirstVisitStagesAndBudgets() {
     {
         auto session = MakeSession();
         auto& agent = session.agents.at(1);
-        const float unit_8x = 0.25f / 188.0f;
-        agent.first_visit_bonus_total = 0.25f - unit_8x / 2.0f;
+        const float unit = 0.75f / 188.0f;
+        agent.first_visit_bonus_total = 0.75f - unit / 2.0f;
         const auto capped = Transition(session, 188, 187);
-        Require(Near(Component(capped, "first_visit_bonus"),
-                     unit_8x / 2.0f),
-                "8x first-visit total is capped at 0.25");
+        Require(Near(Component(capped, "first_visit_bonus"), unit / 2.0f),
+                "8x first-visit total is capped at 0.75");
     }
     {
         auto session = MakeSession();
         session.curriculum_stage = maze::CURRICULUM_STAGE_4X;
         auto& agent = session.agents.at(1);
-        const float unit_4x = 0.10f / 188.0f;
-        agent.first_visit_bonus_total = 0.10f - unit_4x / 2.0f;
+        const float unit = 0.25f / 188.0f;
+        agent.first_visit_bonus_total = 0.25f - unit / 2.0f;
         const auto capped = Transition(session, 188, 187);
-        Require(Near(Component(capped, "first_visit_bonus"),
-                     unit_4x / 2.0f),
-                "4x first-visit total is capped at 0.10");
+        Require(Near(Component(capped, "first_visit_bonus"), unit / 2.0f),
+                "4x first-visit total is capped at 0.25");
     }
     {
         auto session = MakeSession();
@@ -154,7 +187,7 @@ void TestFirstVisitStagesAndCaps() {
     }
 }
 
-void TestGoalAndTimeoutTerminalTerms() {
+void TestGoalTimeoutAndFailureReturn() {
     auto session = MakeSession();
     const auto goal = Transition(
         session, 1, 0, true,
@@ -162,42 +195,39 @@ void TestGoalAndTimeoutTerminalTerms() {
     RequireAtomicSum(goal);
     Require(Near(Component(goal, "goal_reward"), 10.0f),
             "Goal receives +10");
-    Require(Near(Component(goal, "timeout_base"), 0.0f) &&
-                Near(Component(goal, "timeout_progress"), 0.0f),
-            "Goal never receives TIME_LIMIT terms");
+    Require(Near(Component(goal, "timeout_penalty"), 0.0f),
+            "Goal never receives TIME_LIMIT penalty");
     Require(goal.total > 0.0f,
             "Goal terminal transition remains positive");
 
+    session = MakeSession();
+    float failure_return = 0.0f;
+    for (int distance = 188; distance > 1; --distance) {
+        const auto detail = Transition(session, distance, distance - 1);
+        RequireAtomicSum(detail);
+        failure_return += detail.total;
+    }
     const auto timeout = Transition(
-        session, 219, 220, true,
+        session, 1, 1, true,
         maze::MAZE_TERMINATION_REASON_TIME_LIMIT);
     RequireAtomicSum(timeout);
+    failure_return += timeout.total;
     Require(Near(Component(timeout, "goal_reward"), 0.0f),
             "TIME_LIMIT never receives Goal Reward");
-    Require(Near(Component(timeout, "timeout_base"), -2.0f),
-            "TIME_LIMIT receives the fixed base penalty");
-    Require(Near(Component(timeout, "timeout_progress"),
-                 (188.0f - 220.0f) / 188.0f),
-            "TIME_LIMIT progress uses (d-star minus d-terminal) over d-star");
-    Require(timeout.total < 0.0f,
-            "a failed terminal transition is negative");
+    Require(Near(Component(timeout, "timeout_penalty"), -2.0f),
+            "TIME_LIMIT receives the fixed penalty");
+    Require(failure_return < 0.0f,
+            "even the maximum-progress 8x failure Episode remains strictly negative");
 }
 
-void TestFailureReturnAndFailClosedStates() {
+void TestFailClosedStatesAndConfiguration() {
     auto session = MakeSession();
-    float episode_return = 0.0f;
-    for (int step = 0; step < 8; ++step) {
-        const bool terminal = step == 7;
-        auto detail = Transition(
-            session, 188, 188, terminal,
-            terminal ? maze::MAZE_TERMINATION_REASON_TIME_LIMIT
-                     : maze::MAZE_TERMINATION_REASON_ACTIVE);
-        RequireAtomicSum(detail);
-        episode_return += detail.total;
-    }
-    Require(episode_return < 0.0f,
-            "Episode without success has negative learning return");
+    session.geodesic_distance[186] = 186;
+    session.geodesic_distance[187] = 188;
+    Require(!Transition(session, 187, 186).valid,
+            "geodesic delta greater than one fails closed");
 
+    session = MakeSession();
     session.geodesic_distance[187] = -1;
     Require(!Transition(session, 188, 187).valid,
             "unreachable runtime state fails closed");
@@ -206,15 +236,24 @@ void TestFailureReturnAndFailClosedStates() {
                  maze::MAZE_TERMINATION_REASON_GOAL_REACHED)
                  .valid,
             "Goal reason outside Goal cell fails closed");
+
+    session = MakeSession();
+    auto unsafe = RewardConfig();
+    unsafe.timeout_penalty = -1.0f;
+    Require(!Transition(session, 188, 187, false,
+                        maze::MAZE_TERMINATION_REASON_ACTIVE, unsafe)
+                 .valid,
+            "non-negative worst-case failure budget is rejected");
 }
 
 }  // namespace
 
 int main() {
-    TestGeodesicPbrsAndExplorationTolerance();
-    TestFirstVisitStagesAndCaps();
-    TestGoalAndTimeoutTerminalTerms();
-    TestFailureReturnAndFailClosedStates();
+    TestProgressHasNoDistanceDependentSignFlip();
+    TestLoopsDetoursAndWastedActions();
+    TestFirstVisitStagesAndBudgets();
+    TestGoalTimeoutAndFailureReturn();
+    TestFailClosedStatesAndConfiguration();
     std::cout << "reward_contract: PASS\n";
     return 0;
 }
