@@ -382,6 +382,7 @@ void MazeServiceImpl::RecordUpdateLatency(
 void MazeServiceImpl::MarkDegraded(const std::string& error) {
     state_.store(training::AISERVER_STATE_DEGRADED);
     last_error_ = error;
+    LOG_ERROR("MazeService", "进入 DEGRADED: %s", error.c_str());
     if (config_.server.run_mode == aiserver_mode::kTraining) {
         sample_sender_.MarkDegraded(error);
     }
