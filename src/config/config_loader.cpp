@@ -783,7 +783,8 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.sample_output.enqueue_timeout_ms > 0 &&
         out_config.sample_output.drain_timeout_ms > 0 &&
         out_config.sample_output.health_timeout_ms > 0 &&
-        out_config.sample_output.outbound_max_fragments > 0 &&
+        out_config.sample_output.outbound_max_fragments >=
+            static_cast<std::size_t>(out_config.task.agent_num) &&
         out_config.sample_output.outbound_max_estimated_bytes > 0 &&
         out_config.task.training_sample_budget >= 0 &&
         out_config.metrics.episode_window > 0 &&

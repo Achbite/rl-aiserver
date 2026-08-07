@@ -16,7 +16,10 @@ double ElapsedMs(std::chrono::steady_clock::time_point start) {
 }  // namespace
 
 SampleSender::SampleSender(const AIServerConfig& config)
-    : config_(config.sample_output), contract_(config.contract) {}
+    : config_(config.sample_output),
+      contract_(config.contract),
+      producer_fragment_reserve_(
+          static_cast<std::size_t>(std::max(1, config.task.agent_num))) {}
 
 SampleSender::~SampleSender() {
     StopAndDrain();
@@ -449,12 +452,37 @@ bool SampleSender::IsDegraded() const {
 
 bool SampleSender::IsWaitingForTrainingCapacity() const {
     std::lock_guard<std::mutex> lock(mutex_);
-    return training_capacity_wait_;
+    return ProducerCapacityConstrainedLocked();
 }
 
 int SampleSender::TrainingCapacityRetryAfterMs() const {
     std::lock_guard<std::mutex> lock(mutex_);
-    return training_capacity_retry_after_ms_;
+    if (training_capacity_retry_after_ms_ > 0) {
+        return training_capacity_retry_after_ms_;
+    }
+    return std::max(1, config_.enqueue_timeout_ms);
+}
+
+bool SampleSender::ProducerCapacityConstrainedLocked() const {
+    if (training_capacity_wait_) return true;
+
+    // One Client Update can close one fragment for every assigned Agent. Keep
+    // that whole frame atomic: once the reserve is unavailable, the RPC layer
+    // asks the Client to retry the same frame instead of partially mutating it.
+    if (queue_.size() + producer_fragment_reserve_ >
+        config_.outbound_max_fragments) {
+        return true;
+    }
+
+    const auto bytes_per_slot =
+        config_.outbound_max_estimated_bytes /
+        config_.outbound_max_fragments;
+    const auto byte_reserve =
+        bytes_per_slot * producer_fragment_reserve_;
+    return byte_reserve > config_.outbound_max_estimated_bytes ||
+           queue_estimated_bytes_ >
+               static_cast<int64_t>(
+                   config_.outbound_max_estimated_bytes - byte_reserve);
 }
 
 void SampleSender::MarkDegraded(const std::string& error) {
@@ -486,8 +514,11 @@ SampleSender::Snapshot SampleSender::GetSnapshot() const {
     Snapshot snapshot;
     snapshot.ready = ready_;
     snapshot.degraded = degraded_;
-    snapshot.training_capacity_wait = training_capacity_wait_;
-    snapshot.retry_after_ms = training_capacity_retry_after_ms_;
+    snapshot.training_capacity_wait = ProducerCapacityConstrainedLocked();
+    snapshot.retry_after_ms =
+        training_capacity_retry_after_ms_ > 0
+            ? training_capacity_retry_after_ms_
+            : std::max(1, config_.enqueue_timeout_ms);
     snapshot.queue_fragments = queue_.size();
     snapshot.queue_samples = queue_samples_;
     snapshot.queue_estimated_bytes = queue_estimated_bytes_;

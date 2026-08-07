@@ -78,6 +78,85 @@ private:
     std::atomic<int> acquire_calls_{0};
 };
 
+class CapacityWaitingDistributor final
+    : public training::SampleDistributorService::Service {
+public:
+    explicit CapacityWaitingDistributor(ContractConfig contract)
+        : contract_(std::move(contract)) {}
+
+    grpc::Status GetStatus(
+        grpc::ServerContext*, const training::DistributorStatusReq*,
+        training::DistributorStatusRsp* response) override {
+        FillContract(contract_, response->mutable_contract());
+        response->mutable_distributor()->set_component("sample-distributor");
+        response->mutable_distributor()->set_instance_id("wait-distributor");
+        response->mutable_distributor()->set_lifecycle_epoch(1);
+        response->set_ready(true);
+        response->set_ingress_ready(true);
+        return grpc::Status::OK;
+    }
+
+    grpc::Status AcquireSampleCredit(
+        grpc::ServerContext*, const training::AcquireSampleCreditReq* request,
+        training::SampleCreditGrant* response) override {
+        response->set_request_id(request->request_id());
+        response->mutable_distributor()->set_component("sample-distributor");
+        response->mutable_distributor()->set_instance_id("wait-distributor");
+        response->mutable_distributor()->set_lifecycle_epoch(1);
+        response->set_result(
+            training::SAMPLE_CREDIT_RESULT_WAIT_INFLIGHT_LIMIT);
+        response->set_retry_after_ms(7);
+        response->set_message("wait for current demand window");
+        return grpc::Status::OK;
+    }
+
+private:
+    ContractConfig contract_;
+};
+
+void VerifyFrameAtomicCapacityWait(AIServerConfig config) {
+    CapacityWaitingDistributor service(config.contract);
+    grpc::ServerBuilder builder;
+    int port = 0;
+    builder.AddListeningPort("127.0.0.1:0",
+                             grpc::InsecureServerCredentials(), &port);
+    builder.RegisterService(&service);
+    std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
+    Require(server != nullptr && port > 0,
+            "capacity distributor did not start");
+
+    config.sample_output.port = port;
+    config.sample_output.outbound_max_fragments = 5;
+    config.sample_output.outbound_max_estimated_bytes = 5 * 1024 * 1024;
+    SampleSender sender(config);
+    Require(sender.Start(), "capacity sender did not start");
+
+    training::SampleBatch batch;
+    batch.set_batch_id("capacity-batch");
+    batch.mutable_behavior_policy()->set_model_version(1);
+    batch.add_samples();
+    Require(sender.Enqueue(batch), "capacity batch was not enqueued");
+
+    const auto deadline = std::chrono::steady_clock::now() +
+                          std::chrono::seconds(2);
+    while (!sender.IsWaitingForTrainingCapacity() &&
+           std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+    const auto snapshot = sender.GetSnapshot();
+    Require(sender.IsWaitingForTrainingCapacity(),
+            "one full Agent frame was not reserved before mutation");
+    Require(snapshot.training_capacity_wait && !snapshot.degraded,
+            "retryable capacity wait degraded the sender");
+    Require(sender.TrainingCapacityRetryAfterMs() == 7,
+            "downstream retry interval was not preserved");
+
+    sender.MarkDegraded("test shutdown");
+    sender.StopAndDrain();
+    server->Shutdown();
+    server->Wait();
+}
+
 }  // namespace
 
 int main() {
@@ -135,5 +214,6 @@ int main() {
     Require(sender.StopAndDrain(), "sample sender did not drain");
     server->Shutdown();
     server->Wait();
+    VerifyFrameAtomicCapacityWait(config);
     return 0;
 }

@@ -86,9 +86,11 @@ private:
                          int& attempts_used, int& retry_after_ms,
                          std::string& error);
     void CancelActiveRpc();
+    bool ProducerCapacityConstrainedLocked() const;
 
     SampleOutputConfig config_;
     ContractConfig contract_;
+    std::size_t producer_fragment_reserve_ = 1;
     std::shared_ptr<grpc::Channel> channel_;
     std::unique_ptr<training::SampleDistributorService::Stub> stub_;
 
