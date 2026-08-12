@@ -238,16 +238,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"reward", "stage_4x_first_visit_budget"},
         {"reward", "stage_2x_first_visit_budget"},
         {"reward", "wasted_action_penalty"},
-        {"curriculum", "stage_8x_sample_budget"},
-        {"curriculum", "stage_4x_sample_budget"},
-        {"curriculum", "stage_2x_sample_budget"},
-        {"curriculum", "evaluation_interval_samples"},
-        {"curriculum", "evaluation_episodes_per_round"},
-        {"curriculum", "stage_8x_success_threshold"},
-        {"curriculum", "stage_4x_success_threshold"},
-        {"curriculum", "stage_2x_success_threshold"},
-        {"curriculum", "final_path_ratio_median_limit"},
-        {"curriculum", "final_path_ratio_p95_limit"},
         {"task", "task_contract_id"},
         {"task", "task_id"},
         {"task", "task_revision"},
@@ -271,6 +261,37 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         }
     }
 
+    // Automatic model evaluation and quality gating are not part of either
+    // local or Infra-managed training. Reject stale configurations instead of
+    // silently reviving the retired in-training evaluation controller.
+    const char* retired_training_controller_fields[] = {
+        "stage_8x_sample_budget",
+        "stage_4x_sample_budget",
+        "stage_2x_sample_budget",
+        "evaluation_interval_samples",
+        "evaluation_episodes_per_round",
+        "stage_8x_success_threshold",
+        "stage_4x_success_threshold",
+        "stage_2x_success_threshold",
+        "final_path_ratio_median_limit",
+        "final_path_ratio_p95_limit",
+    };
+    for (const char* field : retired_training_controller_fields) {
+        if (!FindValue(entries, "curriculum", field).empty()) {
+            LOG_ERROR(
+                "Config",
+                "训练配置禁止已退役的课程/评测控制字段: curriculum.%s",
+                field);
+            return false;
+        }
+    }
+    if (!FindValue(entries, "task", "training_sample_budget").empty()) {
+        LOG_ERROR(
+            "Config",
+            "训练配置禁止样本硬上限: task.training_sample_budget");
+        return false;
+    }
+
 
     const std::pair<const char*, const char*> integer_fields[] = {
         {"training_semantics", "observation_schema_version"},
@@ -278,11 +299,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"training_semantics", "reward_schema_version"},
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
-        {"curriculum", "stage_8x_sample_budget"},
-        {"curriculum", "stage_4x_sample_budget"},
-        {"curriculum", "stage_2x_sample_budget"},
-        {"curriculum", "evaluation_interval_samples"},
-        {"curriculum", "evaluation_episodes_per_round"},
         {"server", "listen_port"},
         {"server", "max_agents"},
         {"server", "run_mode"},
@@ -294,7 +310,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"task", "task_revision"},
         {"task", "agent_num"},
         {"task", "shortest_action_steps"},
-        {"task", "training_sample_budget"},
         {"model_distribution", "port"},
         {"model_distribution", "poll_interval_ms"},
         {"model_distribution", "rpc_timeout_ms"},
@@ -329,11 +344,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"reward", "stage_4x_first_visit_budget"},
         {"reward", "stage_2x_first_visit_budget"},
         {"reward", "wasted_action_penalty"},
-        {"curriculum", "stage_8x_success_threshold"},
-        {"curriculum", "stage_4x_success_threshold"},
-        {"curriculum", "stage_2x_success_threshold"},
-        {"curriculum", "final_path_ratio_median_limit"},
-        {"curriculum", "final_path_ratio_p95_limit"},
     };
     for (const auto& field : finite_fields) {
         const std::string value = FindValue(entries, field.first, field.second);
@@ -427,37 +437,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         SafeDouble(FindValue(entries, "reward",
                              "wasted_action_penalty"), 0.0));
 
-    out_config.curriculum.stage_8x_sample_budget = SafeInt64(
-        FindValue(entries, "curriculum", "stage_8x_sample_budget"),
-        out_config.curriculum.stage_8x_sample_budget);
-    out_config.curriculum.stage_4x_sample_budget = SafeInt64(
-        FindValue(entries, "curriculum", "stage_4x_sample_budget"),
-        out_config.curriculum.stage_4x_sample_budget);
-    out_config.curriculum.stage_2x_sample_budget = SafeInt64(
-        FindValue(entries, "curriculum", "stage_2x_sample_budget"),
-        out_config.curriculum.stage_2x_sample_budget);
-    out_config.curriculum.evaluation_interval_samples = SafeInt64(
-        FindValue(entries, "curriculum", "evaluation_interval_samples"),
-        out_config.curriculum.evaluation_interval_samples);
-    out_config.curriculum.evaluation_episodes_per_round = SafeInt(
-        FindValue(entries, "curriculum", "evaluation_episodes_per_round"),
-        out_config.curriculum.evaluation_episodes_per_round);
-    out_config.curriculum.stage_8x_success_threshold = SafeDouble(
-        FindValue(entries, "curriculum", "stage_8x_success_threshold"),
-        out_config.curriculum.stage_8x_success_threshold);
-    out_config.curriculum.stage_4x_success_threshold = SafeDouble(
-        FindValue(entries, "curriculum", "stage_4x_success_threshold"),
-        out_config.curriculum.stage_4x_success_threshold);
-    out_config.curriculum.stage_2x_success_threshold = SafeDouble(
-        FindValue(entries, "curriculum", "stage_2x_success_threshold"),
-        out_config.curriculum.stage_2x_success_threshold);
-    out_config.curriculum.final_path_ratio_median_limit = SafeDouble(
-        FindValue(entries, "curriculum", "final_path_ratio_median_limit"),
-        out_config.curriculum.final_path_ratio_median_limit);
-    out_config.curriculum.final_path_ratio_p95_limit = SafeDouble(
-        FindValue(entries, "curriculum", "final_path_ratio_p95_limit"),
-        out_config.curriculum.final_path_ratio_p95_limit);
-
     // --- server ---
     out_config.server.listen_port = SafeInt(FindValue(entries, "server", "listen_port"), 9002);
     out_config.server.max_agents  = SafeInt(FindValue(entries, "server", "max_agents"),  10);
@@ -537,8 +516,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         FindValue(entries, "task", "action_rule_id");
     out_config.task.shortest_action_steps = SafeInt(
         FindValue(entries, "task", "shortest_action_steps"), 0);
-    out_config.task.training_sample_budget = SafeInt64(
-        FindValue(entries, "task", "training_sample_budget"), 0);
 
     std::string model_host =
         FindValue(entries, "model_distribution", "host");
@@ -671,9 +648,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         EnvInt(
             "RL_MODEL_POLL_INTERVAL_MS",
             out_config.model_distribution.poll_interval_ms);
-    out_config.task.training_sample_budget = SafeInt64(
-        GetEnvValue("RL_TRAINING_SAMPLE_BUDGET"),
-        out_config.task.training_sample_budget);
+    if (!GetEnvValue("RL_TRAINING_SAMPLE_BUDGET").empty()) {
+        LOG_ERROR(
+            "Config",
+            "RL_TRAINING_SAMPLE_BUDGET was retired; training has no hard cap");
+        return false;
+    }
     out_config.metrics.episode_window = SafeSize(
         GetEnvValue("RL_EPISODE_METRICS_WINDOW"),
         out_config.metrics.episode_window);
@@ -794,23 +774,8 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.sample_output.outbound_max_fragments >=
             static_cast<std::size_t>(out_config.task.agent_num) &&
         out_config.sample_output.outbound_max_estimated_bytes > 0 &&
-        out_config.task.training_sample_budget >= 0 &&
         out_config.metrics.episode_window > 0 &&
-        out_config.metrics.episode_window <= 1000000 &&
-        out_config.curriculum.stage_8x_sample_budget > 0 &&
-        out_config.curriculum.stage_4x_sample_budget > 0 &&
-        out_config.curriculum.stage_2x_sample_budget > 0 &&
-        out_config.curriculum.evaluation_interval_samples > 0 &&
-        out_config.curriculum.evaluation_episodes_per_round > 0 &&
-        out_config.curriculum.stage_8x_success_threshold > 0.0 &&
-        out_config.curriculum.stage_8x_success_threshold <= 1.0 &&
-        out_config.curriculum.stage_4x_success_threshold > 0.0 &&
-        out_config.curriculum.stage_4x_success_threshold <= 1.0 &&
-        out_config.curriculum.stage_2x_success_threshold > 0.0 &&
-        out_config.curriculum.stage_2x_success_threshold <= 1.0 &&
-        out_config.curriculum.final_path_ratio_median_limit >= 1.0 &&
-        out_config.curriculum.final_path_ratio_p95_limit >=
-            out_config.curriculum.final_path_ratio_median_limit;
+        out_config.metrics.episode_window <= 1000000;
     if (!runtime_values_valid) {
         LOG_ERROR("Config", "运行时数值配置无效");
         return false;
@@ -818,12 +783,8 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     const int64_t fragment_quantum =
         static_cast<int64_t>(out_config.task.agent_num) *
         static_cast<int64_t>(out_config.sample_output.fragment_samples);
-    out_config.curriculum.agent_num = out_config.task.agent_num;
-    out_config.curriculum.sample_quantum = fragment_quantum;
     if (fragment_quantum != 512 || out_config.server.max_agents < 4 ||
-        out_config.model_distribution.contract_version != "0.10.0" ||
-        (out_config.task.training_sample_budget > 0 &&
-         out_config.task.training_sample_budget % fragment_quantum != 0)) {
+        out_config.model_distribution.contract_version != "0.10.0") {
         LOG_ERROR("Config", "sample quantum or runtime contract mismatch");
         return false;
     }
@@ -846,13 +807,11 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
              out_config.model.expected_action_dim,
              out_config.model.observation_schema_id.c_str(),
              out_config.model.action_schema_id.c_str());
-    LOG_INFO("Config", "task: id=%s revision=%llu agents=%d map=%s training_sample_budget=%lld",
+    LOG_INFO("Config", "task: id=%s revision=%llu agents=%d map=%s",
              out_config.task.task_id.c_str(),
              static_cast<unsigned long long>(out_config.task.task_revision),
              out_config.task.agent_num,
-             out_config.task.fixed_map_id.c_str(),
-             static_cast<long long>(
-                 out_config.task.training_sample_budget));
+             out_config.task.fixed_map_id.c_str());
     LOG_INFO("Config", "model_distribution: target=%s:%d, poll_interval_ms=%d, rpc_timeout_ms=%d, contract=%s",
              out_config.model_distribution.host.c_str(),
              out_config.model_distribution.port,

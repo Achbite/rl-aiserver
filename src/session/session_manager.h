@@ -77,6 +77,7 @@ public:
         std::string session_id;
         common::ServiceInstanceIdentity client;
         std::string environment_instance_id;
+        int64_t last_valid_client_activity_unix_ms = 0;
         maze::TaskIdentity task;
         uint64_t lifecycle_epoch = 0;
         uint64_t last_command_sequence = 0;
@@ -132,13 +133,13 @@ public:
             maze::EPISODE_MODE_UNSPECIFIED;
         BehaviorPolicyScope behavior_policy_scope =
             BehaviorPolicyScope::Unspecified;
-        bool training_collection_paused = false;
         int current_max_steps = 0;
-        int evaluation_pinned_model_version = -1;
-        std::string evaluation_pinned_model_checksum;
-        std::string evaluation_pinned_model_lineage_id;
-        std::string evaluation_pinned_model_manifest_digest;
-        int64_t evaluation_pinned_model_trained_samples = 0;
+    int evaluation_pinned_model_version = -1;
+    std::string evaluation_pinned_model_checksum;
+    std::string evaluation_pinned_model_lineage_id;
+    std::string evaluation_pinned_model_manifest_digest;
+    int64_t evaluation_pinned_model_train_updates = 0;
+    int64_t evaluation_pinned_model_trained_samples = 0;
 
         // 网格是否可通行（越界视为不可通行）
         bool IsWalkable(int gx, int gy) const {
@@ -146,6 +147,12 @@ public:
             return !blocked[gy * grid_cols + gx];
         }
 
+    };
+
+    struct ClientActivitySnapshot {
+        int active_session_count = 0;
+        int recent_active_session_count = 0;
+        int64_t latest_active_activity_unix_ms = 0;
     };
 
     SessionManager() = default;
@@ -162,6 +169,8 @@ public:
 
     // 获取当前活跃会话数
     int GetActiveSessionCount() const;
+    ClientActivitySnapshot GetClientActivitySnapshot(
+        int64_t now_unix_ms, int64_t lease_ms) const;
     int GetActiveEpisodeCount() const;
     std::vector<std::string> GetSessionIds() const;
 

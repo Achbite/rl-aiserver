@@ -43,17 +43,6 @@ reward:
   stage_2x_first_visit_budget: 0.0        # episode reward budget; final stage =0
   wasted_action_penalty: -0.002           # reward/action; Stay or collision, <0
 
-curriculum:
-  stage_8x_sample_budget: 1000000
-  stage_4x_sample_budget: 500000
-  stage_2x_sample_budget: 500000
-  evaluation_interval_samples: 100000
-  evaluation_episodes_per_round: 25
-  stage_8x_success_threshold: 0.80
-  stage_4x_success_threshold: 0.90
-  stage_2x_success_threshold: 0.90
-  final_path_ratio_median_limit: 1.50
-  final_path_ratio_p95_limit: 2.00
 # AIServer 配置文件 - 迷宫训练框架
 # 说明：AI 决策服务的运行参数、策略参数、网络参数集中管理
 #       修改后无需重新编译，重启 AIServer 即可生效
@@ -94,7 +83,6 @@ task:
   fixed_map_checksum_sha256: "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9"
   action_rule_id: "maze.action.9-way.no-corner-cut.v1"
   shortest_action_steps: 188
-  training_sample_budget: 0       # 0=课程控制；本地闭环由 AIServer 显式设为 3072
 
 # --- 训练模型分发参数（仅 training 生效）---
 model_distribution:

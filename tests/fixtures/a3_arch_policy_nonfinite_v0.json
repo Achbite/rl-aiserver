@@ -1,0 +1,8 @@
+{
+  "fixture_id": "a3-arch-policy-nonfinite-v0",
+  "source": "rl-learner/src/training/ppo_trainer.py::ActorCritic",
+  "generator": "tests/fixtures/generate_a3_arch_policy_nonfinite_v0.py",
+  "weights": "Observation[16] feeds two unit policy paths whose logit-0 weights are 3.2e38; input 0 is finite and input 1 overflows to a non-finite output.",
+  "onnx_sha256": "6df68d06c8bb69f168fae2b7213f2eb1c0dcfff48a71c808682695bedc648230",
+  "purpose": "Exercise a late per-Agent production inference validation failure without a production test hook."
+}

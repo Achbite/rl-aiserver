@@ -4,6 +4,29 @@
 #include <cmath>
 #include <numeric>
 
+bool ValidateEpisodeModelOutput(const std::vector<float>& logits,
+                                int expected_action_dim,
+                                float value,
+                                std::string& error) {
+    if (expected_action_dim <= 0 ||
+        logits.size() != static_cast<std::size_t>(expected_action_dim)) {
+        error = "action logits do not match the expected action dimension";
+        return false;
+    }
+    for (float logit : logits) {
+        if (!std::isfinite(logit)) {
+            error = "action logits contain a non-finite value";
+            return false;
+        }
+    }
+    if (!std::isfinite(value)) {
+        error = "state value is non-finite";
+        return false;
+    }
+    error.clear();
+    return true;
+}
+
 bool SelectEpisodeAction(const std::vector<float>& logits,
                          maze::EpisodeMode mode,
                          double temperature,

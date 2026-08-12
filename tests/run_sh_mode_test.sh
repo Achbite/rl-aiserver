@@ -10,6 +10,12 @@ fake_aiserver="${test_root}/maze_aiserver"
 cat >"${fake_aiserver}" <<'SH'
 #!/usr/bin/env bash
 printf '%s\n' "$@" >"${FAKE_ARGS_FILE}"
+if [ "${FAKE_HOLD_OPEN:-0}" = "1" ]; then
+    trap 'exit "${FAKE_TERM_STATUS:-0}"' TERM
+    while true; do
+        sleep 0.05
+    done
+fi
 SH
 chmod +x "${fake_aiserver}"
 
@@ -52,13 +58,24 @@ cp "${repo_dir}/run.sh" "${launcher_repo}/run.sh"
 cp "${config}" "${launcher_repo}/configs/server_config.yaml"
 printf '%s\n' "keep" >"${launcher_repo}/models/local-train/active-model"
 
-if ! AISERVER_BIN="${fake_aiserver}" \
+if AISERVER_BIN="${fake_aiserver}" \
    AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
    bash "${launcher_repo}/run.sh" training \
    --training-sample-budget 3072 \
    --sample-distributor maze-learner:9100 \
+   >"${test_root}/retired-budget.out" 2>&1; then
+    echo "training unexpectedly accepted a retired sample budget" >&2
+    exit 1
+fi
+grep -q "training has no hard cap" "${test_root}/retired-budget.out"
+test -f "${launcher_repo}/models/local-train/active-model"
+
+if ! AISERVER_BIN="${fake_aiserver}" \
+   AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
+   bash "${launcher_repo}/run.sh" training \
+   --sample-distributor maze-learner:9100 \
    >"${test_root}/training.out" 2>&1; then
-    echo "training launcher failed without a bundled SampleDistributor" >&2
+    echo "unbounded training launcher failed" >&2
     exit 1
 fi
 assert_workload "training"
@@ -68,8 +85,54 @@ if [ -e "${launcher_repo}/models/local-train/active-model" ]; then
 fi
 grep -qx -- "--sample-distributor" "${FAKE_ARGS_FILE}"
 grep -qx -- "maze-learner:9100" "${FAKE_ARGS_FILE}"
-grep -qx -- "--training-sample-budget" "${FAKE_ARGS_FILE}"
-grep -qx -- "3072" "${FAKE_ARGS_FILE}"
+grep -q 'return 125' "${repo_dir}/run.sh"
+grep -q 'aiserver_child_status="${status}"' "${repo_dir}/run.sh"
+if grep -q -- "--training-sample-budget" "${FAKE_ARGS_FILE}"; then
+    echo "retired sample budget reached the AIServer process" >&2
+    exit 1
+fi
+
+quiesce_launcher="${test_root}/quiesce-launcher"
+mkdir -p \
+    "${quiesce_launcher}/configs" \
+    "${quiesce_launcher}/models/local-train"
+cp "${repo_dir}/run.sh" "${quiesce_launcher}/run.sh"
+cp "${config}" "${quiesce_launcher}/configs/server_config.yaml"
+quiesce_success="${test_root}/quiesced"
+quiesce_failure="${test_root}/quiesce-failed"
+: >"${FAKE_ARGS_FILE}"
+RL_AISERVER_QUIESCE_MARKER="${quiesce_success}" \
+RL_AISERVER_QUIESCE_FAILURE_MARKER="${quiesce_failure}" \
+FAKE_HOLD_OPEN=1 \
+FAKE_TERM_STATUS=17 \
+AISERVER_BIN="${fake_aiserver}" \
+AISERVER_CONFIG="${quiesce_launcher}/configs/server_config.yaml" \
+bash "${quiesce_launcher}/run.sh" training \
+    >"${test_root}/quiesce.out" 2>&1 &
+launcher_pid=$!
+for _ in $(seq 1 100); do
+    if [ -s "${FAKE_ARGS_FILE}" ]; then
+        break
+    fi
+    sleep 0.02
+done
+kill -USR1 "${launcher_pid}"
+for _ in $(seq 1 100); do
+    if [ -e "${quiesce_failure}" ]; then
+        break
+    fi
+    sleep 0.02
+done
+if [ -e "${quiesce_success}" ]; then
+    echo "non-zero AIServer shutdown published quiesce success" >&2
+    exit 1
+fi
+if [ "$(cat "${quiesce_failure}")" != "17" ]; then
+    echo "AIServer quiesce failure did not preserve child status" >&2
+    exit 1
+fi
+kill -TERM "${launcher_pid}"
+wait "${launcher_pid}"
 
 outside_root="${test_root}/outside/local-train"
 mkdir -p "${outside_root}"

@@ -6,6 +6,7 @@
 #include <chrono>
 #include <filesystem>
 #include <initializer_list>
+#include <thread>
 
 namespace {
 
@@ -28,6 +29,52 @@ bool IsSha256(const std::string& value) {
         }
     }
     return true;
+}
+
+bool ValidModelDistributorAuthority(
+    const common::ServiceInstanceIdentity& identity) {
+    return identity.component() == "model-distributor" &&
+           !identity.instance_id().empty() &&
+           identity.lifecycle_epoch() > 0;
+}
+
+bool SameAuthority(const common::ServiceInstanceIdentity& lhs,
+                   const common::ServiceInstanceIdentity& rhs) {
+    return lhs.component() == rhs.component() &&
+           lhs.instance_id() == rhs.instance_id() &&
+           lhs.lifecycle_epoch() == rhs.lifecycle_epoch();
+}
+
+bool IsRetryableAuthorityTransport(const grpc::Status& status) {
+    if (status.ok()) return false;
+    switch (status.error_code()) {
+        case grpc::StatusCode::ABORTED:
+        case grpc::StatusCode::CANCELLED:
+        case grpc::StatusCode::DEADLINE_EXCEEDED:
+        case grpc::StatusCode::INTERNAL:
+        case grpc::StatusCode::RESOURCE_EXHAUSTED:
+        case grpc::StatusCode::UNKNOWN:
+        case grpc::StatusCode::UNAVAILABLE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool ContractMatchesConfig(const common::ContractIdentity& actual,
+                           const ContractConfig& expected) {
+    return expected.source_digest.algorithm == "sha256" &&
+           expected.artifact_digest.algorithm == "sha256" &&
+           actual.package_name() == expected.package_name &&
+           actual.package_version() == expected.package_version &&
+           actual.source_digest().algorithm() ==
+               common::DIGEST_ALGORITHM_SHA256 &&
+           actual.source_digest().hex() == expected.source_digest.hex &&
+           actual.artifact_digest().algorithm() ==
+               common::DIGEST_ALGORITHM_SHA256 &&
+           actual.artifact_digest().hex() == expected.artifact_digest.hex &&
+           actual.platform() == expected.platform &&
+           actual.generator_identity() == expected.generator_identity;
 }
 
 bool WriteAll(int descriptor, const char* data, std::size_t size) {
@@ -239,6 +286,75 @@ bool ModelDistributorClient::Ack(const ModelManifest& manifest,
                                  training::ModelLoadStatus load_status,
                                  const std::string& message,
                                  std::string& error) {
+    return AckIdempotently(
+               manifest, aiserver_id, load_status, message, error) ==
+           AckDisposition::Applied;
+}
+
+bool ModelDistributorClient::ProbeAckAuthority(
+    common::ServiceInstanceIdentity& authority,
+    std::string& error) {
+    return ProbeAckAuthorityDisposition(authority, error) ==
+           AuthorityProbeDisposition::Ready;
+}
+
+ModelDistributorClient::AuthorityProbeDisposition
+ModelDistributorClient::ProbeAckAuthorityDisposition(
+    common::ServiceInstanceIdentity& authority,
+    std::string& error) {
+    training::ModelDistributorStatusReq request;
+    training::ModelDistributorStatusRsp response;
+    grpc::ClientContext context;
+    context.set_deadline(
+        std::chrono::system_clock::now() +
+        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
+    const grpc::Status status =
+        stub_->GetModelDistributorStatus(&context, request, &response);
+    if (!status.ok()) {
+        error = "model ACK authority probe failed: " +
+                status.error_message();
+        authority.Clear();
+        return IsRetryableAuthorityTransport(status)
+                   ? AuthorityProbeDisposition::Retryable
+                   : AuthorityProbeDisposition::Rejected;
+    }
+    if (!response.ready()) {
+        error = "model ACK authority is not ready";
+        authority.Clear();
+        return AuthorityProbeDisposition::Retryable;
+    }
+    if (!ValidModelDistributorAuthority(response.distributor())) {
+        error = "model ACK authority identity is invalid";
+        authority.Clear();
+        return AuthorityProbeDisposition::Rejected;
+    }
+    if (!ContractMatchesConfig(response.contract(), config_.contract)) {
+        error = "model ACK authority contract does not match the configured "
+                "rl-contract";
+        authority.Clear();
+        return AuthorityProbeDisposition::Rejected;
+    }
+    authority.CopyFrom(response.distributor());
+    error.clear();
+    return AuthorityProbeDisposition::Ready;
+}
+
+ModelDistributorClient::AckDisposition
+ModelDistributorClient::AckIdempotently(
+    const ModelManifest& manifest,
+    const std::string& aiserver_id,
+    training::ModelLoadStatus load_status,
+    const std::string& message,
+    std::string& error,
+    common::ServiceInstanceIdentity* pinned_authority) {
+    common::ServiceInstanceIdentity local_authority;
+    auto* authority = pinned_authority ? pinned_authority : &local_authority;
+    if (!ValidModelDistributorAuthority(*authority)) {
+        if (!ProbeAckAuthority(*authority, error)) {
+            return AckDisposition::NotApplied;
+        }
+    }
+
     training::AckModelReq request;
     request.mutable_aiserver()->set_component("aiserver");
     request.mutable_aiserver()->set_instance_id(aiserver_id);
@@ -248,21 +364,53 @@ bool ModelDistributorClient::Ack(const ModelManifest& manifest,
         aiserver_id + "-load-v" + std::to_string(manifest.model_version));
     request.set_load_status(load_status);
     request.set_message(message);
-    training::AckModelRsp response;
-    grpc::ClientContext context;
-    context.set_deadline(
-        std::chrono::system_clock::now() +
-        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
-    const grpc::Status status = stub_->AckModel(&context, request, &response);
-    if (!status.ok() ||
-        (response.result() != training::MODEL_ACK_RESULT_APPLIED &&
-         response.result() != training::MODEL_ACK_RESULT_ALREADY_APPLIED)) {
-        error = status.ok()
-                    ? response.message()
-                    : "model ACK RPC failed: " + status.error_message();
-        return false;
+    constexpr int kMaxAttempts = 3;
+    for (int attempt = 0; attempt < kMaxAttempts; ++attempt) {
+        training::AckModelRsp response;
+        grpc::ClientContext context;
+        context.set_deadline(
+            std::chrono::system_clock::now() +
+            std::chrono::milliseconds(
+                config_.model_distribution.rpc_timeout_ms));
+        const grpc::Status rpc_status =
+            stub_->AckModel(&context, request, &response);
+        if (rpc_status.ok()) {
+            if (!ValidModelDistributorAuthority(response.distributor())) {
+                error = "model ACK response authority is invalid";
+                return AckDisposition::Uncertain;
+            }
+            const bool applied =
+                response.result() == training::MODEL_ACK_RESULT_APPLIED ||
+                response.result() ==
+                    training::MODEL_ACK_RESULT_ALREADY_APPLIED;
+            const bool rejected =
+                response.result() == training::MODEL_ACK_RESULT_NOT_FOUND ||
+                response.result() == training::MODEL_ACK_RESULT_REJECTED;
+            if ((response.ret_code() == 0) != applied) {
+                error = "model ACK response code and result disagree";
+                return AckDisposition::Uncertain;
+            }
+            if (applied) {
+                error.clear();
+                return AckDisposition::Applied;
+            }
+            error = response.message().empty()
+                        ? "model ACK was explicitly rejected"
+                        : response.message();
+            if (rejected &&
+                SameAuthority(response.distributor(), *authority)) {
+                return AckDisposition::Rejected;
+            }
+            return AckDisposition::Uncertain;
+        }
+        error = "model ACK RPC outcome is uncertain: " +
+                rpc_status.error_message();
+        if (attempt + 1 < kMaxAttempts) {
+            std::this_thread::sleep_for(
+                std::chrono::milliseconds(50 * (attempt + 1)));
+        }
     }
-    return true;
+    return AckDisposition::Uncertain;
 }
 
 bool ModelDistributorClient::Promote(
@@ -318,5 +466,40 @@ bool ModelDistributorClient::Promote(
         return false;
     }
     manifest.model_path = active_path.string();
+    return true;
+}
+
+bool ModelDistributorClient::RollbackPromotion(
+    ModelManifest& manifest,
+    const std::string& incoming_path,
+    const std::string& previous_path,
+    std::string& error) {
+    namespace fs = std::filesystem;
+    const fs::path active_path = manifest.model_path;
+    const fs::path incoming = incoming_path;
+    std::error_code fs_error;
+    if (!fs::is_regular_file(active_path, fs_error) || fs_error ||
+        fs::exists(incoming, fs_error)) {
+        error = "promoted model cannot be restored to incoming";
+        return false;
+    }
+    fs::rename(active_path, incoming, fs_error);
+    if (fs_error) {
+        error = "cannot restore promoted model to incoming: " +
+                fs_error.message();
+        return false;
+    }
+    if (!previous_path.empty()) {
+        fs::rename(previous_path, active_path, fs_error);
+        if (fs_error) {
+            std::error_code recovery_error;
+            fs::rename(incoming, active_path, recovery_error);
+            error = "cannot restore previous active model: " +
+                    fs_error.message();
+            return false;
+        }
+    }
+    manifest.model_path = incoming_path;
+    error.clear();
     return true;
 }

@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
+#include <limits>
 #include <sstream>
 
 namespace {
@@ -377,7 +378,9 @@ bool ValidateModelManifest(const AIServerConfig& config,
         !IsSha256(source.identity().manifest_digest()) ||
         !IsSha256(source.training_config_digest()) ||
         source.size_bytes() <= 0 || source.train_updates() < 0 ||
-        source.trained_samples() < 0) {
+        source.trained_samples() < 0 ||
+        source.identity().model_version() >
+            static_cast<uint64_t>(std::numeric_limits<int>::max())) {
         error = "model manifest identity or counters are invalid";
         return false;
     }

@@ -77,6 +77,28 @@ int main(int argc, char* argv[]) {
                 ReplaceOnce(valid, "  run_mode: 1",
                             "  run_mode: unexpected")),
             "unknown workload did not fail closed");
+    const char* retired_curriculum_fields[] = {
+        "stage_8x_sample_budget",
+        "stage_4x_sample_budget",
+        "stage_2x_sample_budget",
+        "evaluation_interval_samples",
+        "evaluation_episodes_per_round",
+        "stage_8x_success_threshold",
+        "stage_4x_success_threshold",
+        "stage_2x_success_threshold",
+        "final_path_ratio_median_limit",
+        "final_path_ratio_p95_limit",
+    };
+    for (const char* field : retired_curriculum_fields) {
+        Require(!LoadDocument(
+                    root, std::string("retired-") + field + ".yaml",
+                    valid + "\ncurriculum:\n  " + field + ": 1\n"),
+                "retired curriculum/evaluation field did not fail closed");
+    }
+    Require(!LoadDocument(
+                root, "retired-training-budget.yaml",
+                valid + "\ntask:\n  training_sample_budget: 1000000\n"),
+            "retired training sample budget did not fail closed");
 
     ::setenv("RL_SAMPLE_FRAGMENT_SIZE", "128suffix", 1);
     Require(!LoadDocument(root, "bad-env.yaml", valid),

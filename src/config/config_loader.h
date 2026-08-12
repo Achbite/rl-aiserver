@@ -118,10 +118,6 @@ struct MazeTaskConfig {
     std::string action_rule_id =
         "maze.action.9-way.no-corner-cut.v1";
     int shortest_action_steps = 188;
-    // Zero means that the TaskController owns an unbounded training run.
-    // Positive values are upper bounds and are rounded down to a complete
-    // global sample fragment by the AIServer.
-    int64_t training_sample_budget = 0;
 };
 
 // ---- Learner Pod 样本接入服务连接参数 ----
@@ -155,7 +151,6 @@ struct AIServerConfig {
     PolicyConfig policy;
     ObservationConfig observation;
     MazeRewardConfig reward;
-    SingleMapTaskControllerConfig curriculum;
     ModelConfig    model;
     ModelDistributionConfig model_distribution;
     MazeTaskConfig task;

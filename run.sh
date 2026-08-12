@@ -111,7 +111,6 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
             argument_index=$((argument_index + 2))
             ;;
         --listen-port|--model-distributor|--local-test-model-dir|\
-        --training-sample-budget|\
         --smoke-model-dir)
             value_index=$((argument_index + 1))
             if [ "${value_index}" -ge "${#runtime_arguments[@]}" ] ||
@@ -122,6 +121,10 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
             forward_arguments+=(
                 "${argument}" "${runtime_arguments[${value_index}]}")
             argument_index=$((argument_index + 2))
+            ;;
+        --training-sample-budget)
+            echo "--training-sample-budget was retired; training has no hard cap" >&2
+            exit 2
             ;;
         --train)
             workload_override="training"
@@ -167,17 +170,34 @@ export RL_AISERVER_RUN_MODE="${workload}"
 printf 'AIServer run mode: %s (%s)\n' "${selected_mode}" "${workload}"
 
 aiserver_pid=""
+aiserver_child_status=""
 stopping=0
 quiesced=0
 quiesce_marker="${RL_AISERVER_QUIESCE_MARKER:-/tmp/rl-training-quiesced}"
+quiesce_failure_marker="${RL_AISERVER_QUIESCE_FAILURE_MARKER:-/tmp/rl-training-quiesce-failed}"
+quiesce_timeout_seconds="${RL_AISERVER_QUIESCE_TIMEOUT_SECONDS:-45}"
 training_lock=""
-rm -f "${quiesce_marker}"
+rm -f "${quiesce_marker}" "${quiesce_failure_marker}"
+case "${quiesce_timeout_seconds}" in
+    ''|*[!0-9]*)
+        echo "RL_AISERVER_QUIESCE_TIMEOUT_SECONDS must be a positive integer" >&2
+        exit 2
+        ;;
+esac
+if [ "${quiesce_timeout_seconds}" -le 0 ]; then
+    echo "RL_AISERVER_QUIESCE_TIMEOUT_SECONDS must be a positive integer" >&2
+    exit 2
+fi
 
 terminate_process() {
     local pid="$1"
     local timeout_seconds="$2"
-    if [ -z "${pid}" ] || ! kill -0 "${pid}" 2>/dev/null; then
-        return
+    if [ -z "${pid}" ]; then
+        return 125
+    fi
+    if ! kill -0 "${pid}" 2>/dev/null; then
+        wait "${pid}" 2>/dev/null
+        return $?
     fi
     kill -TERM "${pid}" 2>/dev/null || true
     local waited=0
@@ -189,7 +209,7 @@ terminate_process() {
     if kill -0 "${pid}" 2>/dev/null; then
         kill -KILL "${pid}" 2>/dev/null || true
     fi
-    wait "${pid}" 2>/dev/null || true
+    wait "${pid}" 2>/dev/null
 }
 
 shutdown() {
@@ -197,7 +217,7 @@ shutdown() {
         return
     fi
     stopping=1
-    terminate_process "${aiserver_pid}" 15
+    terminate_process "${aiserver_pid}" "${quiesce_timeout_seconds}" || true
     aiserver_pid=""
     if [ -n "${training_lock}" ]; then
         rm -rf -- "${training_lock}"
@@ -210,9 +230,25 @@ quiesce() {
         return
     fi
     quiesced=1
-    terminate_process "${aiserver_pid}" 15
+    local child_status="${aiserver_child_status}"
+    if [ -n "${aiserver_pid}" ]; then
+        if terminate_process "${aiserver_pid}" "${quiesce_timeout_seconds}"; then
+            child_status=0
+        else
+            child_status=$?
+        fi
+    elif [ -z "${child_status}" ]; then
+        child_status=125
+    fi
+    if [ -n "${aiserver_pid}" ]; then
+        aiserver_child_status="${child_status}"
+    fi
     aiserver_pid=""
-    : > "${quiesce_marker}"
+    if [ "${child_status}" -eq 0 ]; then
+        : > "${quiesce_marker}"
+    else
+        printf '%s\n' "${child_status}" > "${quiesce_failure_marker}"
+    fi
 }
 
 trap quiesce USR1
@@ -288,8 +324,12 @@ aiserver_pid=$!
 while [ "${stopping}" -eq 0 ]; do
     if [ -n "${aiserver_pid}" ] &&
        ! kill -0 "${aiserver_pid}" 2>/dev/null; then
-        wait "${aiserver_pid}"
-        status=$?
+        if wait "${aiserver_pid}"; then
+            status=0
+        else
+            status=$?
+        fi
+        aiserver_child_status="${status}"
         aiserver_pid=""
         shutdown
         exit "${status}"

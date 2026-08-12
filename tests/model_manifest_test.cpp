@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 
@@ -259,6 +260,26 @@ int main() {
     Require(loaded.model_version == 6 && loaded.train_updates == 6 &&
                 loaded.trained_samples == 3072,
             "preserve trained counters");
+
+    auto independent_counters = Wire(config, checksum, 7, 42, 3072);
+    error.clear();
+    Require(ValidateModelManifest(
+                config, independent_counters, -1, error),
+            "publication version and train-update count are independent: " +
+                error);
+
+    auto overflowing_version = independent_counters;
+    overflowing_version.mutable_identity()->set_model_version(
+        static_cast<uint64_t>(std::numeric_limits<int>::max()) + 1U);
+    auto overflow_digest_source = overflowing_version;
+    overflow_digest_source.mutable_identity()->clear_manifest_digest();
+    SetDigest(Sha256(DeterministicBytes(overflow_digest_source)),
+              overflowing_version.mutable_identity()
+                  ->mutable_manifest_digest());
+    error.clear();
+    Require(!ValidateModelManifest(
+                config, overflowing_version, -1, error),
+            "wire publication versions that overflow the local identity fail closed");
 
     auto legacy = trained;
     legacy.mutable_contract()->set_package_version("0.7.0");

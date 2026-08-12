@@ -51,5 +51,16 @@ int main() {
     Require(std::string(aiserver_mode::Workload(
                 aiserver_mode::kTraining)) == "training",
             "train canonical workload");
+    Require(aiserver_mode::ExposesTrainingStatus(
+                aiserver_mode::kTraining),
+            "training exposes the Learner status service");
+    for (const int mode : {
+             aiserver_mode::kLocalTest,
+             aiserver_mode::kModelEvaluation,
+             aiserver_mode::kMapValidation,
+         }) {
+        Require(!aiserver_mode::ExposesTrainingStatus(mode),
+                "standalone inference must not impersonate a training Actor");
+    }
     return 0;
 }

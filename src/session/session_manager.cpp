@@ -52,6 +52,31 @@ int SessionManager::GetActiveSessionCount() const {
     return count;
 }
 
+SessionManager::ClientActivitySnapshot
+SessionManager::GetClientActivitySnapshot(int64_t now_unix_ms,
+                                          int64_t lease_ms) const {
+    std::lock_guard<std::mutex> lock(mutex_);
+    ClientActivitySnapshot snapshot;
+    for (const auto& item : sessions_) {
+        const auto& session = item.second;
+        if (session.session_state == maze::SESSION_STATE_CLOSED) {
+            continue;
+        }
+        ++snapshot.active_session_count;
+        snapshot.latest_active_activity_unix_ms = std::max(
+            snapshot.latest_active_activity_unix_ms,
+            session.last_valid_client_activity_unix_ms);
+        if (lease_ms >= 0 &&
+            session.last_valid_client_activity_unix_ms > 0 &&
+            now_unix_ms >= session.last_valid_client_activity_unix_ms &&
+            now_unix_ms - session.last_valid_client_activity_unix_ms <=
+                lease_ms) {
+            ++snapshot.recent_active_session_count;
+        }
+    }
+    return snapshot;
+}
+
 int SessionManager::GetActiveEpisodeCount() const {
     std::lock_guard<std::mutex> lock(mutex_);
     int count = 0;

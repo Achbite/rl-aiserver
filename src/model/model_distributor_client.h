@@ -12,6 +12,19 @@
 
 class ModelDistributorClient {
 public:
+    enum class AckDisposition {
+        Applied,
+        Rejected,
+        NotApplied,
+        Uncertain,
+    };
+
+    enum class AuthorityProbeDisposition {
+        Ready,
+        Retryable,
+        Rejected,
+    };
+
     explicit ModelDistributorClient(const AIServerConfig& config);
 
     bool FetchLatest(const std::string& aiserver_id,
@@ -33,10 +46,27 @@ public:
              training::ModelLoadStatus status,
              const std::string& message,
              std::string& error);
+    bool ProbeAckAuthority(
+        common::ServiceInstanceIdentity& authority,
+        std::string& error);
+    AuthorityProbeDisposition ProbeAckAuthorityDisposition(
+        common::ServiceInstanceIdentity& authority,
+        std::string& error);
+    AckDisposition AckIdempotently(
+        const ModelManifest& manifest,
+        const std::string& aiserver_id,
+        training::ModelLoadStatus status,
+        const std::string& message,
+        std::string& error,
+        common::ServiceInstanceIdentity* pinned_authority = nullptr);
 
     bool Promote(ModelManifest& manifest,
                  std::string& previous_path,
                  std::string& error);
+    bool RollbackPromotion(ModelManifest& manifest,
+                           const std::string& incoming_path,
+                           const std::string& previous_path,
+                           std::string& error);
 
 private:
     bool ValidateManifest(const training::ModelArtifactManifest& source,

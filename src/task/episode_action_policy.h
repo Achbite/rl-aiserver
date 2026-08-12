@@ -6,6 +6,11 @@
 #include <string>
 #include <vector>
 
+bool ValidateEpisodeModelOutput(const std::vector<float>& logits,
+                                int expected_action_dim,
+                                float value,
+                                std::string& error);
+
 bool SelectEpisodeAction(const std::vector<float>& logits,
                          maze::EpisodeMode mode,
                          double temperature,

@@ -1,0 +1,20 @@
+{
+  "fixture_id": "a3-arch-policy-wire-v0",
+  "source": "rl-learner/src/training/ppo_trainer.py::ActorCritic",
+  "generator": "tests/fixtures/generate_a3_arch_policy_wire_v0.py",
+  "weights": "All parameters zero except policy_head.bias[8]=4.0 and value_head.bias[0]=-0.75.",
+  "onnx_sha256": "6d7da5eef97886eb9649b948d72a0ef77703fcee095062897752eef88df3ff4d",
+  "expected_logits": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    4.0
+  ],
+  "expected_value": -0.75,
+  "purpose": "Distinct pre-activation serving identity for model ACK transaction tests."
+}

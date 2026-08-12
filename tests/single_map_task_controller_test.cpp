@@ -2,59 +2,25 @@
 
 #include <cassert>
 #include <iostream>
+#include <limits>
 #include <string>
-#include <vector>
 
 namespace {
 
-SingleMapModelIdentity Model(int version, int64_t trained_samples) {
+SingleMapModelIdentity Model(int version,
+                             int64_t train_updates,
+                             int64_t trained_samples) {
     SingleMapModelIdentity model;
     model.model_version = version;
-    model.model_checksum = std::string(64, static_cast<char>('a' + version % 20));
+    model.model_checksum =
+        std::string(64, static_cast<char>('a' + version % 20));
+    model.train_updates = train_updates;
     model.trained_samples = trained_samples;
     return model;
 }
 
-std::vector<SingleMapAgentEvaluation> Agents(int successes,
-                                             int success_steps,
-                                             int failure_steps) {
-    std::vector<SingleMapAgentEvaluation> agents(4);
-    for (int i = 0; i < 4; ++i) {
-        agents[i].success = i < successes;
-        agents[i].transition_count =
-            agents[i].success ? success_steps : failure_steps;
-    }
-    return agents;
-}
-
-void CompleteRound(SingleMapTaskController& controller,
-                   maze::EpisodeMode mode,
-                   const SingleMapModelIdentity& model,
-                   int successes_per_episode,
-                   int success_steps,
-                   int failure_steps) {
-    for (int episode = 0; episode < 25; ++episode) {
-        std::string error;
-        assert(controller.RecordEvaluationEpisode(
-            mode, model,
-            Agents(successes_per_episode, success_steps, failure_steps),
-            error));
-    }
-}
-
-void CompletePassingCampaign(SingleMapTaskController& controller,
-                             const SingleMapModelIdentity& model,
-                             int success_steps,
-                             int max_steps) {
-    CompleteRound(controller, maze::EPISODE_MODE_EVALUATION_ARGMAX,
-                  model, 4, success_steps, max_steps);
-    assert(controller.GetSnapshot().evaluation_round == 2);
-    CompleteRound(controller, maze::EPISODE_MODE_EVALUATION_ARGMAX,
-                  model, 4, success_steps, max_steps);
-    assert(controller.GetSnapshot().evaluation_round == 3);
-    // The stochastic diagnostic does not participate in the Gate.
-    CompleteRound(controller, maze::EPISODE_MODE_EVALUATION_STOCHASTIC,
-                  model, 0, success_steps, max_steps);
+SingleMapModelIdentity Model(int version, int64_t trained_samples) {
+    return Model(version, version, trained_samples);
 }
 
 }  // namespace
@@ -63,164 +29,128 @@ int main() {
     std::string error;
     SingleMapTaskController controller;
     assert(controller.Initialize(188, Model(0, 0), 0, error));
+    assert(controller.GetSnapshot().startup_mode ==
+           SingleMapTaskStartupMode::Fresh);
 
     SingleMapEpisodePlan plan;
     assert(controller.PlanNextEpisode(Model(0, 0), 0, plan, error));
+    assert(plan.continue_task);
     assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
     assert(plan.curriculum_stage == maze::CURRICULUM_STAGE_8X);
     assert(plan.max_steps == 1504);
 
-    bool should_pause = false;
-    assert(controller.ShouldPauseTrainingCollection(
-        Model(195, 99840), 99840, should_pause, error));
-    assert(!should_pause);
-    assert(controller.ShouldPauseTrainingCollection(
-        Model(196, 100352), 100352, should_pause, error));
-    assert(should_pause);
+    // Model-quality evaluation is external to training. Crossing the former
+    // 100k/200k thresholds and the retired one-million-sample boundary must
+    // not pause, complete, or change the episode mode.
+    const struct {
+        int model_version;
+        int64_t samples;
+    } progress[] = {
+        {195, 99840},
+        {196, 100352},
+        {390, 200192},
+        {1953, 999936},
+        {1954, 1000448},
+        {3907, 2000384},
+    };
+    for (const auto& item : progress) {
+        assert(controller.ObserveTrainingProgress(
+            Model(item.model_version, item.samples), item.samples, error));
+        assert(controller.PlanNextEpisode(
+            Model(item.model_version, item.samples), item.samples,
+            plan, error));
+        assert(plan.continue_task);
+        assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
+    }
+    const auto training_snapshot = controller.GetSnapshot();
+    const std::string training_receipt = controller.ToJson();
+    assert(training_receipt.find("evaluation") == std::string::npos);
+    assert(training_snapshot.run_produced_samples == 2000384);
 
-    const auto first_eval_model = Model(196, 100352);
-    assert(controller.PlanNextEpisode(
-        first_eval_model, 100352, plan, error));
-    assert(plan.episode_mode == maze::EPISODE_MODE_EVALUATION_ARGMAX);
-    assert(plan.model.model_version == 196);
-    assert(controller.IsEvaluationActive());
-    assert(controller.GetSnapshot().evaluation_round == 1);
-
-    // A newer publication cannot replace the model pinned by the campaign.
-    const auto republished_model = Model(197, 100352);
-    assert(controller.PlanNextEpisode(republished_model, 100352,
-                                      plan, error));
-    assert(plan.model.model_version == 196);
-    CompletePassingCampaign(controller, first_eval_model, 250, 1504);
-
-    assert(controller.PlanNextEpisode(republished_model, 100352,
-                                      plan, error));
-    assert(plan.curriculum_stage == maze::CURRICULUM_STAGE_4X);
-    assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
-    assert(plan.max_steps == 752);
-
-    const auto second_eval_model = Model(391, 200192);
-    assert(controller.PlanNextEpisode(
-        second_eval_model, 200192, plan, error));
-    CompletePassingCampaign(controller, second_eval_model, 240, 752);
-    assert(controller.PlanNextEpisode(second_eval_model, 200192,
-                                      plan, error));
-    assert(plan.curriculum_stage == maze::CURRICULUM_STAGE_2X);
-    assert(plan.max_steps == 376);
-
-    const auto final_eval_model = Model(586, 300032);
-    assert(controller.PlanNextEpisode(
-        final_eval_model, 300032, plan, error));
-    CompletePassingCampaign(controller, final_eval_model, 280, 376);
-    assert(controller.PlanNextEpisode(final_eval_model, 300032,
-                                      plan, error));
-    assert(!plan.continue_task);
-    assert(plan.curriculum_stage == maze::CURRICULUM_STAGE_COMPLETE);
-    assert(controller.GetSnapshot().complete);
-    assert(controller.history().size() == 3);
-
-    // A failed final attempt closes the current seed as a quality failure.
-    SingleMapTaskControllerConfig short_config;
-    short_config.stage_8x_sample_budget = 1000;
-    short_config.stage_4x_sample_budget = 1000;
-    short_config.stage_2x_sample_budget = 1000;
-    short_config.evaluation_interval_samples = 100000;
-    SingleMapTaskController failed(short_config);
-    error.clear();
-    assert(failed.Initialize(188, Model(0, 0), 0, error));
-    assert(failed.PlanNextEpisode(Model(0, 0), 0, plan, error));
-    assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
-    assert(failed.ShouldPauseTrainingCollection(
-        Model(1, 512), 512, should_pause, error));
-    assert(should_pause);
-    assert(failed.PlanNextEpisode(Model(1, 512), 512, plan, error));
-    assert(plan.episode_mode == maze::EPISODE_MODE_EVALUATION_ARGMAX);
-    CompleteRound(failed, maze::EPISODE_MODE_EVALUATION_ARGMAX,
-                  Model(1, 512), 0, 188, 1504);
-    CompleteRound(failed, maze::EPISODE_MODE_EVALUATION_ARGMAX,
-                  Model(1, 512), 0, 188, 1504);
-    CompleteRound(failed, maze::EPISODE_MODE_EVALUATION_STOCHASTIC,
-                  Model(1, 512), 4, 188, 1504);
-    assert(failed.PlanNextEpisode(Model(1, 512), 512, plan, error));
-    assert(!plan.continue_task);
-    assert(plan.curriculum_stage == maze::CURRICULUM_STAGE_FAILED);
-    assert(failed.GetSnapshot().failed);
-
-    // The regression that left 256 samples untrained at the final campaign:
-    // evaluation remains blocked until a homogeneous PPO batch is drained.
-    SingleMapTaskController near_cap;
-    error.clear();
-    assert(near_cap.Initialize(188, Model(0, 0), 0, error));
-    assert(near_cap.PlanNextEpisode(
-        Model(1950, 998400), 998656, plan, error));
-    assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
-    assert(near_cap.ShouldPauseTrainingCollection(
-        Model(1950, 998400), 998656, should_pause, error));
-    assert(!should_pause);
-    assert(near_cap.ShouldPauseTrainingCollection(
-        Model(1953, 999936), 999936, should_pause, error));
-    assert(should_pause);
-    assert(near_cap.PlanNextEpisode(
-        Model(1953, 999936), 999936, plan, error));
-    assert(plan.episode_mode == maze::EPISODE_MODE_EVALUATION_ARGMAX);
-
-    // Whole-fragment ingress and a bounded variable learner batch must stop at
-    // the last safe trainable window instead of crossing the hard stage cap.
-    SingleMapTaskControllerConfig bounded_config;
-    bounded_config.evaluation_interval_samples = 2000000;
-    SingleMapTaskController bounded_cap(bounded_config);
-    error.clear();
-    assert(bounded_cap.Initialize(188, Model(0, 0), 0, error));
-    assert(bounded_cap.ShouldPauseTrainingCollection(
-        Model(1950, 998400), 998900, should_pause, error));
-    assert(!should_pause);
-    assert(bounded_cap.ShouldPauseTrainingCollection(
-        Model(1950, 998400), 999028, should_pause, error));
-    assert(should_pause);
-    assert(bounded_cap.PlanNextEpisode(
-        Model(1951, 999028), 999028, plan, error));
-    assert(plan.episode_mode == maze::EPISODE_MODE_EVALUATION_ARGMAX);
-    assert(bounded_cap.GetSnapshot().stage_produced_samples == 999028);
-
-    // Sample Pool freshness is resolved after production. Reconcile that
-    // explicit disposition inside the current stage without weakening the
-    // monotonic counter check used by later updates.
+    // Sample Pool freshness reconciliation remains part of the training
+    // ledger and cannot move the run-produced counter below zero.
     SingleMapTaskController freshness;
     error.clear();
     assert(freshness.Initialize(188, Model(0, 0), 0, error));
-    assert(freshness.ShouldPauseTrainingCollection(
-        Model(1, 512), 640, should_pause, error));
-    assert(!should_pause);
+    assert(freshness.ObserveTrainingProgress(
+        Model(1, 512), 640, error));
     assert(freshness.ReconcileDiscardedTrainingSamples(128, error));
-    assert(freshness.GetSnapshot().stage_produced_samples == 512);
-    assert(freshness.ShouldPauseTrainingCollection(
-        Model(1, 512), 512, should_pause, error));
-    assert(!should_pause);
+    assert(freshness.GetSnapshot().run_produced_samples == 512);
     assert(!freshness.ReconcileDiscardedTrainingSamples(513, error));
 
-    // Once evaluation is due, collection alternates between pause-and-drain
-    // and filling a stranded sub-batch remainder. This reaches an exact empty
-    // ledger without admitting partial PPO updates.
-    SingleMapTaskController periodic;
+    // Resume starts a new run ledger at zero while preserving publication and
+    // optimizer counters as an immutable baseline. It never schedules an
+    // evaluation when the relative trained count crosses an old threshold.
+    SingleMapTaskController resumed;
+    const auto resume_model = Model(201, 200, 10000);
     error.clear();
-    assert(periodic.Initialize(188, Model(0, 0), 0, error));
-    assert(periodic.ShouldPauseTrainingCollection(
-        Model(196, 100352), 100608, should_pause, error));
-    assert(!should_pause);
-    assert(periodic.ShouldPauseTrainingCollection(
-        Model(196, 100352), 100864, should_pause, error));
-    assert(should_pause);
-    assert(periodic.ReconcileDiscardedTrainingSamples(128, error));
-    assert(periodic.ShouldPauseTrainingCollection(
-        Model(196, 100352), 100736, should_pause, error));
-    assert(!should_pause);
-    assert(periodic.ShouldPauseTrainingCollection(
-        Model(196, 100352), 100864, should_pause, error));
-    assert(should_pause);
-    assert(periodic.ShouldPauseTrainingCollection(
-        Model(197, 100864), 100864, should_pause, error));
-    assert(should_pause);
+    assert(resumed.Initialize(188, resume_model, 0, error));
+    auto resume_snapshot = resumed.GetSnapshot();
+    assert(resume_snapshot.startup_mode ==
+           SingleMapTaskStartupMode::Resume);
+    assert(resume_snapshot.baseline_model_version == 201);
+    assert(resume_snapshot.baseline_train_updates == 200);
+    assert(resume_snapshot.baseline_trained_samples == 10000);
+    assert(resume_snapshot.run_produced_samples == 0);
+    assert(resumed.ObserveTrainingProgress(
+        Model(202, 200, 10000), 0, error));
+    assert(resumed.ObserveTrainingProgress(
+        Model(203, 201, 10050), 50, error));
+    assert(resumed.ObserveTrainingProgress(
+        Model(204, 202, 10100), 100, error));
+    assert(resumed.PlanNextEpisode(
+        Model(204, 202, 10100), 100, plan, error));
+    assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
 
-    std::cout << "single-map task controller contract passed\n";
+    // Publication and optimizer counters advance independently, but neither
+    // training counter may roll back. Rejected observations are atomic.
+    const std::string before_invalid_progress = resumed.ToJson();
+    assert(!resumed.ObserveTrainingProgress(
+        Model(205, 201, 10100), 100, error));
+    assert(resumed.ToJson() == before_invalid_progress);
+    error.clear();
+    assert(!resumed.ObserveTrainingProgress(
+        Model(205, 203, 10099), 100, error));
+    assert(resumed.ToJson() == before_invalid_progress);
+    error.clear();
+    assert(!resumed.ObserveTrainingProgress(
+        Model(203, 203, 10100), 100, error));
+    assert(resumed.ToJson() == before_invalid_progress);
+    error.clear();
+    assert(!resumed.ObserveTrainingProgress(
+        Model(204, 203, 10100), 100, error));
+    assert(resumed.ToJson() == before_invalid_progress);
+    error.clear();
+    assert(!resumed.ObserveTrainingProgress(
+        Model(205, 203, 10101), 100, error));
+    assert(resumed.ToJson() == before_invalid_progress);
+
+    SingleMapTaskController invalid_resume;
+    error.clear();
+    assert(!invalid_resume.Initialize(
+        188, Model(1, -1, 0), 0, error));
+    assert(!invalid_resume.GetSnapshot().initialized);
+
+    // Removing the evaluation counter also removes its near-uint64 overflow
+    // failure. Horizon overflow remains fail-closed and atomic.
+    SingleMapTaskController high_counter;
+    const int64_t near_max = std::numeric_limits<int64_t>::max() - 1;
+    error.clear();
+    assert(high_counter.Initialize(
+        188, Model(1, 0, near_max), 0, error));
+    assert(high_counter.PlanNextEpisode(
+        Model(2, 1, near_max), 0, plan, error));
+    assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
+
+    SingleMapTaskController horizon_overflow;
+    error.clear();
+    assert(horizon_overflow.Initialize(
+        std::numeric_limits<int>::max(), Model(0, 0), 0, error));
+    const std::string before_overflow = horizon_overflow.ToJson();
+    assert(!horizon_overflow.PlanNextEpisode(
+        Model(0, 0), 0, plan, error));
+    assert(horizon_overflow.ToJson() == before_overflow);
+
+    std::cout << "single-map training controller contract passed\n";
     return 0;
 }

@@ -12,12 +12,12 @@
 #include "model/model_distributor_client.h"
 #include "sample/sample_sender.h"
 #include "session/session_manager.h"
-#include "task/training_sample_budget.h"
 #include "task/single_map_task_controller.h"
 
 #include <atomic>
 #include <chrono>
 #include <cstdint>
+#include <functional>
 #include <mutex>
 #include <random>
 #include <string>
@@ -32,7 +32,7 @@ public:
     ~MazeServiceImpl();
 
     bool Start();
-    void BeginShutdown();
+    bool BeginShutdown();
     bool IsReady() const;
 
     grpc::Status OpenSession(grpc::ServerContext* ctx,
@@ -68,14 +68,30 @@ public:
                                    training::AIServerStatusRsp* rsp) override;
 
 private:
+    friend struct MazeServiceUpdateTestAccess;
+    friend struct MazeServiceLifecycleTestAccess;
+
     bool LoadInitialModel();
+    bool IsCoreInferenceReady() const;
     void StartModelWatcher();
     void StopModelWatcher();
     void ModelWatchLoop();
+    void RecordPendingModelAck(
+        const ModelManifest& manifest,
+        const common::ServiceInstanceIdentity& authority,
+        const std::string& error);
+    bool HasLocallyActivatedPendingModel() const;
+    bool RetryPendingModelAck();
+    bool TryActivateStagedModelForWatcher();
     bool ActivateStagedModel();
-    bool AtLocalFragmentBoundary();
+    bool AtLocalFragmentBoundary(
+        const SessionManager::Session* candidate_session = nullptr);
     bool ActiveEpisodesAllowModelActivation();
-    bool CanActivateStagedModel();
+    bool CanActivateStagedModel(
+        const SessionManager::Session* candidate_session = nullptr);
+    bool ValidateStagedModelProgress(const ModelManifest& active,
+                                     const ModelManifest& candidate,
+                                     std::string& error) const;
     void RefreshFragmentSampleTarget(
         const SessionManager::Session& session);
     void InitAgentSolver(SessionManager::AgentRuntime& agent,
@@ -88,13 +104,25 @@ private:
                                    int gy,
                                    bool is_done,
                                    maze::MazeTerminationReason reason,
-                                   bool collect_training_sample);
+                                   bool collect_training_sample,
+                                   int64_t& produced_unique_samples,
+                                   std::unordered_map<int, int64_t>&
+                                       produced_samples_by_model,
+                                   std::string& error);
     bool InferStateValue(const SessionManager::Session& session,
                          const SessionManager::AgentRuntime& agent,
                          int gx,
                          int gy,
                          int64_t episode_step,
                          float& value);
+    bool PrepareStateValue(
+        const SessionManager::Session& session,
+        const SessionManager::AgentRuntime& agent,
+        int gx,
+        int gy,
+        int64_t episode_step,
+        const OnnxInferencer::PreparedModel* prepared_model,
+        float& value);
     bool ChooseModelAction(SessionManager::Session& session,
                            SessionManager::AgentRuntime& agent,
                            int gx,
@@ -103,18 +131,42 @@ private:
                            int& action,
                            float& log_prob,
                            float& value);
+    bool PrepareModelAction(
+        SessionManager::Session& session,
+        SessionManager::AgentRuntime& agent,
+        int gx,
+        int gy,
+        int64_t action_frame_id,
+        const OnnxInferencer::PreparedModel* prepared_model,
+        const ModelManifest& behavior_model,
+        std::mt19937& action_rng,
+        int& action,
+        float& log_prob,
+        float& value);
     bool FlushAgentSamples(SessionManager::Session& session,
                            int agent_id,
                            bool is_episode_end,
                            maze::MazeTerminationReason reason,
                            float bootstrap_value,
                            bool bootstrap_valid);
+    bool PrepareAgentSampleFlush(
+        SessionManager::Session& session,
+        int agent_id,
+        bool is_episode_end,
+        maze::MazeTerminationReason reason,
+        float bootstrap_value,
+        bool bootstrap_valid,
+        uint64_t& next_fragment_sequence,
+        int64_t& produced_unique_batches,
+        std::vector<training::SampleBatch>& batches,
+        std::string& error);
     void QuarantineAgentSamples(SessionManager::Session& session,
                                 int agent_id);
     void FillSampleBatchMetadata(training::SampleBatch& batch,
                                  const SessionManager::Session& session,
                                  int agent_id,
-                                 maze::MazeTerminationReason reason);
+                                 maze::MazeTerminationReason reason,
+                                 uint64_t sequence);
     int64_t CountCachedSamples();
     int64_t CountCachedFragments();
     int64_t EstimateCachedBytes();
@@ -122,7 +174,9 @@ private:
     bool ReconcileDiscardedTrainingSamples();
     void MarkDegraded(const std::string& error);
     SingleMapModelIdentity ActiveModelIdentity() const;
-    bool WriteTaskControllerReceipt(std::string& error) const;
+    bool WriteTaskControllerReceipt(
+        const SingleMapTaskController& controller,
+        std::string& error) const;
     static int64_t NowMs();
     static std::string CreateProducerInstanceId(const std::string& aiserver_id);
 
@@ -135,6 +189,11 @@ private:
     ModelDistributorClient model_distributor_;
     ModelManifest model_manifest_;
     ModelManifest staged_model_manifest_;
+    bool model_ack_pending_ = false;
+    ModelManifest pending_model_ack_manifest_;
+    common::ServiceInstanceIdentity pending_model_ack_authority_;
+    std::string pending_model_ack_error_;
+    std::string pending_model_ack_cause_;
 
     std::atomic<training::AIServerState> state_{training::AISERVER_STATE_STARTING};
     std::atomic<training::ModelState> model_state_{training::MODEL_STATE_WAITING};
@@ -148,10 +207,13 @@ private:
     std::unordered_map<std::string, std::string> open_payloads_;
     std::unordered_map<std::string, std::string> open_responses_;
     std::string producer_instance_id_;
-    TrainingSampleBudget training_sample_budget_;
     SingleMapTaskController task_controller_;
+    std::function<bool(const SingleMapTaskController&, std::string&)>
+        task_controller_receipt_writer_;
     bool started_ = false;
     bool shutdown_started_ = false;
+    bool shutdown_completed_ = false;
+    bool shutdown_succeeded_ = true;
     bool client_initialized_ = false;
     bool task_stop_requested_ = false;
 

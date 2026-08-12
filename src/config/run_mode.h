@@ -45,4 +45,8 @@ inline bool IsValid(int mode) {
     return mode >= kTraining && mode <= kMapValidation;
 }
 
+inline bool ExposesTrainingStatus(int mode) {
+    return mode == kTraining;
+}
+
 }  // namespace aiserver_mode

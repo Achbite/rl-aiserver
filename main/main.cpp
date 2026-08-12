@@ -121,15 +121,6 @@ static bool ApplyCommandLine(int argc,
             const char* candidate = value("--local-train-dir");
             if (!candidate) return false;
             config.model.local_train_dir = candidate;
-        } else if (argument == "--training-sample-budget") {
-            const char* candidate = value("--training-sample-budget");
-            if (!candidate ||
-                !ParseNonNegativeInt64(
-                    candidate, config.task.training_sample_budget)) {
-                error =
-                    "--training-sample-budget must be a non-negative integer";
-                return false;
-            }
         } else if (argument == "--local-test-model-dir" ||
                    argument == "--smoke-model-dir") {
             const char* candidate = value(argument.c_str());
@@ -171,7 +162,6 @@ int main(int argc, char* argv[]) {
                    argument == "--model-distributor" ||
                    argument == "--sample-distributor" ||
                    argument == "--local-train-dir" ||
-                   argument == "--training-sample-budget" ||
                    argument == "--local-test-model-dir" ||
                    argument == "--smoke-model-dir") {
             ++i;
@@ -191,14 +181,6 @@ int main(int argc, char* argv[]) {
     if (!ApplyCommandLine(
             argc, argv, cfg, config_path, argument_error)) {
         LOG_ERROR("Main", "命令参数无效: %s", argument_error.c_str());
-        Logger::Instance().Close();
-        return 2;
-    }
-    if (cfg.task.training_sample_budget > 0 &&
-        cfg.server.run_mode != aiserver_mode::kTraining) {
-        LOG_ERROR(
-            "Main",
-            "training sample budget is only valid for training workload");
         Logger::Instance().Close();
         return 2;
     }
@@ -227,8 +209,11 @@ int main(int argc, char* argv[]) {
     builder.AddListeningPort(listen_addr, grpc::InsecureServerCredentials());
     builder.RegisterService(
         static_cast<maze::MazeTaskService::Service*>(&service));
-    builder.RegisterService(
-        static_cast<training::AIServerTrainingStatusService::Service*>(&service));
+    if (aiserver_mode::ExposesTrainingStatus(cfg.server.run_mode)) {
+        builder.RegisterService(
+            static_cast<training::AIServerTrainingStatusService::Service*>(
+                &service));
+    }
 
     std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
 
@@ -247,12 +232,18 @@ int main(int argc, char* argv[]) {
     }
 
     LOG_INFO("Main", "收到停止信号，开始清理样本链路");
-    service.BeginShutdown();
+    const bool shutdown_clean = service.BeginShutdown();
     server->Shutdown(
         std::chrono::system_clock::now() + std::chrono::seconds(2));
     server->Wait();
 
-    LOG_INFO("Main", "AIServer 已停止");
+    if (shutdown_clean) {
+        LOG_INFO("Main", "AIServer 已停止");
+    } else {
+        LOG_ERROR(
+            "Main",
+            "AIServer 停止失败: 样本处置未收敛，详见 MazeService 错误日志");
+    }
     Logger::Instance().Close();
-    return 0;
+    return shutdown_clean ? 0 : 1;
 }

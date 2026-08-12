@@ -45,7 +45,9 @@ void AddDescriptor(training::MetricSnapshot* snapshot,
                    const std::string& unit,
                    const std::string& statistic,
                    training::MetricValueKind value_kind,
-                   training::MetricAggregationKind aggregation) {
+                   training::MetricAggregationKind aggregation,
+                   training::MetricWindowKind window =
+                       training::METRIC_WINDOW_KIND_ROLLING) {
     auto* descriptor = snapshot->add_descriptors();
     descriptor->set_field_id(field_id);
     descriptor->set_label(label);
@@ -57,7 +59,7 @@ void AddDescriptor(training::MetricSnapshot* snapshot,
     descriptor->set_value_kind(value_kind);
     descriptor->set_owner_component("maze-task-adapter");
     descriptor->set_aggregation_kind(aggregation);
-    descriptor->set_window_kind(training::METRIC_WINDOW_KIND_ROLLING);
+    descriptor->set_window_kind(window);
     FillMetricSchema(descriptor->mutable_schema_identity());
 }
 
@@ -85,47 +87,6 @@ void AddGauge(training::MetricSnapshot* snapshot,
     value->set_window_end_unix_ms(timestamp);
 }
 
-void AddTaskDescriptor(
-    training::MetricSnapshot* snapshot,
-    const std::string& field_id,
-    const std::string& label,
-    const std::string& dimension,
-    const std::string& unit,
-    const std::string& statistic,
-    training::MetricValueKind value_kind,
-    training::MetricAggregationKind aggregation,
-    training::MetricWindowKind window) {
-    auto* descriptor = snapshot->add_descriptors();
-    descriptor->set_field_id(field_id);
-    descriptor->set_label(label);
-    descriptor->set_group(
-        field_id.rfind("server.evaluation.", 0) == 0
-            ? "episode_success"
-            : "training_depth");
-    descriptor->set_dimension(dimension);
-    descriptor->set_unit(unit);
-    descriptor->set_scope("server_pod");
-    descriptor->set_statistic(statistic);
-    descriptor->set_value_kind(value_kind);
-    descriptor->set_owner_component("maze-task-adapter");
-    descriptor->set_aggregation_kind(aggregation);
-    descriptor->set_window_kind(window);
-    FillMetricSchema(descriptor->mutable_schema_identity());
-}
-
-double CurriculumMultiplier(maze::CurriculumStage stage) {
-    switch (stage) {
-        case maze::CURRICULUM_STAGE_8X:
-            return 8.0;
-        case maze::CURRICULUM_STAGE_4X:
-            return 4.0;
-        case maze::CURRICULUM_STAGE_2X:
-            return 2.0;
-        default:
-            return 0.0;
-    }
-}
-
 }  // namespace
 
 EpisodeMetricsWindow::EpisodeMetricsWindow(std::size_t capacity)
@@ -136,19 +97,34 @@ void EpisodeMetricsWindow::Push(Entry entry) {
     while (entries_.size() > capacity_) entries_.pop_front();
 }
 
+void EpisodeMetricsWindow::PushTraining(Entry entry) {
+    training_entries_.push_back(std::move(entry));
+    while (training_entries_.size() > capacity_) {
+        training_entries_.pop_front();
+    }
+}
+
 void EpisodeMetricsWindow::AddCompleted(
+    maze::EpisodeMode episode_mode,
     std::vector<AgentEpisodeResult> agents) {
     std::lock_guard<std::mutex> lock(mutex_);
-    Push(Entry{false, std::move(agents)});
+    Entry entry{false, episode_mode, std::move(agents)};
+    if (episode_mode == maze::EPISODE_MODE_TRAINING) {
+        PushTraining(entry);
+        ++completed_training_episode_count_;
+    }
+    Push(std::move(entry));
 }
 
 void EpisodeMetricsWindow::AddExcluded(
+    maze::EpisodeMode episode_mode,
     std::size_t agent_count,
     maze::MazeTerminationReason reason) {
     std::lock_guard<std::mutex> lock(mutex_);
     std::vector<AgentEpisodeResult> agents(agent_count);
     for (auto& agent : agents) agent.termination_reason = reason;
-    Push(Entry{true, std::move(agents)});
+    Entry entry{true, episode_mode, std::move(agents)};
+    Push(std::move(entry));
 }
 
 void EpisodeMetricsWindow::Fill(
@@ -195,179 +171,262 @@ void EpisodeMetricsWindow::Fill(
                   "rate", training::METRIC_VALUE_KIND_MEAN,
                   training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
 
-    uint64_t completed_agents = 0;
-    uint64_t successes = 0;
-    uint64_t reward_transitions = 0;
-    uint64_t successful_paths = 0;
-    double return_sum = 0.0;
-    double return_min = std::numeric_limits<double>::infinity();
-    double return_max = -std::numeric_limits<double>::infinity();
-    double episode_step_sum = 0.0;
-    double path_ratio_sum = 0.0;
-    double unique_cells_sum = 0.0;
-    double blocked_moves_sum = 0.0;
-    std::unordered_map<std::string, double> reward_component_sums;
-
-    for (const auto& entry : entries_) {
-        if (entry.excluded) continue;
-        for (const auto& agent : entry.agents) {
-            ++completed_agents;
-            return_sum += agent.episode_return;
-            return_min = std::min(return_min, agent.episode_return);
-            return_max = std::max(return_max, agent.episode_return);
-            episode_step_sum += agent.transition_count;
-            unique_cells_sum += agent.unique_cell_count;
-            blocked_moves_sum += agent.blocked_move_count;
-            reward_transitions += static_cast<uint64_t>(
+    struct Aggregate {
+        uint64_t completed_agents = 0;
+        uint64_t successes = 0;
+        uint64_t environment_episodes = 0;
+        uint64_t any_success_episodes = 0;
+        uint64_t all_success_episodes = 0;
+        uint64_t reward_transitions = 0;
+        uint64_t successful_paths = 0;
+        double return_sum = 0.0;
+        double return_min = std::numeric_limits<double>::infinity();
+        double return_max = -std::numeric_limits<double>::infinity();
+        double episode_step_sum = 0.0;
+        double path_ratio_sum = 0.0;
+        double unique_cells_sum = 0.0;
+        double blocked_moves_sum = 0.0;
+        std::unordered_map<std::string, double> reward_component_sums;
+    };
+    const auto add_agents = [](Aggregate& aggregate,
+                               const std::vector<AgentEpisodeResult>& agents) {
+        for (const auto& agent : agents) {
+            ++aggregate.completed_agents;
+            aggregate.return_sum += agent.episode_return;
+            aggregate.return_min =
+                std::min(aggregate.return_min, agent.episode_return);
+            aggregate.return_max =
+                std::max(aggregate.return_max, agent.episode_return);
+            aggregate.episode_step_sum += agent.transition_count;
+            aggregate.unique_cells_sum += agent.unique_cell_count;
+            aggregate.blocked_moves_sum += agent.blocked_move_count;
+            aggregate.reward_transitions += static_cast<uint64_t>(
                 std::max<int64_t>(0, agent.transition_count));
             if (agent.success) {
-                ++successes;
+                ++aggregate.successes;
                 if (agent.shortest_action_steps > 0) {
-                    path_ratio_sum +=
+                    aggregate.path_ratio_sum +=
                         static_cast<double>(agent.transition_count) /
                         static_cast<double>(agent.shortest_action_steps);
-                    ++successful_paths;
+                    ++aggregate.successful_paths;
                 }
             }
             for (const auto& item : agent.reward_component_sums) {
                 if (SnakeCase(item.first)) {
-                    reward_component_sums[item.first] += item.second;
+                    aggregate.reward_component_sums[item.first] += item.second;
                 }
             }
+        }
+    };
+    const auto add_entry = [&](Aggregate& aggregate,
+                               const std::vector<AgentEpisodeResult>& agents) {
+        add_agents(aggregate, agents);
+        ++aggregate.environment_episodes;
+        bool any_success = false;
+        bool all_success = !agents.empty();
+        for (const auto& agent : agents) {
+            any_success = any_success || agent.success;
+            all_success = all_success && agent.success;
+        }
+        if (any_success) ++aggregate.any_success_episodes;
+        if (all_success) ++aggregate.all_success_episodes;
+    };
+
+    Aggregate aggregate;
+    Aggregate training_aggregate;
+    Aggregate latest_training_episode;
+    bool has_latest_training_episode = false;
+    for (const auto& entry : entries_) {
+        if (entry.excluded) continue;
+        add_entry(aggregate, entry.agents);
+    }
+    for (const auto& entry : training_entries_) {
+        if (!entry.excluded) {
+            add_entry(training_aggregate, entry.agents);
+        }
+    }
+    for (auto entry = training_entries_.rbegin();
+         entry != training_entries_.rend(); ++entry) {
+        if (!entry->excluded) {
+            add_entry(latest_training_episode, entry->agents);
+            has_latest_training_episode = true;
+            break;
         }
     }
 
     AddMean(snapshot, "server.episode.learning_return.mean.v1",
-            return_sum, completed_agents, timestamp_unix_ms);
-    if (completed_agents > 0) {
+            aggregate.return_sum, aggregate.completed_agents,
+            timestamp_unix_ms);
+    if (aggregate.completed_agents > 0) {
         AddGauge(snapshot, "server.episode.learning_return.min.v1",
-                 return_min, timestamp_unix_ms);
+                 aggregate.return_min, timestamp_unix_ms);
         AddGauge(snapshot, "server.episode.learning_return.max.v1",
-                 return_max, timestamp_unix_ms);
+                 aggregate.return_max, timestamp_unix_ms);
     }
     AddMean(snapshot, "server.episode.success.agent_rate.v1",
-            static_cast<double>(successes), completed_agents,
+            static_cast<double>(aggregate.successes),
+            aggregate.completed_agents,
             timestamp_unix_ms);
-    AddMean(snapshot, "server.episode.step.mean.v1", episode_step_sum,
-            completed_agents, timestamp_unix_ms);
-    AddMean(snapshot, "server.episode.path_ratio.mean.v1", path_ratio_sum,
-            successful_paths, timestamp_unix_ms);
-    AddMean(snapshot, "server.episode.unique_cells.mean.v1", unique_cells_sum,
-            completed_agents, timestamp_unix_ms);
+    AddMean(snapshot, "server.episode.step.mean.v1",
+            aggregate.episode_step_sum, aggregate.completed_agents,
+            timestamp_unix_ms);
+    AddMean(snapshot, "server.episode.path_ratio.mean.v1",
+            aggregate.path_ratio_sum, aggregate.successful_paths,
+            timestamp_unix_ms);
+    AddMean(snapshot, "server.episode.unique_cells.mean.v1",
+            aggregate.unique_cells_sum, aggregate.completed_agents,
+            timestamp_unix_ms);
     AddMean(snapshot, "server.episode.blocked_move_rate.v1",
-            blocked_moves_sum, reward_transitions, timestamp_unix_ms);
+            aggregate.blocked_moves_sum, aggregate.reward_transitions,
+            timestamp_unix_ms);
 
-    for (const auto& item : reward_component_sums) {
+    for (const auto& item : aggregate.reward_component_sums) {
         const std::string field_id = "server.reward.component." + item.first +
                                      ".transition_mean.v1";
         AddDescriptor(snapshot, field_id, item.first, "reward_components",
                       "reward", "reward", "transition_mean",
                       training::METRIC_VALUE_KIND_MEAN,
                       training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
-        AddMean(snapshot, field_id, item.second, reward_transitions,
+        AddMean(snapshot, field_id, item.second,
+                aggregate.reward_transitions,
                 timestamp_unix_ms);
     }
-}
 
-void AppendSingleMapTaskMetrics(
-    training::MetricSnapshot* snapshot,
-    const SingleMapTaskSnapshot& task,
-    bool has_completed_evaluation,
-    int64_t timestamp_unix_ms) {
-    AddTaskDescriptor(
-        snapshot, "server.task.curriculum.multiplier.v1", "Curriculum",
-        "curriculum_multiplier", "x", "latest",
-        training::METRIC_VALUE_KIND_GAUGE,
-        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
-        training::METRIC_WINDOW_KIND_INSTANT);
-    AddTaskDescriptor(
-        snapshot, "server.task.stage_produced_samples.v1", "Stage Samples",
-        "sample_count", "samples", "total",
-        training::METRIC_VALUE_KIND_COUNTER,
-        training::METRIC_AGGREGATION_KIND_SUM,
-        training::METRIC_WINDOW_KIND_CUMULATIVE);
-    AddTaskDescriptor(
-        snapshot, "server.task.stage_sample_budget.v1",
-        "Stage Sample Budget", "sample_count", "samples", "latest",
-        training::METRIC_VALUE_KIND_GAUGE,
-        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
-        training::METRIC_WINDOW_KIND_INSTANT);
-    AddTaskDescriptor(
-        snapshot, "server.task.next_evaluation_trained_samples.v1",
-        "Next Evaluation", "sample_count", "samples", "latest",
-        training::METRIC_VALUE_KIND_GAUGE,
-        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
-        training::METRIC_WINDOW_KIND_INSTANT);
-    AddTaskDescriptor(
-        snapshot, "server.evaluation.episode_in_round.v1",
-        "Evaluation Episode", "episode_count", "episode", "latest",
-        training::METRIC_VALUE_KIND_GAUGE,
-        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
-        training::METRIC_WINDOW_KIND_INSTANT);
+    AddDescriptor(snapshot, "server.training.episode.completed.total.v1",
+                  "Completed Training Episodes", "training_depth",
+                  "episode_count", "episode", "total",
+                  training::METRIC_VALUE_KIND_COUNTER,
+                  training::METRIC_AGGREGATION_KIND_SUM,
+                  training::METRIC_WINDOW_KIND_CUMULATIVE);
+    AddGauge(snapshot, "server.training.episode.completed.total.v1",
+             static_cast<double>(completed_training_episode_count_),
+             timestamp_unix_ms);
+    AddDescriptor(snapshot,
+                  "server.training.episode.learning_return.mean.v1",
+                  "Mean Training Agent Return", "episode_return",
+                  "episode_return", "reward", "mean",
+                  training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.learning_return.mean.v1",
+            training_aggregate.return_sum,
+            training_aggregate.completed_agents, timestamp_unix_ms);
+    AddDescriptor(snapshot,
+                  "server.training.episode.success.agent_rate.v1",
+                  "Training Agent Success", "episode_success", "ratio",
+                  "ratio", "rate", training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.success.agent_rate.v1",
+            static_cast<double>(training_aggregate.successes),
+            training_aggregate.completed_agents, timestamp_unix_ms);
+    AddDescriptor(snapshot,
+                  "server.training.episode.success.any_rate.v1",
+                  "Training Any Success", "episode_success", "ratio",
+                  "ratio", "rate", training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.success.any_rate.v1",
+            static_cast<double>(training_aggregate.any_success_episodes),
+            training_aggregate.environment_episodes, timestamp_unix_ms);
+    AddDescriptor(snapshot,
+                  "server.training.episode.success.all_rate.v1",
+                  "Training All Success", "episode_success", "ratio",
+                  "ratio", "rate", training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.success.all_rate.v1",
+            static_cast<double>(training_aggregate.all_success_episodes),
+            training_aggregate.environment_episodes, timestamp_unix_ms);
+    AddDescriptor(snapshot, "server.training.episode.step.mean.v1",
+                  "Training Episode Step", "episode_success",
+                  "environment_step", "step", "mean",
+                  training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.step.mean.v1",
+            training_aggregate.episode_step_sum,
+            training_aggregate.completed_agents, timestamp_unix_ms);
+    AddDescriptor(snapshot, "server.training.episode.path_ratio.mean.v1",
+                  "Training Path Ratio", "episode_success", "ratio", "1",
+                  "mean", training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.path_ratio.mean.v1",
+            training_aggregate.path_ratio_sum,
+            training_aggregate.successful_paths, timestamp_unix_ms);
+    AddDescriptor(snapshot, "server.training.episode.unique_cells.mean.v1",
+                  "Training Unique Cells", "episode_success", "count",
+                  "cell", "mean", training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.unique_cells.mean.v1",
+            training_aggregate.unique_cells_sum,
+            training_aggregate.completed_agents, timestamp_unix_ms);
+    AddDescriptor(snapshot,
+                  "server.training.episode.blocked_move_rate.v1",
+                  "Training Blocked Move Rate", "episode_success", "ratio",
+                  "ratio", "rate", training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+    AddMean(snapshot, "server.training.episode.blocked_move_rate.v1",
+            training_aggregate.blocked_moves_sum,
+            training_aggregate.reward_transitions, timestamp_unix_ms);
+    AddDescriptor(snapshot,
+                  "server.training.episode.learning_return.latest_mean.v1",
+                  "Latest Training Agent Return", "episode_return",
+                  "episode_return", "reward", "latest_mean",
+                  training::METRIC_VALUE_KIND_MEAN,
+                  training::METRIC_AGGREGATION_KIND_LATEST,
+                  training::METRIC_WINDOW_KIND_INSTANT);
+    if (has_latest_training_episode) {
+        AddMean(snapshot,
+                "server.training.episode.learning_return.latest_mean.v1",
+                latest_training_episode.return_sum,
+                latest_training_episode.completed_agents,
+                timestamp_unix_ms);
+    }
 
-    const char* success_ids[] = {
-        "server.evaluation.argmax_round_1_success_rate.v1",
-        "server.evaluation.argmax_round_2_success_rate.v1",
-        "server.evaluation.stochastic_success_rate.v1",
-    };
-    const char* success_labels[] = {
-        "Argmax Round 1 Success",
-        "Argmax Round 2 Success",
-        "Stochastic Success",
-    };
-    for (int index = 0; index < 3; ++index) {
-        AddTaskDescriptor(
-            snapshot, success_ids[index], success_labels[index], "ratio",
-            "ratio", "mean", training::METRIC_VALUE_KIND_GAUGE,
-            training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
-            training::METRIC_WINDOW_KIND_INSTANT);
+    std::unordered_map<std::string, bool> training_component_names;
+    for (const auto& item : training_aggregate.reward_component_sums) {
+        training_component_names[item.first] = true;
     }
-    AddTaskDescriptor(
-        snapshot, "server.evaluation.path_ratio_median.v1",
-        "Argmax Path Ratio Median", "ratio", "ratio", "median",
-        training::METRIC_VALUE_KIND_GAUGE,
-        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
-        training::METRIC_WINDOW_KIND_INSTANT);
-    AddTaskDescriptor(
-        snapshot, "server.evaluation.path_ratio_p95.v1",
-        "Argmax Path Ratio p95", "ratio", "ratio", "p95",
-        training::METRIC_VALUE_KIND_GAUGE,
-        training::METRIC_AGGREGATION_KIND_NOT_MERGEABLE,
-        training::METRIC_WINDOW_KIND_INSTANT);
+    for (const auto& item : latest_training_episode.reward_component_sums) {
+        training_component_names[item.first] = true;
+    }
+    for (const auto& component : training_component_names) {
+        const auto& name = component.first;
+        const auto aggregate_value =
+            training_aggregate.reward_component_sums.find(name);
+        const double aggregate_sum =
+            aggregate_value == training_aggregate.reward_component_sums.end()
+                ? 0.0
+                : aggregate_value->second;
+        const auto latest_value =
+            latest_training_episode.reward_component_sums.find(name);
+        const double latest_sum =
+            latest_value == latest_training_episode.reward_component_sums.end()
+                ? 0.0
+                : latest_value->second;
 
-    if (!task.initialized) return;
-    AddGauge(snapshot, "server.task.curriculum.multiplier.v1",
-             CurriculumMultiplier(task.curriculum_stage), timestamp_unix_ms);
-    AddGauge(snapshot, "server.task.stage_produced_samples.v1",
-             static_cast<double>(task.stage_produced_samples),
-             timestamp_unix_ms);
-    AddGauge(snapshot, "server.task.stage_sample_budget.v1",
-             static_cast<double>(task.stage_sample_budget),
-             timestamp_unix_ms);
-    AddGauge(snapshot, "server.task.next_evaluation_trained_samples.v1",
-             static_cast<double>(task.next_evaluation_trained_samples),
-             timestamp_unix_ms);
-    if (task.evaluation_active) {
-        AddGauge(snapshot, "server.evaluation.episode_in_round.v1",
-                 static_cast<double>(task.evaluation_episode_in_round),
-                 timestamp_unix_ms);
-    }
-    if (!has_completed_evaluation) return;
-    AddGauge(snapshot,
-             "server.evaluation.argmax_round_1_success_rate.v1",
-             task.latest_argmax_round_1_success_rate, timestamp_unix_ms);
-    AddGauge(snapshot,
-             "server.evaluation.argmax_round_2_success_rate.v1",
-             task.latest_argmax_round_2_success_rate, timestamp_unix_ms);
-    AddGauge(snapshot,
-             "server.evaluation.stochastic_success_rate.v1",
-             task.latest_stochastic_success_rate, timestamp_unix_ms);
-    if (std::isfinite(task.latest_path_ratio_median)) {
-        AddGauge(snapshot, "server.evaluation.path_ratio_median.v1",
-                 task.latest_path_ratio_median, timestamp_unix_ms);
-    }
-    if (std::isfinite(task.latest_path_ratio_p95)) {
-        AddGauge(snapshot, "server.evaluation.path_ratio_p95.v1",
-                 task.latest_path_ratio_p95, timestamp_unix_ms);
+        const std::string prefix =
+            "server.training.reward.component." + name;
+        AddDescriptor(snapshot, prefix + ".episode_mean.v1", name,
+                      "reward_components", "episode_reward",
+                      "reward/agent_episode", "mean",
+                      training::METRIC_VALUE_KIND_MEAN,
+                      training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+        AddMean(snapshot, prefix + ".episode_mean.v1", aggregate_sum,
+                training_aggregate.completed_agents, timestamp_unix_ms);
+        AddDescriptor(snapshot, prefix + ".transition_mean.v1", name,
+                      "reward_components", "transition_reward",
+                      "reward/transition", "mean",
+                      training::METRIC_VALUE_KIND_MEAN,
+                      training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
+        AddMean(snapshot, prefix + ".transition_mean.v1", aggregate_sum,
+                training_aggregate.reward_transitions, timestamp_unix_ms);
+        AddDescriptor(snapshot, prefix + ".latest_episode_mean.v1", name,
+                      "reward_components", "episode_reward",
+                      "reward/agent_episode", "latest_mean",
+                      training::METRIC_VALUE_KIND_MEAN,
+                      training::METRIC_AGGREGATION_KIND_LATEST,
+                      training::METRIC_WINDOW_KIND_INSTANT);
+        if (has_latest_training_episode) {
+            AddMean(snapshot, prefix + ".latest_episode_mean.v1", latest_sum,
+                    latest_training_episode.completed_agents,
+                    timestamp_unix_ms);
+        }
     }
 }
