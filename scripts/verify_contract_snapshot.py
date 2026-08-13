@@ -20,6 +20,8 @@ SNAPSHOT_FILES = {
     "cpp/maze_task.pb.h": "maze_task.pb.h",
     "cpp/maze_task.grpc.pb.cc": "maze_task.grpc.pb.cc",
     "cpp/maze_task.grpc.pb.h": "maze_task.grpc.pb.h",
+    "schemas/maze.metrics.v2.json": "schemas/maze.metrics.v2.json",
+    "schemas/maze.metrics.v2.sha256": "schemas/maze.metrics.v2.sha256",
 }
 
 
@@ -53,6 +55,14 @@ def verify_snapshot(
     checksums = manifest.get("files", {})
     if not isinstance(checksums, dict):
         fail("contract manifest files table is invalid")
+    canonical_files = json.dumps(
+        checksums, separators=(",", ":"), sort_keys=True
+    ).encode("utf-8")
+    if manifest.get("artifact_digest") != {
+        "algorithm": "sha256",
+        "hex": hashlib.sha256(canonical_files).hexdigest(),
+    }:
+        fail("contract snapshot artifact digest is invalid")
     for artifact_name, local_name in SNAPSHOT_FILES.items():
         path = root / local_name
         expected = checksums.get(artifact_name)
@@ -61,6 +71,26 @@ def verify_snapshot(
         actual = hashlib.sha256(path.read_bytes()).hexdigest()
         if actual != expected:
             fail(f"contract snapshot checksum mismatch: {path}")
+    schema_metadata = manifest.get("metric_schemas", {}).get(
+        "maze.metrics.v2"
+    )
+    catalog = root / "schemas/maze.metrics.v2.json"
+    digest_file = root / "schemas/maze.metrics.v2.sha256"
+    catalog_digest = hashlib.sha256(catalog.read_bytes()).hexdigest()
+    if (
+        digest_file.read_text(encoding="utf-8").strip() != catalog_digest
+        or schema_metadata
+        != {
+            "canonical_digest": {
+                "algorithm": "sha256",
+                "hex": catalog_digest,
+            },
+            "digest_path": "schemas/maze.metrics.v2.sha256",
+            "path": "schemas/maze.metrics.v2.json",
+            "schema_version": 2,
+        }
+    ):
+        fail("maze.metrics.v2 snapshot identity mismatch")
     return manifest
 
 

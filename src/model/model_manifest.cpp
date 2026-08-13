@@ -6,12 +6,17 @@
 #include <google/protobuf/util/json_util.h>
 #include <openssl/evp.h>
 
+#include <fcntl.h>
+#include <unistd.h>
+
 #include <array>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <limits>
 #include <sstream>
+#include <string_view>
 
 namespace {
 
@@ -58,6 +63,62 @@ bool ReadInteger(const Struct& object, const std::string& name,
         return false;
     }
     return true;
+}
+
+bool ReadModelVersion(const Struct& object, const std::string& name,
+                      ModelVersion& value, std::string& error) {
+    const Value* field = FindField(object, name);
+    if (!field) {
+        error = "manifest field '" + name + "' is missing";
+        return false;
+    }
+    if (field->kind_case() == Value::kStringValue) {
+        const std::string& decimal = field->string_value();
+        if (decimal.empty()) {
+            error = "manifest field '" + name +
+                    "' must be an unsigned decimal string";
+            return false;
+        }
+        ModelVersion parsed = 0;
+        for (const unsigned char character : decimal) {
+            if (character < '0' || character > '9') {
+                error = "manifest field '" + name +
+                        "' must be an unsigned decimal string";
+                return false;
+            }
+            const ModelVersion digit = character - '0';
+            if (parsed > (std::numeric_limits<ModelVersion>::max() - digit) /
+                             10) {
+                error = "manifest field '" + name + "' overflows uint64";
+                return false;
+            }
+            parsed = parsed * 10 + digit;
+        }
+        if (decimal.size() > 1 && decimal.front() == '0') {
+            error = "manifest field '" + name +
+                    "' must use canonical decimal form";
+            return false;
+        }
+        value = parsed;
+        return true;
+    }
+    if (field->kind_case() == Value::kNumberValue) {
+        constexpr double kLargestExactLegacyJsonInteger =
+            9007199254740991.0;  // 2^53 - 1
+        const double number = field->number_value();
+        if (!std::isfinite(number) || number < 0 ||
+            number > kLargestExactLegacyJsonInteger ||
+            std::floor(number) != number) {
+            error = "legacy numeric manifest field '" + name +
+                    "' must be an exact integer in [0, 2^53-1]";
+            return false;
+        }
+        value = static_cast<ModelVersion>(number);
+        return true;
+    }
+    error = "manifest field '" + name +
+            "' must be a decimal string or exact legacy integer";
+    return false;
 }
 
 bool ReadBoolean(const Struct& object, const std::string& name,
@@ -191,7 +252,7 @@ bool ParseManifestDocument(const Struct& document,
                            std::string& error) {
     const Struct* identity = nullptr;
     int64_t schema_version = 0;
-    int64_t model_version = 0;
+    ModelVersion model_version = 0;
     int64_t size_bytes = 0;
     int64_t seed = 0;
     int64_t train_updates = 0;
@@ -203,7 +264,7 @@ bool ParseManifestDocument(const Struct& document,
         !ReadContract(document, manifest.mutable_contract(), error) ||
         !ReadStruct(document, "identity", identity, error) ||
         !ReadString(*identity, "model_lineage_id", lineage, error) ||
-        !ReadInteger(*identity, "model_version", model_version, error) ||
+        !ReadModelVersion(*identity, "model_version", model_version, error) ||
         !ReadDigest(*identity, "artifact_digest",
                     manifest.mutable_identity()->mutable_artifact_digest(), error) ||
         !ReadDigest(*identity, "manifest_digest",
@@ -233,15 +294,13 @@ bool ParseManifestDocument(const Struct& document,
         !ReadBoolean(document, "ready", ready, error)) {
         return false;
     }
-    if (schema_version < 0 || schema_version > UINT32_MAX ||
-        model_version < 0) {
+    if (schema_version < 0 || schema_version > UINT32_MAX) {
         error = "manifest schema or model version is invalid";
         return false;
     }
     manifest.set_manifest_schema_version(static_cast<uint32_t>(schema_version));
     manifest.mutable_identity()->set_model_lineage_id(lineage);
-    manifest.mutable_identity()->set_model_version(
-        static_cast<uint64_t>(model_version));
+    manifest.mutable_identity()->set_model_version(model_version);
     manifest.set_size_bytes(size_bytes);
     manifest.set_seed(seed);
     manifest.set_train_updates(train_updates);
@@ -333,6 +392,142 @@ bool ShapeEquals(const google::protobuf::RepeatedField<int64_t>& actual,
     return true;
 }
 
+void WriteJsonString(std::ostream& output, std::string_view value) {
+    static constexpr char kHex[] = "0123456789abcdef";
+    output << '"';
+    for (const unsigned char character : value) {
+        switch (character) {
+            case '"': output << "\\\""; break;
+            case '\\': output << "\\\\"; break;
+            case '\b': output << "\\b"; break;
+            case '\f': output << "\\f"; break;
+            case '\n': output << "\\n"; break;
+            case '\r': output << "\\r"; break;
+            case '\t': output << "\\t"; break;
+            default:
+                if (character < 0x20) {
+                    output << "\\u00" << kHex[character >> 4]
+                           << kHex[character & 0x0f];
+                } else {
+                    output << static_cast<char>(character);
+                }
+        }
+    }
+    output << '"';
+}
+
+void WriteDigestJson(std::ostream& output,
+                     const common::ContentDigest& digest) {
+    WriteJsonString(output, digest.hex());
+}
+
+void WriteSchemaJson(std::ostream& output,
+                     const common::SchemaIdentity& schema) {
+    output << "{\"schema_id\":";
+    WriteJsonString(output, schema.schema_id());
+    output << ",\"schema_version\":" << schema.schema_version()
+           << ",\"canonical_digest\":";
+    WriteDigestJson(output, schema.canonical_digest());
+    output << '}';
+}
+
+void WriteShapeJson(
+    std::ostream& output,
+    const google::protobuf::RepeatedField<int64_t>& shape) {
+    output << '[';
+    for (int index = 0; index < shape.size(); ++index) {
+        if (index != 0) output << ',';
+        output << shape.Get(index);
+    }
+    output << ']';
+}
+
+std::string ModelManifestJson(
+    const training::ModelArtifactManifest& manifest) {
+    std::ostringstream output;
+    output << "{\"manifest_schema_version\":"
+           << manifest.manifest_schema_version()
+           << ",\"contract\":{\"package_name\":";
+    WriteJsonString(output, manifest.contract().package_name());
+    output << ",\"package_version\":";
+    WriteJsonString(output, manifest.contract().package_version());
+    output << ",\"source_digest\":";
+    WriteDigestJson(output, manifest.contract().source_digest());
+    output << ",\"artifact_digest\":";
+    WriteDigestJson(output, manifest.contract().artifact_digest());
+    output << ",\"platform\":";
+    WriteJsonString(output, manifest.contract().platform());
+    output << ",\"generator_identity\":";
+    WriteJsonString(output, manifest.contract().generator_identity());
+    output << "},\"identity\":{\"model_lineage_id\":";
+    WriteJsonString(output, manifest.identity().model_lineage_id());
+    output << ",\"model_version\":\""
+           << manifest.identity().model_version() << '"'
+           << ",\"artifact_digest\":";
+    WriteDigestJson(output, manifest.identity().artifact_digest());
+    output << ",\"manifest_digest\":";
+    WriteDigestJson(output, manifest.identity().manifest_digest());
+    output << "},\"observation_schema\":";
+    WriteSchemaJson(output, manifest.observation_schema());
+    output << ",\"action_schema\":";
+    WriteSchemaJson(output, manifest.action_schema());
+    output << ",\"model_architecture_id\":";
+    WriteJsonString(output, manifest.model_architecture_id());
+    output << ",\"tensor_dtype\":";
+    WriteJsonString(output, manifest.tensor_dtype());
+    output << ",\"input_shape\":";
+    WriteShapeJson(output, manifest.input_shape());
+    output << ",\"action_shape\":";
+    WriteShapeJson(output, manifest.action_shape());
+    output << ",\"value_shape\":";
+    WriteShapeJson(output, manifest.value_shape());
+    output << ",\"artifact_uri\":";
+    WriteJsonString(output, manifest.artifact_uri());
+    output << ",\"model_file\":";
+    WriteJsonString(output, manifest.model_file());
+    output << ",\"size_bytes\":" << manifest.size_bytes()
+           << ",\"seed\":" << manifest.seed()
+           << ",\"train_updates\":" << manifest.train_updates()
+           << ",\"trained_samples\":" << manifest.trained_samples()
+           << ",\"training_config_digest\":";
+    WriteDigestJson(output, manifest.training_config_digest());
+    output << ",\"training_semantics\":{\"training_contract_id\":";
+    WriteJsonString(
+        output, manifest.training_semantics().training_contract_id());
+    output << ",\"observation_schema\":";
+    WriteSchemaJson(
+        output, manifest.training_semantics().observation_schema());
+    output << ",\"action_schema\":";
+    WriteSchemaJson(output, manifest.training_semantics().action_schema());
+    output << ",\"reward_schema\":";
+    WriteSchemaJson(output, manifest.training_semantics().reward_schema());
+    output << ",\"policy_distribution_schema_id\":";
+    WriteJsonString(
+        output,
+        manifest.training_semantics().policy_distribution_schema_id());
+    output << ",\"model_architecture_id\":";
+    WriteJsonString(
+        output, manifest.training_semantics().model_architecture_id());
+    output << ",\"semantics_digest\":";
+    WriteDigestJson(output, manifest.training_semantics().semantics_digest());
+    output << "},\"published_at_unix_ms\":"
+           << manifest.published_at_unix_ms()
+           << ",\"ready\":" << (manifest.ready() ? "true" : "false")
+           << "}\n";
+    return output.str();
+}
+
+bool WriteAll(int descriptor, const char* data, std::size_t size) {
+    std::size_t written = 0;
+    while (written < size) {
+        const ssize_t count =
+            ::write(descriptor, data + written, size - written);
+        if (count <= 0) return false;
+        written += static_cast<std::size_t>(count);
+    }
+    return true;
+}
+
 }  // namespace
 
 bool ComputeFileSha256(const std::string& path,
@@ -359,7 +554,7 @@ bool ComputeFileSha256(const std::string& path,
 
 bool ValidateModelManifest(const AIServerConfig& config,
                            const training::ModelArtifactManifest& source,
-                           int expected_version,
+                           std::optional<ModelVersion> expected_version,
                            std::string& error) {
     if (source.manifest_schema_version() != 1 || !source.ready() ||
         source.contract().SerializeAsString() !=
@@ -371,16 +566,13 @@ bool ValidateModelManifest(const AIServerConfig& config,
     }
     if (source.identity().model_lineage_id() !=
             config.model.expected_model_lineage_id ||
-        (expected_version >= 0 &&
-         source.identity().model_version() !=
-             static_cast<uint64_t>(expected_version)) ||
+        (expected_version.has_value() &&
+         source.identity().model_version() != *expected_version) ||
         !IsSha256(source.identity().artifact_digest()) ||
         !IsSha256(source.identity().manifest_digest()) ||
         !IsSha256(source.training_config_digest()) ||
         source.size_bytes() <= 0 || source.train_updates() < 0 ||
-        source.trained_samples() < 0 ||
-        source.identity().model_version() >
-            static_cast<uint64_t>(std::numeric_limits<int>::max())) {
+        source.trained_samples() < 0) {
         error = "model manifest identity or counters are invalid";
         return false;
     }
@@ -421,8 +613,7 @@ void AssignModelManifest(const training::ModelArtifactManifest& source,
         static_cast<int>(source.manifest_schema_version());
     destination.contract_version = source.contract().package_version();
     destination.model_lineage_id = source.identity().model_lineage_id();
-    destination.model_version =
-        static_cast<int>(source.identity().model_version());
+    destination.model_version = source.identity().model_version();
     destination.sha256 = source.identity().artifact_digest().hex();
     destination.manifest_digest = source.identity().manifest_digest().hex();
     destination.artifact_uri = source.artifact_uri();
@@ -447,16 +638,6 @@ void AssignModelManifest(const training::ModelArtifactManifest& source,
     destination.model_path = model_path;
 }
 
-bool LoadModelManifest(const AIServerConfig& config,
-                       ModelManifest& manifest,
-                       std::string& error) {
-    const std::filesystem::path manifest_path =
-        std::filesystem::path(config.model.local_train_dir) /
-        "active" / config.model.manifest_name;
-    return LoadModelManifestFile(
-        config, manifest_path.string(), manifest, error);
-}
-
 bool LoadModelManifestFile(const AIServerConfig& config,
                            const std::string& manifest_file_path,
                            ModelManifest& manifest,
@@ -478,7 +659,7 @@ bool LoadModelManifestFile(const AIServerConfig& config,
     }
     training::ModelArtifactManifest wire;
     if (!ParseManifestDocument(document, wire, error) ||
-        !ValidateModelManifest(config, wire, -1, error)) {
+        !ValidateModelManifest(config, wire, std::nullopt, error)) {
         return false;
     }
     const std::filesystem::path model_path =
@@ -499,5 +680,29 @@ bool LoadModelManifestFile(const AIServerConfig& config,
     }
     AssignModelManifest(wire, model_path.string(), manifest);
     manifest.manifest_path = manifest_path.string();
+    return true;
+}
+
+bool WriteModelManifestFile(
+    const training::ModelArtifactManifest& manifest,
+    const std::string& manifest_file_path,
+    std::string& error) {
+    const std::string payload = ModelManifestJson(manifest);
+    const int descriptor = ::open(
+        manifest_file_path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0600);
+    if (descriptor < 0) {
+        error = "cannot open model manifest for writing: " +
+                manifest_file_path;
+        return false;
+    }
+    bool ok = WriteAll(descriptor, payload.data(), payload.size());
+    if (ok) ok = ::fsync(descriptor) == 0;
+    if (::close(descriptor) != 0) ok = false;
+    if (!ok) {
+        error = "cannot durably write model manifest: " +
+                manifest_file_path;
+        return false;
+    }
+    error.clear();
     return true;
 }

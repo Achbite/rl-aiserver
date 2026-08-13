@@ -70,9 +70,9 @@ std::string Sha256(const std::string& payload) {
 AIServerConfig Config(const std::filesystem::path& root) {
     AIServerConfig config;
     config.contract.source_digest.hex =
-        "fc1bf2e3dfd804431f2528d8da53227e55ca9b58b32fc95327558d91cebb3b97";
+        "7e3eb7227e67a2a880130c9c82f87041691c0095f838a60f80abc1f387c1c5b3";
     config.contract.artifact_digest.hex =
-        "d90083d97e377230f50c820d040a5d83ce7435dc88c4f948c222c86ac4a429ae";
+        "077ac6d61486fafd5f0430eeb05a492764b36e073282f6d7626d0414bb5b2ddf";
     config.contract.generator_identity =
         "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8";
     config.training_semantics.observation_schema = {
@@ -92,7 +92,7 @@ AIServerConfig Config(const std::filesystem::path& root) {
 
 training::ModelArtifactManifest Wire(const AIServerConfig& config,
                                      const std::string& artifact_digest,
-                                     int version,
+                                     ModelVersion version,
                                      int64_t train_updates,
                                      int64_t trained_samples) {
     training::ModelArtifactManifest manifest;
@@ -108,7 +108,7 @@ training::ModelArtifactManifest Wire(const AIServerConfig& config,
     contract->set_generator_identity(config.contract.generator_identity);
     auto* identity = manifest.mutable_identity();
     identity->set_model_lineage_id(config.model.expected_model_lineage_id);
-    identity->set_model_version(static_cast<uint64_t>(version));
+    identity->set_model_version(version);
     SetDigest(artifact_digest, identity->mutable_artifact_digest());
     SetSchema(config.training_semantics.observation_schema,
               manifest.mutable_observation_schema());
@@ -122,8 +122,8 @@ training::ModelArtifactManifest Wire(const AIServerConfig& config,
     manifest.add_action_shape(config.model.expected_action_dim);
     manifest.add_value_shape(1);
     manifest.add_value_shape(1);
-    manifest.set_artifact_uri("file://model_v000000.onnx");
-    manifest.set_model_file("model_v000000.onnx");
+    manifest.set_artifact_uri("file://000000/SaveModel.onnx");
+    manifest.set_model_file("SaveModel.onnx");
     manifest.set_size_bytes(11);
     manifest.set_seed(0);
     manifest.set_train_updates(train_updates);
@@ -229,9 +229,9 @@ int main() {
     const fs::path root = fs::temp_directory_path() /
                           ("maze-manifest-test-" +
                            std::to_string(std::rand()));
-    const fs::path active_dir = root / "local-train" / "active";
-    fs::create_directories(active_dir);
-    const fs::path model_path = active_dir / "model_v000000.onnx";
+    const fs::path version_dir = root / "local-train" / "cache" / "000000";
+    fs::create_directories(version_dir);
+    const fs::path model_path = version_dir / "SaveModel.onnx";
     {
         std::ofstream model(model_path, std::ios::binary);
         model << "model-bytes";
@@ -243,61 +243,111 @@ int main() {
     const AIServerConfig config = Config(root);
 
     auto valid = Wire(config, checksum, 0, 0, 0);
-    WriteManifest(active_dir / "manifest.json", valid);
+    WriteManifest(version_dir / "manifest.json", valid);
     ModelManifest loaded;
-    Require(LoadModelManifest(config, loaded, error),
-            "load valid 0.10.0 manifest: " + error);
+    Require(LoadModelManifestFile(
+                config, (version_dir / "manifest.json").string(),
+                loaded, error),
+            "load valid 0.11.0 manifest: " + error);
     Require(loaded.model_version == 0 && loaded.sha256 == checksum &&
                 loaded.observation_schema_id == "maze.observation.v3",
             "preserve model and schema identity");
 
     auto trained = Wire(config, checksum, 6, 6, 3072);
-    WriteManifest(active_dir / "manifest.json", trained);
+    WriteManifest(version_dir / "manifest.json", trained);
     Require(LoadModelManifestFile(
-                config, (active_dir / "manifest.json").string(),
+                config, (version_dir / "manifest.json").string(),
                 loaded, error),
             "load trained model identity: " + error);
     Require(loaded.model_version == 6 && loaded.train_updates == 6 &&
                 loaded.trained_samples == 3072,
             "preserve trained counters");
 
+    const fs::path persisted_manifest = version_dir / "persisted.json";
+    error.clear();
+    Require(WriteModelManifestFile(
+                trained, persisted_manifest.string(), error),
+            "persist full wire manifest: " + error);
+    ModelManifest persisted;
+    Require(LoadModelManifestFile(
+                config, persisted_manifest.string(), persisted, error) &&
+                persisted.wire.SerializeAsString() ==
+                    trained.SerializeAsString(),
+            "persisted manifest round-trips full identity: " + error);
+
     auto independent_counters = Wire(config, checksum, 7, 42, 3072);
     error.clear();
     Require(ValidateModelManifest(
-                config, independent_counters, -1, error),
+                config, independent_counters, std::nullopt, error),
             "publication version and train-update count are independent: " +
                 error);
 
-    auto overflowing_version = independent_counters;
-    overflowing_version.mutable_identity()->set_model_version(
-        static_cast<uint64_t>(std::numeric_limits<int>::max()) + 1U);
-    auto overflow_digest_source = overflowing_version;
-    overflow_digest_source.mutable_identity()->clear_manifest_digest();
-    SetDigest(Sha256(DeterministicBytes(overflow_digest_source)),
-              overflowing_version.mutable_identity()
-                  ->mutable_manifest_digest());
+    auto maximum_version = independent_counters;
+    maximum_version.mutable_identity()->set_model_version(
+        std::numeric_limits<uint64_t>::max());
+    auto maximum_digest_source = maximum_version;
+    maximum_digest_source.mutable_identity()->clear_manifest_digest();
+    SetDigest(Sha256(DeterministicBytes(maximum_digest_source)),
+              maximum_version.mutable_identity()->mutable_manifest_digest());
     error.clear();
-    Require(!ValidateModelManifest(
-                config, overflowing_version, -1, error),
-            "wire publication versions that overflow the local identity fail closed");
+    Require(ValidateModelManifest(
+                config, maximum_version, std::nullopt, error),
+            "the complete uint64 publication domain is valid: " + error);
+    const fs::path maximum_manifest = version_dir / "maximum.json";
+    Require(WriteModelManifestFile(
+                maximum_version, maximum_manifest.string(), error),
+            "write maximum uint64 manifest: " + error);
+    Require(LoadModelManifestFile(
+                config, maximum_manifest.string(), loaded, error) &&
+                loaded.model_version == std::numeric_limits<uint64_t>::max(),
+            "maximum uint64 manifest round-trips without JSON precision loss: " +
+                error);
+
+    constexpr ModelVersion kLargestExactLegacyJsonInteger =
+        (ModelVersion{1} << 53) - 1;
+    const auto legacy_exact = Wire(
+        config, checksum, kLargestExactLegacyJsonInteger, 42, 3072);
+    const fs::path legacy_exact_manifest =
+        version_dir / "legacy-exact-numeric.json";
+    WriteManifest(legacy_exact_manifest, legacy_exact);
+    Require(LoadModelManifestFile(
+                config, legacy_exact_manifest.string(), loaded, error) &&
+                loaded.model_version == kLargestExactLegacyJsonInteger,
+            "legacy numeric model_version accepts the exact 2^53-1 boundary: " +
+                error);
+
+    const auto unsafe_numeric = Wire(
+        config, checksum, ModelVersion{1} << 53, 42, 3072);
+    const fs::path unsafe_numeric_manifest =
+        version_dir / "unsafe-legacy-numeric.json";
+    WriteManifest(unsafe_numeric_manifest, unsafe_numeric);
+    Require(!LoadModelManifestFile(
+                config, unsafe_numeric_manifest.string(), loaded, error),
+            "legacy numeric model_version above 2^53-1 must fail closed");
 
     auto legacy = trained;
     legacy.mutable_contract()->set_package_version("0.7.0");
-    WriteManifest(active_dir / "manifest.json", legacy);
-    Require(!LoadModelManifest(config, loaded, error),
+    WriteManifest(version_dir / "manifest.json", legacy);
+    Require(!LoadModelManifestFile(
+                config, (version_dir / "manifest.json").string(),
+                loaded, error),
             "legacy contract must fail closed");
 
     auto wrong_shape = trained;
     wrong_shape.set_input_shape(1, 13);
-    WriteManifest(active_dir / "manifest.json", wrong_shape);
-    Require(!LoadModelManifest(config, loaded, error),
+    WriteManifest(version_dir / "manifest.json", wrong_shape);
+    Require(!LoadModelManifestFile(
+                config, (version_dir / "manifest.json").string(),
+                loaded, error),
             "legacy observation shape must fail closed");
 
     auto wrong_manifest_digest = trained;
     wrong_manifest_digest.mutable_identity()->mutable_manifest_digest()->
         set_hex(std::string(64, 'f'));
-    WriteManifest(active_dir / "manifest.json", wrong_manifest_digest);
-    Require(!LoadModelManifest(config, loaded, error),
+    WriteManifest(version_dir / "manifest.json", wrong_manifest_digest);
+    Require(!LoadModelManifestFile(
+                config, (version_dir / "manifest.json").string(),
+                loaded, error),
             "manifest digest mismatch must fail closed");
 
     fs::remove_all(root);

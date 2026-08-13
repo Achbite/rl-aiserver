@@ -6,6 +6,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -1147,7 +1148,9 @@ int main() {
 
     training::SampleBatch batch;
     batch.set_batch_id("stale-batch");
-    batch.mutable_behavior_policy()->set_model_version(139);
+    constexpr uint64_t kHighBehaviorVersion =
+        std::numeric_limits<uint64_t>::max();
+    batch.mutable_behavior_policy()->set_model_version(kHighBehaviorVersion);
     for (int index = 0; index < 8; ++index) batch.add_samples();
     Require(sender.Enqueue(batch), "stale batch was not enqueued");
 
@@ -1162,7 +1165,8 @@ int main() {
 
     Require(snapshot.producer_stale_count == 8,
             "producer stale disposition did not count samples");
-    Require(snapshot.producer_stale_samples_by_model.at(139) == 8,
+    Require(snapshot.producer_stale_samples_by_model.at(
+                kHighBehaviorVersion) == 8,
             "producer stale disposition lost behavior model identity");
     Require(snapshot.queue_samples == 0 && snapshot.queue_fragments == 0,
             "producer stale fragment remained queued");

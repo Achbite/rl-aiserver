@@ -2,9 +2,11 @@
 
 #include "config/config_loader.h"
 #include "contracts/contract_namespaces.h"
+#include "model/model_version.h"
 #include "training.pb.h"
 
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -13,7 +15,7 @@ struct ModelManifest {
     int schema_version = 0;
     std::string contract_version;
     std::string model_lineage_id;
-    int model_version = -1;
+    ModelVersion model_version = 0;
     std::string manifest_digest;
     std::string artifact_uri;
     std::string model_file;
@@ -33,25 +35,31 @@ struct ModelManifest {
     bool ready = false;
     std::string model_path;
     std::string manifest_path;
+
+    bool HasModelIdentity() const {
+        return wire.has_identity() &&
+               wire.identity().model_version() == model_version;
+    }
 };
 
 bool ValidateModelManifest(const AIServerConfig& config,
                            const training::ModelArtifactManifest& source,
-                           int expected_version,
+                           std::optional<ModelVersion> expected_version,
                            std::string& error);
 
 void AssignModelManifest(const training::ModelArtifactManifest& source,
                          const std::string& model_path,
                          ModelManifest& destination);
 
-bool LoadModelManifest(const AIServerConfig& config,
-                       ModelManifest& manifest,
-                       std::string& error);
-
 bool LoadModelManifestFile(const AIServerConfig& config,
                            const std::string& manifest_path,
                            ModelManifest& manifest,
                            std::string& error);
+
+bool WriteModelManifestFile(
+    const training::ModelArtifactManifest& manifest,
+    const std::string& manifest_path,
+    std::string& error);
 
 bool ComputeFileSha256(const std::string& path,
                        std::string& checksum,

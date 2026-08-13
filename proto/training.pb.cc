@@ -692,6 +692,234 @@ struct MetricSnapshotDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricSnapshotDefaultTypeInternal _MetricSnapshot_default_instance_;
+PROTOBUF_CONSTEXPR RawMetricSumCount::RawMetricSumCount(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.field_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.sum_)*/0
+  , /*decltype(_impl_.count_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RawMetricSumCountDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RawMetricSumCountDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RawMetricSumCountDefaultTypeInternal() {}
+  union {
+    RawMetricSumCount _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RawMetricSumCountDefaultTypeInternal _RawMetricSumCount_default_instance_;
+PROTOBUF_CONSTEXPR AgentEpisodeMetricFact::AgentEpisodeMetricFact(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.reward_components_)*/{}
+  , /*decltype(_impl_.termination_reason_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.behavior_model_lineage_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.episode_return_)*/0
+  , /*decltype(_impl_.agent_id_)*/0u
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_.transition_count_)*/uint64_t{0u}
+  , /*decltype(_impl_.unique_cell_count_)*/uint64_t{0u}
+  , /*decltype(_impl_.blocked_move_count_)*/uint64_t{0u}
+  , /*decltype(_impl_.attempted_move_count_)*/uint64_t{0u}
+  , /*decltype(_impl_.behavior_model_version_min_)*/uint64_t{0u}
+  , /*decltype(_impl_.behavior_model_version_max_)*/uint64_t{0u}
+  , /*decltype(_impl_.shortest_action_steps_)*/0u
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct AgentEpisodeMetricFactDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AgentEpisodeMetricFactDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AgentEpisodeMetricFactDefaultTypeInternal() {}
+  union {
+    AgentEpisodeMetricFact _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AgentEpisodeMetricFactDefaultTypeInternal _AgentEpisodeMetricFact_default_instance_;
+PROTOBUF_CONSTEXPR EpisodeMetricFact::EpisodeMetricFact(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.agents_)*/{}
+  , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.environment_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.episode_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.training_semantics_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct EpisodeMetricFactDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EpisodeMetricFactDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EpisodeMetricFactDefaultTypeInternal() {}
+  union {
+    EpisodeMetricFact _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EpisodeMetricFactDefaultTypeInternal _EpisodeMetricFact_default_instance_;
+PROTOBUF_CONSTEXPR TrainUpdateMetricFact::TrainUpdateMetricFact(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.ppo_statistics_)*/{}
+  , /*decltype(_impl_.train_update_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.delivery_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.behavior_model_lineage_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.published_model_)*/nullptr
+  , /*decltype(_impl_.training_semantics_)*/nullptr
+  , /*decltype(_impl_.train_update_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.cumulative_trained_samples_)*/int64_t{0}
+  , /*decltype(_impl_.actual_batch_size_)*/int64_t{0}
+  , /*decltype(_impl_.behavior_model_version_min_)*/uint64_t{0u}
+  , /*decltype(_impl_.behavior_model_version_max_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct TrainUpdateMetricFactDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TrainUpdateMetricFactDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TrainUpdateMetricFactDefaultTypeInternal() {}
+  union {
+    TrainUpdateMetricFact _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TrainUpdateMetricFactDefaultTypeInternal _TrainUpdateMetricFact_default_instance_;
+PROTOBUF_CONSTEXPR MetricEvent::MetricEvent(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.contract_)*/nullptr
+  , /*decltype(_impl_.schema_identity_)*/nullptr
+  , /*decltype(_impl_.source_)*/nullptr
+  , /*decltype(_impl_.event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.committed_at_unix_ms_)*/int64_t{0}
+  , /*decltype(_impl_.fact_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_._oneof_case_)*/{}} {}
+struct MetricEventDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricEventDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricEventDefaultTypeInternal() {}
+  union {
+    MetricEvent _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricEventDefaultTypeInternal _MetricEvent_default_instance_;
+PROTOBUF_CONSTEXPR MetricSequenceGap::MetricSequenceGap(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.reason_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.first_unavailable_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.last_unavailable_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.oldest_available_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct MetricSequenceGapDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricSequenceGapDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricSequenceGapDefaultTypeInternal() {}
+  union {
+    MetricSequenceGap _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricSequenceGapDefaultTypeInternal _MetricSequenceGap_default_instance_;
+PROTOBUF_CONSTEXPR MetricBatch::MetricBatch(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.events_)*/{}
+  , /*decltype(_impl_.contract_)*/nullptr
+  , /*decltype(_impl_.schema_identity_)*/nullptr
+  , /*decltype(_impl_.source_)*/nullptr
+  , /*decltype(_impl_.batch_digest_)*/nullptr
+  , /*decltype(_impl_.gap_)*/nullptr
+  , /*decltype(_impl_.batch_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.created_at_unix_ms_)*/int64_t{0}
+  , /*decltype(_impl_.first_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.last_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.final_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.event_time_watermark_unix_ms_)*/int64_t{0}
+  , /*decltype(_impl_.heartbeat_)*/false
+  , /*decltype(_impl_.source_final_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct MetricBatchDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricBatchDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricBatchDefaultTypeInternal() {}
+  union {
+    MetricBatch _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricBatchDefaultTypeInternal _MetricBatch_default_instance_;
+PROTOBUF_CONSTEXPR MetricBatchCursor::MetricBatchCursor(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.source_)*/nullptr
+  , /*decltype(_impl_.acknowledged_batch_digest_)*/nullptr
+  , /*decltype(_impl_.acknowledged_batch_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.acknowledged_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct MetricBatchCursorDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricBatchCursorDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricBatchCursorDefaultTypeInternal() {}
+  union {
+    MetricBatchCursor _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricBatchCursorDefaultTypeInternal _MetricBatchCursor_default_instance_;
+PROTOBUF_CONSTEXPR GetMetricBatchReq::GetMetricBatchReq(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.contract_)*/nullptr
+  , /*decltype(_impl_.consumer_)*/nullptr
+  , /*decltype(_impl_.cursor_)*/nullptr
+  , /*decltype(_impl_.max_bytes_)*/int64_t{0}
+  , /*decltype(_impl_.max_events_)*/0u
+  , /*decltype(_impl_.wait_timeout_ms_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct GetMetricBatchReqDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetMetricBatchReqDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetMetricBatchReqDefaultTypeInternal() {}
+  union {
+    GetMetricBatchReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetMetricBatchReqDefaultTypeInternal _GetMetricBatchReq_default_instance_;
+PROTOBUF_CONSTEXPR GetMetricBatchRsp::GetMetricBatchRsp(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.batch_)*/nullptr
+  , /*decltype(_impl_.producer_)*/nullptr
+  , /*decltype(_impl_.ret_code_)*/0
+  , /*decltype(_impl_.result_)*/0
+  , /*decltype(_impl_.oldest_available_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.latest_available_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct GetMetricBatchRspDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetMetricBatchRspDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetMetricBatchRspDefaultTypeInternal() {}
+  union {
+    GetMetricBatchRsp _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetMetricBatchRspDefaultTypeInternal _GetMetricBatchRsp_default_instance_;
+PROTOBUF_CONSTEXPR AckMetricBatchReq::AckMetricBatchReq(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.contract_)*/nullptr
+  , /*decltype(_impl_.consumer_)*/nullptr
+  , /*decltype(_impl_.cursor_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct AckMetricBatchReqDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AckMetricBatchReqDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AckMetricBatchReqDefaultTypeInternal() {}
+  union {
+    AckMetricBatchReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AckMetricBatchReqDefaultTypeInternal _AckMetricBatchReq_default_instance_;
+PROTOBUF_CONSTEXPR AckMetricBatchRsp::AckMetricBatchRsp(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.producer_)*/nullptr
+  , /*decltype(_impl_.committed_cursor_)*/nullptr
+  , /*decltype(_impl_.ret_code_)*/0
+  , /*decltype(_impl_.result_)*/0
+  , /*decltype(_impl_.oldest_available_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_.latest_available_event_sequence_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct AckMetricBatchRspDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AckMetricBatchRspDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AckMetricBatchRspDefaultTypeInternal() {}
+  union {
+    AckMetricBatchRsp _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AckMetricBatchRspDefaultTypeInternal _AckMetricBatchRsp_default_instance_;
 PROTOBUF_CONSTEXPR AIServerStatusReq::AIServerStatusReq(
     ::_pbi::ConstantInitialized) {}
 struct AIServerStatusReqDefaultTypeInternal {
@@ -838,11 +1066,14 @@ struct GetModelManifestReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetModelManifestReqDefaultTypeInternal _GetModelManifestReq_default_instance_;
 PROTOBUF_CONSTEXPR GetModelManifestRsp::GetModelManifestRsp(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_._has_bits_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.manifest_)*/nullptr
   , /*decltype(_impl_.distributor_)*/nullptr
-  , /*decltype(_impl_.ret_code_)*/0
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+  , /*decltype(_impl_.available_floor_model_version_)*/uint64_t{0u}
+  , /*decltype(_impl_.latest_available_model_version_)*/uint64_t{0u}
+  , /*decltype(_impl_.ret_code_)*/0} {}
 struct GetModelManifestRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR GetModelManifestRspDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -927,7 +1158,9 @@ struct ModelDistributorStatusReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ModelDistributorStatusReqDefaultTypeInternal _ModelDistributorStatusReq_default_instance_;
 PROTOBUF_CONSTEXPR ModelDistributorStatusRsp::ModelDistributorStatusRsp(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.last_error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_._has_bits_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_.last_error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.contract_)*/nullptr
   , /*decltype(_impl_.distributor_)*/nullptr
   , /*decltype(_impl_.latest_model_)*/nullptr
@@ -946,7 +1179,8 @@ PROTOBUF_CONSTEXPR ModelDistributorStatusRsp::ModelDistributorStatusRsp(
   , /*decltype(_impl_.loaded_ack_count_)*/int64_t{0}
   , /*decltype(_impl_.failed_ack_count_)*/int64_t{0}
   , /*decltype(_impl_.timestamp_unix_ms_)*/int64_t{0}
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+  , /*decltype(_impl_.available_floor_model_version_)*/uint64_t{0u}
+  , /*decltype(_impl_.latest_available_model_version_)*/uint64_t{0u}} {}
 struct ModelDistributorStatusRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ModelDistributorStatusRspDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -959,8 +1193,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace v1
 }  // namespace training
 }  // namespace rl
-static ::_pb::Metadata file_level_metadata_training_2eproto[45];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_training_2eproto[20];
+static ::_pb::Metadata file_level_metadata_training_2eproto[57];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_training_2eproto[22];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_training_2eproto = nullptr;
 
 const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -1443,6 +1677,163 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSnapshot, _impl_.descriptors_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSnapshot, _impl_.values_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.field_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.sum_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.count_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.agent_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.episode_return_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.transition_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.termination_reason_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.shortest_action_steps_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.unique_cell_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.blocked_move_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.attempted_move_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.reward_components_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.behavior_model_version_min_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.behavior_model_version_max_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.behavior_model_lineage_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.task_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.environment_instance_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.episode_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.training_semantics_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.agents_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.train_update_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.train_update_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.published_model_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.delivery_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.training_semantics_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.cumulative_trained_samples_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.actual_batch_size_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.behavior_model_version_min_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.behavior_model_version_max_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.ppo_statistics_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.behavior_model_lineage_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _internal_metadata_),
+  ~0u,  // no _extensions_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_._oneof_case_[0]),
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.contract_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.schema_identity_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.source_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.committed_at_unix_ms_),
+  ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.fact_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSequenceGap, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSequenceGap, _impl_.first_unavailable_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSequenceGap, _impl_.last_unavailable_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSequenceGap, _impl_.oldest_available_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSequenceGap, _impl_.reason_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.contract_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.schema_identity_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.source_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.batch_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.batch_digest_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.created_at_unix_ms_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.first_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.last_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.events_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.heartbeat_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.source_final_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.final_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.event_time_watermark_unix_ms_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatch, _impl_.gap_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatchCursor, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatchCursor, _impl_.source_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatchCursor, _impl_.acknowledged_batch_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatchCursor, _impl_.acknowledged_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricBatchCursor, _impl_.acknowledged_batch_digest_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchReq, _impl_.contract_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchReq, _impl_.consumer_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchReq, _impl_.cursor_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchReq, _impl_.max_events_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchReq, _impl_.max_bytes_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchReq, _impl_.wait_timeout_ms_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _impl_.ret_code_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _impl_.result_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _impl_.message_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _impl_.batch_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _impl_.producer_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _impl_.oldest_available_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetMetricBatchRsp, _impl_.latest_available_event_sequence_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchReq, _impl_.contract_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchReq, _impl_.consumer_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchReq, _impl_.cursor_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _impl_.ret_code_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _impl_.result_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _impl_.message_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _impl_.producer_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _impl_.oldest_available_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _impl_.latest_available_event_sequence_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckMetricBatchRsp, _impl_.committed_cursor_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::AIServerStatusReq, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -1548,7 +1939,7 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestReq, _impl_.requested_model_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestReq, _impl_.requester_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestReq, _impl_.latest_in_lineage_),
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestRsp, _impl_._has_bits_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestRsp, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -1558,6 +1949,14 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestRsp, _impl_.message_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestRsp, _impl_.manifest_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestRsp, _impl_.distributor_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestRsp, _impl_.available_floor_model_version_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetModelManifestRsp, _impl_.latest_available_model_version_),
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  0,
+  1,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::DownloadModelReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1602,7 +2001,7 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelDistributorStatusRsp, _impl_._has_bits_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelDistributorStatusRsp, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -1627,6 +2026,29 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelDistributorStatusRsp, _impl_.latest_ack_status_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelDistributorStatusRsp, _impl_.last_error_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelDistributorStatusRsp, _impl_.timestamp_unix_ms_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelDistributorStatusRsp, _impl_.available_floor_model_version_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelDistributorStatusRsp, _impl_.latest_available_model_version_),
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  0,
+  1,
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::rl::training::v1::ModelIdentity)},
@@ -1661,19 +2083,31 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 436, -1, -1, sizeof(::rl::training::v1::MetricDescriptor)},
   { 454, -1, -1, sizeof(::rl::training::v1::MetricValue)},
   { 467, -1, -1, sizeof(::rl::training::v1::MetricSnapshot)},
-  { 478, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
-  { 484, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
-  { 531, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
-  { 557, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
-  { 564, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
-  { 575, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
-  { 584, -1, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
-  { 594, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
-  { 602, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
-  { 611, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
-  { 622, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
-  { 632, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
-  { 638, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
+  { 478, -1, -1, sizeof(::rl::training::v1::RawMetricSumCount)},
+  { 487, -1, -1, sizeof(::rl::training::v1::AgentEpisodeMetricFact)},
+  { 506, -1, -1, sizeof(::rl::training::v1::EpisodeMetricFact)},
+  { 517, -1, -1, sizeof(::rl::training::v1::TrainUpdateMetricFact)},
+  { 534, -1, -1, sizeof(::rl::training::v1::MetricEvent)},
+  { 548, -1, -1, sizeof(::rl::training::v1::MetricSequenceGap)},
+  { 558, -1, -1, sizeof(::rl::training::v1::MetricBatch)},
+  { 578, -1, -1, sizeof(::rl::training::v1::MetricBatchCursor)},
+  { 588, -1, -1, sizeof(::rl::training::v1::GetMetricBatchReq)},
+  { 600, -1, -1, sizeof(::rl::training::v1::GetMetricBatchRsp)},
+  { 613, -1, -1, sizeof(::rl::training::v1::AckMetricBatchReq)},
+  { 622, -1, -1, sizeof(::rl::training::v1::AckMetricBatchRsp)},
+  { 635, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
+  { 641, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
+  { 688, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
+  { 714, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
+  { 721, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
+  { 732, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
+  { 741, 753, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
+  { 759, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
+  { 767, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
+  { 776, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
+  { 787, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
+  { 797, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
+  { 803, 830, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1709,6 +2143,18 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::rl::training::v1::_MetricDescriptor_default_instance_._instance,
   &::rl::training::v1::_MetricValue_default_instance_._instance,
   &::rl::training::v1::_MetricSnapshot_default_instance_._instance,
+  &::rl::training::v1::_RawMetricSumCount_default_instance_._instance,
+  &::rl::training::v1::_AgentEpisodeMetricFact_default_instance_._instance,
+  &::rl::training::v1::_EpisodeMetricFact_default_instance_._instance,
+  &::rl::training::v1::_TrainUpdateMetricFact_default_instance_._instance,
+  &::rl::training::v1::_MetricEvent_default_instance_._instance,
+  &::rl::training::v1::_MetricSequenceGap_default_instance_._instance,
+  &::rl::training::v1::_MetricBatch_default_instance_._instance,
+  &::rl::training::v1::_MetricBatchCursor_default_instance_._instance,
+  &::rl::training::v1::_GetMetricBatchReq_default_instance_._instance,
+  &::rl::training::v1::_GetMetricBatchRsp_default_instance_._instance,
+  &::rl::training::v1::_AckMetricBatchReq_default_instance_._instance,
+  &::rl::training::v1::_AckMetricBatchRsp_default_instance_._instance,
   &::rl::training::v1::_AIServerStatusReq_default_instance_._instance,
   &::rl::training::v1::_AIServerStatusRsp_default_instance_._instance,
   &::rl::training::v1::_ModelArtifactManifest_default_instance_._instance,
@@ -1983,263 +2429,378 @@ const char descriptor_table_protodef_training_2eproto[] PROTOBUF_SECTION_VARIABL
   "uence\030\002 \001(\004\022\031\n\021timestamp_unix_ms\030\003 \001(\003\0225"
   "\n\013descriptors\030\004 \003(\0132 .rl.training.v1.Met"
   "ricDescriptor\022+\n\006values\030\005 \003(\0132\033.rl.train"
-  "ing.v1.MetricValue\"\023\n\021AIServerStatusReq\""
-  "\227\013\n\021AIServerStatusRsp\0220\n\010contract\030\001 \001(\0132"
-  "\036.rl.common.v1.ContractIdentity\0227\n\010aiser"
-  "ver\030\002 \001(\0132%.rl.common.v1.ServiceInstance"
-  "Identity\022,\n\005state\030\003 \001(\0162\035.rl.training.v1"
-  ".AIServerState\022\r\n\005ready\030\004 \001(\010\022\031\n\021distrib"
-  "utor_ready\030\005 \001(\010\022/\n\013model_state\030\006 \001(\0162\032."
-  "rl.training.v1.ModelState\0223\n\014loaded_mode"
-  "l\030\007 \001(\0132\035.rl.training.v1.ModelIdentity\0223"
-  "\n\014staged_model\030\010 \001(\0132\035.rl.training.v1.Mo"
-  "delIdentity\022 \n\030outbound_queue_fragments\030"
-  "\t \001(\003\022\036\n\026outbound_queue_samples\030\n \001(\003\022&\n"
-  "\036outbound_queue_estimated_bytes\030\013 \001(\003\022%\n"
-  "\035outbound_queue_high_watermark\030\014 \001(\003\022\037\n\027"
-  "produced_unique_samples\030\r \001(\003\022\037\n\027produce"
-  "d_unique_batches\030\016 \001(\003\022\032\n\022push_attempt_c"
-  "ount\030\017 \001(\003\022\037\n\027accepted_unique_samples\030\020 "
-  "\001(\003\022$\n\034duplicate_push_attempt_count\030\021 \001("
-  "\003\022#\n\033rejected_push_attempt_count\030\022 \001(\003\022\033"
-  "\n\023retry_attempt_count\030\023 \001(\003\022!\n\031final_dro"
-  "p_unique_samples\030\024 \001(\003\022\"\n\032active_actor_s"
-  "ession_count\030\025 \001(\003\022\037\n\027active_trajectory_"
-  "count\030\026 \001(\003\022\027\n\017inference_count\030\027 \001(\003\022 \n\030"
-  "inference_latency_sum_ms\030\030 \001(\001\022 \n\030infere"
-  "nce_latency_max_ms\030\031 \001(\001\022\026\n\016push_rpc_cou"
-  "nt\030\032 \001(\003\022\037\n\027push_rpc_latency_sum_ms\030\033 \001("
-  "\001\022\037\n\027push_rpc_latency_max_ms\030\034 \001(\001\022\032\n\022mo"
-  "del_switch_count\030\035 \001(\003\022 \n\030quarantined_sa"
-  "mple_count\030\036 \001(\003\022\"\n\032quarantined_fragment"
-  "_count\030\037 \001(\003\022\022\n\nlast_error\030  \001(\t\022\031\n\021time"
-  "stamp_unix_ms\030! \001(\003\022/\n\007metrics\030\" \001(\0132\036.r"
-  "l.training.v1.MetricSnapshot\022\034\n\024credit_r"
-  "equest_count\030# \001(\003\022\032\n\022credit_grant_count"
-  "\030$ \001(\003\022\031\n\021credit_wait_count\030% \001(\003\022\036\n\026cre"
-  "dit_reacquire_count\030& \001(\003\022\034\n\024producer_st"
-  "ale_count\030\' \001(\003\022\030\n\020capacity_wait_ms\030( \001("
-  "\003\022\036\n\026training_capacity_wait\030) \001(\010\"\254\005\n\025Mo"
-  "delArtifactManifest\022\037\n\027manifest_schema_v"
-  "ersion\030\001 \001(\r\0220\n\010contract\030\002 \001(\0132\036.rl.comm"
-  "on.v1.ContractIdentity\022/\n\010identity\030\003 \001(\013"
-  "2\035.rl.training.v1.ModelIdentity\0228\n\022obser"
-  "vation_schema\030\004 \001(\0132\034.rl.common.v1.Schem"
-  "aIdentity\0223\n\raction_schema\030\005 \001(\0132\034.rl.co"
-  "mmon.v1.SchemaIdentity\022\035\n\025model_architec"
-  "ture_id\030\006 \001(\t\022\024\n\014tensor_dtype\030\007 \001(\t\022\023\n\013i"
-  "nput_shape\030\010 \003(\003\022\024\n\014action_shape\030\t \003(\003\022\023"
-  "\n\013value_shape\030\n \003(\003\022\024\n\014artifact_uri\030\013 \001("
-  "\t\022\022\n\nmodel_file\030\014 \001(\t\022\022\n\nsize_bytes\030\r \001("
-  "\003\022\014\n\004seed\030\016 \001(\003\022\025\n\rtrain_updates\030\017 \001(\003\022\027"
-  "\n\017trained_samples\030\020 \001(\003\022;\n\026training_conf"
-  "ig_digest\030\021 \001(\0132\033.rl.common.v1.ContentDi"
-  "gest\022E\n\022training_semantics\030\022 \001(\0132).rl.tr"
-  "aining.v1.TrainingSemanticsIdentity\022\034\n\024p"
-  "ublished_at_unix_ms\030\023 \001(\003\022\r\n\005ready\030\024 \001(\010"
-  "\"K\n\020RegisterModelReq\0227\n\010manifest\030\001 \001(\0132%"
-  ".rl.training.v1.ModelArtifactManifest\"\337\001"
-  "\n\020RegisterModelRsp\022\020\n\010ret_code\030\001 \001(\005\0223\n\006"
-  "result\030\002 \001(\0162#.rl.training.v1.ModelRegis"
-  "terResult\022\017\n\007message\030\003 \001(\t\0227\n\010manifest\030\004"
-  " \001(\0132%.rl.training.v1.ModelArtifactManif"
-  "est\022:\n\013distributor\030\005 \001(\0132%.rl.common.v1."
-  "ServiceInstanceIdentity\"\242\001\n\023GetModelMani"
-  "festReq\0226\n\017requested_model\030\001 \001(\0132\035.rl.tr"
-  "aining.v1.ModelIdentity\0228\n\trequester\030\002 \001"
+  "ing.v1.MetricValue\"A\n\021RawMetricSumCount\022"
+  "\020\n\010field_id\030\001 \001(\t\022\013\n\003sum\030\002 \001(\001\022\r\n\005count\030"
+  "\003 \001(\004\"\246\003\n\026AgentEpisodeMetricFact\022\020\n\010agen"
+  "t_id\030\001 \001(\r\022\026\n\016episode_return\030\002 \001(\001\022\030\n\020tr"
+  "ansition_count\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\022\032\n"
+  "\022termination_reason\030\005 \001(\t\022\035\n\025shortest_ac"
+  "tion_steps\030\006 \001(\r\022\031\n\021unique_cell_count\030\007 "
+  "\001(\004\022\032\n\022blocked_move_count\030\010 \001(\004\022\034\n\024attem"
+  "pted_move_count\030\t \001(\004\022<\n\021reward_componen"
+  "ts\030\n \003(\0132!.rl.training.v1.RawMetricSumCo"
+  "unt\022\"\n\032behavior_model_version_min\030\013 \001(\004\022"
+  "\"\n\032behavior_model_version_max\030\014 \001(\004\022!\n\031b"
+  "ehavior_model_lineage_id\030\r \001(\t\"\330\001\n\021Episo"
+  "deMetricFact\022\017\n\007task_id\030\001 \001(\t\022\037\n\027environ"
+  "ment_instance_id\030\002 \001(\t\022\022\n\nepisode_id\030\003 \001"
+  "(\t\022E\n\022training_semantics\030\004 \001(\0132).rl.trai"
+  "ning.v1.TrainingSemanticsIdentity\0226\n\006age"
+  "nts\030\005 \003(\0132&.rl.training.v1.AgentEpisodeM"
+  "etricFact\"\310\003\n\025TrainUpdateMetricFact\022\027\n\017t"
+  "rain_update_id\030\001 \001(\t\022\035\n\025train_update_seq"
+  "uence\030\002 \001(\004\0226\n\017published_model\030\003 \001(\0132\035.r"
+  "l.training.v1.ModelIdentity\022\023\n\013delivery_"
+  "id\030\004 \001(\t\022E\n\022training_semantics\030\005 \001(\0132).r"
+  "l.training.v1.TrainingSemanticsIdentity\022"
+  "\"\n\032cumulative_trained_samples\030\006 \001(\003\022\031\n\021a"
+  "ctual_batch_size\030\007 \001(\003\022\"\n\032behavior_model"
+  "_version_min\030\010 \001(\004\022\"\n\032behavior_model_ver"
+  "sion_max\030\t \001(\004\0229\n\016ppo_statistics\030\n \003(\0132!"
+  ".rl.training.v1.RawMetricSumCount\022!\n\031beh"
+  "avior_model_lineage_id\030\013 \001(\t\"\340\002\n\013MetricE"
+  "vent\0220\n\010contract\030\001 \001(\0132\036.rl.common.v1.Co"
+  "ntractIdentity\0225\n\017schema_identity\030\002 \001(\0132"
+  "\034.rl.common.v1.SchemaIdentity\0225\n\006source\030"
+  "\003 \001(\0132%.rl.common.v1.ServiceInstanceIden"
+  "tity\022\026\n\016event_sequence\030\004 \001(\004\022\034\n\024committe"
+  "d_at_unix_ms\030\005 \001(\003\0224\n\007episode\030\006 \001(\0132!.rl"
+  ".training.v1.EpisodeMetricFactH\000\022=\n\014trai"
+  "n_update\030\007 \001(\0132%.rl.training.v1.TrainUpd"
+  "ateMetricFactH\000B\006\n\004fact\"\237\001\n\021MetricSequen"
+  "ceGap\022(\n first_unavailable_event_sequenc"
+  "e\030\001 \001(\004\022\'\n\037last_unavailable_event_sequen"
+  "ce\030\002 \001(\004\022\'\n\037oldest_available_event_seque"
+  "nce\030\003 \001(\004\022\016\n\006reason\030\004 \001(\t\"\231\004\n\013MetricBatc"
+  "h\0220\n\010contract\030\001 \001(\0132\036.rl.common.v1.Contr"
+  "actIdentity\0225\n\017schema_identity\030\002 \001(\0132\034.r"
+  "l.common.v1.SchemaIdentity\0225\n\006source\030\003 \001"
   "(\0132%.rl.common.v1.ServiceInstanceIdentit"
-  "y\022\031\n\021latest_in_lineage\030\003 \001(\010\"\255\001\n\023GetMode"
-  "lManifestRsp\022\020\n\010ret_code\030\001 \001(\005\022\017\n\007messag"
-  "e\030\002 \001(\t\0227\n\010manifest\030\003 \001(\0132%.rl.training."
-  "v1.ModelArtifactManifest\022:\n\013distributor\030"
-  "\004 \001(\0132%.rl.common.v1.ServiceInstanceIden"
-  "tity\"\204\001\n\020DownloadModelReq\0226\n\017requested_m"
-  "odel\030\001 \001(\0132\035.rl.training.v1.ModelIdentit"
-  "y\0228\n\trequester\030\002 \001(\0132%.rl.common.v1.Serv"
-  "iceInstanceIdentity\"X\n\nModelChunk\022,\n\005mod"
-  "el\030\001 \001(\0132\035.rl.training.v1.ModelIdentity\022"
-  "\016\n\006offset\030\002 \001(\003\022\014\n\004data\030\003 \001(\014\"\325\001\n\013AckMod"
-  "elReq\0227\n\010aiserver\030\001 \001(\0132%.rl.common.v1.S"
-  "erviceInstanceIdentity\022,\n\005model\030\002 \001(\0132\035."
-  "rl.training.v1.ModelIdentity\022\030\n\020load_ins"
-  "tance_id\030\003 \001(\t\0224\n\013load_status\030\004 \001(\0162\037.rl"
-  ".training.v1.ModelLoadStatus\022\017\n\007message\030"
-  "\005 \001(\t\"\234\001\n\013AckModelRsp\022\020\n\010ret_code\030\001 \001(\005\022"
-  ".\n\006result\030\002 \001(\0162\036.rl.training.v1.ModelAc"
-  "kResult\022\017\n\007message\030\003 \001(\t\022:\n\013distributor\030"
-  "\004 \001(\0132%.rl.common.v1.ServiceInstanceIden"
-  "tity\"\033\n\031ModelDistributorStatusReq\"\342\005\n\031Mo"
-  "delDistributorStatusRsp\0220\n\010contract\030\001 \001("
-  "\0132\036.rl.common.v1.ContractIdentity\022:\n\013dis"
-  "tributor\030\002 \001(\0132%.rl.common.v1.ServiceIns"
-  "tanceIdentity\022\r\n\005ready\030\003 \001(\010\022\036\n\026register"
-  "ed_model_count\030\004 \001(\003\0223\n\014latest_model\030\005 \001"
-  "(\0132\035.rl.training.v1.ModelIdentity\022\036\n\026reg"
-  "ister_attempt_count\030\006 \001(\003\022 \n\030duplicate_r"
-  "egister_count\030\007 \001(\003\022\037\n\027rejected_register"
-  "_count\030\010 \001(\003\022\036\n\026download_request_count\030\t"
-  " \001(\003\022\036\n\026download_success_count\030\n \001(\003\022\036\n\026"
-  "download_failure_count\030\013 \001(\003\022\024\n\014bytes_se"
-  "rved\030\014 \001(\003\022\030\n\020loaded_ack_count\030\r \001(\003\022\030\n\020"
-  "failed_ack_count\030\016 \001(\003\022B\n\023latest_ack_ais"
-  "erver\030\017 \001(\0132%.rl.common.v1.ServiceInstan"
-  "ceIdentity\0227\n\020latest_ack_model\030\020 \001(\0132\035.r"
-  "l.training.v1.ModelIdentity\022:\n\021latest_ac"
-  "k_status\030\021 \001(\0162\037.rl.training.v1.ModelLoa"
-  "dStatus\022\022\n\nlast_error\030\022 \001(\t\022\031\n\021timestamp"
-  "_unix_ms\030\023 \001(\003*\341\001\n\021TransitionEndKind\022#\n\037"
-  "TRANSITION_END_KIND_UNSPECIFIED\020\000\022\"\n\036TRA"
-  "NSITION_END_KIND_CONTINUING\020\001\022.\n*TRANSIT"
-  "ION_END_KIND_ENVIRONMENT_TERMINATED\020\002\022+\n"
-  "\'TRANSITION_END_KIND_EXTERNAL_TRUNCATION"
-  "\020\003\022&\n\"TRANSITION_END_KIND_PRODUCER_ABORT"
-  "\020\004*\306\001\n\nPushResult\022\033\n\027PUSH_RESULT_UNSPECI"
-  "FIED\020\000\022\030\n\024PUSH_RESULT_ACCEPTED\020\001\022\031\n\025PUSH"
-  "_RESULT_DUPLICATE\020\002\022!\n\035PUSH_RESULT_REJEC"
-  "TED_CAPACITY\020\003\022 \n\034PUSH_RESULT_REJECTED_I"
-  "NVALID\020\004\022!\n\035PUSH_RESULT_REJECTED_IDENTIT"
-  "Y\020\005*\323\002\n\022SampleDemandResult\022$\n SAMPLE_DEM"
-  "AND_RESULT_UNSPECIFIED\020\000\022 \n\034SAMPLE_DEMAN"
-  "D_RESULT_APPLIED\020\001\022(\n$SAMPLE_DEMAND_RESU"
-  "LT_ALREADY_APPLIED\020\002\022!\n\035SAMPLE_DEMAND_RE"
-  "SULT_RELEASED\020\003\022\"\n\036SAMPLE_DEMAND_RESULT_"
-  "NOT_FOUND\020\004\022)\n%SAMPLE_DEMAND_RESULT_REJE"
-  "CTED_INVALID\020\005\022*\n&SAMPLE_DEMAND_RESULT_R"
-  "EJECTED_IDENTITY\020\006\022-\n)SAMPLE_DEMAND_RESU"
-  "LT_REJECTED_STALE_EPOCH\020\007*\264\003\n\022SampleCred"
-  "itResult\022$\n SAMPLE_CREDIT_RESULT_UNSPECI"
-  "FIED\020\000\022 \n\034SAMPLE_CREDIT_RESULT_GRANTED\020\001"
-  "\022\'\n#SAMPLE_CREDIT_RESULT_WAIT_NO_DEMAND\020"
-  "\002\022,\n(SAMPLE_CREDIT_RESULT_WAIT_INFLIGHT_"
-  "LIMIT\020\003\022&\n\"SAMPLE_CREDIT_RESULT_WAIT_CAP"
-  "ACITY\020\004\022&\n\"SAMPLE_CREDIT_RESULT_WAIT_DRA"
-  "INING\020\005\022*\n&SAMPLE_CREDIT_RESULT_REJECTED"
-  "_IDENTITY\020\006\022+\n\'SAMPLE_CREDIT_RESULT_REJE"
-  "CTED_SEMANTICS\020\007\022+\n\'SAMPLE_CREDIT_RESULT"
-  "_REJECTED_FRESHNESS\020\010\022)\n%SAMPLE_CREDIT_R"
-  "ESULT_REJECTED_INVALID\020\t*\341\001\n\021SampleCredi"
-  "tState\022#\n\037SAMPLE_CREDIT_STATE_UNSPECIFIE"
-  "D\020\000\022 \n\034SAMPLE_CREDIT_STATE_RESERVED\020\001\022!\n"
-  "\035SAMPLE_CREDIT_STATE_COMMITTED\020\002\022 \n\034SAMP"
-  "LE_CREDIT_STATE_RELEASED\020\003\022\037\n\033SAMPLE_CRE"
-  "DIT_STATE_EXPIRED\020\004\022\037\n\033SAMPLE_CREDIT_STA"
-  "TE_REVOKED\020\005*\322\001\n\031SampleCreditReleaseReas"
-  "on\022,\n(SAMPLE_CREDIT_RELEASE_REASON_UNSPE"
-  "CIFIED\020\000\022/\n+SAMPLE_CREDIT_RELEASE_REASON"
-  "_PRODUCER_ABORT\020\001\022)\n%SAMPLE_CREDIT_RELEA"
-  "SE_REASON_SHUTDOWN\020\002\022+\n\'SAMPLE_CREDIT_RE"
-  "LEASE_REASON_SUPERSEDED\020\003*|\n\rPressureSta"
-  "te\022\036\n\032PRESSURE_STATE_UNSPECIFIED\020\000\022\031\n\025PR"
-  "ESSURE_STATE_NORMAL\020\001\022\027\n\023PRESSURE_STATE_"
-  "HIGH\020\002\022\027\n\023PRESSURE_STATE_FULL\020\003*\247\001\n\016GetB"
-  "atchResult\022 \n\034GET_BATCH_RESULT_UNSPECIFI"
-  "ED\020\000\022\033\n\027GET_BATCH_RESULT_LEASED\020\001\022\034\n\030GET"
-  "_BATCH_RESULT_TIMEOUT\020\002\022\031\n\025GET_BATCH_RES"
-  "ULT_BUSY\020\003\022\035\n\031GET_BATCH_RESULT_REJECTED\020"
-  "\004*\211\001\n\021BatchAssemblyMode\022#\n\037BATCH_ASSEMBL"
-  "Y_MODE_UNSPECIFIED\020\000\022&\n\"BATCH_ASSEMBLY_M"
-  "ODE_TARGET_BOUNDED\020\001\022\'\n#BATCH_ASSEMBLY_M"
-  "ODE_DRAIN_AVAILABLE\020\002*\315\001\n\016DeliveryResult"
-  "\022\037\n\033DELIVERY_RESULT_UNSPECIFIED\020\000\022\033\n\027DEL"
-  "IVERY_RESULT_APPLIED\020\001\022#\n\037DELIVERY_RESUL"
-  "T_ALREADY_APPLIED\020\002\022\033\n\027DELIVERY_RESULT_E"
-  "XPIRED\020\003\022\035\n\031DELIVERY_RESULT_NOT_FOUND\020\004\022"
-  "\034\n\030DELIVERY_RESULT_REJECTED\020\005*\256\001\n\016AckDis"
-  "position\022\037\n\033ACK_DISPOSITION_UNSPECIFIED\020"
-  "\000\022\033\n\027ACK_DISPOSITION_TRAINED\020\001\022\031\n\025ACK_DI"
-  "SPOSITION_STALE\020\002\022\033\n\027ACK_DISPOSITION_INV"
-  "ALID\020\003\022&\n\"ACK_DISPOSITION_SHUTDOWN_UNTRA"
-  "INED\020\004*\274\001\n\rAIServerState\022\036\n\032AISERVER_STA"
-  "TE_UNSPECIFIED\020\000\022\033\n\027AISERVER_STATE_START"
-  "ING\020\001\022\030\n\024AISERVER_STATE_READY\020\002\022\033\n\027AISER"
-  "VER_STATE_DEGRADED\020\003\022\033\n\027AISERVER_STATE_D"
-  "RAINING\020\004\022\032\n\026AISERVER_STATE_STOPPED\020\005*q\n"
-  "\nModelState\022\033\n\027MODEL_STATE_UNSPECIFIED\020\000"
-  "\022\027\n\023MODEL_STATE_WAITING\020\001\022\025\n\021MODEL_STATE"
-  "_READY\020\002\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001\n\023Mod"
-  "elRegisterResult\022%\n!MODEL_REGISTER_RESUL"
-  "T_UNSPECIFIED\020\000\022$\n MODEL_REGISTER_RESULT"
-  "_REGISTERED\020\001\022,\n(MODEL_REGISTER_RESULT_A"
-  "LREADY_REGISTERED\020\002\022*\n&MODEL_REGISTER_RE"
-  "SULT_REJECTED_INVALID\020\003\022+\n\'MODEL_REGISTE"
-  "R_RESULT_REJECTED_CONFLICT\020\004*p\n\017ModelLoa"
-  "dStatus\022!\n\035MODEL_LOAD_STATUS_UNSPECIFIED"
-  "\020\000\022\034\n\030MODEL_LOAD_STATUS_LOADED\020\001\022\034\n\030MODE"
-  "L_LOAD_STATUS_FAILED\020\002*\265\001\n\016ModelAckResul"
-  "t\022 \n\034MODEL_ACK_RESULT_UNSPECIFIED\020\000\022\034\n\030M"
-  "ODEL_ACK_RESULT_APPLIED\020\001\022$\n MODEL_ACK_R"
-  "ESULT_ALREADY_APPLIED\020\002\022\036\n\032MODEL_ACK_RES"
-  "ULT_NOT_FOUND\020\003\022\035\n\031MODEL_ACK_RESULT_REJE"
-  "CTED\020\004*^\n\021SampleBackendType\022#\n\037SAMPLE_BA"
-  "CKEND_TYPE_UNSPECIFIED\020\000\022$\n SAMPLE_BACKE"
-  "ND_TYPE_LOCAL_MEMORY\020\001*\310\001\n\017MetricValueKi"
-  "nd\022!\n\035METRIC_VALUE_KIND_UNSPECIFIED\020\000\022\033\n"
-  "\027METRIC_VALUE_KIND_GAUGE\020\001\022\035\n\031METRIC_VAL"
-  "UE_KIND_COUNTER\020\002\022\032\n\026METRIC_VALUE_KIND_M"
-  "EAN\020\003\022\032\n\026METRIC_VALUE_KIND_RATE\020\004\022\036\n\032MET"
-  "RIC_VALUE_KIND_QUANTILE\020\005*\375\001\n\025MetricAggr"
-  "egationKind\022\'\n#METRIC_AGGREGATION_KIND_U"
-  "NSPECIFIED\020\000\022 \n\034METRIC_AGGREGATION_KIND_"
-  "NONE\020\001\022\037\n\033METRIC_AGGREGATION_KIND_SUM\020\002\022"
-  ")\n%METRIC_AGGREGATION_KIND_WEIGHTED_MEAN"
-  "\020\003\022\"\n\036METRIC_AGGREGATION_KIND_LATEST\020\004\022)"
-  "\n%METRIC_AGGREGATION_KIND_NOT_MERGEABLE\020"
-  "\005*\272\001\n\020MetricWindowKind\022\"\n\036METRIC_WINDOW_"
-  "KIND_UNSPECIFIED\020\000\022\036\n\032METRIC_WINDOW_KIND"
-  "_INSTANT\020\001\022!\n\035METRIC_WINDOW_KIND_CUMULAT"
-  "IVE\020\002\022\037\n\033METRIC_WINDOW_KIND_INTERVAL\020\003\022\036"
-  "\n\032METRIC_WINDOW_KIND_ROLLING\020\0042z\n\035AIServ"
-  "erTrainingStatusService\022Y\n\021GetAIServerSt"
-  "atus\022!.rl.training.v1.AIServerStatusReq\032"
-  "!.rl.training.v1.AIServerStatusRsp2\\\n\016Le"
-  "arnerService\022J\n\013SendSamples\022\033.rl.trainin"
-  "g.v1.SampleBatch\032\036.rl.training.v1.Sample"
-  "Response2\321\007\n\030SampleDistributorService\022\\\n"
-  "\022UpsertSampleDemand\022%.rl.training.v1.Ups"
-  "ertSampleDemandReq\032\037.rl.training.v1.Samp"
-  "leDemandRsp\022^\n\023ReleaseSampleDemand\022&.rl."
-  "training.v1.ReleaseSampleDemandReq\032\037.rl."
-  "training.v1.SampleDemandRsp\022h\n\025GetSample"
-  "DemandStatus\022(.rl.training.v1.GetSampleD"
-  "emandStatusReq\032%.rl.training.v1.SampleDe"
-  "mandStatusRsp\022`\n\023AcquireSampleCredit\022&.r"
-  "l.training.v1.AcquireSampleCreditReq\032!.r"
-  "l.training.v1.SampleCreditGrant\022e\n\023Relea"
-  "seSampleCredit\022&.rl.training.v1.ReleaseS"
-  "ampleCreditReq\032&.rl.training.v1.ReleaseS"
-  "ampleCreditRsp\022M\n\013PushSamples\022\036.rl.train"
-  "ing.v1.PushSamplesReq\032\036.rl.training.v1.P"
-  "ushSamplesRsp\022D\n\010GetBatch\022\033.rl.training."
-  "v1.GetBatchReq\032\033.rl.training.v1.GetBatch"
-  "Rsp\022D\n\010AckBatch\022\033.rl.training.v1.AckBatc"
-  "hReq\032\033.rl.training.v1.DeliveryRsp\022F\n\tNac"
-  "kBatch\022\034.rl.training.v1.NackBatchReq\032\033.r"
-  "l.training.v1.DeliveryRsp\022H\n\nRenewLease\022"
-  "\035.rl.training.v1.RenewLeaseReq\032\033.rl.trai"
-  "ning.v1.DeliveryRsp\022W\n\tGetStatus\022$.rl.tr"
-  "aining.v1.DistributorStatusReq\032$.rl.trai"
-  "ning.v1.DistributorStatusRsp2\326\003\n\027ModelDi"
-  "stributorService\022S\n\rRegisterModel\022 .rl.t"
-  "raining.v1.RegisterModelReq\032 .rl.trainin"
-  "g.v1.RegisterModelRsp\022\\\n\020GetModelManifes"
-  "t\022#.rl.training.v1.GetModelManifestReq\032#"
-  ".rl.training.v1.GetModelManifestRsp\022O\n\rD"
-  "ownloadModel\022 .rl.training.v1.DownloadMo"
-  "delReq\032\032.rl.training.v1.ModelChunk0\001\022D\n\010"
-  "AckModel\022\033.rl.training.v1.AckModelReq\032\033."
-  "rl.training.v1.AckModelRsp\022q\n\031GetModelDi"
-  "stributorStatus\022).rl.training.v1.ModelDi"
-  "stributorStatusReq\032).rl.training.v1.Mode"
-  "lDistributorStatusRspB\003\200\001\000b\006proto3"
+  "y\022\026\n\016batch_sequence\030\004 \001(\004\0221\n\014batch_diges"
+  "t\030\005 \001(\0132\033.rl.common.v1.ContentDigest\022\032\n\022"
+  "created_at_unix_ms\030\006 \001(\003\022\034\n\024first_event_"
+  "sequence\030\007 \001(\004\022\033\n\023last_event_sequence\030\010 "
+  "\001(\004\022+\n\006events\030\t \003(\0132\033.rl.training.v1.Met"
+  "ricEvent\022\021\n\theartbeat\030\n \001(\010\022\024\n\014source_fi"
+  "nal\030\013 \001(\010\022\034\n\024final_event_sequence\030\014 \001(\004\022"
+  "$\n\034event_time_watermark_unix_ms\030\r \001(\003\022.\n"
+  "\003gap\030\016 \001(\0132!.rl.training.v1.MetricSequen"
+  "ceGap\"\324\001\n\021MetricBatchCursor\0225\n\006source\030\001 "
+  "\001(\0132%.rl.common.v1.ServiceInstanceIdenti"
+  "ty\022#\n\033acknowledged_batch_sequence\030\002 \001(\004\022"
+  "#\n\033acknowledged_event_sequence\030\003 \001(\004\022>\n\031"
+  "acknowledged_batch_digest\030\004 \001(\0132\033.rl.com"
+  "mon.v1.ContentDigest\"\361\001\n\021GetMetricBatchR"
+  "eq\0220\n\010contract\030\001 \001(\0132\036.rl.common.v1.Cont"
+  "ractIdentity\0227\n\010consumer\030\002 \001(\0132%.rl.comm"
+  "on.v1.ServiceInstanceIdentity\0221\n\006cursor\030"
+  "\003 \001(\0132!.rl.training.v1.MetricBatchCursor"
+  "\022\022\n\nmax_events\030\004 \001(\r\022\021\n\tmax_bytes\030\005 \001(\003\022"
+  "\027\n\017wait_timeout_ms\030\006 \001(\005\"\240\002\n\021GetMetricBa"
+  "tchRsp\022\020\n\010ret_code\030\001 \001(\005\0221\n\006result\030\002 \001(\016"
+  "2!.rl.training.v1.MetricBatchResult\022\017\n\007m"
+  "essage\030\003 \001(\t\022*\n\005batch\030\004 \001(\0132\033.rl.trainin"
+  "g.v1.MetricBatch\0227\n\010producer\030\005 \001(\0132%.rl."
+  "common.v1.ServiceInstanceIdentity\022\'\n\037old"
+  "est_available_event_sequence\030\006 \001(\004\022\'\n\037la"
+  "test_available_event_sequence\030\007 \001(\004\"\261\001\n\021"
+  "AckMetricBatchReq\0220\n\010contract\030\001 \001(\0132\036.rl"
+  ".common.v1.ContractIdentity\0227\n\010consumer\030"
+  "\002 \001(\0132%.rl.common.v1.ServiceInstanceIden"
+  "tity\0221\n\006cursor\030\003 \001(\0132!.rl.training.v1.Me"
+  "tricBatchCursor\"\264\002\n\021AckMetricBatchRsp\022\020\n"
+  "\010ret_code\030\001 \001(\005\0224\n\006result\030\002 \001(\0162$.rl.tra"
+  "ining.v1.MetricBatchAckResult\022\017\n\007message"
+  "\030\003 \001(\t\0227\n\010producer\030\004 \001(\0132%.rl.common.v1."
+  "ServiceInstanceIdentity\022\'\n\037oldest_availa"
+  "ble_event_sequence\030\005 \001(\004\022\'\n\037latest_avail"
+  "able_event_sequence\030\006 \001(\004\022;\n\020committed_c"
+  "ursor\030\007 \001(\0132!.rl.training.v1.MetricBatch"
+  "Cursor\"\023\n\021AIServerStatusReq\"\227\013\n\021AIServer"
+  "StatusRsp\0220\n\010contract\030\001 \001(\0132\036.rl.common."
+  "v1.ContractIdentity\0227\n\010aiserver\030\002 \001(\0132%."
+  "rl.common.v1.ServiceInstanceIdentity\022,\n\005"
+  "state\030\003 \001(\0162\035.rl.training.v1.AIServerSta"
+  "te\022\r\n\005ready\030\004 \001(\010\022\031\n\021distributor_ready\030\005"
+  " \001(\010\022/\n\013model_state\030\006 \001(\0162\032.rl.training."
+  "v1.ModelState\0223\n\014loaded_model\030\007 \001(\0132\035.rl"
+  ".training.v1.ModelIdentity\0223\n\014staged_mod"
+  "el\030\010 \001(\0132\035.rl.training.v1.ModelIdentity\022"
+  " \n\030outbound_queue_fragments\030\t \001(\003\022\036\n\026out"
+  "bound_queue_samples\030\n \001(\003\022&\n\036outbound_qu"
+  "eue_estimated_bytes\030\013 \001(\003\022%\n\035outbound_qu"
+  "eue_high_watermark\030\014 \001(\003\022\037\n\027produced_uni"
+  "que_samples\030\r \001(\003\022\037\n\027produced_unique_bat"
+  "ches\030\016 \001(\003\022\032\n\022push_attempt_count\030\017 \001(\003\022\037"
+  "\n\027accepted_unique_samples\030\020 \001(\003\022$\n\034dupli"
+  "cate_push_attempt_count\030\021 \001(\003\022#\n\033rejecte"
+  "d_push_attempt_count\030\022 \001(\003\022\033\n\023retry_atte"
+  "mpt_count\030\023 \001(\003\022!\n\031final_drop_unique_sam"
+  "ples\030\024 \001(\003\022\"\n\032active_actor_session_count"
+  "\030\025 \001(\003\022\037\n\027active_trajectory_count\030\026 \001(\003\022"
+  "\027\n\017inference_count\030\027 \001(\003\022 \n\030inference_la"
+  "tency_sum_ms\030\030 \001(\001\022 \n\030inference_latency_"
+  "max_ms\030\031 \001(\001\022\026\n\016push_rpc_count\030\032 \001(\003\022\037\n\027"
+  "push_rpc_latency_sum_ms\030\033 \001(\001\022\037\n\027push_rp"
+  "c_latency_max_ms\030\034 \001(\001\022\032\n\022model_switch_c"
+  "ount\030\035 \001(\003\022 \n\030quarantined_sample_count\030\036"
+  " \001(\003\022\"\n\032quarantined_fragment_count\030\037 \001(\003"
+  "\022\022\n\nlast_error\030  \001(\t\022\031\n\021timestamp_unix_m"
+  "s\030! \001(\003\022/\n\007metrics\030\" \001(\0132\036.rl.training.v"
+  "1.MetricSnapshot\022\034\n\024credit_request_count"
+  "\030# \001(\003\022\032\n\022credit_grant_count\030$ \001(\003\022\031\n\021cr"
+  "edit_wait_count\030% \001(\003\022\036\n\026credit_reacquir"
+  "e_count\030& \001(\003\022\034\n\024producer_stale_count\030\' "
+  "\001(\003\022\030\n\020capacity_wait_ms\030( \001(\003\022\036\n\026trainin"
+  "g_capacity_wait\030) \001(\010\"\254\005\n\025ModelArtifactM"
+  "anifest\022\037\n\027manifest_schema_version\030\001 \001(\r"
+  "\0220\n\010contract\030\002 \001(\0132\036.rl.common.v1.Contra"
+  "ctIdentity\022/\n\010identity\030\003 \001(\0132\035.rl.traini"
+  "ng.v1.ModelIdentity\0228\n\022observation_schem"
+  "a\030\004 \001(\0132\034.rl.common.v1.SchemaIdentity\0223\n"
+  "\raction_schema\030\005 \001(\0132\034.rl.common.v1.Sche"
+  "maIdentity\022\035\n\025model_architecture_id\030\006 \001("
+  "\t\022\024\n\014tensor_dtype\030\007 \001(\t\022\023\n\013input_shape\030\010"
+  " \003(\003\022\024\n\014action_shape\030\t \003(\003\022\023\n\013value_shap"
+  "e\030\n \003(\003\022\024\n\014artifact_uri\030\013 \001(\t\022\022\n\nmodel_f"
+  "ile\030\014 \001(\t\022\022\n\nsize_bytes\030\r \001(\003\022\014\n\004seed\030\016 "
+  "\001(\003\022\025\n\rtrain_updates\030\017 \001(\003\022\027\n\017trained_sa"
+  "mples\030\020 \001(\003\022;\n\026training_config_digest\030\021 "
+  "\001(\0132\033.rl.common.v1.ContentDigest\022E\n\022trai"
+  "ning_semantics\030\022 \001(\0132).rl.training.v1.Tr"
+  "ainingSemanticsIdentity\022\034\n\024published_at_"
+  "unix_ms\030\023 \001(\003\022\r\n\005ready\030\024 \001(\010\"K\n\020Register"
+  "ModelReq\0227\n\010manifest\030\001 \001(\0132%.rl.training"
+  ".v1.ModelArtifactManifest\"\337\001\n\020RegisterMo"
+  "delRsp\022\020\n\010ret_code\030\001 \001(\005\0223\n\006result\030\002 \001(\016"
+  "2#.rl.training.v1.ModelRegisterResult\022\017\n"
+  "\007message\030\003 \001(\t\0227\n\010manifest\030\004 \001(\0132%.rl.tr"
+  "aining.v1.ModelArtifactManifest\022:\n\013distr"
+  "ibutor\030\005 \001(\0132%.rl.common.v1.ServiceInsta"
+  "nceIdentity\"\242\001\n\023GetModelManifestReq\0226\n\017r"
+  "equested_model\030\001 \001(\0132\035.rl.training.v1.Mo"
+  "delIdentity\0228\n\trequester\030\002 \001(\0132%.rl.comm"
+  "on.v1.ServiceInstanceIdentity\022\031\n\021latest_"
+  "in_lineage\030\003 \001(\010\"\313\002\n\023GetModelManifestRsp"
+  "\022\020\n\010ret_code\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\0227\n\010m"
+  "anifest\030\003 \001(\0132%.rl.training.v1.ModelArti"
+  "factManifest\022:\n\013distributor\030\004 \001(\0132%.rl.c"
+  "ommon.v1.ServiceInstanceIdentity\022*\n\035avai"
+  "lable_floor_model_version\030\005 \001(\004H\000\210\001\001\022+\n\036"
+  "latest_available_model_version\030\006 \001(\004H\001\210\001"
+  "\001B \n\036_available_floor_model_versionB!\n\037_"
+  "latest_available_model_version\"\204\001\n\020Downl"
+  "oadModelReq\0226\n\017requested_model\030\001 \001(\0132\035.r"
+  "l.training.v1.ModelIdentity\0228\n\trequester"
+  "\030\002 \001(\0132%.rl.common.v1.ServiceInstanceIde"
+  "ntity\"X\n\nModelChunk\022,\n\005model\030\001 \001(\0132\035.rl."
+  "training.v1.ModelIdentity\022\016\n\006offset\030\002 \001("
+  "\003\022\014\n\004data\030\003 \001(\014\"\325\001\n\013AckModelReq\0227\n\010aiser"
+  "ver\030\001 \001(\0132%.rl.common.v1.ServiceInstance"
+  "Identity\022,\n\005model\030\002 \001(\0132\035.rl.training.v1"
+  ".ModelIdentity\022\030\n\020load_instance_id\030\003 \001(\t"
+  "\0224\n\013load_status\030\004 \001(\0162\037.rl.training.v1.M"
+  "odelLoadStatus\022\017\n\007message\030\005 \001(\t\"\234\001\n\013AckM"
+  "odelRsp\022\020\n\010ret_code\030\001 \001(\005\022.\n\006result\030\002 \001("
+  "\0162\036.rl.training.v1.ModelAckResult\022\017\n\007mes"
+  "sage\030\003 \001(\t\022:\n\013distributor\030\004 \001(\0132%.rl.com"
+  "mon.v1.ServiceInstanceIdentity\"\033\n\031ModelD"
+  "istributorStatusReq\"\200\007\n\031ModelDistributor"
+  "StatusRsp\0220\n\010contract\030\001 \001(\0132\036.rl.common."
+  "v1.ContractIdentity\022:\n\013distributor\030\002 \001(\013"
+  "2%.rl.common.v1.ServiceInstanceIdentity\022"
+  "\r\n\005ready\030\003 \001(\010\022\036\n\026registered_model_count"
+  "\030\004 \001(\003\0223\n\014latest_model\030\005 \001(\0132\035.rl.traini"
+  "ng.v1.ModelIdentity\022\036\n\026register_attempt_"
+  "count\030\006 \001(\003\022 \n\030duplicate_register_count\030"
+  "\007 \001(\003\022\037\n\027rejected_register_count\030\010 \001(\003\022\036"
+  "\n\026download_request_count\030\t \001(\003\022\036\n\026downlo"
+  "ad_success_count\030\n \001(\003\022\036\n\026download_failu"
+  "re_count\030\013 \001(\003\022\024\n\014bytes_served\030\014 \001(\003\022\030\n\020"
+  "loaded_ack_count\030\r \001(\003\022\030\n\020failed_ack_cou"
+  "nt\030\016 \001(\003\022B\n\023latest_ack_aiserver\030\017 \001(\0132%."
+  "rl.common.v1.ServiceInstanceIdentity\0227\n\020"
+  "latest_ack_model\030\020 \001(\0132\035.rl.training.v1."
+  "ModelIdentity\022:\n\021latest_ack_status\030\021 \001(\016"
+  "2\037.rl.training.v1.ModelLoadStatus\022\022\n\nlas"
+  "t_error\030\022 \001(\t\022\031\n\021timestamp_unix_ms\030\023 \001(\003"
+  "\022*\n\035available_floor_model_version\030\024 \001(\004H"
+  "\000\210\001\001\022+\n\036latest_available_model_version\030\025"
+  " \001(\004H\001\210\001\001B \n\036_available_floor_model_vers"
+  "ionB!\n\037_latest_available_model_version*\341"
+  "\001\n\021TransitionEndKind\022#\n\037TRANSITION_END_K"
+  "IND_UNSPECIFIED\020\000\022\"\n\036TRANSITION_END_KIND"
+  "_CONTINUING\020\001\022.\n*TRANSITION_END_KIND_ENV"
+  "IRONMENT_TERMINATED\020\002\022+\n\'TRANSITION_END_"
+  "KIND_EXTERNAL_TRUNCATION\020\003\022&\n\"TRANSITION"
+  "_END_KIND_PRODUCER_ABORT\020\004*\306\001\n\nPushResul"
+  "t\022\033\n\027PUSH_RESULT_UNSPECIFIED\020\000\022\030\n\024PUSH_R"
+  "ESULT_ACCEPTED\020\001\022\031\n\025PUSH_RESULT_DUPLICAT"
+  "E\020\002\022!\n\035PUSH_RESULT_REJECTED_CAPACITY\020\003\022 "
+  "\n\034PUSH_RESULT_REJECTED_INVALID\020\004\022!\n\035PUSH"
+  "_RESULT_REJECTED_IDENTITY\020\005*\323\002\n\022SampleDe"
+  "mandResult\022$\n SAMPLE_DEMAND_RESULT_UNSPE"
+  "CIFIED\020\000\022 \n\034SAMPLE_DEMAND_RESULT_APPLIED"
+  "\020\001\022(\n$SAMPLE_DEMAND_RESULT_ALREADY_APPLI"
+  "ED\020\002\022!\n\035SAMPLE_DEMAND_RESULT_RELEASED\020\003\022"
+  "\"\n\036SAMPLE_DEMAND_RESULT_NOT_FOUND\020\004\022)\n%S"
+  "AMPLE_DEMAND_RESULT_REJECTED_INVALID\020\005\022*"
+  "\n&SAMPLE_DEMAND_RESULT_REJECTED_IDENTITY"
+  "\020\006\022-\n)SAMPLE_DEMAND_RESULT_REJECTED_STAL"
+  "E_EPOCH\020\007*\264\003\n\022SampleCreditResult\022$\n SAMP"
+  "LE_CREDIT_RESULT_UNSPECIFIED\020\000\022 \n\034SAMPLE"
+  "_CREDIT_RESULT_GRANTED\020\001\022\'\n#SAMPLE_CREDI"
+  "T_RESULT_WAIT_NO_DEMAND\020\002\022,\n(SAMPLE_CRED"
+  "IT_RESULT_WAIT_INFLIGHT_LIMIT\020\003\022&\n\"SAMPL"
+  "E_CREDIT_RESULT_WAIT_CAPACITY\020\004\022&\n\"SAMPL"
+  "E_CREDIT_RESULT_WAIT_DRAINING\020\005\022*\n&SAMPL"
+  "E_CREDIT_RESULT_REJECTED_IDENTITY\020\006\022+\n\'S"
+  "AMPLE_CREDIT_RESULT_REJECTED_SEMANTICS\020\007"
+  "\022+\n\'SAMPLE_CREDIT_RESULT_REJECTED_FRESHN"
+  "ESS\020\010\022)\n%SAMPLE_CREDIT_RESULT_REJECTED_I"
+  "NVALID\020\t*\341\001\n\021SampleCreditState\022#\n\037SAMPLE"
+  "_CREDIT_STATE_UNSPECIFIED\020\000\022 \n\034SAMPLE_CR"
+  "EDIT_STATE_RESERVED\020\001\022!\n\035SAMPLE_CREDIT_S"
+  "TATE_COMMITTED\020\002\022 \n\034SAMPLE_CREDIT_STATE_"
+  "RELEASED\020\003\022\037\n\033SAMPLE_CREDIT_STATE_EXPIRE"
+  "D\020\004\022\037\n\033SAMPLE_CREDIT_STATE_REVOKED\020\005*\322\001\n"
+  "\031SampleCreditReleaseReason\022,\n(SAMPLE_CRE"
+  "DIT_RELEASE_REASON_UNSPECIFIED\020\000\022/\n+SAMP"
+  "LE_CREDIT_RELEASE_REASON_PRODUCER_ABORT\020"
+  "\001\022)\n%SAMPLE_CREDIT_RELEASE_REASON_SHUTDO"
+  "WN\020\002\022+\n\'SAMPLE_CREDIT_RELEASE_REASON_SUP"
+  "ERSEDED\020\003*|\n\rPressureState\022\036\n\032PRESSURE_S"
+  "TATE_UNSPECIFIED\020\000\022\031\n\025PRESSURE_STATE_NOR"
+  "MAL\020\001\022\027\n\023PRESSURE_STATE_HIGH\020\002\022\027\n\023PRESSU"
+  "RE_STATE_FULL\020\003*\247\001\n\016GetBatchResult\022 \n\034GE"
+  "T_BATCH_RESULT_UNSPECIFIED\020\000\022\033\n\027GET_BATC"
+  "H_RESULT_LEASED\020\001\022\034\n\030GET_BATCH_RESULT_TI"
+  "MEOUT\020\002\022\031\n\025GET_BATCH_RESULT_BUSY\020\003\022\035\n\031GE"
+  "T_BATCH_RESULT_REJECTED\020\004*\211\001\n\021BatchAssem"
+  "blyMode\022#\n\037BATCH_ASSEMBLY_MODE_UNSPECIFI"
+  "ED\020\000\022&\n\"BATCH_ASSEMBLY_MODE_TARGET_BOUND"
+  "ED\020\001\022\'\n#BATCH_ASSEMBLY_MODE_DRAIN_AVAILA"
+  "BLE\020\002*\315\001\n\016DeliveryResult\022\037\n\033DELIVERY_RES"
+  "ULT_UNSPECIFIED\020\000\022\033\n\027DELIVERY_RESULT_APP"
+  "LIED\020\001\022#\n\037DELIVERY_RESULT_ALREADY_APPLIE"
+  "D\020\002\022\033\n\027DELIVERY_RESULT_EXPIRED\020\003\022\035\n\031DELI"
+  "VERY_RESULT_NOT_FOUND\020\004\022\034\n\030DELIVERY_RESU"
+  "LT_REJECTED\020\005*\256\001\n\016AckDisposition\022\037\n\033ACK_"
+  "DISPOSITION_UNSPECIFIED\020\000\022\033\n\027ACK_DISPOSI"
+  "TION_TRAINED\020\001\022\031\n\025ACK_DISPOSITION_STALE\020"
+  "\002\022\033\n\027ACK_DISPOSITION_INVALID\020\003\022&\n\"ACK_DI"
+  "SPOSITION_SHUTDOWN_UNTRAINED\020\004*\274\001\n\rAISer"
+  "verState\022\036\n\032AISERVER_STATE_UNSPECIFIED\020\000"
+  "\022\033\n\027AISERVER_STATE_STARTING\020\001\022\030\n\024AISERVE"
+  "R_STATE_READY\020\002\022\033\n\027AISERVER_STATE_DEGRAD"
+  "ED\020\003\022\033\n\027AISERVER_STATE_DRAINING\020\004\022\032\n\026AIS"
+  "ERVER_STATE_STOPPED\020\005*q\n\nModelState\022\033\n\027M"
+  "ODEL_STATE_UNSPECIFIED\020\000\022\027\n\023MODEL_STATE_"
+  "WAITING\020\001\022\025\n\021MODEL_STATE_READY\020\002\022\026\n\022MODE"
+  "L_STATE_FAILED\020\003*\351\001\n\023ModelRegisterResult"
+  "\022%\n!MODEL_REGISTER_RESULT_UNSPECIFIED\020\000\022"
+  "$\n MODEL_REGISTER_RESULT_REGISTERED\020\001\022,\n"
+  "(MODEL_REGISTER_RESULT_ALREADY_REGISTERE"
+  "D\020\002\022*\n&MODEL_REGISTER_RESULT_REJECTED_IN"
+  "VALID\020\003\022+\n\'MODEL_REGISTER_RESULT_REJECTE"
+  "D_CONFLICT\020\004*p\n\017ModelLoadStatus\022!\n\035MODEL"
+  "_LOAD_STATUS_UNSPECIFIED\020\000\022\034\n\030MODEL_LOAD"
+  "_STATUS_LOADED\020\001\022\034\n\030MODEL_LOAD_STATUS_FA"
+  "ILED\020\002*\265\001\n\016ModelAckResult\022 \n\034MODEL_ACK_R"
+  "ESULT_UNSPECIFIED\020\000\022\034\n\030MODEL_ACK_RESULT_"
+  "APPLIED\020\001\022$\n MODEL_ACK_RESULT_ALREADY_AP"
+  "PLIED\020\002\022\036\n\032MODEL_ACK_RESULT_NOT_FOUND\020\003\022"
+  "\035\n\031MODEL_ACK_RESULT_REJECTED\020\004*^\n\021Sample"
+  "BackendType\022#\n\037SAMPLE_BACKEND_TYPE_UNSPE"
+  "CIFIED\020\000\022$\n SAMPLE_BACKEND_TYPE_LOCAL_ME"
+  "MORY\020\001*\310\001\n\017MetricValueKind\022!\n\035METRIC_VAL"
+  "UE_KIND_UNSPECIFIED\020\000\022\033\n\027METRIC_VALUE_KI"
+  "ND_GAUGE\020\001\022\035\n\031METRIC_VALUE_KIND_COUNTER\020"
+  "\002\022\032\n\026METRIC_VALUE_KIND_MEAN\020\003\022\032\n\026METRIC_"
+  "VALUE_KIND_RATE\020\004\022\036\n\032METRIC_VALUE_KIND_Q"
+  "UANTILE\020\005*\375\001\n\025MetricAggregationKind\022\'\n#M"
+  "ETRIC_AGGREGATION_KIND_UNSPECIFIED\020\000\022 \n\034"
+  "METRIC_AGGREGATION_KIND_NONE\020\001\022\037\n\033METRIC"
+  "_AGGREGATION_KIND_SUM\020\002\022)\n%METRIC_AGGREG"
+  "ATION_KIND_WEIGHTED_MEAN\020\003\022\"\n\036METRIC_AGG"
+  "REGATION_KIND_LATEST\020\004\022)\n%METRIC_AGGREGA"
+  "TION_KIND_NOT_MERGEABLE\020\005*\272\001\n\020MetricWind"
+  "owKind\022\"\n\036METRIC_WINDOW_KIND_UNSPECIFIED"
+  "\020\000\022\036\n\032METRIC_WINDOW_KIND_INSTANT\020\001\022!\n\035ME"
+  "TRIC_WINDOW_KIND_CUMULATIVE\020\002\022\037\n\033METRIC_"
+  "WINDOW_KIND_INTERVAL\020\003\022\036\n\032METRIC_WINDOW_"
+  "KIND_ROLLING\020\004*\226\002\n\021MetricBatchResult\022#\n\037"
+  "METRIC_BATCH_RESULT_UNSPECIFIED\020\000\022!\n\035MET"
+  "RIC_BATCH_RESULT_DELIVERED\020\001\022\034\n\030METRIC_B"
+  "ATCH_RESULT_WAIT\020\002\022\035\n\031METRIC_BATCH_RESUL"
+  "T_FINAL\020\003\022)\n%METRIC_BATCH_RESULT_REJECTE"
+  "D_IDENTITY\020\004\022\'\n#METRIC_BATCH_RESULT_REJE"
+  "CTED_CURSOR\020\005\022(\n$METRIC_BATCH_RESULT_REJ"
+  "ECTED_INVALID\020\006*\302\002\n\024MetricBatchAckResult"
+  "\022\'\n#METRIC_BATCH_ACK_RESULT_UNSPECIFIED\020"
+  "\000\022#\n\037METRIC_BATCH_ACK_RESULT_APPLIED\020\001\022+"
+  "\n\'METRIC_BATCH_ACK_RESULT_ALREADY_APPLIE"
+  "D\020\002\022%\n!METRIC_BATCH_ACK_RESULT_NOT_FOUND"
+  "\020\003\022-\n)METRIC_BATCH_ACK_RESULT_REJECTED_I"
+  "DENTITY\020\004\022+\n\'METRIC_BATCH_ACK_RESULT_REJ"
+  "ECTED_CURSOR\020\005\022,\n(METRIC_BATCH_ACK_RESUL"
+  "T_REJECTED_INVALID\020\0062z\n\035AIServerTraining"
+  "StatusService\022Y\n\021GetAIServerStatus\022!.rl."
+  "training.v1.AIServerStatusReq\032!.rl.train"
+  "ing.v1.AIServerStatusRsp2\304\001\n\022MetricEvent"
+  "Service\022V\n\016GetMetricBatch\022!.rl.training."
+  "v1.GetMetricBatchReq\032!.rl.training.v1.Ge"
+  "tMetricBatchRsp\022V\n\016AckMetricBatch\022!.rl.t"
+  "raining.v1.AckMetricBatchReq\032!.rl.traini"
+  "ng.v1.AckMetricBatchRsp2\\\n\016LearnerServic"
+  "e\022J\n\013SendSamples\022\033.rl.training.v1.Sample"
+  "Batch\032\036.rl.training.v1.SampleResponse2\321\007"
+  "\n\030SampleDistributorService\022\\\n\022UpsertSamp"
+  "leDemand\022%.rl.training.v1.UpsertSampleDe"
+  "mandReq\032\037.rl.training.v1.SampleDemandRsp"
+  "\022^\n\023ReleaseSampleDemand\022&.rl.training.v1"
+  ".ReleaseSampleDemandReq\032\037.rl.training.v1"
+  ".SampleDemandRsp\022h\n\025GetSampleDemandStatu"
+  "s\022(.rl.training.v1.GetSampleDemandStatus"
+  "Req\032%.rl.training.v1.SampleDemandStatusR"
+  "sp\022`\n\023AcquireSampleCredit\022&.rl.training."
+  "v1.AcquireSampleCreditReq\032!.rl.training."
+  "v1.SampleCreditGrant\022e\n\023ReleaseSampleCre"
+  "dit\022&.rl.training.v1.ReleaseSampleCredit"
+  "Req\032&.rl.training.v1.ReleaseSampleCredit"
+  "Rsp\022M\n\013PushSamples\022\036.rl.training.v1.Push"
+  "SamplesReq\032\036.rl.training.v1.PushSamplesR"
+  "sp\022D\n\010GetBatch\022\033.rl.training.v1.GetBatch"
+  "Req\032\033.rl.training.v1.GetBatchRsp\022D\n\010AckB"
+  "atch\022\033.rl.training.v1.AckBatchReq\032\033.rl.t"
+  "raining.v1.DeliveryRsp\022F\n\tNackBatch\022\034.rl"
+  ".training.v1.NackBatchReq\032\033.rl.training."
+  "v1.DeliveryRsp\022H\n\nRenewLease\022\035.rl.traini"
+  "ng.v1.RenewLeaseReq\032\033.rl.training.v1.Del"
+  "iveryRsp\022W\n\tGetStatus\022$.rl.training.v1.D"
+  "istributorStatusReq\032$.rl.training.v1.Dis"
+  "tributorStatusRsp2\326\003\n\027ModelDistributorSe"
+  "rvice\022S\n\rRegisterModel\022 .rl.training.v1."
+  "RegisterModelReq\032 .rl.training.v1.Regist"
+  "erModelRsp\022\\\n\020GetModelManifest\022#.rl.trai"
+  "ning.v1.GetModelManifestReq\032#.rl.trainin"
+  "g.v1.GetModelManifestRsp\022O\n\rDownloadMode"
+  "l\022 .rl.training.v1.DownloadModelReq\032\032.rl"
+  ".training.v1.ModelChunk0\001\022D\n\010AckModel\022\033."
+  "rl.training.v1.AckModelReq\032\033.rl.training"
+  ".v1.AckModelRsp\022q\n\031GetModelDistributorSt"
+  "atus\022).rl.training.v1.ModelDistributorSt"
+  "atusReq\032).rl.training.v1.ModelDistributo"
+  "rStatusRspB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_training_2eproto_deps[1] = {
   &::descriptor_table_common_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_training_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_training_2eproto = {
-    false, false, 20234, descriptor_table_protodef_training_2eproto,
+    false, false, 24823, descriptor_table_protodef_training_2eproto,
     "training.proto",
-    &descriptor_table_training_2eproto_once, descriptor_table_training_2eproto_deps, 1, 45,
+    &descriptor_table_training_2eproto_once, descriptor_table_training_2eproto_deps, 1, 57,
     schemas, file_default_instances, TableStruct_training_2eproto::offsets,
     file_level_metadata_training_2eproto, file_level_enum_descriptors_training_2eproto,
     file_level_service_descriptors_training_2eproto,
@@ -2591,6 +3152,44 @@ bool MetricWindowKind_IsValid(int value) {
     case 2:
     case 3:
     case 4:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricBatchResult_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_training_2eproto);
+  return file_level_enum_descriptors_training_2eproto[20];
+}
+bool MetricBatchResult_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricBatchAckResult_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_training_2eproto);
+  return file_level_enum_descriptors_training_2eproto[21];
+}
+bool MetricBatchAckResult_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;
@@ -17250,6 +17849,4944 @@ void MetricSnapshot::InternalSwap(MetricSnapshot* other) {
 
 // ===================================================================
 
+class RawMetricSumCount::_Internal {
+ public:
+};
+
+RawMetricSumCount::RawMetricSumCount(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.RawMetricSumCount)
+}
+RawMetricSumCount::RawMetricSumCount(const RawMetricSumCount& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RawMetricSumCount* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.field_id_){}
+    , decltype(_impl_.sum_){}
+    , decltype(_impl_.count_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.field_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.field_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_field_id().empty()) {
+    _this->_impl_.field_id_.Set(from._internal_field_id(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.sum_, &from._impl_.sum_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.count_) -
+    reinterpret_cast<char*>(&_impl_.sum_)) + sizeof(_impl_.count_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.RawMetricSumCount)
+}
+
+inline void RawMetricSumCount::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.field_id_){}
+    , decltype(_impl_.sum_){0}
+    , decltype(_impl_.count_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.field_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.field_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+RawMetricSumCount::~RawMetricSumCount() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.RawMetricSumCount)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RawMetricSumCount::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.field_id_.Destroy();
+}
+
+void RawMetricSumCount::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RawMetricSumCount::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.RawMetricSumCount)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.field_id_.ClearToEmpty();
+  ::memset(&_impl_.sum_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.count_) -
+      reinterpret_cast<char*>(&_impl_.sum_)) + sizeof(_impl_.count_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RawMetricSumCount::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string field_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_field_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.RawMetricSumCount.field_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // double sum = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 17)) {
+          _impl_.sum_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 count = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RawMetricSumCount::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.RawMetricSumCount)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string field_id = 1;
+  if (!this->_internal_field_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_field_id().data(), static_cast<int>(this->_internal_field_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.RawMetricSumCount.field_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_field_id(), target);
+  }
+
+  // double sum = 2;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_sum = this->_internal_sum();
+  uint64_t raw_sum;
+  memcpy(&raw_sum, &tmp_sum, sizeof(tmp_sum));
+  if (raw_sum != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(2, this->_internal_sum(), target);
+  }
+
+  // uint64 count = 3;
+  if (this->_internal_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(3, this->_internal_count(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.RawMetricSumCount)
+  return target;
+}
+
+size_t RawMetricSumCount::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.RawMetricSumCount)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string field_id = 1;
+  if (!this->_internal_field_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_field_id());
+  }
+
+  // double sum = 2;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_sum = this->_internal_sum();
+  uint64_t raw_sum;
+  memcpy(&raw_sum, &tmp_sum, sizeof(tmp_sum));
+  if (raw_sum != 0) {
+    total_size += 1 + 8;
+  }
+
+  // uint64 count = 3;
+  if (this->_internal_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_count());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RawMetricSumCount::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RawMetricSumCount::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RawMetricSumCount::GetClassData() const { return &_class_data_; }
+
+
+void RawMetricSumCount::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RawMetricSumCount*>(&to_msg);
+  auto& from = static_cast<const RawMetricSumCount&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.RawMetricSumCount)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_field_id().empty()) {
+    _this->_internal_set_field_id(from._internal_field_id());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_sum = from._internal_sum();
+  uint64_t raw_sum;
+  memcpy(&raw_sum, &tmp_sum, sizeof(tmp_sum));
+  if (raw_sum != 0) {
+    _this->_internal_set_sum(from._internal_sum());
+  }
+  if (from._internal_count() != 0) {
+    _this->_internal_set_count(from._internal_count());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RawMetricSumCount::CopyFrom(const RawMetricSumCount& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.RawMetricSumCount)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RawMetricSumCount::IsInitialized() const {
+  return true;
+}
+
+void RawMetricSumCount::InternalSwap(RawMetricSumCount* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.field_id_, lhs_arena,
+      &other->_impl_.field_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RawMetricSumCount, _impl_.count_)
+      + sizeof(RawMetricSumCount::_impl_.count_)
+      - PROTOBUF_FIELD_OFFSET(RawMetricSumCount, _impl_.sum_)>(
+          reinterpret_cast<char*>(&_impl_.sum_),
+          reinterpret_cast<char*>(&other->_impl_.sum_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RawMetricSumCount::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[32]);
+}
+
+// ===================================================================
+
+class AgentEpisodeMetricFact::_Internal {
+ public:
+};
+
+AgentEpisodeMetricFact::AgentEpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.AgentEpisodeMetricFact)
+}
+AgentEpisodeMetricFact::AgentEpisodeMetricFact(const AgentEpisodeMetricFact& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  AgentEpisodeMetricFact* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.reward_components_){from._impl_.reward_components_}
+    , decltype(_impl_.termination_reason_){}
+    , decltype(_impl_.behavior_model_lineage_id_){}
+    , decltype(_impl_.episode_return_){}
+    , decltype(_impl_.agent_id_){}
+    , decltype(_impl_.success_){}
+    , decltype(_impl_.transition_count_){}
+    , decltype(_impl_.unique_cell_count_){}
+    , decltype(_impl_.blocked_move_count_){}
+    , decltype(_impl_.attempted_move_count_){}
+    , decltype(_impl_.behavior_model_version_min_){}
+    , decltype(_impl_.behavior_model_version_max_){}
+    , decltype(_impl_.shortest_action_steps_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.termination_reason_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.termination_reason_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_termination_reason().empty()) {
+    _this->_impl_.termination_reason_.Set(from._internal_termination_reason(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.behavior_model_lineage_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_behavior_model_lineage_id().empty()) {
+    _this->_impl_.behavior_model_lineage_id_.Set(from._internal_behavior_model_lineage_id(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.episode_return_, &from._impl_.episode_return_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.shortest_action_steps_) -
+    reinterpret_cast<char*>(&_impl_.episode_return_)) + sizeof(_impl_.shortest_action_steps_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.AgentEpisodeMetricFact)
+}
+
+inline void AgentEpisodeMetricFact::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.reward_components_){arena}
+    , decltype(_impl_.termination_reason_){}
+    , decltype(_impl_.behavior_model_lineage_id_){}
+    , decltype(_impl_.episode_return_){0}
+    , decltype(_impl_.agent_id_){0u}
+    , decltype(_impl_.success_){false}
+    , decltype(_impl_.transition_count_){uint64_t{0u}}
+    , decltype(_impl_.unique_cell_count_){uint64_t{0u}}
+    , decltype(_impl_.blocked_move_count_){uint64_t{0u}}
+    , decltype(_impl_.attempted_move_count_){uint64_t{0u}}
+    , decltype(_impl_.behavior_model_version_min_){uint64_t{0u}}
+    , decltype(_impl_.behavior_model_version_max_){uint64_t{0u}}
+    , decltype(_impl_.shortest_action_steps_){0u}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.termination_reason_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.termination_reason_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.behavior_model_lineage_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+AgentEpisodeMetricFact::~AgentEpisodeMetricFact() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.AgentEpisodeMetricFact)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void AgentEpisodeMetricFact::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.reward_components_.~RepeatedPtrField();
+  _impl_.termination_reason_.Destroy();
+  _impl_.behavior_model_lineage_id_.Destroy();
+}
+
+void AgentEpisodeMetricFact::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void AgentEpisodeMetricFact::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.AgentEpisodeMetricFact)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.reward_components_.Clear();
+  _impl_.termination_reason_.ClearToEmpty();
+  _impl_.behavior_model_lineage_id_.ClearToEmpty();
+  ::memset(&_impl_.episode_return_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.shortest_action_steps_) -
+      reinterpret_cast<char*>(&_impl_.episode_return_)) + sizeof(_impl_.shortest_action_steps_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* AgentEpisodeMetricFact::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 agent_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.agent_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // double episode_return = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 17)) {
+          _impl_.episode_return_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 transition_count = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.transition_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool success = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string termination_reason = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_termination_reason();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.AgentEpisodeMetricFact.termination_reason"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 shortest_action_steps = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.shortest_action_steps_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 unique_cell_count = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.unique_cell_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 blocked_move_count = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          _impl_.blocked_move_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 attempted_move_count = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
+          _impl_.attempted_move_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_reward_components(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<82>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 behavior_model_version_min = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
+          _impl_.behavior_model_version_min_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 behavior_model_version_max = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
+          _impl_.behavior_model_version_max_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string behavior_model_lineage_id = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 106)) {
+          auto str = _internal_mutable_behavior_model_lineage_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* AgentEpisodeMetricFact::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.AgentEpisodeMetricFact)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 agent_id = 1;
+  if (this->_internal_agent_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_agent_id(), target);
+  }
+
+  // double episode_return = 2;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_episode_return = this->_internal_episode_return();
+  uint64_t raw_episode_return;
+  memcpy(&raw_episode_return, &tmp_episode_return, sizeof(tmp_episode_return));
+  if (raw_episode_return != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(2, this->_internal_episode_return(), target);
+  }
+
+  // uint64 transition_count = 3;
+  if (this->_internal_transition_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(3, this->_internal_transition_count(), target);
+  }
+
+  // bool success = 4;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_success(), target);
+  }
+
+  // string termination_reason = 5;
+  if (!this->_internal_termination_reason().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_termination_reason().data(), static_cast<int>(this->_internal_termination_reason().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.AgentEpisodeMetricFact.termination_reason");
+    target = stream->WriteStringMaybeAliased(
+        5, this->_internal_termination_reason(), target);
+  }
+
+  // uint32 shortest_action_steps = 6;
+  if (this->_internal_shortest_action_steps() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_shortest_action_steps(), target);
+  }
+
+  // uint64 unique_cell_count = 7;
+  if (this->_internal_unique_cell_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(7, this->_internal_unique_cell_count(), target);
+  }
+
+  // uint64 blocked_move_count = 8;
+  if (this->_internal_blocked_move_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(8, this->_internal_blocked_move_count(), target);
+  }
+
+  // uint64 attempted_move_count = 9;
+  if (this->_internal_attempted_move_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(9, this->_internal_attempted_move_count(), target);
+  }
+
+  // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_reward_components_size()); i < n; i++) {
+    const auto& repfield = this->_internal_reward_components(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(10, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // uint64 behavior_model_version_min = 11;
+  if (this->_internal_behavior_model_version_min() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(11, this->_internal_behavior_model_version_min(), target);
+  }
+
+  // uint64 behavior_model_version_max = 12;
+  if (this->_internal_behavior_model_version_max() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(12, this->_internal_behavior_model_version_max(), target);
+  }
+
+  // string behavior_model_lineage_id = 13;
+  if (!this->_internal_behavior_model_lineage_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_behavior_model_lineage_id().data(), static_cast<int>(this->_internal_behavior_model_lineage_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id");
+    target = stream->WriteStringMaybeAliased(
+        13, this->_internal_behavior_model_lineage_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.AgentEpisodeMetricFact)
+  return target;
+}
+
+size_t AgentEpisodeMetricFact::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.AgentEpisodeMetricFact)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
+  total_size += 1UL * this->_internal_reward_components_size();
+  for (const auto& msg : this->_impl_.reward_components_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string termination_reason = 5;
+  if (!this->_internal_termination_reason().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_termination_reason());
+  }
+
+  // string behavior_model_lineage_id = 13;
+  if (!this->_internal_behavior_model_lineage_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_behavior_model_lineage_id());
+  }
+
+  // double episode_return = 2;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_episode_return = this->_internal_episode_return();
+  uint64_t raw_episode_return;
+  memcpy(&raw_episode_return, &tmp_episode_return, sizeof(tmp_episode_return));
+  if (raw_episode_return != 0) {
+    total_size += 1 + 8;
+  }
+
+  // uint32 agent_id = 1;
+  if (this->_internal_agent_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_agent_id());
+  }
+
+  // bool success = 4;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // uint64 transition_count = 3;
+  if (this->_internal_transition_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_transition_count());
+  }
+
+  // uint64 unique_cell_count = 7;
+  if (this->_internal_unique_cell_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_unique_cell_count());
+  }
+
+  // uint64 blocked_move_count = 8;
+  if (this->_internal_blocked_move_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_blocked_move_count());
+  }
+
+  // uint64 attempted_move_count = 9;
+  if (this->_internal_attempted_move_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_attempted_move_count());
+  }
+
+  // uint64 behavior_model_version_min = 11;
+  if (this->_internal_behavior_model_version_min() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_behavior_model_version_min());
+  }
+
+  // uint64 behavior_model_version_max = 12;
+  if (this->_internal_behavior_model_version_max() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_behavior_model_version_max());
+  }
+
+  // uint32 shortest_action_steps = 6;
+  if (this->_internal_shortest_action_steps() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_shortest_action_steps());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AgentEpisodeMetricFact::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    AgentEpisodeMetricFact::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AgentEpisodeMetricFact::GetClassData() const { return &_class_data_; }
+
+
+void AgentEpisodeMetricFact::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<AgentEpisodeMetricFact*>(&to_msg);
+  auto& from = static_cast<const AgentEpisodeMetricFact&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.AgentEpisodeMetricFact)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.reward_components_.MergeFrom(from._impl_.reward_components_);
+  if (!from._internal_termination_reason().empty()) {
+    _this->_internal_set_termination_reason(from._internal_termination_reason());
+  }
+  if (!from._internal_behavior_model_lineage_id().empty()) {
+    _this->_internal_set_behavior_model_lineage_id(from._internal_behavior_model_lineage_id());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_episode_return = from._internal_episode_return();
+  uint64_t raw_episode_return;
+  memcpy(&raw_episode_return, &tmp_episode_return, sizeof(tmp_episode_return));
+  if (raw_episode_return != 0) {
+    _this->_internal_set_episode_return(from._internal_episode_return());
+  }
+  if (from._internal_agent_id() != 0) {
+    _this->_internal_set_agent_id(from._internal_agent_id());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  if (from._internal_transition_count() != 0) {
+    _this->_internal_set_transition_count(from._internal_transition_count());
+  }
+  if (from._internal_unique_cell_count() != 0) {
+    _this->_internal_set_unique_cell_count(from._internal_unique_cell_count());
+  }
+  if (from._internal_blocked_move_count() != 0) {
+    _this->_internal_set_blocked_move_count(from._internal_blocked_move_count());
+  }
+  if (from._internal_attempted_move_count() != 0) {
+    _this->_internal_set_attempted_move_count(from._internal_attempted_move_count());
+  }
+  if (from._internal_behavior_model_version_min() != 0) {
+    _this->_internal_set_behavior_model_version_min(from._internal_behavior_model_version_min());
+  }
+  if (from._internal_behavior_model_version_max() != 0) {
+    _this->_internal_set_behavior_model_version_max(from._internal_behavior_model_version_max());
+  }
+  if (from._internal_shortest_action_steps() != 0) {
+    _this->_internal_set_shortest_action_steps(from._internal_shortest_action_steps());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void AgentEpisodeMetricFact::CopyFrom(const AgentEpisodeMetricFact& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.AgentEpisodeMetricFact)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AgentEpisodeMetricFact::IsInitialized() const {
+  return true;
+}
+
+void AgentEpisodeMetricFact::InternalSwap(AgentEpisodeMetricFact* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.reward_components_.InternalSwap(&other->_impl_.reward_components_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.termination_reason_, lhs_arena,
+      &other->_impl_.termination_reason_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.behavior_model_lineage_id_, lhs_arena,
+      &other->_impl_.behavior_model_lineage_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(AgentEpisodeMetricFact, _impl_.shortest_action_steps_)
+      + sizeof(AgentEpisodeMetricFact::_impl_.shortest_action_steps_)
+      - PROTOBUF_FIELD_OFFSET(AgentEpisodeMetricFact, _impl_.episode_return_)>(
+          reinterpret_cast<char*>(&_impl_.episode_return_),
+          reinterpret_cast<char*>(&other->_impl_.episode_return_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata AgentEpisodeMetricFact::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[33]);
+}
+
+// ===================================================================
+
+class EpisodeMetricFact::_Internal {
+ public:
+  static const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics(const EpisodeMetricFact* msg);
+};
+
+const ::rl::training::v1::TrainingSemanticsIdentity&
+EpisodeMetricFact::_Internal::training_semantics(const EpisodeMetricFact* msg) {
+  return *msg->_impl_.training_semantics_;
+}
+EpisodeMetricFact::EpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.EpisodeMetricFact)
+}
+EpisodeMetricFact::EpisodeMetricFact(const EpisodeMetricFact& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  EpisodeMetricFact* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.agents_){from._impl_.agents_}
+    , decltype(_impl_.task_id_){}
+    , decltype(_impl_.environment_instance_id_){}
+    , decltype(_impl_.episode_id_){}
+    , decltype(_impl_.training_semantics_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_id().empty()) {
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.environment_instance_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.environment_instance_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_environment_instance_id().empty()) {
+    _this->_impl_.environment_instance_id_.Set(from._internal_environment_instance_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.episode_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.episode_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_episode_id().empty()) {
+    _this->_impl_.episode_id_.Set(from._internal_episode_id(), 
+      _this->GetArenaForAllocation());
+  }
+  if (from._internal_has_training_semantics()) {
+    _this->_impl_.training_semantics_ = new ::rl::training::v1::TrainingSemanticsIdentity(*from._impl_.training_semantics_);
+  }
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.EpisodeMetricFact)
+}
+
+inline void EpisodeMetricFact::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.agents_){arena}
+    , decltype(_impl_.task_id_){}
+    , decltype(_impl_.environment_instance_id_){}
+    , decltype(_impl_.episode_id_){}
+    , decltype(_impl_.training_semantics_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.environment_instance_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.environment_instance_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.episode_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.episode_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+EpisodeMetricFact::~EpisodeMetricFact() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.EpisodeMetricFact)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void EpisodeMetricFact::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.agents_.~RepeatedPtrField();
+  _impl_.task_id_.Destroy();
+  _impl_.environment_instance_id_.Destroy();
+  _impl_.episode_id_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.training_semantics_;
+}
+
+void EpisodeMetricFact::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void EpisodeMetricFact::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.EpisodeMetricFact)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.agents_.Clear();
+  _impl_.task_id_.ClearToEmpty();
+  _impl_.environment_instance_id_.ClearToEmpty();
+  _impl_.episode_id_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
+    delete _impl_.training_semantics_;
+  }
+  _impl_.training_semantics_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* EpisodeMetricFact::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string task_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_task_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.EpisodeMetricFact.task_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string environment_instance_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_environment_instance_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.EpisodeMetricFact.environment_instance_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string episode_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_episode_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.EpisodeMetricFact.episode_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_training_semantics(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_agents(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* EpisodeMetricFact::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.EpisodeMetricFact)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string task_id = 1;
+  if (!this->_internal_task_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.EpisodeMetricFact.task_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_task_id(), target);
+  }
+
+  // string environment_instance_id = 2;
+  if (!this->_internal_environment_instance_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_environment_instance_id().data(), static_cast<int>(this->_internal_environment_instance_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.EpisodeMetricFact.environment_instance_id");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_environment_instance_id(), target);
+  }
+
+  // string episode_id = 3;
+  if (!this->_internal_episode_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_episode_id().data(), static_cast<int>(this->_internal_episode_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.EpisodeMetricFact.episode_id");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_episode_id(), target);
+  }
+
+  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 4;
+  if (this->_internal_has_training_semantics()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::training_semantics(this),
+        _Internal::training_semantics(this).GetCachedSize(), target, stream);
+  }
+
+  // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_agents_size()); i < n; i++) {
+    const auto& repfield = this->_internal_agents(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(5, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.EpisodeMetricFact)
+  return target;
+}
+
+size_t EpisodeMetricFact::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.EpisodeMetricFact)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
+  total_size += 1UL * this->_internal_agents_size();
+  for (const auto& msg : this->_impl_.agents_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string task_id = 1;
+  if (!this->_internal_task_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_id());
+  }
+
+  // string environment_instance_id = 2;
+  if (!this->_internal_environment_instance_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_environment_instance_id());
+  }
+
+  // string episode_id = 3;
+  if (!this->_internal_episode_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_episode_id());
+  }
+
+  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 4;
+  if (this->_internal_has_training_semantics()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.training_semantics_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EpisodeMetricFact::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    EpisodeMetricFact::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EpisodeMetricFact::GetClassData() const { return &_class_data_; }
+
+
+void EpisodeMetricFact::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<EpisodeMetricFact*>(&to_msg);
+  auto& from = static_cast<const EpisodeMetricFact&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.EpisodeMetricFact)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.agents_.MergeFrom(from._impl_.agents_);
+  if (!from._internal_task_id().empty()) {
+    _this->_internal_set_task_id(from._internal_task_id());
+  }
+  if (!from._internal_environment_instance_id().empty()) {
+    _this->_internal_set_environment_instance_id(from._internal_environment_instance_id());
+  }
+  if (!from._internal_episode_id().empty()) {
+    _this->_internal_set_episode_id(from._internal_episode_id());
+  }
+  if (from._internal_has_training_semantics()) {
+    _this->_internal_mutable_training_semantics()->::rl::training::v1::TrainingSemanticsIdentity::MergeFrom(
+        from._internal_training_semantics());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void EpisodeMetricFact::CopyFrom(const EpisodeMetricFact& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.EpisodeMetricFact)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool EpisodeMetricFact::IsInitialized() const {
+  return true;
+}
+
+void EpisodeMetricFact::InternalSwap(EpisodeMetricFact* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.agents_.InternalSwap(&other->_impl_.agents_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_id_, lhs_arena,
+      &other->_impl_.task_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.environment_instance_id_, lhs_arena,
+      &other->_impl_.environment_instance_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.episode_id_, lhs_arena,
+      &other->_impl_.episode_id_, rhs_arena
+  );
+  swap(_impl_.training_semantics_, other->_impl_.training_semantics_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata EpisodeMetricFact::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[34]);
+}
+
+// ===================================================================
+
+class TrainUpdateMetricFact::_Internal {
+ public:
+  static const ::rl::training::v1::ModelIdentity& published_model(const TrainUpdateMetricFact* msg);
+  static const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics(const TrainUpdateMetricFact* msg);
+};
+
+const ::rl::training::v1::ModelIdentity&
+TrainUpdateMetricFact::_Internal::published_model(const TrainUpdateMetricFact* msg) {
+  return *msg->_impl_.published_model_;
+}
+const ::rl::training::v1::TrainingSemanticsIdentity&
+TrainUpdateMetricFact::_Internal::training_semantics(const TrainUpdateMetricFact* msg) {
+  return *msg->_impl_.training_semantics_;
+}
+TrainUpdateMetricFact::TrainUpdateMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.TrainUpdateMetricFact)
+}
+TrainUpdateMetricFact::TrainUpdateMetricFact(const TrainUpdateMetricFact& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TrainUpdateMetricFact* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.ppo_statistics_){from._impl_.ppo_statistics_}
+    , decltype(_impl_.train_update_id_){}
+    , decltype(_impl_.delivery_id_){}
+    , decltype(_impl_.behavior_model_lineage_id_){}
+    , decltype(_impl_.published_model_){nullptr}
+    , decltype(_impl_.training_semantics_){nullptr}
+    , decltype(_impl_.train_update_sequence_){}
+    , decltype(_impl_.cumulative_trained_samples_){}
+    , decltype(_impl_.actual_batch_size_){}
+    , decltype(_impl_.behavior_model_version_min_){}
+    , decltype(_impl_.behavior_model_version_max_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.train_update_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.train_update_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_train_update_id().empty()) {
+    _this->_impl_.train_update_id_.Set(from._internal_train_update_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.delivery_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.delivery_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_delivery_id().empty()) {
+    _this->_impl_.delivery_id_.Set(from._internal_delivery_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.behavior_model_lineage_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_behavior_model_lineage_id().empty()) {
+    _this->_impl_.behavior_model_lineage_id_.Set(from._internal_behavior_model_lineage_id(), 
+      _this->GetArenaForAllocation());
+  }
+  if (from._internal_has_published_model()) {
+    _this->_impl_.published_model_ = new ::rl::training::v1::ModelIdentity(*from._impl_.published_model_);
+  }
+  if (from._internal_has_training_semantics()) {
+    _this->_impl_.training_semantics_ = new ::rl::training::v1::TrainingSemanticsIdentity(*from._impl_.training_semantics_);
+  }
+  ::memcpy(&_impl_.train_update_sequence_, &from._impl_.train_update_sequence_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.behavior_model_version_max_) -
+    reinterpret_cast<char*>(&_impl_.train_update_sequence_)) + sizeof(_impl_.behavior_model_version_max_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.TrainUpdateMetricFact)
+}
+
+inline void TrainUpdateMetricFact::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.ppo_statistics_){arena}
+    , decltype(_impl_.train_update_id_){}
+    , decltype(_impl_.delivery_id_){}
+    , decltype(_impl_.behavior_model_lineage_id_){}
+    , decltype(_impl_.published_model_){nullptr}
+    , decltype(_impl_.training_semantics_){nullptr}
+    , decltype(_impl_.train_update_sequence_){uint64_t{0u}}
+    , decltype(_impl_.cumulative_trained_samples_){int64_t{0}}
+    , decltype(_impl_.actual_batch_size_){int64_t{0}}
+    , decltype(_impl_.behavior_model_version_min_){uint64_t{0u}}
+    , decltype(_impl_.behavior_model_version_max_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.train_update_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.train_update_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.delivery_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.delivery_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.behavior_model_lineage_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+TrainUpdateMetricFact::~TrainUpdateMetricFact() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.TrainUpdateMetricFact)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void TrainUpdateMetricFact::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.ppo_statistics_.~RepeatedPtrField();
+  _impl_.train_update_id_.Destroy();
+  _impl_.delivery_id_.Destroy();
+  _impl_.behavior_model_lineage_id_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.published_model_;
+  if (this != internal_default_instance()) delete _impl_.training_semantics_;
+}
+
+void TrainUpdateMetricFact::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void TrainUpdateMetricFact::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.TrainUpdateMetricFact)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.ppo_statistics_.Clear();
+  _impl_.train_update_id_.ClearToEmpty();
+  _impl_.delivery_id_.ClearToEmpty();
+  _impl_.behavior_model_lineage_id_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.published_model_ != nullptr) {
+    delete _impl_.published_model_;
+  }
+  _impl_.published_model_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
+    delete _impl_.training_semantics_;
+  }
+  _impl_.training_semantics_ = nullptr;
+  ::memset(&_impl_.train_update_sequence_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.behavior_model_version_max_) -
+      reinterpret_cast<char*>(&_impl_.train_update_sequence_)) + sizeof(_impl_.behavior_model_version_max_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TrainUpdateMetricFact::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string train_update_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_train_update_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.TrainUpdateMetricFact.train_update_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 train_update_sequence = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.train_update_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.ModelIdentity published_model = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_published_model(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string delivery_id = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_delivery_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.TrainUpdateMetricFact.delivery_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr = ctx->ParseMessage(_internal_mutable_training_semantics(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 cumulative_trained_samples = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.cumulative_trained_samples_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 actual_batch_size = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.actual_batch_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 behavior_model_version_min = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          _impl_.behavior_model_version_min_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 behavior_model_version_max = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
+          _impl_.behavior_model_version_max_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_ppo_statistics(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<82>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // string behavior_model_lineage_id = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
+          auto str = _internal_mutable_behavior_model_lineage_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TrainUpdateMetricFact::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.TrainUpdateMetricFact)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string train_update_id = 1;
+  if (!this->_internal_train_update_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_train_update_id().data(), static_cast<int>(this->_internal_train_update_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.TrainUpdateMetricFact.train_update_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_train_update_id(), target);
+  }
+
+  // uint64 train_update_sequence = 2;
+  if (this->_internal_train_update_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_train_update_sequence(), target);
+  }
+
+  // .rl.training.v1.ModelIdentity published_model = 3;
+  if (this->_internal_has_published_model()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::published_model(this),
+        _Internal::published_model(this).GetCachedSize(), target, stream);
+  }
+
+  // string delivery_id = 4;
+  if (!this->_internal_delivery_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_delivery_id().data(), static_cast<int>(this->_internal_delivery_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.TrainUpdateMetricFact.delivery_id");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_delivery_id(), target);
+  }
+
+  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 5;
+  if (this->_internal_has_training_semantics()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(5, _Internal::training_semantics(this),
+        _Internal::training_semantics(this).GetCachedSize(), target, stream);
+  }
+
+  // int64 cumulative_trained_samples = 6;
+  if (this->_internal_cumulative_trained_samples() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(6, this->_internal_cumulative_trained_samples(), target);
+  }
+
+  // int64 actual_batch_size = 7;
+  if (this->_internal_actual_batch_size() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(7, this->_internal_actual_batch_size(), target);
+  }
+
+  // uint64 behavior_model_version_min = 8;
+  if (this->_internal_behavior_model_version_min() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(8, this->_internal_behavior_model_version_min(), target);
+  }
+
+  // uint64 behavior_model_version_max = 9;
+  if (this->_internal_behavior_model_version_max() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(9, this->_internal_behavior_model_version_max(), target);
+  }
+
+  // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_ppo_statistics_size()); i < n; i++) {
+    const auto& repfield = this->_internal_ppo_statistics(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(10, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // string behavior_model_lineage_id = 11;
+  if (!this->_internal_behavior_model_lineage_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_behavior_model_lineage_id().data(), static_cast<int>(this->_internal_behavior_model_lineage_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id");
+    target = stream->WriteStringMaybeAliased(
+        11, this->_internal_behavior_model_lineage_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.TrainUpdateMetricFact)
+  return target;
+}
+
+size_t TrainUpdateMetricFact::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.TrainUpdateMetricFact)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
+  total_size += 1UL * this->_internal_ppo_statistics_size();
+  for (const auto& msg : this->_impl_.ppo_statistics_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string train_update_id = 1;
+  if (!this->_internal_train_update_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_train_update_id());
+  }
+
+  // string delivery_id = 4;
+  if (!this->_internal_delivery_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_delivery_id());
+  }
+
+  // string behavior_model_lineage_id = 11;
+  if (!this->_internal_behavior_model_lineage_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_behavior_model_lineage_id());
+  }
+
+  // .rl.training.v1.ModelIdentity published_model = 3;
+  if (this->_internal_has_published_model()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.published_model_);
+  }
+
+  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 5;
+  if (this->_internal_has_training_semantics()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.training_semantics_);
+  }
+
+  // uint64 train_update_sequence = 2;
+  if (this->_internal_train_update_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_train_update_sequence());
+  }
+
+  // int64 cumulative_trained_samples = 6;
+  if (this->_internal_cumulative_trained_samples() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_cumulative_trained_samples());
+  }
+
+  // int64 actual_batch_size = 7;
+  if (this->_internal_actual_batch_size() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_actual_batch_size());
+  }
+
+  // uint64 behavior_model_version_min = 8;
+  if (this->_internal_behavior_model_version_min() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_behavior_model_version_min());
+  }
+
+  // uint64 behavior_model_version_max = 9;
+  if (this->_internal_behavior_model_version_max() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_behavior_model_version_max());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TrainUpdateMetricFact::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    TrainUpdateMetricFact::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TrainUpdateMetricFact::GetClassData() const { return &_class_data_; }
+
+
+void TrainUpdateMetricFact::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TrainUpdateMetricFact*>(&to_msg);
+  auto& from = static_cast<const TrainUpdateMetricFact&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.TrainUpdateMetricFact)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.ppo_statistics_.MergeFrom(from._impl_.ppo_statistics_);
+  if (!from._internal_train_update_id().empty()) {
+    _this->_internal_set_train_update_id(from._internal_train_update_id());
+  }
+  if (!from._internal_delivery_id().empty()) {
+    _this->_internal_set_delivery_id(from._internal_delivery_id());
+  }
+  if (!from._internal_behavior_model_lineage_id().empty()) {
+    _this->_internal_set_behavior_model_lineage_id(from._internal_behavior_model_lineage_id());
+  }
+  if (from._internal_has_published_model()) {
+    _this->_internal_mutable_published_model()->::rl::training::v1::ModelIdentity::MergeFrom(
+        from._internal_published_model());
+  }
+  if (from._internal_has_training_semantics()) {
+    _this->_internal_mutable_training_semantics()->::rl::training::v1::TrainingSemanticsIdentity::MergeFrom(
+        from._internal_training_semantics());
+  }
+  if (from._internal_train_update_sequence() != 0) {
+    _this->_internal_set_train_update_sequence(from._internal_train_update_sequence());
+  }
+  if (from._internal_cumulative_trained_samples() != 0) {
+    _this->_internal_set_cumulative_trained_samples(from._internal_cumulative_trained_samples());
+  }
+  if (from._internal_actual_batch_size() != 0) {
+    _this->_internal_set_actual_batch_size(from._internal_actual_batch_size());
+  }
+  if (from._internal_behavior_model_version_min() != 0) {
+    _this->_internal_set_behavior_model_version_min(from._internal_behavior_model_version_min());
+  }
+  if (from._internal_behavior_model_version_max() != 0) {
+    _this->_internal_set_behavior_model_version_max(from._internal_behavior_model_version_max());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TrainUpdateMetricFact::CopyFrom(const TrainUpdateMetricFact& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.TrainUpdateMetricFact)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TrainUpdateMetricFact::IsInitialized() const {
+  return true;
+}
+
+void TrainUpdateMetricFact::InternalSwap(TrainUpdateMetricFact* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.ppo_statistics_.InternalSwap(&other->_impl_.ppo_statistics_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.train_update_id_, lhs_arena,
+      &other->_impl_.train_update_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.delivery_id_, lhs_arena,
+      &other->_impl_.delivery_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.behavior_model_lineage_id_, lhs_arena,
+      &other->_impl_.behavior_model_lineage_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TrainUpdateMetricFact, _impl_.behavior_model_version_max_)
+      + sizeof(TrainUpdateMetricFact::_impl_.behavior_model_version_max_)
+      - PROTOBUF_FIELD_OFFSET(TrainUpdateMetricFact, _impl_.published_model_)>(
+          reinterpret_cast<char*>(&_impl_.published_model_),
+          reinterpret_cast<char*>(&other->_impl_.published_model_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TrainUpdateMetricFact::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[35]);
+}
+
+// ===================================================================
+
+class MetricEvent::_Internal {
+ public:
+  static const ::rl::common::v1::ContractIdentity& contract(const MetricEvent* msg);
+  static const ::rl::common::v1::SchemaIdentity& schema_identity(const MetricEvent* msg);
+  static const ::rl::common::v1::ServiceInstanceIdentity& source(const MetricEvent* msg);
+  static const ::rl::training::v1::EpisodeMetricFact& episode(const MetricEvent* msg);
+  static const ::rl::training::v1::TrainUpdateMetricFact& train_update(const MetricEvent* msg);
+};
+
+const ::rl::common::v1::ContractIdentity&
+MetricEvent::_Internal::contract(const MetricEvent* msg) {
+  return *msg->_impl_.contract_;
+}
+const ::rl::common::v1::SchemaIdentity&
+MetricEvent::_Internal::schema_identity(const MetricEvent* msg) {
+  return *msg->_impl_.schema_identity_;
+}
+const ::rl::common::v1::ServiceInstanceIdentity&
+MetricEvent::_Internal::source(const MetricEvent* msg) {
+  return *msg->_impl_.source_;
+}
+const ::rl::training::v1::EpisodeMetricFact&
+MetricEvent::_Internal::episode(const MetricEvent* msg) {
+  return *msg->_impl_.fact_.episode_;
+}
+const ::rl::training::v1::TrainUpdateMetricFact&
+MetricEvent::_Internal::train_update(const MetricEvent* msg) {
+  return *msg->_impl_.fact_.train_update_;
+}
+void MetricEvent::clear_contract() {
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+}
+void MetricEvent::clear_schema_identity() {
+  if (GetArenaForAllocation() == nullptr && _impl_.schema_identity_ != nullptr) {
+    delete _impl_.schema_identity_;
+  }
+  _impl_.schema_identity_ = nullptr;
+}
+void MetricEvent::clear_source() {
+  if (GetArenaForAllocation() == nullptr && _impl_.source_ != nullptr) {
+    delete _impl_.source_;
+  }
+  _impl_.source_ = nullptr;
+}
+void MetricEvent::set_allocated_episode(::rl::training::v1::EpisodeMetricFact* episode) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_fact();
+  if (episode) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(episode);
+    if (message_arena != submessage_arena) {
+      episode = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, episode, submessage_arena);
+    }
+    set_has_episode();
+    _impl_.fact_.episode_ = episode;
+  }
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.episode)
+}
+void MetricEvent::set_allocated_train_update(::rl::training::v1::TrainUpdateMetricFact* train_update) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_fact();
+  if (train_update) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(train_update);
+    if (message_arena != submessage_arena) {
+      train_update = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, train_update, submessage_arena);
+    }
+    set_has_train_update();
+    _impl_.fact_.train_update_ = train_update;
+  }
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.train_update)
+}
+MetricEvent::MetricEvent(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.MetricEvent)
+}
+MetricEvent::MetricEvent(const MetricEvent& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MetricEvent* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.schema_identity_){nullptr}
+    , decltype(_impl_.source_){nullptr}
+    , decltype(_impl_.event_sequence_){}
+    , decltype(_impl_.committed_at_unix_ms_){}
+    , decltype(_impl_.fact_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , /*decltype(_impl_._oneof_case_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_contract()) {
+    _this->_impl_.contract_ = new ::rl::common::v1::ContractIdentity(*from._impl_.contract_);
+  }
+  if (from._internal_has_schema_identity()) {
+    _this->_impl_.schema_identity_ = new ::rl::common::v1::SchemaIdentity(*from._impl_.schema_identity_);
+  }
+  if (from._internal_has_source()) {
+    _this->_impl_.source_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.source_);
+  }
+  ::memcpy(&_impl_.event_sequence_, &from._impl_.event_sequence_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.committed_at_unix_ms_) -
+    reinterpret_cast<char*>(&_impl_.event_sequence_)) + sizeof(_impl_.committed_at_unix_ms_));
+  clear_has_fact();
+  switch (from.fact_case()) {
+    case kEpisode: {
+      _this->_internal_mutable_episode()->::rl::training::v1::EpisodeMetricFact::MergeFrom(
+          from._internal_episode());
+      break;
+    }
+    case kTrainUpdate: {
+      _this->_internal_mutable_train_update()->::rl::training::v1::TrainUpdateMetricFact::MergeFrom(
+          from._internal_train_update());
+      break;
+    }
+    case FACT_NOT_SET: {
+      break;
+    }
+  }
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricEvent)
+}
+
+inline void MetricEvent::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.schema_identity_){nullptr}
+    , decltype(_impl_.source_){nullptr}
+    , decltype(_impl_.event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.committed_at_unix_ms_){int64_t{0}}
+    , decltype(_impl_.fact_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , /*decltype(_impl_._oneof_case_)*/{}
+  };
+  clear_has_fact();
+}
+
+MetricEvent::~MetricEvent() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.MetricEvent)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MetricEvent::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.contract_;
+  if (this != internal_default_instance()) delete _impl_.schema_identity_;
+  if (this != internal_default_instance()) delete _impl_.source_;
+  if (has_fact()) {
+    clear_fact();
+  }
+}
+
+void MetricEvent::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MetricEvent::clear_fact() {
+// @@protoc_insertion_point(one_of_clear_start:rl.training.v1.MetricEvent)
+  switch (fact_case()) {
+    case kEpisode: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.fact_.episode_;
+      }
+      break;
+    }
+    case kTrainUpdate: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.fact_.train_update_;
+      }
+      break;
+    }
+    case FACT_NOT_SET: {
+      break;
+    }
+  }
+  _impl_._oneof_case_[0] = FACT_NOT_SET;
+}
+
+
+void MetricEvent::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricEvent)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.schema_identity_ != nullptr) {
+    delete _impl_.schema_identity_;
+  }
+  _impl_.schema_identity_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.source_ != nullptr) {
+    delete _impl_.source_;
+  }
+  _impl_.source_ = nullptr;
+  ::memset(&_impl_.event_sequence_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.committed_at_unix_ms_) -
+      reinterpret_cast<char*>(&_impl_.event_sequence_)) + sizeof(_impl_.committed_at_unix_ms_));
+  clear_fact();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MetricEvent::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .rl.common.v1.ContractIdentity contract = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_contract(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.SchemaIdentity schema_identity = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_schema_identity(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ServiceInstanceIdentity source = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_source(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 event_sequence = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 committed_at_unix_ms = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.committed_at_unix_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.EpisodeMetricFact episode = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          ptr = ctx->ParseMessage(_internal_mutable_episode(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.TrainUpdateMetricFact train_update = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          ptr = ctx->ParseMessage(_internal_mutable_train_update(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MetricEvent::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.MetricEvent)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::contract(this),
+        _Internal::contract(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.common.v1.SchemaIdentity schema_identity = 2;
+  if (this->_internal_has_schema_identity()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::schema_identity(this),
+        _Internal::schema_identity(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity source = 3;
+  if (this->_internal_has_source()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::source(this),
+        _Internal::source(this).GetCachedSize(), target, stream);
+  }
+
+  // uint64 event_sequence = 4;
+  if (this->_internal_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(4, this->_internal_event_sequence(), target);
+  }
+
+  // int64 committed_at_unix_ms = 5;
+  if (this->_internal_committed_at_unix_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(5, this->_internal_committed_at_unix_ms(), target);
+  }
+
+  // .rl.training.v1.EpisodeMetricFact episode = 6;
+  if (_internal_has_episode()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(6, _Internal::episode(this),
+        _Internal::episode(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.training.v1.TrainUpdateMetricFact train_update = 7;
+  if (_internal_has_train_update()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(7, _Internal::train_update(this),
+        _Internal::train_update(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.MetricEvent)
+  return target;
+}
+
+size_t MetricEvent::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.MetricEvent)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.contract_);
+  }
+
+  // .rl.common.v1.SchemaIdentity schema_identity = 2;
+  if (this->_internal_has_schema_identity()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.schema_identity_);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity source = 3;
+  if (this->_internal_has_source()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.source_);
+  }
+
+  // uint64 event_sequence = 4;
+  if (this->_internal_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_event_sequence());
+  }
+
+  // int64 committed_at_unix_ms = 5;
+  if (this->_internal_committed_at_unix_ms() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_committed_at_unix_ms());
+  }
+
+  switch (fact_case()) {
+    // .rl.training.v1.EpisodeMetricFact episode = 6;
+    case kEpisode: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *_impl_.fact_.episode_);
+      break;
+    }
+    // .rl.training.v1.TrainUpdateMetricFact train_update = 7;
+    case kTrainUpdate: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *_impl_.fact_.train_update_);
+      break;
+    }
+    case FACT_NOT_SET: {
+      break;
+    }
+  }
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MetricEvent::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MetricEvent::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MetricEvent::GetClassData() const { return &_class_data_; }
+
+
+void MetricEvent::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MetricEvent*>(&to_msg);
+  auto& from = static_cast<const MetricEvent&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.MetricEvent)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_contract()) {
+    _this->_internal_mutable_contract()->::rl::common::v1::ContractIdentity::MergeFrom(
+        from._internal_contract());
+  }
+  if (from._internal_has_schema_identity()) {
+    _this->_internal_mutable_schema_identity()->::rl::common::v1::SchemaIdentity::MergeFrom(
+        from._internal_schema_identity());
+  }
+  if (from._internal_has_source()) {
+    _this->_internal_mutable_source()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
+        from._internal_source());
+  }
+  if (from._internal_event_sequence() != 0) {
+    _this->_internal_set_event_sequence(from._internal_event_sequence());
+  }
+  if (from._internal_committed_at_unix_ms() != 0) {
+    _this->_internal_set_committed_at_unix_ms(from._internal_committed_at_unix_ms());
+  }
+  switch (from.fact_case()) {
+    case kEpisode: {
+      _this->_internal_mutable_episode()->::rl::training::v1::EpisodeMetricFact::MergeFrom(
+          from._internal_episode());
+      break;
+    }
+    case kTrainUpdate: {
+      _this->_internal_mutable_train_update()->::rl::training::v1::TrainUpdateMetricFact::MergeFrom(
+          from._internal_train_update());
+      break;
+    }
+    case FACT_NOT_SET: {
+      break;
+    }
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MetricEvent::CopyFrom(const MetricEvent& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.MetricEvent)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetricEvent::IsInitialized() const {
+  return true;
+}
+
+void MetricEvent::InternalSwap(MetricEvent* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MetricEvent, _impl_.committed_at_unix_ms_)
+      + sizeof(MetricEvent::_impl_.committed_at_unix_ms_)
+      - PROTOBUF_FIELD_OFFSET(MetricEvent, _impl_.contract_)>(
+          reinterpret_cast<char*>(&_impl_.contract_),
+          reinterpret_cast<char*>(&other->_impl_.contract_));
+  swap(_impl_.fact_, other->_impl_.fact_);
+  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MetricEvent::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[36]);
+}
+
+// ===================================================================
+
+class MetricSequenceGap::_Internal {
+ public:
+};
+
+MetricSequenceGap::MetricSequenceGap(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.MetricSequenceGap)
+}
+MetricSequenceGap::MetricSequenceGap(const MetricSequenceGap& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MetricSequenceGap* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.reason_){}
+    , decltype(_impl_.first_unavailable_event_sequence_){}
+    , decltype(_impl_.last_unavailable_event_sequence_){}
+    , decltype(_impl_.oldest_available_event_sequence_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.reason_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.reason_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_reason().empty()) {
+    _this->_impl_.reason_.Set(from._internal_reason(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.first_unavailable_event_sequence_, &from._impl_.first_unavailable_event_sequence_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.oldest_available_event_sequence_) -
+    reinterpret_cast<char*>(&_impl_.first_unavailable_event_sequence_)) + sizeof(_impl_.oldest_available_event_sequence_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricSequenceGap)
+}
+
+inline void MetricSequenceGap::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.reason_){}
+    , decltype(_impl_.first_unavailable_event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.last_unavailable_event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.oldest_available_event_sequence_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.reason_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.reason_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+MetricSequenceGap::~MetricSequenceGap() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.MetricSequenceGap)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MetricSequenceGap::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.reason_.Destroy();
+}
+
+void MetricSequenceGap::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MetricSequenceGap::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricSequenceGap)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.reason_.ClearToEmpty();
+  ::memset(&_impl_.first_unavailable_event_sequence_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.oldest_available_event_sequence_) -
+      reinterpret_cast<char*>(&_impl_.first_unavailable_event_sequence_)) + sizeof(_impl_.oldest_available_event_sequence_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MetricSequenceGap::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint64 first_unavailable_event_sequence = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.first_unavailable_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 last_unavailable_event_sequence = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.last_unavailable_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 oldest_available_event_sequence = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.oldest_available_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string reason = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_reason();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.MetricSequenceGap.reason"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MetricSequenceGap::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.MetricSequenceGap)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 first_unavailable_event_sequence = 1;
+  if (this->_internal_first_unavailable_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(1, this->_internal_first_unavailable_event_sequence(), target);
+  }
+
+  // uint64 last_unavailable_event_sequence = 2;
+  if (this->_internal_last_unavailable_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_last_unavailable_event_sequence(), target);
+  }
+
+  // uint64 oldest_available_event_sequence = 3;
+  if (this->_internal_oldest_available_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(3, this->_internal_oldest_available_event_sequence(), target);
+  }
+
+  // string reason = 4;
+  if (!this->_internal_reason().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_reason().data(), static_cast<int>(this->_internal_reason().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.MetricSequenceGap.reason");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_reason(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.MetricSequenceGap)
+  return target;
+}
+
+size_t MetricSequenceGap::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.MetricSequenceGap)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string reason = 4;
+  if (!this->_internal_reason().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_reason());
+  }
+
+  // uint64 first_unavailable_event_sequence = 1;
+  if (this->_internal_first_unavailable_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_first_unavailable_event_sequence());
+  }
+
+  // uint64 last_unavailable_event_sequence = 2;
+  if (this->_internal_last_unavailable_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_last_unavailable_event_sequence());
+  }
+
+  // uint64 oldest_available_event_sequence = 3;
+  if (this->_internal_oldest_available_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_oldest_available_event_sequence());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MetricSequenceGap::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MetricSequenceGap::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MetricSequenceGap::GetClassData() const { return &_class_data_; }
+
+
+void MetricSequenceGap::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MetricSequenceGap*>(&to_msg);
+  auto& from = static_cast<const MetricSequenceGap&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.MetricSequenceGap)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_reason().empty()) {
+    _this->_internal_set_reason(from._internal_reason());
+  }
+  if (from._internal_first_unavailable_event_sequence() != 0) {
+    _this->_internal_set_first_unavailable_event_sequence(from._internal_first_unavailable_event_sequence());
+  }
+  if (from._internal_last_unavailable_event_sequence() != 0) {
+    _this->_internal_set_last_unavailable_event_sequence(from._internal_last_unavailable_event_sequence());
+  }
+  if (from._internal_oldest_available_event_sequence() != 0) {
+    _this->_internal_set_oldest_available_event_sequence(from._internal_oldest_available_event_sequence());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MetricSequenceGap::CopyFrom(const MetricSequenceGap& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.MetricSequenceGap)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetricSequenceGap::IsInitialized() const {
+  return true;
+}
+
+void MetricSequenceGap::InternalSwap(MetricSequenceGap* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.reason_, lhs_arena,
+      &other->_impl_.reason_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MetricSequenceGap, _impl_.oldest_available_event_sequence_)
+      + sizeof(MetricSequenceGap::_impl_.oldest_available_event_sequence_)
+      - PROTOBUF_FIELD_OFFSET(MetricSequenceGap, _impl_.first_unavailable_event_sequence_)>(
+          reinterpret_cast<char*>(&_impl_.first_unavailable_event_sequence_),
+          reinterpret_cast<char*>(&other->_impl_.first_unavailable_event_sequence_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MetricSequenceGap::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[37]);
+}
+
+// ===================================================================
+
+class MetricBatch::_Internal {
+ public:
+  static const ::rl::common::v1::ContractIdentity& contract(const MetricBatch* msg);
+  static const ::rl::common::v1::SchemaIdentity& schema_identity(const MetricBatch* msg);
+  static const ::rl::common::v1::ServiceInstanceIdentity& source(const MetricBatch* msg);
+  static const ::rl::common::v1::ContentDigest& batch_digest(const MetricBatch* msg);
+  static const ::rl::training::v1::MetricSequenceGap& gap(const MetricBatch* msg);
+};
+
+const ::rl::common::v1::ContractIdentity&
+MetricBatch::_Internal::contract(const MetricBatch* msg) {
+  return *msg->_impl_.contract_;
+}
+const ::rl::common::v1::SchemaIdentity&
+MetricBatch::_Internal::schema_identity(const MetricBatch* msg) {
+  return *msg->_impl_.schema_identity_;
+}
+const ::rl::common::v1::ServiceInstanceIdentity&
+MetricBatch::_Internal::source(const MetricBatch* msg) {
+  return *msg->_impl_.source_;
+}
+const ::rl::common::v1::ContentDigest&
+MetricBatch::_Internal::batch_digest(const MetricBatch* msg) {
+  return *msg->_impl_.batch_digest_;
+}
+const ::rl::training::v1::MetricSequenceGap&
+MetricBatch::_Internal::gap(const MetricBatch* msg) {
+  return *msg->_impl_.gap_;
+}
+void MetricBatch::clear_contract() {
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+}
+void MetricBatch::clear_schema_identity() {
+  if (GetArenaForAllocation() == nullptr && _impl_.schema_identity_ != nullptr) {
+    delete _impl_.schema_identity_;
+  }
+  _impl_.schema_identity_ = nullptr;
+}
+void MetricBatch::clear_source() {
+  if (GetArenaForAllocation() == nullptr && _impl_.source_ != nullptr) {
+    delete _impl_.source_;
+  }
+  _impl_.source_ = nullptr;
+}
+void MetricBatch::clear_batch_digest() {
+  if (GetArenaForAllocation() == nullptr && _impl_.batch_digest_ != nullptr) {
+    delete _impl_.batch_digest_;
+  }
+  _impl_.batch_digest_ = nullptr;
+}
+MetricBatch::MetricBatch(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.MetricBatch)
+}
+MetricBatch::MetricBatch(const MetricBatch& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MetricBatch* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.events_){from._impl_.events_}
+    , decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.schema_identity_){nullptr}
+    , decltype(_impl_.source_){nullptr}
+    , decltype(_impl_.batch_digest_){nullptr}
+    , decltype(_impl_.gap_){nullptr}
+    , decltype(_impl_.batch_sequence_){}
+    , decltype(_impl_.created_at_unix_ms_){}
+    , decltype(_impl_.first_event_sequence_){}
+    , decltype(_impl_.last_event_sequence_){}
+    , decltype(_impl_.final_event_sequence_){}
+    , decltype(_impl_.event_time_watermark_unix_ms_){}
+    , decltype(_impl_.heartbeat_){}
+    , decltype(_impl_.source_final_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_contract()) {
+    _this->_impl_.contract_ = new ::rl::common::v1::ContractIdentity(*from._impl_.contract_);
+  }
+  if (from._internal_has_schema_identity()) {
+    _this->_impl_.schema_identity_ = new ::rl::common::v1::SchemaIdentity(*from._impl_.schema_identity_);
+  }
+  if (from._internal_has_source()) {
+    _this->_impl_.source_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.source_);
+  }
+  if (from._internal_has_batch_digest()) {
+    _this->_impl_.batch_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.batch_digest_);
+  }
+  if (from._internal_has_gap()) {
+    _this->_impl_.gap_ = new ::rl::training::v1::MetricSequenceGap(*from._impl_.gap_);
+  }
+  ::memcpy(&_impl_.batch_sequence_, &from._impl_.batch_sequence_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.source_final_) -
+    reinterpret_cast<char*>(&_impl_.batch_sequence_)) + sizeof(_impl_.source_final_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricBatch)
+}
+
+inline void MetricBatch::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.events_){arena}
+    , decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.schema_identity_){nullptr}
+    , decltype(_impl_.source_){nullptr}
+    , decltype(_impl_.batch_digest_){nullptr}
+    , decltype(_impl_.gap_){nullptr}
+    , decltype(_impl_.batch_sequence_){uint64_t{0u}}
+    , decltype(_impl_.created_at_unix_ms_){int64_t{0}}
+    , decltype(_impl_.first_event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.last_event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.final_event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.event_time_watermark_unix_ms_){int64_t{0}}
+    , decltype(_impl_.heartbeat_){false}
+    , decltype(_impl_.source_final_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+MetricBatch::~MetricBatch() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.MetricBatch)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MetricBatch::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.events_.~RepeatedPtrField();
+  if (this != internal_default_instance()) delete _impl_.contract_;
+  if (this != internal_default_instance()) delete _impl_.schema_identity_;
+  if (this != internal_default_instance()) delete _impl_.source_;
+  if (this != internal_default_instance()) delete _impl_.batch_digest_;
+  if (this != internal_default_instance()) delete _impl_.gap_;
+}
+
+void MetricBatch::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MetricBatch::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricBatch)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.events_.Clear();
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.schema_identity_ != nullptr) {
+    delete _impl_.schema_identity_;
+  }
+  _impl_.schema_identity_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.source_ != nullptr) {
+    delete _impl_.source_;
+  }
+  _impl_.source_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.batch_digest_ != nullptr) {
+    delete _impl_.batch_digest_;
+  }
+  _impl_.batch_digest_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.gap_ != nullptr) {
+    delete _impl_.gap_;
+  }
+  _impl_.gap_ = nullptr;
+  ::memset(&_impl_.batch_sequence_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.source_final_) -
+      reinterpret_cast<char*>(&_impl_.batch_sequence_)) + sizeof(_impl_.source_final_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MetricBatch::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .rl.common.v1.ContractIdentity contract = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_contract(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.SchemaIdentity schema_identity = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_schema_identity(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ServiceInstanceIdentity source = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_source(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 batch_sequence = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.batch_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ContentDigest batch_digest = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr = ctx->ParseMessage(_internal_mutable_batch_digest(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 created_at_unix_ms = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.created_at_unix_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 first_event_sequence = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.first_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 last_event_sequence = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          _impl_.last_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .rl.training.v1.MetricEvent events = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_events(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<74>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool heartbeat = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 80)) {
+          _impl_.heartbeat_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool source_final = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
+          _impl_.source_final_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 final_event_sequence = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
+          _impl_.final_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 event_time_watermark_unix_ms = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
+          _impl_.event_time_watermark_unix_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricSequenceGap gap = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+          ptr = ctx->ParseMessage(_internal_mutable_gap(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MetricBatch::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.MetricBatch)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::contract(this),
+        _Internal::contract(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.common.v1.SchemaIdentity schema_identity = 2;
+  if (this->_internal_has_schema_identity()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::schema_identity(this),
+        _Internal::schema_identity(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity source = 3;
+  if (this->_internal_has_source()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::source(this),
+        _Internal::source(this).GetCachedSize(), target, stream);
+  }
+
+  // uint64 batch_sequence = 4;
+  if (this->_internal_batch_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(4, this->_internal_batch_sequence(), target);
+  }
+
+  // .rl.common.v1.ContentDigest batch_digest = 5;
+  if (this->_internal_has_batch_digest()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(5, _Internal::batch_digest(this),
+        _Internal::batch_digest(this).GetCachedSize(), target, stream);
+  }
+
+  // int64 created_at_unix_ms = 6;
+  if (this->_internal_created_at_unix_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(6, this->_internal_created_at_unix_ms(), target);
+  }
+
+  // uint64 first_event_sequence = 7;
+  if (this->_internal_first_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(7, this->_internal_first_event_sequence(), target);
+  }
+
+  // uint64 last_event_sequence = 8;
+  if (this->_internal_last_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(8, this->_internal_last_event_sequence(), target);
+  }
+
+  // repeated .rl.training.v1.MetricEvent events = 9;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_events_size()); i < n; i++) {
+    const auto& repfield = this->_internal_events(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(9, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // bool heartbeat = 10;
+  if (this->_internal_heartbeat() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(10, this->_internal_heartbeat(), target);
+  }
+
+  // bool source_final = 11;
+  if (this->_internal_source_final() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(11, this->_internal_source_final(), target);
+  }
+
+  // uint64 final_event_sequence = 12;
+  if (this->_internal_final_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(12, this->_internal_final_event_sequence(), target);
+  }
+
+  // int64 event_time_watermark_unix_ms = 13;
+  if (this->_internal_event_time_watermark_unix_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(13, this->_internal_event_time_watermark_unix_ms(), target);
+  }
+
+  // .rl.training.v1.MetricSequenceGap gap = 14;
+  if (this->_internal_has_gap()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(14, _Internal::gap(this),
+        _Internal::gap(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.MetricBatch)
+  return target;
+}
+
+size_t MetricBatch::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.MetricBatch)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .rl.training.v1.MetricEvent events = 9;
+  total_size += 1UL * this->_internal_events_size();
+  for (const auto& msg : this->_impl_.events_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.contract_);
+  }
+
+  // .rl.common.v1.SchemaIdentity schema_identity = 2;
+  if (this->_internal_has_schema_identity()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.schema_identity_);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity source = 3;
+  if (this->_internal_has_source()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.source_);
+  }
+
+  // .rl.common.v1.ContentDigest batch_digest = 5;
+  if (this->_internal_has_batch_digest()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.batch_digest_);
+  }
+
+  // .rl.training.v1.MetricSequenceGap gap = 14;
+  if (this->_internal_has_gap()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.gap_);
+  }
+
+  // uint64 batch_sequence = 4;
+  if (this->_internal_batch_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_batch_sequence());
+  }
+
+  // int64 created_at_unix_ms = 6;
+  if (this->_internal_created_at_unix_ms() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_created_at_unix_ms());
+  }
+
+  // uint64 first_event_sequence = 7;
+  if (this->_internal_first_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_first_event_sequence());
+  }
+
+  // uint64 last_event_sequence = 8;
+  if (this->_internal_last_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_last_event_sequence());
+  }
+
+  // uint64 final_event_sequence = 12;
+  if (this->_internal_final_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_final_event_sequence());
+  }
+
+  // int64 event_time_watermark_unix_ms = 13;
+  if (this->_internal_event_time_watermark_unix_ms() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_event_time_watermark_unix_ms());
+  }
+
+  // bool heartbeat = 10;
+  if (this->_internal_heartbeat() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool source_final = 11;
+  if (this->_internal_source_final() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MetricBatch::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MetricBatch::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MetricBatch::GetClassData() const { return &_class_data_; }
+
+
+void MetricBatch::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MetricBatch*>(&to_msg);
+  auto& from = static_cast<const MetricBatch&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.MetricBatch)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.events_.MergeFrom(from._impl_.events_);
+  if (from._internal_has_contract()) {
+    _this->_internal_mutable_contract()->::rl::common::v1::ContractIdentity::MergeFrom(
+        from._internal_contract());
+  }
+  if (from._internal_has_schema_identity()) {
+    _this->_internal_mutable_schema_identity()->::rl::common::v1::SchemaIdentity::MergeFrom(
+        from._internal_schema_identity());
+  }
+  if (from._internal_has_source()) {
+    _this->_internal_mutable_source()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
+        from._internal_source());
+  }
+  if (from._internal_has_batch_digest()) {
+    _this->_internal_mutable_batch_digest()->::rl::common::v1::ContentDigest::MergeFrom(
+        from._internal_batch_digest());
+  }
+  if (from._internal_has_gap()) {
+    _this->_internal_mutable_gap()->::rl::training::v1::MetricSequenceGap::MergeFrom(
+        from._internal_gap());
+  }
+  if (from._internal_batch_sequence() != 0) {
+    _this->_internal_set_batch_sequence(from._internal_batch_sequence());
+  }
+  if (from._internal_created_at_unix_ms() != 0) {
+    _this->_internal_set_created_at_unix_ms(from._internal_created_at_unix_ms());
+  }
+  if (from._internal_first_event_sequence() != 0) {
+    _this->_internal_set_first_event_sequence(from._internal_first_event_sequence());
+  }
+  if (from._internal_last_event_sequence() != 0) {
+    _this->_internal_set_last_event_sequence(from._internal_last_event_sequence());
+  }
+  if (from._internal_final_event_sequence() != 0) {
+    _this->_internal_set_final_event_sequence(from._internal_final_event_sequence());
+  }
+  if (from._internal_event_time_watermark_unix_ms() != 0) {
+    _this->_internal_set_event_time_watermark_unix_ms(from._internal_event_time_watermark_unix_ms());
+  }
+  if (from._internal_heartbeat() != 0) {
+    _this->_internal_set_heartbeat(from._internal_heartbeat());
+  }
+  if (from._internal_source_final() != 0) {
+    _this->_internal_set_source_final(from._internal_source_final());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MetricBatch::CopyFrom(const MetricBatch& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.MetricBatch)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetricBatch::IsInitialized() const {
+  return true;
+}
+
+void MetricBatch::InternalSwap(MetricBatch* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.events_.InternalSwap(&other->_impl_.events_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MetricBatch, _impl_.source_final_)
+      + sizeof(MetricBatch::_impl_.source_final_)
+      - PROTOBUF_FIELD_OFFSET(MetricBatch, _impl_.contract_)>(
+          reinterpret_cast<char*>(&_impl_.contract_),
+          reinterpret_cast<char*>(&other->_impl_.contract_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MetricBatch::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[38]);
+}
+
+// ===================================================================
+
+class MetricBatchCursor::_Internal {
+ public:
+  static const ::rl::common::v1::ServiceInstanceIdentity& source(const MetricBatchCursor* msg);
+  static const ::rl::common::v1::ContentDigest& acknowledged_batch_digest(const MetricBatchCursor* msg);
+};
+
+const ::rl::common::v1::ServiceInstanceIdentity&
+MetricBatchCursor::_Internal::source(const MetricBatchCursor* msg) {
+  return *msg->_impl_.source_;
+}
+const ::rl::common::v1::ContentDigest&
+MetricBatchCursor::_Internal::acknowledged_batch_digest(const MetricBatchCursor* msg) {
+  return *msg->_impl_.acknowledged_batch_digest_;
+}
+void MetricBatchCursor::clear_source() {
+  if (GetArenaForAllocation() == nullptr && _impl_.source_ != nullptr) {
+    delete _impl_.source_;
+  }
+  _impl_.source_ = nullptr;
+}
+void MetricBatchCursor::clear_acknowledged_batch_digest() {
+  if (GetArenaForAllocation() == nullptr && _impl_.acknowledged_batch_digest_ != nullptr) {
+    delete _impl_.acknowledged_batch_digest_;
+  }
+  _impl_.acknowledged_batch_digest_ = nullptr;
+}
+MetricBatchCursor::MetricBatchCursor(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.MetricBatchCursor)
+}
+MetricBatchCursor::MetricBatchCursor(const MetricBatchCursor& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MetricBatchCursor* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.source_){nullptr}
+    , decltype(_impl_.acknowledged_batch_digest_){nullptr}
+    , decltype(_impl_.acknowledged_batch_sequence_){}
+    , decltype(_impl_.acknowledged_event_sequence_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_source()) {
+    _this->_impl_.source_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.source_);
+  }
+  if (from._internal_has_acknowledged_batch_digest()) {
+    _this->_impl_.acknowledged_batch_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.acknowledged_batch_digest_);
+  }
+  ::memcpy(&_impl_.acknowledged_batch_sequence_, &from._impl_.acknowledged_batch_sequence_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.acknowledged_event_sequence_) -
+    reinterpret_cast<char*>(&_impl_.acknowledged_batch_sequence_)) + sizeof(_impl_.acknowledged_event_sequence_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricBatchCursor)
+}
+
+inline void MetricBatchCursor::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.source_){nullptr}
+    , decltype(_impl_.acknowledged_batch_digest_){nullptr}
+    , decltype(_impl_.acknowledged_batch_sequence_){uint64_t{0u}}
+    , decltype(_impl_.acknowledged_event_sequence_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+MetricBatchCursor::~MetricBatchCursor() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.MetricBatchCursor)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MetricBatchCursor::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.source_;
+  if (this != internal_default_instance()) delete _impl_.acknowledged_batch_digest_;
+}
+
+void MetricBatchCursor::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MetricBatchCursor::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricBatchCursor)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.source_ != nullptr) {
+    delete _impl_.source_;
+  }
+  _impl_.source_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.acknowledged_batch_digest_ != nullptr) {
+    delete _impl_.acknowledged_batch_digest_;
+  }
+  _impl_.acknowledged_batch_digest_ = nullptr;
+  ::memset(&_impl_.acknowledged_batch_sequence_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.acknowledged_event_sequence_) -
+      reinterpret_cast<char*>(&_impl_.acknowledged_batch_sequence_)) + sizeof(_impl_.acknowledged_event_sequence_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MetricBatchCursor::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .rl.common.v1.ServiceInstanceIdentity source = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_source(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 acknowledged_batch_sequence = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.acknowledged_batch_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 acknowledged_event_sequence = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.acknowledged_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ContentDigest acknowledged_batch_digest = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_acknowledged_batch_digest(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MetricBatchCursor::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.MetricBatchCursor)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ServiceInstanceIdentity source = 1;
+  if (this->_internal_has_source()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::source(this),
+        _Internal::source(this).GetCachedSize(), target, stream);
+  }
+
+  // uint64 acknowledged_batch_sequence = 2;
+  if (this->_internal_acknowledged_batch_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_acknowledged_batch_sequence(), target);
+  }
+
+  // uint64 acknowledged_event_sequence = 3;
+  if (this->_internal_acknowledged_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(3, this->_internal_acknowledged_event_sequence(), target);
+  }
+
+  // .rl.common.v1.ContentDigest acknowledged_batch_digest = 4;
+  if (this->_internal_has_acknowledged_batch_digest()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::acknowledged_batch_digest(this),
+        _Internal::acknowledged_batch_digest(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.MetricBatchCursor)
+  return target;
+}
+
+size_t MetricBatchCursor::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.MetricBatchCursor)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ServiceInstanceIdentity source = 1;
+  if (this->_internal_has_source()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.source_);
+  }
+
+  // .rl.common.v1.ContentDigest acknowledged_batch_digest = 4;
+  if (this->_internal_has_acknowledged_batch_digest()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.acknowledged_batch_digest_);
+  }
+
+  // uint64 acknowledged_batch_sequence = 2;
+  if (this->_internal_acknowledged_batch_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_acknowledged_batch_sequence());
+  }
+
+  // uint64 acknowledged_event_sequence = 3;
+  if (this->_internal_acknowledged_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_acknowledged_event_sequence());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MetricBatchCursor::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MetricBatchCursor::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MetricBatchCursor::GetClassData() const { return &_class_data_; }
+
+
+void MetricBatchCursor::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MetricBatchCursor*>(&to_msg);
+  auto& from = static_cast<const MetricBatchCursor&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.MetricBatchCursor)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_source()) {
+    _this->_internal_mutable_source()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
+        from._internal_source());
+  }
+  if (from._internal_has_acknowledged_batch_digest()) {
+    _this->_internal_mutable_acknowledged_batch_digest()->::rl::common::v1::ContentDigest::MergeFrom(
+        from._internal_acknowledged_batch_digest());
+  }
+  if (from._internal_acknowledged_batch_sequence() != 0) {
+    _this->_internal_set_acknowledged_batch_sequence(from._internal_acknowledged_batch_sequence());
+  }
+  if (from._internal_acknowledged_event_sequence() != 0) {
+    _this->_internal_set_acknowledged_event_sequence(from._internal_acknowledged_event_sequence());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MetricBatchCursor::CopyFrom(const MetricBatchCursor& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.MetricBatchCursor)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetricBatchCursor::IsInitialized() const {
+  return true;
+}
+
+void MetricBatchCursor::InternalSwap(MetricBatchCursor* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MetricBatchCursor, _impl_.acknowledged_event_sequence_)
+      + sizeof(MetricBatchCursor::_impl_.acknowledged_event_sequence_)
+      - PROTOBUF_FIELD_OFFSET(MetricBatchCursor, _impl_.source_)>(
+          reinterpret_cast<char*>(&_impl_.source_),
+          reinterpret_cast<char*>(&other->_impl_.source_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MetricBatchCursor::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[39]);
+}
+
+// ===================================================================
+
+class GetMetricBatchReq::_Internal {
+ public:
+  static const ::rl::common::v1::ContractIdentity& contract(const GetMetricBatchReq* msg);
+  static const ::rl::common::v1::ServiceInstanceIdentity& consumer(const GetMetricBatchReq* msg);
+  static const ::rl::training::v1::MetricBatchCursor& cursor(const GetMetricBatchReq* msg);
+};
+
+const ::rl::common::v1::ContractIdentity&
+GetMetricBatchReq::_Internal::contract(const GetMetricBatchReq* msg) {
+  return *msg->_impl_.contract_;
+}
+const ::rl::common::v1::ServiceInstanceIdentity&
+GetMetricBatchReq::_Internal::consumer(const GetMetricBatchReq* msg) {
+  return *msg->_impl_.consumer_;
+}
+const ::rl::training::v1::MetricBatchCursor&
+GetMetricBatchReq::_Internal::cursor(const GetMetricBatchReq* msg) {
+  return *msg->_impl_.cursor_;
+}
+void GetMetricBatchReq::clear_contract() {
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+}
+void GetMetricBatchReq::clear_consumer() {
+  if (GetArenaForAllocation() == nullptr && _impl_.consumer_ != nullptr) {
+    delete _impl_.consumer_;
+  }
+  _impl_.consumer_ = nullptr;
+}
+GetMetricBatchReq::GetMetricBatchReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.GetMetricBatchReq)
+}
+GetMetricBatchReq::GetMetricBatchReq(const GetMetricBatchReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  GetMetricBatchReq* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.consumer_){nullptr}
+    , decltype(_impl_.cursor_){nullptr}
+    , decltype(_impl_.max_bytes_){}
+    , decltype(_impl_.max_events_){}
+    , decltype(_impl_.wait_timeout_ms_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_contract()) {
+    _this->_impl_.contract_ = new ::rl::common::v1::ContractIdentity(*from._impl_.contract_);
+  }
+  if (from._internal_has_consumer()) {
+    _this->_impl_.consumer_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.consumer_);
+  }
+  if (from._internal_has_cursor()) {
+    _this->_impl_.cursor_ = new ::rl::training::v1::MetricBatchCursor(*from._impl_.cursor_);
+  }
+  ::memcpy(&_impl_.max_bytes_, &from._impl_.max_bytes_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.wait_timeout_ms_) -
+    reinterpret_cast<char*>(&_impl_.max_bytes_)) + sizeof(_impl_.wait_timeout_ms_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.GetMetricBatchReq)
+}
+
+inline void GetMetricBatchReq::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.consumer_){nullptr}
+    , decltype(_impl_.cursor_){nullptr}
+    , decltype(_impl_.max_bytes_){int64_t{0}}
+    , decltype(_impl_.max_events_){0u}
+    , decltype(_impl_.wait_timeout_ms_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+GetMetricBatchReq::~GetMetricBatchReq() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.GetMetricBatchReq)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void GetMetricBatchReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.contract_;
+  if (this != internal_default_instance()) delete _impl_.consumer_;
+  if (this != internal_default_instance()) delete _impl_.cursor_;
+}
+
+void GetMetricBatchReq::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void GetMetricBatchReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.GetMetricBatchReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.consumer_ != nullptr) {
+    delete _impl_.consumer_;
+  }
+  _impl_.consumer_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.cursor_ != nullptr) {
+    delete _impl_.cursor_;
+  }
+  _impl_.cursor_ = nullptr;
+  ::memset(&_impl_.max_bytes_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.wait_timeout_ms_) -
+      reinterpret_cast<char*>(&_impl_.max_bytes_)) + sizeof(_impl_.wait_timeout_ms_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* GetMetricBatchReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .rl.common.v1.ContractIdentity contract = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_contract(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_consumer(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricBatchCursor cursor = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_cursor(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 max_events = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.max_events_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 max_bytes = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.max_bytes_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 wait_timeout_ms = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.wait_timeout_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* GetMetricBatchReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.GetMetricBatchReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::contract(this),
+        _Internal::contract(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
+  if (this->_internal_has_consumer()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::consumer(this),
+        _Internal::consumer(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.training.v1.MetricBatchCursor cursor = 3;
+  if (this->_internal_has_cursor()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::cursor(this),
+        _Internal::cursor(this).GetCachedSize(), target, stream);
+  }
+
+  // uint32 max_events = 4;
+  if (this->_internal_max_events() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_max_events(), target);
+  }
+
+  // int64 max_bytes = 5;
+  if (this->_internal_max_bytes() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(5, this->_internal_max_bytes(), target);
+  }
+
+  // int32 wait_timeout_ms = 6;
+  if (this->_internal_wait_timeout_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_wait_timeout_ms(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.GetMetricBatchReq)
+  return target;
+}
+
+size_t GetMetricBatchReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.GetMetricBatchReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.contract_);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
+  if (this->_internal_has_consumer()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.consumer_);
+  }
+
+  // .rl.training.v1.MetricBatchCursor cursor = 3;
+  if (this->_internal_has_cursor()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.cursor_);
+  }
+
+  // int64 max_bytes = 5;
+  if (this->_internal_max_bytes() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_max_bytes());
+  }
+
+  // uint32 max_events = 4;
+  if (this->_internal_max_events() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_max_events());
+  }
+
+  // int32 wait_timeout_ms = 6;
+  if (this->_internal_wait_timeout_ms() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_wait_timeout_ms());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GetMetricBatchReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    GetMetricBatchReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetMetricBatchReq::GetClassData() const { return &_class_data_; }
+
+
+void GetMetricBatchReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<GetMetricBatchReq*>(&to_msg);
+  auto& from = static_cast<const GetMetricBatchReq&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.GetMetricBatchReq)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_contract()) {
+    _this->_internal_mutable_contract()->::rl::common::v1::ContractIdentity::MergeFrom(
+        from._internal_contract());
+  }
+  if (from._internal_has_consumer()) {
+    _this->_internal_mutable_consumer()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
+        from._internal_consumer());
+  }
+  if (from._internal_has_cursor()) {
+    _this->_internal_mutable_cursor()->::rl::training::v1::MetricBatchCursor::MergeFrom(
+        from._internal_cursor());
+  }
+  if (from._internal_max_bytes() != 0) {
+    _this->_internal_set_max_bytes(from._internal_max_bytes());
+  }
+  if (from._internal_max_events() != 0) {
+    _this->_internal_set_max_events(from._internal_max_events());
+  }
+  if (from._internal_wait_timeout_ms() != 0) {
+    _this->_internal_set_wait_timeout_ms(from._internal_wait_timeout_ms());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetMetricBatchReq::CopyFrom(const GetMetricBatchReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.GetMetricBatchReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GetMetricBatchReq::IsInitialized() const {
+  return true;
+}
+
+void GetMetricBatchReq::InternalSwap(GetMetricBatchReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GetMetricBatchReq, _impl_.wait_timeout_ms_)
+      + sizeof(GetMetricBatchReq::_impl_.wait_timeout_ms_)
+      - PROTOBUF_FIELD_OFFSET(GetMetricBatchReq, _impl_.contract_)>(
+          reinterpret_cast<char*>(&_impl_.contract_),
+          reinterpret_cast<char*>(&other->_impl_.contract_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata GetMetricBatchReq::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[40]);
+}
+
+// ===================================================================
+
+class GetMetricBatchRsp::_Internal {
+ public:
+  static const ::rl::training::v1::MetricBatch& batch(const GetMetricBatchRsp* msg);
+  static const ::rl::common::v1::ServiceInstanceIdentity& producer(const GetMetricBatchRsp* msg);
+};
+
+const ::rl::training::v1::MetricBatch&
+GetMetricBatchRsp::_Internal::batch(const GetMetricBatchRsp* msg) {
+  return *msg->_impl_.batch_;
+}
+const ::rl::common::v1::ServiceInstanceIdentity&
+GetMetricBatchRsp::_Internal::producer(const GetMetricBatchRsp* msg) {
+  return *msg->_impl_.producer_;
+}
+void GetMetricBatchRsp::clear_producer() {
+  if (GetArenaForAllocation() == nullptr && _impl_.producer_ != nullptr) {
+    delete _impl_.producer_;
+  }
+  _impl_.producer_ = nullptr;
+}
+GetMetricBatchRsp::GetMetricBatchRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.GetMetricBatchRsp)
+}
+GetMetricBatchRsp::GetMetricBatchRsp(const GetMetricBatchRsp& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  GetMetricBatchRsp* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.batch_){nullptr}
+    , decltype(_impl_.producer_){nullptr}
+    , decltype(_impl_.ret_code_){}
+    , decltype(_impl_.result_){}
+    , decltype(_impl_.oldest_available_event_sequence_){}
+    , decltype(_impl_.latest_available_event_sequence_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_message().empty()) {
+    _this->_impl_.message_.Set(from._internal_message(), 
+      _this->GetArenaForAllocation());
+  }
+  if (from._internal_has_batch()) {
+    _this->_impl_.batch_ = new ::rl::training::v1::MetricBatch(*from._impl_.batch_);
+  }
+  if (from._internal_has_producer()) {
+    _this->_impl_.producer_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.producer_);
+  }
+  ::memcpy(&_impl_.ret_code_, &from._impl_.ret_code_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.latest_available_event_sequence_) -
+    reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.latest_available_event_sequence_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.GetMetricBatchRsp)
+}
+
+inline void GetMetricBatchRsp::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.batch_){nullptr}
+    , decltype(_impl_.producer_){nullptr}
+    , decltype(_impl_.ret_code_){0}
+    , decltype(_impl_.result_){0}
+    , decltype(_impl_.oldest_available_event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.latest_available_event_sequence_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+GetMetricBatchRsp::~GetMetricBatchRsp() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.GetMetricBatchRsp)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void GetMetricBatchRsp::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.message_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.batch_;
+  if (this != internal_default_instance()) delete _impl_.producer_;
+}
+
+void GetMetricBatchRsp::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void GetMetricBatchRsp::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.GetMetricBatchRsp)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.message_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.batch_ != nullptr) {
+    delete _impl_.batch_;
+  }
+  _impl_.batch_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.producer_ != nullptr) {
+    delete _impl_.producer_;
+  }
+  _impl_.producer_ = nullptr;
+  ::memset(&_impl_.ret_code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.latest_available_event_sequence_) -
+      reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.latest_available_event_sequence_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* GetMetricBatchRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 ret_code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.ret_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricBatchResult result = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_result(static_cast<::rl::training::v1::MetricBatchResult>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // string message = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_message();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.GetMetricBatchRsp.message"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricBatch batch = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_batch(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ServiceInstanceIdentity producer = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr = ctx->ParseMessage(_internal_mutable_producer(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 oldest_available_event_sequence = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.oldest_available_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 latest_available_event_sequence = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.latest_available_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* GetMetricBatchRsp::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.GetMetricBatchRsp)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 ret_code = 1;
+  if (this->_internal_ret_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_ret_code(), target);
+  }
+
+  // .rl.training.v1.MetricBatchResult result = 2;
+  if (this->_internal_result() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      2, this->_internal_result(), target);
+  }
+
+  // string message = 3;
+  if (!this->_internal_message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.GetMetricBatchRsp.message");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_message(), target);
+  }
+
+  // .rl.training.v1.MetricBatch batch = 4;
+  if (this->_internal_has_batch()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::batch(this),
+        _Internal::batch(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity producer = 5;
+  if (this->_internal_has_producer()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(5, _Internal::producer(this),
+        _Internal::producer(this).GetCachedSize(), target, stream);
+  }
+
+  // uint64 oldest_available_event_sequence = 6;
+  if (this->_internal_oldest_available_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(6, this->_internal_oldest_available_event_sequence(), target);
+  }
+
+  // uint64 latest_available_event_sequence = 7;
+  if (this->_internal_latest_available_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(7, this->_internal_latest_available_event_sequence(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.GetMetricBatchRsp)
+  return target;
+}
+
+size_t GetMetricBatchRsp::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.GetMetricBatchRsp)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 3;
+  if (!this->_internal_message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_message());
+  }
+
+  // .rl.training.v1.MetricBatch batch = 4;
+  if (this->_internal_has_batch()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.batch_);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity producer = 5;
+  if (this->_internal_has_producer()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.producer_);
+  }
+
+  // int32 ret_code = 1;
+  if (this->_internal_ret_code() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_ret_code());
+  }
+
+  // .rl.training.v1.MetricBatchResult result = 2;
+  if (this->_internal_result() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_result());
+  }
+
+  // uint64 oldest_available_event_sequence = 6;
+  if (this->_internal_oldest_available_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_oldest_available_event_sequence());
+  }
+
+  // uint64 latest_available_event_sequence = 7;
+  if (this->_internal_latest_available_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_latest_available_event_sequence());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GetMetricBatchRsp::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    GetMetricBatchRsp::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetMetricBatchRsp::GetClassData() const { return &_class_data_; }
+
+
+void GetMetricBatchRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<GetMetricBatchRsp*>(&to_msg);
+  auto& from = static_cast<const GetMetricBatchRsp&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.GetMetricBatchRsp)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_message().empty()) {
+    _this->_internal_set_message(from._internal_message());
+  }
+  if (from._internal_has_batch()) {
+    _this->_internal_mutable_batch()->::rl::training::v1::MetricBatch::MergeFrom(
+        from._internal_batch());
+  }
+  if (from._internal_has_producer()) {
+    _this->_internal_mutable_producer()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
+        from._internal_producer());
+  }
+  if (from._internal_ret_code() != 0) {
+    _this->_internal_set_ret_code(from._internal_ret_code());
+  }
+  if (from._internal_result() != 0) {
+    _this->_internal_set_result(from._internal_result());
+  }
+  if (from._internal_oldest_available_event_sequence() != 0) {
+    _this->_internal_set_oldest_available_event_sequence(from._internal_oldest_available_event_sequence());
+  }
+  if (from._internal_latest_available_event_sequence() != 0) {
+    _this->_internal_set_latest_available_event_sequence(from._internal_latest_available_event_sequence());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetMetricBatchRsp::CopyFrom(const GetMetricBatchRsp& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.GetMetricBatchRsp)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GetMetricBatchRsp::IsInitialized() const {
+  return true;
+}
+
+void GetMetricBatchRsp::InternalSwap(GetMetricBatchRsp* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.message_, lhs_arena,
+      &other->_impl_.message_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GetMetricBatchRsp, _impl_.latest_available_event_sequence_)
+      + sizeof(GetMetricBatchRsp::_impl_.latest_available_event_sequence_)
+      - PROTOBUF_FIELD_OFFSET(GetMetricBatchRsp, _impl_.batch_)>(
+          reinterpret_cast<char*>(&_impl_.batch_),
+          reinterpret_cast<char*>(&other->_impl_.batch_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata GetMetricBatchRsp::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[41]);
+}
+
+// ===================================================================
+
+class AckMetricBatchReq::_Internal {
+ public:
+  static const ::rl::common::v1::ContractIdentity& contract(const AckMetricBatchReq* msg);
+  static const ::rl::common::v1::ServiceInstanceIdentity& consumer(const AckMetricBatchReq* msg);
+  static const ::rl::training::v1::MetricBatchCursor& cursor(const AckMetricBatchReq* msg);
+};
+
+const ::rl::common::v1::ContractIdentity&
+AckMetricBatchReq::_Internal::contract(const AckMetricBatchReq* msg) {
+  return *msg->_impl_.contract_;
+}
+const ::rl::common::v1::ServiceInstanceIdentity&
+AckMetricBatchReq::_Internal::consumer(const AckMetricBatchReq* msg) {
+  return *msg->_impl_.consumer_;
+}
+const ::rl::training::v1::MetricBatchCursor&
+AckMetricBatchReq::_Internal::cursor(const AckMetricBatchReq* msg) {
+  return *msg->_impl_.cursor_;
+}
+void AckMetricBatchReq::clear_contract() {
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+}
+void AckMetricBatchReq::clear_consumer() {
+  if (GetArenaForAllocation() == nullptr && _impl_.consumer_ != nullptr) {
+    delete _impl_.consumer_;
+  }
+  _impl_.consumer_ = nullptr;
+}
+AckMetricBatchReq::AckMetricBatchReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.AckMetricBatchReq)
+}
+AckMetricBatchReq::AckMetricBatchReq(const AckMetricBatchReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  AckMetricBatchReq* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.consumer_){nullptr}
+    , decltype(_impl_.cursor_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_contract()) {
+    _this->_impl_.contract_ = new ::rl::common::v1::ContractIdentity(*from._impl_.contract_);
+  }
+  if (from._internal_has_consumer()) {
+    _this->_impl_.consumer_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.consumer_);
+  }
+  if (from._internal_has_cursor()) {
+    _this->_impl_.cursor_ = new ::rl::training::v1::MetricBatchCursor(*from._impl_.cursor_);
+  }
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.AckMetricBatchReq)
+}
+
+inline void AckMetricBatchReq::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.contract_){nullptr}
+    , decltype(_impl_.consumer_){nullptr}
+    , decltype(_impl_.cursor_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+AckMetricBatchReq::~AckMetricBatchReq() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.AckMetricBatchReq)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void AckMetricBatchReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.contract_;
+  if (this != internal_default_instance()) delete _impl_.consumer_;
+  if (this != internal_default_instance()) delete _impl_.cursor_;
+}
+
+void AckMetricBatchReq::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void AckMetricBatchReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.AckMetricBatchReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.contract_ != nullptr) {
+    delete _impl_.contract_;
+  }
+  _impl_.contract_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.consumer_ != nullptr) {
+    delete _impl_.consumer_;
+  }
+  _impl_.consumer_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.cursor_ != nullptr) {
+    delete _impl_.cursor_;
+  }
+  _impl_.cursor_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* AckMetricBatchReq::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .rl.common.v1.ContractIdentity contract = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_contract(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_consumer(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricBatchCursor cursor = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_cursor(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* AckMetricBatchReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.AckMetricBatchReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::contract(this),
+        _Internal::contract(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
+  if (this->_internal_has_consumer()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::consumer(this),
+        _Internal::consumer(this).GetCachedSize(), target, stream);
+  }
+
+  // .rl.training.v1.MetricBatchCursor cursor = 3;
+  if (this->_internal_has_cursor()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::cursor(this),
+        _Internal::cursor(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.AckMetricBatchReq)
+  return target;
+}
+
+size_t AckMetricBatchReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.AckMetricBatchReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .rl.common.v1.ContractIdentity contract = 1;
+  if (this->_internal_has_contract()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.contract_);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
+  if (this->_internal_has_consumer()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.consumer_);
+  }
+
+  // .rl.training.v1.MetricBatchCursor cursor = 3;
+  if (this->_internal_has_cursor()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.cursor_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AckMetricBatchReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    AckMetricBatchReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AckMetricBatchReq::GetClassData() const { return &_class_data_; }
+
+
+void AckMetricBatchReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<AckMetricBatchReq*>(&to_msg);
+  auto& from = static_cast<const AckMetricBatchReq&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.AckMetricBatchReq)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_contract()) {
+    _this->_internal_mutable_contract()->::rl::common::v1::ContractIdentity::MergeFrom(
+        from._internal_contract());
+  }
+  if (from._internal_has_consumer()) {
+    _this->_internal_mutable_consumer()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
+        from._internal_consumer());
+  }
+  if (from._internal_has_cursor()) {
+    _this->_internal_mutable_cursor()->::rl::training::v1::MetricBatchCursor::MergeFrom(
+        from._internal_cursor());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void AckMetricBatchReq::CopyFrom(const AckMetricBatchReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.AckMetricBatchReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AckMetricBatchReq::IsInitialized() const {
+  return true;
+}
+
+void AckMetricBatchReq::InternalSwap(AckMetricBatchReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(AckMetricBatchReq, _impl_.cursor_)
+      + sizeof(AckMetricBatchReq::_impl_.cursor_)
+      - PROTOBUF_FIELD_OFFSET(AckMetricBatchReq, _impl_.contract_)>(
+          reinterpret_cast<char*>(&_impl_.contract_),
+          reinterpret_cast<char*>(&other->_impl_.contract_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata AckMetricBatchReq::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[42]);
+}
+
+// ===================================================================
+
+class AckMetricBatchRsp::_Internal {
+ public:
+  static const ::rl::common::v1::ServiceInstanceIdentity& producer(const AckMetricBatchRsp* msg);
+  static const ::rl::training::v1::MetricBatchCursor& committed_cursor(const AckMetricBatchRsp* msg);
+};
+
+const ::rl::common::v1::ServiceInstanceIdentity&
+AckMetricBatchRsp::_Internal::producer(const AckMetricBatchRsp* msg) {
+  return *msg->_impl_.producer_;
+}
+const ::rl::training::v1::MetricBatchCursor&
+AckMetricBatchRsp::_Internal::committed_cursor(const AckMetricBatchRsp* msg) {
+  return *msg->_impl_.committed_cursor_;
+}
+void AckMetricBatchRsp::clear_producer() {
+  if (GetArenaForAllocation() == nullptr && _impl_.producer_ != nullptr) {
+    delete _impl_.producer_;
+  }
+  _impl_.producer_ = nullptr;
+}
+AckMetricBatchRsp::AckMetricBatchRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.AckMetricBatchRsp)
+}
+AckMetricBatchRsp::AckMetricBatchRsp(const AckMetricBatchRsp& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  AckMetricBatchRsp* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.producer_){nullptr}
+    , decltype(_impl_.committed_cursor_){nullptr}
+    , decltype(_impl_.ret_code_){}
+    , decltype(_impl_.result_){}
+    , decltype(_impl_.oldest_available_event_sequence_){}
+    , decltype(_impl_.latest_available_event_sequence_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_message().empty()) {
+    _this->_impl_.message_.Set(from._internal_message(), 
+      _this->GetArenaForAllocation());
+  }
+  if (from._internal_has_producer()) {
+    _this->_impl_.producer_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.producer_);
+  }
+  if (from._internal_has_committed_cursor()) {
+    _this->_impl_.committed_cursor_ = new ::rl::training::v1::MetricBatchCursor(*from._impl_.committed_cursor_);
+  }
+  ::memcpy(&_impl_.ret_code_, &from._impl_.ret_code_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.latest_available_event_sequence_) -
+    reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.latest_available_event_sequence_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.AckMetricBatchRsp)
+}
+
+inline void AckMetricBatchRsp::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.producer_){nullptr}
+    , decltype(_impl_.committed_cursor_){nullptr}
+    , decltype(_impl_.ret_code_){0}
+    , decltype(_impl_.result_){0}
+    , decltype(_impl_.oldest_available_event_sequence_){uint64_t{0u}}
+    , decltype(_impl_.latest_available_event_sequence_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+AckMetricBatchRsp::~AckMetricBatchRsp() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.AckMetricBatchRsp)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void AckMetricBatchRsp::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.message_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.producer_;
+  if (this != internal_default_instance()) delete _impl_.committed_cursor_;
+}
+
+void AckMetricBatchRsp::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void AckMetricBatchRsp::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.AckMetricBatchRsp)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.message_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.producer_ != nullptr) {
+    delete _impl_.producer_;
+  }
+  _impl_.producer_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.committed_cursor_ != nullptr) {
+    delete _impl_.committed_cursor_;
+  }
+  _impl_.committed_cursor_ = nullptr;
+  ::memset(&_impl_.ret_code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.latest_available_event_sequence_) -
+      reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.latest_available_event_sequence_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* AckMetricBatchRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 ret_code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.ret_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricBatchAckResult result = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_result(static_cast<::rl::training::v1::MetricBatchAckResult>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // string message = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_message();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.AckMetricBatchRsp.message"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ServiceInstanceIdentity producer = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_producer(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 oldest_available_event_sequence = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.oldest_available_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 latest_available_event_sequence = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.latest_available_event_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricBatchCursor committed_cursor = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          ptr = ctx->ParseMessage(_internal_mutable_committed_cursor(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* AckMetricBatchRsp::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.AckMetricBatchRsp)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 ret_code = 1;
+  if (this->_internal_ret_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_ret_code(), target);
+  }
+
+  // .rl.training.v1.MetricBatchAckResult result = 2;
+  if (this->_internal_result() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      2, this->_internal_result(), target);
+  }
+
+  // string message = 3;
+  if (!this->_internal_message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.AckMetricBatchRsp.message");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_message(), target);
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity producer = 4;
+  if (this->_internal_has_producer()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::producer(this),
+        _Internal::producer(this).GetCachedSize(), target, stream);
+  }
+
+  // uint64 oldest_available_event_sequence = 5;
+  if (this->_internal_oldest_available_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(5, this->_internal_oldest_available_event_sequence(), target);
+  }
+
+  // uint64 latest_available_event_sequence = 6;
+  if (this->_internal_latest_available_event_sequence() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(6, this->_internal_latest_available_event_sequence(), target);
+  }
+
+  // .rl.training.v1.MetricBatchCursor committed_cursor = 7;
+  if (this->_internal_has_committed_cursor()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(7, _Internal::committed_cursor(this),
+        _Internal::committed_cursor(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.AckMetricBatchRsp)
+  return target;
+}
+
+size_t AckMetricBatchRsp::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.AckMetricBatchRsp)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 3;
+  if (!this->_internal_message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_message());
+  }
+
+  // .rl.common.v1.ServiceInstanceIdentity producer = 4;
+  if (this->_internal_has_producer()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.producer_);
+  }
+
+  // .rl.training.v1.MetricBatchCursor committed_cursor = 7;
+  if (this->_internal_has_committed_cursor()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.committed_cursor_);
+  }
+
+  // int32 ret_code = 1;
+  if (this->_internal_ret_code() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_ret_code());
+  }
+
+  // .rl.training.v1.MetricBatchAckResult result = 2;
+  if (this->_internal_result() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_result());
+  }
+
+  // uint64 oldest_available_event_sequence = 5;
+  if (this->_internal_oldest_available_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_oldest_available_event_sequence());
+  }
+
+  // uint64 latest_available_event_sequence = 6;
+  if (this->_internal_latest_available_event_sequence() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_latest_available_event_sequence());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AckMetricBatchRsp::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    AckMetricBatchRsp::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AckMetricBatchRsp::GetClassData() const { return &_class_data_; }
+
+
+void AckMetricBatchRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<AckMetricBatchRsp*>(&to_msg);
+  auto& from = static_cast<const AckMetricBatchRsp&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.AckMetricBatchRsp)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_message().empty()) {
+    _this->_internal_set_message(from._internal_message());
+  }
+  if (from._internal_has_producer()) {
+    _this->_internal_mutable_producer()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
+        from._internal_producer());
+  }
+  if (from._internal_has_committed_cursor()) {
+    _this->_internal_mutable_committed_cursor()->::rl::training::v1::MetricBatchCursor::MergeFrom(
+        from._internal_committed_cursor());
+  }
+  if (from._internal_ret_code() != 0) {
+    _this->_internal_set_ret_code(from._internal_ret_code());
+  }
+  if (from._internal_result() != 0) {
+    _this->_internal_set_result(from._internal_result());
+  }
+  if (from._internal_oldest_available_event_sequence() != 0) {
+    _this->_internal_set_oldest_available_event_sequence(from._internal_oldest_available_event_sequence());
+  }
+  if (from._internal_latest_available_event_sequence() != 0) {
+    _this->_internal_set_latest_available_event_sequence(from._internal_latest_available_event_sequence());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void AckMetricBatchRsp::CopyFrom(const AckMetricBatchRsp& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.AckMetricBatchRsp)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AckMetricBatchRsp::IsInitialized() const {
+  return true;
+}
+
+void AckMetricBatchRsp::InternalSwap(AckMetricBatchRsp* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.message_, lhs_arena,
+      &other->_impl_.message_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(AckMetricBatchRsp, _impl_.latest_available_event_sequence_)
+      + sizeof(AckMetricBatchRsp::_impl_.latest_available_event_sequence_)
+      - PROTOBUF_FIELD_OFFSET(AckMetricBatchRsp, _impl_.producer_)>(
+          reinterpret_cast<char*>(&_impl_.producer_),
+          reinterpret_cast<char*>(&other->_impl_.producer_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata AckMetricBatchRsp::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[43]);
+}
+
+// ===================================================================
+
 class AIServerStatusReq::_Internal {
  public:
 };
@@ -17285,7 +22822,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AIServerStatusReq::GetClassDat
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[32]);
+      file_level_metadata_training_2eproto[44]);
 }
 
 // ===================================================================
@@ -18649,7 +24186,7 @@ void AIServerStatusRsp::InternalSwap(AIServerStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[33]);
+      file_level_metadata_training_2eproto[45]);
 }
 
 // ===================================================================
@@ -19582,7 +25119,7 @@ void ModelArtifactManifest::InternalSwap(ModelArtifactManifest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelArtifactManifest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[34]);
+      file_level_metadata_training_2eproto[46]);
 }
 
 // ===================================================================
@@ -19775,7 +25312,7 @@ void RegisterModelReq::InternalSwap(RegisterModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[35]);
+      file_level_metadata_training_2eproto[47]);
 }
 
 // ===================================================================
@@ -20129,7 +25666,7 @@ void RegisterModelRsp::InternalSwap(RegisterModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[36]);
+      file_level_metadata_training_2eproto[48]);
 }
 
 // ===================================================================
@@ -20400,15 +25937,22 @@ void GetModelManifestReq::InternalSwap(GetModelManifestReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[37]);
+      file_level_metadata_training_2eproto[49]);
 }
 
 // ===================================================================
 
 class GetModelManifestRsp::_Internal {
  public:
+  using HasBits = decltype(std::declval<GetModelManifestRsp>()._impl_._has_bits_);
   static const ::rl::training::v1::ModelArtifactManifest& manifest(const GetModelManifestRsp* msg);
   static const ::rl::common::v1::ServiceInstanceIdentity& distributor(const GetModelManifestRsp* msg);
+  static void set_has_available_floor_model_version(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_latest_available_model_version(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
 };
 
 const ::rl::training::v1::ModelArtifactManifest&
@@ -20435,11 +25979,14 @@ GetModelManifestRsp::GetModelManifestRsp(const GetModelManifestRsp& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   GetModelManifestRsp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.message_){}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.message_){}
     , decltype(_impl_.manifest_){nullptr}
     , decltype(_impl_.distributor_){nullptr}
-    , decltype(_impl_.ret_code_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
+    , decltype(_impl_.available_floor_model_version_){}
+    , decltype(_impl_.latest_available_model_version_){}
+    , decltype(_impl_.ret_code_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _impl_.message_.InitDefault();
@@ -20456,7 +26003,9 @@ GetModelManifestRsp::GetModelManifestRsp(const GetModelManifestRsp& from)
   if (from._internal_has_distributor()) {
     _this->_impl_.distributor_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.distributor_);
   }
-  _this->_impl_.ret_code_ = from._impl_.ret_code_;
+  ::memcpy(&_impl_.available_floor_model_version_, &from._impl_.available_floor_model_version_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.ret_code_) -
+    reinterpret_cast<char*>(&_impl_.available_floor_model_version_)) + sizeof(_impl_.ret_code_));
   // @@protoc_insertion_point(copy_constructor:rl.training.v1.GetModelManifestRsp)
 }
 
@@ -20465,11 +26014,14 @@ inline void GetModelManifestRsp::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.message_){}
+      decltype(_impl_._has_bits_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.message_){}
     , decltype(_impl_.manifest_){nullptr}
     , decltype(_impl_.distributor_){nullptr}
+    , decltype(_impl_.available_floor_model_version_){uint64_t{0u}}
+    , decltype(_impl_.latest_available_model_version_){uint64_t{0u}}
     , decltype(_impl_.ret_code_){0}
-    , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.message_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -20512,12 +26064,20 @@ void GetModelManifestRsp::Clear() {
     delete _impl_.distributor_;
   }
   _impl_.distributor_ = nullptr;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.available_floor_model_version_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&_impl_.latest_available_model_version_) -
+        reinterpret_cast<char*>(&_impl_.available_floor_model_version_)) + sizeof(_impl_.latest_available_model_version_));
+  }
   _impl_.ret_code_ = 0;
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* GetModelManifestRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
@@ -20556,6 +26116,24 @@ const char* GetModelManifestRsp::_InternalParse(const char* ptr, ::_pbi::ParseCo
         } else
           goto handle_unusual;
         continue;
+      // optional uint64 available_floor_model_version = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _Internal::set_has_available_floor_model_version(&has_bits);
+          _impl_.available_floor_model_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // optional uint64 latest_available_model_version = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _Internal::set_has_latest_available_model_version(&has_bits);
+          _impl_.latest_available_model_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -20572,6 +26150,7 @@ const char* GetModelManifestRsp::_InternalParse(const char* ptr, ::_pbi::ParseCo
     CHK_(ptr != nullptr);
   }  // while
 message_done:
+  _impl_._has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -20615,6 +26194,18 @@ uint8_t* GetModelManifestRsp::_InternalSerialize(
         _Internal::distributor(this).GetCachedSize(), target, stream);
   }
 
+  // optional uint64 available_floor_model_version = 5;
+  if (_internal_has_available_floor_model_version()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(5, this->_internal_available_floor_model_version(), target);
+  }
+
+  // optional uint64 latest_available_model_version = 6;
+  if (_internal_has_latest_available_model_version()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(6, this->_internal_latest_available_model_version(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -20652,6 +26243,19 @@ size_t GetModelManifestRsp::ByteSizeLong() const {
         *_impl_.distributor_);
   }
 
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // optional uint64 available_floor_model_version = 5;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_available_floor_model_version());
+    }
+
+    // optional uint64 latest_available_model_version = 6;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_latest_available_model_version());
+    }
+
+  }
   // int32 ret_code = 1;
   if (this->_internal_ret_code() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_ret_code());
@@ -20686,6 +26290,16 @@ void GetModelManifestRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
     _this->_internal_mutable_distributor()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
         from._internal_distributor());
   }
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.available_floor_model_version_ = from._impl_.available_floor_model_version_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.latest_available_model_version_ = from._impl_.latest_available_model_version_;
+    }
+    _this->_impl_._has_bits_[0] |= cached_has_bits;
+  }
   if (from._internal_ret_code() != 0) {
     _this->_internal_set_ret_code(from._internal_ret_code());
   }
@@ -20708,6 +26322,7 @@ void GetModelManifestRsp::InternalSwap(GetModelManifestRsp* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.message_, lhs_arena,
       &other->_impl_.message_, rhs_arena
@@ -20723,7 +26338,7 @@ void GetModelManifestRsp::InternalSwap(GetModelManifestRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[38]);
+      file_level_metadata_training_2eproto[50]);
 }
 
 // ===================================================================
@@ -20968,7 +26583,7 @@ void DownloadModelReq::InternalSwap(DownloadModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata DownloadModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[39]);
+      file_level_metadata_training_2eproto[51]);
 }
 
 // ===================================================================
@@ -21239,7 +26854,7 @@ void ModelChunk::InternalSwap(ModelChunk* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelChunk::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[40]);
+      file_level_metadata_training_2eproto[52]);
 }
 
 // ===================================================================
@@ -21615,7 +27230,7 @@ void AckModelReq::InternalSwap(AckModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[41]);
+      file_level_metadata_training_2eproto[53]);
 }
 
 // ===================================================================
@@ -21928,7 +27543,7 @@ void AckModelRsp::InternalSwap(AckModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[42]);
+      file_level_metadata_training_2eproto[54]);
 }
 
 // ===================================================================
@@ -21968,18 +27583,25 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ModelDistributorStatusReq::Get
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[43]);
+      file_level_metadata_training_2eproto[55]);
 }
 
 // ===================================================================
 
 class ModelDistributorStatusRsp::_Internal {
  public:
+  using HasBits = decltype(std::declval<ModelDistributorStatusRsp>()._impl_._has_bits_);
   static const ::rl::common::v1::ContractIdentity& contract(const ModelDistributorStatusRsp* msg);
   static const ::rl::common::v1::ServiceInstanceIdentity& distributor(const ModelDistributorStatusRsp* msg);
   static const ::rl::training::v1::ModelIdentity& latest_model(const ModelDistributorStatusRsp* msg);
   static const ::rl::common::v1::ServiceInstanceIdentity& latest_ack_aiserver(const ModelDistributorStatusRsp* msg);
   static const ::rl::training::v1::ModelIdentity& latest_ack_model(const ModelDistributorStatusRsp* msg);
+  static void set_has_available_floor_model_version(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_latest_available_model_version(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
 };
 
 const ::rl::common::v1::ContractIdentity&
@@ -22030,7 +27652,9 @@ ModelDistributorStatusRsp::ModelDistributorStatusRsp(const ModelDistributorStatu
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   ModelDistributorStatusRsp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.last_error_){}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.last_error_){}
     , decltype(_impl_.contract_){nullptr}
     , decltype(_impl_.distributor_){nullptr}
     , decltype(_impl_.latest_model_){nullptr}
@@ -22049,7 +27673,8 @@ ModelDistributorStatusRsp::ModelDistributorStatusRsp(const ModelDistributorStatu
     , decltype(_impl_.loaded_ack_count_){}
     , decltype(_impl_.failed_ack_count_){}
     , decltype(_impl_.timestamp_unix_ms_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
+    , decltype(_impl_.available_floor_model_version_){}
+    , decltype(_impl_.latest_available_model_version_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _impl_.last_error_.InitDefault();
@@ -22076,8 +27701,8 @@ ModelDistributorStatusRsp::ModelDistributorStatusRsp(const ModelDistributorStatu
     _this->_impl_.latest_ack_model_ = new ::rl::training::v1::ModelIdentity(*from._impl_.latest_ack_model_);
   }
   ::memcpy(&_impl_.registered_model_count_, &from._impl_.registered_model_count_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.timestamp_unix_ms_) -
-    reinterpret_cast<char*>(&_impl_.registered_model_count_)) + sizeof(_impl_.timestamp_unix_ms_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.latest_available_model_version_) -
+    reinterpret_cast<char*>(&_impl_.registered_model_count_)) + sizeof(_impl_.latest_available_model_version_));
   // @@protoc_insertion_point(copy_constructor:rl.training.v1.ModelDistributorStatusRsp)
 }
 
@@ -22086,7 +27711,9 @@ inline void ModelDistributorStatusRsp::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.last_error_){}
+      decltype(_impl_._has_bits_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.last_error_){}
     , decltype(_impl_.contract_){nullptr}
     , decltype(_impl_.distributor_){nullptr}
     , decltype(_impl_.latest_model_){nullptr}
@@ -22105,7 +27732,8 @@ inline void ModelDistributorStatusRsp::SharedCtor(
     , decltype(_impl_.loaded_ack_count_){int64_t{0}}
     , decltype(_impl_.failed_ack_count_){int64_t{0}}
     , decltype(_impl_.timestamp_unix_ms_){int64_t{0}}
-    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.available_floor_model_version_){uint64_t{0u}}
+    , decltype(_impl_.latest_available_model_version_){uint64_t{0u}}
   };
   _impl_.last_error_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -22166,11 +27794,19 @@ void ModelDistributorStatusRsp::Clear() {
   ::memset(&_impl_.registered_model_count_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.timestamp_unix_ms_) -
       reinterpret_cast<char*>(&_impl_.registered_model_count_)) + sizeof(_impl_.timestamp_unix_ms_));
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.available_floor_model_version_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&_impl_.latest_available_model_version_) -
+        reinterpret_cast<char*>(&_impl_.available_floor_model_version_)) + sizeof(_impl_.latest_available_model_version_));
+  }
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* ModelDistributorStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
@@ -22330,6 +27966,24 @@ const char* ModelDistributorStatusRsp::_InternalParse(const char* ptr, ::_pbi::P
         } else
           goto handle_unusual;
         continue;
+      // optional uint64 available_floor_model_version = 20;
+      case 20:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 160)) {
+          _Internal::set_has_available_floor_model_version(&has_bits);
+          _impl_.available_floor_model_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // optional uint64 latest_available_model_version = 21;
+      case 21:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 168)) {
+          _Internal::set_has_latest_available_model_version(&has_bits);
+          _impl_.latest_available_model_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -22346,6 +28000,7 @@ const char* ModelDistributorStatusRsp::_InternalParse(const char* ptr, ::_pbi::P
     CHK_(ptr != nullptr);
   }  // while
 message_done:
+  _impl_._has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -22483,6 +28138,18 @@ uint8_t* ModelDistributorStatusRsp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt64ToArray(19, this->_internal_timestamp_unix_ms(), target);
   }
 
+  // optional uint64 available_floor_model_version = 20;
+  if (_internal_has_available_floor_model_version()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(20, this->_internal_available_floor_model_version(), target);
+  }
+
+  // optional uint64 latest_available_model_version = 21;
+  if (_internal_has_latest_available_model_version()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(21, this->_internal_latest_available_model_version(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -22609,6 +28276,23 @@ size_t ModelDistributorStatusRsp::ByteSizeLong() const {
         this->_internal_timestamp_unix_ms());
   }
 
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // optional uint64 available_floor_model_version = 20;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += 2 +
+        ::_pbi::WireFormatLite::UInt64Size(
+          this->_internal_available_floor_model_version());
+    }
+
+    // optional uint64 latest_available_model_version = 21;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 2 +
+        ::_pbi::WireFormatLite::UInt64Size(
+          this->_internal_latest_available_model_version());
+    }
+
+  }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -22689,6 +28373,16 @@ void ModelDistributorStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_m
   if (from._internal_timestamp_unix_ms() != 0) {
     _this->_internal_set_timestamp_unix_ms(from._internal_timestamp_unix_ms());
   }
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.available_floor_model_version_ = from._impl_.available_floor_model_version_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.latest_available_model_version_ = from._impl_.latest_available_model_version_;
+    }
+    _this->_impl_._has_bits_[0] |= cached_has_bits;
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -22708,13 +28402,14 @@ void ModelDistributorStatusRsp::InternalSwap(ModelDistributorStatusRsp* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.last_error_, lhs_arena,
       &other->_impl_.last_error_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ModelDistributorStatusRsp, _impl_.timestamp_unix_ms_)
-      + sizeof(ModelDistributorStatusRsp::_impl_.timestamp_unix_ms_)
+      PROTOBUF_FIELD_OFFSET(ModelDistributorStatusRsp, _impl_.latest_available_model_version_)
+      + sizeof(ModelDistributorStatusRsp::_impl_.latest_available_model_version_)
       - PROTOBUF_FIELD_OFFSET(ModelDistributorStatusRsp, _impl_.contract_)>(
           reinterpret_cast<char*>(&_impl_.contract_),
           reinterpret_cast<char*>(&other->_impl_.contract_));
@@ -22723,7 +28418,7 @@ void ModelDistributorStatusRsp::InternalSwap(ModelDistributorStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[44]);
+      file_level_metadata_training_2eproto[56]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -22858,6 +28553,54 @@ Arena::CreateMaybeMessage< ::rl::training::v1::MetricValue >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricSnapshot*
 Arena::CreateMaybeMessage< ::rl::training::v1::MetricSnapshot >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::training::v1::MetricSnapshot >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::RawMetricSumCount*
+Arena::CreateMaybeMessage< ::rl::training::v1::RawMetricSumCount >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::RawMetricSumCount >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::AgentEpisodeMetricFact*
+Arena::CreateMaybeMessage< ::rl::training::v1::AgentEpisodeMetricFact >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::AgentEpisodeMetricFact >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::EpisodeMetricFact*
+Arena::CreateMaybeMessage< ::rl::training::v1::EpisodeMetricFact >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::EpisodeMetricFact >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::TrainUpdateMetricFact*
+Arena::CreateMaybeMessage< ::rl::training::v1::TrainUpdateMetricFact >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::TrainUpdateMetricFact >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricEvent*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricEvent >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricEvent >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricSequenceGap*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricSequenceGap >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricSequenceGap >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricBatch*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricBatch >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricBatch >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricBatchCursor*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricBatchCursor >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricBatchCursor >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::GetMetricBatchReq*
+Arena::CreateMaybeMessage< ::rl::training::v1::GetMetricBatchReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::GetMetricBatchReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::GetMetricBatchRsp*
+Arena::CreateMaybeMessage< ::rl::training::v1::GetMetricBatchRsp >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::GetMetricBatchRsp >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::AckMetricBatchReq*
+Arena::CreateMaybeMessage< ::rl::training::v1::AckMetricBatchReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::AckMetricBatchReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::AckMetricBatchRsp*
+Arena::CreateMaybeMessage< ::rl::training::v1::AckMetricBatchRsp >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::AckMetricBatchRsp >(arena);
 }
 template<> PROTOBUF_NOINLINE ::rl::training::v1::AIServerStatusReq*
 Arena::CreateMaybeMessage< ::rl::training::v1::AIServerStatusReq >(Arena* arena) {

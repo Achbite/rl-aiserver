@@ -6,6 +6,12 @@ repo_dir="$1"
 test_root="$(mktemp -d)"
 trap 'rm -rf "${test_root}"' EXIT
 
+grep -Fq \
+    "COPY proto/manifest.json /opt/rl/aiserver/proto/manifest.json" \
+    "${repo_dir}/Dockerfile"
+grep -Fq "COPY proto/schemas /opt/rl/aiserver/proto/schemas" \
+    "${repo_dir}/Dockerfile"
+
 fake_aiserver="${test_root}/maze_aiserver"
 cat >"${fake_aiserver}" <<'SH'
 #!/usr/bin/env bash
@@ -53,10 +59,14 @@ assert_workload "map-validation"
 launcher_repo="${test_root}/launcher"
 mkdir -p \
     "${launcher_repo}/configs" \
-    "${launcher_repo}/models/local-train"
+    "${launcher_repo}/models/local-train/cache/000000"
 cp "${repo_dir}/run.sh" "${launcher_repo}/run.sh"
 cp "${config}" "${launcher_repo}/configs/server_config.yaml"
 printf '%s\n' "keep" >"${launcher_repo}/models/local-train/active-model"
+printf '%s\n' "cached-model" >\
+    "${launcher_repo}/models/local-train/cache/000000/SaveModel.onnx"
+printf '%s\n' '{"model_version":"0"}' >\
+    "${launcher_repo}/models/local-train/cache/000000/manifest.json"
 
 if AISERVER_BIN="${fake_aiserver}" \
    AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
@@ -69,6 +79,8 @@ if AISERVER_BIN="${fake_aiserver}" \
 fi
 grep -q "training has no hard cap" "${test_root}/retired-budget.out"
 test -f "${launcher_repo}/models/local-train/active-model"
+test -f "${launcher_repo}/models/local-train/cache/000000/SaveModel.onnx"
+test -f "${launcher_repo}/models/local-train/cache/000000/manifest.json"
 
 if ! AISERVER_BIN="${fake_aiserver}" \
    AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
@@ -79,10 +91,10 @@ if ! AISERVER_BIN="${fake_aiserver}" \
     exit 1
 fi
 assert_workload "training"
-if [ -e "${launcher_repo}/models/local-train/active-model" ]; then
-    echo "training did not clear the AIServer local-train directory" >&2
-    exit 1
-fi
+test -f "${launcher_repo}/models/local-train/active-model"
+test -d "${launcher_repo}/models/local-train/cache"
+test -f "${launcher_repo}/models/local-train/cache/000000/SaveModel.onnx"
+test -f "${launcher_repo}/models/local-train/cache/000000/manifest.json"
 grep -qx -- "--sample-distributor" "${FAKE_ARGS_FILE}"
 grep -qx -- "maze-learner:9100" "${FAKE_ARGS_FILE}"
 grep -q 'return 125' "${repo_dir}/run.sh"
@@ -91,6 +103,38 @@ if grep -q -- "--training-sample-budget" "${FAKE_ARGS_FILE}"; then
     echo "retired sample budget reached the AIServer process" >&2
     exit 1
 fi
+
+printf '%s\n' "remove-on-new-run" >\
+    "${launcher_repo}/models/local-train/cache/000000/old-model"
+if ! AISERVER_BIN="${fake_aiserver}" \
+   AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
+   bash "${launcher_repo}/run.sh" training --new-run \
+   --sample-distributor maze-learner:9100 \
+   >"${test_root}/new-run.out" 2>&1; then
+    echo "explicit AIServer new-run reset failed" >&2
+    exit 1
+fi
+test ! -e "${launcher_repo}/models/local-train/active-model"
+test ! -e "${launcher_repo}/models/local-train/cache/000000"
+test -d "${launcher_repo}/models/local-train/cache"
+grep -q "AIServer new Run reset" "${test_root}/new-run.out"
+if grep -q -- "--new-run" "${FAKE_ARGS_FILE}"; then
+    echo "new-run control flag reached the AIServer process" >&2
+    exit 1
+fi
+
+printf '%s\n' "preserve" >\
+    "${launcher_repo}/models/local-train/preserve-nontraining"
+if AISERVER_BIN="${fake_aiserver}" \
+   AISERVER_CONFIG="${launcher_repo}/configs/server_config.yaml" \
+   bash "${launcher_repo}/run.sh" local-test --new-run \
+   >"${test_root}/new-run-nontraining.out" 2>&1; then
+    echo "non-training workload unexpectedly accepted --new-run" >&2
+    exit 1
+fi
+grep -q "only valid for the training workload" \
+    "${test_root}/new-run-nontraining.out"
+test -f "${launcher_repo}/models/local-train/preserve-nontraining"
 
 quiesce_launcher="${test_root}/quiesce-launcher"
 mkdir -p \

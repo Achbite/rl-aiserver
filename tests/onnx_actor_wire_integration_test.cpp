@@ -5,7 +5,9 @@
 #include <openssl/evp.h>
 
 #include <cmath>
+#include <atomic>
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -13,7 +15,9 @@
 #include <random>
 #include <sstream>
 #include <string>
+#include <thread>
 #include <vector>
+#include <unistd.h>
 
 namespace {
 
@@ -131,11 +135,64 @@ void TestLearnerOnnxThroughActorWire(const std::string& model_path) {
         "production ONNX-selector-sample wire matches deterministic golden");
 }
 
+void TestPreparedSessionLifetimeAndConcurrentPreparation(
+    const std::string& fixture_path) {
+    namespace fs = std::filesystem;
+    const fs::path root = fs::temp_directory_path() /
+        ("onnx-prepared-lifetime-" + std::to_string(::getpid()));
+    fs::remove_all(root);
+    fs::create_directories(root);
+    const fs::path active_path = root / "active.onnx";
+    const fs::path staged_path = root / "staged.onnx";
+    fs::copy_file(fixture_path, active_path);
+    fs::copy_file(fixture_path, staged_path);
+
+    OnnxInferencer inferencer;
+    std::string error;
+    Require(inferencer.LoadModel(active_path.string(), 17, 9, &error),
+            "active session loads from cache file: " + error);
+    std::atomic<bool> preparation_done{false};
+    std::atomic<bool> preparation_ok{false};
+    OnnxInferencer::PreparedModel staged;
+    std::thread loader([&]() {
+        std::string prepare_error;
+        preparation_ok.store(inferencer.PrepareModel(
+            staged_path.string(), 17, 9, staged, &prepare_error));
+        preparation_done.store(true);
+    });
+
+    const std::vector<float> observation(17, 0.0f);
+    int inference_count = 0;
+    while (!preparation_done.load()) {
+        std::vector<float> logits;
+        float value = 0.0f;
+        Require(inferencer.Infer(observation, 17, logits, value),
+                "active inference remains available during PrepareModel");
+        ++inference_count;
+    }
+    loader.join();
+    Require(preparation_ok.load() && staged.valid(),
+            "background PrepareModel produces a reusable shared session");
+
+    fs::remove(active_path);
+    std::vector<float> logits;
+    float value = 0.0f;
+    Require(inferencer.Infer(observation, 17, logits, value),
+            "active shared session survives cache file eviction");
+    inferencer.ActivatePreparedModel(std::move(staged));
+    fs::remove(staged_path);
+    Require(inferencer.Infer(observation, 17, logits, value),
+            "new shared session survives its cache file eviction");
+    (void)inference_count;
+    fs::remove_all(root);
+}
+
 }  // namespace
 
 int main(int argc, char** argv) {
     Require(argc == 2, "usage: onnx_actor_wire_integration_test MODEL");
     TestLearnerOnnxThroughActorWire(argv[1]);
+    TestPreparedSessionLifetimeAndConcurrentPreparation(argv[1]);
     std::cout << "onnx_actor_wire_integration: PASS\n";
     return 0;
 }

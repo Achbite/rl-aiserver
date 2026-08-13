@@ -4,9 +4,16 @@
 #include <unistd.h>
 
 #include <chrono>
+#include <algorithm>
+#include <atomic>
+#include <cctype>
 #include <filesystem>
+#include <iomanip>
 #include <initializer_list>
+#include <limits>
+#include <sstream>
 #include <thread>
+#include <vector>
 
 namespace {
 
@@ -88,10 +95,153 @@ bool WriteAll(int descriptor, const char* data, std::size_t size) {
     return true;
 }
 
+bool FsyncDirectory(const std::filesystem::path& directory,
+                    std::string& error) {
+    const int descriptor = ::open(directory.c_str(), O_RDONLY | O_DIRECTORY);
+    if (descriptor < 0) {
+        error = "cannot open model cache directory for fsync: " +
+                directory.string();
+        return false;
+    }
+    bool ok = ::fsync(descriptor) == 0;
+    if (::close(descriptor) != 0) ok = false;
+    if (!ok) {
+        error = "cannot fsync model cache directory: " + directory.string();
+        return false;
+    }
+    return true;
+}
+
+bool IsPrivateTemporaryDirectory(const std::filesystem::path& directory) {
+    const std::string name = directory.filename().string();
+    return name.rfind(".tmp-", 0) == 0;
+}
+
+bool IsPrivatePruneDirectory(const std::filesystem::path& directory) {
+    const std::string name = directory.filename().string();
+    return name.rfind(".prune-", 0) == 0;
+}
+
+bool ParseCanonicalVersionDirectory(const std::string& name,
+                                    ModelVersion& version) {
+    if (name.size() < 6 ||
+        !std::all_of(name.begin(), name.end(), [](unsigned char value) {
+            return std::isdigit(value) != 0;
+        })) {
+        return false;
+    }
+    try {
+        const unsigned long long parsed = std::stoull(name);
+        version = static_cast<ModelVersion>(parsed);
+    } catch (...) {
+        return false;
+    }
+    std::ostringstream canonical;
+    canonical << std::setfill('0') << std::setw(6) << version;
+    return canonical.str() == name;
+}
+
+bool SameWireManifest(const ModelManifest& left,
+                      const ModelManifest& right) {
+    return left.wire.SerializeAsString() == right.wire.SerializeAsString();
+}
+
+bool IsUnsignedDecimal(const std::string& value) {
+    return !value.empty() &&
+           std::all_of(value.begin(), value.end(), [](unsigned char item) {
+               return std::isdigit(item) != 0;
+           });
+}
+
+bool ParsePrivateCacheDirectory(const std::string& name,
+                                const std::string& prefix,
+                                ModelVersion& version) {
+    if (name.rfind(prefix, 0) != 0) return false;
+    const std::string remainder = name.substr(prefix.size());
+    const std::size_t last_separator = remainder.rfind('-');
+    if (last_separator == std::string::npos ||
+        last_separator == 0 ||
+        last_separator + 1 >= remainder.size()) {
+        return false;
+    }
+    const std::size_t process_separator =
+        remainder.rfind('-', last_separator - 1);
+    if (process_separator == std::string::npos ||
+        process_separator == 0 ||
+        process_separator + 1 == last_separator) {
+        return false;
+    }
+    return ParseCanonicalVersionDirectory(
+               remainder.substr(0, process_separator), version) &&
+           IsUnsignedDecimal(remainder.substr(
+               process_separator + 1,
+               last_separator - process_separator - 1)) &&
+           IsUnsignedDecimal(remainder.substr(last_separator + 1));
+}
+
+bool RemoveValidatedPrivateDirectory(
+    const std::filesystem::path& cache_root,
+    const std::filesystem::path& directory,
+    const std::string& prefix,
+    std::string& error) {
+    namespace fs = std::filesystem;
+    ModelVersion ignored_version = 0;
+    std::error_code fs_error;
+    const auto status = fs::symlink_status(directory, fs_error);
+    if (fs_error || fs::is_symlink(status) || !fs::is_directory(status) ||
+        directory.parent_path() != cache_root ||
+        !ParsePrivateCacheDirectory(
+            directory.filename().string(), prefix, ignored_version)) {
+        error = "refusing to remove an invalid private model directory: " +
+                directory.string();
+        return false;
+    }
+    fs::remove_all(directory, fs_error);
+    if (fs_error) {
+        error = "cannot remove private model directory: " +
+                fs_error.message();
+        return false;
+    }
+    return true;
+}
+
+std::filesystem::path AllocatePrivateCacheDirectory(
+    const std::filesystem::path& cache_root,
+    const std::string& prefix,
+    ModelVersion model_version,
+    std::string& error) {
+    namespace fs = std::filesystem;
+    static std::atomic<uint64_t> next_private_id{1};
+    std::error_code fs_error;
+    for (int attempt = 0; attempt < 100; ++attempt) {
+        const fs::path candidate =
+            cache_root /
+            (prefix + ModelDistributorClient::CacheVersionDirectoryName(
+                          model_version) +
+             "-" + std::to_string(::getpid()) + "-" +
+             std::to_string(next_private_id.fetch_add(1)));
+        if (fs::create_directory(candidate, fs_error)) return candidate;
+        if (fs_error && fs_error != std::errc::file_exists) {
+            error = "cannot create private model cache directory: " +
+                    fs_error.message();
+            return {};
+        }
+        fs_error.clear();
+    }
+    error = "cannot allocate private model cache directory";
+    return {};
+}
+
 }  // namespace
 
-ModelDistributorClient::ModelDistributorClient(const AIServerConfig& config)
+ModelDistributorClient::ModelDistributorClient(
+    const AIServerConfig& config,
+    std::string producer_instance_id,
+    uint64_t producer_lifecycle_epoch)
     : config_(config) {
+    requester_identity_.set_component("rl-aiserver");
+    requester_identity_.set_instance_id(std::move(producer_instance_id));
+    requester_identity_.set_lifecycle_epoch(producer_lifecycle_epoch);
     const std::string address =
         config_.model_distribution.host + ":" +
         std::to_string(config_.model_distribution.port);
@@ -102,42 +252,57 @@ ModelDistributorClient::ModelDistributorClient(const AIServerConfig& config)
 
 bool ModelDistributorClient::ValidateManifest(
     const training::ModelArtifactManifest& source,
-    int expected_version,
+    std::optional<ModelVersion> expected_version,
     std::string& error) const {
     return ValidateModelManifest(
         config_, source, expected_version, error);
 }
 
-bool ModelDistributorClient::Download(
+bool ModelDistributorClient::DownloadToTemporary(
     const training::ModelArtifactManifest& source,
     const std::string& aiserver_id,
     std::string& local_path,
     std::string& error) {
     namespace fs = std::filesystem;
-    const fs::path incoming_dir =
-        fs::path(config_.model.local_train_dir) / "incoming";
+    if (source.model_file() != kCachedModelFile) {
+        error = "distributed model_file must be SaveModel.onnx";
+        return false;
+    }
+    const fs::path cache_root =
+        fs::path(config_.model.local_train_dir) / "cache";
     std::error_code fs_error;
-    fs::create_directories(incoming_dir, fs_error);
+    fs::create_directories(cache_root, fs_error);
     if (fs_error) {
-        error = "cannot create incoming model directory: " +
+        error = "cannot create model cache directory: " +
                 fs_error.message();
         return false;
     }
-    const fs::path final_path = incoming_dir / source.model_file();
-    const fs::path temporary =
-        final_path.string() + ".tmp." + std::to_string(::getpid());
+    const auto cache_status = fs::symlink_status(cache_root, fs_error);
+    if (fs_error || fs::is_symlink(cache_status) ||
+        !fs::is_directory(cache_status)) {
+        error = "model cache root must be a real directory";
+        return false;
+    }
+
+    const fs::path temporary_dir = AllocatePrivateCacheDirectory(
+        cache_root, ".tmp-",
+        source.identity().model_version(), error);
+    if (temporary_dir.empty()) {
+        return false;
+    }
+
+    const fs::path temporary_model = temporary_dir / kCachedModelFile;
     const int descriptor = ::open(
-        temporary.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0600);
+        temporary_model.c_str(), O_CREAT | O_EXCL | O_WRONLY, 0600);
     if (descriptor < 0) {
+        fs::remove_all(temporary_dir, fs_error);
         error = "cannot open model download temporary file";
         return false;
     }
 
     training::DownloadModelReq request;
     *request.mutable_requested_model() = source.identity();
-    request.mutable_requester()->set_component("aiserver");
-    request.mutable_requester()->set_instance_id(aiserver_id);
-    request.mutable_requester()->set_lifecycle_epoch(1);
+    request.mutable_requester()->CopyFrom(requester_identity_);
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
@@ -163,34 +328,47 @@ bool ModelDistributorClient::Download(
 
     if (!status.ok() || !write_ok ||
         expected_offset != source.size_bytes()) {
-        fs::remove(temporary, fs_error);
+        fs::remove_all(temporary_dir, fs_error);
         error = status.ok()
                     ? "model stream offset or size mismatch"
                     : "model download failed: " + status.error_message();
         return false;
     }
     std::string checksum;
-    if (!ComputeFileSha256(temporary.string(), checksum, error)) {
-        fs::remove(temporary, fs_error);
+    if (!ComputeFileSha256(temporary_model.string(), checksum, error)) {
+        fs::remove_all(temporary_dir, fs_error);
         return false;
     }
     if (checksum != source.identity().artifact_digest().hex()) {
-        fs::remove(temporary, fs_error);
+        fs::remove_all(temporary_dir, fs_error);
         error = "downloaded model checksum mismatch";
         return false;
     }
-    fs::rename(temporary, final_path, fs_error);
-    if (fs_error) {
-        fs::remove(temporary, fs_error);
-        error = "cannot install downloaded model: " + fs_error.message();
+
+    const fs::path manifest_path =
+        temporary_dir / config_.model.manifest_name;
+    if (!WriteModelManifestFile(source, manifest_path.string(), error) ||
+        !FsyncDirectory(temporary_dir, error)) {
+        fs::remove_all(temporary_dir, fs_error);
         return false;
     }
-    local_path = final_path.string();
+
+    ModelManifest validated;
+    if (!LoadModelManifestFile(
+            config_, manifest_path.string(), validated, error) ||
+        validated.wire.SerializeAsString() != source.SerializeAsString()) {
+        fs::remove_all(temporary_dir, fs_error);
+        if (error.empty()) {
+            error = "persisted model manifest identity mismatch";
+        }
+        return false;
+    }
+    local_path = temporary_model.string();
     return true;
 }
 
 bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
-                                   int model_version,
+                                   ModelVersion model_version,
                                    bool latest,
                                    ModelManifest& manifest,
     std::string& error) {
@@ -198,12 +376,9 @@ bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
     request.mutable_requested_model()->set_model_lineage_id(
         config_.model.expected_model_lineage_id);
     if (!latest) {
-        request.mutable_requested_model()->set_model_version(
-            static_cast<uint64_t>(model_version));
+        request.mutable_requested_model()->set_model_version(model_version);
     }
-    request.mutable_requester()->set_component("aiserver");
-    request.mutable_requester()->set_instance_id(aiserver_id);
-    request.mutable_requester()->set_lifecycle_epoch(1);
+    request.mutable_requester()->CopyFrom(requester_identity_);
     request.set_latest_in_lineage(latest);
     training::GetModelManifestRsp response;
     grpc::ClientContext context;
@@ -220,13 +395,31 @@ bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
         return false;
     }
     const auto& source = response.manifest();
-    if (!ValidateManifest(source, model_version, error)) {
+    if (!ValidateManifest(
+            source,
+            latest ? std::nullopt
+                   : std::optional<ModelVersion>(model_version),
+            error)) {
         return false;
     }
 
     std::string local_path;
-    if (!Download(source, aiserver_id, local_path, error)) return false;
-    AssignModelManifest(source, local_path, manifest);
+    if (!DownloadToTemporary(source, aiserver_id, local_path, error)) {
+        return false;
+    }
+    const std::filesystem::path manifest_path =
+        std::filesystem::path(local_path).parent_path() /
+        config_.model.manifest_name;
+    if (!LoadModelManifestFile(
+            config_, manifest_path.string(), manifest, error) ||
+        manifest.wire.SerializeAsString() != source.SerializeAsString()) {
+        std::error_code remove_error;
+        std::filesystem::remove_all(
+            std::filesystem::path(local_path).parent_path(), remove_error);
+        if (error.empty()) error = "downloaded model identity mismatch";
+        return false;
+    }
+    error.clear();
     return true;
 }
 
@@ -234,12 +427,12 @@ bool ModelDistributorClient::FetchLatest(
     const std::string& aiserver_id,
     ModelManifest& manifest,
     std::string& error) {
-    return Fetch(aiserver_id, -1, true, manifest, error);
+    return Fetch(aiserver_id, 0, true, manifest, error);
 }
 
 bool ModelDistributorClient::FetchVersion(
     const std::string& aiserver_id,
-    int model_version,
+    ModelVersion model_version,
     ModelManifest& manifest,
     std::string& error) {
     return Fetch(
@@ -248,15 +441,13 @@ bool ModelDistributorClient::FetchVersion(
 
 bool ModelDistributorClient::GetLatestIdentity(
     const std::string& aiserver_id,
-    int& model_version,
+    ModelVersion& model_version,
     std::string& checksum,
     std::string& error) {
     training::GetModelManifestReq request;
     request.mutable_requested_model()->set_model_lineage_id(
         config_.model.expected_model_lineage_id);
-    request.mutable_requester()->set_component("aiserver");
-    request.mutable_requester()->set_instance_id(aiserver_id);
-    request.mutable_requester()->set_lifecycle_epoch(1);
+    request.mutable_requester()->CopyFrom(requester_identity_);
     request.set_latest_in_lineage(true);
     training::GetModelManifestRsp response;
     grpc::ClientContext context;
@@ -273,11 +464,60 @@ bool ModelDistributorClient::GetLatestIdentity(
         return false;
     }
     const auto& source = response.manifest();
-    if (!ValidateManifest(source, -1, error)) {
+    if (!ValidateManifest(source, std::nullopt, error)) {
         return false;
     }
-    model_version = static_cast<int>(source.identity().model_version());
+    model_version = source.identity().model_version();
     checksum = source.identity().artifact_digest().hex();
+    return true;
+}
+
+bool ModelDistributorClient::GetAvailableRange(
+    const std::string& aiserver_id,
+    AvailableRange& range,
+    std::string& error) {
+    range = AvailableRange{};
+    training::GetModelManifestReq request;
+    request.mutable_requested_model()->set_model_lineage_id(
+        config_.model.expected_model_lineage_id);
+    request.mutable_requester()->CopyFrom(requester_identity_);
+    request.set_latest_in_lineage(true);
+    training::GetModelManifestRsp response;
+    grpc::ClientContext context;
+    context.set_deadline(
+        std::chrono::system_clock::now() +
+        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
+    const grpc::Status status =
+        stub_->GetModelManifest(&context, request, &response);
+    if (!status.ok() || response.ret_code() != 0 ||
+        !response.has_manifest()) {
+        error = status.ok()
+                    ? response.message()
+                    : "model manifest RPC failed: " + status.error_message();
+        return false;
+    }
+    const auto& latest = response.manifest();
+    if (!ValidateManifest(latest, std::nullopt, error)) return false;
+
+    if (!response.has_available_floor_model_version() ||
+        !response.has_latest_available_model_version()) {
+        error = "Model Distributor available range is missing";
+        return false;
+    }
+
+    const uint64_t floor_version =
+        response.available_floor_model_version();
+    const uint64_t latest_version =
+        response.latest_available_model_version();
+    if (floor_version > latest_version ||
+        latest_version != latest.identity().model_version()) {
+        error = "Model Distributor available range is invalid";
+        return false;
+    }
+    range.floor_model_version = floor_version;
+    range.latest_model_version = latest_version;
+    range.latest_checksum = latest.identity().artifact_digest().hex();
+    error.clear();
     return true;
 }
 
@@ -356,12 +596,11 @@ ModelDistributorClient::AckIdempotently(
     }
 
     training::AckModelReq request;
-    request.mutable_aiserver()->set_component("aiserver");
-    request.mutable_aiserver()->set_instance_id(aiserver_id);
-    request.mutable_aiserver()->set_lifecycle_epoch(1);
+    request.mutable_aiserver()->CopyFrom(requester_identity_);
     *request.mutable_model() = manifest.wire.identity();
     request.set_load_instance_id(
-        aiserver_id + "-load-v" + std::to_string(manifest.model_version));
+        requester_identity_.instance_id() + "-load-v" +
+        std::to_string(manifest.model_version));
     request.set_load_status(load_status);
     request.set_message(message);
     constexpr int kMaxAttempts = 3;
@@ -413,93 +652,424 @@ ModelDistributorClient::AckIdempotently(
     return AckDisposition::Uncertain;
 }
 
-bool ModelDistributorClient::Promote(
+std::string ModelDistributorClient::CacheVersionDirectoryName(
+    ModelVersion model_version) {
+    std::ostringstream output;
+    output << std::setfill('0') << std::setw(6) << model_version;
+    return output.str();
+}
+
+bool ModelDistributorClient::LoadCachedVersion(
+    ModelVersion model_version,
     ModelManifest& manifest,
-    std::string& previous_path,
-    std::string& error) {
+    std::string& error) const {
     namespace fs = std::filesystem;
-    const fs::path source = manifest.model_path;
-    const fs::path root = config_.model.local_train_dir;
-    const fs::path active_dir = root / "active";
-    const fs::path previous_dir = root / "previous";
-    const fs::path active_path = active_dir / "model.onnx";
-    const fs::path previous_model = previous_dir / "model.onnx";
+    const fs::path directory =
+        fs::path(config_.model.local_train_dir) / "cache" /
+        CacheVersionDirectoryName(model_version);
     std::error_code fs_error;
-
-    if (!fs::is_regular_file(source, fs_error) || fs_error) {
-        error = "incoming model does not exist";
+    const auto directory_status = fs::symlink_status(directory, fs_error);
+    if (fs_error || fs::is_symlink(directory_status) ||
+        !fs::is_directory(directory_status)) {
+        error = "cached model version directory is invalid";
         return false;
     }
-    fs::create_directories(active_dir, fs_error);
-    if (fs_error) {
-        error = "cannot create active model directory: " +
-                fs_error.message();
-        return false;
-    }
-    fs::create_directories(previous_dir, fs_error);
-    if (fs_error) {
-        error = "cannot create previous model directory: " +
-                fs_error.message();
-        return false;
-    }
-
-    fs::remove(previous_model, fs_error);
-    fs_error.clear();
-    previous_path.clear();
-    if (fs::exists(active_path, fs_error)) {
-        fs::rename(active_path, previous_model, fs_error);
-        if (fs_error) {
-            error = "cannot preserve previous model: " +
-                    fs_error.message();
+    std::set<std::string> entries;
+    for (fs::directory_iterator iterator(directory, fs_error), end;
+         !fs_error && iterator != end; iterator.increment(fs_error)) {
+        const auto entry_status =
+            fs::symlink_status(iterator->path(), fs_error);
+        if (fs_error || fs::is_symlink(entry_status) ||
+            !fs::is_regular_file(entry_status)) {
+            error = "cached model version contains an invalid entry";
             return false;
         }
-        previous_path = previous_model.string();
+        entries.insert(iterator->path().filename().string());
     }
-
-    fs::rename(source, active_path, fs_error);
-    if (fs_error) {
-        if (!previous_path.empty()) {
-            std::error_code rollback_error;
-            fs::rename(previous_model, active_path, rollback_error);
-        }
-        error = "cannot promote incoming model: " + fs_error.message();
+    const std::set<std::string> expected_entries{
+        kCachedModelFile, config_.model.manifest_name};
+    if (fs_error || entries != expected_entries) {
+        error = "cached model version is not a complete two-file artifact";
         return false;
     }
-    manifest.model_path = active_path.string();
+    if (!LoadModelManifestFile(
+            config_,
+            (directory / config_.model.manifest_name).string(),
+            manifest, error)) {
+        return false;
+    }
+    if (manifest.model_version != model_version ||
+        manifest.model_file != kCachedModelFile ||
+        fs::path(manifest.model_path).filename() != kCachedModelFile) {
+        error = "cached model directory identity mismatch";
+        return false;
+    }
+    error.clear();
     return true;
 }
 
-bool ModelDistributorClient::RollbackPromotion(
-    ModelManifest& manifest,
-    const std::string& incoming_path,
-    const std::string& previous_path,
+bool ModelDistributorClient::ListCachedModels(
+    std::vector<ModelManifest>& models,
+    std::string& error) const {
+    namespace fs = std::filesystem;
+    models.clear();
+    const fs::path cache_root =
+        fs::path(config_.model.local_train_dir) / "cache";
+    std::error_code fs_error;
+    fs::create_directories(cache_root, fs_error);
+    if (fs_error) {
+        error = "cannot create model cache directory: " + fs_error.message();
+        return false;
+    }
+    const auto root_status = fs::symlink_status(cache_root, fs_error);
+    if (fs_error || fs::is_symlink(root_status) ||
+        !fs::is_directory(root_status)) {
+        error = "model cache root must be a real directory";
+        return false;
+    }
+    for (fs::directory_iterator iterator(cache_root, fs_error), end;
+         !fs_error && iterator != end; iterator.increment(fs_error)) {
+        const fs::path path = iterator->path();
+        const auto status = fs::symlink_status(path, fs_error);
+        if (fs_error) break;
+        ModelVersion directory_version = 0;
+        if (fs::is_symlink(status) || !fs::is_directory(status) ||
+            !ParseCanonicalVersionDirectory(
+                path.filename().string(), directory_version)) {
+            error = "model cache contains an unrecognized entry: " +
+                    path.filename().string();
+            models.clear();
+            return false;
+        }
+        ModelManifest candidate;
+        std::string validation_error;
+        if (!LoadCachedVersion(
+                directory_version, candidate, validation_error)) {
+            error = "cached model version is invalid: " +
+                    path.filename().string() + ": " + validation_error;
+            models.clear();
+            return false;
+        }
+        models.push_back(std::move(candidate));
+    }
+    if (fs_error) {
+        error = "cannot scan model cache: " + fs_error.message();
+        models.clear();
+        return false;
+    }
+    std::sort(models.begin(), models.end(), [](const auto& left,
+                                                const auto& right) {
+        return left.model_version < right.model_version;
+    });
+    error.clear();
+    return true;
+}
+
+bool ModelDistributorClient::RecoverCache(
+    std::vector<ModelManifest>& models,
     std::string& error) {
     namespace fs = std::filesystem;
-    const fs::path active_path = manifest.model_path;
-    const fs::path incoming = incoming_path;
+    models.clear();
+    const fs::path cache_root =
+        fs::path(config_.model.local_train_dir) / "cache";
     std::error_code fs_error;
-    if (!fs::is_regular_file(active_path, fs_error) || fs_error ||
-        fs::exists(incoming, fs_error)) {
-        error = "promoted model cannot be restored to incoming";
-        return false;
-    }
-    fs::rename(active_path, incoming, fs_error);
+    fs::create_directories(cache_root, fs_error);
     if (fs_error) {
-        error = "cannot restore promoted model to incoming: " +
-                fs_error.message();
+        error = "cannot create model cache directory: " + fs_error.message();
         return false;
     }
-    if (!previous_path.empty()) {
-        fs::rename(previous_path, active_path, fs_error);
+    const auto root_status = fs::symlink_status(cache_root, fs_error);
+    if (fs_error || fs::is_symlink(root_status) ||
+        !fs::is_directory(root_status)) {
+        error = "model cache root must be a real directory";
+        return false;
+    }
+
+    std::vector<fs::path> entries;
+    for (fs::directory_iterator iterator(cache_root, fs_error), end;
+         !fs_error && iterator != end; iterator.increment(fs_error)) {
+        entries.push_back(iterator->path());
+    }
+    if (fs_error) {
+        error = "cannot scan model cache: " + fs_error.message();
+        return false;
+    }
+    std::sort(entries.begin(), entries.end());
+    bool changed = false;
+    for (const auto& path : entries) {
+        const std::string name = path.filename().string();
+        ModelVersion private_version = 0;
+        if (ParsePrivateCacheDirectory(name, ".tmp-", private_version)) {
+            if (!RemoveValidatedPrivateDirectory(
+                    cache_root, path, ".tmp-", error)) {
+                return false;
+            }
+            changed = true;
+            continue;
+        }
+        if (ParsePrivateCacheDirectory(name, ".prune-", private_version)) {
+            if (!RemoveValidatedPrivateDirectory(
+                    cache_root, path, ".prune-", error)) {
+                return false;
+            }
+            changed = true;
+            continue;
+        }
+
+        ModelVersion directory_version = 0;
+        const auto status = fs::symlink_status(path, fs_error);
+        if (fs_error || fs::is_symlink(status) ||
+            !fs::is_directory(status) ||
+            !ParseCanonicalVersionDirectory(name, directory_version)) {
+            error = "model cache contains an unrecognized entry: " + name;
+            return false;
+        }
+        ModelManifest candidate;
+        std::string validation_error;
+        if (!LoadCachedVersion(
+                directory_version, candidate, validation_error)) {
+            const fs::path quarantine = AllocatePrivateCacheDirectory(
+                cache_root, ".prune-", directory_version, error);
+            if (quarantine.empty()) return false;
+            fs::remove(quarantine, fs_error);
+            if (fs_error) {
+                error = "cannot prepare corrupt cache quarantine: " +
+                        fs_error.message();
+                return false;
+            }
+            fs::rename(path, quarantine, fs_error);
+            if (fs_error || !RemoveValidatedPrivateDirectory(
+                                cache_root, quarantine, ".prune-", error)) {
+                if (error.empty()) {
+                    error = "cannot remove corrupt cached model: " +
+                            fs_error.message();
+                }
+                return false;
+            }
+            changed = true;
+        }
+    }
+    if (changed && !FsyncDirectory(cache_root, error)) return false;
+    if (!ListCachedModels(models, error)) return false;
+    {
+        std::lock_guard<std::mutex> lock(cache_mutex_);
+        cached_versions_.clear();
+        for (const auto& model : models) {
+            cached_versions_.insert(model.model_version);
+        }
+    }
+    if (!PruneCache(error) || !ListCachedModels(models, error)) return false;
+    return true;
+}
+
+bool ModelDistributorClient::PublishPrepared(
+    ModelManifest& manifest,
+    std::string& error) {
+    namespace fs = std::filesystem;
+    if (manifest.model_file != kCachedModelFile) {
+        error = "prepared model identity is invalid";
+        return false;
+    }
+    const fs::path temporary_model = manifest.model_path;
+    const fs::path temporary_dir = temporary_model.parent_path();
+    const fs::path cache_root =
+        fs::path(config_.model.local_train_dir) / "cache";
+    const fs::path final_dir =
+        cache_root / CacheVersionDirectoryName(manifest.model_version);
+    std::error_code fs_error;
+    if (temporary_model.filename() != kCachedModelFile ||
+        !IsPrivateTemporaryDirectory(temporary_dir) ||
+        !fs::equivalent(temporary_dir.parent_path(), cache_root, fs_error) ||
+        fs_error) {
+        error = "prepared model is not in a private cache directory";
+        return false;
+    }
+    ModelManifest validated;
+    if (!LoadModelManifestFile(
+            config_,
+            (temporary_dir / config_.model.manifest_name).string(),
+            validated, error) ||
+        !SameWireManifest(validated, manifest) ||
+        validated.model_version != manifest.model_version) {
+        if (error.empty()) error = "prepared model identity changed";
+        return false;
+    }
+
+    if (fs::exists(final_dir, fs_error)) {
         if (fs_error) {
-            std::error_code recovery_error;
-            fs::rename(incoming, active_path, recovery_error);
-            error = "cannot restore previous active model: " +
+            error = "cannot inspect published model directory: " +
                     fs_error.message();
             return false;
         }
+        ModelManifest published;
+        if (!LoadCachedVersion(manifest.model_version, published, error) ||
+            !SameWireManifest(published, validated)) {
+            if (error.empty()) {
+                error = "published model version has a different identity";
+            }
+            return false;
+        }
+        std::string discard_error;
+        if (!DiscardTemporary(manifest, discard_error)) {
+            error = discard_error;
+            return false;
+        }
+        manifest = std::move(published);
+        {
+            std::lock_guard<std::mutex> lock(cache_mutex_);
+            cached_versions_.insert(manifest.model_version);
+        }
+        return true;
     }
-    manifest.model_path = incoming_path;
+
+    fs::rename(temporary_dir, final_dir, fs_error);
+    if (fs_error) {
+        error = "cannot atomically publish prepared model: " +
+                fs_error.message();
+        return false;
+    }
+    if (!FsyncDirectory(cache_root, error)) return false;
+    manifest = std::move(validated);
+    manifest.model_path = (final_dir / kCachedModelFile).string();
+    manifest.manifest_path =
+        (final_dir / config_.model.manifest_name).string();
+    {
+        std::lock_guard<std::mutex> lock(cache_mutex_);
+        cached_versions_.insert(manifest.model_version);
+    }
+    error.clear();
+    return true;
+}
+
+bool ModelDistributorClient::DiscardTemporary(
+    const ModelManifest& manifest,
+    std::string& error) const {
+    namespace fs = std::filesystem;
+    const fs::path directory = fs::path(manifest.model_path).parent_path();
+    const fs::path cache_root =
+        fs::path(config_.model.local_train_dir) / "cache";
+    std::error_code fs_error;
+    if (!fs::exists(directory, fs_error) && !fs_error) return true;
+    if (fs_error || directory.parent_path() != cache_root) {
+        error = "refusing to remove a non-temporary model directory";
+        return false;
+    }
+    return RemoveValidatedPrivateDirectory(
+        cache_root, directory, ".tmp-", error);
+}
+
+bool ModelDistributorClient::GetFirstMissingCachedVersion(
+    ModelVersion floor_model_version,
+    ModelVersion latest_model_version,
+    std::optional<ModelVersion>& missing_model_version,
+    std::string& error) const {
+    missing_model_version.reset();
+    if (latest_model_version < floor_model_version) {
+        error = "requested cache range is invalid";
+        return false;
+    }
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+    for (ModelVersion version = floor_model_version;; ++version) {
+        if (cached_versions_.find(version) == cached_versions_.end()) {
+            missing_model_version = version;
+            break;
+        }
+        if (version == latest_model_version) break;
+    }
+    error.clear();
+    return true;
+}
+
+bool ModelDistributorClient::PruneCache(std::string& error) {
+    namespace fs = std::filesystem;
+    const fs::path cache_root =
+        fs::path(config_.model.local_train_dir) / "cache";
+    std::error_code fs_error;
+    std::vector<fs::path> private_prune_directories;
+    for (fs::directory_iterator iterator(cache_root, fs_error), end;
+         !fs_error && iterator != end; iterator.increment(fs_error)) {
+        ModelVersion version = 0;
+        const std::string name = iterator->path().filename().string();
+        if (ParsePrivateCacheDirectory(name, ".prune-", version)) {
+            private_prune_directories.push_back(iterator->path());
+        } else if (IsPrivatePruneDirectory(iterator->path())) {
+            error = "model cache contains an invalid prune residue: " + name;
+            return false;
+        }
+    }
+    if (fs_error) {
+        error = "cannot scan model prune residue: " + fs_error.message();
+        return false;
+    }
+    std::sort(private_prune_directories.begin(),
+              private_prune_directories.end());
+    for (const auto& directory : private_prune_directories) {
+        if (!RemoveValidatedPrivateDirectory(
+                cache_root, directory, ".prune-", error)) {
+            return false;
+        }
+    }
+    if (!private_prune_directories.empty() &&
+        !FsyncDirectory(cache_root, error)) {
+        return false;
+    }
+
+    std::vector<ModelManifest> models;
+    if (!ListCachedModels(models, error)) return false;
+    if (models.size() <= kCacheRetentionVersions) {
+        std::lock_guard<std::mutex> lock(cache_mutex_);
+        cached_versions_.clear();
+        for (const auto& model : models) {
+            cached_versions_.insert(model.model_version);
+        }
+        error.clear();
+        return true;
+    }
+
+    const std::size_t remove_count =
+        models.size() - kCacheRetentionVersions;
+    for (std::size_t index = 0; index < remove_count; ++index) {
+        const ModelManifest& model = models[index];
+        const fs::path canonical =
+            cache_root / CacheVersionDirectoryName(model.model_version);
+        ModelManifest validated;
+        if (!LoadCachedVersion(model.model_version, validated, error) ||
+            !SameWireManifest(model, validated)) {
+            if (error.empty()) {
+                error = "cached model changed before pruning";
+            }
+            return false;
+        }
+        const fs::path quarantine = AllocatePrivateCacheDirectory(
+            cache_root, ".prune-", model.model_version, error);
+        if (quarantine.empty()) return false;
+        fs_error.clear();
+        fs::remove(quarantine, fs_error);
+        if (fs_error) {
+            error = "cannot prepare model prune quarantine: " +
+                    fs_error.message();
+            return false;
+        }
+        fs::rename(canonical, quarantine, fs_error);
+        if (fs_error) {
+            error = "cannot atomically quarantine cached model: " +
+                    fs_error.message();
+            return false;
+        }
+        if (!FsyncDirectory(cache_root, error) ||
+            !RemoveValidatedPrivateDirectory(
+                cache_root, quarantine, ".prune-", error) ||
+            !FsyncDirectory(cache_root, error)) {
+            return false;
+        }
+    }
+    {
+        std::lock_guard<std::mutex> lock(cache_mutex_);
+        cached_versions_.clear();
+        for (std::size_t index = remove_count; index < models.size(); ++index) {
+            cached_versions_.insert(models[index].model_version);
+        }
+    }
     error.clear();
     return true;
 }

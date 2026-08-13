@@ -1,16 +1,20 @@
 #pragma once
 
+#include "model/model_version.h"
+
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 
 // A downloaded candidate owns the single outstanding download/ACK transaction
 // for this AIServer lifecycle. Do not replace it while it waits for a safe
 // fragment boundary; otherwise a newer download can overwrite the distributor's
 // ACK eligibility before the staged identity is activated.
-inline bool ShouldFetchModelCandidate(int active_version,
-                                      int staged_version,
-                                      int latest_version) {
-    return staged_version < 0 && latest_version > active_version;
+inline bool ShouldFetchModelCandidate(
+    ModelVersion active_version,
+    std::optional<ModelVersion> staged_version,
+    ModelVersion latest_version) {
+    return !staged_version.has_value() && latest_version > active_version;
 }
 inline bool ShouldFlushAgentFragment(
     std::size_t cached_samples,

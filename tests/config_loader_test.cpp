@@ -34,6 +34,19 @@ std::string ReplaceOnce(std::string value,
     return value;
 }
 
+std::string ReplaceManifestChecksum(std::string manifest,
+                                    const std::string& filename) {
+    const std::string prefix = "\"" + filename + "\": \"";
+    const auto prefix_position = manifest.find(prefix);
+    Require(prefix_position != std::string::npos,
+            "manifest fixture checksum is missing");
+    const auto checksum_position = prefix_position + prefix.size();
+    Require(checksum_position + 64 <= manifest.size(),
+            "manifest fixture checksum is truncated");
+    manifest.replace(checksum_position, 64, std::string(64, '0'));
+    return manifest;
+}
+
 bool LoadDocument(const std::filesystem::path& root,
                   const std::string& name,
                   const std::string& content) {
@@ -49,14 +62,63 @@ bool LoadDocument(const std::filesystem::path& root,
 
 int main(int argc, char* argv[]) {
     Require(argc == 2, "config path argument is required");
-    const std::string valid = ReadFile(argv[1]);
+    const auto config_path = std::filesystem::weakly_canonical(argv[1]);
+    const auto repository_root = config_path.parent_path().parent_path();
     const auto root = std::filesystem::temp_directory_path() /
                       ("rl-aiserver-config-test-" +
                        std::to_string(::getpid()));
-    std::filesystem::create_directories(root);
+    const auto snapshot = root / "proto";
+    const auto snapshot_schemas = snapshot / "schemas";
+    std::filesystem::create_directories(snapshot_schemas);
+    std::filesystem::copy_file(
+        repository_root / "proto/manifest.json",
+        snapshot / "manifest.json");
+    std::filesystem::copy_file(
+        repository_root / "proto/schemas/maze.metrics.v2.json",
+        snapshot_schemas / "maze.metrics.v2.json");
+    std::filesystem::copy_file(
+        repository_root / "proto/schemas/maze.metrics.v2.sha256",
+        snapshot_schemas / "maze.metrics.v2.sha256");
+    const std::string valid = ReplaceOnce(
+        ReadFile(config_path), "../proto/schemas/maze.metrics.v2.json",
+        (snapshot_schemas / "maze.metrics.v2.json").string());
 
     Require(LoadDocument(root, "valid.yaml", valid),
             "valid config was rejected");
+    {
+        std::ofstream catalog(
+            snapshot_schemas / "maze.metrics.v2.json", std::ios::app);
+        catalog << ' ';
+    }
+    Require(!LoadDocument(root, "tampered-catalog.yaml", valid),
+            "tampered metric schema catalog did not fail closed");
+    std::filesystem::copy_file(
+        repository_root / "proto/schemas/maze.metrics.v2.json",
+        snapshot_schemas / "maze.metrics.v2.json",
+        std::filesystem::copy_options::overwrite_existing);
+    {
+        std::ofstream digest(
+            snapshot_schemas / "maze.metrics.v2.sha256", std::ios::trunc);
+        digest << std::string(64, '0') << '\n';
+    }
+    Require(!LoadDocument(root, "tampered-digest.yaml", valid),
+            "tampered metric schema digest did not fail closed");
+    std::filesystem::copy_file(
+        repository_root / "proto/schemas/maze.metrics.v2.sha256",
+        snapshot_schemas / "maze.metrics.v2.sha256",
+        std::filesystem::copy_options::overwrite_existing);
+    const std::string valid_manifest = ReadFile(
+        repository_root / "proto/manifest.json");
+    {
+        std::ofstream manifest(snapshot / "manifest.json", std::ios::trunc);
+        manifest << ReplaceManifestChecksum(valid_manifest, "common.proto");
+    }
+    Require(!LoadDocument(root, "tampered-file-table.yaml", valid),
+            "tampered artifact file table did not fail closed");
+    {
+        std::ofstream manifest(snapshot / "manifest.json", std::ios::trunc);
+        manifest << valid_manifest;
+    }
     Require(!LoadDocument(
                 root, "bad-revision.yaml",
                 ReplaceOnce(valid, "  task_revision: 2\n",

@@ -171,7 +171,7 @@ int main(int argc, char* argv[]) {
     }
     AIServerConfig cfg;
     if (!LoadServerConfig(config_path, cfg)) {
-        LOG_ERROR("Main", "配置加载或 0.10.0 身份校验失败: %s",
+        LOG_ERROR("Main", "配置加载或 0.11.0 身份校验失败: %s",
                   config_path.c_str());
         Logger::Instance().Close();
         return 2;
@@ -213,6 +213,8 @@ int main(int argc, char* argv[]) {
         builder.RegisterService(
             static_cast<training::AIServerTrainingStatusService::Service*>(
                 &service));
+        builder.RegisterService(
+            static_cast<training::MetricEventService::Service*>(&service));
     }
 
     std::unique_ptr<grpc::Server> server = builder.BuildAndStart();

@@ -6,8 +6,8 @@
 #include <vector>
 
 int main() {
-    if (!ShouldFetchModelCandidate(10, -1, 11) ||
-        ShouldFetchModelCandidate(10, -1, 10) ||
+    if (!ShouldFetchModelCandidate(10, std::nullopt, 11) ||
+        ShouldFetchModelCandidate(10, std::nullopt, 10) ||
         ShouldFetchModelCandidate(10, 11, 12) ||
         ShouldFetchModelCandidate(10, 11, 11)) {
         std::cerr <<

@@ -71,6 +71,16 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 include(CTest)
 if(BUILD_TESTING)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    add_test(
+        NAME contract_snapshot_integrity
+        COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/scripts/verify_contract_snapshot.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/proto
+            0.11.0
+            linux/arm64
+    )
+
     add_executable(config_loader_test
         tests/config_loader_test.cpp
         src/config/config_loader.cpp
@@ -82,6 +92,7 @@ if(BUILD_TESTING)
     )
     target_link_libraries(config_loader_test PRIVATE
         protobuf::libprotobuf
+        crypto
     )
     add_test(NAME config_loader_contract
              COMMAND config_loader_test
@@ -384,6 +395,7 @@ if(BUILD_TESTING)
     )
     target_link_libraries(episode_metrics_test PRIVATE
         protobuf::libprotobuf
+        crypto
     )
     add_test(NAME episode_metrics_contract COMMAND episode_metrics_test)
 

@@ -1,13 +1,253 @@
 #include "config/config_loader.h"
 #include "log/logger.h"
 
+#include <google/protobuf/struct.pb.h>
+#include <google/protobuf/util/json_util.h>
+#include <openssl/evp.h>
+
+#include <array>
+#include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <sstream>
 #include <vector>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
 #include <limits>
+#include <map>
+
+namespace {
+
+bool ReadFile(const std::filesystem::path& path,
+              std::string& bytes,
+              std::string& error) {
+    std::ifstream stream(path, std::ios::binary);
+    std::ostringstream content;
+    content << stream.rdbuf();
+    if (!stream.good() && !stream.eof()) {
+        error = "cannot read file: " + path.string();
+        return false;
+    }
+    bytes = content.str();
+    return true;
+}
+
+std::string TrimAscii(const std::string& value) {
+    const auto begin = value.find_first_not_of(" \t\r\n");
+    if (begin == std::string::npos) return "";
+    const auto end = value.find_last_not_of(" \t\r\n");
+    return value.substr(begin, end - begin + 1);
+}
+
+std::string Sha256Hex(const std::string& bytes) {
+    EVP_MD_CTX* context = EVP_MD_CTX_new();
+    std::array<unsigned char, EVP_MAX_MD_SIZE> digest{};
+    unsigned int digest_size = 0;
+    const bool digest_ok = context &&
+        EVP_DigestInit_ex(context, EVP_sha256(), nullptr) == 1 &&
+        EVP_DigestUpdate(context, bytes.data(), bytes.size()) == 1 &&
+        EVP_DigestFinal_ex(context, digest.data(), &digest_size) == 1;
+    if (context) EVP_MD_CTX_free(context);
+    if (!digest_ok) return "";
+    std::ostringstream hex;
+    hex << std::hex << std::setfill('0');
+    for (unsigned int index = 0; index < digest_size; ++index) {
+        hex << std::setw(2) << static_cast<unsigned int>(digest[index]);
+    }
+    return hex.str();
+}
+
+const google::protobuf::Value* JsonField(
+    const google::protobuf::Struct& document,
+    const std::string& name) {
+    const auto found = document.fields().find(name);
+    return found == document.fields().end() ? nullptr : &found->second;
+}
+
+const google::protobuf::Struct* JsonStruct(
+    const google::protobuf::Struct& document,
+    const std::string& name) {
+    const auto* value = JsonField(document, name);
+    return value && value->kind_case() == google::protobuf::Value::kStructValue
+        ? &value->struct_value()
+        : nullptr;
+}
+
+bool JsonStringEquals(const google::protobuf::Struct& document,
+                      const std::string& name,
+                      const std::string& expected) {
+    const auto* value = JsonField(document, name);
+    return value && value->kind_case() == google::protobuf::Value::kStringValue &&
+           value->string_value() == expected;
+}
+
+bool JsonNumberEquals(const google::protobuf::Struct& document,
+                      const std::string& name,
+                      double expected) {
+    const auto* value = JsonField(document, name);
+    return value && value->kind_case() == google::protobuf::Value::kNumberValue &&
+           value->number_value() == expected;
+}
+
+std::string JsonQuote(const std::string& value) {
+    std::ostringstream output;
+    output << '"';
+    static constexpr char kHex[] = "0123456789abcdef";
+    for (const unsigned char character : value) {
+        switch (character) {
+            case '"': output << "\\\""; break;
+            case '\\': output << "\\\\"; break;
+            case '\b': output << "\\b"; break;
+            case '\f': output << "\\f"; break;
+            case '\n': output << "\\n"; break;
+            case '\r': output << "\\r"; break;
+            case '\t': output << "\\t"; break;
+            default:
+                if (character < 0x20) {
+                    output << "\\u00" << kHex[character >> 4]
+                           << kHex[character & 0x0f];
+                } else {
+                    output << static_cast<char>(character);
+                }
+        }
+    }
+    output << '"';
+    return output.str();
+}
+
+std::string CanonicalFileTableDigest(
+    const google::protobuf::Struct& files) {
+    std::map<std::string, std::string> ordered;
+    for (const auto& item : files.fields()) {
+        if (item.second.kind_case() !=
+                google::protobuf::Value::kStringValue ||
+            item.second.string_value().empty()) {
+            return "";
+        }
+        ordered.emplace(item.first, item.second.string_value());
+    }
+    if (ordered.empty()) return "";
+    std::ostringstream canonical;
+    canonical << '{';
+    bool first = true;
+    for (const auto& item : ordered) {
+        if (!first) canonical << ',';
+        first = false;
+        canonical << JsonQuote(item.first) << ':'
+                  << JsonQuote(item.second);
+    }
+    canonical << '}';
+    return Sha256Hex(canonical.str());
+}
+
+bool LoadMetricEventSchema(const std::string& yaml_path,
+                           const std::string& configured_path,
+                           const ContractConfig& contract,
+                           MetricsConfig& metrics,
+                           std::string& error) {
+    namespace fs = std::filesystem;
+    fs::path catalog_path(configured_path);
+    if (catalog_path.is_relative()) {
+        catalog_path = fs::path(yaml_path).parent_path() / catalog_path;
+    }
+    std::error_code fs_error;
+    catalog_path = fs::weakly_canonical(catalog_path, fs_error);
+    if (fs_error || !fs::is_regular_file(catalog_path, fs_error)) {
+        error = "metric schema catalog is missing: " +
+                catalog_path.string();
+        return false;
+    }
+    std::string bytes;
+    if (!ReadFile(catalog_path, bytes, error)) return false;
+    google::protobuf::Struct document;
+    const auto status = google::protobuf::util::JsonStringToMessage(
+        bytes, &document);
+    const auto schema_id = document.fields().find("schema_id");
+    const auto schema_version = document.fields().find("schema_version");
+    if (!status.ok() || schema_id == document.fields().end() ||
+        schema_version == document.fields().end() ||
+        schema_id->second.kind_case() !=
+            google::protobuf::Value::kStringValue ||
+        schema_version->second.kind_case() !=
+            google::protobuf::Value::kNumberValue ||
+        schema_id->second.string_value() != "maze.metrics.v2" ||
+        schema_version->second.number_value() != 2.0) {
+        error = "metric schema catalog identity is invalid";
+        return false;
+    }
+    const std::string catalog_digest = Sha256Hex(bytes);
+    if (catalog_digest.empty()) {
+        error = "cannot calculate metric schema catalog digest";
+        return false;
+    }
+
+    fs::path digest_path = catalog_path;
+    digest_path.replace_extension(".sha256");
+    std::string digest_bytes;
+    if (!ReadFile(digest_path, digest_bytes, error) ||
+        TrimAscii(digest_bytes) != catalog_digest) {
+        error = "metric schema digest file does not match the catalog";
+        return false;
+    }
+    const fs::path manifest_path = catalog_path.parent_path().parent_path() /
+                                   "manifest.json";
+    std::string manifest_bytes;
+    if (!ReadFile(manifest_path, manifest_bytes, error)) return false;
+    google::protobuf::Struct manifest;
+    if (!google::protobuf::util::JsonStringToMessage(
+             manifest_bytes, &manifest).ok()) {
+        error = "contract snapshot manifest is invalid";
+        return false;
+    }
+    const auto* source_digest = JsonStruct(manifest, "source_digest");
+    const auto* artifact_digest = JsonStruct(manifest, "artifact_digest");
+    const auto* metric_schemas = JsonStruct(manifest, "metric_schemas");
+    const auto* schema_metadata = metric_schemas
+        ? JsonStruct(*metric_schemas, "maze.metrics.v2") : nullptr;
+    const auto* canonical_digest = schema_metadata
+        ? JsonStruct(*schema_metadata, "canonical_digest") : nullptr;
+    const auto* files = JsonStruct(manifest, "files");
+    const std::string catalog_relative = "schemas/maze.metrics.v2.json";
+    const std::string digest_relative = "schemas/maze.metrics.v2.sha256";
+    if (!JsonStringEquals(manifest, "package", contract.package_name) ||
+        !JsonStringEquals(manifest, "version", contract.package_version) ||
+        !JsonStringEquals(manifest, "platform", contract.platform) ||
+        !JsonStringEquals(manifest, "generator_identity",
+                          contract.generator_identity) ||
+        !source_digest ||
+        !JsonStringEquals(*source_digest, "algorithm", "sha256") ||
+        !JsonStringEquals(*source_digest, "hex",
+                          contract.source_digest.hex) ||
+        !artifact_digest ||
+        !JsonStringEquals(*artifact_digest, "algorithm", "sha256") ||
+        !JsonStringEquals(*artifact_digest, "hex",
+                          contract.artifact_digest.hex) ||
+        !files ||
+        CanonicalFileTableDigest(*files) !=
+            contract.artifact_digest.hex ||
+        !schema_metadata ||
+        !JsonNumberEquals(*schema_metadata, "schema_version", 2.0) ||
+        !JsonStringEquals(*schema_metadata, "path", catalog_relative) ||
+        !JsonStringEquals(*schema_metadata, "digest_path", digest_relative) ||
+        !canonical_digest ||
+        !JsonStringEquals(*canonical_digest, "algorithm", "sha256") ||
+        !JsonStringEquals(*canonical_digest, "hex", catalog_digest) ||
+        !JsonStringEquals(*files, catalog_relative, catalog_digest) ||
+        !JsonStringEquals(*files, digest_relative,
+                          Sha256Hex(digest_bytes))) {
+        error = "metric schema catalog is not bound to the selected contract manifest";
+        return false;
+    }
+    metrics.event_schema_catalog_path = catalog_path.string();
+    metrics.event_schema.schema_id = schema_id->second.string_value();
+    metrics.event_schema.schema_version = static_cast<uint32_t>(
+        schema_version->second.number_value());
+    metrics.event_schema.canonical_digest = {"sha256", catalog_digest};
+    return true;
+}
+
+}  // namespace
 
 // ---- 去除字符串首尾空白 ----
 static std::string Trim(const std::string& s) {
@@ -231,6 +471,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"policy", "policy_spec_digest"},
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
+        {"metrics", "event_schema_catalog"},
         {"reward", "goal_reward"},
         {"reward", "timeout_penalty"},
         {"reward", "progress_budget"},
@@ -660,17 +901,26 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     if (out_config.metrics.episode_window == 0) {
         out_config.metrics.episode_window = 100;
     }
+    std::string metric_schema_error;
+    if (!LoadMetricEventSchema(
+            yaml_path,
+            FindValue(entries, "metrics", "event_schema_catalog"),
+            out_config.contract,
+            out_config.metrics, metric_schema_error)) {
+        LOG_ERROR("Config", "%s", metric_schema_error.c_str());
+        return false;
+    }
 
     const auto digest_valid = [](const DigestConfig& digest) {
         return digest.algorithm == "sha256" && IsLowerSha256(digest.hex);
     };
     const bool immutable_identity_valid =
         out_config.contract.package_name == "rl-contracts" &&
-        out_config.contract.package_version == "0.10.0" &&
+        out_config.contract.package_version == "0.11.0" &&
         out_config.contract.source_digest.hex ==
-            "fc1bf2e3dfd804431f2528d8da53227e55ca9b58b32fc95327558d91cebb3b97" &&
+            "7e3eb7227e67a2a880130c9c82f87041691c0095f838a60f80abc1f387c1c5b3" &&
         out_config.contract.artifact_digest.hex ==
-            "d90083d97e377230f50c820d040a5d83ce7435dc88c4f948c222c86ac4a429ae" &&
+            "077ac6d61486fafd5f0430eeb05a492764b36e073282f6d7626d0414bb5b2ddf" &&
         out_config.contract.platform == "linux/arm64" &&
         out_config.contract.generator_identity ==
             "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8" &&
@@ -707,9 +957,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         !digest_valid(out_config.training_semantics.observation_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.action_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.reward_schema.canonical_digest) ||
+        out_config.metrics.event_schema.schema_id != "maze.metrics.v2" ||
+        out_config.metrics.event_schema.schema_version != 2 ||
+        !digest_valid(out_config.metrics.event_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.semantics_digest) ||
         !digest_valid(out_config.policy.policy_spec_digest)) {
-        LOG_ERROR("Config", "0.10.0 contract/training identity mismatch");
+        LOG_ERROR("Config", "0.11.0 contract/training identity mismatch");
         return false;
     }
     if (out_config.task.task_contract_id != "maze.task.v3" ||
@@ -784,7 +1037,7 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         static_cast<int64_t>(out_config.task.agent_num) *
         static_cast<int64_t>(out_config.sample_output.fragment_samples);
     if (fragment_quantum != 512 || out_config.server.max_agents < 4 ||
-        out_config.model_distribution.contract_version != "0.10.0") {
+        out_config.model_distribution.contract_version != "0.11.0") {
         LOG_ERROR("Config", "sample quantum or runtime contract mismatch");
         return false;
     }

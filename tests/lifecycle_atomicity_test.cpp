@@ -141,6 +141,22 @@ struct MazeServiceLifecycleTestAccess {
         return 0;
     }
 
+    static const common::ServiceInstanceIdentity& MetricSource(
+        const MazeServiceImpl& service) {
+        return service.metric_events_.source();
+    }
+
+    static void FinalizeMetricEvents(MazeServiceImpl& service) {
+        service.metric_events_.Finalize(1000);
+    }
+
+    static void GetMetricBatch(
+        MazeServiceImpl& service,
+        const training::GetMetricBatchReq& request,
+        training::GetMetricBatchRsp& response) {
+        service.metric_events_.Get(request, response);
+    }
+
 };
 
 namespace {
@@ -188,6 +204,10 @@ AIServerConfig Config(const maze::MapDescriptor& map) {
         static_cast<int>(map.shortest_action_steps());
     config.sample_output.fragment_samples = 1;
     config.metrics.episode_window = 8;
+    config.metrics.event_schema = {
+        "maze.metrics.v2", 2,
+        {"sha256",
+         "34622334da8d4aec593ad231eb0e7cf4465fdee0cbfa13a9ea0e6f864797df73"}};
     return config;
 }
 
@@ -256,6 +276,10 @@ void ConfigureTrainingEndSession(SessionManager::Session& session,
             maze::MAZE_TERMINATION_REASON_GOAL_REACHED;
         agent.episode_return = 10.0;
         agent.episode_transition_count = 2;
+        agent.episode_behavior_model_seen = true;
+        agent.episode_behavior_model_version_min = 3;
+        agent.episode_behavior_model_version_max = 5;
+        agent.episode_behavior_model_lineage_id = "lifecycle-atomicity";
         agent.visited.insert(0);
         agent.visited.insert(1);
         agent.reward_component_sums["goal"] = 10.0;
@@ -547,6 +571,16 @@ void TestTrainingEndEpisodeCommitsOnce() {
     ConfigureTrainingEndSession(*session, config);
     maze::EndEpisodeReq request;
     FillCommand(*session, 1, "end-training", request.mutable_command());
+    session->agents.at(0).reward_component_sums["goal"] = 9.0;
+    maze::EndEpisodeRsp inconsistent;
+    service.EndEpisode(nullptr, &request, &inconsistent);
+    Require(inconsistent.lifecycle().result() ==
+                maze::LIFECYCLE_RESULT_REJECTED &&
+                session->last_command_sequence == 0 &&
+                MazeServiceLifecycleTestAccess::CompletedAgentCount(service) ==
+                    0,
+            "inconsistent raw reward facts reject before lifecycle commit");
+    session->agents.at(0).reward_component_sums["goal"] = 10.0;
     maze::EndEpisodeRsp applied;
     service.EndEpisode(nullptr, &request, &applied);
     Require(applied.lifecycle().result() == maze::LIFECYCLE_RESULT_APPLIED,
@@ -562,8 +596,55 @@ void TestTrainingEndEpisodeCommitsOnce() {
                 session->session_state == maze::SESSION_STATE_IDLE &&
                 session->protocol_episode_state ==
                     maze::EPISODE_STATE_COMMITTED &&
-                session->evaluation_pinned_model_version == -1,
+                session->evaluation_pinned_model_version == 0,
             "training EndEpisode commits terminal lifecycle state");
+    MazeServiceLifecycleTestAccess::FinalizeMetricEvents(service);
+    training::GetMetricBatchReq metric_request;
+    auto* metric_contract = metric_request.mutable_contract();
+    metric_contract->set_package_name(config.contract.package_name);
+    metric_contract->set_package_version(config.contract.package_version);
+    metric_contract->mutable_source_digest()->set_algorithm(
+        common::DIGEST_ALGORITHM_SHA256);
+    metric_contract->mutable_source_digest()->set_hex(
+        config.contract.source_digest.hex);
+    metric_contract->mutable_artifact_digest()->set_algorithm(
+        common::DIGEST_ALGORITHM_SHA256);
+    metric_contract->mutable_artifact_digest()->set_hex(
+        config.contract.artifact_digest.hex);
+    metric_contract->set_platform(config.contract.platform);
+    metric_contract->set_generator_identity(
+        config.contract.generator_identity);
+    metric_request.mutable_consumer()->set_component("rl-learner");
+    metric_request.mutable_consumer()->set_instance_id("lifecycle-relay");
+    metric_request.mutable_consumer()->set_lifecycle_epoch(1);
+    *metric_request.mutable_cursor()->mutable_source() =
+        MazeServiceLifecycleTestAccess::MetricSource(service);
+    metric_request.set_max_events(8);
+    metric_request.set_max_bytes(1 << 20);
+    metric_request.set_wait_timeout_ms(0);
+    training::GetMetricBatchRsp metric_batch;
+    MazeServiceLifecycleTestAccess::GetMetricBatch(
+        service, metric_request, metric_batch);
+    Require(metric_batch.result() ==
+                training::METRIC_BATCH_RESULT_DELIVERED &&
+                metric_batch.batch().events_size() == 1 &&
+                metric_batch.batch().source_final() &&
+                metric_batch.batch().events(0).has_episode() &&
+                metric_batch.batch().events(0).episode().agents_size() == 2,
+            "successful training EndEpisode emits one immutable Episode fact");
+    for (const auto& agent :
+         metric_batch.batch().events(0).episode().agents()) {
+        Require(agent.episode_return() == 10.0 &&
+                    agent.transition_count() == 2 && agent.success() &&
+                    agent.behavior_model_version_min() == 3 &&
+                    agent.behavior_model_version_max() == 5 &&
+                    agent.behavior_model_lineage_id() ==
+                        "lifecycle-atomicity" &&
+                    agent.reward_components_size() == 1 &&
+                    agent.reward_components(0).sum() == 10.0 &&
+                    agent.reward_components(0).count() == 2,
+                "Episode fact preserves raw reward and behavior-model facts");
+    }
     maze::EndEpisodeRsp replayed;
     service.EndEpisode(nullptr, &request, &replayed);
     Require(replayed.lifecycle().result() ==
@@ -573,6 +654,12 @@ void TestTrainingEndEpisodeCommitsOnce() {
                     2 &&
                 session->last_command_sequence == 1,
             "replayed training EndEpisode does not recount metrics");
+    training::GetMetricBatchRsp metric_replay;
+    MazeServiceLifecycleTestAccess::GetMetricBatch(
+        service, metric_request, metric_replay);
+    Require(metric_replay.batch().SerializeAsString() ==
+                metric_batch.batch().SerializeAsString(),
+            "replayed EndEpisode cannot append or replace the metric event");
 }
 
 void TestStatusDoesNotTreatAnOrphanSessionAsAConnectedClient() {

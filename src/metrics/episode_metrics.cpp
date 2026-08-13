@@ -2,11 +2,16 @@
 
 #include "task/single_map_task_controller.h"
 
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
+#include <openssl/evp.h>
+
 #include <algorithm>
 #include <cctype>
 #include <cmath>
 #include <limits>
 #include <map>
+#include <thread>
 #include <utility>
 
 namespace {
@@ -87,7 +92,472 @@ void AddGauge(training::MetricSnapshot* snapshot,
     value->set_window_end_unix_ms(timestamp);
 }
 
+std::string DeterministicBytes(
+    const google::protobuf::MessageLite& message) {
+    std::string output(message.ByteSizeLong(), '\0');
+    google::protobuf::io::ArrayOutputStream array(
+        output.data(), static_cast<int>(output.size()));
+    google::protobuf::io::CodedOutputStream coded(&array);
+    coded.SetSerializationDeterministic(true);
+    if (!message.SerializeToCodedStream(&coded) || coded.HadError()) {
+        return "";
+    }
+    output.resize(static_cast<std::size_t>(coded.ByteCount()));
+    return output;
+}
+
+std::string Sha256(const std::string& payload) {
+    EVP_MD_CTX* context = EVP_MD_CTX_new();
+    if (!context) return "";
+    bool ok = EVP_DigestInit_ex(context, EVP_sha256(), nullptr) == 1 &&
+              EVP_DigestUpdate(
+                  context, payload.data(), payload.size()) == 1;
+    unsigned char digest[EVP_MAX_MD_SIZE];
+    unsigned int size = 0;
+    if (ok) ok = EVP_DigestFinal_ex(context, digest, &size) == 1;
+    EVP_MD_CTX_free(context);
+    if (!ok) return "";
+    static constexpr char kHex[] = "0123456789abcdef";
+    std::string output(size * 2, '0');
+    for (unsigned int index = 0; index < size; ++index) {
+        output[index * 2] = kHex[digest[index] >> 4];
+        output[index * 2 + 1] = kHex[digest[index] & 0x0f];
+    }
+    return output;
+}
+
+bool SameIdentity(const common::ServiceInstanceIdentity& left,
+                  const common::ServiceInstanceIdentity& right) {
+    return left.component() == right.component() &&
+           left.instance_id() == right.instance_id() &&
+           left.lifecycle_epoch() == right.lifecycle_epoch();
+}
+
+bool SameDigest(const common::ContentDigest& left,
+                const common::ContentDigest& right) {
+    return left.algorithm() == right.algorithm() &&
+           left.hex() == right.hex();
+}
+
 }  // namespace
+
+MetricEventJournal::MetricEventJournal(
+    common::ContractIdentity contract,
+    common::SchemaIdentity schema,
+    common::ServiceInstanceIdentity source,
+    std::size_t capacity,
+    std::size_t byte_capacity,
+    std::chrono::milliseconds flush_interval)
+    : contract_(std::move(contract)),
+      schema_(std::move(schema)),
+      source_(std::move(source)),
+      capacity_(std::max<std::size_t>(1, capacity)),
+      byte_capacity_(std::max<std::size_t>(1, byte_capacity)),
+      flush_interval_(std::max(std::chrono::milliseconds(0), flush_interval)),
+      last_batch_created_at_(std::chrono::steady_clock::now()) {
+    *committed_cursor_.mutable_source() = source_;
+}
+
+bool MetricEventJournal::AppendEpisode(
+    training::EpisodeMetricFact fact,
+    int64_t committed_at_unix_ms) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (source_final_) return false;
+    training::MetricEvent event;
+    *event.mutable_contract() = contract_;
+    *event.mutable_schema_identity() = schema_;
+    *event.mutable_source() = source_;
+    event.set_event_sequence(next_event_sequence_++);
+    const int64_t pending_watermark = pending_batch_
+        ? pending_batch_->event_time_watermark_unix_ms()
+        : 0;
+    const int64_t monotonic_committed_at = std::max(
+        committed_at_unix_ms,
+        std::max({last_event_committed_at_unix_ms_,
+                  last_acked_watermark_unix_ms_,
+                  pending_watermark}) + 1);
+    event.set_committed_at_unix_ms(monotonic_committed_at);
+    *event.mutable_episode() = std::move(fact);
+    last_event_committed_at_unix_ms_ = monotonic_committed_at;
+    event_bytes_ += event.ByteSizeLong();
+    events_.push_back(std::move(event));
+    event_enqueued_at_.push_back(std::chrono::steady_clock::now());
+    while (events_.size() > capacity_ || event_bytes_ > byte_capacity_) {
+        event_bytes_ -= events_.front().ByteSizeLong();
+        events_.pop_front();
+        event_enqueued_at_.pop_front();
+    }
+    changed_.notify_all();
+    return true;
+}
+
+void MetricEventJournal::Finalize(int64_t finalized_at_unix_ms) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (source_final_) return;
+    source_final_ = true;
+    final_event_sequence_ = next_event_sequence_ - 1;
+    final_watermark_unix_ms_ = std::max(
+        finalized_at_unix_ms,
+        std::max(last_event_committed_at_unix_ms_,
+                 last_acked_watermark_unix_ms_));
+    changed_.notify_all();
+}
+
+bool MetricEventJournal::ValidContract(
+    const common::ContractIdentity& contract) const {
+    return contract.SerializeAsString() == contract_.SerializeAsString();
+}
+
+bool MetricEventJournal::ValidConsumer(
+    const common::ServiceInstanceIdentity& consumer) const {
+    return !consumer.component().empty() &&
+           !consumer.instance_id().empty() &&
+           consumer.lifecycle_epoch() > 0;
+}
+
+bool MetricEventJournal::SameConsumer(
+    const common::ServiceInstanceIdentity& consumer) const {
+    return consumer_ && SameIdentity(*consumer_, consumer);
+}
+
+bool MetricEventJournal::CursorMatchesCommitted(
+    const training::MetricBatchCursor& cursor) const {
+    if (!SameIdentity(cursor.source(), source_)) return false;
+    if (cursor.acknowledged_batch_sequence() !=
+            committed_cursor_.acknowledged_batch_sequence() ||
+        cursor.acknowledged_event_sequence() !=
+            committed_cursor_.acknowledged_event_sequence()) {
+        return false;
+    }
+    if (cursor.acknowledged_batch_sequence() == 0) {
+        return cursor.acknowledged_batch_digest().hex().empty();
+    }
+    return SameDigest(cursor.acknowledged_batch_digest(),
+                      committed_cursor_.acknowledged_batch_digest());
+}
+
+bool MetricEventJournal::ReadyToSeal(
+    std::chrono::steady_clock::time_point now) const {
+    if (source_final_) return true;
+    const uint64_t next_requested =
+        committed_cursor_.acknowledged_event_sequence() + 1;
+    const uint64_t oldest = events_.empty()
+        ? next_event_sequence_
+        : events_.front().event_sequence();
+    if (next_requested < oldest) return true;
+
+    std::size_t pending_count = 0;
+    std::size_t pending_bytes = 0;
+    for (std::size_t index = 0; index < events_.size(); ++index) {
+        if (events_[index].event_sequence() < next_requested) continue;
+        if (pending_count == 0 &&
+            now >= event_enqueued_at_[index] + flush_interval_) {
+            return true;
+        }
+        ++pending_count;
+        pending_bytes += events_[index].ByteSizeLong();
+        if (pending_count >= 1024 ||
+            pending_bytes >= 16U * 1024U * 1024U) {
+            return true;
+        }
+    }
+    if (pending_count > 0) return false;
+    return now >= last_batch_created_at_ + flush_interval_;
+}
+
+std::chrono::steady_clock::time_point
+MetricEventJournal::NextSealDeadline() const {
+    const uint64_t next_requested =
+        committed_cursor_.acknowledged_event_sequence() + 1;
+    for (std::size_t index = 0; index < events_.size(); ++index) {
+        if (events_[index].event_sequence() >= next_requested) {
+            return event_enqueued_at_[index] + flush_interval_;
+        }
+    }
+    return last_batch_created_at_ + flush_interval_;
+}
+
+void MetricEventJournal::FillAvailability(
+    training::GetMetricBatchRsp& response) const {
+    *response.mutable_producer() = source_;
+    response.set_oldest_available_event_sequence(
+        events_.empty() ? next_event_sequence_ :
+                          events_.front().event_sequence());
+    response.set_latest_available_event_sequence(next_event_sequence_ - 1);
+}
+
+void MetricEventJournal::FillAvailability(
+    training::AckMetricBatchRsp& response) const {
+    *response.mutable_producer() = source_;
+    response.set_oldest_available_event_sequence(
+        events_.empty() ? next_event_sequence_ :
+                          events_.front().event_sequence());
+    response.set_latest_available_event_sequence(next_event_sequence_ - 1);
+}
+
+std::string MetricEventJournal::BatchDigest(
+    const training::MetricBatch& batch) {
+    training::MetricBatch canonical = batch;
+    canonical.clear_batch_digest();
+    return Sha256(DeterministicBytes(canonical));
+}
+
+bool MetricEventJournal::BuildPendingBatch(
+    const training::GetMetricBatchReq& request,
+    int64_t now_unix_ms,
+    std::string& error) {
+    training::MetricBatch batch;
+    *batch.mutable_contract() = contract_;
+    *batch.mutable_schema_identity() = schema_;
+    *batch.mutable_source() = source_;
+    batch.set_batch_sequence(next_batch_sequence_);
+    batch.set_created_at_unix_ms(now_unix_ms);
+
+    const uint64_t next_requested =
+        committed_cursor_.acknowledged_event_sequence() + 1;
+    const uint64_t oldest =
+        events_.empty() ? next_event_sequence_ :
+                          events_.front().event_sequence();
+    if (next_requested < oldest) {
+        batch.set_first_event_sequence(next_requested);
+        batch.set_last_event_sequence(oldest - 1);
+        auto* gap = batch.mutable_gap();
+        gap->set_first_unavailable_event_sequence(next_requested);
+        gap->set_last_unavailable_event_sequence(oldest - 1);
+        gap->set_oldest_available_event_sequence(oldest);
+        gap->set_reason("bounded metric event journal overflow");
+        batch.set_event_time_watermark_unix_ms(
+            last_acked_watermark_unix_ms_);
+    } else {
+        const std::size_t max_events = request.max_events();
+        const int64_t max_bytes = request.max_bytes();
+        bool next_event_exists = false;
+        for (const auto& event : events_) {
+            if (event.event_sequence() < next_requested) continue;
+            next_event_exists = true;
+            if (batch.events_size() >= static_cast<int>(max_events)) break;
+            *batch.add_events() = event;
+            if (batch.ByteSizeLong() > static_cast<std::size_t>(max_bytes)) {
+                batch.mutable_events()->RemoveLast();
+                break;
+            }
+        }
+        if (batch.events_size() > 0) {
+            batch.set_first_event_sequence(
+                batch.events(0).event_sequence());
+            batch.set_last_event_sequence(
+                batch.events(batch.events_size() - 1).event_sequence());
+            batch.set_event_time_watermark_unix_ms(
+                std::max(last_acked_watermark_unix_ms_,
+                         batch.events(batch.events_size() - 1)
+                             .committed_at_unix_ms()));
+        } else if (next_event_exists) {
+            error = "max_bytes is smaller than the next metric event";
+            return false;
+        } else {
+            batch.set_heartbeat(true);
+            batch.set_event_time_watermark_unix_ms(
+                source_final_
+                    ? final_watermark_unix_ms_
+                    : std::max(last_acked_watermark_unix_ms_, now_unix_ms));
+        }
+    }
+    const bool final_event_batch =
+        batch.events_size() > 0 &&
+        batch.last_event_sequence() == final_event_sequence_;
+    const bool final_gap_batch =
+        batch.has_gap() &&
+        batch.last_event_sequence() == final_event_sequence_;
+    const bool final_heartbeat =
+        batch.heartbeat() &&
+        committed_cursor_.acknowledged_event_sequence() ==
+            final_event_sequence_;
+    if (source_final_ &&
+        (final_event_batch || final_gap_batch || final_heartbeat)) {
+        batch.set_source_final(true);
+        batch.set_final_event_sequence(final_event_sequence_);
+        batch.set_event_time_watermark_unix_ms(final_watermark_unix_ms_);
+    }
+    batch.mutable_batch_digest()->set_algorithm(
+        common::DIGEST_ALGORITHM_SHA256);
+    batch.mutable_batch_digest()->set_hex(BatchDigest(batch));
+    if (batch.ByteSizeLong() > static_cast<std::size_t>(request.max_bytes())) {
+        error = "max_bytes is smaller than the next metric batch";
+        return false;
+    }
+    pending_batch_ = std::move(batch);
+    ++next_batch_sequence_;
+    last_batch_created_at_ = std::chrono::steady_clock::now();
+    error.clear();
+    return true;
+}
+
+void MetricEventJournal::Get(
+    const training::GetMetricBatchReq& request,
+    training::GetMetricBatchRsp& response) {
+    std::unique_lock<std::mutex> lock(mutex_);
+    response.Clear();
+    FillAvailability(response);
+    if (!ValidContract(request.contract()) ||
+        !ValidConsumer(request.consumer())) {
+        response.set_ret_code(-1);
+        response.set_result(
+            training::METRIC_BATCH_RESULT_REJECTED_IDENTITY);
+        response.set_message("metric consumer contract or identity is invalid");
+        return;
+    }
+    if (consumer_ && !SameConsumer(request.consumer())) {
+        response.set_ret_code(-1);
+        response.set_result(
+            training::METRIC_BATCH_RESULT_REJECTED_IDENTITY);
+        response.set_message("metric journal is pinned to another consumer");
+        return;
+    }
+    if (!CursorMatchesCommitted(request.cursor())) {
+        response.set_ret_code(-1);
+        response.set_result(
+            training::METRIC_BATCH_RESULT_REJECTED_CURSOR);
+        response.set_message("metric cursor does not match committed cursor");
+        return;
+    }
+    if (request.max_events() == 0 || request.max_events() > 1024 ||
+        request.max_bytes() <= 0 || request.max_bytes() > 16 * 1024 * 1024 ||
+        request.wait_timeout_ms() < 0 || request.wait_timeout_ms() > 5000) {
+        response.set_ret_code(-1);
+        response.set_result(
+            training::METRIC_BATCH_RESULT_REJECTED_INVALID);
+        response.set_message("metric batch limits are invalid");
+        return;
+    }
+    if (!consumer_) consumer_ = request.consumer();
+    if (pending_batch_) {
+        response.set_ret_code(0);
+        response.set_result(training::METRIC_BATCH_RESULT_DELIVERED);
+        *response.mutable_batch() = *pending_batch_;
+        FillAvailability(response);
+        return;
+    }
+    if (source_final_ && final_batch_acknowledged_) {
+        response.set_ret_code(0);
+        response.set_result(training::METRIC_BATCH_RESULT_FINAL);
+        response.set_message("metric source final batch is acknowledged");
+        return;
+    }
+
+    const uint64_t next_requested =
+        committed_cursor_.acknowledged_event_sequence() + 1;
+    const uint64_t oldest = events_.empty()
+        ? next_event_sequence_
+        : events_.front().event_sequence();
+    const bool has_uncommitted_event =
+        !events_.empty() &&
+        events_.back().event_sequence() >= next_requested;
+    const bool has_gap = next_requested < oldest;
+    if (!source_final_ && !has_uncommitted_event && !has_gap &&
+        request.wait_timeout_ms() == 0) {
+        response.set_ret_code(0);
+        response.set_result(training::METRIC_BATCH_RESULT_WAIT);
+        response.set_message("no metric event is currently available");
+        return;
+    }
+
+    const auto request_deadline = std::chrono::steady_clock::now() +
+        std::chrono::milliseconds(request.wait_timeout_ms());
+    while (!ReadyToSeal(std::chrono::steady_clock::now()) &&
+           request.wait_timeout_ms() > 0 &&
+           std::chrono::steady_clock::now() < request_deadline) {
+        changed_.wait_until(
+            lock, std::min(request_deadline, NextSealDeadline()));
+    }
+    if (!ReadyToSeal(std::chrono::steady_clock::now())) {
+        response.set_ret_code(0);
+        response.set_result(training::METRIC_BATCH_RESULT_WAIT);
+        response.set_message("metric flush window has not closed");
+        return;
+    }
+    const int64_t now_unix_ms =
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+    std::string build_error;
+    if (!BuildPendingBatch(request, now_unix_ms, build_error)) {
+        response.set_ret_code(-1);
+        response.set_result(training::METRIC_BATCH_RESULT_REJECTED_INVALID);
+        response.set_message(build_error);
+        return;
+    }
+    response.set_ret_code(0);
+    response.set_result(training::METRIC_BATCH_RESULT_DELIVERED);
+    *response.mutable_batch() = *pending_batch_;
+    FillAvailability(response);
+}
+
+void MetricEventJournal::Ack(
+    const training::AckMetricBatchReq& request,
+    training::AckMetricBatchRsp& response) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    response.Clear();
+    FillAvailability(response);
+    *response.mutable_committed_cursor() = committed_cursor_;
+    if (!ValidContract(request.contract()) ||
+        !ValidConsumer(request.consumer()) ||
+        !SameConsumer(request.consumer())) {
+        response.set_ret_code(-1);
+        response.set_result(
+            training::METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY);
+        response.set_message("metric ACK contract or consumer is invalid");
+        return;
+    }
+    const auto& cursor = request.cursor();
+    if (cursor.SerializeAsString() == committed_cursor_.SerializeAsString()) {
+        response.set_ret_code(0);
+        response.set_result(
+            training::METRIC_BATCH_ACK_RESULT_ALREADY_APPLIED);
+        response.set_message("metric batch was already acknowledged");
+        return;
+    }
+    if (!pending_batch_ || !SameIdentity(cursor.source(), source_) ||
+        cursor.acknowledged_batch_sequence() !=
+            pending_batch_->batch_sequence() ||
+        !SameDigest(cursor.acknowledged_batch_digest(),
+                    pending_batch_->batch_digest())) {
+        response.set_ret_code(-1);
+        response.set_result(
+            training::METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR);
+        response.set_message("metric ACK does not identify the pending batch");
+        return;
+    }
+    uint64_t expected_event =
+        committed_cursor_.acknowledged_event_sequence();
+    if (pending_batch_->events_size() > 0 || pending_batch_->has_gap()) {
+        expected_event = pending_batch_->last_event_sequence();
+    }
+    if (cursor.acknowledged_event_sequence() != expected_event) {
+        response.set_ret_code(-1);
+        response.set_result(
+            training::METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR);
+        response.set_message("metric ACK event cursor is invalid");
+        return;
+    }
+    const bool acknowledged_final_batch = pending_batch_->source_final();
+    committed_cursor_ = cursor;
+    last_acked_watermark_unix_ms_ = std::max(
+        last_acked_watermark_unix_ms_,
+        pending_batch_->event_time_watermark_unix_ms());
+    while (!events_.empty() &&
+           events_.front().event_sequence() <=
+               committed_cursor_.acknowledged_event_sequence()) {
+        event_bytes_ -= events_.front().ByteSizeLong();
+        events_.pop_front();
+        event_enqueued_at_.pop_front();
+    }
+    pending_batch_.reset();
+    if (acknowledged_final_batch) final_batch_acknowledged_ = true;
+    response.set_ret_code(0);
+    response.set_result(training::METRIC_BATCH_ACK_RESULT_APPLIED);
+    response.set_message("metric batch acknowledged");
+    *response.mutable_committed_cursor() = committed_cursor_;
+    FillAvailability(response);
+}
 
 EpisodeMetricsWindow::EpisodeMetricsWindow(std::size_t capacity)
     : capacity_(std::max<std::size_t>(1, capacity)) {}

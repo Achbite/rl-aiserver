@@ -5,6 +5,7 @@
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 #include <openssl/evp.h>
 
+#include <algorithm>
 #include <array>
 #include <atomic>
 #include <chrono>
@@ -15,6 +16,7 @@
 #include <iomanip>
 #include <iostream>
 #include <iterator>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <sstream>
@@ -24,6 +26,16 @@
 #include <vector>
 
 struct MazeServiceUpdateTestAccess {
+    static const std::string& ProducerInstanceId(
+        const MazeServiceImpl& service) {
+        return service.producer_instance_id_;
+    }
+
+    static uint64_t ProducerLifecycleEpoch(
+        const MazeServiceImpl& service) {
+        return service.producer_lifecycle_epoch_;
+    }
+
     static SessionManager::Session* AddSession(MazeServiceImpl& service) {
         const std::string id = service.session_mgr_.CreateSession();
         return service.session_mgr_.GetSession(id);
@@ -108,6 +120,12 @@ struct MazeServiceUpdateTestAccess {
         service.staged_model_manifest_.wire.set_train_updates(train_updates);
         service.staged_model_manifest_.wire.set_trained_samples(
             trained_samples);
+        std::string error;
+        if (!service.onnx_inferencer_.PrepareModel(
+                staged_path, 17, 9, service.staged_prepared_model_, &error)) {
+            std::cerr << "staged model prepare failed: " << error << std::endl;
+            std::exit(1);
+        }
     }
 
     static bool LoadActiveAndStage(
@@ -135,8 +153,10 @@ struct MazeServiceUpdateTestAccess {
     static bool AckPending(const MazeServiceImpl& service) {
         return service.model_ack_pending_;
     }
-    static int ActiveModelVersion(const MazeServiceImpl& service) {
-        return service.model_manifest_.model_version;
+    static int64_t ActiveModelVersion(const MazeServiceImpl& service) {
+        return service.model_manifest_.HasModelIdentity()
+                   ? static_cast<int64_t>(service.model_manifest_.model_version)
+                   : -1;
     }
     static int64_t ActiveTrainUpdates(const MazeServiceImpl& service) {
         return service.model_manifest_.train_updates;
@@ -144,8 +164,11 @@ struct MazeServiceUpdateTestAccess {
     static int64_t ActiveTrainedSamples(const MazeServiceImpl& service) {
         return service.model_manifest_.trained_samples;
     }
-    static int StagedModelVersion(const MazeServiceImpl& service) {
-        return service.staged_model_manifest_.model_version;
+    static int64_t StagedModelVersion(const MazeServiceImpl& service) {
+        return service.staged_model_manifest_.HasModelIdentity()
+                   ? static_cast<int64_t>(
+                         service.staged_model_manifest_.model_version)
+                   : -1;
     }
     static int64_t ModelSwitchCount(const MazeServiceImpl& service) {
         return service.model_switch_count_;
@@ -161,6 +184,12 @@ struct MazeServiceUpdateTestAccess {
     }
     static bool RunWatcherActivationAttempt(MazeServiceImpl& service) {
         return service.TryActivateStagedModelForWatcher();
+    }
+    static void StartWatcher(MazeServiceImpl& service) {
+        service.StartModelWatcher();
+    }
+    static void StopWatcher(MazeServiceImpl& service) {
+        service.StopModelWatcher();
     }
     static bool InferActive(MazeServiceImpl& service,
                             const std::vector<float>& observation,
@@ -539,6 +568,10 @@ public:
         training::GetModelManifestRsp* response) override {
         response->set_ret_code(0);
         response->mutable_manifest()->CopyFrom(manifest_);
+        response->set_available_floor_model_version(
+            manifest_.identity().model_version());
+        response->set_latest_available_model_version(
+            manifest_.identity().model_version());
         return grpc::Status::OK;
     }
 
@@ -583,6 +616,7 @@ public:
         {
             std::lock_guard<std::mutex> lock(mutex_);
             last_load_instance_id_ = request->load_instance_id();
+            last_aiserver_.CopyFrom(request->aiserver());
         }
         if ((ack_mode_.load() == AckMode::LoseFirstTransaction && call <= 3) ||
             ack_mode_.load() == AckMode::LoseEveryTransaction) {
@@ -615,6 +649,10 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
         return last_load_instance_id_;
     }
+    common::ServiceInstanceIdentity last_aiserver() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return last_aiserver_;
+    }
 
 private:
     training::ModelArtifactManifest manifest_;
@@ -627,6 +665,7 @@ private:
     std::atomic<int> ack_calls_{0};
     mutable std::mutex mutex_;
     std::string last_load_instance_id_;
+    common::ServiceInstanceIdentity last_aiserver_;
 };
 
 void Require(bool condition, const std::string& message) {
@@ -707,12 +746,18 @@ AIServerConfig Config() {
     config.sample_output.outbound_max_fragments = 8;
     config.sample_output.outbound_max_estimated_bytes = 1024 * 1024;
     config.sample_output.enqueue_timeout_ms = 10;
+    config.metrics.event_schema = {
+        "maze.metrics.v2", 2,
+        {"sha256",
+         "34622334da8d4aec593ad231eb0e7cf4465fdee0cbfa13a9ea0e6f864797df73"}};
     return config;
 }
 
 training::ModelArtifactManifest InitialManifest(
     const AIServerConfig& config,
-    const std::string& model_bytes) {
+    const std::string& model_bytes,
+    uint64_t model_version = 1,
+    int64_t train_updates = 0) {
     training::ModelArtifactManifest manifest;
     manifest.set_manifest_schema_version(1);
     auto* contract = manifest.mutable_contract();
@@ -726,7 +771,7 @@ training::ModelArtifactManifest InitialManifest(
     contract->set_generator_identity(config.contract.generator_identity);
     auto* identity = manifest.mutable_identity();
     identity->set_model_lineage_id(config.model.expected_model_lineage_id);
-    identity->set_model_version(1);
+    identity->set_model_version(model_version);
     SetDigest(Sha256(model_bytes), identity->mutable_artifact_digest());
     SetSchema(config.training_semantics.observation_schema,
               manifest.mutable_observation_schema());
@@ -740,11 +785,14 @@ training::ModelArtifactManifest InitialManifest(
     manifest.add_action_shape(config.model.expected_action_dim);
     manifest.add_value_shape(1);
     manifest.add_value_shape(1);
-    manifest.set_artifact_uri("fixture://a3-arch-policy-wire-v1");
-    manifest.set_model_file("initial-model-v1.onnx");
+    std::ostringstream version_name;
+    version_name << std::setfill('0') << std::setw(6) << model_version;
+    manifest.set_artifact_uri(
+        "fixture://" + version_name.str() + "/SaveModel.onnx");
+    manifest.set_model_file("SaveModel.onnx");
     manifest.set_size_bytes(static_cast<int64_t>(model_bytes.size()));
     manifest.set_seed(0);
-    manifest.set_train_updates(0);
+    manifest.set_train_updates(train_updates);
     manifest.set_trained_samples(0);
     SetDigest(std::string(64, '7'),
               manifest.mutable_training_config_digest());
@@ -771,6 +819,109 @@ training::ModelArtifactManifest InitialManifest(
               manifest.mutable_identity()->mutable_manifest_digest());
     return manifest;
 }
+
+class WatcherDistributor final
+    : public training::ModelDistributorService::Service {
+public:
+    WatcherDistributor(std::vector<training::ModelArtifactManifest> manifests,
+                       std::string model_bytes)
+        : manifests_(std::move(manifests)),
+          model_bytes_(std::move(model_bytes)) {}
+
+    grpc::Status GetModelManifest(
+        grpc::ServerContext*, const training::GetModelManifestReq* request,
+        training::GetModelManifestRsp* response) override {
+        uint64_t version = request->latest_in_lineage()
+            ? manifests_.back().identity().model_version()
+            : request->requested_model().model_version();
+        const auto found = std::find_if(
+            manifests_.begin(), manifests_.end(), [&](const auto& manifest) {
+                return manifest.identity().model_version() == version;
+            });
+        if (found == manifests_.end()) {
+            response->set_ret_code(-1);
+            response->set_message("requested watcher model is unavailable");
+            return grpc::Status::OK;
+        }
+        response->set_ret_code(0);
+        *response->mutable_manifest() = *found;
+        FillAuthority(response->mutable_distributor());
+        response->set_available_floor_model_version(
+            manifests_.front().identity().model_version());
+        response->set_latest_available_model_version(
+            manifests_.back().identity().model_version());
+        return grpc::Status::OK;
+    }
+
+    grpc::Status DownloadModel(
+        grpc::ServerContext*, const training::DownloadModelReq* request,
+        grpc::ServerWriter<training::ModelChunk>* writer) override {
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            download_versions_.push_back(
+                request->requested_model().model_version());
+        }
+        training::ModelChunk chunk;
+        *chunk.mutable_model() = request->requested_model();
+        chunk.set_offset(0);
+        chunk.set_data(model_bytes_);
+        writer->Write(chunk);
+        return grpc::Status::OK;
+    }
+
+    grpc::Status AckModel(
+        grpc::ServerContext*, const training::AckModelReq*,
+        training::AckModelRsp* response) override {
+        ++ack_calls_;
+        if (!ack_available_.load()) {
+            return grpc::Status(
+                grpc::StatusCode::UNAVAILABLE,
+                "injected watcher ACK response loss");
+        }
+        response->set_ret_code(0);
+        response->set_result(training::MODEL_ACK_RESULT_ALREADY_APPLIED);
+        response->set_message("watcher ACK converged");
+        FillAuthority(response->mutable_distributor());
+        return grpc::Status::OK;
+    }
+
+    grpc::Status GetModelDistributorStatus(
+        grpc::ServerContext*, const training::ModelDistributorStatusReq*,
+        training::ModelDistributorStatusRsp* response) override {
+        response->set_ready(true);
+        FillAuthority(response->mutable_distributor());
+        *response->mutable_contract() = manifests_.back().contract();
+        *response->mutable_latest_model() = manifests_.back().identity();
+        response->set_available_floor_model_version(
+            manifests_.front().identity().model_version());
+        response->set_latest_available_model_version(
+            manifests_.back().identity().model_version());
+        return grpc::Status::OK;
+    }
+
+    void SetAckAvailable(bool available) {
+        ack_available_.store(available);
+    }
+    std::vector<uint64_t> DownloadVersions() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return download_versions_;
+    }
+    int AckCalls() const { return ack_calls_.load(); }
+
+private:
+    static void FillAuthority(common::ServiceInstanceIdentity* identity) {
+        identity->set_component("model-distributor");
+        identity->set_instance_id("watcher-distributor");
+        identity->set_lifecycle_epoch(1);
+    }
+
+    std::vector<training::ModelArtifactManifest> manifests_;
+    std::string model_bytes_;
+    mutable std::mutex mutex_;
+    std::vector<uint64_t> download_versions_;
+    std::atomic<bool> ack_available_{false};
+    std::atomic<int> ack_calls_{0};
+};
 
 SessionManager::AgentRuntime Agent() {
     SessionManager::AgentRuntime agent;
@@ -1052,7 +1203,12 @@ void TestMultiAgentUpdateIsAtomic() {
     for (const auto& item : session->agents) {
         const auto& agent = item.second;
         Require(!agent.has_pending_action && agent.done_collected &&
-                    agent.episode_transition_count == 1,
+                    agent.episode_transition_count == 1 &&
+                    agent.episode_behavior_model_seen &&
+                    agent.episode_behavior_model_version_min == 0 &&
+                    agent.episode_behavior_model_version_max == 0 &&
+                    agent.episode_behavior_model_lineage_id ==
+                        "atomicity-fixture",
                 "each Agent transition commits exactly once");
     }
     Require(MazeServiceUpdateTestAccess::ProducedSamples(service) == 2 &&
@@ -1441,14 +1597,15 @@ void TestLoadInitialAuthorityPreflightIsRetryable(
 
     Require(!MazeServiceUpdateTestAccess::LoadInitialModel(service),
             "persistent initial authority outage defers startup");
-    const fs::path incoming = root / "incoming" / "initial-model-v1.onnx";
-    const fs::path active = root / "active" / "model.onnx";
+    const fs::path cached = root / "cache" / "000001" /
+                            "SaveModel.onnx";
     Require(distributor.status_calls() > 0 && distributor.ack_calls() == 0 &&
                 MazeServiceUpdateTestAccess::ActiveModelVersion(service) < 0 &&
                 MazeServiceUpdateTestAccess::ModelState(service) ==
                     training::MODEL_STATE_FAILED &&
-                fs::is_regular_file(incoming) && !fs::exists(active),
-            "initial preflight failure sends no ACK and performs no promotion");
+                fs::is_regular_file(cached),
+            "initial preflight failure sends no ACK but retains the complete "
+            "non-active cache entry");
 
     server->Shutdown();
     server->Wait();
@@ -1489,10 +1646,9 @@ void TestLoadInitialAuthorityPreflightIsRetryable(
                 MazeServiceUpdateTestAccess::LastError(
                     retry_service).empty() &&
                 fs::is_regular_file(
-                    retry_root / "active" / "model.onnx") &&
-                !fs::exists(
-                    retry_root / "incoming" / "initial-model-v1.onnx"),
-            "recovered initial preflight promotes and ACKs exactly once");
+                    retry_root / "cache" / "000001" /
+                    "SaveModel.onnx"),
+            "recovered initial preflight activates and ACKs exactly once");
     RequireActiveV1(
         retry_service,
         "recovered initial preflight serves the tracked v1 model");
@@ -1528,8 +1684,8 @@ void TestLoadInitialWrongContractIsRetryable(
     config.model_distribution.port = port;
     MazeServiceImpl service(config);
 
-    const fs::path incoming = root / "incoming" / "initial-model-v1.onnx";
-    const fs::path active = root / "active" / "model.onnx";
+    const fs::path cached = root / "cache" / "000001" /
+                            "SaveModel.onnx";
     Require(!MazeServiceUpdateTestAccess::LoadInitialModel(service),
             "wrong distributor contract blocks initial activation");
     Require(distributor.status_calls() > 0 && distributor.ack_calls() == 0 &&
@@ -1538,8 +1694,8 @@ void TestLoadInitialWrongContractIsRetryable(
                     training::MODEL_STATE_FAILED &&
                 MazeServiceUpdateTestAccess::LastError(service).find(
                     "contract") != std::string::npos &&
-                fs::is_regular_file(incoming) && !fs::exists(active),
-            "wrong initial contract performs no Promote, ACK, or READY");
+                fs::is_regular_file(cached),
+            "wrong initial contract performs no ACK, activation, or READY");
 
     distributor.SetWrongStatusContract(false);
     Require(MazeServiceUpdateTestAccess::LoadInitialModel(service),
@@ -1549,8 +1705,8 @@ void TestLoadInitialWrongContractIsRetryable(
                 MazeServiceUpdateTestAccess::ModelState(service) ==
                     training::MODEL_STATE_READY &&
                 MazeServiceUpdateTestAccess::LastError(service).empty() &&
-                fs::is_regular_file(active) && !fs::exists(incoming),
-            "corrected initial contract promotes and ACKs exactly once");
+                fs::is_regular_file(cached),
+            "corrected initial contract activates and ACKs exactly once");
     RequireActiveV1(service,
                     "corrected initial contract serves tracked v1");
 
@@ -1591,11 +1747,19 @@ void TestLoadInitialResponseLossConverges(
     Require(distributor.ack_calls() == 4 &&
                 distributor.last_load_instance_id().find("-load-v1") !=
                     std::string::npos &&
+                distributor.last_aiserver().component() == "rl-aiserver" &&
+                distributor.last_aiserver().instance_id() != "aiserver-0" &&
+                !distributor.last_aiserver().instance_id().empty() &&
+                distributor.last_aiserver().lifecycle_epoch() > 0 &&
+                distributor.last_load_instance_id().find(
+                    distributor.last_aiserver().instance_id()) !=
+                    std::string::npos &&
                 MazeServiceUpdateTestAccess::ActiveModelVersion(service) == 1 &&
                 MazeServiceUpdateTestAccess::ModelState(service) ==
                     training::MODEL_STATE_READY &&
                 MazeServiceUpdateTestAccess::LastError(service).empty() &&
-                fs::is_regular_file(root / "active" / "model.onnx"),
+                fs::is_regular_file(
+                    root / "cache" / "000001" / "SaveModel.onnx"),
             "initial loss rolls forward locally then receives exact Applied");
     RequireActiveV1(service,
                     "initial response-loss convergence serves tracked v1");
@@ -1640,7 +1804,8 @@ void TestLoadInitialResponseLossConverges(
                     training::MODEL_STATE_WAITING &&
                 !pending_service.IsReady() &&
                 fs::is_regular_file(
-                    pending_root / "active" / "model.onnx"),
+                    pending_root / "cache" / "000001" /
+                    "SaveModel.onnx"),
             "initial local publication is retained as a pending exact ACK, not "
             "reported as an uncommitted load");
     RequireActiveV1(
@@ -2302,10 +2467,99 @@ void TestAckResponseLossRollsForward(
                 maze::LIFECYCLE_RESULT_APPLIED &&
                 session->last_frame_id == 2,
             "next frame applies after pending ACK convergence");
+    for (const auto& item : session->agents) {
+        const auto& agent = item.second;
+        Require(agent.episode_behavior_model_seen &&
+                    agent.episode_behavior_model_version_min == 0 &&
+                    agent.episode_behavior_model_version_max == 1 &&
+                    agent.episode_behavior_model_lineage_id ==
+                        "atomicity-fixture",
+                "Episode behavior facts span both fragment model versions");
+    }
 
     server->Shutdown();
     server->Wait();
     std::filesystem::remove_all(paths.root);
+}
+
+void TestRealWatcherLatestFirstAndPendingAckBackfill(
+    const std::string& active_fixture,
+    const std::string& distributed_fixture) {
+    namespace fs = std::filesystem;
+    const std::string model_bytes = ReadBytes(distributed_fixture);
+    auto config = Config();
+    std::vector<training::ModelArtifactManifest> manifests;
+    for (uint64_t version = 0; version <= 2; ++version) {
+        manifests.push_back(InitialManifest(
+            config, model_bytes, version, static_cast<int64_t>(version)));
+    }
+    WatcherDistributor distributor(std::move(manifests), model_bytes);
+    grpc::ServerBuilder builder;
+    int port = 0;
+    builder.AddListeningPort("127.0.0.1:0",
+                             grpc::InsecureServerCredentials(), &port);
+    builder.RegisterService(&distributor);
+    std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
+    Require(server != nullptr && port > 0,
+            "real watcher distributor starts");
+
+    const fs::path root = fs::temp_directory_path() /
+        ("a3-real-watcher-" + std::to_string(getpid()));
+    fs::remove_all(root);
+    fs::create_directories(root / "active");
+    const fs::path active_path = root / "active" / "SaveModel.onnx";
+    fs::copy_file(active_fixture, active_path);
+    config.model.local_train_dir = root.string();
+    config.model_distribution.host = "127.0.0.1";
+    config.model_distribution.port = port;
+    config.model_distribution.rpc_timeout_ms = 50;
+    config.model_distribution.poll_interval_ms = 50;
+
+    MazeServiceImpl service(config);
+    MazeServiceUpdateTestAccess::MakeReady(service);
+    MazeServiceUpdateTestAccess::SetModel(service, 0, 0, 0);
+    std::string error;
+    Require(MazeServiceUpdateTestAccess::LoadActive(
+                service, active_path.string(), error),
+            "real watcher active model loads: " + error);
+    distributor.SetAckAvailable(false);
+    MazeServiceUpdateTestAccess::StartWatcher(service);
+
+    const auto activation_deadline = std::chrono::steady_clock::now() +
+        std::chrono::seconds(3);
+    while ((!MazeServiceUpdateTestAccess::AckPending(service) ||
+            MazeServiceUpdateTestAccess::ActiveModelVersion(service) != 2) &&
+           std::chrono::steady_clock::now() < activation_deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+    Require(MazeServiceUpdateTestAccess::AckPending(service) &&
+                MazeServiceUpdateTestAccess::ActiveModelVersion(service) == 2 &&
+                MazeServiceUpdateTestAccess::ModelSwitchCount(service) == 1,
+            "watcher downloads, prepares, and activates latest before backfill");
+    std::this_thread::sleep_for(std::chrono::milliseconds(175));
+    Require(distributor.DownloadVersions() == std::vector<uint64_t>{2},
+            "pending ACK suppresses every older-version backfill download");
+
+    distributor.SetAckAvailable(true);
+    const auto backfill_deadline = std::chrono::steady_clock::now() +
+        std::chrono::seconds(3);
+    while ((MazeServiceUpdateTestAccess::AckPending(service) ||
+            !fs::exists(root / "cache" / "000000" / "SaveModel.onnx") ||
+            !fs::exists(root / "cache" / "000001" / "SaveModel.onnx")) &&
+           std::chrono::steady_clock::now() < backfill_deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+    MazeServiceUpdateTestAccess::StopWatcher(service);
+    const auto downloads = distributor.DownloadVersions();
+    Require(!MazeServiceUpdateTestAccess::AckPending(service) &&
+                service.IsReady() &&
+                downloads == std::vector<uint64_t>({2, 0, 1}) &&
+                fs::exists(root / "cache" / "000002" / "SaveModel.onnx"),
+            "watcher converges ACK then backfills exactly one oldest gap per cycle");
+
+    server->Shutdown();
+    server->Wait();
+    fs::remove_all(root);
 }
 
 void TestAckRecoveryPreservesSenderFault(
@@ -2473,6 +2727,17 @@ void TestShutdownRejectsUnsettledModelAndAccounting() {
 int main(int argc, char** argv) {
     Require(argc == 4,
             "usage: update_atomicity_test V0_ONNX V1_ONNX FAILURE_ONNX");
+    {
+        MazeServiceImpl first(Config());
+        MazeServiceImpl second(Config());
+        Require(!MazeServiceUpdateTestAccess::ProducerInstanceId(first).empty() &&
+                    MazeServiceUpdateTestAccess::ProducerInstanceId(first) !=
+                        MazeServiceUpdateTestAccess::ProducerInstanceId(second),
+                "same-label producer processes receive distinct instance IDs");
+        Require(MazeServiceUpdateTestAccess::ProducerLifecycleEpoch(first) > 0 &&
+                    MazeServiceUpdateTestAccess::ProducerLifecycleEpoch(second) > 0,
+                "producer lifecycle epochs are non-zero");
+    }
     TestMultiAgentUpdateIsAtomic();
     TestStandaloneEvaluationDoesNotRunTrainingReward();
     TestUpdateCapabilityReadinessAndErrors(argv[1]);
@@ -2487,6 +2752,7 @@ int main(int argc, char** argv) {
     TestBeginSameAuthorityRejectionRollsBack(argv[1], argv[2]);
     TestBeginAckResponseLossRollsForward(argv[1], argv[2]);
     TestWatcherActivationRetriesAfterAuthorityProbe(argv[1], argv[2]);
+    TestRealWatcherLatestFirstAndPendingAckBackfill(argv[1], argv[2]);
     TestBeginPlanFailurePreservesCandidateState();
     TestAckResponseLossRollsForward(argv[1], argv[2]);
     TestAckRecoveryPreservesSenderFault(argv[1], argv[2]);

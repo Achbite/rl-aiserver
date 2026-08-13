@@ -263,7 +263,7 @@ bool SampleSender::ValidateDistributorStatus(
         response.distributor().component() != "sample-distributor" ||
         response.distributor().instance_id().empty() ||
         response.distributor().lifecycle_epoch() == 0) {
-        error = "sample ingress identity does not match rl-contracts 0.10.0";
+        error = "sample ingress identity does not match rl-contracts 0.11.0";
         return false;
     }
     if (!response.ready() || !response.ingress_ready()) {
@@ -277,19 +277,17 @@ bool SampleSender::ApplyDistributorStatus(
     const training::DistributorStatusRsp& response,
     bool initialize_baseline,
     std::string& error) {
-    std::unordered_map<int, int64_t> current_by_model;
+    std::unordered_map<ModelVersion, int64_t> current_by_model;
     int64_t current_sum = 0;
     for (const auto& status : response.behavior_versions()) {
         const int64_t stale = status.stale_samples();
         if (stale < 0 ||
-            stale > std::numeric_limits<int64_t>::max() - current_sum ||
-            status.behavior_policy().model_version() >
-                static_cast<uint64_t>(std::numeric_limits<int>::max())) {
+            stale > std::numeric_limits<int64_t>::max() - current_sum) {
             error = "sample ingress returned invalid stale accounting";
             return false;
         }
-        const int version = static_cast<int>(
-            status.behavior_policy().model_version());
+        const ModelVersion version =
+            status.behavior_policy().model_version();
         if (current_by_model[version] >
             std::numeric_limits<int64_t>::max() - stale) {
             error = "sample ingress stale accounting overflowed";
@@ -323,7 +321,7 @@ bool SampleSender::ApplyDistributorStatus(
         return false;
     }
 
-    std::unordered_map<int, int64_t> delta_by_model;
+    std::unordered_map<ModelVersion, int64_t> delta_by_model;
     int64_t delta_sum = 0;
     for (const auto& baseline : pool_stale_baseline_by_model_) {
         const auto current = current_by_model.find(baseline.first);
@@ -1018,8 +1016,8 @@ void SampleSender::SenderLoop() {
                 queue_samples_ -= queue_.front().samples;
                 queue_estimated_bytes_ -= queue_.front().estimated_bytes;
                 producer_stale_count_ += queue_.front().samples;
-                producer_stale_samples_by_model_[static_cast<int>(
-                    queue_.front().batch.behavior_policy().model_version())] +=
+                producer_stale_samples_by_model_[
+                    queue_.front().batch.behavior_policy().model_version()] +=
                     queue_.front().samples;
                 queue_.pop_front();
                 if (training_capacity_wait_) {

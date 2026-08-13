@@ -3,6 +3,7 @@
 #include "ai/astar_solver.h"
 #include "contracts/contract_namespaces.h"
 #include "model/behavior_policy_scope.h"
+#include "model/model_version.h"
 #include "session/lifecycle_replay_window.h"
 
 #include <unordered_map>
@@ -43,12 +44,12 @@ public:
         int64_t pending_action_frame_id = -1;
         float pending_log_prob = 0.0f;
         float pending_value = 0.0f;
-        int   pending_model_version = -1;
+        ModelVersion pending_model_version = 0;
         std::string pending_model_checksum;
         std::string pending_model_lineage_id;
         std::string pending_model_manifest_digest;
         std::vector<float> pending_obs;
-        int   fragment_model_version = -1;
+        ModelVersion fragment_model_version = 0;
         std::string fragment_model_checksum;
         std::string fragment_model_lineage_id;
         std::string fragment_model_manifest_digest;
@@ -67,6 +68,10 @@ public:
         int64_t last_observation_frame_id = -1;
         double episode_return = 0.0;
         int64_t episode_transition_count = 0;
+        bool episode_behavior_model_seen = false;
+        uint64_t episode_behavior_model_version_min = 0;
+        uint64_t episode_behavior_model_version_max = 0;
+        std::string episode_behavior_model_lineage_id;
         maze::MazeTerminationReason final_termination_reason =
             maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
         std::unordered_map<std::string, double> reward_component_sums;
@@ -134,7 +139,7 @@ public:
         BehaviorPolicyScope behavior_policy_scope =
             BehaviorPolicyScope::Unspecified;
         int current_max_steps = 0;
-    int evaluation_pinned_model_version = -1;
+    ModelVersion evaluation_pinned_model_version = 0;
     std::string evaluation_pinned_model_checksum;
     std::string evaluation_pinned_model_lineage_id;
     std::string evaluation_pinned_model_manifest_digest;

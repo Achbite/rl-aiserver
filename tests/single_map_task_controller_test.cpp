@@ -7,7 +7,7 @@
 
 namespace {
 
-SingleMapModelIdentity Model(int version,
+SingleMapModelIdentity Model(ModelVersion version,
                              int64_t train_updates,
                              int64_t trained_samples) {
     SingleMapModelIdentity model;
@@ -19,7 +19,7 @@ SingleMapModelIdentity Model(int version,
     return model;
 }
 
-SingleMapModelIdentity Model(int version, int64_t trained_samples) {
+SingleMapModelIdentity Model(ModelVersion version, int64_t trained_samples) {
     return Model(version, version, trained_samples);
 }
 
@@ -43,7 +43,7 @@ int main() {
     // 100k/200k thresholds and the retired one-million-sample boundary must
     // not pause, complete, or change the episode mode.
     const struct {
-        int model_version;
+        ModelVersion model_version;
         int64_t samples;
     } progress[] = {
         {195, 99840},
@@ -101,6 +101,21 @@ int main() {
     assert(resumed.PlanNextEpisode(
         Model(204, 202, 10100), 100, plan, error));
     assert(plan.episode_mode == maze::EPISODE_MODE_TRAINING);
+
+    // Publication identity uses the full uint64 wire domain. Crossing the
+    // former signed-int boundary is ordinary progress; UINT64_MAX cannot
+    // wrap to zero.
+    SingleMapTaskController high_version;
+    const ModelVersion above_int_max =
+        static_cast<ModelVersion>(std::numeric_limits<int>::max()) + 1;
+    error.clear();
+    assert(high_version.Initialize(
+        188, Model(above_int_max, 0, 0), 0, error));
+    assert(high_version.ObserveTrainingProgress(
+        Model(std::numeric_limits<ModelVersion>::max(), 1, 0), 0, error));
+    const std::string before_wrap = high_version.ToJson();
+    assert(!high_version.ObserveTrainingProgress(Model(0, 2, 0), 0, error));
+    assert(high_version.ToJson() == before_wrap);
 
     // Publication and optimizer counters advance independently, but neither
     // training counter may roll back. Rejected observations are atomic.

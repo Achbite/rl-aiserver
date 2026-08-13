@@ -89,11 +89,15 @@ def sync_snapshot(
     ) as temporary:
         stage = Path(temporary)
         for artifact_name, local_name in SNAPSHOT_FILES.items():
+            (stage / local_name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(artifact_root / artifact_name, stage / local_name)
         shutil.copyfile(artifact_root / "manifest.json", stage / "manifest.json")
         verify_snapshot(stage, version, platform)
 
         for local_name in SNAPSHOT_FILES.values():
+            (target_root / local_name).parent.mkdir(
+                parents=True, exist_ok=True
+            )
             os.replace(stage / local_name, target_root / local_name)
         os.replace(stage / "manifest.json", target_root / "manifest.json")
 

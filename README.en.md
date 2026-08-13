@@ -1,74 +1,85 @@
 # RL AIServer
 
-English | [简体中文](README.md)
+[简体中文](README.md) | English
 
-C++ environment-interaction, inference, trajectory assembly, and asynchronous sample egress service. Training mode sends samples to LocalSampleService in the Learner Pod, while `local-test` uses the model embedded in the image.
+AIServer provides training inference, trajectory assembly, and sample delivery. Start full training from [rl-framework](../rl-framework/README.en.md).
 
-## Quick Start
-
-Build Contracts, then synchronize the repository-local protocol snapshot from
-the immutable artifact selected by an explicit version and platform:
+## 1. Prepare Contracts and the smoke model
 
 ```bash
 (cd ../rl-contracts && bash build_artifact.sh)
 bash scripts/sync_contract_snapshot.sh
 ```
 
-The synchronization entrypoint reads the explicit `0.10.0` and `linux/arm64`
-identity from `artifact_versions.env`, verifies the manifest, every artifact
-file, and the staged snapshot before and after replacement. It neither discovers
-`latest` nor invokes a host `protoc` to regenerate code.
+The runtime image also needs the smoke model produced by Learner:
 
-Build the image:
+```bash
+(cd ../rl-learner && RL_LEARNER_IMAGE_TAG=training-001 bash build_image.sh)
+```
+
+## 2. Build the runtime image
 
 ```bash
 RL_AISERVER_IMAGE_TAG=training-001 bash build_image.sh
 ```
 
-Enter the development container and start the inference smoke test:
+## 3. Incremental build and tests
 
 ```bash
+# Build the development image from the runtime image
+AISERVER_IMAGE_TAG=training-001 make dev-image
+
+# Incrementally build only the main executable; do not run CTest
+make build
+
+# Explicitly build test targets and run CTest
+make test
+
+# Enter the development container
 make shell
-bash ./run.sh local-test
 ```
 
-Start training mode:
+The development container uses a persistent ccache volume. `ninja: no work to do.` means no source changed; it does not automatically rerun tests.
+
+## 4. Run modes
+
+Inside the development container:
 
 ```bash
+# Random-model inference-chain check
+bash ./run.sh local-test
+
+# Training; normally started by Framework with Learner addresses
 bash ./run.sh training
+
+# Local model evaluation
+bash ./run.sh model-evaluation
 ```
 
-For local model evaluation, set `model.evaluation_dir` in
-`configs/server_config.yaml` to the savepoint directory. The directory must
-contain the fixed filename `SaveModel.onnx`:
+Before local evaluation, point `model.evaluation_dir` in `configs/server_config.yaml` to a directory containing `SaveModel.onnx`:
 
 ```yaml
 model:
   evaluation_dir: "models/evaluation/000200"
 ```
 
+## 5. Training cache
+
+A normal stop preserves `models/local-train`. Framework passes `--new-run` only for a new Run; that option clears the old AIServer training cache:
+
 ```bash
-bash ./run.sh model-evaluation
+bash ./run.sh training --new-run
 ```
 
-Use `rl-framework` to start the complete workflow.
+Training models always come from Learner Model Distributor. AIServer never starts training from a local savepoint and never removes its cache on a normal stop.
 
-## Run Modes
+## 6. Default addresses
 
-```text
-1 / training
-2 / local-test
-3 / model-evaluation
-4 / map-validation
-```
-
-The default AIServer port is `9002`. Training samples are sent to `maze-learner:9100`, and models are fetched from `maze-learner:9200`.
-
-Training activates a new model only after every active Agent in the current
-AIServer reaches a fragment boundary; there is no cross-Server-Pod switch
-barrier. Every `SampleBatch` carries the `BehaviorPolicyReference` that produced
-it. Evaluation pins the full model identity for the complete Episode and
-releases it only after commit or abort.
+| Service | Address |
+| --- | --- |
+| AIServer gRPC | `0.0.0.0:9002` |
+| Learner Sample Pool | `maze-learner:9100` |
+| Learner Model Distributor | `maze-learner:9200` |
 
 ## License
 

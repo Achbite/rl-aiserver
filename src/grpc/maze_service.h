@@ -26,7 +26,8 @@
 #include <vector>
 
 class MazeServiceImpl final : public maze::MazeTaskService::Service,
-                              public training::AIServerTrainingStatusService::Service {
+                              public training::AIServerTrainingStatusService::Service,
+                              public training::MetricEventService::Service {
 public:
     explicit MazeServiceImpl(const AIServerConfig& config);
     ~MazeServiceImpl();
@@ -67,11 +68,33 @@ public:
                                    const training::AIServerStatusReq* req,
                                    training::AIServerStatusRsp* rsp) override;
 
+    grpc::Status GetMetricBatch(
+        grpc::ServerContext* ctx,
+        const training::GetMetricBatchReq* req,
+        training::GetMetricBatchRsp* rsp) override;
+    grpc::Status AckMetricBatch(
+        grpc::ServerContext* ctx,
+        const training::AckMetricBatchReq* req,
+        training::AckMetricBatchRsp* rsp) override;
+
 private:
     friend struct MazeServiceUpdateTestAccess;
     friend struct MazeServiceLifecycleTestAccess;
 
     bool LoadInitialModel();
+    bool LoadAndPrepareCachedModel(
+        const ModelManifest& manifest,
+        OnnxInferencer::PreparedModel& prepared,
+        std::string& error);
+    bool FetchPrepareAndPublishModel(
+        ModelVersion model_version,
+        ModelManifest& manifest,
+        OnnxInferencer::PreparedModel& prepared,
+        std::string& error,
+        bool force_exact_download = false);
+    bool BackfillOneCachedModel(
+        const ModelDistributorClient::AvailableRange& range,
+        std::string& error);
     bool IsCoreInferenceReady() const;
     void StartModelWatcher();
     void StopModelWatcher();
@@ -96,6 +119,9 @@ private:
         const SessionManager::Session& session);
     void InitAgentSolver(SessionManager::AgentRuntime& agent,
                          const SessionManager::Session& session);
+    training::EpisodeMetricFact BuildEpisodeMetricFact(
+        const SessionManager::Session& session,
+        const std::vector<AgentEpisodeResult>& agents) const;
     void ResetEpisodeState(SessionManager::Session& session,
                            const std::string& episode_id);
     bool FinalizePendingTransition(SessionManager::Session& session,
@@ -106,7 +132,7 @@ private:
                                    maze::MazeTerminationReason reason,
                                    bool collect_training_sample,
                                    int64_t& produced_unique_samples,
-                                   std::unordered_map<int, int64_t>&
+                                   std::unordered_map<ModelVersion, int64_t>&
                                        produced_samples_by_model,
                                    std::string& error);
     bool InferStateValue(const SessionManager::Session& session,
@@ -179,16 +205,20 @@ private:
         std::string& error) const;
     static int64_t NowMs();
     static std::string CreateProducerInstanceId(const std::string& aiserver_id);
+    static uint64_t CreateProducerLifecycleEpoch();
 
     AIServerConfig config_;
     SessionManager session_mgr_;
     mutable std::mutex mutex_;
+    std::string producer_instance_id_;
+    uint64_t producer_lifecycle_epoch_ = 0;
     SampleSender sample_sender_;
     EpisodeMetricsWindow episode_metrics_;
     OnnxInferencer onnx_inferencer_;
     ModelDistributorClient model_distributor_;
     ModelManifest model_manifest_;
     ModelManifest staged_model_manifest_;
+    OnnxInferencer::PreparedModel staged_prepared_model_;
     bool model_ack_pending_ = false;
     ModelManifest pending_model_ack_manifest_;
     common::ServiceInstanceIdentity pending_model_ack_authority_;
@@ -206,7 +236,7 @@ private:
     std::mt19937 action_rng_;
     std::unordered_map<std::string, std::string> open_payloads_;
     std::unordered_map<std::string, std::string> open_responses_;
-    std::string producer_instance_id_;
+    MetricEventJournal metric_events_;
     SingleMapTaskController task_controller_;
     std::function<bool(const SingleMapTaskController&, std::string&)>
         task_controller_receipt_writer_;
@@ -218,12 +248,12 @@ private:
     bool task_stop_requested_ = false;
 
     int64_t produced_unique_samples_ = 0;
-    std::unordered_map<int, int64_t> produced_samples_by_model_;
+    std::unordered_map<ModelVersion, int64_t> produced_samples_by_model_;
     int64_t reconciled_producer_stale_samples_ = 0;
-    std::unordered_map<int, int64_t>
+    std::unordered_map<ModelVersion, int64_t>
         reconciled_producer_stale_samples_by_model_;
     int64_t reconciled_pool_stale_samples_ = 0;
-    std::unordered_map<int, int64_t>
+    std::unordered_map<ModelVersion, int64_t>
         reconciled_pool_stale_samples_by_model_;
     int current_fragment_samples_ = 0;
     int64_t produced_unique_batches_ = 0;

@@ -53,6 +53,7 @@ read_config_mode() {
 runtime_arguments=("$@")
 forward_arguments=()
 workload_override=""
+new_run=0
 argument_index=0
 while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
     argument="${runtime_arguments[${argument_index}]}"
@@ -126,6 +127,10 @@ while [ "${argument_index}" -lt "${#runtime_arguments[@]}" ]; do
             echo "--training-sample-budget was retired; training has no hard cap" >&2
             exit 2
             ;;
+        --new-run)
+            new_run=1
+            argument_index=$((argument_index + 1))
+            ;;
         --train)
             workload_override="training"
             argument_index=$((argument_index + 1))
@@ -168,6 +173,10 @@ if ! workload="$(canonical_workload "${selected_mode}")"; then
 fi
 export RL_AISERVER_RUN_MODE="${workload}"
 printf 'AIServer run mode: %s (%s)\n' "${selected_mode}" "${workload}"
+if [ "${new_run}" -eq 1 ] && [ "${workload}" != "training" ]; then
+    echo "--new-run is only valid for the training workload" >&2
+    exit 2
+fi
 
 aiserver_pid=""
 aiserver_child_status=""
@@ -282,16 +291,26 @@ case "${workload}" in
             exit 1
         fi
         printf '%s\n' "$$" > "${training_lock}/pid"
-        if [ -d "${local_train_root}" ]; then
-            find "${local_train_root}" -mindepth 1 -maxdepth 1 \
-                -exec rm -rf -- {} +
-        else
+        if [ "${new_run}" -eq 1 ]; then
+            if [ -e "${local_train_root}" ] &&
+               [ ! -d "${local_train_root}" ]; then
+                echo "AIServer local-train path is not a directory" >&2
+                exit 1
+            fi
             mkdir -p "${local_train_root}"
+            shopt -s dotglob nullglob
+            reset_entries=("${local_train_root}"/*)
+            shopt -u dotglob nullglob
+            for reset_entry in "${reset_entries[@]}"; do
+                if [ "$(dirname "${reset_entry}")" != "${local_train_root}" ]; then
+                    echo "Unsafe AIServer new-run reset target: ${reset_entry}" >&2
+                    exit 1
+                fi
+                rm -rf -- "${reset_entry}"
+            done
+            printf 'AIServer new Run reset: %s\n' "${local_train_root}"
         fi
-        mkdir -p \
-            "${local_train_root}/incoming" \
-            "${local_train_root}/active" \
-            "${local_train_root}/previous"
+        mkdir -p "${local_train_root}/cache"
         export RL_LOCAL_TRAIN_ROOT="${local_train_root}"
         export RL_SAMPLE_DISTRIBUTOR_HOST="${RL_SAMPLE_DISTRIBUTOR_HOST:-maze-learner}"
         export RL_SAMPLE_DISTRIBUTOR_PORT="${RL_SAMPLE_DISTRIBUTOR_PORT:-9100}"

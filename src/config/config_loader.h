@@ -53,7 +53,7 @@ struct SchemaConfig {
 
 struct ContractConfig {
     std::string package_name = "rl-contracts";
-    std::string package_version = "0.10.0";
+    std::string package_version = "0.11.0";
     DigestConfig source_digest;
     DigestConfig artifact_digest;
     std::string platform = "linux/arm64";
@@ -99,7 +99,7 @@ struct ModelDistributionConfig {
     int port = 9200;
     int poll_interval_ms = 200;
     int rpc_timeout_ms = 5000;
-    std::string contract_version = "0.10.0";
+    std::string contract_version = "0.11.0";
 };
 
 // Maze task ownership belongs to AIServer. Client configuration cannot
@@ -140,6 +140,8 @@ struct SampleOutputConfig {
 
 struct MetricsConfig {
     std::size_t episode_window = 100;
+    std::string event_schema_catalog_path;
+    SchemaConfig event_schema;
 };
 
 // ---- AIServer 完整配置 ----

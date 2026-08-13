@@ -58,6 +58,8 @@ COPY configs /opt/rl/aiserver/configs
 COPY run.sh /opt/rl/aiserver/run.sh
 COPY scripts /opt/rl/aiserver/scripts
 COPY proto/manifest.json /opt/rl/identity/contracts.json
+COPY proto/manifest.json /opt/rl/aiserver/proto/manifest.json
+COPY proto/schemas /opt/rl/aiserver/proto/schemas
 COPY _deps/smoke-model /opt/rl/aiserver/models/local-test
 
 RUN ldconfig && \

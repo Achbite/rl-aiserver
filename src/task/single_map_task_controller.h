@@ -1,12 +1,13 @@
 #pragma once
 
 #include "contracts/contract_namespaces.h"
+#include "model/model_version.h"
 
 #include <cstdint>
 #include <string>
 
 struct SingleMapModelIdentity {
-    int model_version = -1;
+    ModelVersion model_version = 0;
     std::string model_checksum;
     int64_t train_updates = 0;
     int64_t trained_samples = 0;
@@ -31,7 +32,7 @@ struct SingleMapTaskSnapshot {
     bool initialized = false;
     SingleMapTaskStartupMode startup_mode =
         SingleMapTaskStartupMode::Unspecified;
-    int baseline_model_version = -1;
+    ModelVersion baseline_model_version = 0;
     std::string baseline_model_checksum;
     int64_t baseline_train_updates = 0;
     int64_t baseline_trained_samples = 0;

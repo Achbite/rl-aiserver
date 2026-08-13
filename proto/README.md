@@ -1,6 +1,6 @@
 # Maze Contract Snapshot
 
-This directory is the staging location for the selected `rl-contracts 0.10.0`
+This directory is the staging location for the selected `rl-contracts 0.11.0`
 training and Maze protocols and their generated C++ bindings. AIServer compiles
 these repository-local files directly and does not mount or discover an
 external Contracts artifact.

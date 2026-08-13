@@ -19,7 +19,7 @@ bool SameModel(const SingleMapModelIdentity& lhs,
 bool SingleMapTaskController::ValidateModel(
     const SingleMapModelIdentity& model,
     std::string& error) const {
-    if (model.model_version < 0 || model.model_checksum.size() != 64 ||
+    if (model.model_checksum.size() != 64 ||
         model.train_updates < 0 || model.trained_samples < 0) {
         error = "single-map model identity is invalid";
         return false;

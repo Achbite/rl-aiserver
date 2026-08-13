@@ -472,7 +472,8 @@ grpc::Status MazeServiceImpl::OpenSession(
     rsp->set_session_protocol_version(kSessionProtocolVersion);
     rsp->set_session_id(session_id);
     rsp->set_lifecycle_epoch(session->lifecycle_epoch);
-    FillServiceIdentity("rl-aiserver", producer_instance_id_, 1,
+    FillServiceIdentity("rl-aiserver", producer_instance_id_,
+                        producer_lifecycle_epoch_,
                         rsp->mutable_aiserver());
     auto* spec = rsp->mutable_task_spec();
     spec->mutable_identity()->CopyFrom(session->task);
@@ -752,7 +753,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
         *session = std::move(candidate);
         return grpc::Status::OK;
     }
-    if (plan.max_steps <= 0 || plan.model.model_version < 0 ||
+    if (plan.max_steps <= 0 ||
         plan.model.model_version != planned_model.model_version ||
         plan.model.model_checksum != planned_model.sha256 ||
         plan.model.train_updates != planned_model.train_updates ||
@@ -778,7 +779,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
         training_episode
             ? BehaviorPolicyScope::TrainingFragment
             : BehaviorPolicyScope::EvaluationEpisode;
-    candidate.evaluation_pinned_model_version = -1;
+    candidate.evaluation_pinned_model_version = 0;
     candidate.evaluation_pinned_model_checksum.clear();
     candidate.evaluation_pinned_model_lineage_id.clear();
     candidate.evaluation_pinned_model_manifest_digest.clear();
@@ -1255,25 +1256,11 @@ grpc::Status MazeServiceImpl::Update(
     const bool activate_staged_model =
         staged_model_waiting && CanActivateStagedModel(&candidate);
     ModelManifest candidate_behavior_model = model_manifest_;
-    OnnxInferencer::PreparedModel prepared_model;
     common::ServiceInstanceIdentity prepared_ack_authority;
     if (activate_staged_model) {
         if (!ValidateStagedModelProgress(
                 model_manifest_, staged_model_manifest_, prepare_error)) {
             MarkDegraded("staged model progress is invalid: " +
-                         prepare_error);
-            RejectCommand(*session,
-                          maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
-                          last_error_, rsp->mutable_lifecycle());
-            finish();
-            return grpc::Status::OK;
-        }
-        if (!onnx_inferencer_.PrepareModel(
-                staged_model_manifest_.model_path,
-                config_.model.expected_obs_dim,
-                config_.model.expected_action_dim, prepared_model,
-                &prepare_error)) {
-            MarkDegraded("staged model preparation failed: " +
                          prepare_error);
             RejectCommand(*session,
                           maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
@@ -1364,7 +1351,8 @@ grpc::Status MazeServiceImpl::Update(
                                static_cast<int>(state.position().x()),
                                static_cast<int>(state.position().y()),
                                static_cast<int64_t>(req->frame_id()),
-                               activate_staged_model ? &prepared_model
+                               activate_staged_model
+                                   ? &staged_prepared_model_
                                                      : nullptr,
                                candidate_behavior_model,
                                candidate_action_rng, action,
@@ -1458,16 +1446,6 @@ grpc::Status MazeServiceImpl::Update(
     bool model_ack_outcome_uncertain = false;
     if (activate_staged_model) {
         activated_manifest = staged_model_manifest_;
-        const std::string incoming_path = activated_manifest.model_path;
-        std::string previous_path;
-        if (!model_distributor_.Promote(
-                activated_manifest, previous_path, prepare_error)) {
-            sample_sender_.CancelEnqueueBatchSet(enqueue_reservation);
-            MarkDegraded("staged model promotion failed: " + prepare_error);
-            reject_prepared(last_error_);
-            finish();
-            return grpc::Status::OK;
-        }
         common::ServiceInstanceIdentity ack_authority =
             prepared_ack_authority;
         const auto ack = model_distributor_.AckIdempotently(
@@ -1477,13 +1455,6 @@ grpc::Status MazeServiceImpl::Update(
         if (ack == ModelDistributorClient::AckDisposition::Rejected ||
             ack == ModelDistributorClient::AckDisposition::NotApplied) {
             sample_sender_.CancelEnqueueBatchSet(enqueue_reservation);
-            std::string rollback_error;
-            if (!model_distributor_.RollbackPromotion(
-                    activated_manifest, incoming_path, previous_path,
-                    rollback_error)) {
-                prepare_error += "; promotion rollback failed: " +
-                                 rollback_error;
-            }
             MarkDegraded("model ACK was rejected: " + prepare_error);
             reject_prepared(last_error_);
             finish();
@@ -1494,10 +1465,12 @@ grpc::Status MazeServiceImpl::Update(
 
         // Applied and outcome-uncertain both roll forward. A lost response can
         // mean the remote already committed this deterministic ACK identity.
-        prepared_model.model_path = activated_manifest.model_path;
-        onnx_inferencer_.ActivatePreparedModel(std::move(prepared_model));
+        staged_prepared_model_.model_path = activated_manifest.model_path;
+        onnx_inferencer_.ActivatePreparedModel(
+            std::move(staged_prepared_model_));
         model_manifest_ = activated_manifest;
         staged_model_manifest_ = ModelManifest{};
+        staged_prepared_model_ = OnnxInferencer::PreparedModel{};
         ++model_switch_count_;
         if (model_ack_outcome_uncertain) {
             RecordPendingModelAck(
@@ -1561,6 +1534,12 @@ grpc::Status MazeServiceImpl::EndEpisode(
         session->last_valid_client_activity_unix_ms = NowMs();
     }
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
+    if (shutdown_started_) {
+        RejectCommand(*session, maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                      "AIServer is draining and no longer accepts EndEpisode",
+                      rsp->mutable_lifecycle());
+        return grpc::Status::OK;
+    }
     if (session->episode_state != SessionManager::EpisodeState::Active ||
         session->protocol_episode_state !=
             maze::EPISODE_STATE_TERMINAL_REPORTED ||
@@ -1590,6 +1569,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
             return grpc::Status::OK;
         }
         AgentEpisodeResult metric;
+        metric.agent_id = static_cast<uint32_t>(item.first);
         metric.episode_return = agent.episode_return;
         metric.success = agent.reached_goal;
         metric.termination_reason = agent.final_termination_reason;
@@ -1597,7 +1577,49 @@ grpc::Status MazeServiceImpl::EndEpisode(
         metric.shortest_action_steps = session->shortest_action_steps;
         metric.unique_cell_count = static_cast<int64_t>(agent.visited.size());
         metric.blocked_move_count = agent.blocked_move_count;
+        metric.attempted_move_count = agent.episode_transition_count;
+        if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING &&
+            (!agent.episode_behavior_model_seen ||
+             agent.episode_behavior_model_lineage_id.empty())) {
+            RejectCommand(*session,
+                          maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                          "training Episode has no behavior model facts",
+                          rsp->mutable_lifecycle());
+            return grpc::Status::OK;
+        }
+        metric.behavior_model_version_min =
+            agent.episode_behavior_model_version_min;
+        metric.behavior_model_version_max =
+            agent.episode_behavior_model_version_max;
+        metric.behavior_model_lineage_id =
+            agent.episode_behavior_model_lineage_id;
         metric.reward_component_sums = agent.reward_component_sums;
+        if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING) {
+            double component_total = 0.0;
+            bool component_valid = !metric.reward_component_sums.empty();
+            for (const auto& component : metric.reward_component_sums) {
+                component_valid = component_valid &&
+                    !component.first.empty() &&
+                    std::isfinite(component.second);
+                component_total += component.second;
+            }
+            const double tolerance = 1e-5 * std::max(
+                1.0, std::max(std::abs(metric.episode_return),
+                              std::abs(component_total)));
+            if (!component_valid ||
+                !std::isfinite(metric.episode_return) ||
+                std::abs(metric.episode_return - component_total) > tolerance ||
+                metric.transition_count <= 0 ||
+                metric.blocked_move_count > metric.attempted_move_count ||
+                metric.behavior_model_version_min >
+                    metric.behavior_model_version_max) {
+                RejectCommand(*session,
+                              maze::LIFECYCLE_ERROR_CODE_STATE_CONFLICT,
+                              "training Episode metric facts are inconsistent",
+                              rsp->mutable_lifecycle());
+                return grpc::Status::OK;
+            }
+        }
         metric_agents.push_back(std::move(metric));
     }
     SessionManager::Session candidate = *session;
@@ -1639,7 +1661,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
         candidate.evaluation_state = maze::EVALUATION_STATE_COMMITTED;
     }
     candidate.behavior_policy_scope = BehaviorPolicyScope::Unspecified;
-    candidate.evaluation_pinned_model_version = -1;
+    candidate.evaluation_pinned_model_version = 0;
     candidate.evaluation_pinned_model_checksum.clear();
     candidate.evaluation_pinned_model_lineage_id.clear();
     candidate.evaluation_pinned_model_manifest_digest.clear();
@@ -1647,11 +1669,36 @@ grpc::Status MazeServiceImpl::EndEpisode(
     candidate.evaluation_pinned_model_trained_samples = 0;
     CommitCommand(candidate, req->command(), *req, rsp,
                   "Episode outcome and metrics committed");
+    training::EpisodeMetricFact metric_fact;
+    if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING) {
+        metric_fact = BuildEpisodeMetricFact(*session, metric_agents);
+    }
     episode_metrics_.AddCompleted(session->current_episode_mode,
                                   std::move(metric_agents));
+    if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING) {
+        if (!metric_events_.AppendEpisode(std::move(metric_fact), NowMs())) {
+            LOG_ERROR("MazeService",
+                      "Episode metric fact rejected after source final: %s",
+                      session->current_episode_id.c_str());
+        }
+    }
     task_controller_ = std::move(candidate_task_controller);
     *session = std::move(candidate);
     task_stop_requested_ = candidate_task_stop_requested;
+    return grpc::Status::OK;
+}
+
+grpc::Status MazeServiceImpl::GetMetricBatch(
+    grpc::ServerContext*, const training::GetMetricBatchReq* req,
+    training::GetMetricBatchRsp* rsp) {
+    metric_events_.Get(*req, *rsp);
+    return grpc::Status::OK;
+}
+
+grpc::Status MazeServiceImpl::AckMetricBatch(
+    grpc::ServerContext*, const training::AckMetricBatchReq* req,
+    training::AckMetricBatchRsp* rsp) {
+    metric_events_.Ack(*req, *rsp);
     return grpc::Status::OK;
 }
 
@@ -1696,7 +1743,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     session->protocol_episode_state = maze::EPISODE_STATE_ABORTED;
     session->evaluation_state = maze::EVALUATION_STATE_INACTIVE;
     session->behavior_policy_scope = BehaviorPolicyScope::Unspecified;
-    session->evaluation_pinned_model_version = -1;
+    session->evaluation_pinned_model_version = 0;
     session->evaluation_pinned_model_checksum.clear();
     session->evaluation_pinned_model_lineage_id.clear();
     session->evaluation_pinned_model_manifest_digest.clear();
@@ -1802,7 +1849,8 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     const auto sender = sample_sender_.GetSnapshot();
     const int64_t timestamp = NowMs();
     FillContract(config_, rsp->mutable_contract());
-    FillServiceIdentity("rl-aiserver", producer_instance_id_, 1,
+    FillServiceIdentity("rl-aiserver", producer_instance_id_,
+                        producer_lifecycle_epoch_,
                         rsp->mutable_aiserver());
     rsp->set_state(state_.load());
     rsp->set_ready(IsReady());
@@ -1810,10 +1858,10 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
         config_.server.run_mode != aiserver_mode::kTraining ||
         (sender.ready && !sender.transient_retry && !sender.terminal_fault));
     rsp->set_model_state(model_state_.load());
-    if (model_manifest_.model_version >= 0) {
+    if (model_manifest_.HasModelIdentity()) {
         rsp->mutable_loaded_model()->CopyFrom(model_manifest_.wire.identity());
     }
-    if (staged_model_manifest_.model_version >= 0) {
+    if (staged_model_manifest_.HasModelIdentity()) {
         rsp->mutable_staged_model()->CopyFrom(
             staged_model_manifest_.wire.identity());
     }
@@ -1864,7 +1912,8 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     rsp->set_timestamp_unix_ms(timestamp);
 
     common::ServiceInstanceIdentity metric_source;
-    FillServiceIdentity("rl-aiserver", producer_instance_id_, 1,
+    FillServiceIdentity("rl-aiserver", producer_instance_id_,
+                        producer_lifecycle_epoch_,
                         &metric_source);
     episode_metrics_.Fill(rsp->mutable_metrics(), metric_source,
                           next_metric_sequence_.fetch_add(1), timestamp);
