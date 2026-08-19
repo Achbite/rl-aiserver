@@ -55,6 +55,8 @@ public:
     std::string GetModelPath() const;
 
 private:
+    friend struct MazeServiceUpdateTestAccess;
+
     static bool InferSession(const std::shared_ptr<Ort::Session>& session,
                              const std::vector<float>& obs,
                              int obs_dim,

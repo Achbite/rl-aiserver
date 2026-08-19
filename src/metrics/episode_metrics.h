@@ -23,8 +23,8 @@ struct AgentEpisodeResult {
     int64_t unique_cell_count = 0;
     int64_t blocked_move_count = 0;
     int64_t attempted_move_count = 0;
-    uint64_t behavior_model_version_min = 0;
-    uint64_t behavior_model_version_max = 0;
+    uint64_t minimum_behavior_model_step = 0;
+    uint64_t maximum_behavior_model_step = 0;
     std::string behavior_model_lineage_id;
     std::unordered_map<std::string, double> reward_component_sums;
 };
@@ -47,6 +47,8 @@ public:
     bool AppendEpisode(training::EpisodeMetricFact fact,
                        int64_t committed_at_unix_ms);
     void Finalize(int64_t finalized_at_unix_ms);
+    bool WaitForFinalAcknowledgement(
+        std::chrono::milliseconds timeout);
     void Get(const training::GetMetricBatchReq& request,
              training::GetMetricBatchRsp& response);
     void Ack(const training::AckMetricBatchReq& request,

@@ -16,51 +16,30 @@ void Require(bool condition, const std::string& message) {
 }  // namespace
 
 int main() {
-    Require(aiserver_mode::Parse("1") == aiserver_mode::kTraining,
-            "numeric train mode");
-    Require(aiserver_mode::Parse("train") == aiserver_mode::kTraining,
-            "train alias");
     Require(aiserver_mode::Parse("training") ==
                 aiserver_mode::kTraining,
             "training workload");
-    Require(aiserver_mode::Parse("sample-flow") == 0,
-            "removed sample-flow workload");
-    Require(aiserver_mode::Parse("2") == aiserver_mode::kLocalTest,
-            "numeric local-test mode");
-    Require(aiserver_mode::Parse("local-test") ==
-                aiserver_mode::kLocalTest,
-            "local-test alias");
-    Require(aiserver_mode::Parse("inference-smoke") ==
-                aiserver_mode::kLocalTest,
-            "inference-smoke workload");
-    Require(aiserver_mode::Parse("3") ==
-                aiserver_mode::kModelEvaluation,
-            "model-evaluation mode");
-    Require(aiserver_mode::Parse("4") == aiserver_mode::kMapValidation,
-            "map validation mode");
-    Require(aiserver_mode::Parse("map-validation") ==
-                aiserver_mode::kMapValidation,
-            "map validation workload");
-    Require(aiserver_mode::Parse("astar-test") == 0,
-            "removed astar-test workload alias");
-    Require(aiserver_mode::Parse("invalid") == 0,
-            "invalid mode");
+    Require(aiserver_mode::Parse("evaluation") ==
+                aiserver_mode::kEvaluation,
+            "evaluation workload");
     Require(std::string(aiserver_mode::Workload(
-                aiserver_mode::kLocalTest)) == "local-test",
-            "local-test canonical workload");
+                aiserver_mode::kEvaluation)) == "evaluation",
+            "evaluation canonical workload");
     Require(std::string(aiserver_mode::Workload(
                 aiserver_mode::kTraining)) == "training",
             "train canonical workload");
     Require(aiserver_mode::ExposesTrainingStatus(
                 aiserver_mode::kTraining),
             "training exposes the Learner status service");
-    for (const int mode : {
-             aiserver_mode::kLocalTest,
-             aiserver_mode::kModelEvaluation,
-             aiserver_mode::kMapValidation,
+    Require(!aiserver_mode::ExposesTrainingStatus(
+                aiserver_mode::kEvaluation),
+            "evaluation must not impersonate a training Actor");
+    for (const std::string& retired : {
+             "1", "2", "3", "4", "train", "local-test",
+             "inference-smoke", "model-evaluation", "map-validation",
          }) {
-        Require(!aiserver_mode::ExposesTrainingStatus(mode),
-                "standalone inference must not impersonate a training Actor");
+        Require(aiserver_mode::Parse(retired) == 0,
+                "retired workload must fail closed: " + retired);
     }
     return 0;
 }

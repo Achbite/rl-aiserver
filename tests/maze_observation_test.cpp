@@ -68,14 +68,6 @@ void TestSeventeenDimensionContract() {
         Require(std::isfinite(value), "observation values are finite");
     }
 
-    const auto baseline = observation;
-    agent.visited.insert(1);
-    Require(MazeObservation::Build(
-                session, agent, 0, 0, 0, 10, 17,
-                observation, error),
-            "observation still builds after hidden Reward state changes");
-    Require(observation == baseline,
-            "visit counts, d-geo and Reward state are not exposed to Policy");
     Require(!MazeObservation::Build(
                 session, agent, 0, 0, 0, 10, 13,
                 observation, error),

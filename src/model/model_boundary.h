@@ -1,6 +1,6 @@
 #pragma once
 
-#include "model/model_version.h"
+#include "model/model_step.h"
 
 #include <cstddef>
 #include <cstdint>
@@ -11,10 +11,10 @@
 // fragment boundary; otherwise a newer download can overwrite the distributor's
 // ACK eligibility before the staged identity is activated.
 inline bool ShouldFetchModelCandidate(
-    ModelVersion active_version,
-    std::optional<ModelVersion> staged_version,
-    ModelVersion latest_version) {
-    return !staged_version.has_value() && latest_version > active_version;
+    ModelStep active_step,
+    std::optional<ModelStep> staged_step,
+    ModelStep latest_step) {
+    return !staged_step.has_value() && latest_step > active_step;
 }
 inline bool ShouldFlushAgentFragment(
     std::size_t cached_samples,

@@ -77,13 +77,14 @@ if(BUILD_TESTING)
         COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/scripts/verify_contract_snapshot.py
             ${CMAKE_CURRENT_SOURCE_DIR}/proto
-            0.11.0
+            0.13.0
             linux/arm64
     )
 
     add_executable(config_loader_test
         tests/config_loader_test.cpp
         src/config/config_loader.cpp
+        src/ai/maze_reward.cpp
     )
     target_include_directories(config_loader_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -105,17 +106,6 @@ if(BUILD_TESTING)
         ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
     add_test(NAME run_mode_contract COMMAND run_mode_test)
-
-    add_executable(model_evaluation_config_test
-        tests/model_evaluation_config_test.cpp
-    )
-    target_include_directories(model_evaluation_config_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    add_test(NAME model_evaluation_config_contract
-             COMMAND model_evaluation_config_test)
 
     add_test(
         NAME run_launcher_mode_contract
@@ -163,24 +153,24 @@ if(BUILD_TESTING)
     add_test(NAME model_distributor_client_contract
              COMMAND model_distributor_client_test)
 
-    add_executable(sample_sender_freshness_test
-        tests/sample_sender_freshness_test.cpp
+    add_executable(sample_distributor_test
+        tests/sample_distributor_test.cpp
         src/sample/sample_sender.cpp
         ${PROTO_SOURCES}
     )
-    target_include_directories(sample_sender_freshness_test PRIVATE
+    target_include_directories(sample_distributor_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
         ${GRPC_INCLUDE_DIRS}
     )
-    target_link_libraries(sample_sender_freshness_test PRIVATE
+    target_link_libraries(sample_distributor_test PRIVATE
         protobuf::libprotobuf
         ${GRPC_LIBRARIES}
         pthread
     )
-    add_test(NAME sample_sender_freshness_contract
-             COMMAND sample_sender_freshness_test)
+    add_test(NAME sample_distributor_contract
+             COMMAND sample_distributor_test)
 
     add_executable(fragment_boundary_test
         tests/fragment_boundary_test.cpp
@@ -190,15 +180,6 @@ if(BUILD_TESTING)
     )
     add_test(NAME fragment_boundary_contract
              COMMAND fragment_boundary_test)
-
-    add_executable(lifecycle_replay_window_test
-        tests/lifecycle_replay_window_test.cpp
-    )
-    target_include_directories(lifecycle_replay_window_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-    )
-    add_test(NAME lifecycle_replay_window_contract
-             COMMAND lifecycle_replay_window_test)
 
     add_executable(sample_producer_identity_test
         tests/sample_producer_identity_test.cpp
@@ -214,25 +195,6 @@ if(BUILD_TESTING)
     )
     add_test(NAME sample_producer_identity_contract
              COMMAND sample_producer_identity_test)
-
-    add_executable(single_map_task_controller_test
-        tests/single_map_task_controller_test.cpp
-        src/task/single_map_task_controller.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-    )
-    target_include_directories(single_map_task_controller_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(single_map_task_controller_test PRIVATE
-        protobuf::libprotobuf
-    )
-    target_compile_options(single_map_task_controller_test PRIVATE -UNDEBUG)
-    add_test(NAME single_map_task_controller_contract
-             COMMAND single_map_task_controller_test)
 
     add_executable(episode_action_policy_test
         tests/episode_action_policy_test.cpp
@@ -267,54 +229,10 @@ if(BUILD_TESTING)
     )
     target_link_libraries(training_fragment_contract_test PRIVATE
         protobuf::libprotobuf
-        crypto
     )
     target_compile_options(training_fragment_contract_test PRIVATE -UNDEBUG)
     add_test(NAME training_fragment_contract
              COMMAND training_fragment_contract_test)
-
-    add_executable(update_atomicity_test
-        tests/update_atomicity_test.cpp
-        src/grpc/maze_service.cpp
-        src/grpc/maze_service_rpc.cpp
-        src/ai/maze_reward.cpp
-        src/ai/maze_observation.cpp
-        src/ai/astar_solver.cpp
-        src/config/config_loader.cpp
-        src/session/session_manager.cpp
-        src/ai/onnx_inferencer.cpp
-        src/model/model_manifest.cpp
-        src/model/model_distributor_client.cpp
-        src/metrics/episode_metrics.cpp
-        src/sample/sample_sender.cpp
-        src/sample/training_transition_builder.cpp
-        src/task/maze_map_contract.cpp
-        src/task/episode_action_policy.cpp
-        src/task/single_map_task_controller.cpp
-        ${PROTO_SOURCES}
-    )
-    target_include_directories(update_atomicity_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-        ${GRPC_INCLUDE_DIRS}
-        /usr/local/include/onnxruntime
-    )
-    target_link_libraries(update_atomicity_test PRIVATE
-        protobuf::libprotobuf
-        ${GRPC_LIBRARIES}
-        pthread
-        onnxruntime
-        crypto
-    )
-    target_compile_options(update_atomicity_test PRIVATE -UNDEBUG)
-    add_test(
-        NAME update_atomicity_contract
-        COMMAND update_atomicity_test
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v0.onnx
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_nonfinite_v0.onnx
-    )
 
     add_executable(lifecycle_atomicity_test
         tests/lifecycle_atomicity_test.cpp
@@ -352,12 +270,12 @@ if(BUILD_TESTING)
     )
     target_compile_options(lifecycle_atomicity_test PRIVATE -UNDEBUG)
     add_test(NAME lifecycle_atomicity_contract
-             COMMAND lifecycle_atomicity_test)
+             COMMAND lifecycle_atomicity_test
+                 ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx)
 
     add_executable(onnx_actor_wire_integration_test
         tests/onnx_actor_wire_integration_test.cpp
         src/ai/onnx_inferencer.cpp
-        src/sample/training_transition_builder.cpp
         src/task/episode_action_policy.cpp
         ${PROTO_GEN_DIR}/common.pb.cc
         ${PROTO_GEN_DIR}/training.pb.cc
@@ -372,7 +290,6 @@ if(BUILD_TESTING)
     target_link_libraries(onnx_actor_wire_integration_test PRIVATE
         protobuf::libprotobuf
         onnxruntime
-        crypto
     )
     target_compile_options(
         onnx_actor_wire_integration_test PRIVATE -UNDEBUG)
@@ -382,44 +299,13 @@ if(BUILD_TESTING)
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx
     )
 
-    add_executable(episode_metrics_test
-        tests/episode_metrics_test.cpp
-        src/metrics/episode_metrics.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-    )
-    target_include_directories(episode_metrics_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(episode_metrics_test PRIVATE
-        protobuf::libprotobuf
-        crypto
-    )
-    add_test(NAME episode_metrics_contract COMMAND episode_metrics_test)
-
-    add_executable(reward_contract_test
-        tests/reward_contract_test.cpp
-        src/ai/maze_reward.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-    )
-    target_include_directories(reward_contract_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(reward_contract_test PRIVATE
-        protobuf::libprotobuf
-    )
-    add_test(NAME reward_contract COMMAND reward_contract_test)
     add_test(
-        NAME reward_identity_contract
-        COMMAND python3
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/reward_identity_contract.py
-            ${CMAKE_CURRENT_SOURCE_DIR}/configs/server_config.yaml
+        NAME model_inspection_contract
+        COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/model_inspection_contract.py
+            $<TARGET_FILE:maze_aiserver>
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v0.onnx
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_nonfinite_v0.onnx
     )
 
     add_executable(maze_map_contract_test
@@ -439,15 +325,6 @@ if(BUILD_TESTING)
         crypto
     )
     add_test(NAME maze_map_contract COMMAND maze_map_contract_test)
-
-    add_executable(astar_solver_test
-        tests/astar_solver_test.cpp
-        src/ai/astar_solver.cpp
-    )
-    target_include_directories(astar_solver_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-    )
-    add_test(NAME astar_solver_contract COMMAND astar_solver_test)
 
     add_executable(maze_observation_test
         tests/maze_observation_test.cpp

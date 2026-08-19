@@ -20,6 +20,7 @@
 #include <functional>
 #include <mutex>
 #include <random>
+#include <set>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -82,12 +83,14 @@ private:
     friend struct MazeServiceLifecycleTestAccess;
 
     bool LoadInitialModel();
+    bool AcquireTrainingWorkspaceLease(std::string& error);
+    bool ReleaseTrainingWorkspaceLease(std::string& error);
     bool LoadAndPrepareCachedModel(
         const ModelManifest& manifest,
         OnnxInferencer::PreparedModel& prepared,
         std::string& error);
     bool FetchPrepareAndPublishModel(
-        ModelVersion model_version,
+        ModelStep model_step,
         ModelManifest& manifest,
         OnnxInferencer::PreparedModel& prepared,
         std::string& error,
@@ -95,6 +98,7 @@ private:
     bool BackfillOneCachedModel(
         const ModelDistributorClient::AvailableRange& range,
         std::string& error);
+    std::set<ModelStep> ProtectedCachedModelStepsLocked();
     bool IsCoreInferenceReady() const;
     void StartModelWatcher();
     void StopModelWatcher();
@@ -132,7 +136,7 @@ private:
                                    maze::MazeTerminationReason reason,
                                    bool collect_training_sample,
                                    int64_t& produced_unique_samples,
-                                   std::unordered_map<ModelVersion, int64_t>&
+                                   std::unordered_map<ModelStep, int64_t>&
                                        produced_samples_by_model,
                                    std::string& error);
     bool InferStateValue(const SessionManager::Session& session,
@@ -197,7 +201,6 @@ private:
     int64_t CountCachedFragments();
     int64_t EstimateCachedBytes();
     void RecordUpdateLatency(std::chrono::steady_clock::time_point start);
-    bool ReconcileDiscardedTrainingSamples();
     void MarkDegraded(const std::string& error);
     SingleMapModelIdentity ActiveModelIdentity() const;
     bool WriteTaskControllerReceipt(
@@ -212,7 +215,7 @@ private:
     mutable std::mutex mutex_;
     std::string producer_instance_id_;
     uint64_t producer_lifecycle_epoch_ = 0;
-    SampleSender sample_sender_;
+    SampleDistributor sample_distributor_;
     EpisodeMetricsWindow episode_metrics_;
     OnnxInferencer onnx_inferencer_;
     ModelDistributorClient model_distributor_;
@@ -224,6 +227,8 @@ private:
     common::ServiceInstanceIdentity pending_model_ack_authority_;
     std::string pending_model_ack_error_;
     std::string pending_model_ack_cause_;
+    std::string training_workspace_lock_path_;
+    bool training_workspace_lease_held_ = false;
 
     std::atomic<training::AIServerState> state_{training::AISERVER_STATE_STARTING};
     std::atomic<training::ModelState> model_state_{training::MODEL_STATE_WAITING};
@@ -248,13 +253,7 @@ private:
     bool task_stop_requested_ = false;
 
     int64_t produced_unique_samples_ = 0;
-    std::unordered_map<ModelVersion, int64_t> produced_samples_by_model_;
-    int64_t reconciled_producer_stale_samples_ = 0;
-    std::unordered_map<ModelVersion, int64_t>
-        reconciled_producer_stale_samples_by_model_;
-    int64_t reconciled_pool_stale_samples_ = 0;
-    std::unordered_map<ModelVersion, int64_t>
-        reconciled_pool_stale_samples_by_model_;
+    std::unordered_map<ModelStep, int64_t> produced_samples_by_model_;
     int current_fragment_samples_ = 0;
     int64_t produced_unique_batches_ = 0;
     int64_t enqueue_count_ = 0;
@@ -269,8 +268,6 @@ private:
     int64_t model_switch_count_ = 0;
     int64_t latest_episode_step_ = 0;
     int64_t current_episode_max_steps_ = 0;
-    maze::CurriculumStage current_curriculum_stage_ =
-        maze::CURRICULUM_STAGE_UNSPECIFIED;
     int64_t quarantined_sample_count_ = 0;
     int64_t quarantined_fragment_count_ = 0;
     std::string last_error_;

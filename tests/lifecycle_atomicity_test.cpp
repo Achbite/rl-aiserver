@@ -2,28 +2,21 @@
 
 #include "task/maze_map_contract.h"
 
-#include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <string>
 
 struct MazeServiceUpdateTestAccess {
-    static void SetRuntimeReady(MazeServiceImpl& service, bool degraded) {
+    static void SetRuntimeReady(MazeServiceImpl& service) {
         service.state_.store(training::AISERVER_STATE_READY);
         service.model_state_.store(training::MODEL_STATE_READY);
-        std::lock_guard<std::mutex> lock(service.sample_sender_.mutex_);
-        service.sample_sender_.accepting_ = true;
-        service.sample_sender_.ready_ = true;
-        service.sample_sender_.degraded_ = degraded;
-        service.sample_sender_.delivery_state_ =
-            degraded
-                ? SampleSender::DeliveryState::kTerminalFault
-                : SampleSender::DeliveryState::kHealthy;
-        service.sample_sender_.transient_retry_after_ms_ = 0;
-    }
-
-    static bool SenderDegraded(const MazeServiceImpl& service) {
-        return service.sample_sender_.IsDegraded();
+        std::lock_guard<std::mutex> lock(service.sample_distributor_.mutex_);
+        service.sample_distributor_.accepting_ = true;
+        service.sample_distributor_.ready_ = true;
+        service.sample_distributor_.degraded_ = false;
+        service.sample_distributor_.delivery_state_ =
+            SampleDistributor::DeliveryState::kHealthy;
+        service.sample_distributor_.transient_retry_after_ms_ = 0;
     }
 };
 
@@ -33,20 +26,16 @@ struct MazeServiceLifecycleTestAccess {
         return service.session_mgr_.GetSession(id);
     }
 
-    static void SetModel(MazeServiceImpl& service,
-                         int version,
-                         int64_t train_updates,
-                         int64_t trained_samples) {
-        service.model_manifest_.model_version = version;
-        service.model_manifest_.sha256 =
-            std::string(64, static_cast<char>('a' + version % 6));
-        service.model_manifest_.model_lineage_id = "lifecycle-atomicity";
+    static void SetBootstrapModel(MazeServiceImpl& service) {
+        service.model_manifest_.model_step = 0;
+        service.model_manifest_.sha256 = std::string(64, 'a');
+        service.model_manifest_.model_lineage_id = "lifecycle-session";
         service.model_manifest_.manifest_digest = std::string(64, 'f');
-        service.model_manifest_.train_updates = train_updates;
-        service.model_manifest_.trained_samples = trained_samples;
+        service.model_manifest_.train_updates = 0;
+        service.model_manifest_.trained_samples = 0;
         auto* identity = service.model_manifest_.wire.mutable_identity();
-        identity->set_model_lineage_id("lifecycle-atomicity");
-        identity->set_model_version(static_cast<uint64_t>(version));
+        identity->set_model_lineage_id("lifecycle-session");
+        identity->set_model_step(0);
         identity->mutable_artifact_digest()->set_algorithm(
             common::DIGEST_ALGORITHM_SHA256);
         identity->mutable_artifact_digest()->set_hex(
@@ -55,35 +44,16 @@ struct MazeServiceLifecycleTestAccess {
             common::DIGEST_ALGORITHM_SHA256);
         identity->mutable_manifest_digest()->set_hex(
             service.model_manifest_.manifest_digest);
-        service.model_manifest_.wire.set_train_updates(train_updates);
-        service.model_manifest_.wire.set_trained_samples(trained_samples);
+        service.model_manifest_.wire.set_train_updates(0);
+        service.model_manifest_.wire.set_trained_samples(0);
     }
 
-    static void SetModel(MazeServiceImpl& service,
-                         int version,
-                         int64_t trained_samples) {
-        SetModel(service, version, version, trained_samples);
-    }
-
-    static void InstallReceiptWriter(MazeServiceImpl& service,
-                                     bool& fail,
-                                     int& calls,
-                                     std::string& published) {
+    static void InstallReceiptWriter(MazeServiceImpl& service, int& calls) {
         service.task_controller_receipt_writer_ =
-            [&](const SingleMapTaskController& candidate,
-                std::string& error) {
+            [&](const SingleMapTaskController&, std::string&) {
                 ++calls;
-                if (fail) {
-                    error = "injected task receipt write failure";
-                    return false;
-                }
-                published = candidate.ToJson();
                 return true;
             };
-    }
-
-    static std::string ControllerJson(const MazeServiceImpl& service) {
-        return service.task_controller_.ToJson();
     }
 
     static SingleMapTaskSnapshot ControllerSnapshot(
@@ -91,72 +61,45 @@ struct MazeServiceLifecycleTestAccess {
         return service.task_controller_.GetSnapshot();
     }
 
-    static bool ClientInitialized(const MazeServiceImpl& service) {
-        return service.client_initialized_;
+    static bool LoadActor(MazeServiceImpl& service,
+                          const std::string& model_path,
+                          std::string& error) {
+        return service.onnx_inferencer_.LoadModel(
+            model_path, service.config_.model.expected_obs_dim,
+            service.config_.model.expected_action_dim, &error);
     }
 
-    static bool TaskStopRequested(const MazeServiceImpl& service) {
-        return service.task_stop_requested_;
-    }
-
-    static void SetModelAckPending(MazeServiceImpl& service, bool pending) {
-        service.model_ack_pending_ = pending;
-    }
-
-    static bool ModelAckPending(const MazeServiceImpl& service) {
-        return service.model_ack_pending_;
-    }
-
-    static void SetClientActivity(SessionManager::Session& session,
-                                  int64_t timestamp_unix_ms) {
-        session.last_valid_client_activity_unix_ms = timestamp_unix_ms;
-    }
-
-    static int ActiveSessionCount(const MazeServiceImpl& service) {
-        return service.session_mgr_.GetActiveSessionCount();
-    }
-
-    static std::string LastError(const MazeServiceImpl& service) {
-        return service.last_error_;
-    }
-
-    static training::AIServerState ServiceState(
-        const MazeServiceImpl& service) {
-        return service.state_.load();
-    }
-
-    static uint64_t CompletedAgentCount(const MazeServiceImpl& service) {
-        training::MetricSnapshot snapshot;
-        common::ServiceInstanceIdentity source;
-        source.set_component("rl-aiserver");
-        source.set_instance_id("lifecycle-test");
-        source.set_lifecycle_epoch(1);
-        service.episode_metrics_.Fill(&snapshot, source, 1, 1);
-        for (const auto& value : snapshot.values()) {
-            if (value.field_id() ==
-                "server.episode.learning_return.mean.v1") {
-                return value.count();
-            }
-        }
-        return 0;
-    }
-
-    static const common::ServiceInstanceIdentity& MetricSource(
-        const MazeServiceImpl& service) {
-        return service.metric_events_.source();
-    }
-
-    static void FinalizeMetricEvents(MazeServiceImpl& service) {
-        service.metric_events_.Finalize(1000);
-    }
-
-    static void GetMetricBatch(
+    static void UseEvaluationUpdateScope(
         MazeServiceImpl& service,
-        const training::GetMetricBatchReq& request,
-        training::GetMetricBatchRsp& response) {
-        service.metric_events_.Get(request, response);
+        SessionManager::Session& session) {
+        session.current_episode_mode = maze::EPISODE_MODE_EVALUATION;
+        session.behavior_policy_scope = BehaviorPolicyScope::EvaluationEpisode;
+        session.evaluation_pinned_model_checksum =
+            service.model_manifest_.sha256;
     }
 
+    static void SetPendingActionZero(SessionManager::Session& session,
+                                     int agent_id,
+                                     int gx,
+                                     int gy) {
+        auto& agent = session.agents.at(agent_id);
+        agent.has_pending_action = true;
+        agent.pending_action = 0;
+        agent.last_action = 0;
+        agent.prev_grid_x = gx;
+        agent.prev_grid_y = gy;
+        agent.observation_grid_x = gx;
+        agent.observation_grid_y = gy;
+    }
+
+    static void SetGoal(SessionManager::Session& session, int gx, int gy) {
+        session.end_gx = gx;
+        session.end_gy = gy;
+    }
+
+    static int64_t ProducedSamples(const MazeServiceImpl& service) {
+        return service.produced_unique_samples_;
+    }
 };
 
 namespace {
@@ -187,8 +130,7 @@ maze::MapDescriptor MapDescriptor() {
         common::DIGEST_ALGORITHM_SHA256);
     map.mutable_canonical_digest()->set_hex(
         CanonicalMazeMapChecksum(map, error));
-    Require(error.empty() && map.canonical_digest().hex().size() == 64,
-            "fixture map digest is valid");
+    Require(error.empty(), "fixture map identity is valid");
     return map;
 }
 
@@ -197,15 +139,14 @@ AIServerConfig Config(const maze::MapDescriptor& map) {
     config.server.run_mode = aiserver_mode::kTraining;
     config.task.agent_num = 2;
     config.task.fixed_map_id = map.map_id();
-    config.task.fixed_map_checksum_sha256 =
-        map.canonical_digest().hex();
+    config.task.fixed_map_checksum_sha256 = map.canonical_digest().hex();
     config.task.action_rule_id = map.action_rule_id();
     config.task.shortest_action_steps =
         static_cast<int>(map.shortest_action_steps());
-    config.sample_output.fragment_samples = 1;
+    config.sample_distributor.fragment_samples = 1;
     config.metrics.episode_window = 8;
     config.metrics.event_schema = {
-        "maze.metrics.v2", 2,
+        "maze.metrics.v3", 3,
         {"sha256",
          "34622334da8d4aec593ad231eb0e7cf4465fdee0cbfa13a9ea0e6f864797df73"}};
     return config;
@@ -214,7 +155,6 @@ AIServerConfig Config(const maze::MapDescriptor& map) {
 void SetTaskIdentity(SessionManager::Session& session,
                      const AIServerConfig& config) {
     session.task.set_task_contract_id(config.task.task_contract_id);
-    session.task.set_task_id(config.task.task_id);
     session.task.set_task_revision(config.task.task_revision);
     session.task.mutable_task_config_digest()->set_algorithm(
         common::DIGEST_ALGORITHM_SHA256);
@@ -229,285 +169,72 @@ void FillCommand(const SessionManager::Session& session,
     command->mutable_task()->CopyFrom(session.task);
     command->set_session_id(session.session_id);
     command->set_episode_id(session.current_episode_id);
-    command->set_evaluation_id(session.current_evaluation_id);
     command->set_lifecycle_epoch(session.lifecycle_epoch);
     command->set_command_sequence(sequence);
     command->set_idempotency_key(key);
     command->set_expected_task_state(session.task_state);
     command->set_expected_session_state(session.session_state);
     command->set_expected_episode_state(session.protocol_episode_state);
-    command->set_expected_evaluation_state(session.evaluation_state);
 }
 
-void ConfigureInitSession(SessionManager::Session& session,
-                          const AIServerConfig& config) {
-    session.lifecycle_epoch = 7;
-    SetTaskIdentity(session, config);
-    session.map_id = config.task.fixed_map_id;
-    session.opened = true;
-    session.initialized = false;
-    session.task_state = maze::TASK_STATE_INITIALIZING;
-    session.session_state = maze::SESSION_STATE_OPENED;
-    session.protocol_episode_state = maze::EPISODE_STATE_UNSPECIFIED;
-    session.evaluation_state = maze::EVALUATION_STATE_INACTIVE;
-}
-
-void ConfigureTrainingEndSession(SessionManager::Session& session,
-                                 const AIServerConfig& config) {
-    session.lifecycle_epoch = 11;
-    SetTaskIdentity(session, config);
-    session.opened = true;
-    session.initialized = true;
-    session.task_state = maze::TASK_STATE_TRAINING;
-    session.session_state = maze::SESSION_STATE_EPISODE_ACTIVE;
-    session.protocol_episode_state = maze::EPISODE_STATE_TERMINAL_REPORTED;
-    session.evaluation_state = maze::EVALUATION_STATE_INACTIVE;
-    session.episode_state = SessionManager::EpisodeState::Active;
-    session.current_episode_id = "training-episode-1";
-    session.current_evaluation_id.clear();
-    session.current_episode_mode = maze::EPISODE_MODE_TRAINING;
-    session.behavior_policy_scope = BehaviorPolicyScope::TrainingFragment;
-    session.shortest_action_steps = 2;
-    for (int agent_id = 0; agent_id < 2; ++agent_id) {
-        SessionManager::AgentRuntime agent;
-        agent.done_collected = true;
-        agent.reached_goal = true;
-        agent.final_termination_reason =
-            maze::MAZE_TERMINATION_REASON_GOAL_REACHED;
-        agent.episode_return = 10.0;
-        agent.episode_transition_count = 2;
-        agent.episode_behavior_model_seen = true;
-        agent.episode_behavior_model_version_min = 3;
-        agent.episode_behavior_model_version_max = 5;
-        agent.episode_behavior_model_lineage_id = "lifecycle-atomicity";
-        agent.visited.insert(0);
-        agent.visited.insert(1);
-        agent.reward_component_sums["goal"] = 10.0;
-        session.agents.emplace(agent_id, std::move(agent));
+maze::AgentState* AddAgentState(maze::UpdateReq* request,
+                                std::uint32_t agent_id,
+                                int gx,
+                                int gy,
+                                bool done,
+                                maze::MazeTerminationReason reason,
+                                int executed_action = -1) {
+    auto* state = request->add_agents();
+    state->set_agent_id(agent_id);
+    state->mutable_position()->set_x(static_cast<float>(gx));
+    state->mutable_position()->set_y(static_cast<float>(gy));
+    state->set_is_done(done);
+    state->set_termination_reason(reason);
+    state->set_last_move_blocked(false);
+    if (executed_action >= 0) {
+        state->set_executed_action_id(executed_action);
     }
+    return state;
 }
 
-void TestInitReadinessFailureHasNoCandidateSideEffects() {
+void RequireRejected(const maze::UpdateRsp& response,
+                     const std::string& message) {
+    Require(response.lifecycle().result() ==
+                maze::LIFECYCLE_RESULT_REJECTED &&
+                response.lifecycle().ret_code() != 0,
+            message);
+}
+
+}  // namespace
+
+int main(int argc, char** argv) {
+    Require(argc == 2,
+            "usage: lifecycle_atomicity_test MODEL");
     const auto map = MapDescriptor();
     const auto config = Config(map);
-    bool fail_receipt = false;
+    MazeServiceImpl service(config);
+    MazeServiceLifecycleTestAccess::SetBootstrapModel(service);
+    MazeServiceUpdateTestAccess::SetRuntimeReady(service);
+    std::string model_error;
+    Require(MazeServiceLifecycleTestAccess::LoadActor(
+                service, argv[1], model_error),
+            "lifecycle Update loads the real ONNX actor: " + model_error);
     int receipt_calls = 0;
-    std::string published_receipt;
-    MazeServiceImpl service(config);
-    MazeServiceLifecycleTestAccess::SetModel(service, 0, 0);
-    MazeServiceUpdateTestAccess::SetRuntimeReady(service, false);
     MazeServiceLifecycleTestAccess::InstallReceiptWriter(
-        service, fail_receipt, receipt_calls, published_receipt);
-    auto* session = MazeServiceLifecycleTestAccess::AddSession(service);
-    Require(session != nullptr, "readiness fixture session allocated");
-    ConfigureInitSession(*session, config);
-    const std::string controller_before =
-        MazeServiceLifecycleTestAccess::ControllerJson(service);
-    maze::InitReq request;
-    FillCommand(*session, 1, "init-readiness", request.mutable_command());
-    request.mutable_map()->CopyFrom(map);
-
-    MazeServiceLifecycleTestAccess::SetModelAckPending(service, true);
-    maze::InitRsp pending;
-    service.Init(nullptr, &request, &pending);
-    Require(pending.lifecycle().result() == maze::LIFECYCLE_RESULT_REJECTED &&
-                receipt_calls == 0 && !session->initialized &&
-                session->agents.empty() &&
-                session->last_command_sequence == 0 &&
-                !session->command_replay.present() &&
-                MazeServiceLifecycleTestAccess::ModelAckPending(service) &&
-                MazeServiceLifecycleTestAccess::ControllerJson(service) ==
-                    controller_before,
-            "model ACK pending rejects Init before candidate receipt or commit");
-
-    MazeServiceLifecycleTestAccess::SetModelAckPending(service, false);
-    MazeServiceUpdateTestAccess::SetRuntimeReady(service, true);
-    maze::InitRsp degraded;
-    service.Init(nullptr, &request, &degraded);
-    Require(degraded.lifecycle().result() == maze::LIFECYCLE_RESULT_REJECTED &&
-                receipt_calls == 0 && !session->initialized &&
-                session->map_checksum_sha256.empty() &&
-                session->last_command_sequence == 0 &&
-                !session->command_replay.present() &&
-                MazeServiceUpdateTestAccess::SenderDegraded(service) &&
-                MazeServiceLifecycleTestAccess::ControllerJson(service) ==
-                    controller_before,
-            "degraded sender rejects Init before candidate receipt or commit");
-
-    MazeServiceUpdateTestAccess::SetRuntimeReady(service, false);
-    maze::InitRsp applied;
-    service.Init(nullptr, &request, &applied);
-    Require(applied.lifecycle().result() == maze::LIFECYCLE_RESULT_APPLIED &&
-                receipt_calls == 1 && session->initialized &&
-                session->last_command_sequence == 1 &&
-                session->command_replay.present(),
-            "same Init command applies once readiness is restored");
-}
-
-void TestInitReceiptFailureIsRetryableAndAtomic() {
-    const auto map = MapDescriptor();
-    const auto config = Config(map);
-    bool fail_receipt = true;
-    int receipt_calls = 0;
-    std::string published_receipt;
-    MazeServiceImpl service(config);
-    MazeServiceLifecycleTestAccess::SetModel(service, 0, 0);
-    MazeServiceUpdateTestAccess::SetRuntimeReady(service, false);
-    MazeServiceLifecycleTestAccess::InstallReceiptWriter(
-        service, fail_receipt, receipt_calls, published_receipt);
-    auto* session = MazeServiceLifecycleTestAccess::AddSession(service);
-    Require(session != nullptr, "Init fixture session allocated");
-    ConfigureInitSession(*session, config);
-
-    const std::string controller_before =
-        MazeServiceLifecycleTestAccess::ControllerJson(service);
-    const auto state_before =
-        MazeServiceLifecycleTestAccess::ServiceState(service);
-    maze::InitReq request;
-    FillCommand(*session, 1, "init-atomic", request.mutable_command());
-    request.mutable_map()->CopyFrom(map);
-
-    maze::InitRsp failed;
-    service.Init(nullptr, &request, &failed);
-    Require(failed.lifecycle().result() == maze::LIFECYCLE_RESULT_REJECTED,
-            "receipt failure rejects Init");
-    Require(receipt_calls == 1, "failed Init attempted one receipt");
-    Require(!session->initialized && session->agents.empty() &&
-                session->map_checksum_sha256.empty() &&
-                session->blocked.empty() &&
-                session->geodesic_distance.empty(),
-            "failed Init exposes no candidate map or Agent state");
-    Require(session->last_command_sequence == 0 &&
-                !session->command_replay.present(),
-            "failed Init does not advance command replay");
-    Require(session->task_state == maze::TASK_STATE_INITIALIZING &&
-                session->session_state == maze::SESSION_STATE_OPENED,
-            "failed Init preserves lifecycle state");
-    Require(MazeServiceLifecycleTestAccess::ControllerJson(service) ==
-                controller_before &&
-                !MazeServiceLifecycleTestAccess::ClientInitialized(service),
-            "failed Init preserves controller and global init state");
-    Require(MazeServiceLifecycleTestAccess::CompletedAgentCount(service) == 0 &&
-                MazeServiceLifecycleTestAccess::LastError(service).empty() &&
-                MazeServiceLifecycleTestAccess::ServiceState(service) ==
-                    state_before,
-            "failed Init preserves metrics and service health state");
-
-    fail_receipt = false;
-    maze::InitRsp applied;
-    service.Init(nullptr, &request, &applied);
-    Require(applied.lifecycle().result() == maze::LIFECYCLE_RESULT_APPLIED,
-            "same Init command applies after receipt recovery");
-    Require(receipt_calls == 2 && session->initialized &&
-                session->agents.size() == 2 &&
-                session->last_command_sequence == 1 &&
-                session->command_replay.present(),
-            "successful Init commits map, Agents, and replay once");
-    Require(MazeServiceLifecycleTestAccess::ClientInitialized(service) &&
-                published_receipt ==
-                    MazeServiceLifecycleTestAccess::ControllerJson(service),
-            "successful Init publishes and commits the same controller");
-
-    const std::string controller_after =
-        MazeServiceLifecycleTestAccess::ControllerJson(service);
-    maze::InitRsp replayed;
-    service.Init(nullptr, &request, &replayed);
-    Require(replayed.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_ALREADY_APPLIED &&
-                receipt_calls == 2 &&
-                MazeServiceLifecycleTestAccess::ControllerJson(service) ==
-                    controller_after &&
-                session->last_command_sequence == 1,
-            "replayed Init does not repeat receipt or state commit");
-}
-
-void TestRejectedInitCanCloseOpenedSession() {
-    const auto map = MapDescriptor();
-    const auto config = Config(map);
-    MazeServiceImpl service(config);
-    MazeServiceLifecycleTestAccess::SetModel(service, 0, 0);
-    MazeServiceUpdateTestAccess::SetRuntimeReady(service, false);
+        service, receipt_calls);
 
     auto* session = MazeServiceLifecycleTestAccess::AddSession(service);
-    Require(session != nullptr, "Init-close fixture session allocated");
-    ConfigureInitSession(*session, config);
+    Require(session != nullptr, "session is allocated");
+    session->lifecycle_epoch = 7;
+    SetTaskIdentity(*session, config);
+    session->map_id = config.task.fixed_map_id;
+    session->opened = true;
+    session->task_state = maze::TASK_STATE_INITIALIZING;
+    session->session_state = maze::SESSION_STATE_OPENED;
+    session->protocol_episode_state = maze::EPISODE_STATE_UNSPECIFIED;
 
     maze::InitReq init_request;
-    FillCommand(*session, 1, "init-conclusive-rejection",
-                init_request.mutable_command());
-    init_request.mutable_map()->CopyFrom(map);
-    init_request.mutable_map()->set_map_id("wrong-map-identity");
-    maze::InitRsp init_response;
-    service.Init(nullptr, &init_request, &init_response);
-    Require(init_response.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_REJECTED &&
-                init_response.lifecycle().error_code() ==
-                    maze::LIFECYCLE_ERROR_CODE_MAP_INVALID &&
-                session->session_state == maze::SESSION_STATE_OPENED &&
-                session->episode_state == SessionManager::EpisodeState::None &&
-                session->last_command_sequence == 0 &&
-                !session->command_replay.present(),
-            "conclusive Init rejection preserves an uncommitted OPENED "
-            "session");
-
-    maze::CloseSessionReq close_request;
-    FillCommand(*session, 1, "close-after-init-rejection",
-                close_request.mutable_command());
-    maze::CloseSessionRsp close_response;
-    service.CloseSession(nullptr, &close_request, &close_response);
-    Require(close_response.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_APPLIED &&
-                session->session_state == maze::SESSION_STATE_CLOSED &&
-                session->task_state == maze::TASK_STATE_STOPPED &&
-                !session->opened && session->last_command_sequence == 1 &&
-                session->command_replay.present(),
-            "OPENED session closes with the unconsumed Init sequence");
-
-    maze::CloseSessionRsp replayed;
-    service.CloseSession(nullptr, &close_request, &replayed);
-    Require(replayed.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_ALREADY_APPLIED &&
-                session->last_command_sequence == 1,
-            "CloseSession replay remains idempotent after Init rejection");
-
-    auto* active = MazeServiceLifecycleTestAccess::AddSession(service);
-    Require(active != nullptr, "active close fixture session allocated");
-    ConfigureTrainingEndSession(*active, config);
-    maze::CloseSessionReq active_close_request;
-    FillCommand(*active, 1, "close-active-episode",
-                active_close_request.mutable_command());
-    maze::CloseSessionRsp active_close_response;
-    service.CloseSession(
-        nullptr, &active_close_request, &active_close_response);
-    Require(active_close_response.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_REJECTED &&
-                active->session_state ==
-                    maze::SESSION_STATE_EPISODE_ACTIVE &&
-                active->episode_state ==
-                    SessionManager::EpisodeState::Active &&
-                active->last_command_sequence == 0 &&
-                !active->command_replay.present(),
-            "active Episode remains fail-closed for Session cleanup");
-}
-
-void TestResumeInitAndBeginUseCheckpointBaseline() {
-    const auto map = MapDescriptor();
-    auto config = Config(map);
-    bool fail_receipt = false;
-    int receipt_calls = 0;
-    std::string published_receipt;
-    MazeServiceImpl service(config);
-    MazeServiceLifecycleTestAccess::SetModel(
-        service, 201, 200, 10000);
-    MazeServiceUpdateTestAccess::SetRuntimeReady(service, false);
-    MazeServiceLifecycleTestAccess::InstallReceiptWriter(
-        service, fail_receipt, receipt_calls, published_receipt);
-    auto* session = MazeServiceLifecycleTestAccess::AddSession(service);
-    Require(session != nullptr, "resume fixture session allocated");
-    ConfigureInitSession(*session, config);
-
-    maze::InitReq init_request;
-    FillCommand(*session, 1, "resume-init", init_request.mutable_command());
+    FillCommand(*session, 1, "init", init_request.mutable_command());
     init_request.mutable_map()->CopyFrom(map);
     maze::InitRsp init_response;
     service.Init(nullptr, &init_request, &init_response);
@@ -516,210 +243,234 @@ void TestResumeInitAndBeginUseCheckpointBaseline() {
     Require(init_response.lifecycle().result() ==
                 maze::LIFECYCLE_RESULT_APPLIED &&
                 receipt_calls == 1 && session->initialized &&
-                initialized.startup_mode ==
-                    SingleMapTaskStartupMode::Resume &&
-                initialized.baseline_model_version == 201 &&
-                initialized.baseline_train_updates == 200 &&
-                initialized.baseline_trained_samples == 10000 &&
-                initialized.run_produced_samples == 0,
-            "Init captures checkpoint counters without fabricating run samples");
-    Require(published_receipt.find("\"startup_mode\":\"resume\"") !=
-                std::string::npos &&
-                published_receipt.find("\"model_version\":201") !=
-                    std::string::npos &&
-                published_receipt.find("\"train_updates\":200") !=
-                    std::string::npos &&
-                published_receipt.find("\"trained_samples\":10000") !=
-                    std::string::npos &&
-                published_receipt.find("\"run_produced_samples\":0") !=
-                    std::string::npos,
-            "Init receipt records the resume mode and immutable baseline");
+                session->agents.size() == 2 &&
+                initialized.baseline_model_step == 0 &&
+                initialized.baseline_train_updates == 0 &&
+                session->last_command_sequence == 1,
+            "Init establishes the normal training session");
 
     maze::BeginEpisodeReq begin_request;
-    FillCommand(*session, 2, "resume-begin",
-                begin_request.mutable_command());
+    FillCommand(*session, 2, "begin", begin_request.mutable_command());
     maze::BeginEpisodeRsp begin_response;
     service.BeginEpisode(nullptr, &begin_request, &begin_response);
-    const auto planned =
-        MazeServiceLifecycleTestAccess::ControllerSnapshot(service);
     Require(begin_response.lifecycle().result() ==
                 maze::LIFECYCLE_RESULT_APPLIED &&
                 begin_response.assignment().mode() ==
                     maze::EPISODE_MODE_TRAINING &&
-                begin_response.assignment().behavior_policy().model_version() ==
-                    201 &&
+                begin_response.assignment().behavior_policy().model_step() ==
+                    0 &&
                 session->episode_state ==
                     SessionManager::EpisodeState::Active &&
-                session->last_command_sequence == 2 &&
-                planned.baseline_train_updates == 200 &&
-                planned.run_produced_samples == 0,
-            "BeginEpisode plans against the full resumed model identity");
-}
+                session->last_command_sequence == 2,
+            "BeginEpisode binds the bootstrap model to the session");
 
-void TestTrainingEndEpisodeCommitsOnce() {
-    const auto map = MapDescriptor();
-    const auto config = Config(map);
-    bool fail_receipt = false;
-    int receipt_calls = 0;
-    std::string published_receipt;
-    MazeServiceImpl service(config);
-    MazeServiceUpdateTestAccess::SetRuntimeReady(service, false);
-    MazeServiceLifecycleTestAccess::InstallReceiptWriter(
-        service, fail_receipt, receipt_calls, published_receipt);
-    auto* session = MazeServiceLifecycleTestAccess::AddSession(service);
-    Require(session != nullptr, "EndEpisode fixture session allocated");
-    ConfigureTrainingEndSession(*session, config);
-    maze::EndEpisodeReq request;
-    FillCommand(*session, 1, "end-training", request.mutable_command());
-    session->agents.at(0).reward_component_sums["goal"] = 9.0;
-    maze::EndEpisodeRsp inconsistent;
-    service.EndEpisode(nullptr, &request, &inconsistent);
-    Require(inconsistent.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_REJECTED &&
-                session->last_command_sequence == 0 &&
-                MazeServiceLifecycleTestAccess::CompletedAgentCount(service) ==
-                    0,
-            "inconsistent raw reward facts reject before lifecycle commit");
-    session->agents.at(0).reward_component_sums["goal"] = 10.0;
-    maze::EndEpisodeRsp applied;
-    service.EndEpisode(nullptr, &request, &applied);
-    Require(applied.lifecycle().result() == maze::LIFECYCLE_RESULT_APPLIED,
-            "training EndEpisode applies");
-    Require(receipt_calls == 0 && published_receipt.empty() &&
-                MazeServiceLifecycleTestAccess::CompletedAgentCount(service) ==
-                    2 &&
-                session->last_command_sequence == 1 &&
-                session->command_replay.present(),
-            "training EndEpisode commits metrics and replay without an "
-            "evaluation receipt");
-    Require(session->episode_state == SessionManager::EpisodeState::Ended &&
-                session->session_state == maze::SESSION_STATE_IDLE &&
+    MazeServiceLifecycleTestAccess::UseEvaluationUpdateScope(
+        service, *session);
+
+    maze::UpdateReq invalid_initial;
+    FillCommand(*session, 3, "update-0-invalid",
+                invalid_initial.mutable_command());
+    invalid_initial.set_frame_id(0);
+    AddAgentState(&invalid_initial, 0, 0, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE, 0);
+    AddAgentState(&invalid_initial, 1, 0, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE);
+    maze::UpdateRsp invalid_initial_response;
+    service.Update(nullptr, &invalid_initial, &invalid_initial_response);
+    RequireRejected(invalid_initial_response,
+                    "frame zero rejects an executed action receipt");
+    Require(session->last_command_sequence == 2 &&
+                session->last_frame_id == -1,
+            "rejected initial receipt cannot advance lifecycle state");
+
+    maze::UpdateReq initial_update;
+    FillCommand(*session, 3, "update-0", initial_update.mutable_command());
+    initial_update.set_frame_id(0);
+    AddAgentState(&initial_update, 0, 0, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE);
+    AddAgentState(&initial_update, 1, 0, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE);
+    maze::UpdateRsp initial_update_response;
+    service.Update(nullptr, &initial_update, &initial_update_response);
+    Require(initial_update_response.lifecycle().result() ==
+                maze::LIFECYCLE_RESULT_APPLIED &&
+                initial_update_response.actions_size() == 2 &&
+                session->last_command_sequence == 3 &&
+                session->last_frame_id == 0,
+            "frame zero accepts every active Agent and returns real actions");
+
+    const int pending_action_0 = session->agents.at(0).pending_action;
+    const int pending_action_1 = session->agents.at(1).pending_action;
+    const int64_t produced_before_rejections =
+        MazeServiceLifecycleTestAccess::ProducedSamples(service);
+
+    maze::UpdateReq missing_receipt;
+    FillCommand(*session, 4, "update-1-missing",
+                missing_receipt.mutable_command());
+    missing_receipt.set_frame_id(1);
+    AddAgentState(&missing_receipt, 0, 0, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE);
+    AddAgentState(&missing_receipt, 1, 0, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE,
+                  pending_action_1);
+    maze::UpdateRsp missing_receipt_response;
+    service.Update(nullptr, &missing_receipt, &missing_receipt_response);
+    RequireRejected(missing_receipt_response,
+                    "later frame rejects a missing action receipt");
+
+    maze::UpdateReq mismatched_receipt = missing_receipt;
+    mismatched_receipt.mutable_command()->set_idempotency_key(
+        "update-1-mismatch");
+    mismatched_receipt.mutable_agents(0)->set_executed_action_id(
+        (pending_action_0 + 1) % 9);
+    maze::UpdateRsp mismatched_receipt_response;
+    service.Update(nullptr, &mismatched_receipt,
+                   &mismatched_receipt_response);
+    RequireRejected(mismatched_receipt_response,
+                    "later frame rejects a mismatched action receipt");
+
+    maze::UpdateReq out_of_range_receipt = missing_receipt;
+    out_of_range_receipt.mutable_command()->set_idempotency_key(
+        "update-1-out-of-range");
+    out_of_range_receipt.mutable_agents(0)->set_executed_action_id(9);
+    maze::UpdateRsp out_of_range_receipt_response;
+    service.Update(nullptr, &out_of_range_receipt,
+                   &out_of_range_receipt_response);
+    RequireRejected(out_of_range_receipt_response,
+                    "later frame rejects an out-of-range action receipt");
+    Require(session->last_command_sequence == 3 &&
+                session->last_frame_id == 0 &&
+                MazeServiceLifecycleTestAccess::ProducedSamples(service) ==
+                    produced_before_rejections,
+            "invalid receipts are rejected before transition/sample commit");
+
+    MazeServiceLifecycleTestAccess::SetPendingActionZero(
+        *session, 0, 0, 0);
+    MazeServiceLifecycleTestAccess::SetPendingActionZero(
+        *session, 1, 1, 0);
+    MazeServiceLifecycleTestAccess::SetGoal(*session, 0, 0);
+    maze::UpdateReq partial_terminal;
+    FillCommand(*session, 4, "update-1-terminal",
+                partial_terminal.mutable_command());
+    partial_terminal.set_frame_id(1);
+    AddAgentState(&partial_terminal, 0, 0, 0, true,
+                  maze::MAZE_TERMINATION_REASON_GOAL_REACHED, 0);
+    AddAgentState(&partial_terminal, 1, 1, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE, 0);
+    maze::UpdateRsp partial_terminal_response;
+    service.Update(nullptr, &partial_terminal,
+                   &partial_terminal_response);
+    Require(partial_terminal_response.lifecycle().result() ==
+                maze::LIFECYCLE_RESULT_APPLIED &&
+                partial_terminal_response.actions_size() == 1 &&
+                partial_terminal_response.actions(0).agent_id() == 1 &&
+                session->agents.at(0).done_collected &&
+                !session->agents.at(1).done_collected &&
                 session->protocol_episode_state ==
-                    maze::EPISODE_STATE_COMMITTED &&
-                session->evaluation_pinned_model_version == 0,
-            "training EndEpisode commits terminal lifecycle state");
-    MazeServiceLifecycleTestAccess::FinalizeMetricEvents(service);
-    training::GetMetricBatchReq metric_request;
-    auto* metric_contract = metric_request.mutable_contract();
-    metric_contract->set_package_name(config.contract.package_name);
-    metric_contract->set_package_version(config.contract.package_version);
-    metric_contract->mutable_source_digest()->set_algorithm(
-        common::DIGEST_ALGORITHM_SHA256);
-    metric_contract->mutable_source_digest()->set_hex(
-        config.contract.source_digest.hex);
-    metric_contract->mutable_artifact_digest()->set_algorithm(
-        common::DIGEST_ALGORITHM_SHA256);
-    metric_contract->mutable_artifact_digest()->set_hex(
-        config.contract.artifact_digest.hex);
-    metric_contract->set_platform(config.contract.platform);
-    metric_contract->set_generator_identity(
-        config.contract.generator_identity);
-    metric_request.mutable_consumer()->set_component("rl-learner");
-    metric_request.mutable_consumer()->set_instance_id("lifecycle-relay");
-    metric_request.mutable_consumer()->set_lifecycle_epoch(1);
-    *metric_request.mutable_cursor()->mutable_source() =
-        MazeServiceLifecycleTestAccess::MetricSource(service);
-    metric_request.set_max_events(8);
-    metric_request.set_max_bytes(1 << 20);
-    metric_request.set_wait_timeout_ms(0);
-    training::GetMetricBatchRsp metric_batch;
-    MazeServiceLifecycleTestAccess::GetMetricBatch(
-        service, metric_request, metric_batch);
-    Require(metric_batch.result() ==
-                training::METRIC_BATCH_RESULT_DELIVERED &&
-                metric_batch.batch().events_size() == 1 &&
-                metric_batch.batch().source_final() &&
-                metric_batch.batch().events(0).has_episode() &&
-                metric_batch.batch().events(0).episode().agents_size() == 2,
-            "successful training EndEpisode emits one immutable Episode fact");
-    for (const auto& agent :
-         metric_batch.batch().events(0).episode().agents()) {
-        Require(agent.episode_return() == 10.0 &&
-                    agent.transition_count() == 2 && agent.success() &&
-                    agent.behavior_model_version_min() == 3 &&
-                    agent.behavior_model_version_max() == 5 &&
-                    agent.behavior_model_lineage_id() ==
-                        "lifecycle-atomicity" &&
-                    agent.reward_components_size() == 1 &&
-                    agent.reward_components(0).sum() == 10.0 &&
-                    agent.reward_components(0).count() == 2,
-                "Episode fact preserves raw reward and behavior-model facts");
-    }
-    maze::EndEpisodeRsp replayed;
-    service.EndEpisode(nullptr, &request, &replayed);
-    Require(replayed.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_ALREADY_APPLIED &&
-                receipt_calls == 0 &&
-                MazeServiceLifecycleTestAccess::CompletedAgentCount(service) ==
-                    2 &&
-                session->last_command_sequence == 1,
-            "replayed training EndEpisode does not recount metrics");
-    training::GetMetricBatchRsp metric_replay;
-    MazeServiceLifecycleTestAccess::GetMetricBatch(
-        service, metric_request, metric_replay);
-    Require(metric_replay.batch().SerializeAsString() ==
-                metric_batch.batch().SerializeAsString(),
-            "replayed EndEpisode cannot append or replace the metric event");
-}
+                    maze::EPISODE_STATE_RUNNING,
+            "first terminal Agent is settled once and receives no next action");
 
-void TestStatusDoesNotTreatAnOrphanSessionAsAConnectedClient() {
-    const auto map = MapDescriptor();
-    const auto config = Config(map);
-    MazeServiceImpl service(config);
-    auto* session = MazeServiceLifecycleTestAccess::AddSession(service);
-    Require(session != nullptr, "client activity fixture session allocated");
-    const auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
-                         std::chrono::system_clock::now().time_since_epoch())
-                         .count();
+    maze::UpdateReq missing_active;
+    FillCommand(*session, 5, "update-2-missing",
+                missing_active.mutable_command());
+    missing_active.set_frame_id(2);
+    maze::UpdateRsp missing_active_response;
+    service.Update(nullptr, &missing_active, &missing_active_response);
+    RequireRejected(missing_active_response,
+                    "Update cannot omit the remaining active Agent");
 
-    auto client_recent = [&]() {
-        training::AIServerStatusReq request;
-        training::AIServerStatusRsp response;
-        service.GetAIServerStatus(nullptr, &request, &response);
-        for (const auto& value : response.metrics().values()) {
-            if (value.field_id() == "server.client.session_recent.v1") {
-                return value.value();
-            }
-        }
-        return -1.0;
-    };
+    maze::UpdateReq terminal_reappears;
+    FillCommand(*session, 5, "update-2-reactivate",
+                terminal_reappears.mutable_command());
+    terminal_reappears.set_frame_id(2);
+    AddAgentState(&terminal_reappears, 0, 0, 0, true,
+                  maze::MAZE_TERMINATION_REASON_GOAL_REACHED, 0);
+    maze::UpdateRsp terminal_reappears_response;
+    service.Update(nullptr, &terminal_reappears,
+                   &terminal_reappears_response);
+    RequireRejected(terminal_reappears_response,
+                    "terminal Agent cannot reappear in a later Update");
 
-    MazeServiceLifecycleTestAccess::SetClientActivity(*session, now);
-    Require(client_recent() == 1.0,
-            "a live lifecycle session reports recent client activity");
-    MazeServiceLifecycleTestAccess::SetClientActivity(*session, now - 31000);
-    Require(client_recent() == 0.0 &&
-                MazeServiceLifecycleTestAccess::ActiveSessionCount(service) ==
-                    1,
-            "an expired activity lease does not turn an orphan lifecycle "
-            "record into a connected Client");
+    maze::UpdateReq unknown_agent;
+    FillCommand(*session, 5, "update-2-unknown",
+                unknown_agent.mutable_command());
+    unknown_agent.set_frame_id(2);
+    AddAgentState(&unknown_agent, 9, 1, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE, 0);
+    maze::UpdateRsp unknown_agent_response;
+    service.Update(nullptr, &unknown_agent, &unknown_agent_response);
+    RequireRejected(unknown_agent_response,
+                    "Update rejects an unknown active Agent identity");
 
-    ConfigureInitSession(*session, config);
-    MazeServiceLifecycleTestAccess::SetClientActivity(*session, now - 31000);
-    maze::InitReq invalid_request;
-    FillCommand(*session, 1, "invalid-client-activity",
-                invalid_request.mutable_command());
-    invalid_request.mutable_command()->set_lifecycle_epoch(
-        session->lifecycle_epoch + 1);
-    invalid_request.mutable_map()->CopyFrom(map);
-    maze::InitRsp invalid_response;
-    service.Init(nullptr, &invalid_request, &invalid_response);
-    Require(invalid_response.lifecycle().result() ==
-                maze::LIFECYCLE_RESULT_REJECTED &&
-                client_recent() == 0.0,
-            "a rejected lifecycle identity cannot renew an orphan Client "
-            "activity lease");
-}
+    maze::UpdateReq duplicate_agent;
+    FillCommand(*session, 5, "update-2-duplicate",
+                duplicate_agent.mutable_command());
+    duplicate_agent.set_frame_id(2);
+    AddAgentState(&duplicate_agent, 1, 1, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE, 0);
+    AddAgentState(&duplicate_agent, 1, 1, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE, 0);
+    maze::UpdateRsp duplicate_agent_response;
+    service.Update(nullptr, &duplicate_agent,
+                   &duplicate_agent_response);
+    RequireRejected(duplicate_agent_response,
+                    "Update rejects duplicate active Agent identity");
 
-}  // namespace
+    MazeServiceLifecycleTestAccess::SetPendingActionZero(
+        *session, 1, 1, 0);
+    maze::UpdateReq active_only;
+    FillCommand(*session, 5, "update-2-active",
+                active_only.mutable_command());
+    active_only.set_frame_id(2);
+    AddAgentState(&active_only, 1, 1, 0, false,
+                  maze::MAZE_TERMINATION_REASON_ACTIVE, 0);
+    maze::UpdateRsp active_only_response;
+    service.Update(nullptr, &active_only, &active_only_response);
+    Require(active_only_response.lifecycle().result() ==
+                maze::LIFECYCLE_RESULT_APPLIED &&
+                active_only_response.actions_size() == 1 &&
+                active_only_response.actions(0).agent_id() == 1 &&
+                session->last_command_sequence == 5 &&
+                session->last_frame_id == 2,
+            "later Update contains only and exactly every remaining active Agent");
+    const int64_t produced_before_replay =
+        MazeServiceLifecycleTestAccess::ProducedSamples(service);
+    maze::UpdateRsp active_replay;
+    service.Update(nullptr, &active_only, &active_replay);
+    Require(active_replay.replayed() &&
+                active_replay.lifecycle().result() ==
+                    maze::LIFECYCLE_RESULT_ALREADY_APPLIED &&
+                active_replay.lifecycle().applied_sequence() ==
+                    active_only_response.lifecycle().applied_sequence() &&
+                active_replay.actions_size() == 1 &&
+                active_replay.actions(0).agent_id() == 1 &&
+                active_replay.actions(0).SerializeAsString() ==
+                    active_only_response.actions(0).SerializeAsString() &&
+                MazeServiceLifecycleTestAccess::ProducedSamples(service) ==
+                    produced_before_replay,
+            "exact Update replay returns the committed result without a duplicate transition");
 
-int main() {
-    TestInitReadinessFailureHasNoCandidateSideEffects();
-    TestInitReceiptFailureIsRetryableAndAtomic();
-    TestRejectedInitCanCloseOpenedSession();
-    TestResumeInitAndBeginUseCheckpointBaseline();
-    TestTrainingEndEpisodeCommitsOnce();
-    TestStatusDoesNotTreatAnOrphanSessionAsAConnectedClient();
-    std::cout << "lifecycle_atomicity_contract: PASS\n";
+    MazeServiceLifecycleTestAccess::SetPendingActionZero(
+        *session, 1, 1, 0);
+    MazeServiceLifecycleTestAccess::SetGoal(*session, 1, 0);
+    maze::UpdateReq final_terminal;
+    FillCommand(*session, 6, "update-3-terminal",
+                final_terminal.mutable_command());
+    final_terminal.set_frame_id(3);
+    AddAgentState(&final_terminal, 1, 1, 0, true,
+                  maze::MAZE_TERMINATION_REASON_GOAL_REACHED, 0);
+    maze::UpdateRsp final_terminal_response;
+    service.Update(nullptr, &final_terminal,
+                   &final_terminal_response);
+    Require(final_terminal_response.lifecycle().result() ==
+                maze::LIFECYCLE_RESULT_APPLIED &&
+                final_terminal_response.lifecycle().episode_state() ==
+                    maze::EPISODE_STATE_TERMINAL_REPORTED &&
+                final_terminal_response.actions_size() == 0 &&
+                session->agents.at(0).done_collected &&
+                session->agents.at(1).done_collected,
+            "final terminal Agent yields an empty action set and terminal lifecycle");
+
+    std::cout << "lifecycle_session_contract: PASS\n";
     return 0;
 }

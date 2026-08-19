@@ -2,78 +2,91 @@
 
 [简体中文](README.md) | English
 
-AIServer provides training inference, trajectory assembly, and sample delivery. Start full training from [rl-framework](../rl-framework/README.en.md).
+AIServer provides static model evaluation plus training inference, trajectory
+assembly, and sample delivery. For the A3 local chain, developers start Learner,
+AIServer, and Client separately; Framework no longer orchestrates runtime.
 
-## 1. Prepare Contracts and the smoke model
-
-```bash
-(cd ../rl-contracts && bash build_artifact.sh)
-bash scripts/sync_contract_snapshot.sh
-```
-
-The runtime image also needs the smoke model produced by Learner:
+## 1. Development container, incremental build, and tests
 
 ```bash
-(cd ../rl-learner && RL_LEARNER_IMAGE_TAG=training-001 bash build_image.sh)
-```
-
-## 2. Build the runtime image
-
-```bash
-RL_AISERVER_IMAGE_TAG=training-001 bash build_image.sh
-```
-
-## 3. Incremental build and tests
-
-```bash
-# Build the development image from the runtime image
-AISERVER_IMAGE_TAG=training-001 make dev-image
-
-# Incrementally build only the main executable; do not run CTest
-make build
-
-# Explicitly build test targets and run CTest
-make test
-
-# Enter the development container
+# Host: build or reuse the independent development image and enter it
 make shell
+
+# Inside the container: build and test are explicit, separate entrypoints
+./build.sh
+bash ./test.sh
+
+# The host can also reuse the same container for a build
+make build
 ```
 
-The development container uses a persistent ccache volume. `ninja: no work to do.` means no source changed; it does not automatically rerun tests.
+The development image does not inherit an old runtime image and uses a
+persistent ccache volume. `ninja: no work to do.` means no source changed; it
+does not automatically rerun tests. Tests may be started only from the
+repository root with `bash ./test.sh`; `build.sh`, Docker image builds, and
+other wrappers do not run them implicitly. Run `make shell` only on the host.
 
-## 4. Run modes
+## 2. Run modes
 
 Inside the development container:
 
 ```bash
-# Random-model inference-chain check
-bash ./run.sh local-test
+# Show the executable CLI-to-config mapping without starting the service
+bash ./run.sh --help
 
-# Training; normally started by Framework with Learner addresses
-bash ./run.sh training
+# Deterministic evaluation from an explicit SaveModel.onnx
+bash ./run.sh --config configs/server_config.yaml --workload evaluation \
+  --evaluation-model /absolute/path/SaveModel.onnx
 
-# Local model evaluation
-bash ./run.sh model-evaluation
+# Training; config supplies defaults and CLI explicitly overrides Learner endpoints
+bash ./run.sh --config configs/server_config.yaml --workload training \
+  --sample-distributor maze-learner:9100 \
+  --model-distributor maze-learner:9200
 ```
 
-Before local evaluation, point `model.evaluation_dir` in `configs/server_config.yaml` to a directory containing `SaveModel.onnx`:
+The final evaluation config/CLI value must point to a regular, non-symlink
+`SaveModel.onnx`. AIServer does not read a neighboring manifest or accept a
+directory entrypoint. `run.sh` only supervises the process and propagates its
+exit status; only the C++ config/CLI layer interprets business arguments.
 
-```yaml
-model:
-  evaluation_dir: "models/evaluation/000200"
-```
+The default workload is `server.run_mode` in `configs/server_config.yaml`, and
+`--workload` only overrides that field. Reward V4 formulas and numeric values
+are compiled in `src/ai/maze_reward.cpp`; runtime YAML must not contain a
+`reward:` tuning section and retains only the reward schema identity.
 
-## 5. Training cache
-
-A normal stop preserves `models/local-train`. Framework passes `--new-run` only for a new Run; that option clears the old AIServer training cache:
+The same runtime image exposes a read-only model diagnostic for tensor-contract
+and finite-inference checks:
 
 ```bash
-bash ./run.sh training --new-run
+/opt/rl/aiserver/bin/maze_aiserver \
+  --inspect-model /absolute/path/SaveModel.onnx
 ```
 
-Training models always come from Learner Model Distributor. AIServer never starts training from a local savepoint and never removes its cache on a normal stop.
+The inspector emits only tensor identity; it loads no service configuration and
+opens no port.
 
-## 6. Default addresses
+## 3. Training cache
+
+AIServer uses the private `cache` under `model.local_train_dir` and neither
+receives nor interprets platform `task_id/run_id`. A `.aiserver.lock` prevents
+two AIServers from concurrently using the same directory. A normal restart
+validates and recovers an existing valid cache instead of deleting or rejecting
+it merely because it is non-empty:
+
+```bash
+bash ./run.sh --config configs/server_config.yaml --workload training
+```
+
+Models always come from the isolated training invocation's Learner Model Distributor. AIServer discovers the internal model lineage from Distributor status and pins the first lineage; a different lineage in the same service lifetime fails closed. AIServer never starts training from a local savepoint and never removes its cache on a normal stop.
+
+## 4. Formal artifacts and image
+
+Only after Level 1/2 pass, user review, and clean savepoints may the host sync
+the formal Contracts artifact and run `bash build_image.sh`. The formal build
+requires clean runtime repositories and never consumes development artifacts or
+a development-container build directory.
+
+## 5. Default addresses
 
 | Service | Address |
 | --- | --- |

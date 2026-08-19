@@ -20,8 +20,8 @@ SNAPSHOT_FILES = {
     "cpp/maze_task.pb.h": "maze_task.pb.h",
     "cpp/maze_task.grpc.pb.cc": "maze_task.grpc.pb.cc",
     "cpp/maze_task.grpc.pb.h": "maze_task.grpc.pb.h",
-    "schemas/maze.metrics.v2.json": "schemas/maze.metrics.v2.json",
-    "schemas/maze.metrics.v2.sha256": "schemas/maze.metrics.v2.sha256",
+    "schemas/maze.metrics.v3.json": "schemas/maze.metrics.v3.json",
+    "schemas/maze.metrics.v3.sha256": "schemas/maze.metrics.v3.sha256",
 }
 
 
@@ -30,7 +30,11 @@ def fail(message: str) -> None:
 
 
 def verify_snapshot(
-    root: Path, expected_version: str, expected_platform: str
+    root: Path,
+    expected_version: str,
+    expected_platform: str,
+    *,
+    artifact_layout: bool = False,
 ) -> dict:
     manifest_path = root / "manifest.json"
     if not manifest_path.is_file():
@@ -64,7 +68,7 @@ def verify_snapshot(
     }:
         fail("contract snapshot artifact digest is invalid")
     for artifact_name, local_name in SNAPSHOT_FILES.items():
-        path = root / local_name
+        path = root / (artifact_name if artifact_layout else local_name)
         expected = checksums.get(artifact_name)
         if not path.is_file() or not expected:
             fail(f"contract snapshot file is missing: {path}")
@@ -72,10 +76,10 @@ def verify_snapshot(
         if actual != expected:
             fail(f"contract snapshot checksum mismatch: {path}")
     schema_metadata = manifest.get("metric_schemas", {}).get(
-        "maze.metrics.v2"
+        "maze.metrics.v3"
     )
-    catalog = root / "schemas/maze.metrics.v2.json"
-    digest_file = root / "schemas/maze.metrics.v2.sha256"
+    catalog = root / "schemas/maze.metrics.v3.json"
+    digest_file = root / "schemas/maze.metrics.v3.sha256"
     catalog_digest = hashlib.sha256(catalog.read_bytes()).hexdigest()
     if (
         digest_file.read_text(encoding="utf-8").strip() != catalog_digest
@@ -85,22 +89,29 @@ def verify_snapshot(
                 "algorithm": "sha256",
                 "hex": catalog_digest,
             },
-            "digest_path": "schemas/maze.metrics.v2.sha256",
-            "path": "schemas/maze.metrics.v2.json",
-            "schema_version": 2,
+            "digest_path": "schemas/maze.metrics.v3.sha256",
+            "path": "schemas/maze.metrics.v3.json",
+            "schema_version": 3,
         }
     ):
-        fail("maze.metrics.v2 snapshot identity mismatch")
+        fail("maze.metrics.v3 snapshot identity mismatch")
     return manifest
 
 
 def main() -> None:
-    if len(sys.argv) != 4:
+    if len(sys.argv) not in (4, 5) or (
+        len(sys.argv) == 5 and sys.argv[4] != "--artifact-layout"
+    ):
         fail(
             "usage: verify_contract_snapshot.py "
-            "<proto-dir> <version> <platform>"
+            "<proto-dir> <version> <platform> [--artifact-layout]"
         )
-    verify_snapshot(Path(sys.argv[1]), sys.argv[2], sys.argv[3])
+    verify_snapshot(
+        Path(sys.argv[1]),
+        sys.argv[2],
+        sys.argv[3],
+        artifact_layout=len(sys.argv) == 5,
+    )
 
 
 if __name__ == "__main__":

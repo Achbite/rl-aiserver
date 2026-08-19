@@ -23,46 +23,8 @@ enum PushResult {
     PUSH_RESULT_REJECTED_CAPACITY = 3;
     PUSH_RESULT_REJECTED_INVALID = 4;
     PUSH_RESULT_REJECTED_IDENTITY = 5;
-}
-
-enum SampleDemandResult {
-    SAMPLE_DEMAND_RESULT_UNSPECIFIED = 0;
-    SAMPLE_DEMAND_RESULT_APPLIED = 1;
-    SAMPLE_DEMAND_RESULT_ALREADY_APPLIED = 2;
-    SAMPLE_DEMAND_RESULT_RELEASED = 3;
-    SAMPLE_DEMAND_RESULT_NOT_FOUND = 4;
-    SAMPLE_DEMAND_RESULT_REJECTED_INVALID = 5;
-    SAMPLE_DEMAND_RESULT_REJECTED_IDENTITY = 6;
-    SAMPLE_DEMAND_RESULT_REJECTED_STALE_EPOCH = 7;
-}
-
-enum SampleCreditResult {
-    SAMPLE_CREDIT_RESULT_UNSPECIFIED = 0;
-    SAMPLE_CREDIT_RESULT_GRANTED = 1;
-    SAMPLE_CREDIT_RESULT_WAIT_NO_DEMAND = 2;
-    SAMPLE_CREDIT_RESULT_WAIT_INFLIGHT_LIMIT = 3;
-    SAMPLE_CREDIT_RESULT_WAIT_CAPACITY = 4;
-    SAMPLE_CREDIT_RESULT_WAIT_DRAINING = 5;
-    SAMPLE_CREDIT_RESULT_REJECTED_IDENTITY = 6;
-    SAMPLE_CREDIT_RESULT_REJECTED_SEMANTICS = 7;
-    SAMPLE_CREDIT_RESULT_REJECTED_FRESHNESS = 8;
-    SAMPLE_CREDIT_RESULT_REJECTED_INVALID = 9;
-}
-
-enum SampleCreditState {
-    SAMPLE_CREDIT_STATE_UNSPECIFIED = 0;
-    SAMPLE_CREDIT_STATE_RESERVED = 1;
-    SAMPLE_CREDIT_STATE_COMMITTED = 2;
-    SAMPLE_CREDIT_STATE_RELEASED = 3;
-    SAMPLE_CREDIT_STATE_EXPIRED = 4;
-    SAMPLE_CREDIT_STATE_REVOKED = 5;
-}
-
-enum SampleCreditReleaseReason {
-    SAMPLE_CREDIT_RELEASE_REASON_UNSPECIFIED = 0;
-    SAMPLE_CREDIT_RELEASE_REASON_PRODUCER_ABORT = 1;
-    SAMPLE_CREDIT_RELEASE_REASON_SHUTDOWN = 2;
-    SAMPLE_CREDIT_RELEASE_REASON_SUPERSEDED = 3;
+    PUSH_RESULT_REJECTED_CONFLICT = 6;
+    PUSH_RESULT_REJECTED_FINALIZED = 7;
 }
 
 enum PressureState {
@@ -83,10 +45,11 @@ enum GetBatchResult {
 enum BatchAssemblyMode {
     BATCH_ASSEMBLY_MODE_UNSPECIFIED = 0;
     // Wait for target_samples and lease complete fragments without exceeding
-    // max_samples. A delivery may contain multiple compatible behavior models.
+    // max_samples. Every delivery contains exactly one behavior model step.
     BATCH_ASSEMBLY_MODE_TARGET_BOUNDED = 1;
-    // Lease the compatible fragments currently available. Used only for an
-    // explicit shutdown drain; ordinary training must use TARGET_BOUNDED.
+    // Lease the compatible fragments currently available for an explicit
+    // bounded execution finalization. Process shutdown settles the remaining
+    // READY tail atomically through FinalizeSamplePool instead.
     BATCH_ASSEMBLY_MODE_DRAIN_AVAILABLE = 2;
 }
 
@@ -150,6 +113,15 @@ enum SampleBackendType {
     SAMPLE_BACKEND_TYPE_LOCAL_MEMORY = 1;
 }
 
+enum SamplePoolFinalizeResult {
+    SAMPLE_POOL_FINALIZE_RESULT_UNSPECIFIED = 0;
+    SAMPLE_POOL_FINALIZE_RESULT_FINALIZED = 1;
+    SAMPLE_POOL_FINALIZE_RESULT_ALREADY_FINALIZED = 2;
+    SAMPLE_POOL_FINALIZE_RESULT_REJECTED_ACTIVE_LEASE = 3;
+    SAMPLE_POOL_FINALIZE_RESULT_REJECTED_IDENTITY = 4;
+    SAMPLE_POOL_FINALIZE_RESULT_REJECTED_CONFLICT = 5;
+}
+
 enum MetricValueKind {
     METRIC_VALUE_KIND_UNSPECIFIED = 0;
     METRIC_VALUE_KIND_GAUGE = 1;
@@ -198,7 +170,9 @@ enum MetricBatchAckResult {
 
 message ModelIdentity {
     string model_lineage_id = 1;
-    uint64 model_version = 2;
+    reserved "model_version";
+    // Explicit presence distinguishes bootstrap step 0 from a missing step.
+    optional uint64 model_step = 2;
     rl.common.v1.ContentDigest artifact_digest = 3;
     rl.common.v1.ContentDigest manifest_digest = 4;
 }
@@ -209,15 +183,17 @@ message ModelIdentity {
 // bucket at the Sample Pool.
 message BehaviorPolicyReference {
     string model_lineage_id = 1;
-    uint64 model_version = 2;
+    reserved "model_version";
+    optional uint64 model_step = 2;
     string distribution_schema_id = 3;
     rl.common.v1.ContentDigest policy_spec_digest = 4;
 }
 
 message SampleFreshnessPolicy {
     string model_lineage_id = 1;
-    uint64 reference_model_version = 2;
-    uint32 max_version_lag = 3;
+    reserved "reference_model_version", "max_version_lag";
+    optional uint64 reference_model_step = 2;
+    uint32 max_model_step_lag = 3;
     int64 max_sample_age_ms = 4;
     string distribution_schema_id = 5;
     rl.common.v1.ContentDigest policy_spec_digest = 6;
@@ -277,122 +253,13 @@ message SampleBatch {
 
 message SampleResponse {
     int32 ret_code = 1;
-    uint64 model_version = 2;
-}
-
-// A short-lived, task-neutral declaration of the Learner's current training
-// intake window. Refreshing an unchanged demand extends its expiry; changing
-// immutable fields requires a strictly newer demand_epoch.
-message SampleDemand {
-    string demand_id = 1;
-    uint64 demand_epoch = 2;
-    rl.common.v1.ServiceInstanceIdentity consumer = 3;
-    rl.common.v1.ContractIdentity contract = 4;
-    TrainingSemanticsIdentity training_semantics = 5;
-    SampleFreshnessPolicy freshness = 6;
-    BatchAssemblySpec assembly = 7;
-    int64 max_buffered_samples = 8;
-    int64 max_buffered_fragments = 9;
-    int64 max_buffered_estimated_bytes = 10;
-    int64 expires_at_unix_ms = 11;
-}
-
-message UpsertSampleDemandReq {
-    SampleDemand demand = 1;
-}
-
-message ReleaseSampleDemandReq {
-    rl.common.v1.ServiceInstanceIdentity consumer = 1;
-    rl.common.v1.ContractIdentity contract = 2;
-    string demand_id = 3;
-    uint64 demand_epoch = 4;
-}
-
-message GetSampleDemandStatusReq {
-    rl.common.v1.ServiceInstanceIdentity requester = 1;
-    string demand_id = 2;
-}
-
-message SampleDemandRsp {
-    int32 ret_code = 1;
-    SampleDemandResult result = 2;
-    string message = 3;
-    SampleDemand demand = 4;
-    int64 reserved_samples = 5;
-    int64 reserved_fragments = 6;
-    int64 reserved_estimated_bytes = 7;
-    rl.common.v1.ServiceInstanceIdentity distributor = 8;
-}
-
-message SampleDemandStatusRsp {
-    int32 ret_code = 1;
-    SampleDemandResult result = 2;
-    string message = 3;
-    bool active = 4;
-    SampleDemand demand = 5;
-    int64 demand_age_ms = 6;
-    int64 reserved_samples = 7;
-    int64 reserved_fragments = 8;
-    int64 reserved_estimated_bytes = 9;
-    rl.common.v1.ServiceInstanceIdentity distributor = 10;
-}
-
-// One credit reserves capacity for exactly one immutable SampleBatch. The
-// payload digest and all identity fields are rechecked when the batch commits.
-message AcquireSampleCreditReq {
-    string request_id = 1;
-    rl.common.v1.ServiceInstanceIdentity producer = 2;
-    rl.common.v1.ContractIdentity contract = 3;
-    string batch_id = 4;
-    rl.common.v1.ContentDigest payload_digest = 5;
-    BehaviorPolicyReference behavior_policy = 6;
-    TrainingSemanticsIdentity training_semantics = 7;
-    int64 sample_count = 8;
-    int64 fragment_count = 9;
-    int64 estimated_bytes = 10;
-    int64 created_at_unix_ms = 11;
-}
-
-message SampleCreditGrant {
-    int32 ret_code = 1;
-    SampleCreditResult result = 2;
-    string message = 3;
-    string request_id = 4;
-    string credit_id = 5;
-    string demand_id = 6;
-    uint64 demand_epoch = 7;
-    string batch_id = 8;
-    rl.common.v1.ContentDigest payload_digest = 9;
-    int64 granted_samples = 10;
-    int64 granted_fragments = 11;
-    int64 granted_estimated_bytes = 12;
-    int64 expires_at_unix_ms = 13;
-    int32 retry_after_ms = 14;
-    PressureState pressure_state = 15;
-    rl.common.v1.ServiceInstanceIdentity distributor = 16;
-    SampleCreditState state = 17;
-}
-
-message ReleaseSampleCreditReq {
-    rl.common.v1.ServiceInstanceIdentity producer = 1;
-    rl.common.v1.ContractIdentity contract = 2;
-    string credit_id = 3;
-    string batch_id = 4;
-    rl.common.v1.ContentDigest payload_digest = 5;
-    SampleCreditReleaseReason reason = 6;
-}
-
-message ReleaseSampleCreditRsp {
-    int32 ret_code = 1;
-    SampleCreditResult result = 2;
-    string message = 3;
-    string credit_id = 4;
-    SampleCreditState state = 5;
-    rl.common.v1.ServiceInstanceIdentity distributor = 6;
+    reserved "model_version";
+    optional uint64 model_step = 2;
 }
 
 message PushSamplesReq {
-    string credit_id = 1;
+    reserved 1;
+    reserved "credit_id";
     SampleBatch batch = 2;
 }
 
@@ -408,7 +275,7 @@ message PushSamplesRsp {
     int64 resident_fragments = 9;
     int64 resident_estimated_bytes = 10;
     PressureState pressure_state = 11;
-    rl.common.v1.ServiceInstanceIdentity distributor = 12;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 12;
 }
 
 message GetBatchReq {
@@ -421,6 +288,7 @@ message GetBatchReq {
 }
 
 message GetBatchRsp {
+    reserved "minimum_behavior_model_version", "maximum_behavior_model_version";
     int32 ret_code = 1;
     repeated SampleBatch batches = 2;
     int64 queue_size = 3;
@@ -433,9 +301,9 @@ message GetBatchRsp {
     int64 actual_batch_size = 10;
     int64 wait_ms = 11;
     int64 leased_samples = 12;
-    rl.common.v1.ServiceInstanceIdentity distributor = 13;
-    uint64 minimum_behavior_model_version = 14;
-    uint64 maximum_behavior_model_version = 15;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 13;
+    optional uint64 minimum_behavior_model_step = 14;
+    optional uint64 maximum_behavior_model_step = 15;
     int64 oldest_sample_created_at_unix_ms = 16;
     int64 newest_sample_created_at_unix_ms = 17;
 }
@@ -471,9 +339,32 @@ message DeliveryRsp {
     string train_update_id = 9;
 }
 
-message DistributorStatusReq {}
+message FinalizeSamplePoolReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    rl.common.v1.ServiceInstanceIdentity expected_sample_pool = 2;
+    string finalization_id = 3;
+}
 
-message BehaviorVersionQueueStatus {
+message FinalizeSamplePoolRsp {
+    int32 ret_code = 1;
+    SamplePoolFinalizeResult result = 2;
+    string message = 3;
+    string finalization_id = 4;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 5;
+    int64 settled_samples = 6;
+    int64 settled_fragments = 7;
+    int64 ready_samples = 8;
+    int64 ready_fragments = 9;
+    int64 leased_samples = 10;
+    int64 leased_fragments = 11;
+    int64 resident_samples = 12;
+    int64 resident_fragments = 13;
+    int64 finalized_at_unix_ms = 14;
+}
+
+message SamplePoolStatusReq {}
+
+message BehaviorStepQueueStatus {
     BehaviorPolicyReference behavior_policy = 1;
     int64 ready_samples = 2;
     int64 ready_fragments = 3;
@@ -487,9 +378,10 @@ message BehaviorVersionQueueStatus {
     int64 shutdown_untrained_samples = 11;
 }
 
-message DistributorStatusRsp {
+message SamplePoolStatusRsp {
+    reserved "behavior_versions", "minimum_ready_model_version", "maximum_ready_model_version";
     rl.common.v1.ContractIdentity contract = 1;
-    rl.common.v1.ServiceInstanceIdentity distributor = 2;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 2;
     bool ready = 3;
     int64 push_attempt_count = 4;
     int64 accepted_unique_samples = 5;
@@ -519,7 +411,7 @@ message DistributorStatusRsp {
     int64 partial_get_count = 29;
     int64 empty_timeout_count = 30;
     string last_error = 31;
-    repeated BehaviorVersionQueueStatus behavior_versions = 32;
+    repeated BehaviorStepQueueStatus behavior_steps = 32;
     int64 trained_sample_count = 33;
     int64 stale_sample_count = 34;
     int64 invalid_sample_count = 35;
@@ -533,26 +425,26 @@ message DistributorStatusRsp {
     bool pool_ready = 43;
     int64 timestamp_unix_ms = 44;
     int64 oldest_ready_sample_age_ms = 45;
-    uint64 minimum_ready_model_version = 46;
-    uint64 maximum_ready_model_version = 47;
-    int64 active_demand_count = 48;
-    uint64 active_demand_epoch = 49;
-    int64 active_demand_age_ms = 50;
-    int64 reserved_samples = 51;
-    int64 reserved_fragments = 52;
-    int64 reserved_estimated_bytes = 53;
-    int64 credit_request_count = 54;
-    int64 credit_grant_count = 55;
-    int64 credit_commit_count = 56;
-    int64 credit_release_count = 57;
-    int64 credit_expire_count = 58;
-    int64 credit_revoke_count = 59;
-    int64 credit_wait_no_demand_count = 60;
-    int64 credit_wait_inflight_limit_count = 61;
-    int64 credit_wait_capacity_count = 62;
-    int64 credit_wait_draining_count = 63;
-    int64 demand_upsert_count = 64;
-    int64 demand_release_count = 65;
+    optional uint64 minimum_ready_model_step = 46;
+    optional uint64 maximum_ready_model_step = 47;
+    reserved 48 to 65;
+    reserved "active_demand_count", "active_demand_epoch",
+             "active_demand_age_ms", "reserved_samples",
+             "reserved_fragments", "reserved_estimated_bytes",
+             "credit_request_count", "credit_grant_count",
+             "credit_commit_count", "credit_release_count",
+             "credit_expire_count", "credit_revoke_count",
+             "credit_wait_no_demand_count",
+             "credit_wait_inflight_limit_count",
+             "credit_wait_capacity_count", "credit_wait_draining_count",
+             "demand_upsert_count", "demand_release_count";
+    int64 evicted_sample_count = 66;
+    int64 evicted_fragment_count = 67;
+    bool finalized = 68;
+    string finalization_id = 69;
+    int64 finalized_at_unix_ms = 70;
+    int64 finalized_sample_count = 71;
+    int64 finalized_fragment_count = 72;
 }
 
 message MetricDescriptor {
@@ -600,6 +492,7 @@ message RawMetricSumCount {
 }
 
 message AgentEpisodeMetricFact {
+    reserved "behavior_model_version_min", "behavior_model_version_max";
     uint32 agent_id = 1;
     double episode_return = 2;
     uint64 transition_count = 3;
@@ -612,8 +505,8 @@ message AgentEpisodeMetricFact {
     uint64 blocked_move_count = 8;
     uint64 attempted_move_count = 9;
     repeated RawMetricSumCount reward_components = 10;
-    uint64 behavior_model_version_min = 11;
-    uint64 behavior_model_version_max = 12;
+    optional uint64 minimum_behavior_model_step = 11;
+    optional uint64 maximum_behavior_model_step = 12;
     string behavior_model_lineage_id = 13;
 }
 
@@ -621,7 +514,8 @@ message AgentEpisodeMetricFact {
 // The repeated Agent facts preserve raw per-Agent sufficient statistics and
 // intentionally contain no precomputed cross-Agent mean.
 message EpisodeMetricFact {
-    string task_id = 1;
+    reserved 1;
+    reserved "task_id";
     string environment_instance_id = 2;
     string episode_id = 3;
     TrainingSemanticsIdentity training_semantics = 4;
@@ -631,6 +525,7 @@ message EpisodeMetricFact {
 // One immutable fact is emitted only after the Learner update transaction has
 // published its model and settled its input delivery.
 message TrainUpdateMetricFact {
+    reserved "behavior_model_version_min", "behavior_model_version_max";
     string train_update_id = 1;
     uint64 train_update_sequence = 2;
     ModelIdentity published_model = 3;
@@ -638,16 +533,16 @@ message TrainUpdateMetricFact {
     TrainingSemanticsIdentity training_semantics = 5;
     int64 cumulative_trained_samples = 6;
     int64 actual_batch_size = 7;
-    uint64 behavior_model_version_min = 8;
-    uint64 behavior_model_version_max = 9;
+    optional uint64 minimum_behavior_model_step = 8;
+    optional uint64 maximum_behavior_model_step = 9;
     repeated RawMetricSumCount ppo_statistics = 10;
     string behavior_model_lineage_id = 11;
 }
 
 message MetricEvent {
     rl.common.v1.ContractIdentity contract = 1;
-    // A3-SL uses schema_id "maze.metrics.v2", schema_version 2 and the
-    // canonical digest published with schemas/maze.metrics.v2.json.
+    // A3 uses schema_id "maze.metrics.v3", schema_version 3 and the
+    // canonical digest published with schemas/maze.metrics.v3.json.
     rl.common.v1.SchemaIdentity schema_identity = 2;
     rl.common.v1.ServiceInstanceIdentity source = 3;
     // Starts at 1 for each source lifecycle. Zero is never a valid event and
@@ -790,13 +685,11 @@ message AIServerStatusRsp {
     string last_error = 32;
     int64 timestamp_unix_ms = 33;
     MetricSnapshot metrics = 34;
-    int64 credit_request_count = 35;
-    int64 credit_grant_count = 36;
-    int64 credit_wait_count = 37;
-    int64 credit_reacquire_count = 38;
-    int64 producer_stale_count = 39;
-    int64 capacity_wait_ms = 40;
-    bool training_capacity_wait = 41;
+    reserved 35 to 41;
+    reserved "credit_request_count", "credit_grant_count",
+             "credit_wait_count", "credit_reacquire_count",
+             "producer_stale_count", "capacity_wait_ms",
+             "training_capacity_wait";
 }
 
 message ModelArtifactManifest {
@@ -816,8 +709,8 @@ message ModelArtifactManifest {
     string model_file = 12;
     int64 size_bytes = 13;
     int64 seed = 14;
-    int64 train_updates = 15;
-    int64 trained_samples = 16;
+    uint64 train_updates = 15;
+    uint64 trained_samples = 16;
     rl.common.v1.ContentDigest training_config_digest = 17;
     TrainingSemanticsIdentity training_semantics = 18;
     int64 published_at_unix_ms = 19;
@@ -843,15 +736,16 @@ message GetModelManifestReq {
 }
 
 message GetModelManifestRsp {
+    reserved "available_floor_model_version", "latest_available_model_version";
     int32 ret_code = 1;
     string message = 2;
     ModelArtifactManifest manifest = 3;
     rl.common.v1.ServiceInstanceIdentity distributor = 4;
     // On a successful response with a manifest, both values are always valid
     // for manifest.identity lineage. The inclusive range is contiguous and
-    // model version zero is valid; zero must not be interpreted as no-data.
-    optional uint64 available_floor_model_version = 5;
-    optional uint64 latest_available_model_version = 6;
+    // model step zero is valid; zero must not be interpreted as no-data.
+    optional uint64 available_floor_model_step = 5;
+    optional uint64 latest_available_model_step = 6;
 }
 
 message DownloadModelReq {
@@ -883,6 +777,7 @@ message AckModelRsp {
 message ModelDistributorStatusReq {}
 
 message ModelDistributorStatusRsp {
+    reserved "available_floor_model_version", "latest_available_model_version";
     rl.common.v1.ContractIdentity contract = 1;
     rl.common.v1.ServiceInstanceIdentity distributor = 2;
     bool ready = 3;
@@ -903,9 +798,9 @@ message ModelDistributorStatusRsp {
     string last_error = 18;
     int64 timestamp_unix_ms = 19;
     // Valid only when latest_model has an identity. The inclusive range is for
-    // that lineage, and model version zero is a valid floor/latest value.
-    optional uint64 available_floor_model_version = 20;
-    optional uint64 latest_available_model_version = 21;
+    // that lineage, and model step zero is a valid floor/latest value.
+    optional uint64 available_floor_model_step = 20;
+    optional uint64 latest_available_model_step = 21;
 }
 
 service AIServerTrainingStatusService {
@@ -924,21 +819,19 @@ service LearnerService {
     rpc SendSamples(SampleBatch) returns (SampleResponse);
 }
 
-service SampleDistributorService {
-    rpc UpsertSampleDemand(UpsertSampleDemandReq) returns (SampleDemandRsp);
-    rpc ReleaseSampleDemand(ReleaseSampleDemandReq) returns (SampleDemandRsp);
-    rpc GetSampleDemandStatus(GetSampleDemandStatusReq)
-        returns (SampleDemandStatusRsp);
-    rpc AcquireSampleCredit(AcquireSampleCreditReq)
-        returns (SampleCreditGrant);
-    rpc ReleaseSampleCredit(ReleaseSampleCreditReq)
-        returns (ReleaseSampleCreditRsp);
+service SamplePoolIngressService {
     rpc PushSamples(PushSamplesReq) returns (PushSamplesRsp);
+    rpc GetStatus(SamplePoolStatusReq) returns (SamplePoolStatusRsp);
+}
+
+service SamplePoolConsumerService {
     rpc GetBatch(GetBatchReq) returns (GetBatchRsp);
     rpc AckBatch(AckBatchReq) returns (DeliveryRsp);
     rpc NackBatch(NackBatchReq) returns (DeliveryRsp);
     rpc RenewLease(RenewLeaseReq) returns (DeliveryRsp);
-    rpc GetStatus(DistributorStatusReq) returns (DistributorStatusRsp);
+    rpc FinalizeSamplePool(FinalizeSamplePoolReq)
+        returns (FinalizeSamplePoolRsp);
+    rpc GetStatus(SamplePoolStatusReq) returns (SamplePoolStatusRsp);
 }
 
 service ModelDistributorService {

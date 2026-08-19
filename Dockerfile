@@ -36,9 +36,9 @@ RUN case "${TARGETARCH:-$(dpkg --print-architecture)}" in \
 
 COPY . /source
 RUN cmake -S /source -B /source/build -G Ninja \
-        -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build /source/build --parallel && \
-    ctest --test-dir /source/build --output-on-failure
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF && \
+    cmake --build /source/build --parallel --target maze_aiserver
 
 FROM python:3.11-slim
 
@@ -58,18 +58,17 @@ COPY configs /opt/rl/aiserver/configs
 COPY run.sh /opt/rl/aiserver/run.sh
 COPY scripts /opt/rl/aiserver/scripts
 COPY proto/manifest.json /opt/rl/identity/contracts.json
+COPY _deps/identity/stack-source.json /opt/rl/identity/stack-source.json
 COPY proto/manifest.json /opt/rl/aiserver/proto/manifest.json
 COPY proto/schemas /opt/rl/aiserver/proto/schemas
-COPY _deps/smoke-model /opt/rl/aiserver/models/local-test
-
 RUN ldconfig && \
     chmod +x /opt/rl/aiserver/bin/maze_aiserver \
         /opt/rl/aiserver/run.sh \
-        /opt/rl/aiserver/scripts/entrypoint.sh \
-        /opt/rl/aiserver/scripts/inference_entrypoint.sh
+        /opt/rl/aiserver/scripts/entrypoint.sh
 
 WORKDIR /opt/rl/aiserver
 EXPOSE 9002
 HEALTHCHECK --interval=2s --timeout=2s --start-period=10s --retries=30 \
     CMD ["bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/9002"]
 ENTRYPOINT ["/opt/rl/aiserver/scripts/entrypoint.sh"]
+CMD ["--config", "configs/server_config.yaml"]

@@ -86,9 +86,6 @@ extern EndEpisodeRspDefaultTypeInternal _EndEpisodeRsp_default_instance_;
 class EpisodeAssignment;
 struct EpisodeAssignmentDefaultTypeInternal;
 extern EpisodeAssignmentDefaultTypeInternal _EpisodeAssignment_default_instance_;
-class EvaluationAssignment;
-struct EvaluationAssignmentDefaultTypeInternal;
-extern EvaluationAssignmentDefaultTypeInternal _EvaluationAssignment_default_instance_;
 class InitReq;
 struct InitReqDefaultTypeInternal;
 extern InitReqDefaultTypeInternal _InitReq_default_instance_;
@@ -142,7 +139,6 @@ template<> ::rl::task::maze::v1::CloseSessionRsp* Arena::CreateMaybeMessage<::rl
 template<> ::rl::task::maze::v1::EndEpisodeReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::EndEpisodeReq>(Arena*);
 template<> ::rl::task::maze::v1::EndEpisodeRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::EndEpisodeRsp>(Arena*);
 template<> ::rl::task::maze::v1::EpisodeAssignment* Arena::CreateMaybeMessage<::rl::task::maze::v1::EpisodeAssignment>(Arena*);
-template<> ::rl::task::maze::v1::EvaluationAssignment* Arena::CreateMaybeMessage<::rl::task::maze::v1::EvaluationAssignment>(Arena*);
 template<> ::rl::task::maze::v1::InitReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::InitReq>(Arena*);
 template<> ::rl::task::maze::v1::InitRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::InitRsp>(Arena*);
 template<> ::rl::task::maze::v1::LifecycleCommand* Arena::CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(Arena*);
@@ -314,48 +310,16 @@ inline bool EpisodeState_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EpisodeState>(
     EpisodeState_descriptor(), name, value);
 }
-enum EvaluationState : int {
-  EVALUATION_STATE_UNSPECIFIED = 0,
-  EVALUATION_STATE_INACTIVE = 1,
-  EVALUATION_STATE_DRAINING = 2,
-  EVALUATION_STATE_MODEL_PINNED = 3,
-  EVALUATION_STATE_ARGMAX_ROUND_1 = 4,
-  EVALUATION_STATE_ARGMAX_ROUND_2 = 5,
-  EVALUATION_STATE_STOCHASTIC_DIAGNOSTIC = 6,
-  EVALUATION_STATE_COMMITTED = 7,
-  EvaluationState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  EvaluationState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool EvaluationState_IsValid(int value);
-constexpr EvaluationState EvaluationState_MIN = EVALUATION_STATE_UNSPECIFIED;
-constexpr EvaluationState EvaluationState_MAX = EVALUATION_STATE_COMMITTED;
-constexpr int EvaluationState_ARRAYSIZE = EvaluationState_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EvaluationState_descriptor();
-template<typename T>
-inline const std::string& EvaluationState_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, EvaluationState>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function EvaluationState_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    EvaluationState_descriptor(), enum_t_value);
-}
-inline bool EvaluationState_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, EvaluationState* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EvaluationState>(
-    EvaluationState_descriptor(), name, value);
-}
 enum EpisodeMode : int {
   EPISODE_MODE_UNSPECIFIED = 0,
   EPISODE_MODE_TRAINING = 1,
-  EPISODE_MODE_EVALUATION_ARGMAX = 2,
-  EPISODE_MODE_EVALUATION_STOCHASTIC = 3,
+  EPISODE_MODE_EVALUATION = 2,
   EpisodeMode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   EpisodeMode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool EpisodeMode_IsValid(int value);
 constexpr EpisodeMode EpisodeMode_MIN = EPISODE_MODE_UNSPECIFIED;
-constexpr EpisodeMode EpisodeMode_MAX = EPISODE_MODE_EVALUATION_STOCHASTIC;
+constexpr EpisodeMode EpisodeMode_MAX = EPISODE_MODE_EVALUATION;
 constexpr int EpisodeMode_ARRAYSIZE = EpisodeMode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EpisodeMode_descriptor();
@@ -372,47 +336,16 @@ inline bool EpisodeMode_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EpisodeMode>(
     EpisodeMode_descriptor(), name, value);
 }
-enum CurriculumStage : int {
-  CURRICULUM_STAGE_UNSPECIFIED = 0,
-  CURRICULUM_STAGE_8X = 1,
-  CURRICULUM_STAGE_4X = 2,
-  CURRICULUM_STAGE_2X = 3,
-  CURRICULUM_STAGE_COMPLETE = 4,
-  CURRICULUM_STAGE_FAILED = 5,
-  CurriculumStage_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  CurriculumStage_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool CurriculumStage_IsValid(int value);
-constexpr CurriculumStage CurriculumStage_MIN = CURRICULUM_STAGE_UNSPECIFIED;
-constexpr CurriculumStage CurriculumStage_MAX = CURRICULUM_STAGE_FAILED;
-constexpr int CurriculumStage_ARRAYSIZE = CurriculumStage_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CurriculumStage_descriptor();
-template<typename T>
-inline const std::string& CurriculumStage_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, CurriculumStage>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function CurriculumStage_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    CurriculumStage_descriptor(), enum_t_value);
-}
-inline bool CurriculumStage_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, CurriculumStage* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<CurriculumStage>(
-    CurriculumStage_descriptor(), name, value);
-}
 enum WorkloadMode : int {
   WORKLOAD_MODE_UNSPECIFIED = 0,
   WORKLOAD_MODE_TRAINING = 1,
-  WORKLOAD_MODE_INFERENCE_SMOKE = 2,
-  WORKLOAD_MODE_MODEL_EVALUATION = 3,
-  WORKLOAD_MODE_MAP_VALIDATION = 4,
+  WORKLOAD_MODE_EVALUATION = 2,
   WorkloadMode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   WorkloadMode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool WorkloadMode_IsValid(int value);
 constexpr WorkloadMode WorkloadMode_MIN = WORKLOAD_MODE_UNSPECIFIED;
-constexpr WorkloadMode WorkloadMode_MAX = WORKLOAD_MODE_MAP_VALIDATION;
+constexpr WorkloadMode WorkloadMode_MAX = WORKLOAD_MODE_EVALUATION;
 constexpr int WorkloadMode_ARRAYSIZE = WorkloadMode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* WorkloadMode_descriptor();
@@ -635,7 +568,6 @@ class TaskIdentity final :
 
   enum : int {
     kTaskContractIdFieldNumber = 1,
-    kTaskIdFieldNumber = 2,
     kFixedMapIdFieldNumber = 5,
     kTaskConfigDigestFieldNumber = 4,
     kFixedMapDigestFieldNumber = 6,
@@ -653,20 +585,6 @@ class TaskIdentity final :
   const std::string& _internal_task_contract_id() const;
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_contract_id(const std::string& value);
   std::string* _internal_mutable_task_contract_id();
-  public:
-
-  // string task_id = 2;
-  void clear_task_id();
-  const std::string& task_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_task_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_task_id();
-  PROTOBUF_NODISCARD std::string* release_task_id();
-  void set_allocated_task_id(std::string* task_id);
-  private:
-  const std::string& _internal_task_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_id(const std::string& value);
-  std::string* _internal_mutable_task_id();
   public:
 
   // string fixed_map_id = 5;
@@ -737,7 +655,6 @@ class TaskIdentity final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_contract_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fixed_map_id_;
     ::rl::common::v1::ContentDigest* task_config_digest_;
     ::rl::common::v1::ContentDigest* fixed_map_digest_;
@@ -875,7 +792,7 @@ class BehaviorPolicyBinding final :
     kModelArtifactDigestFieldNumber = 3,
     kModelManifestDigestFieldNumber = 4,
     kPolicySpecDigestFieldNumber = 6,
-    kModelVersionFieldNumber = 2,
+    kModelStepFieldNumber = 2,
   };
   // string model_lineage_id = 1;
   void clear_model_lineage_id();
@@ -959,13 +876,17 @@ class BehaviorPolicyBinding final :
       ::rl::common::v1::ContentDigest* policy_spec_digest);
   ::rl::common::v1::ContentDigest* unsafe_arena_release_policy_spec_digest();
 
-  // uint64 model_version = 2;
-  void clear_model_version();
-  uint64_t model_version() const;
-  void set_model_version(uint64_t value);
+  // optional uint64 model_step = 2;
+  bool has_model_step() const;
   private:
-  uint64_t _internal_model_version() const;
-  void _internal_set_model_version(uint64_t value);
+  bool _internal_has_model_step() const;
+  public:
+  void clear_model_step();
+  uint64_t model_step() const;
+  void set_model_step(uint64_t value);
+  private:
+  uint64_t _internal_model_step() const;
+  void _internal_set_model_step(uint64_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.BehaviorPolicyBinding)
@@ -976,13 +897,14 @@ class BehaviorPolicyBinding final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_lineage_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr distribution_schema_id_;
     ::rl::common::v1::ContentDigest* model_artifact_digest_;
     ::rl::common::v1::ContentDigest* model_manifest_digest_;
     ::rl::common::v1::ContentDigest* policy_spec_digest_;
-    uint64_t model_version_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    uint64_t model_step_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_maze_5ftask_2eproto;
@@ -1117,6 +1039,7 @@ class MazeTaskSpec final :
     kObservationSchemaFieldNumber = 5,
     kActionSchemaFieldNumber = 6,
     kAgentCountFieldNumber = 2,
+    kEpisodeMaxStepsFieldNumber = 8,
   };
   // string fixed_map_id = 3;
   void clear_fixed_map_id();
@@ -1227,6 +1150,15 @@ class MazeTaskSpec final :
   void _internal_set_agent_count(uint32_t value);
   public:
 
+  // uint32 episode_max_steps = 8;
+  void clear_episode_max_steps();
+  uint32_t episode_max_steps() const;
+  void set_episode_max_steps(uint32_t value);
+  private:
+  uint32_t _internal_episode_max_steps() const;
+  void _internal_set_episode_max_steps(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.MazeTaskSpec)
  private:
   class _Internal;
@@ -1242,6 +1174,7 @@ class MazeTaskSpec final :
     ::rl::common::v1::SchemaIdentity* observation_schema_;
     ::rl::common::v1::SchemaIdentity* action_schema_;
     uint32_t agent_count_;
+    uint32_t episode_max_steps_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1676,7 +1609,6 @@ class LifecycleCommand final :
   enum : int {
     kSessionIdFieldNumber = 2,
     kEpisodeIdFieldNumber = 3,
-    kEvaluationIdFieldNumber = 4,
     kIdempotencyKeyFieldNumber = 7,
     kTaskFieldNumber = 1,
     kLifecycleEpochFieldNumber = 5,
@@ -1684,7 +1616,6 @@ class LifecycleCommand final :
     kExpectedTaskStateFieldNumber = 8,
     kExpectedSessionStateFieldNumber = 9,
     kExpectedEpisodeStateFieldNumber = 10,
-    kExpectedEvaluationStateFieldNumber = 11,
   };
   // string session_id = 2;
   void clear_session_id();
@@ -1712,20 +1643,6 @@ class LifecycleCommand final :
   const std::string& _internal_episode_id() const;
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_episode_id(const std::string& value);
   std::string* _internal_mutable_episode_id();
-  public:
-
-  // string evaluation_id = 4;
-  void clear_evaluation_id();
-  const std::string& evaluation_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_evaluation_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_evaluation_id();
-  PROTOBUF_NODISCARD std::string* release_evaluation_id();
-  void set_allocated_evaluation_id(std::string* evaluation_id);
-  private:
-  const std::string& _internal_evaluation_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_evaluation_id(const std::string& value);
-  std::string* _internal_mutable_evaluation_id();
   public:
 
   // string idempotency_key = 7;
@@ -1805,15 +1722,6 @@ class LifecycleCommand final :
   void _internal_set_expected_episode_state(::rl::task::maze::v1::EpisodeState value);
   public:
 
-  // .rl.task.maze.v1.EvaluationState expected_evaluation_state = 11;
-  void clear_expected_evaluation_state();
-  ::rl::task::maze::v1::EvaluationState expected_evaluation_state() const;
-  void set_expected_evaluation_state(::rl::task::maze::v1::EvaluationState value);
-  private:
-  ::rl::task::maze::v1::EvaluationState _internal_expected_evaluation_state() const;
-  void _internal_set_expected_evaluation_state(::rl::task::maze::v1::EvaluationState value);
-  public:
-
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.LifecycleCommand)
  private:
   class _Internal;
@@ -1824,7 +1732,6 @@ class LifecycleCommand final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr session_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr evaluation_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr idempotency_key_;
     ::rl::task::maze::v1::TaskIdentity* task_;
     uint64_t lifecycle_epoch_;
@@ -1832,7 +1739,6 @@ class LifecycleCommand final :
     int expected_task_state_;
     int expected_session_state_;
     int expected_episode_state_;
-    int expected_evaluation_state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1969,7 +1875,6 @@ class LifecycleReply final :
     kAppliedSequenceFieldNumber = 5,
     kSessionStateFieldNumber = 7,
     kEpisodeStateFieldNumber = 8,
-    kEvaluationStateFieldNumber = 9,
   };
   // string message = 4;
   void clear_message();
@@ -2048,15 +1953,6 @@ class LifecycleReply final :
   void _internal_set_episode_state(::rl::task::maze::v1::EpisodeState value);
   public:
 
-  // .rl.task.maze.v1.EvaluationState evaluation_state = 9;
-  void clear_evaluation_state();
-  ::rl::task::maze::v1::EvaluationState evaluation_state() const;
-  void set_evaluation_state(::rl::task::maze::v1::EvaluationState value);
-  private:
-  ::rl::task::maze::v1::EvaluationState _internal_evaluation_state() const;
-  void _internal_set_evaluation_state(::rl::task::maze::v1::EvaluationState value);
-  public:
-
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.LifecycleReply)
  private:
   class _Internal;
@@ -2073,7 +1969,6 @@ class LifecycleReply final :
     uint64_t applied_sequence_;
     int session_state_;
     int episode_state_;
-    int evaluation_state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2957,212 +2852,6 @@ class InitRsp final :
 };
 // -------------------------------------------------------------------
 
-class EvaluationAssignment final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.EvaluationAssignment) */ {
- public:
-  inline EvaluationAssignment() : EvaluationAssignment(nullptr) {}
-  ~EvaluationAssignment() override;
-  explicit PROTOBUF_CONSTEXPR EvaluationAssignment(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  EvaluationAssignment(const EvaluationAssignment& from);
-  EvaluationAssignment(EvaluationAssignment&& from) noexcept
-    : EvaluationAssignment() {
-    *this = ::std::move(from);
-  }
-
-  inline EvaluationAssignment& operator=(const EvaluationAssignment& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline EvaluationAssignment& operator=(EvaluationAssignment&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const EvaluationAssignment& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const EvaluationAssignment* internal_default_instance() {
-    return reinterpret_cast<const EvaluationAssignment*>(
-               &_EvaluationAssignment_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    10;
-
-  friend void swap(EvaluationAssignment& a, EvaluationAssignment& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(EvaluationAssignment* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(EvaluationAssignment* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  EvaluationAssignment* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<EvaluationAssignment>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const EvaluationAssignment& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const EvaluationAssignment& from) {
-    EvaluationAssignment::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(EvaluationAssignment* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.EvaluationAssignment";
-  }
-  protected:
-  explicit EvaluationAssignment(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kEvaluationIdFieldNumber = 1,
-    kPinnedPolicyFieldNumber = 4,
-    kEvaluationRoundFieldNumber = 2,
-    kStateFieldNumber = 3,
-    kTrainingSampleEmissionAllowedFieldNumber = 5,
-  };
-  // string evaluation_id = 1;
-  void clear_evaluation_id();
-  const std::string& evaluation_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_evaluation_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_evaluation_id();
-  PROTOBUF_NODISCARD std::string* release_evaluation_id();
-  void set_allocated_evaluation_id(std::string* evaluation_id);
-  private:
-  const std::string& _internal_evaluation_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_evaluation_id(const std::string& value);
-  std::string* _internal_mutable_evaluation_id();
-  public:
-
-  // .rl.task.maze.v1.BehaviorPolicyBinding pinned_policy = 4;
-  bool has_pinned_policy() const;
-  private:
-  bool _internal_has_pinned_policy() const;
-  public:
-  void clear_pinned_policy();
-  const ::rl::task::maze::v1::BehaviorPolicyBinding& pinned_policy() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::BehaviorPolicyBinding* release_pinned_policy();
-  ::rl::task::maze::v1::BehaviorPolicyBinding* mutable_pinned_policy();
-  void set_allocated_pinned_policy(::rl::task::maze::v1::BehaviorPolicyBinding* pinned_policy);
-  private:
-  const ::rl::task::maze::v1::BehaviorPolicyBinding& _internal_pinned_policy() const;
-  ::rl::task::maze::v1::BehaviorPolicyBinding* _internal_mutable_pinned_policy();
-  public:
-  void unsafe_arena_set_allocated_pinned_policy(
-      ::rl::task::maze::v1::BehaviorPolicyBinding* pinned_policy);
-  ::rl::task::maze::v1::BehaviorPolicyBinding* unsafe_arena_release_pinned_policy();
-
-  // uint32 evaluation_round = 2;
-  void clear_evaluation_round();
-  uint32_t evaluation_round() const;
-  void set_evaluation_round(uint32_t value);
-  private:
-  uint32_t _internal_evaluation_round() const;
-  void _internal_set_evaluation_round(uint32_t value);
-  public:
-
-  // .rl.task.maze.v1.EvaluationState state = 3;
-  void clear_state();
-  ::rl::task::maze::v1::EvaluationState state() const;
-  void set_state(::rl::task::maze::v1::EvaluationState value);
-  private:
-  ::rl::task::maze::v1::EvaluationState _internal_state() const;
-  void _internal_set_state(::rl::task::maze::v1::EvaluationState value);
-  public:
-
-  // bool training_sample_emission_allowed = 5;
-  void clear_training_sample_emission_allowed();
-  bool training_sample_emission_allowed() const;
-  void set_training_sample_emission_allowed(bool value);
-  private:
-  bool _internal_training_sample_emission_allowed() const;
-  void _internal_set_training_sample_emission_allowed(bool value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.EvaluationAssignment)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr evaluation_id_;
-    ::rl::task::maze::v1::BehaviorPolicyBinding* pinned_policy_;
-    uint32_t evaluation_round_;
-    int state_;
-    bool training_sample_emission_allowed_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_maze_5ftask_2eproto;
-};
-// -------------------------------------------------------------------
-
 class EpisodeAssignment final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.EpisodeAssignment) */ {
  public:
@@ -3211,7 +2900,7 @@ class EpisodeAssignment final :
                &_EpisodeAssignment_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    10;
 
   friend void swap(EpisodeAssignment& a, EpisodeAssignment& b) {
     a.Swap(&b);
@@ -3287,9 +2976,7 @@ class EpisodeAssignment final :
     kEpisodeIdFieldNumber = 1,
     kTaskFieldNumber = 2,
     kBehaviorPolicyFieldNumber = 7,
-    kEvaluationFieldNumber = 9,
     kModeFieldNumber = 3,
-    kCurriculumStageFieldNumber = 4,
     kMaxStepsFieldNumber = 5,
     kContinueTaskFieldNumber = 6,
     kCollectTrainingSamplesFieldNumber = 8,
@@ -3344,24 +3031,6 @@ class EpisodeAssignment final :
       ::rl::task::maze::v1::BehaviorPolicyBinding* behavior_policy);
   ::rl::task::maze::v1::BehaviorPolicyBinding* unsafe_arena_release_behavior_policy();
 
-  // .rl.task.maze.v1.EvaluationAssignment evaluation = 9;
-  bool has_evaluation() const;
-  private:
-  bool _internal_has_evaluation() const;
-  public:
-  void clear_evaluation();
-  const ::rl::task::maze::v1::EvaluationAssignment& evaluation() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::EvaluationAssignment* release_evaluation();
-  ::rl::task::maze::v1::EvaluationAssignment* mutable_evaluation();
-  void set_allocated_evaluation(::rl::task::maze::v1::EvaluationAssignment* evaluation);
-  private:
-  const ::rl::task::maze::v1::EvaluationAssignment& _internal_evaluation() const;
-  ::rl::task::maze::v1::EvaluationAssignment* _internal_mutable_evaluation();
-  public:
-  void unsafe_arena_set_allocated_evaluation(
-      ::rl::task::maze::v1::EvaluationAssignment* evaluation);
-  ::rl::task::maze::v1::EvaluationAssignment* unsafe_arena_release_evaluation();
-
   // .rl.task.maze.v1.EpisodeMode mode = 3;
   void clear_mode();
   ::rl::task::maze::v1::EpisodeMode mode() const;
@@ -3369,15 +3038,6 @@ class EpisodeAssignment final :
   private:
   ::rl::task::maze::v1::EpisodeMode _internal_mode() const;
   void _internal_set_mode(::rl::task::maze::v1::EpisodeMode value);
-  public:
-
-  // .rl.task.maze.v1.CurriculumStage curriculum_stage = 4;
-  void clear_curriculum_stage();
-  ::rl::task::maze::v1::CurriculumStage curriculum_stage() const;
-  void set_curriculum_stage(::rl::task::maze::v1::CurriculumStage value);
-  private:
-  ::rl::task::maze::v1::CurriculumStage _internal_curriculum_stage() const;
-  void _internal_set_curriculum_stage(::rl::task::maze::v1::CurriculumStage value);
   public:
 
   // uint32 max_steps = 5;
@@ -3418,9 +3078,7 @@ class EpisodeAssignment final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
     ::rl::task::maze::v1::TaskIdentity* task_;
     ::rl::task::maze::v1::BehaviorPolicyBinding* behavior_policy_;
-    ::rl::task::maze::v1::EvaluationAssignment* evaluation_;
     int mode_;
-    int curriculum_stage_;
     uint32_t max_steps_;
     bool continue_task_;
     bool collect_training_samples_;
@@ -3479,7 +3137,7 @@ class BeginEpisodeReq final :
                &_BeginEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    11;
 
   friend void swap(BeginEpisodeReq& a, BeginEpisodeReq& b) {
     a.Swap(&b);
@@ -3636,7 +3294,7 @@ class BeginEpisodeRsp final :
                &_BeginEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    12;
 
   friend void swap(BeginEpisodeRsp& a, BeginEpisodeRsp& b) {
     a.Swap(&b);
@@ -3813,7 +3471,7 @@ class Vec2 final :
                &_Vec2_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    13;
 
   friend void swap(Vec2& a, Vec2& b) {
     a.Swap(&b);
@@ -3972,7 +3630,7 @@ class AgentState final :
                &_AgentState_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    14;
 
   friend void swap(AgentState& a, AgentState& b) {
     a.Swap(&b);
@@ -4050,6 +3708,7 @@ class AgentState final :
     kTerminationReasonFieldNumber = 4,
     kIsDoneFieldNumber = 3,
     kLastMoveBlockedFieldNumber = 5,
+    kExecutedActionIdFieldNumber = 6,
   };
   // .rl.task.maze.v1.Vec2 position = 2;
   bool has_position() const;
@@ -4105,6 +3764,19 @@ class AgentState final :
   void _internal_set_last_move_blocked(bool value);
   public:
 
+  // optional int32 executed_action_id = 6;
+  bool has_executed_action_id() const;
+  private:
+  bool _internal_has_executed_action_id() const;
+  public:
+  void clear_executed_action_id();
+  int32_t executed_action_id() const;
+  void set_executed_action_id(int32_t value);
+  private:
+  int32_t _internal_executed_action_id() const;
+  void _internal_set_executed_action_id(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.AgentState)
  private:
   class _Internal;
@@ -4113,12 +3785,14 @@ class AgentState final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::rl::task::maze::v1::Vec2* position_;
     uint32_t agent_id_;
     int termination_reason_;
     bool is_done_;
     bool last_move_blocked_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    int32_t executed_action_id_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_maze_5ftask_2eproto;
@@ -4173,7 +3847,7 @@ class UpdateReq final :
                &_UpdateReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    15;
 
   friend void swap(UpdateReq& a, UpdateReq& b) {
     a.Swap(&b);
@@ -4361,7 +4035,7 @@ class AgentAction final :
                &_AgentAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    16;
 
   friend void swap(AgentAction& a, AgentAction& b) {
     a.Swap(&b);
@@ -4520,7 +4194,7 @@ class UpdateRsp final :
                &_UpdateRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    17;
 
   friend void swap(UpdateRsp& a, UpdateRsp& b) {
     a.Swap(&b);
@@ -4752,7 +4426,7 @@ class EndEpisodeReq final :
                &_EndEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    18;
 
   friend void swap(EndEpisodeReq& a, EndEpisodeReq& b) {
     a.Swap(&b);
@@ -4909,7 +4583,7 @@ class EndEpisodeRsp final :
                &_EndEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    19;
 
   friend void swap(EndEpisodeRsp& a, EndEpisodeRsp& b) {
     a.Swap(&b);
@@ -5066,7 +4740,7 @@ class AbortEpisodeReq final :
                &_AbortEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    20;
 
   friend void swap(AbortEpisodeReq& a, AbortEpisodeReq& b) {
     a.Swap(&b);
@@ -5250,7 +4924,7 @@ class AbortEpisodeRsp final :
                &_AbortEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    21;
 
   friend void swap(AbortEpisodeRsp& a, AbortEpisodeRsp& b) {
     a.Swap(&b);
@@ -5407,7 +5081,7 @@ class CloseSessionReq final :
                &_CloseSessionReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    22;
 
   friend void swap(CloseSessionReq& a, CloseSessionReq& b) {
     a.Swap(&b);
@@ -5564,7 +5238,7 @@ class CloseSessionRsp final :
                &_CloseSessionRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    23;
 
   friend void swap(CloseSessionRsp& a, CloseSessionRsp& b) {
     a.Swap(&b);
@@ -5730,56 +5404,6 @@ inline void TaskIdentity::set_allocated_task_contract_id(std::string* task_contr
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.task_contract_id)
-}
-
-// string task_id = 2;
-inline void TaskIdentity::clear_task_id() {
-  _impl_.task_id_.ClearToEmpty();
-}
-inline const std::string& TaskIdentity::task_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.TaskIdentity.task_id)
-  return _internal_task_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TaskIdentity::set_task_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.task_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskIdentity.task_id)
-}
-inline std::string* TaskIdentity::mutable_task_id() {
-  std::string* _s = _internal_mutable_task_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.TaskIdentity.task_id)
-  return _s;
-}
-inline const std::string& TaskIdentity::_internal_task_id() const {
-  return _impl_.task_id_.Get();
-}
-inline void TaskIdentity::_internal_set_task_id(const std::string& value) {
-  
-  _impl_.task_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TaskIdentity::_internal_mutable_task_id() {
-  
-  return _impl_.task_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TaskIdentity::release_task_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskIdentity.task_id)
-  return _impl_.task_id_.Release();
-}
-inline void TaskIdentity::set_allocated_task_id(std::string* task_id) {
-  if (task_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.task_id_.SetAllocated(task_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.task_id_.IsDefault()) {
-    _impl_.task_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.task_id)
 }
 
 // uint64 task_revision = 3;
@@ -6076,24 +5700,32 @@ inline void BehaviorPolicyBinding::set_allocated_model_lineage_id(std::string* m
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_lineage_id)
 }
 
-// uint64 model_version = 2;
-inline void BehaviorPolicyBinding::clear_model_version() {
-  _impl_.model_version_ = uint64_t{0u};
+// optional uint64 model_step = 2;
+inline bool BehaviorPolicyBinding::_internal_has_model_step() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
 }
-inline uint64_t BehaviorPolicyBinding::_internal_model_version() const {
-  return _impl_.model_version_;
+inline bool BehaviorPolicyBinding::has_model_step() const {
+  return _internal_has_model_step();
 }
-inline uint64_t BehaviorPolicyBinding::model_version() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.model_version)
-  return _internal_model_version();
+inline void BehaviorPolicyBinding::clear_model_step() {
+  _impl_.model_step_ = uint64_t{0u};
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline void BehaviorPolicyBinding::_internal_set_model_version(uint64_t value) {
-  
-  _impl_.model_version_ = value;
+inline uint64_t BehaviorPolicyBinding::_internal_model_step() const {
+  return _impl_.model_step_;
 }
-inline void BehaviorPolicyBinding::set_model_version(uint64_t value) {
-  _internal_set_model_version(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.BehaviorPolicyBinding.model_version)
+inline uint64_t BehaviorPolicyBinding::model_step() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.model_step)
+  return _internal_model_step();
+}
+inline void BehaviorPolicyBinding::_internal_set_model_step(uint64_t value) {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.model_step_ = value;
+}
+inline void BehaviorPolicyBinding::set_model_step(uint64_t value) {
+  _internal_set_model_step(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.BehaviorPolicyBinding.model_step)
 }
 
 // .rl.common.v1.ContentDigest model_artifact_digest = 3;
@@ -6870,6 +6502,26 @@ inline void MazeTaskSpec::set_allocated_action_rule_id(std::string* action_rule_
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.action_rule_id)
 }
 
+// uint32 episode_max_steps = 8;
+inline void MazeTaskSpec::clear_episode_max_steps() {
+  _impl_.episode_max_steps_ = 0u;
+}
+inline uint32_t MazeTaskSpec::_internal_episode_max_steps() const {
+  return _impl_.episode_max_steps_;
+}
+inline uint32_t MazeTaskSpec::episode_max_steps() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.episode_max_steps)
+  return _internal_episode_max_steps();
+}
+inline void MazeTaskSpec::_internal_set_episode_max_steps(uint32_t value) {
+  
+  _impl_.episode_max_steps_ = value;
+}
+inline void MazeTaskSpec::set_episode_max_steps(uint32_t value) {
+  _internal_set_episode_max_steps(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.MazeTaskSpec.episode_max_steps)
+}
+
 // -------------------------------------------------------------------
 
 // MapDescriptor
@@ -7483,56 +7135,6 @@ inline void LifecycleCommand::set_allocated_episode_id(std::string* episode_id) 
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleCommand.episode_id)
 }
 
-// string evaluation_id = 4;
-inline void LifecycleCommand::clear_evaluation_id() {
-  _impl_.evaluation_id_.ClearToEmpty();
-}
-inline const std::string& LifecycleCommand::evaluation_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.evaluation_id)
-  return _internal_evaluation_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LifecycleCommand::set_evaluation_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.evaluation_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.evaluation_id)
-}
-inline std::string* LifecycleCommand::mutable_evaluation_id() {
-  std::string* _s = _internal_mutable_evaluation_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.LifecycleCommand.evaluation_id)
-  return _s;
-}
-inline const std::string& LifecycleCommand::_internal_evaluation_id() const {
-  return _impl_.evaluation_id_.Get();
-}
-inline void LifecycleCommand::_internal_set_evaluation_id(const std::string& value) {
-  
-  _impl_.evaluation_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* LifecycleCommand::_internal_mutable_evaluation_id() {
-  
-  return _impl_.evaluation_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* LifecycleCommand::release_evaluation_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.LifecycleCommand.evaluation_id)
-  return _impl_.evaluation_id_.Release();
-}
-inline void LifecycleCommand::set_allocated_evaluation_id(std::string* evaluation_id) {
-  if (evaluation_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.evaluation_id_.SetAllocated(evaluation_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.evaluation_id_.IsDefault()) {
-    _impl_.evaluation_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleCommand.evaluation_id)
-}
-
 // uint64 lifecycle_epoch = 5;
 inline void LifecycleCommand::clear_lifecycle_epoch() {
   _impl_.lifecycle_epoch_ = uint64_t{0u};
@@ -7681,26 +7283,6 @@ inline void LifecycleCommand::_internal_set_expected_episode_state(::rl::task::m
 inline void LifecycleCommand::set_expected_episode_state(::rl::task::maze::v1::EpisodeState value) {
   _internal_set_expected_episode_state(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.expected_episode_state)
-}
-
-// .rl.task.maze.v1.EvaluationState expected_evaluation_state = 11;
-inline void LifecycleCommand::clear_expected_evaluation_state() {
-  _impl_.expected_evaluation_state_ = 0;
-}
-inline ::rl::task::maze::v1::EvaluationState LifecycleCommand::_internal_expected_evaluation_state() const {
-  return static_cast< ::rl::task::maze::v1::EvaluationState >(_impl_.expected_evaluation_state_);
-}
-inline ::rl::task::maze::v1::EvaluationState LifecycleCommand::expected_evaluation_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.expected_evaluation_state)
-  return _internal_expected_evaluation_state();
-}
-inline void LifecycleCommand::_internal_set_expected_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
-  
-  _impl_.expected_evaluation_state_ = value;
-}
-inline void LifecycleCommand::set_expected_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
-  _internal_set_expected_evaluation_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.expected_evaluation_state)
 }
 
 // -------------------------------------------------------------------
@@ -7895,26 +7477,6 @@ inline void LifecycleReply::_internal_set_episode_state(::rl::task::maze::v1::Ep
 inline void LifecycleReply::set_episode_state(::rl::task::maze::v1::EpisodeState value) {
   _internal_set_episode_state(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.episode_state)
-}
-
-// .rl.task.maze.v1.EvaluationState evaluation_state = 9;
-inline void LifecycleReply::clear_evaluation_state() {
-  _impl_.evaluation_state_ = 0;
-}
-inline ::rl::task::maze::v1::EvaluationState LifecycleReply::_internal_evaluation_state() const {
-  return static_cast< ::rl::task::maze::v1::EvaluationState >(_impl_.evaluation_state_);
-}
-inline ::rl::task::maze::v1::EvaluationState LifecycleReply::evaluation_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.evaluation_state)
-  return _internal_evaluation_state();
-}
-inline void LifecycleReply::_internal_set_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
-  
-  _impl_.evaluation_state_ = value;
-}
-inline void LifecycleReply::set_evaluation_state(::rl::task::maze::v1::EvaluationState value) {
-  _internal_set_evaluation_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.evaluation_state)
 }
 
 // -------------------------------------------------------------------
@@ -9011,210 +8573,6 @@ inline void InitRsp::set_verified_shortest_action_steps(uint32_t value) {
 
 // -------------------------------------------------------------------
 
-// EvaluationAssignment
-
-// string evaluation_id = 1;
-inline void EvaluationAssignment::clear_evaluation_id() {
-  _impl_.evaluation_id_.ClearToEmpty();
-}
-inline const std::string& EvaluationAssignment::evaluation_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EvaluationAssignment.evaluation_id)
-  return _internal_evaluation_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void EvaluationAssignment::set_evaluation_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.evaluation_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EvaluationAssignment.evaluation_id)
-}
-inline std::string* EvaluationAssignment::mutable_evaluation_id() {
-  std::string* _s = _internal_mutable_evaluation_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EvaluationAssignment.evaluation_id)
-  return _s;
-}
-inline const std::string& EvaluationAssignment::_internal_evaluation_id() const {
-  return _impl_.evaluation_id_.Get();
-}
-inline void EvaluationAssignment::_internal_set_evaluation_id(const std::string& value) {
-  
-  _impl_.evaluation_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* EvaluationAssignment::_internal_mutable_evaluation_id() {
-  
-  return _impl_.evaluation_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* EvaluationAssignment::release_evaluation_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EvaluationAssignment.evaluation_id)
-  return _impl_.evaluation_id_.Release();
-}
-inline void EvaluationAssignment::set_allocated_evaluation_id(std::string* evaluation_id) {
-  if (evaluation_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.evaluation_id_.SetAllocated(evaluation_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.evaluation_id_.IsDefault()) {
-    _impl_.evaluation_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EvaluationAssignment.evaluation_id)
-}
-
-// uint32 evaluation_round = 2;
-inline void EvaluationAssignment::clear_evaluation_round() {
-  _impl_.evaluation_round_ = 0u;
-}
-inline uint32_t EvaluationAssignment::_internal_evaluation_round() const {
-  return _impl_.evaluation_round_;
-}
-inline uint32_t EvaluationAssignment::evaluation_round() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EvaluationAssignment.evaluation_round)
-  return _internal_evaluation_round();
-}
-inline void EvaluationAssignment::_internal_set_evaluation_round(uint32_t value) {
-  
-  _impl_.evaluation_round_ = value;
-}
-inline void EvaluationAssignment::set_evaluation_round(uint32_t value) {
-  _internal_set_evaluation_round(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EvaluationAssignment.evaluation_round)
-}
-
-// .rl.task.maze.v1.EvaluationState state = 3;
-inline void EvaluationAssignment::clear_state() {
-  _impl_.state_ = 0;
-}
-inline ::rl::task::maze::v1::EvaluationState EvaluationAssignment::_internal_state() const {
-  return static_cast< ::rl::task::maze::v1::EvaluationState >(_impl_.state_);
-}
-inline ::rl::task::maze::v1::EvaluationState EvaluationAssignment::state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EvaluationAssignment.state)
-  return _internal_state();
-}
-inline void EvaluationAssignment::_internal_set_state(::rl::task::maze::v1::EvaluationState value) {
-  
-  _impl_.state_ = value;
-}
-inline void EvaluationAssignment::set_state(::rl::task::maze::v1::EvaluationState value) {
-  _internal_set_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EvaluationAssignment.state)
-}
-
-// .rl.task.maze.v1.BehaviorPolicyBinding pinned_policy = 4;
-inline bool EvaluationAssignment::_internal_has_pinned_policy() const {
-  return this != internal_default_instance() && _impl_.pinned_policy_ != nullptr;
-}
-inline bool EvaluationAssignment::has_pinned_policy() const {
-  return _internal_has_pinned_policy();
-}
-inline void EvaluationAssignment::clear_pinned_policy() {
-  if (GetArenaForAllocation() == nullptr && _impl_.pinned_policy_ != nullptr) {
-    delete _impl_.pinned_policy_;
-  }
-  _impl_.pinned_policy_ = nullptr;
-}
-inline const ::rl::task::maze::v1::BehaviorPolicyBinding& EvaluationAssignment::_internal_pinned_policy() const {
-  const ::rl::task::maze::v1::BehaviorPolicyBinding* p = _impl_.pinned_policy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::BehaviorPolicyBinding&>(
-      ::rl::task::maze::v1::_BehaviorPolicyBinding_default_instance_);
-}
-inline const ::rl::task::maze::v1::BehaviorPolicyBinding& EvaluationAssignment::pinned_policy() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
-  return _internal_pinned_policy();
-}
-inline void EvaluationAssignment::unsafe_arena_set_allocated_pinned_policy(
-    ::rl::task::maze::v1::BehaviorPolicyBinding* pinned_policy) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.pinned_policy_);
-  }
-  _impl_.pinned_policy_ = pinned_policy;
-  if (pinned_policy) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
-}
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::release_pinned_policy() {
-  
-  ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.pinned_policy_;
-  _impl_.pinned_policy_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::unsafe_arena_release_pinned_policy() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
-  
-  ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.pinned_policy_;
-  _impl_.pinned_policy_ = nullptr;
-  return temp;
-}
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::_internal_mutable_pinned_policy() {
-  
-  if (_impl_.pinned_policy_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::BehaviorPolicyBinding>(GetArenaForAllocation());
-    _impl_.pinned_policy_ = p;
-  }
-  return _impl_.pinned_policy_;
-}
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EvaluationAssignment::mutable_pinned_policy() {
-  ::rl::task::maze::v1::BehaviorPolicyBinding* _msg = _internal_mutable_pinned_policy();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
-  return _msg;
-}
-inline void EvaluationAssignment::set_allocated_pinned_policy(::rl::task::maze::v1::BehaviorPolicyBinding* pinned_policy) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.pinned_policy_;
-  }
-  if (pinned_policy) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(pinned_policy);
-    if (message_arena != submessage_arena) {
-      pinned_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, pinned_policy, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.pinned_policy_ = pinned_policy;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EvaluationAssignment.pinned_policy)
-}
-
-// bool training_sample_emission_allowed = 5;
-inline void EvaluationAssignment::clear_training_sample_emission_allowed() {
-  _impl_.training_sample_emission_allowed_ = false;
-}
-inline bool EvaluationAssignment::_internal_training_sample_emission_allowed() const {
-  return _impl_.training_sample_emission_allowed_;
-}
-inline bool EvaluationAssignment::training_sample_emission_allowed() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EvaluationAssignment.training_sample_emission_allowed)
-  return _internal_training_sample_emission_allowed();
-}
-inline void EvaluationAssignment::_internal_set_training_sample_emission_allowed(bool value) {
-  
-  _impl_.training_sample_emission_allowed_ = value;
-}
-inline void EvaluationAssignment::set_training_sample_emission_allowed(bool value) {
-  _internal_set_training_sample_emission_allowed(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EvaluationAssignment.training_sample_emission_allowed)
-}
-
-// -------------------------------------------------------------------
-
 // EpisodeAssignment
 
 // string episode_id = 1;
@@ -9377,26 +8735,6 @@ inline void EpisodeAssignment::set_mode(::rl::task::maze::v1::EpisodeMode value)
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.mode)
 }
 
-// .rl.task.maze.v1.CurriculumStage curriculum_stage = 4;
-inline void EpisodeAssignment::clear_curriculum_stage() {
-  _impl_.curriculum_stage_ = 0;
-}
-inline ::rl::task::maze::v1::CurriculumStage EpisodeAssignment::_internal_curriculum_stage() const {
-  return static_cast< ::rl::task::maze::v1::CurriculumStage >(_impl_.curriculum_stage_);
-}
-inline ::rl::task::maze::v1::CurriculumStage EpisodeAssignment::curriculum_stage() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.curriculum_stage)
-  return _internal_curriculum_stage();
-}
-inline void EpisodeAssignment::_internal_set_curriculum_stage(::rl::task::maze::v1::CurriculumStage value) {
-  
-  _impl_.curriculum_stage_ = value;
-}
-inline void EpisodeAssignment::set_curriculum_stage(::rl::task::maze::v1::CurriculumStage value) {
-  _internal_set_curriculum_stage(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.curriculum_stage)
-}
-
 // uint32 max_steps = 5;
 inline void EpisodeAssignment::clear_max_steps() {
   _impl_.max_steps_ = 0u;
@@ -9545,96 +8883,6 @@ inline void EpisodeAssignment::_internal_set_collect_training_samples(bool value
 inline void EpisodeAssignment::set_collect_training_samples(bool value) {
   _internal_set_collect_training_samples(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.collect_training_samples)
-}
-
-// .rl.task.maze.v1.EvaluationAssignment evaluation = 9;
-inline bool EpisodeAssignment::_internal_has_evaluation() const {
-  return this != internal_default_instance() && _impl_.evaluation_ != nullptr;
-}
-inline bool EpisodeAssignment::has_evaluation() const {
-  return _internal_has_evaluation();
-}
-inline void EpisodeAssignment::clear_evaluation() {
-  if (GetArenaForAllocation() == nullptr && _impl_.evaluation_ != nullptr) {
-    delete _impl_.evaluation_;
-  }
-  _impl_.evaluation_ = nullptr;
-}
-inline const ::rl::task::maze::v1::EvaluationAssignment& EpisodeAssignment::_internal_evaluation() const {
-  const ::rl::task::maze::v1::EvaluationAssignment* p = _impl_.evaluation_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::EvaluationAssignment&>(
-      ::rl::task::maze::v1::_EvaluationAssignment_default_instance_);
-}
-inline const ::rl::task::maze::v1::EvaluationAssignment& EpisodeAssignment::evaluation() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.evaluation)
-  return _internal_evaluation();
-}
-inline void EpisodeAssignment::unsafe_arena_set_allocated_evaluation(
-    ::rl::task::maze::v1::EvaluationAssignment* evaluation) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.evaluation_);
-  }
-  _impl_.evaluation_ = evaluation;
-  if (evaluation) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation)
-}
-inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::release_evaluation() {
-  
-  ::rl::task::maze::v1::EvaluationAssignment* temp = _impl_.evaluation_;
-  _impl_.evaluation_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::unsafe_arena_release_evaluation() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.evaluation)
-  
-  ::rl::task::maze::v1::EvaluationAssignment* temp = _impl_.evaluation_;
-  _impl_.evaluation_ = nullptr;
-  return temp;
-}
-inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::_internal_mutable_evaluation() {
-  
-  if (_impl_.evaluation_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::EvaluationAssignment>(GetArenaForAllocation());
-    _impl_.evaluation_ = p;
-  }
-  return _impl_.evaluation_;
-}
-inline ::rl::task::maze::v1::EvaluationAssignment* EpisodeAssignment::mutable_evaluation() {
-  ::rl::task::maze::v1::EvaluationAssignment* _msg = _internal_mutable_evaluation();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EpisodeAssignment.evaluation)
-  return _msg;
-}
-inline void EpisodeAssignment::set_allocated_evaluation(::rl::task::maze::v1::EvaluationAssignment* evaluation) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.evaluation_;
-  }
-  if (evaluation) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(evaluation);
-    if (message_arena != submessage_arena) {
-      evaluation = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, evaluation, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.evaluation_ = evaluation;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation)
 }
 
 // -------------------------------------------------------------------
@@ -10131,6 +9379,34 @@ inline void AgentState::_internal_set_last_move_blocked(bool value) {
 inline void AgentState::set_last_move_blocked(bool value) {
   _internal_set_last_move_blocked(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.AgentState.last_move_blocked)
+}
+
+// optional int32 executed_action_id = 6;
+inline bool AgentState::_internal_has_executed_action_id() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool AgentState::has_executed_action_id() const {
+  return _internal_has_executed_action_id();
+}
+inline void AgentState::clear_executed_action_id() {
+  _impl_.executed_action_id_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline int32_t AgentState::_internal_executed_action_id() const {
+  return _impl_.executed_action_id_;
+}
+inline int32_t AgentState::executed_action_id() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.AgentState.executed_action_id)
+  return _internal_executed_action_id();
+}
+inline void AgentState::_internal_set_executed_action_id(int32_t value) {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.executed_action_id_ = value;
+}
+inline void AgentState::set_executed_action_id(int32_t value) {
+  _internal_set_executed_action_id(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.AgentState.executed_action_id)
 }
 
 // -------------------------------------------------------------------
@@ -11248,8 +10524,6 @@ inline void CloseSessionRsp::set_allocated_lifecycle(::rl::task::maze::v1::Lifec
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -11285,20 +10559,10 @@ template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::EpisodeState>() {
   return ::rl::task::maze::v1::EpisodeState_descriptor();
 }
-template <> struct is_proto_enum< ::rl::task::maze::v1::EvaluationState> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::EvaluationState>() {
-  return ::rl::task::maze::v1::EvaluationState_descriptor();
-}
 template <> struct is_proto_enum< ::rl::task::maze::v1::EpisodeMode> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::EpisodeMode>() {
   return ::rl::task::maze::v1::EpisodeMode_descriptor();
-}
-template <> struct is_proto_enum< ::rl::task::maze::v1::CurriculumStage> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::CurriculumStage>() {
-  return ::rl::task::maze::v1::CurriculumStage_descriptor();
 }
 template <> struct is_proto_enum< ::rl::task::maze::v1::WorkloadMode> : ::std::true_type {};
 template <>

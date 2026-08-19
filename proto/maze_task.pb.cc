@@ -27,7 +27,6 @@ namespace v1 {
 PROTOBUF_CONSTEXPR TaskIdentity::TaskIdentity(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.task_contract_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.fixed_map_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.task_config_digest_)*/nullptr
   , /*decltype(_impl_.fixed_map_digest_)*/nullptr
@@ -44,13 +43,14 @@ struct TaskIdentityDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TaskIdentityDefaultTypeInternal _TaskIdentity_default_instance_;
 PROTOBUF_CONSTEXPR BehaviorPolicyBinding::BehaviorPolicyBinding(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.model_lineage_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_._has_bits_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_.model_lineage_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.distribution_schema_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.model_artifact_digest_)*/nullptr
   , /*decltype(_impl_.model_manifest_digest_)*/nullptr
   , /*decltype(_impl_.policy_spec_digest_)*/nullptr
-  , /*decltype(_impl_.model_version_)*/uint64_t{0u}
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+  , /*decltype(_impl_.model_step_)*/uint64_t{0u}} {}
 struct BehaviorPolicyBindingDefaultTypeInternal {
   PROTOBUF_CONSTEXPR BehaviorPolicyBindingDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -69,6 +69,7 @@ PROTOBUF_CONSTEXPR MazeTaskSpec::MazeTaskSpec(
   , /*decltype(_impl_.observation_schema_)*/nullptr
   , /*decltype(_impl_.action_schema_)*/nullptr
   , /*decltype(_impl_.agent_count_)*/0u
+  , /*decltype(_impl_.episode_max_steps_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct MazeTaskSpecDefaultTypeInternal {
   PROTOBUF_CONSTEXPR MazeTaskSpecDefaultTypeInternal()
@@ -108,7 +109,6 @@ PROTOBUF_CONSTEXPR LifecycleCommand::LifecycleCommand(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.session_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.episode_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.evaluation_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.idempotency_key_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.task_)*/nullptr
   , /*decltype(_impl_.lifecycle_epoch_)*/uint64_t{0u}
@@ -116,7 +116,6 @@ PROTOBUF_CONSTEXPR LifecycleCommand::LifecycleCommand(
   , /*decltype(_impl_.expected_task_state_)*/0
   , /*decltype(_impl_.expected_session_state_)*/0
   , /*decltype(_impl_.expected_episode_state_)*/0
-  , /*decltype(_impl_.expected_evaluation_state_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct LifecycleCommandDefaultTypeInternal {
   PROTOBUF_CONSTEXPR LifecycleCommandDefaultTypeInternal()
@@ -137,7 +136,6 @@ PROTOBUF_CONSTEXPR LifecycleReply::LifecycleReply(
   , /*decltype(_impl_.applied_sequence_)*/uint64_t{0u}
   , /*decltype(_impl_.session_state_)*/0
   , /*decltype(_impl_.episode_state_)*/0
-  , /*decltype(_impl_.evaluation_state_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct LifecycleReplyDefaultTypeInternal {
   PROTOBUF_CONSTEXPR LifecycleReplyDefaultTypeInternal()
@@ -216,31 +214,12 @@ struct InitRspDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 InitRspDefaultTypeInternal _InitRsp_default_instance_;
-PROTOBUF_CONSTEXPR EvaluationAssignment::EvaluationAssignment(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.evaluation_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.pinned_policy_)*/nullptr
-  , /*decltype(_impl_.evaluation_round_)*/0u
-  , /*decltype(_impl_.state_)*/0
-  , /*decltype(_impl_.training_sample_emission_allowed_)*/false
-  , /*decltype(_impl_._cached_size_)*/{}} {}
-struct EvaluationAssignmentDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR EvaluationAssignmentDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~EvaluationAssignmentDefaultTypeInternal() {}
-  union {
-    EvaluationAssignment _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EvaluationAssignmentDefaultTypeInternal _EvaluationAssignment_default_instance_;
 PROTOBUF_CONSTEXPR EpisodeAssignment::EpisodeAssignment(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.episode_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.task_)*/nullptr
   , /*decltype(_impl_.behavior_policy_)*/nullptr
-  , /*decltype(_impl_.evaluation_)*/nullptr
   , /*decltype(_impl_.mode_)*/0
-  , /*decltype(_impl_.curriculum_stage_)*/0
   , /*decltype(_impl_.max_steps_)*/0u
   , /*decltype(_impl_.continue_task_)*/false
   , /*decltype(_impl_.collect_training_samples_)*/false
@@ -297,12 +276,14 @@ struct Vec2DefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 Vec2DefaultTypeInternal _Vec2_default_instance_;
 PROTOBUF_CONSTEXPR AgentState::AgentState(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.position_)*/nullptr
+    /*decltype(_impl_._has_bits_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.agent_id_)*/0u
   , /*decltype(_impl_.termination_reason_)*/0
   , /*decltype(_impl_.is_done_)*/false
   , /*decltype(_impl_.last_move_blocked_)*/false
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+  , /*decltype(_impl_.executed_action_id_)*/0} {}
 struct AgentStateDefaultTypeInternal {
   PROTOBUF_CONSTEXPR AgentStateDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -444,8 +425,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace maze
 }  // namespace task
 }  // namespace rl
-static ::_pb::Metadata file_level_metadata_maze_5ftask_2eproto[25];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_5ftask_2eproto[12];
+static ::_pb::Metadata file_level_metadata_maze_5ftask_2eproto[24];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_5ftask_2eproto[10];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_maze_5ftask_2eproto = nullptr;
 
 const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -456,23 +437,28 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::TaskIdentity, _impl_.task_contract_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::TaskIdentity, _impl_.task_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::TaskIdentity, _impl_.task_revision_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::TaskIdentity, _impl_.task_config_digest_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::TaskIdentity, _impl_.fixed_map_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::TaskIdentity, _impl_.fixed_map_digest_),
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_._has_bits_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_.model_lineage_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_.model_version_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_.model_step_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_.model_artifact_digest_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_.model_manifest_digest_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_.distribution_schema_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BehaviorPolicyBinding, _impl_.policy_spec_digest_),
+  ~0u,
+  0,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MazeTaskSpec, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -486,6 +472,7 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MazeTaskSpec, _impl_.observation_schema_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MazeTaskSpec, _impl_.action_schema_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MazeTaskSpec, _impl_.action_rule_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MazeTaskSpec, _impl_.episode_max_steps_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -514,14 +501,12 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.task_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.session_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.episode_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.evaluation_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.lifecycle_epoch_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.command_sequence_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.idempotency_key_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.expected_task_state_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.expected_session_state_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.expected_episode_state_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleCommand, _impl_.expected_evaluation_state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleReply, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -536,7 +521,6 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleReply, _impl_.task_state_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleReply, _impl_.session_state_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleReply, _impl_.episode_state_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::LifecycleReply, _impl_.evaluation_state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -581,17 +565,6 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::InitRsp, _impl_.accepted_map_digest_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::InitRsp, _impl_.verified_shortest_action_steps_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EvaluationAssignment, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EvaluationAssignment, _impl_.evaluation_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EvaluationAssignment, _impl_.evaluation_round_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EvaluationAssignment, _impl_.state_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EvaluationAssignment, _impl_.pinned_policy_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EvaluationAssignment, _impl_.training_sample_emission_allowed_),
-  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -600,12 +573,10 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.episode_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.task_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.mode_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.curriculum_stage_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.max_steps_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.continue_task_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.behavior_policy_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.collect_training_samples_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.evaluation_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::BeginEpisodeReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -629,7 +600,7 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::Vec2, _impl_.x_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::Vec2, _impl_.y_),
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_._has_bits_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -640,6 +611,13 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.is_done_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.termination_reason_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.last_move_blocked_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.executed_action_id_),
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  0,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -717,30 +695,29 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::rl::task::maze::v1::TaskIdentity)},
-  { 12, -1, -1, sizeof(::rl::task::maze::v1::BehaviorPolicyBinding)},
-  { 24, -1, -1, sizeof(::rl::task::maze::v1::MazeTaskSpec)},
-  { 37, -1, -1, sizeof(::rl::task::maze::v1::MapDescriptor)},
-  { 56, -1, -1, sizeof(::rl::task::maze::v1::LifecycleCommand)},
-  { 73, -1, -1, sizeof(::rl::task::maze::v1::LifecycleReply)},
-  { 88, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionReq)},
-  { 100, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionRsp)},
-  { 114, -1, -1, sizeof(::rl::task::maze::v1::InitReq)},
-  { 122, -1, -1, sizeof(::rl::task::maze::v1::InitRsp)},
-  { 131, -1, -1, sizeof(::rl::task::maze::v1::EvaluationAssignment)},
-  { 142, -1, -1, sizeof(::rl::task::maze::v1::EpisodeAssignment)},
-  { 157, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeReq)},
-  { 164, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeRsp)},
-  { 172, -1, -1, sizeof(::rl::task::maze::v1::Vec2)},
-  { 180, -1, -1, sizeof(::rl::task::maze::v1::AgentState)},
-  { 191, -1, -1, sizeof(::rl::task::maze::v1::UpdateReq)},
-  { 200, -1, -1, sizeof(::rl::task::maze::v1::AgentAction)},
-  { 208, -1, -1, sizeof(::rl::task::maze::v1::UpdateRsp)},
-  { 221, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
-  { 228, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
-  { 235, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
-  { 244, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
-  { 251, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
-  { 258, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
+  { 11, 23, -1, sizeof(::rl::task::maze::v1::BehaviorPolicyBinding)},
+  { 29, -1, -1, sizeof(::rl::task::maze::v1::MazeTaskSpec)},
+  { 43, -1, -1, sizeof(::rl::task::maze::v1::MapDescriptor)},
+  { 62, -1, -1, sizeof(::rl::task::maze::v1::LifecycleCommand)},
+  { 77, -1, -1, sizeof(::rl::task::maze::v1::LifecycleReply)},
+  { 91, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionReq)},
+  { 103, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionRsp)},
+  { 117, -1, -1, sizeof(::rl::task::maze::v1::InitReq)},
+  { 125, -1, -1, sizeof(::rl::task::maze::v1::InitRsp)},
+  { 134, -1, -1, sizeof(::rl::task::maze::v1::EpisodeAssignment)},
+  { 147, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeReq)},
+  { 154, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeRsp)},
+  { 162, -1, -1, sizeof(::rl::task::maze::v1::Vec2)},
+  { 170, 182, -1, sizeof(::rl::task::maze::v1::AgentState)},
+  { 188, -1, -1, sizeof(::rl::task::maze::v1::UpdateReq)},
+  { 197, -1, -1, sizeof(::rl::task::maze::v1::AgentAction)},
+  { 205, -1, -1, sizeof(::rl::task::maze::v1::UpdateRsp)},
+  { 218, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
+  { 225, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
+  { 232, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
+  { 241, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
+  { 248, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
+  { 255, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -754,7 +731,6 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::rl::task::maze::v1::_OpenSessionRsp_default_instance_._instance,
   &::rl::task::maze::v1::_InitReq_default_instance_._instance,
   &::rl::task::maze::v1::_InitRsp_default_instance_._instance,
-  &::rl::task::maze::v1::_EvaluationAssignment_default_instance_._instance,
   &::rl::task::maze::v1::_EpisodeAssignment_default_instance_._instance,
   &::rl::task::maze::v1::_BeginEpisodeReq_default_instance_._instance,
   &::rl::task::maze::v1::_BeginEpisodeRsp_default_instance_._instance,
@@ -773,222 +749,205 @@ static const ::_pb::Message* const file_default_instances[] = {
 
 const char descriptor_table_protodef_maze_5ftask_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\017maze_task.proto\022\017rl.task.maze.v1\032\014comm"
-  "on.proto\"\326\001\n\014TaskIdentity\022\030\n\020task_contra"
-  "ct_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\025\n\rtask_rev"
-  "ision\030\003 \001(\004\0227\n\022task_config_digest\030\004 \001(\0132"
-  "\033.rl.common.v1.ContentDigest\022\024\n\014fixed_ma"
-  "p_id\030\005 \001(\t\0225\n\020fixed_map_digest\030\006 \001(\0132\033.r"
-  "l.common.v1.ContentDigest\"\231\002\n\025BehaviorPo"
-  "licyBinding\022\030\n\020model_lineage_id\030\001 \001(\t\022\025\n"
-  "\rmodel_version\030\002 \001(\004\022:\n\025model_artifact_d"
+  "on.proto\"\324\001\n\014TaskIdentity\022\030\n\020task_contra"
+  "ct_id\030\001 \001(\t\022\025\n\rtask_revision\030\003 \001(\004\0227\n\022ta"
+  "sk_config_digest\030\004 \001(\0132\033.rl.common.v1.Co"
+  "ntentDigest\022\024\n\014fixed_map_id\030\005 \001(\t\0225\n\020fix"
+  "ed_map_digest\030\006 \001(\0132\033.rl.common.v1.Conte"
+  "ntDigestJ\004\010\002\020\003R\007task_id\"\271\002\n\025BehaviorPoli"
+  "cyBinding\022\030\n\020model_lineage_id\030\001 \001(\t\022\027\n\nm"
+  "odel_step\030\002 \001(\004H\000\210\001\001\022:\n\025model_artifact_d"
   "igest\030\003 \001(\0132\033.rl.common.v1.ContentDigest"
   "\022:\n\025model_manifest_digest\030\004 \001(\0132\033.rl.com"
   "mon.v1.ContentDigest\022\036\n\026distribution_sch"
   "ema_id\030\005 \001(\t\0227\n\022policy_spec_digest\030\006 \001(\013"
-  "2\033.rl.common.v1.ContentDigest\"\253\002\n\014MazeTa"
-  "skSpec\022/\n\010identity\030\001 \001(\0132\035.rl.task.maze."
-  "v1.TaskIdentity\022\023\n\013agent_count\030\002 \001(\r\022\024\n\014"
-  "fixed_map_id\030\003 \001(\t\0228\n\023expected_map_diges"
-  "t\030\004 \001(\0132\033.rl.common.v1.ContentDigest\0228\n\022"
-  "observation_schema\030\005 \001(\0132\034.rl.common.v1."
-  "SchemaIdentity\0223\n\raction_schema\030\006 \001(\0132\034."
-  "rl.common.v1.SchemaIdentity\022\026\n\016action_ru"
-  "le_id\030\007 \001(\t\"\332\002\n\rMapDescriptor\022\016\n\006map_id\030"
-  "\001 \001(\t\022\026\n\016format_version\030\002 \001(\r\022\024\n\014grid_co"
-  "lumns\030\003 \001(\r\022\021\n\tgrid_rows\030\004 \001(\r\022\034\n\024grid_s"
-  "ize_microunits\030\005 \001(\r\022\024\n\014start_grid_x\030\006 \001"
-  "(\005\022\024\n\014start_grid_y\030\007 \001(\005\022\023\n\013goal_grid_x\030"
-  "\010 \001(\005\022\023\n\013goal_grid_y\030\t \001(\005\022\026\n\016blocked_bi"
-  "tmap\030\n \001(\014\0225\n\020canonical_digest\030\013 \001(\0132\033.r"
-  "l.common.v1.ContentDigest\022\035\n\025shortest_ac"
-  "tion_steps\030\014 \001(\r\022\026\n\016action_rule_id\030\r \001(\t"
-  "\"\306\003\n\020LifecycleCommand\022+\n\004task\030\001 \001(\0132\035.rl"
-  ".task.maze.v1.TaskIdentity\022\022\n\nsession_id"
-  "\030\002 \001(\t\022\022\n\nepisode_id\030\003 \001(\t\022\025\n\revaluation"
-  "_id\030\004 \001(\t\022\027\n\017lifecycle_epoch\030\005 \001(\004\022\030\n\020co"
-  "mmand_sequence\030\006 \001(\004\022\027\n\017idempotency_key\030"
-  "\007 \001(\t\0227\n\023expected_task_state\030\010 \001(\0162\032.rl."
-  "task.maze.v1.TaskState\022=\n\026expected_sessi"
-  "on_state\030\t \001(\0162\035.rl.task.maze.v1.Session"
-  "State\022=\n\026expected_episode_state\030\n \001(\0162\035."
-  "rl.task.maze.v1.EpisodeState\022C\n\031expected"
-  "_evaluation_state\030\013 \001(\0162 .rl.task.maze.v"
-  "1.EvaluationState\"\220\003\n\016LifecycleReply\022\020\n\010"
-  "ret_code\030\001 \001(\005\0220\n\006result\030\002 \001(\0162 .rl.task"
-  ".maze.v1.LifecycleResult\0227\n\nerror_code\030\003"
-  " \001(\0162#.rl.task.maze.v1.LifecycleErrorCod"
-  "e\022\017\n\007message\030\004 \001(\t\022\030\n\020applied_sequence\030\005"
-  " \001(\004\022.\n\ntask_state\030\006 \001(\0162\032.rl.task.maze."
-  "v1.TaskState\0224\n\rsession_state\030\007 \001(\0162\035.rl"
-  ".task.maze.v1.SessionState\0224\n\repisode_st"
-  "ate\030\010 \001(\0162\035.rl.task.maze.v1.EpisodeState"
-  "\022:\n\020evaluation_state\030\t \001(\0162 .rl.task.maz"
-  "e.v1.EvaluationState\"\263\002\n\016OpenSessionReq\022"
-  "5\n\006client\030\001 \001(\0132%.rl.common.v1.ServiceIn"
-  "stanceIdentity\022\037\n\027environment_instance_i"
-  "d\030\002 \001(\t\022+\n#supported_session_protocol_ve"
-  "rsions\030\003 \003(\r\022C\n\035supported_observation_sc"
-  "hemas\030\004 \003(\0132\034.rl.common.v1.SchemaIdentit"
-  "y\022>\n\030supported_action_schemas\030\005 \003(\0132\034.rl"
-  ".common.v1.SchemaIdentity\022\027\n\017idempotency"
-  "_key\030\006 \001(\t\"\352\002\n\016OpenSessionRsp\0222\n\tlifecyc"
-  "le\030\001 \001(\0132\037.rl.task.maze.v1.LifecycleRepl"
-  "y\022 \n\030session_protocol_version\030\002 \001(\r\022\022\n\ns"
-  "ession_id\030\003 \001(\t\022\027\n\017lifecycle_epoch\030\004 \001(\004"
-  "\0227\n\010aiserver\030\005 \001(\0132%.rl.common.v1.Servic"
-  "eInstanceIdentity\0220\n\ttask_spec\030\006 \001(\0132\035.r"
-  "l.task.maze.v1.MazeTaskSpec\0224\n\rworkload_"
-  "mode\030\007 \001(\0162\035.rl.task.maze.v1.WorkloadMod"
-  "e\0224\n\rreplay_policy\030\010 \001(\0162\035.rl.task.maze."
-  "v1.ReplayPolicy\"j\n\007InitReq\0222\n\007command\030\001 "
-  "\001(\0132!.rl.task.maze.v1.LifecycleCommand\022+"
-  "\n\003map\030\002 \001(\0132\036.rl.task.maze.v1.MapDescrip"
-  "tor\"\237\001\n\007InitRsp\0222\n\tlifecycle\030\001 \001(\0132\037.rl."
-  "task.maze.v1.LifecycleReply\0228\n\023accepted_"
-  "map_digest\030\002 \001(\0132\033.rl.common.v1.ContentD"
-  "igest\022&\n\036verified_shortest_action_steps\030"
-  "\003 \001(\r\"\341\001\n\024EvaluationAssignment\022\025\n\revalua"
-  "tion_id\030\001 \001(\t\022\030\n\020evaluation_round\030\002 \001(\r\022"
-  "/\n\005state\030\003 \001(\0162 .rl.task.maze.v1.Evaluat"
-  "ionState\022=\n\rpinned_policy\030\004 \001(\0132&.rl.tas"
-  "k.maze.v1.BehaviorPolicyBinding\022(\n train"
-  "ing_sample_emission_allowed\030\005 \001(\010\"\204\003\n\021Ep"
-  "isodeAssignment\022\022\n\nepisode_id\030\001 \001(\t\022+\n\004t"
-  "ask\030\002 \001(\0132\035.rl.task.maze.v1.TaskIdentity"
-  "\022*\n\004mode\030\003 \001(\0162\034.rl.task.maze.v1.Episode"
-  "Mode\022:\n\020curriculum_stage\030\004 \001(\0162 .rl.task"
-  ".maze.v1.CurriculumStage\022\021\n\tmax_steps\030\005 "
-  "\001(\r\022\025\n\rcontinue_task\030\006 \001(\010\022\?\n\017behavior_p"
-  "olicy\030\007 \001(\0132&.rl.task.maze.v1.BehaviorPo"
-  "licyBinding\022 \n\030collect_training_samples\030"
-  "\010 \001(\010\0229\n\nevaluation\030\t \001(\0132%.rl.task.maze"
-  ".v1.EvaluationAssignment\"E\n\017BeginEpisode"
-  "Req\0222\n\007command\030\001 \001(\0132!.rl.task.maze.v1.L"
-  "ifecycleCommand\"}\n\017BeginEpisodeRsp\0222\n\tli"
-  "fecycle\030\001 \001(\0132\037.rl.task.maze.v1.Lifecycl"
-  "eReply\0226\n\nassignment\030\002 \001(\0132\".rl.task.maz"
-  "e.v1.EpisodeAssignment\"\034\n\004Vec2\022\t\n\001x\030\001 \001("
-  "\002\022\t\n\001y\030\002 \001(\002\"\267\001\n\nAgentState\022\020\n\010agent_id\030"
-  "\001 \001(\r\022\'\n\010position\030\002 \001(\0132\025.rl.task.maze.v"
-  "1.Vec2\022\017\n\007is_done\030\003 \001(\010\022B\n\022termination_r"
-  "eason\030\004 \001(\0162&.rl.task.maze.v1.MazeTermin"
-  "ationReason\022\031\n\021last_move_blocked\030\005 \001(\010\"~"
-  "\n\tUpdateReq\0222\n\007command\030\001 \001(\0132!.rl.task.m"
-  "aze.v1.LifecycleCommand\022\020\n\010frame_id\030\002 \001("
-  "\004\022+\n\006agents\030\003 \003(\0132\033.rl.task.maze.v1.Agen"
-  "tState\"2\n\013AgentAction\022\020\n\010agent_id\030\001 \001(\r\022"
-  "\021\n\taction_id\030\002 \001(\005\"\271\002\n\tUpdateRsp\0222\n\tlife"
+  "2\033.rl.common.v1.ContentDigestB\r\n\013_model_"
+  "stepR\rmodel_version\"\306\002\n\014MazeTaskSpec\022/\n\010"
+  "identity\030\001 \001(\0132\035.rl.task.maze.v1.TaskIde"
+  "ntity\022\023\n\013agent_count\030\002 \001(\r\022\024\n\014fixed_map_"
+  "id\030\003 \001(\t\0228\n\023expected_map_digest\030\004 \001(\0132\033."
+  "rl.common.v1.ContentDigest\0228\n\022observatio"
+  "n_schema\030\005 \001(\0132\034.rl.common.v1.SchemaIden"
+  "tity\0223\n\raction_schema\030\006 \001(\0132\034.rl.common."
+  "v1.SchemaIdentity\022\026\n\016action_rule_id\030\007 \001("
+  "\t\022\031\n\021episode_max_steps\030\010 \001(\r\"\332\002\n\rMapDesc"
+  "riptor\022\016\n\006map_id\030\001 \001(\t\022\026\n\016format_version"
+  "\030\002 \001(\r\022\024\n\014grid_columns\030\003 \001(\r\022\021\n\tgrid_row"
+  "s\030\004 \001(\r\022\034\n\024grid_size_microunits\030\005 \001(\r\022\024\n"
+  "\014start_grid_x\030\006 \001(\005\022\024\n\014start_grid_y\030\007 \001("
+  "\005\022\023\n\013goal_grid_x\030\010 \001(\005\022\023\n\013goal_grid_y\030\t "
+  "\001(\005\022\026\n\016blocked_bitmap\030\n \001(\014\0225\n\020canonical"
+  "_digest\030\013 \001(\0132\033.rl.common.v1.ContentDige"
+  "st\022\035\n\025shortest_action_steps\030\014 \001(\r\022\026\n\016act"
+  "ion_rule_id\030\r \001(\t\"\240\003\n\020LifecycleCommand\022+"
+  "\n\004task\030\001 \001(\0132\035.rl.task.maze.v1.TaskIdent"
+  "ity\022\022\n\nsession_id\030\002 \001(\t\022\022\n\nepisode_id\030\003 "
+  "\001(\t\022\027\n\017lifecycle_epoch\030\005 \001(\004\022\030\n\020command_"
+  "sequence\030\006 \001(\004\022\027\n\017idempotency_key\030\007 \001(\t\022"
+  "7\n\023expected_task_state\030\010 \001(\0162\032.rl.task.m"
+  "aze.v1.TaskState\022=\n\026expected_session_sta"
+  "te\030\t \001(\0162\035.rl.task.maze.v1.SessionState\022"
+  "=\n\026expected_episode_state\030\n \001(\0162\035.rl.tas"
+  "k.maze.v1.EpisodeStateJ\004\010\004\020\005J\004\010\013\020\014R\reval"
+  "uation_idR\031expected_evaluation_state\"\354\002\n"
+  "\016LifecycleReply\022\020\n\010ret_code\030\001 \001(\005\0220\n\006res"
+  "ult\030\002 \001(\0162 .rl.task.maze.v1.LifecycleRes"
+  "ult\0227\n\nerror_code\030\003 \001(\0162#.rl.task.maze.v"
+  "1.LifecycleErrorCode\022\017\n\007message\030\004 \001(\t\022\030\n"
+  "\020applied_sequence\030\005 \001(\004\022.\n\ntask_state\030\006 "
+  "\001(\0162\032.rl.task.maze.v1.TaskState\0224\n\rsessi"
+  "on_state\030\007 \001(\0162\035.rl.task.maze.v1.Session"
+  "State\0224\n\repisode_state\030\010 \001(\0162\035.rl.task.m"
+  "aze.v1.EpisodeStateJ\004\010\t\020\nR\020evaluation_st"
+  "ate\"\263\002\n\016OpenSessionReq\0225\n\006client\030\001 \001(\0132%"
+  ".rl.common.v1.ServiceInstanceIdentity\022\037\n"
+  "\027environment_instance_id\030\002 \001(\t\022+\n#suppor"
+  "ted_session_protocol_versions\030\003 \003(\r\022C\n\035s"
+  "upported_observation_schemas\030\004 \003(\0132\034.rl."
+  "common.v1.SchemaIdentity\022>\n\030supported_ac"
+  "tion_schemas\030\005 \003(\0132\034.rl.common.v1.Schema"
+  "Identity\022\027\n\017idempotency_key\030\006 \001(\t\"\352\002\n\016Op"
+  "enSessionRsp\0222\n\tlifecycle\030\001 \001(\0132\037.rl.tas"
+  "k.maze.v1.LifecycleReply\022 \n\030session_prot"
+  "ocol_version\030\002 \001(\r\022\022\n\nsession_id\030\003 \001(\t\022\027"
+  "\n\017lifecycle_epoch\030\004 \001(\004\0227\n\010aiserver\030\005 \001("
+  "\0132%.rl.common.v1.ServiceInstanceIdentity"
+  "\0220\n\ttask_spec\030\006 \001(\0132\035.rl.task.maze.v1.Ma"
+  "zeTaskSpec\0224\n\rworkload_mode\030\007 \001(\0162\035.rl.t"
+  "ask.maze.v1.WorkloadMode\0224\n\rreplay_polic"
+  "y\030\010 \001(\0162\035.rl.task.maze.v1.ReplayPolicy\"j"
+  "\n\007InitReq\0222\n\007command\030\001 \001(\0132!.rl.task.maz"
+  "e.v1.LifecycleCommand\022+\n\003map\030\002 \001(\0132\036.rl."
+  "task.maze.v1.MapDescriptor\"\237\001\n\007InitRsp\0222"
+  "\n\tlifecycle\030\001 \001(\0132\037.rl.task.maze.v1.Life"
+  "cycleReply\0228\n\023accepted_map_digest\030\002 \001(\0132"
+  "\033.rl.common.v1.ContentDigest\022&\n\036verified"
+  "_shortest_action_steps\030\003 \001(\r\"\267\002\n\021Episode"
+  "Assignment\022\022\n\nepisode_id\030\001 \001(\t\022+\n\004task\030\002"
+  " \001(\0132\035.rl.task.maze.v1.TaskIdentity\022*\n\004m"
+  "ode\030\003 \001(\0162\034.rl.task.maze.v1.EpisodeMode\022"
+  "\021\n\tmax_steps\030\005 \001(\r\022\025\n\rcontinue_task\030\006 \001("
+  "\010\022\?\n\017behavior_policy\030\007 \001(\0132&.rl.task.maz"
+  "e.v1.BehaviorPolicyBinding\022 \n\030collect_tr"
+  "aining_samples\030\010 \001(\010J\004\010\004\020\005J\004\010\t\020\nR\020curric"
+  "ulum_stageR\nevaluation\"E\n\017BeginEpisodeRe"
+  "q\0222\n\007command\030\001 \001(\0132!.rl.task.maze.v1.Lif"
+  "ecycleCommand\"}\n\017BeginEpisodeRsp\0222\n\tlife"
   "cycle\030\001 \001(\0132\037.rl.task.maze.v1.LifecycleR"
-  "eply\022-\n\007actions\030\002 \003(\0132\034.rl.task.maze.v1."
-  "AgentAction\022\020\n\010replayed\030\003 \001(\010\022\033\n\023task_st"
-  "op_requested\030\004 \001(\010\022@\n\020task_stop_reason\030\005"
-  " \001(\0162&.rl.task.maze.v1.MazeTerminationRe"
-  "ason\022@\n\023environment_control\030\006 \001(\0162#.rl.t"
-  "ask.maze.v1.EnvironmentControl\022\026\n\016retry_"
-  "after_ms\030\007 \001(\005\"C\n\rEndEpisodeReq\0222\n\007comma"
-  "nd\030\001 \001(\0132!.rl.task.maze.v1.LifecycleComm"
-  "and\"C\n\rEndEpisodeRsp\0222\n\tlifecycle\030\001 \001(\0132"
-  "\037.rl.task.maze.v1.LifecycleReply\"\216\001\n\017Abo"
-  "rtEpisodeReq\0222\n\007command\030\001 \001(\0132!.rl.task."
-  "maze.v1.LifecycleCommand\0226\n\006reason\030\002 \001(\016"
-  "2&.rl.task.maze.v1.MazeTerminationReason"
-  "\022\017\n\007message\030\003 \001(\t\"E\n\017AbortEpisodeRsp\0222\n\t"
-  "lifecycle\030\001 \001(\0132\037.rl.task.maze.v1.Lifecy"
-  "cleReply\"E\n\017CloseSessionReq\0222\n\007command\030\001"
-  " \001(\0132!.rl.task.maze.v1.LifecycleCommand\""
-  "E\n\017CloseSessionRsp\0222\n\tlifecycle\030\001 \001(\0132\037."
-  "rl.task.maze.v1.LifecycleReply*\261\001\n\017Lifec"
-  "ycleResult\022 \n\034LIFECYCLE_RESULT_UNSPECIFI"
-  "ED\020\000\022\034\n\030LIFECYCLE_RESULT_APPLIED\020\001\022$\n LI"
-  "FECYCLE_RESULT_ALREADY_APPLIED\020\002\022\035\n\031LIFE"
-  "CYCLE_RESULT_REJECTED\020\003\022\031\n\025LIFECYCLE_RES"
-  "ULT_WAIT\020\004*\351\003\n\022LifecycleErrorCode\022$\n LIF"
-  "ECYCLE_ERROR_CODE_UNSPECIFIED\020\000\022)\n%LIFEC"
-  "YCLE_ERROR_CODE_INVALID_IDENTITY\020\001\022\'\n#LI"
-  "FECYCLE_ERROR_CODE_INVALID_DIGEST\020\002\022+\n\'L"
-  "IFECYCLE_ERROR_CODE_UNSUPPORTED_SCHEMA\020\003"
-  "\022$\n LIFECYCLE_ERROR_CODE_STALE_EPOCH\020\004\022%"
-  "\n!LIFECYCLE_ERROR_CODE_OUT_OF_ORDER\020\005\022-\n"
-  ")LIFECYCLE_ERROR_CODE_IDEMPOTENCY_CONFLI"
-  "CT\020\006\022\'\n#LIFECYCLE_ERROR_CODE_STATE_CONFL"
-  "ICT\020\007\022/\n+LIFECYCLE_ERROR_CODE_TASK_REVIS"
-  "ION_MISMATCH\020\010\022$\n LIFECYCLE_ERROR_CODE_M"
-  "AP_INVALID\020\t\0220\n,LIFECYCLE_ERROR_CODE_MOD"
-  "EL_IDENTITY_MISMATCH\020\n*\361\001\n\tTaskState\022\032\n\026"
-  "TASK_STATE_UNSPECIFIED\020\000\022\026\n\022TASK_STATE_C"
-  "REATED\020\001\022\033\n\027TASK_STATE_INITIALIZING\020\002\022\027\n"
-  "\023TASK_STATE_TRAINING\020\003\022\031\n\025TASK_STATE_EVA"
-  "LUATING\020\004\022\027\n\023TASK_STATE_STOPPING\020\005\022\026\n\022TA"
-  "SK_STATE_STOPPED\020\006\022\027\n\023TASK_STATE_COMPLET"
-  "E\020\007\022\025\n\021TASK_STATE_FAILED\020\010*\327\001\n\014SessionSt"
-  "ate\022\035\n\031SESSION_STATE_UNSPECIFIED\020\000\022\030\n\024SE"
-  "SSION_STATE_OPENED\020\001\022\037\n\033SESSION_STATE_MA"
-  "P_VALIDATED\020\002\022\026\n\022SESSION_STATE_IDLE\020\003\022 \n"
-  "\034SESSION_STATE_EPISODE_ACTIVE\020\004\022\031\n\025SESSI"
-  "ON_STATE_CLOSING\020\005\022\030\n\024SESSION_STATE_CLOS"
-  "ED\020\006*\301\001\n\014EpisodeState\022\035\n\031EPISODE_STATE_U"
-  "NSPECIFIED\020\000\022\032\n\026EPISODE_STATE_ASSIGNED\020\001"
-  "\022\031\n\025EPISODE_STATE_RUNNING\020\002\022#\n\037EPISODE_S"
-  "TATE_TERMINAL_REPORTED\020\003\022\033\n\027EPISODE_STAT"
-  "E_COMMITTED\020\004\022\031\n\025EPISODE_STATE_ABORTED\020\005"
-  "*\252\002\n\017EvaluationState\022 \n\034EVALUATION_STATE"
-  "_UNSPECIFIED\020\000\022\035\n\031EVALUATION_STATE_INACT"
-  "IVE\020\001\022\035\n\031EVALUATION_STATE_DRAINING\020\002\022!\n\035"
-  "EVALUATION_STATE_MODEL_PINNED\020\003\022#\n\037EVALU"
-  "ATION_STATE_ARGMAX_ROUND_1\020\004\022#\n\037EVALUATI"
-  "ON_STATE_ARGMAX_ROUND_2\020\005\022*\n&EVALUATION_"
-  "STATE_STOCHASTIC_DIAGNOSTIC\020\006\022\036\n\032EVALUAT"
-  "ION_STATE_COMMITTED\020\007*\222\001\n\013EpisodeMode\022\034\n"
-  "\030EPISODE_MODE_UNSPECIFIED\020\000\022\031\n\025EPISODE_M"
-  "ODE_TRAINING\020\001\022\"\n\036EPISODE_MODE_EVALUATIO"
-  "N_ARGMAX\020\002\022&\n\"EPISODE_MODE_EVALUATION_ST"
-  "OCHASTIC\020\003*\272\001\n\017CurriculumStage\022 \n\034CURRIC"
-  "ULUM_STAGE_UNSPECIFIED\020\000\022\027\n\023CURRICULUM_S"
-  "TAGE_8X\020\001\022\027\n\023CURRICULUM_STAGE_4X\020\002\022\027\n\023CU"
-  "RRICULUM_STAGE_2X\020\003\022\035\n\031CURRICULUM_STAGE_"
-  "COMPLETE\020\004\022\033\n\027CURRICULUM_STAGE_FAILED\020\005*"
-  "\262\001\n\014WorkloadMode\022\035\n\031WORKLOAD_MODE_UNSPEC"
-  "IFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAINING\020\001\022!\n\035W"
-  "ORKLOAD_MODE_INFERENCE_SMOKE\020\002\022\"\n\036WORKLO"
-  "AD_MODE_MODEL_EVALUATION\020\003\022 \n\034WORKLOAD_M"
-  "ODE_MAP_VALIDATION\020\004*m\n\014ReplayPolicy\022\035\n\031"
-  "REPLAY_POLICY_UNSPECIFIED\020\000\022\032\n\026REPLAY_PO"
-  "LICY_DISABLED\020\001\022\"\n\036REPLAY_POLICY_RECORD_"
-  "AND_SERVE\020\002*\262\002\n\025MazeTerminationReason\022\'\n"
-  "#MAZE_TERMINATION_REASON_UNSPECIFIED\020\000\022\""
-  "\n\036MAZE_TERMINATION_REASON_ACTIVE\020\001\022(\n$MA"
-  "ZE_TERMINATION_REASON_GOAL_REACHED\020\002\022&\n\""
-  "MAZE_TERMINATION_REASON_TIME_LIMIT\020\003\022(\n$"
-  "MAZE_TERMINATION_REASON_CLIENT_ABORT\020\004\022)"
-  "\n%MAZE_TERMINATION_REASON_CHAIN_FAILURE\020"
-  "\005\022%\n!MAZE_TERMINATION_REASON_TASK_STOP\020\006"
-  "*\216\001\n\022EnvironmentControl\022#\n\037ENVIRONMENT_C"
-  "ONTROL_UNSPECIFIED\020\000\022\037\n\033ENVIRONMENT_CONT"
-  "ROL_ADVANCE\020\001\0222\n.ENVIRONMENT_CONTROL_WAI"
-  "T_FOR_TRAINING_CAPACITY\020\0022\252\004\n\017MazeTaskSe"
-  "rvice\022O\n\013OpenSession\022\037.rl.task.maze.v1.O"
-  "penSessionReq\032\037.rl.task.maze.v1.OpenSess"
-  "ionRsp\022:\n\004Init\022\030.rl.task.maze.v1.InitReq"
-  "\032\030.rl.task.maze.v1.InitRsp\022R\n\014BeginEpiso"
-  "de\022 .rl.task.maze.v1.BeginEpisodeReq\032 .r"
-  "l.task.maze.v1.BeginEpisodeRsp\022@\n\006Update"
-  "\022\032.rl.task.maze.v1.UpdateReq\032\032.rl.task.m"
-  "aze.v1.UpdateRsp\022L\n\nEndEpisode\022\036.rl.task"
-  ".maze.v1.EndEpisodeReq\032\036.rl.task.maze.v1"
-  ".EndEpisodeRsp\022R\n\014AbortEpisode\022 .rl.task"
-  ".maze.v1.AbortEpisodeReq\032 .rl.task.maze."
-  "v1.AbortEpisodeRsp\022R\n\014CloseSession\022 .rl."
-  "task.maze.v1.CloseSessionReq\032 .rl.task.m"
-  "aze.v1.CloseSessionRspB\003\200\001\000b\006proto3"
+  "eply\0226\n\nassignment\030\002 \001(\0132\".rl.task.maze."
+  "v1.EpisodeAssignment\"\034\n\004Vec2\022\t\n\001x\030\001 \001(\002\022"
+  "\t\n\001y\030\002 \001(\002\"\357\001\n\nAgentState\022\020\n\010agent_id\030\001 "
+  "\001(\r\022\'\n\010position\030\002 \001(\0132\025.rl.task.maze.v1."
+  "Vec2\022\017\n\007is_done\030\003 \001(\010\022B\n\022termination_rea"
+  "son\030\004 \001(\0162&.rl.task.maze.v1.MazeTerminat"
+  "ionReason\022\031\n\021last_move_blocked\030\005 \001(\010\022\037\n\022"
+  "executed_action_id\030\006 \001(\005H\000\210\001\001B\025\n\023_execut"
+  "ed_action_id\"~\n\tUpdateReq\0222\n\007command\030\001 \001"
+  "(\0132!.rl.task.maze.v1.LifecycleCommand\022\020\n"
+  "\010frame_id\030\002 \001(\004\022+\n\006agents\030\003 \003(\0132\033.rl.tas"
+  "k.maze.v1.AgentState\"2\n\013AgentAction\022\020\n\010a"
+  "gent_id\030\001 \001(\r\022\021\n\taction_id\030\002 \001(\005\"\271\002\n\tUpd"
+  "ateRsp\0222\n\tlifecycle\030\001 \001(\0132\037.rl.task.maze"
+  ".v1.LifecycleReply\022-\n\007actions\030\002 \003(\0132\034.rl"
+  ".task.maze.v1.AgentAction\022\020\n\010replayed\030\003 "
+  "\001(\010\022\033\n\023task_stop_requested\030\004 \001(\010\022@\n\020task"
+  "_stop_reason\030\005 \001(\0162&.rl.task.maze.v1.Maz"
+  "eTerminationReason\022@\n\023environment_contro"
+  "l\030\006 \001(\0162#.rl.task.maze.v1.EnvironmentCon"
+  "trol\022\026\n\016retry_after_ms\030\007 \001(\005\"C\n\rEndEpiso"
+  "deReq\0222\n\007command\030\001 \001(\0132!.rl.task.maze.v1"
+  ".LifecycleCommand\"C\n\rEndEpisodeRsp\0222\n\tli"
+  "fecycle\030\001 \001(\0132\037.rl.task.maze.v1.Lifecycl"
+  "eReply\"\216\001\n\017AbortEpisodeReq\0222\n\007command\030\001 "
+  "\001(\0132!.rl.task.maze.v1.LifecycleCommand\0226"
+  "\n\006reason\030\002 \001(\0162&.rl.task.maze.v1.MazeTer"
+  "minationReason\022\017\n\007message\030\003 \001(\t\"E\n\017Abort"
+  "EpisodeRsp\0222\n\tlifecycle\030\001 \001(\0132\037.rl.task."
+  "maze.v1.LifecycleReply\"E\n\017CloseSessionRe"
+  "q\0222\n\007command\030\001 \001(\0132!.rl.task.maze.v1.Lif"
+  "ecycleCommand\"E\n\017CloseSessionRsp\0222\n\tlife"
+  "cycle\030\001 \001(\0132\037.rl.task.maze.v1.LifecycleR"
+  "eply*\261\001\n\017LifecycleResult\022 \n\034LIFECYCLE_RE"
+  "SULT_UNSPECIFIED\020\000\022\034\n\030LIFECYCLE_RESULT_A"
+  "PPLIED\020\001\022$\n LIFECYCLE_RESULT_ALREADY_APP"
+  "LIED\020\002\022\035\n\031LIFECYCLE_RESULT_REJECTED\020\003\022\031\n"
+  "\025LIFECYCLE_RESULT_WAIT\020\004*\351\003\n\022LifecycleEr"
+  "rorCode\022$\n LIFECYCLE_ERROR_CODE_UNSPECIF"
+  "IED\020\000\022)\n%LIFECYCLE_ERROR_CODE_INVALID_ID"
+  "ENTITY\020\001\022\'\n#LIFECYCLE_ERROR_CODE_INVALID"
+  "_DIGEST\020\002\022+\n\'LIFECYCLE_ERROR_CODE_UNSUPP"
+  "ORTED_SCHEMA\020\003\022$\n LIFECYCLE_ERROR_CODE_S"
+  "TALE_EPOCH\020\004\022%\n!LIFECYCLE_ERROR_CODE_OUT"
+  "_OF_ORDER\020\005\022-\n)LIFECYCLE_ERROR_CODE_IDEM"
+  "POTENCY_CONFLICT\020\006\022\'\n#LIFECYCLE_ERROR_CO"
+  "DE_STATE_CONFLICT\020\007\022/\n+LIFECYCLE_ERROR_C"
+  "ODE_TASK_REVISION_MISMATCH\020\010\022$\n LIFECYCL"
+  "E_ERROR_CODE_MAP_INVALID\020\t\0220\n,LIFECYCLE_"
+  "ERROR_CODE_MODEL_IDENTITY_MISMATCH\020\n*\361\001\n"
+  "\tTaskState\022\032\n\026TASK_STATE_UNSPECIFIED\020\000\022\026"
+  "\n\022TASK_STATE_CREATED\020\001\022\033\n\027TASK_STATE_INI"
+  "TIALIZING\020\002\022\027\n\023TASK_STATE_TRAINING\020\003\022\031\n\025"
+  "TASK_STATE_EVALUATING\020\004\022\027\n\023TASK_STATE_ST"
+  "OPPING\020\005\022\026\n\022TASK_STATE_STOPPED\020\006\022\027\n\023TASK"
+  "_STATE_COMPLETE\020\007\022\025\n\021TASK_STATE_FAILED\020\010"
+  "*\327\001\n\014SessionState\022\035\n\031SESSION_STATE_UNSPE"
+  "CIFIED\020\000\022\030\n\024SESSION_STATE_OPENED\020\001\022\037\n\033SE"
+  "SSION_STATE_MAP_VALIDATED\020\002\022\026\n\022SESSION_S"
+  "TATE_IDLE\020\003\022 \n\034SESSION_STATE_EPISODE_ACT"
+  "IVE\020\004\022\031\n\025SESSION_STATE_CLOSING\020\005\022\030\n\024SESS"
+  "ION_STATE_CLOSED\020\006*\301\001\n\014EpisodeState\022\035\n\031E"
+  "PISODE_STATE_UNSPECIFIED\020\000\022\032\n\026EPISODE_ST"
+  "ATE_ASSIGNED\020\001\022\031\n\025EPISODE_STATE_RUNNING\020"
+  "\002\022#\n\037EPISODE_STATE_TERMINAL_REPORTED\020\003\022\033"
+  "\n\027EPISODE_STATE_COMMITTED\020\004\022\031\n\025EPISODE_S"
+  "TATE_ABORTED\020\005*\255\001\n\013EpisodeMode\022\034\n\030EPISOD"
+  "E_MODE_UNSPECIFIED\020\000\022\031\n\025EPISODE_MODE_TRA"
+  "INING\020\001\022\033\n\027EPISODE_MODE_EVALUATION\020\002\"\004\010\003"
+  "\020\003*\036EPISODE_MODE_EVALUATION_ARGMAX*\"EPIS"
+  "ODE_MODE_EVALUATION_STOCHASTIC*\320\001\n\014Workl"
+  "oadMode\022\035\n\031WORKLOAD_MODE_UNSPECIFIED\020\000\022\032"
+  "\n\026WORKLOAD_MODE_TRAINING\020\001\022\034\n\030WORKLOAD_M"
+  "ODE_EVALUATION\020\002\"\004\010\003\020\003\"\004\010\004\020\004*\035WORKLOAD_M"
+  "ODE_INFERENCE_SMOKE*\036WORKLOAD_MODE_MODEL"
+  "_EVALUATION*\034WORKLOAD_MODE_MAP_VALIDATIO"
+  "N*m\n\014ReplayPolicy\022\035\n\031REPLAY_POLICY_UNSPE"
+  "CIFIED\020\000\022\032\n\026REPLAY_POLICY_DISABLED\020\001\022\"\n\036"
+  "REPLAY_POLICY_RECORD_AND_SERVE\020\002*\262\002\n\025Maz"
+  "eTerminationReason\022\'\n#MAZE_TERMINATION_R"
+  "EASON_UNSPECIFIED\020\000\022\"\n\036MAZE_TERMINATION_"
+  "REASON_ACTIVE\020\001\022(\n$MAZE_TERMINATION_REAS"
+  "ON_GOAL_REACHED\020\002\022&\n\"MAZE_TERMINATION_RE"
+  "ASON_TIME_LIMIT\020\003\022(\n$MAZE_TERMINATION_RE"
+  "ASON_CLIENT_ABORT\020\004\022)\n%MAZE_TERMINATION_"
+  "REASON_CHAIN_FAILURE\020\005\022%\n!MAZE_TERMINATI"
+  "ON_REASON_TASK_STOP\020\006*\216\001\n\022EnvironmentCon"
+  "trol\022#\n\037ENVIRONMENT_CONTROL_UNSPECIFIED\020"
+  "\000\022\037\n\033ENVIRONMENT_CONTROL_ADVANCE\020\001\0222\n.EN"
+  "VIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPA"
+  "CITY\020\0022\252\004\n\017MazeTaskService\022O\n\013OpenSessio"
+  "n\022\037.rl.task.maze.v1.OpenSessionReq\032\037.rl."
+  "task.maze.v1.OpenSessionRsp\022:\n\004Init\022\030.rl"
+  ".task.maze.v1.InitReq\032\030.rl.task.maze.v1."
+  "InitRsp\022R\n\014BeginEpisode\022 .rl.task.maze.v"
+  "1.BeginEpisodeReq\032 .rl.task.maze.v1.Begi"
+  "nEpisodeRsp\022@\n\006Update\022\032.rl.task.maze.v1."
+  "UpdateReq\032\032.rl.task.maze.v1.UpdateRsp\022L\n"
+  "\nEndEpisode\022\036.rl.task.maze.v1.EndEpisode"
+  "Req\032\036.rl.task.maze.v1.EndEpisodeRsp\022R\n\014A"
+  "bortEpisode\022 .rl.task.maze.v1.AbortEpiso"
+  "deReq\032 .rl.task.maze.v1.AbortEpisodeRsp\022"
+  "R\n\014CloseSession\022 .rl.task.maze.v1.CloseS"
+  "essionReq\032 .rl.task.maze.v1.CloseSession"
+  "RspB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_maze_5ftask_2eproto_deps[1] = {
   &::descriptor_table_common_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_maze_5ftask_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_maze_5ftask_2eproto = {
-    false, false, 8315, descriptor_table_protodef_maze_5ftask_2eproto,
+    false, false, 7616, descriptor_table_protodef_maze_5ftask_2eproto,
     "maze_task.proto",
-    &descriptor_table_maze_5ftask_2eproto_once, descriptor_table_maze_5ftask_2eproto_deps, 1, 25,
+    &descriptor_table_maze_5ftask_2eproto_once, descriptor_table_maze_5ftask_2eproto_deps, 1, 24,
     schemas, file_default_instances, TableStruct_maze_5ftask_2eproto::offsets,
     file_level_metadata_maze_5ftask_2eproto, file_level_enum_descriptors_maze_5ftask_2eproto,
     file_level_service_descriptors_maze_5ftask_2eproto,
@@ -1101,54 +1060,15 @@ bool EpisodeState_IsValid(int value) {
   }
 }
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EvaluationState_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
-  return file_level_enum_descriptors_maze_5ftask_2eproto[5];
-}
-bool EvaluationState_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-      return true;
-    default:
-      return false;
-  }
-}
-
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EpisodeMode_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
-  return file_level_enum_descriptors_maze_5ftask_2eproto[6];
+  return file_level_enum_descriptors_maze_5ftask_2eproto[5];
 }
 bool EpisodeMode_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
     case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CurriculumStage_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
-  return file_level_enum_descriptors_maze_5ftask_2eproto[7];
-}
-bool CurriculumStage_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
       return true;
     default:
       return false;
@@ -1157,15 +1077,13 @@ bool CurriculumStage_IsValid(int value) {
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* WorkloadMode_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
-  return file_level_enum_descriptors_maze_5ftask_2eproto[8];
+  return file_level_enum_descriptors_maze_5ftask_2eproto[6];
 }
 bool WorkloadMode_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
     case 2:
-    case 3:
-    case 4:
       return true;
     default:
       return false;
@@ -1174,7 +1092,7 @@ bool WorkloadMode_IsValid(int value) {
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ReplayPolicy_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
-  return file_level_enum_descriptors_maze_5ftask_2eproto[9];
+  return file_level_enum_descriptors_maze_5ftask_2eproto[7];
 }
 bool ReplayPolicy_IsValid(int value) {
   switch (value) {
@@ -1189,7 +1107,7 @@ bool ReplayPolicy_IsValid(int value) {
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MazeTerminationReason_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
-  return file_level_enum_descriptors_maze_5ftask_2eproto[10];
+  return file_level_enum_descriptors_maze_5ftask_2eproto[8];
 }
 bool MazeTerminationReason_IsValid(int value) {
   switch (value) {
@@ -1208,7 +1126,7 @@ bool MazeTerminationReason_IsValid(int value) {
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EnvironmentControl_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
-  return file_level_enum_descriptors_maze_5ftask_2eproto[11];
+  return file_level_enum_descriptors_maze_5ftask_2eproto[9];
 }
 bool EnvironmentControl_IsValid(int value) {
   switch (value) {
@@ -1261,7 +1179,6 @@ TaskIdentity::TaskIdentity(const TaskIdentity& from)
   TaskIdentity* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.task_contract_id_){}
-    , decltype(_impl_.task_id_){}
     , decltype(_impl_.fixed_map_id_){}
     , decltype(_impl_.task_config_digest_){nullptr}
     , decltype(_impl_.fixed_map_digest_){nullptr}
@@ -1275,14 +1192,6 @@ TaskIdentity::TaskIdentity(const TaskIdentity& from)
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_task_contract_id().empty()) {
     _this->_impl_.task_contract_id_.Set(from._internal_task_contract_id(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.task_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.task_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_task_id().empty()) {
-    _this->_impl_.task_id_.Set(from._internal_task_id(), 
       _this->GetArenaForAllocation());
   }
   _impl_.fixed_map_id_.InitDefault();
@@ -1309,7 +1218,6 @@ inline void TaskIdentity::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.task_contract_id_){}
-    , decltype(_impl_.task_id_){}
     , decltype(_impl_.fixed_map_id_){}
     , decltype(_impl_.task_config_digest_){nullptr}
     , decltype(_impl_.fixed_map_digest_){nullptr}
@@ -1319,10 +1227,6 @@ inline void TaskIdentity::SharedCtor(
   _impl_.task_contract_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.task_contract_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.task_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.task_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.fixed_map_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -1342,7 +1246,6 @@ TaskIdentity::~TaskIdentity() {
 inline void TaskIdentity::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.task_contract_id_.Destroy();
-  _impl_.task_id_.Destroy();
   _impl_.fixed_map_id_.Destroy();
   if (this != internal_default_instance()) delete _impl_.task_config_digest_;
   if (this != internal_default_instance()) delete _impl_.fixed_map_digest_;
@@ -1359,7 +1262,6 @@ void TaskIdentity::Clear() {
   (void) cached_has_bits;
 
   _impl_.task_contract_id_.ClearToEmpty();
-  _impl_.task_id_.ClearToEmpty();
   _impl_.fixed_map_id_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && _impl_.task_config_digest_ != nullptr) {
     delete _impl_.task_config_digest_;
@@ -1386,16 +1288,6 @@ const char* TaskIdentity::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.TaskIdentity.task_contract_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string task_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_task_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.TaskIdentity.task_id"));
         } else
           goto handle_unusual;
         continue;
@@ -1472,16 +1364,6 @@ uint8_t* TaskIdentity::_InternalSerialize(
         1, this->_internal_task_contract_id(), target);
   }
 
-  // string task_id = 2;
-  if (!this->_internal_task_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.task.maze.v1.TaskIdentity.task_id");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_task_id(), target);
-  }
-
   // uint64 task_revision = 3;
   if (this->_internal_task_revision() != 0) {
     target = stream->EnsureSpace(target);
@@ -1535,13 +1417,6 @@ size_t TaskIdentity::ByteSizeLong() const {
         this->_internal_task_contract_id());
   }
 
-  // string task_id = 2;
-  if (!this->_internal_task_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_task_id());
-  }
-
   // string fixed_map_id = 5;
   if (!this->_internal_fixed_map_id().empty()) {
     total_size += 1 +
@@ -1589,9 +1464,6 @@ void TaskIdentity::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
   if (!from._internal_task_contract_id().empty()) {
     _this->_internal_set_task_contract_id(from._internal_task_contract_id());
   }
-  if (!from._internal_task_id().empty()) {
-    _this->_internal_set_task_id(from._internal_task_id());
-  }
   if (!from._internal_fixed_map_id().empty()) {
     _this->_internal_set_fixed_map_id(from._internal_fixed_map_id());
   }
@@ -1630,10 +1502,6 @@ void TaskIdentity::InternalSwap(TaskIdentity* other) {
       &other->_impl_.task_contract_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.task_id_, lhs_arena,
-      &other->_impl_.task_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.fixed_map_id_, lhs_arena,
       &other->_impl_.fixed_map_id_, rhs_arena
   );
@@ -1655,6 +1523,10 @@ void TaskIdentity::InternalSwap(TaskIdentity* other) {
 
 class BehaviorPolicyBinding::_Internal {
  public:
+  using HasBits = decltype(std::declval<BehaviorPolicyBinding>()._impl_._has_bits_);
+  static void set_has_model_step(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
   static const ::rl::common::v1::ContentDigest& model_artifact_digest(const BehaviorPolicyBinding* msg);
   static const ::rl::common::v1::ContentDigest& model_manifest_digest(const BehaviorPolicyBinding* msg);
   static const ::rl::common::v1::ContentDigest& policy_spec_digest(const BehaviorPolicyBinding* msg);
@@ -1700,13 +1572,14 @@ BehaviorPolicyBinding::BehaviorPolicyBinding(const BehaviorPolicyBinding& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   BehaviorPolicyBinding* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.model_lineage_id_){}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.model_lineage_id_){}
     , decltype(_impl_.distribution_schema_id_){}
     , decltype(_impl_.model_artifact_digest_){nullptr}
     , decltype(_impl_.model_manifest_digest_){nullptr}
     , decltype(_impl_.policy_spec_digest_){nullptr}
-    , decltype(_impl_.model_version_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
+    , decltype(_impl_.model_step_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _impl_.model_lineage_id_.InitDefault();
@@ -1734,7 +1607,7 @@ BehaviorPolicyBinding::BehaviorPolicyBinding(const BehaviorPolicyBinding& from)
   if (from._internal_has_policy_spec_digest()) {
     _this->_impl_.policy_spec_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.policy_spec_digest_);
   }
-  _this->_impl_.model_version_ = from._impl_.model_version_;
+  _this->_impl_.model_step_ = from._impl_.model_step_;
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.BehaviorPolicyBinding)
 }
 
@@ -1743,13 +1616,14 @@ inline void BehaviorPolicyBinding::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.model_lineage_id_){}
+      decltype(_impl_._has_bits_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.model_lineage_id_){}
     , decltype(_impl_.distribution_schema_id_){}
     , decltype(_impl_.model_artifact_digest_){nullptr}
     , decltype(_impl_.model_manifest_digest_){nullptr}
     , decltype(_impl_.policy_spec_digest_){nullptr}
-    , decltype(_impl_.model_version_){uint64_t{0u}}
-    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.model_step_){uint64_t{0u}}
   };
   _impl_.model_lineage_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -1803,12 +1677,14 @@ void BehaviorPolicyBinding::Clear() {
     delete _impl_.policy_spec_digest_;
   }
   _impl_.policy_spec_digest_ = nullptr;
-  _impl_.model_version_ = uint64_t{0u};
+  _impl_.model_step_ = uint64_t{0u};
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* BehaviorPolicyBinding::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
@@ -1823,10 +1699,11 @@ const char* BehaviorPolicyBinding::_InternalParse(const char* ptr, ::_pbi::Parse
         } else
           goto handle_unusual;
         continue;
-      // uint64 model_version = 2;
+      // optional uint64 model_step = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.model_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _Internal::set_has_model_step(&has_bits);
+          _impl_.model_step_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1881,6 +1758,7 @@ const char* BehaviorPolicyBinding::_InternalParse(const char* ptr, ::_pbi::Parse
     CHK_(ptr != nullptr);
   }  // while
 message_done:
+  _impl_._has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -1904,10 +1782,10 @@ uint8_t* BehaviorPolicyBinding::_InternalSerialize(
         1, this->_internal_model_lineage_id(), target);
   }
 
-  // uint64 model_version = 2;
-  if (this->_internal_model_version() != 0) {
+  // optional uint64 model_step = 2;
+  if (_internal_has_model_step()) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_model_version(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_model_step(), target);
   }
 
   // .rl.common.v1.ContentDigest model_artifact_digest = 3;
@@ -1992,9 +1870,10 @@ size_t BehaviorPolicyBinding::ByteSizeLong() const {
         *_impl_.policy_spec_digest_);
   }
 
-  // uint64 model_version = 2;
-  if (this->_internal_model_version() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_model_version());
+  // optional uint64 model_step = 2;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_model_step());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -2033,8 +1912,8 @@ void BehaviorPolicyBinding::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, 
     _this->_internal_mutable_policy_spec_digest()->::rl::common::v1::ContentDigest::MergeFrom(
         from._internal_policy_spec_digest());
   }
-  if (from._internal_model_version() != 0) {
-    _this->_internal_set_model_version(from._internal_model_version());
+  if (from._internal_has_model_step()) {
+    _this->_internal_set_model_step(from._internal_model_step());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -2055,6 +1934,7 @@ void BehaviorPolicyBinding::InternalSwap(BehaviorPolicyBinding* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.model_lineage_id_, lhs_arena,
       &other->_impl_.model_lineage_id_, rhs_arena
@@ -2064,8 +1944,8 @@ void BehaviorPolicyBinding::InternalSwap(BehaviorPolicyBinding* other) {
       &other->_impl_.distribution_schema_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(BehaviorPolicyBinding, _impl_.model_version_)
-      + sizeof(BehaviorPolicyBinding::_impl_.model_version_)
+      PROTOBUF_FIELD_OFFSET(BehaviorPolicyBinding, _impl_.model_step_)
+      + sizeof(BehaviorPolicyBinding::_impl_.model_step_)
       - PROTOBUF_FIELD_OFFSET(BehaviorPolicyBinding, _impl_.model_artifact_digest_)>(
           reinterpret_cast<char*>(&_impl_.model_artifact_digest_),
           reinterpret_cast<char*>(&other->_impl_.model_artifact_digest_));
@@ -2138,6 +2018,7 @@ MazeTaskSpec::MazeTaskSpec(const MazeTaskSpec& from)
     , decltype(_impl_.observation_schema_){nullptr}
     , decltype(_impl_.action_schema_){nullptr}
     , decltype(_impl_.agent_count_){}
+    , decltype(_impl_.episode_max_steps_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -2169,7 +2050,9 @@ MazeTaskSpec::MazeTaskSpec(const MazeTaskSpec& from)
   if (from._internal_has_action_schema()) {
     _this->_impl_.action_schema_ = new ::rl::common::v1::SchemaIdentity(*from._impl_.action_schema_);
   }
-  _this->_impl_.agent_count_ = from._impl_.agent_count_;
+  ::memcpy(&_impl_.agent_count_, &from._impl_.agent_count_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.episode_max_steps_) -
+    reinterpret_cast<char*>(&_impl_.agent_count_)) + sizeof(_impl_.episode_max_steps_));
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.MazeTaskSpec)
 }
 
@@ -2185,6 +2068,7 @@ inline void MazeTaskSpec::SharedCtor(
     , decltype(_impl_.observation_schema_){nullptr}
     , decltype(_impl_.action_schema_){nullptr}
     , decltype(_impl_.agent_count_){0u}
+    , decltype(_impl_.episode_max_steps_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.fixed_map_id_.InitDefault();
@@ -2244,7 +2128,9 @@ void MazeTaskSpec::Clear() {
     delete _impl_.action_schema_;
   }
   _impl_.action_schema_ = nullptr;
-  _impl_.agent_count_ = 0u;
+  ::memset(&_impl_.agent_count_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.episode_max_steps_) -
+      reinterpret_cast<char*>(&_impl_.agent_count_)) + sizeof(_impl_.episode_max_steps_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2311,6 +2197,14 @@ const char* MazeTaskSpec::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.MazeTaskSpec.action_rule_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 episode_max_steps = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          _impl_.episode_max_steps_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2397,6 +2291,12 @@ uint8_t* MazeTaskSpec::_InternalSerialize(
         7, this->_internal_action_rule_id(), target);
   }
 
+  // uint32 episode_max_steps = 8;
+  if (this->_internal_episode_max_steps() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(8, this->_internal_episode_max_steps(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2460,6 +2360,11 @@ size_t MazeTaskSpec::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_agent_count());
   }
 
+  // uint32 episode_max_steps = 8;
+  if (this->_internal_episode_max_steps() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_episode_max_steps());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2503,6 +2408,9 @@ void MazeTaskSpec::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
   if (from._internal_agent_count() != 0) {
     _this->_internal_set_agent_count(from._internal_agent_count());
   }
+  if (from._internal_episode_max_steps() != 0) {
+    _this->_internal_set_episode_max_steps(from._internal_episode_max_steps());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2531,8 +2439,8 @@ void MazeTaskSpec::InternalSwap(MazeTaskSpec* other) {
       &other->_impl_.action_rule_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(MazeTaskSpec, _impl_.agent_count_)
-      + sizeof(MazeTaskSpec::_impl_.agent_count_)
+      PROTOBUF_FIELD_OFFSET(MazeTaskSpec, _impl_.episode_max_steps_)
+      + sizeof(MazeTaskSpec::_impl_.episode_max_steps_)
       - PROTOBUF_FIELD_OFFSET(MazeTaskSpec, _impl_.identity_)>(
           reinterpret_cast<char*>(&_impl_.identity_),
           reinterpret_cast<char*>(&other->_impl_.identity_));
@@ -3140,7 +3048,6 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
   new (&_impl_) Impl_{
       decltype(_impl_.session_id_){}
     , decltype(_impl_.episode_id_){}
-    , decltype(_impl_.evaluation_id_){}
     , decltype(_impl_.idempotency_key_){}
     , decltype(_impl_.task_){nullptr}
     , decltype(_impl_.lifecycle_epoch_){}
@@ -3148,7 +3055,6 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
     , decltype(_impl_.expected_task_state_){}
     , decltype(_impl_.expected_session_state_){}
     , decltype(_impl_.expected_episode_state_){}
-    , decltype(_impl_.expected_evaluation_state_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -3168,14 +3074,6 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
     _this->_impl_.episode_id_.Set(from._internal_episode_id(), 
       _this->GetArenaForAllocation());
   }
-  _impl_.evaluation_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.evaluation_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_evaluation_id().empty()) {
-    _this->_impl_.evaluation_id_.Set(from._internal_evaluation_id(), 
-      _this->GetArenaForAllocation());
-  }
   _impl_.idempotency_key_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.idempotency_key_.Set("", GetArenaForAllocation());
@@ -3188,8 +3086,8 @@ LifecycleCommand::LifecycleCommand(const LifecycleCommand& from)
     _this->_impl_.task_ = new ::rl::task::maze::v1::TaskIdentity(*from._impl_.task_);
   }
   ::memcpy(&_impl_.lifecycle_epoch_, &from._impl_.lifecycle_epoch_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.expected_evaluation_state_) -
-    reinterpret_cast<char*>(&_impl_.lifecycle_epoch_)) + sizeof(_impl_.expected_evaluation_state_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.expected_episode_state_) -
+    reinterpret_cast<char*>(&_impl_.lifecycle_epoch_)) + sizeof(_impl_.expected_episode_state_));
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.LifecycleCommand)
 }
 
@@ -3200,7 +3098,6 @@ inline void LifecycleCommand::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.session_id_){}
     , decltype(_impl_.episode_id_){}
-    , decltype(_impl_.evaluation_id_){}
     , decltype(_impl_.idempotency_key_){}
     , decltype(_impl_.task_){nullptr}
     , decltype(_impl_.lifecycle_epoch_){uint64_t{0u}}
@@ -3208,7 +3105,6 @@ inline void LifecycleCommand::SharedCtor(
     , decltype(_impl_.expected_task_state_){0}
     , decltype(_impl_.expected_session_state_){0}
     , decltype(_impl_.expected_episode_state_){0}
-    , decltype(_impl_.expected_evaluation_state_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.session_id_.InitDefault();
@@ -3218,10 +3114,6 @@ inline void LifecycleCommand::SharedCtor(
   _impl_.episode_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.episode_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.evaluation_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.evaluation_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.idempotency_key_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -3242,7 +3134,6 @@ inline void LifecycleCommand::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.session_id_.Destroy();
   _impl_.episode_id_.Destroy();
-  _impl_.evaluation_id_.Destroy();
   _impl_.idempotency_key_.Destroy();
   if (this != internal_default_instance()) delete _impl_.task_;
 }
@@ -3259,15 +3150,14 @@ void LifecycleCommand::Clear() {
 
   _impl_.session_id_.ClearToEmpty();
   _impl_.episode_id_.ClearToEmpty();
-  _impl_.evaluation_id_.ClearToEmpty();
   _impl_.idempotency_key_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && _impl_.task_ != nullptr) {
     delete _impl_.task_;
   }
   _impl_.task_ = nullptr;
   ::memset(&_impl_.lifecycle_epoch_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.expected_evaluation_state_) -
-      reinterpret_cast<char*>(&_impl_.lifecycle_epoch_)) + sizeof(_impl_.expected_evaluation_state_));
+      reinterpret_cast<char*>(&_impl_.expected_episode_state_) -
+      reinterpret_cast<char*>(&_impl_.lifecycle_epoch_)) + sizeof(_impl_.expected_episode_state_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3302,16 +3192,6 @@ const char* LifecycleCommand::_InternalParse(const char* ptr, ::_pbi::ParseConte
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.LifecycleCommand.episode_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string evaluation_id = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          auto str = _internal_mutable_evaluation_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.LifecycleCommand.evaluation_id"));
         } else
           goto handle_unusual;
         continue;
@@ -3365,15 +3245,6 @@ const char* LifecycleCommand::_InternalParse(const char* ptr, ::_pbi::ParseConte
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_expected_episode_state(static_cast<::rl::task::maze::v1::EpisodeState>(val));
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.task.maze.v1.EvaluationState expected_evaluation_state = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          _internal_set_expected_evaluation_state(static_cast<::rl::task::maze::v1::EvaluationState>(val));
         } else
           goto handle_unusual;
         continue;
@@ -3433,16 +3304,6 @@ uint8_t* LifecycleCommand::_InternalSerialize(
         3, this->_internal_episode_id(), target);
   }
 
-  // string evaluation_id = 4;
-  if (!this->_internal_evaluation_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_evaluation_id().data(), static_cast<int>(this->_internal_evaluation_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.task.maze.v1.LifecycleCommand.evaluation_id");
-    target = stream->WriteStringMaybeAliased(
-        4, this->_internal_evaluation_id(), target);
-  }
-
   // uint64 lifecycle_epoch = 5;
   if (this->_internal_lifecycle_epoch() != 0) {
     target = stream->EnsureSpace(target);
@@ -3486,13 +3347,6 @@ uint8_t* LifecycleCommand::_InternalSerialize(
       10, this->_internal_expected_episode_state(), target);
   }
 
-  // .rl.task.maze.v1.EvaluationState expected_evaluation_state = 11;
-  if (this->_internal_expected_evaluation_state() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      11, this->_internal_expected_evaluation_state(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3521,13 +3375,6 @@ size_t LifecycleCommand::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_episode_id());
-  }
-
-  // string evaluation_id = 4;
-  if (!this->_internal_evaluation_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_evaluation_id());
   }
 
   // string idempotency_key = 7;
@@ -3572,12 +3419,6 @@ size_t LifecycleCommand::ByteSizeLong() const {
       ::_pbi::WireFormatLite::EnumSize(this->_internal_expected_episode_state());
   }
 
-  // .rl.task.maze.v1.EvaluationState expected_evaluation_state = 11;
-  if (this->_internal_expected_evaluation_state() != 0) {
-    total_size += 1 +
-      ::_pbi::WireFormatLite::EnumSize(this->_internal_expected_evaluation_state());
-  }
-
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -3602,9 +3443,6 @@ void LifecycleCommand::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   if (!from._internal_episode_id().empty()) {
     _this->_internal_set_episode_id(from._internal_episode_id());
   }
-  if (!from._internal_evaluation_id().empty()) {
-    _this->_internal_set_evaluation_id(from._internal_evaluation_id());
-  }
   if (!from._internal_idempotency_key().empty()) {
     _this->_internal_set_idempotency_key(from._internal_idempotency_key());
   }
@@ -3626,9 +3464,6 @@ void LifecycleCommand::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   }
   if (from._internal_expected_episode_state() != 0) {
     _this->_internal_set_expected_episode_state(from._internal_expected_episode_state());
-  }
-  if (from._internal_expected_evaluation_state() != 0) {
-    _this->_internal_set_expected_evaluation_state(from._internal_expected_evaluation_state());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -3658,16 +3493,12 @@ void LifecycleCommand::InternalSwap(LifecycleCommand* other) {
       &other->_impl_.episode_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.evaluation_id_, lhs_arena,
-      &other->_impl_.evaluation_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.idempotency_key_, lhs_arena,
       &other->_impl_.idempotency_key_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(LifecycleCommand, _impl_.expected_evaluation_state_)
-      + sizeof(LifecycleCommand::_impl_.expected_evaluation_state_)
+      PROTOBUF_FIELD_OFFSET(LifecycleCommand, _impl_.expected_episode_state_)
+      + sizeof(LifecycleCommand::_impl_.expected_episode_state_)
       - PROTOBUF_FIELD_OFFSET(LifecycleCommand, _impl_.task_)>(
           reinterpret_cast<char*>(&_impl_.task_),
           reinterpret_cast<char*>(&other->_impl_.task_));
@@ -3703,7 +3534,6 @@ LifecycleReply::LifecycleReply(const LifecycleReply& from)
     , decltype(_impl_.applied_sequence_){}
     , decltype(_impl_.session_state_){}
     , decltype(_impl_.episode_state_){}
-    , decltype(_impl_.evaluation_state_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -3716,8 +3546,8 @@ LifecycleReply::LifecycleReply(const LifecycleReply& from)
       _this->GetArenaForAllocation());
   }
   ::memcpy(&_impl_.ret_code_, &from._impl_.ret_code_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.evaluation_state_) -
-    reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.evaluation_state_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.episode_state_) -
+    reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.episode_state_));
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.LifecycleReply)
 }
 
@@ -3734,7 +3564,6 @@ inline void LifecycleReply::SharedCtor(
     , decltype(_impl_.applied_sequence_){uint64_t{0u}}
     , decltype(_impl_.session_state_){0}
     , decltype(_impl_.episode_state_){0}
-    , decltype(_impl_.evaluation_state_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.message_.InitDefault();
@@ -3769,8 +3598,8 @@ void LifecycleReply::Clear() {
 
   _impl_.message_.ClearToEmpty();
   ::memset(&_impl_.ret_code_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.evaluation_state_) -
-      reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.evaluation_state_));
+      reinterpret_cast<char*>(&_impl_.episode_state_) -
+      reinterpret_cast<char*>(&_impl_.ret_code_)) + sizeof(_impl_.episode_state_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3848,15 +3677,6 @@ const char* LifecycleReply::_InternalParse(const char* ptr, ::_pbi::ParseContext
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_episode_state(static_cast<::rl::task::maze::v1::EpisodeState>(val));
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.task.maze.v1.EvaluationState evaluation_state = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          _internal_set_evaluation_state(static_cast<::rl::task::maze::v1::EvaluationState>(val));
         } else
           goto handle_unusual;
         continue;
@@ -3946,13 +3766,6 @@ uint8_t* LifecycleReply::_InternalSerialize(
       8, this->_internal_episode_state(), target);
   }
 
-  // .rl.task.maze.v1.EvaluationState evaluation_state = 9;
-  if (this->_internal_evaluation_state() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      9, this->_internal_evaluation_state(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4016,12 +3829,6 @@ size_t LifecycleReply::ByteSizeLong() const {
       ::_pbi::WireFormatLite::EnumSize(this->_internal_episode_state());
   }
 
-  // .rl.task.maze.v1.EvaluationState evaluation_state = 9;
-  if (this->_internal_evaluation_state() != 0) {
-    total_size += 1 +
-      ::_pbi::WireFormatLite::EnumSize(this->_internal_evaluation_state());
-  }
-
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -4064,9 +3871,6 @@ void LifecycleReply::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   if (from._internal_episode_state() != 0) {
     _this->_internal_set_episode_state(from._internal_episode_state());
   }
-  if (from._internal_evaluation_state() != 0) {
-    _this->_internal_set_evaluation_state(from._internal_evaluation_state());
-  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -4091,8 +3895,8 @@ void LifecycleReply::InternalSwap(LifecycleReply* other) {
       &other->_impl_.message_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(LifecycleReply, _impl_.evaluation_state_)
-      + sizeof(LifecycleReply::_impl_.evaluation_state_)
+      PROTOBUF_FIELD_OFFSET(LifecycleReply, _impl_.episode_state_)
+      + sizeof(LifecycleReply::_impl_.episode_state_)
       - PROTOBUF_FIELD_OFFSET(LifecycleReply, _impl_.ret_code_)>(
           reinterpret_cast<char*>(&_impl_.ret_code_),
           reinterpret_cast<char*>(&other->_impl_.ret_code_));
@@ -5479,342 +5283,10 @@ void InitRsp::InternalSwap(InitRsp* other) {
 
 // ===================================================================
 
-class EvaluationAssignment::_Internal {
- public:
-  static const ::rl::task::maze::v1::BehaviorPolicyBinding& pinned_policy(const EvaluationAssignment* msg);
-};
-
-const ::rl::task::maze::v1::BehaviorPolicyBinding&
-EvaluationAssignment::_Internal::pinned_policy(const EvaluationAssignment* msg) {
-  return *msg->_impl_.pinned_policy_;
-}
-EvaluationAssignment::EvaluationAssignment(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:rl.task.maze.v1.EvaluationAssignment)
-}
-EvaluationAssignment::EvaluationAssignment(const EvaluationAssignment& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  EvaluationAssignment* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.evaluation_id_){}
-    , decltype(_impl_.pinned_policy_){nullptr}
-    , decltype(_impl_.evaluation_round_){}
-    , decltype(_impl_.state_){}
-    , decltype(_impl_.training_sample_emission_allowed_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.evaluation_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.evaluation_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_evaluation_id().empty()) {
-    _this->_impl_.evaluation_id_.Set(from._internal_evaluation_id(), 
-      _this->GetArenaForAllocation());
-  }
-  if (from._internal_has_pinned_policy()) {
-    _this->_impl_.pinned_policy_ = new ::rl::task::maze::v1::BehaviorPolicyBinding(*from._impl_.pinned_policy_);
-  }
-  ::memcpy(&_impl_.evaluation_round_, &from._impl_.evaluation_round_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.training_sample_emission_allowed_) -
-    reinterpret_cast<char*>(&_impl_.evaluation_round_)) + sizeof(_impl_.training_sample_emission_allowed_));
-  // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.EvaluationAssignment)
-}
-
-inline void EvaluationAssignment::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_.evaluation_id_){}
-    , decltype(_impl_.pinned_policy_){nullptr}
-    , decltype(_impl_.evaluation_round_){0u}
-    , decltype(_impl_.state_){0}
-    , decltype(_impl_.training_sample_emission_allowed_){false}
-    , /*decltype(_impl_._cached_size_)*/{}
-  };
-  _impl_.evaluation_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.evaluation_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
-
-EvaluationAssignment::~EvaluationAssignment() {
-  // @@protoc_insertion_point(destructor:rl.task.maze.v1.EvaluationAssignment)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
-  SharedDtor();
-}
-
-inline void EvaluationAssignment::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.evaluation_id_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.pinned_policy_;
-}
-
-void EvaluationAssignment::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void EvaluationAssignment::Clear() {
-// @@protoc_insertion_point(message_clear_start:rl.task.maze.v1.EvaluationAssignment)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.evaluation_id_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.pinned_policy_ != nullptr) {
-    delete _impl_.pinned_policy_;
-  }
-  _impl_.pinned_policy_ = nullptr;
-  ::memset(&_impl_.evaluation_round_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.training_sample_emission_allowed_) -
-      reinterpret_cast<char*>(&_impl_.evaluation_round_)) + sizeof(_impl_.training_sample_emission_allowed_));
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* EvaluationAssignment::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string evaluation_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_evaluation_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.EvaluationAssignment.evaluation_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 evaluation_round = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.evaluation_round_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.task.maze.v1.EvaluationState state = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          _internal_set_state(static_cast<::rl::task::maze::v1::EvaluationState>(val));
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.task.maze.v1.BehaviorPolicyBinding pinned_policy = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_pinned_policy(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // bool training_sample_emission_allowed = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
-          _impl_.training_sample_emission_allowed_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* EvaluationAssignment::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:rl.task.maze.v1.EvaluationAssignment)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string evaluation_id = 1;
-  if (!this->_internal_evaluation_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_evaluation_id().data(), static_cast<int>(this->_internal_evaluation_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.task.maze.v1.EvaluationAssignment.evaluation_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_evaluation_id(), target);
-  }
-
-  // uint32 evaluation_round = 2;
-  if (this->_internal_evaluation_round() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_evaluation_round(), target);
-  }
-
-  // .rl.task.maze.v1.EvaluationState state = 3;
-  if (this->_internal_state() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      3, this->_internal_state(), target);
-  }
-
-  // .rl.task.maze.v1.BehaviorPolicyBinding pinned_policy = 4;
-  if (this->_internal_has_pinned_policy()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::pinned_policy(this),
-        _Internal::pinned_policy(this).GetCachedSize(), target, stream);
-  }
-
-  // bool training_sample_emission_allowed = 5;
-  if (this->_internal_training_sample_emission_allowed() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(5, this->_internal_training_sample_emission_allowed(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:rl.task.maze.v1.EvaluationAssignment)
-  return target;
-}
-
-size_t EvaluationAssignment::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:rl.task.maze.v1.EvaluationAssignment)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string evaluation_id = 1;
-  if (!this->_internal_evaluation_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_evaluation_id());
-  }
-
-  // .rl.task.maze.v1.BehaviorPolicyBinding pinned_policy = 4;
-  if (this->_internal_has_pinned_policy()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.pinned_policy_);
-  }
-
-  // uint32 evaluation_round = 2;
-  if (this->_internal_evaluation_round() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_evaluation_round());
-  }
-
-  // .rl.task.maze.v1.EvaluationState state = 3;
-  if (this->_internal_state() != 0) {
-    total_size += 1 +
-      ::_pbi::WireFormatLite::EnumSize(this->_internal_state());
-  }
-
-  // bool training_sample_emission_allowed = 5;
-  if (this->_internal_training_sample_emission_allowed() != 0) {
-    total_size += 1 + 1;
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EvaluationAssignment::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    EvaluationAssignment::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EvaluationAssignment::GetClassData() const { return &_class_data_; }
-
-
-void EvaluationAssignment::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<EvaluationAssignment*>(&to_msg);
-  auto& from = static_cast<const EvaluationAssignment&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:rl.task.maze.v1.EvaluationAssignment)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (!from._internal_evaluation_id().empty()) {
-    _this->_internal_set_evaluation_id(from._internal_evaluation_id());
-  }
-  if (from._internal_has_pinned_policy()) {
-    _this->_internal_mutable_pinned_policy()->::rl::task::maze::v1::BehaviorPolicyBinding::MergeFrom(
-        from._internal_pinned_policy());
-  }
-  if (from._internal_evaluation_round() != 0) {
-    _this->_internal_set_evaluation_round(from._internal_evaluation_round());
-  }
-  if (from._internal_state() != 0) {
-    _this->_internal_set_state(from._internal_state());
-  }
-  if (from._internal_training_sample_emission_allowed() != 0) {
-    _this->_internal_set_training_sample_emission_allowed(from._internal_training_sample_emission_allowed());
-  }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void EvaluationAssignment::CopyFrom(const EvaluationAssignment& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:rl.task.maze.v1.EvaluationAssignment)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool EvaluationAssignment::IsInitialized() const {
-  return true;
-}
-
-void EvaluationAssignment::InternalSwap(EvaluationAssignment* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.evaluation_id_, lhs_arena,
-      &other->_impl_.evaluation_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(EvaluationAssignment, _impl_.training_sample_emission_allowed_)
-      + sizeof(EvaluationAssignment::_impl_.training_sample_emission_allowed_)
-      - PROTOBUF_FIELD_OFFSET(EvaluationAssignment, _impl_.pinned_policy_)>(
-          reinterpret_cast<char*>(&_impl_.pinned_policy_),
-          reinterpret_cast<char*>(&other->_impl_.pinned_policy_));
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata EvaluationAssignment::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[10]);
-}
-
-// ===================================================================
-
 class EpisodeAssignment::_Internal {
  public:
   static const ::rl::task::maze::v1::TaskIdentity& task(const EpisodeAssignment* msg);
   static const ::rl::task::maze::v1::BehaviorPolicyBinding& behavior_policy(const EpisodeAssignment* msg);
-  static const ::rl::task::maze::v1::EvaluationAssignment& evaluation(const EpisodeAssignment* msg);
 };
 
 const ::rl::task::maze::v1::TaskIdentity&
@@ -5824,10 +5296,6 @@ EpisodeAssignment::_Internal::task(const EpisodeAssignment* msg) {
 const ::rl::task::maze::v1::BehaviorPolicyBinding&
 EpisodeAssignment::_Internal::behavior_policy(const EpisodeAssignment* msg) {
   return *msg->_impl_.behavior_policy_;
-}
-const ::rl::task::maze::v1::EvaluationAssignment&
-EpisodeAssignment::_Internal::evaluation(const EpisodeAssignment* msg) {
-  return *msg->_impl_.evaluation_;
 }
 EpisodeAssignment::EpisodeAssignment(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -5842,9 +5310,7 @@ EpisodeAssignment::EpisodeAssignment(const EpisodeAssignment& from)
       decltype(_impl_.episode_id_){}
     , decltype(_impl_.task_){nullptr}
     , decltype(_impl_.behavior_policy_){nullptr}
-    , decltype(_impl_.evaluation_){nullptr}
     , decltype(_impl_.mode_){}
-    , decltype(_impl_.curriculum_stage_){}
     , decltype(_impl_.max_steps_){}
     , decltype(_impl_.continue_task_){}
     , decltype(_impl_.collect_training_samples_){}
@@ -5865,9 +5331,6 @@ EpisodeAssignment::EpisodeAssignment(const EpisodeAssignment& from)
   if (from._internal_has_behavior_policy()) {
     _this->_impl_.behavior_policy_ = new ::rl::task::maze::v1::BehaviorPolicyBinding(*from._impl_.behavior_policy_);
   }
-  if (from._internal_has_evaluation()) {
-    _this->_impl_.evaluation_ = new ::rl::task::maze::v1::EvaluationAssignment(*from._impl_.evaluation_);
-  }
   ::memcpy(&_impl_.mode_, &from._impl_.mode_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.collect_training_samples_) -
     reinterpret_cast<char*>(&_impl_.mode_)) + sizeof(_impl_.collect_training_samples_));
@@ -5882,9 +5345,7 @@ inline void EpisodeAssignment::SharedCtor(
       decltype(_impl_.episode_id_){}
     , decltype(_impl_.task_){nullptr}
     , decltype(_impl_.behavior_policy_){nullptr}
-    , decltype(_impl_.evaluation_){nullptr}
     , decltype(_impl_.mode_){0}
-    , decltype(_impl_.curriculum_stage_){0}
     , decltype(_impl_.max_steps_){0u}
     , decltype(_impl_.continue_task_){false}
     , decltype(_impl_.collect_training_samples_){false}
@@ -5910,7 +5371,6 @@ inline void EpisodeAssignment::SharedDtor() {
   _impl_.episode_id_.Destroy();
   if (this != internal_default_instance()) delete _impl_.task_;
   if (this != internal_default_instance()) delete _impl_.behavior_policy_;
-  if (this != internal_default_instance()) delete _impl_.evaluation_;
 }
 
 void EpisodeAssignment::SetCachedSize(int size) const {
@@ -5932,10 +5392,6 @@ void EpisodeAssignment::Clear() {
     delete _impl_.behavior_policy_;
   }
   _impl_.behavior_policy_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.evaluation_ != nullptr) {
-    delete _impl_.evaluation_;
-  }
-  _impl_.evaluation_ = nullptr;
   ::memset(&_impl_.mode_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.collect_training_samples_) -
       reinterpret_cast<char*>(&_impl_.mode_)) + sizeof(_impl_.collect_training_samples_));
@@ -5975,15 +5431,6 @@ const char* EpisodeAssignment::_InternalParse(const char* ptr, ::_pbi::ParseCont
         } else
           goto handle_unusual;
         continue;
-      // .rl.task.maze.v1.CurriculumStage curriculum_stage = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          _internal_set_curriculum_stage(static_cast<::rl::task::maze::v1::CurriculumStage>(val));
-        } else
-          goto handle_unusual;
-        continue;
       // uint32 max_steps = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
@@ -6012,14 +5459,6 @@ const char* EpisodeAssignment::_InternalParse(const char* ptr, ::_pbi::ParseCont
       case 8:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
           _impl_.collect_training_samples_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.task.maze.v1.EvaluationAssignment evaluation = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
-          ptr = ctx->ParseMessage(_internal_mutable_evaluation(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -6077,13 +5516,6 @@ uint8_t* EpisodeAssignment::_InternalSerialize(
       3, this->_internal_mode(), target);
   }
 
-  // .rl.task.maze.v1.CurriculumStage curriculum_stage = 4;
-  if (this->_internal_curriculum_stage() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      4, this->_internal_curriculum_stage(), target);
-  }
-
   // uint32 max_steps = 5;
   if (this->_internal_max_steps() != 0) {
     target = stream->EnsureSpace(target);
@@ -6107,13 +5539,6 @@ uint8_t* EpisodeAssignment::_InternalSerialize(
   if (this->_internal_collect_training_samples() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteBoolToArray(8, this->_internal_collect_training_samples(), target);
-  }
-
-  // .rl.task.maze.v1.EvaluationAssignment evaluation = 9;
-  if (this->_internal_has_evaluation()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(9, _Internal::evaluation(this),
-        _Internal::evaluation(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -6153,23 +5578,10 @@ size_t EpisodeAssignment::ByteSizeLong() const {
         *_impl_.behavior_policy_);
   }
 
-  // .rl.task.maze.v1.EvaluationAssignment evaluation = 9;
-  if (this->_internal_has_evaluation()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.evaluation_);
-  }
-
   // .rl.task.maze.v1.EpisodeMode mode = 3;
   if (this->_internal_mode() != 0) {
     total_size += 1 +
       ::_pbi::WireFormatLite::EnumSize(this->_internal_mode());
-  }
-
-  // .rl.task.maze.v1.CurriculumStage curriculum_stage = 4;
-  if (this->_internal_curriculum_stage() != 0) {
-    total_size += 1 +
-      ::_pbi::WireFormatLite::EnumSize(this->_internal_curriculum_stage());
   }
 
   // uint32 max_steps = 5;
@@ -6216,15 +5628,8 @@ void EpisodeAssignment::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
     _this->_internal_mutable_behavior_policy()->::rl::task::maze::v1::BehaviorPolicyBinding::MergeFrom(
         from._internal_behavior_policy());
   }
-  if (from._internal_has_evaluation()) {
-    _this->_internal_mutable_evaluation()->::rl::task::maze::v1::EvaluationAssignment::MergeFrom(
-        from._internal_evaluation());
-  }
   if (from._internal_mode() != 0) {
     _this->_internal_set_mode(from._internal_mode());
-  }
-  if (from._internal_curriculum_stage() != 0) {
-    _this->_internal_set_curriculum_stage(from._internal_curriculum_stage());
   }
   if (from._internal_max_steps() != 0) {
     _this->_internal_set_max_steps(from._internal_max_steps());
@@ -6269,7 +5674,7 @@ void EpisodeAssignment::InternalSwap(EpisodeAssignment* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeAssignment::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[11]);
+      file_level_metadata_maze_5ftask_2eproto[10]);
 }
 
 // ===================================================================
@@ -6462,7 +5867,7 @@ void BeginEpisodeReq::InternalSwap(BeginEpisodeReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata BeginEpisodeReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[12]);
+      file_level_metadata_maze_5ftask_2eproto[11]);
 }
 
 // ===================================================================
@@ -6701,7 +6106,7 @@ void BeginEpisodeRsp::InternalSwap(BeginEpisodeRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata BeginEpisodeRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[13]);
+      file_level_metadata_maze_5ftask_2eproto[12]);
 }
 
 // ===================================================================
@@ -6936,14 +6341,18 @@ void Vec2::InternalSwap(Vec2* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Vec2::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[14]);
+      file_level_metadata_maze_5ftask_2eproto[13]);
 }
 
 // ===================================================================
 
 class AgentState::_Internal {
  public:
+  using HasBits = decltype(std::declval<AgentState>()._impl_._has_bits_);
   static const ::rl::task::maze::v1::Vec2& position(const AgentState* msg);
+  static void set_has_executed_action_id(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
 };
 
 const ::rl::task::maze::v1::Vec2&
@@ -6960,20 +6369,22 @@ AgentState::AgentState(const AgentState& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   AgentState* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.position_){nullptr}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.agent_id_){}
     , decltype(_impl_.termination_reason_){}
     , decltype(_impl_.is_done_){}
     , decltype(_impl_.last_move_blocked_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
+    , decltype(_impl_.executed_action_id_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_position()) {
     _this->_impl_.position_ = new ::rl::task::maze::v1::Vec2(*from._impl_.position_);
   }
   ::memcpy(&_impl_.agent_id_, &from._impl_.agent_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.last_move_blocked_) -
-    reinterpret_cast<char*>(&_impl_.agent_id_)) + sizeof(_impl_.last_move_blocked_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.executed_action_id_) -
+    reinterpret_cast<char*>(&_impl_.agent_id_)) + sizeof(_impl_.executed_action_id_));
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.AgentState)
 }
 
@@ -6982,12 +6393,14 @@ inline void AgentState::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.position_){nullptr}
+      decltype(_impl_._has_bits_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.agent_id_){0u}
     , decltype(_impl_.termination_reason_){0}
     , decltype(_impl_.is_done_){false}
     , decltype(_impl_.last_move_blocked_){false}
-    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.executed_action_id_){0}
   };
 }
 
@@ -7022,11 +6435,14 @@ void AgentState::Clear() {
   ::memset(&_impl_.agent_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.last_move_blocked_) -
       reinterpret_cast<char*>(&_impl_.agent_id_)) + sizeof(_impl_.last_move_blocked_));
+  _impl_.executed_action_id_ = 0;
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* AgentState::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
@@ -7072,6 +6488,15 @@ const char* AgentState::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
         } else
           goto handle_unusual;
         continue;
+      // optional int32 executed_action_id = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _Internal::set_has_executed_action_id(&has_bits);
+          _impl_.executed_action_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -7088,6 +6513,7 @@ const char* AgentState::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
     CHK_(ptr != nullptr);
   }  // while
 message_done:
+  _impl_._has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -7131,6 +6557,12 @@ uint8_t* AgentState::_InternalSerialize(
   if (this->_internal_last_move_blocked() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteBoolToArray(5, this->_internal_last_move_blocked(), target);
+  }
+
+  // optional int32 executed_action_id = 6;
+  if (_internal_has_executed_action_id()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_executed_action_id(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -7177,6 +6609,12 @@ size_t AgentState::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
+  // optional int32 executed_action_id = 6;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_executed_action_id());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -7211,6 +6649,9 @@ void AgentState::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   if (from._internal_last_move_blocked() != 0) {
     _this->_internal_set_last_move_blocked(from._internal_last_move_blocked());
   }
+  if (from._internal_has_executed_action_id()) {
+    _this->_internal_set_executed_action_id(from._internal_executed_action_id());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -7228,9 +6669,10 @@ bool AgentState::IsInitialized() const {
 void AgentState::InternalSwap(AgentState* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(AgentState, _impl_.last_move_blocked_)
-      + sizeof(AgentState::_impl_.last_move_blocked_)
+      PROTOBUF_FIELD_OFFSET(AgentState, _impl_.executed_action_id_)
+      + sizeof(AgentState::_impl_.executed_action_id_)
       - PROTOBUF_FIELD_OFFSET(AgentState, _impl_.position_)>(
           reinterpret_cast<char*>(&_impl_.position_),
           reinterpret_cast<char*>(&other->_impl_.position_));
@@ -7239,7 +6681,7 @@ void AgentState::InternalSwap(AgentState* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AgentState::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[15]);
+      file_level_metadata_maze_5ftask_2eproto[14]);
 }
 
 // ===================================================================
@@ -7497,7 +6939,7 @@ void UpdateReq::InternalSwap(UpdateReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UpdateReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[16]);
+      file_level_metadata_maze_5ftask_2eproto[15]);
 }
 
 // ===================================================================
@@ -7708,7 +7150,7 @@ void AgentAction::InternalSwap(AgentAction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AgentAction::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[17]);
+      file_level_metadata_maze_5ftask_2eproto[16]);
 }
 
 // ===================================================================
@@ -8072,7 +7514,7 @@ void UpdateRsp::InternalSwap(UpdateRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UpdateRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[18]);
+      file_level_metadata_maze_5ftask_2eproto[17]);
 }
 
 // ===================================================================
@@ -8265,7 +7707,7 @@ void EndEpisodeReq::InternalSwap(EndEpisodeReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EndEpisodeReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[19]);
+      file_level_metadata_maze_5ftask_2eproto[18]);
 }
 
 // ===================================================================
@@ -8458,7 +7900,7 @@ void EndEpisodeRsp::InternalSwap(EndEpisodeRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EndEpisodeRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[20]);
+      file_level_metadata_maze_5ftask_2eproto[19]);
 }
 
 // ===================================================================
@@ -8737,7 +8179,7 @@ void AbortEpisodeReq::InternalSwap(AbortEpisodeReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AbortEpisodeReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[21]);
+      file_level_metadata_maze_5ftask_2eproto[20]);
 }
 
 // ===================================================================
@@ -8930,7 +8372,7 @@ void AbortEpisodeRsp::InternalSwap(AbortEpisodeRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AbortEpisodeRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[22]);
+      file_level_metadata_maze_5ftask_2eproto[21]);
 }
 
 // ===================================================================
@@ -9123,7 +8565,7 @@ void CloseSessionReq::InternalSwap(CloseSessionReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CloseSessionReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[23]);
+      file_level_metadata_maze_5ftask_2eproto[22]);
 }
 
 // ===================================================================
@@ -9316,7 +8758,7 @@ void CloseSessionRsp::InternalSwap(CloseSessionRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CloseSessionRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[24]);
+      file_level_metadata_maze_5ftask_2eproto[23]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -9364,10 +8806,6 @@ Arena::CreateMaybeMessage< ::rl::task::maze::v1::InitReq >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::rl::task::maze::v1::InitRsp*
 Arena::CreateMaybeMessage< ::rl::task::maze::v1::InitRsp >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::task::maze::v1::InitRsp >(arena);
-}
-template<> PROTOBUF_NOINLINE ::rl::task::maze::v1::EvaluationAssignment*
-Arena::CreateMaybeMessage< ::rl::task::maze::v1::EvaluationAssignment >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::rl::task::maze::v1::EvaluationAssignment >(arena);
 }
 template<> PROTOBUF_NOINLINE ::rl::task::maze::v1::EpisodeAssignment*
 Arena::CreateMaybeMessage< ::rl::task::maze::v1::EpisodeAssignment >(Arena* arena) {

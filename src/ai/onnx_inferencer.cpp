@@ -2,6 +2,7 @@
 #include "log/logger.h"
 
 #include <algorithm>
+#include <cmath>
 #include <exception>
 #include <sstream>
 #include <stdexcept>
@@ -107,6 +108,28 @@ bool OnnxInferencer::PrepareModel(const std::string& model_path,
                     << "), value(type=" << static_cast<int>(value_type)
                     << ",shape=" << ShapeText(value_shape) << ")";
             throw std::runtime_error(message.str());
+        }
+
+        for (const float probe_value : {0.0F, 1.0F, -1.0F}) {
+            std::vector<float> logits;
+            float value = 0.0F;
+            if (!InferSession(
+                    new_session,
+                    std::vector<float>(
+                        static_cast<std::size_t>(expected_obs_dim),
+                        probe_value),
+                    expected_obs_dim,
+                    logits,
+                    value) ||
+                logits.size() !=
+                    static_cast<std::size_t>(expected_action_dim) ||
+                !std::isfinite(value) ||
+                !std::all_of(logits.begin(), logits.end(), [](float item) {
+                    return std::isfinite(item);
+                })) {
+                throw std::runtime_error(
+                    "ONNX finite inference probe failed");
+            }
         }
 
         prepared.session = std::move(new_session);

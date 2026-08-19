@@ -2,18 +2,19 @@
 
 set -euo pipefail
 
-AISERVER_IMAGE_TAG="${RL_AISERVER_IMAGE_TAG:-training-001}"
+requested_image_tag="${RL_AISERVER_IMAGE_TAG:-}"
 AISERVER_IMAGE_NAME="rl-training/aiserver"
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 workspace_root="${RL_TRAINING_WORKSPACE:-$(cd "${repo_dir}/.." && pwd)}"
-artifact_root="${workspace_root}/.workspace/artifacts"
 context_root="${workspace_root}/.workspace/build-contexts/rl-aiserver-$$"
 source "${repo_dir}/artifact_versions.env"
-platform="$(docker version --format '{{.Server.Os}}/{{.Server.Arch}}')"
-platform_dir="${platform//\//-}"
 contract_dir="${repo_dir}/proto"
-smoke_model_dir="${artifact_root}/rl-smoke-model/${RL_SMOKE_MODEL_VERSION}/any"
+
+if test -n "$(git -C "${repo_dir}" status --porcelain --untracked-files=all)"; then
+    echo "refusing to build an AIServer runtime image from a dirty worktree" >&2
+    exit 1
+fi
 
 bash "${repo_dir}/scripts/verify_source_inventory.sh"
 
@@ -26,38 +27,18 @@ if [ ! -f "${contract_dir}/manifest.json" ] ||
     echo "Repository-local contract snapshot is incomplete: ${contract_dir}" >&2
     exit 1
 fi
-if [ ! -f "${smoke_model_dir}/manifest.json" ]; then
-    echo "Smoke model artifact is missing. Run ../rl-learner/build_image.sh" >&2
-    exit 1
-fi
-
 python3 - \
     "${contract_dir}/manifest.json" \
-    "${smoke_model_dir}/manifest.json" \
     "${RL_CONTRACTS_VERSION}" \
     "${RL_CONTRACTS_PLATFORM}" \
-    "${RL_SMOKE_MODEL_VERSION}" \
     <<'PY'
 import hashlib
 import json
 from pathlib import Path
-import re
 import sys
 
 contract_path = Path(sys.argv[1])
-smoke_path = Path(sys.argv[2])
 contract = json.loads(contract_path.read_text(encoding="utf-8"))
-smoke = json.loads(smoke_path.read_text(encoding="utf-8"))
-sha256 = re.compile(r"[a-f0-9]{64}")
-
-def verify_files(root, manifest):
-    for relative, expected_checksum in manifest.get("files", {}).items():
-        path = root / relative
-        if not path.is_file():
-            raise SystemExit(f"Artifact file is missing: {path}")
-        actual_checksum = hashlib.sha256(path.read_bytes()).hexdigest()
-        if actual_checksum != expected_checksum:
-            raise SystemExit(f"Artifact checksum mismatch: {path}")
 
 def verify_contract_files(root, manifest):
     files = {
@@ -87,80 +68,75 @@ def verify_contract_files(root, manifest):
 if (
     contract.get("schema_version") != 2
     or contract.get("package") != "rl-contracts"
-    or contract.get("version") != sys.argv[3]
-    or contract.get("platform") != sys.argv[4]
+    or contract.get("version") != sys.argv[2]
+    or contract.get("platform") != sys.argv[3]
+    or contract.get("source_tree_state") != "clean"
 ):
     raise SystemExit("Contract artifact identity is invalid")
 verify_contract_files(contract_path.parent, contract)
-if smoke.get("package") != "rl-smoke-model" or smoke.get("version") != sys.argv[5]:
-    raise SystemExit("Smoke model artifact identity is invalid")
-expected_contract = {
-    "package_name": contract["package"],
-    "package_version": contract["version"],
-    "source_digest": contract["source_digest"]["hex"],
-    "artifact_digest": contract["artifact_digest"]["hex"],
-    "platform": contract["platform"],
-    "generator_identity": contract["generator_identity"],
-}
-if smoke.get("contract") != expected_contract:
-    raise SystemExit("Smoke model artifact uses a different contract version")
-legacy_fields = {
-    "schema_version",
-    "contract_version",
-    "model_version",
-    "sha256",
-    "shape",
-}
-if legacy_fields & smoke.keys():
-    raise SystemExit("Smoke model manifest contains forbidden legacy fields")
-identity = smoke.get("identity", {})
-if (
-    not smoke.get("ready")
-    or smoke.get("manifest_schema_version") != 1
-    or not identity.get("model_lineage_id")
-    or identity.get("model_version") != 0
-    or sha256.fullmatch(str(identity.get("artifact_digest", ""))) is None
-    or sha256.fullmatch(str(identity.get("manifest_digest", ""))) is None
-):
-    raise SystemExit("Smoke model manifest identity is invalid")
-observation = smoke.get("observation_schema", {})
-action = smoke.get("action_schema", {})
-semantics = smoke.get("training_semantics", {})
-if (
-    observation.get("schema_id") != "maze.observation.v3"
-    or action.get("schema_id") != "maze.action.v1"
-    or smoke.get("model_architecture_id") != "maze.mlp-17x64x64.v1"
-    or smoke.get("input_shape") != [1, 17]
-    or smoke.get("action_shape") != [1, 9]
-    or smoke.get("value_shape") != [1, 1]
-    or semantics.get("training_contract_id") != "maze.training.v3"
-    or semantics.get("observation_schema") != observation
-    or semantics.get("action_schema") != action
-    or semantics.get("model_architecture_id")
-    != smoke.get("model_architecture_id")
-):
-    raise SystemExit("Smoke model training semantics are invalid")
-model_path = smoke_path.parent / smoke.get("model_file", "")
-if not model_path.is_file():
-    raise SystemExit("Smoke model file is missing")
-payload = model_path.read_bytes()
-if len(payload) != smoke.get("size_bytes"):
-    raise SystemExit("Smoke model size does not match its manifest")
-if hashlib.sha256(payload).hexdigest() != identity["artifact_digest"]:
-    raise SystemExit("Smoke model checksum does not match its manifest")
 PY
+
+stack_identity_tool="${workspace_root}/rl-framework/tools/compute_stack_source_id.py"
+if [ ! -f "${stack_identity_tool}" ]; then
+    echo "stack source identity tool is missing: ${stack_identity_tool}" >&2
+    exit 1
+fi
+stack_identity_json="$(
+    python3 "${stack_identity_tool}" --workspace-root "${workspace_root}"
+)"
+identity_fields="$(
+    python3 -c '
+import json
+import sys
+
+document = json.loads(sys.argv[1])
+print("\t".join((
+    document["stack_source_id"],
+    document["repositories"]["rl-aiserver"],
+    document["artifacts"]["rl-contracts"]["artifact_digest"],
+    document["artifacts"]["rl-contracts"]["manifest_sha256"],
+    document["configs"]["aiserver"]["sha256"],
+)))
+' "${stack_identity_json}"
+)"
+IFS=$'\t' read -r \
+    stack_source_id component_commit contracts_artifact_digest \
+    contracts_manifest_digest component_config_digest \
+    <<< "${identity_fields}"
+canonical_image_tag="a3-${RL_CONTRACTS_VERSION}-${stack_source_id:0:12}"
+if [ -n "${requested_image_tag}" ] &&
+   [ "${requested_image_tag}" != "${canonical_image_tag}" ]; then
+    echo "AIServer image tag must match the canonical stack identity:" >&2
+    echo "  expected=${canonical_image_tag}" >&2
+    echo "  requested=${requested_image_tag}" >&2
+    exit 1
+fi
+image_ref="${AISERVER_IMAGE_NAME}:${canonical_image_tag}"
+
+if docker image inspect "${image_ref}" >/dev/null 2>&1; then
+    existing_identity="$(
+        docker image inspect --format \
+            '{{index .Config.Labels "org.rl-training.stack-source-id"}}|{{index .Config.Labels "org.rl-training.component"}}|{{index .Config.Labels "org.rl-training.component-commit"}}|{{index .Config.Labels "org.rl-training.contracts-version"}}|{{index .Config.Labels "org.rl-training.contracts-artifact-digest"}}|{{index .Config.Labels "org.rl-training.contracts-manifest-digest"}}|{{index .Config.Labels "org.rl-training.component-config-digest"}}' \
+            "${image_ref}"
+    )"
+    expected_identity="${stack_source_id}|aiserver|${component_commit}|${RL_CONTRACTS_VERSION}|${contracts_artifact_digest}|${contracts_manifest_digest}|${component_config_digest}"
+    if [ "${existing_identity}" != "${expected_identity}" ]; then
+        echo "refusing to overwrite an existing AIServer tag with another identity: ${image_ref}" >&2
+        exit 1
+    fi
+    printf '%s\n' "${image_ref}"
+    exit 0
+fi
 
 python3 - \
     "${repo_dir}" \
-    "${context_root}" \
-    "${smoke_model_dir}" <<'PY'
+    "${context_root}" <<'PY'
 import pathlib
 import shutil
 import sys
 
 source = pathlib.Path(sys.argv[1])
 target = pathlib.Path(sys.argv[2])
-smoke_model = pathlib.Path(sys.argv[3])
 
 def ignore_runtime_outputs(directory, names):
     ignored = {
@@ -184,12 +160,23 @@ shutil.copytree(
 )
 if not (target / "src/log/logger.h").is_file():
     raise SystemExit("Build context is missing src/log/logger.h")
-shutil.copytree(smoke_model, target / "_deps/smoke-model")
 PY
+
+mkdir -p "${context_root}/_deps/identity"
+printf '%s\n' "${stack_identity_json}" \
+    > "${context_root}/_deps/identity/stack-source.json"
 
 trap 'rm -rf "${context_root}"' EXIT
 docker build \
-    --tag "${AISERVER_IMAGE_NAME}:${AISERVER_IMAGE_TAG}" \
+    --label "org.opencontainers.image.revision=${component_commit}" \
+    --label "org.rl-training.component=aiserver" \
+    --label "org.rl-training.component-commit=${component_commit}" \
+    --label "org.rl-training.stack-source-id=${stack_source_id}" \
+    --label "org.rl-training.contracts-version=${RL_CONTRACTS_VERSION}" \
+    --label "org.rl-training.contracts-artifact-digest=${contracts_artifact_digest}" \
+    --label "org.rl-training.contracts-manifest-digest=${contracts_manifest_digest}" \
+    --label "org.rl-training.component-config-digest=${component_config_digest}" \
+    --tag "${image_ref}" \
     "${context_root}"
 
-printf '%s\n' "${AISERVER_IMAGE_NAME}:${AISERVER_IMAGE_TAG}"
+printf '%s\n' "${image_ref}"

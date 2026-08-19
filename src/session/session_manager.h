@@ -3,13 +3,14 @@
 #include "ai/astar_solver.h"
 #include "contracts/contract_namespaces.h"
 #include "model/behavior_policy_scope.h"
-#include "model/model_version.h"
+#include "model/model_step.h"
 #include "session/lifecycle_replay_window.h"
 
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 #include <mutex>
+#include <optional>
 #include <cstdint>
 #include <cmath>
 #include <algorithm>
@@ -44,12 +45,12 @@ public:
         int64_t pending_action_frame_id = -1;
         float pending_log_prob = 0.0f;
         float pending_value = 0.0f;
-        ModelVersion pending_model_version = 0;
+        ModelStep pending_model_step = 0;
         std::string pending_model_checksum;
         std::string pending_model_lineage_id;
         std::string pending_model_manifest_digest;
         std::vector<float> pending_obs;
-        ModelVersion fragment_model_version = 0;
+        ModelStep fragment_model_step = 0;
         std::string fragment_model_checksum;
         std::string fragment_model_lineage_id;
         std::string fragment_model_manifest_digest;
@@ -69,8 +70,8 @@ public:
         double episode_return = 0.0;
         int64_t episode_transition_count = 0;
         bool episode_behavior_model_seen = false;
-        uint64_t episode_behavior_model_version_min = 0;
-        uint64_t episode_behavior_model_version_max = 0;
+        uint64_t minimum_episode_behavior_model_step = 0;
+        uint64_t maximum_episode_behavior_model_step = 0;
         std::string episode_behavior_model_lineage_id;
         maze::MazeTerminationReason final_termination_reason =
             maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
@@ -90,9 +91,6 @@ public:
         maze::SessionState session_state = maze::SESSION_STATE_OPENED;
         maze::EpisodeState protocol_episode_state =
             maze::EPISODE_STATE_UNSPECIFIED;
-        maze::EvaluationState evaluation_state =
-            maze::EVALUATION_STATE_INACTIVE;
-        std::string current_evaluation_id;
         LifecycleReplayWindow command_replay;
         std::string map_id;
         std::string map_checksum_sha256;
@@ -132,19 +130,12 @@ public:
         std::vector<bool> blocked;
         std::vector<int> geodesic_distance;
         int max_finite_geodesic_distance = -1;
-        maze::CurriculumStage curriculum_stage =
-            maze::CURRICULUM_STAGE_8X;
         maze::EpisodeMode current_episode_mode =
             maze::EPISODE_MODE_UNSPECIFIED;
         BehaviorPolicyScope behavior_policy_scope =
             BehaviorPolicyScope::Unspecified;
         int current_max_steps = 0;
-    ModelVersion evaluation_pinned_model_version = 0;
-    std::string evaluation_pinned_model_checksum;
-    std::string evaluation_pinned_model_lineage_id;
-    std::string evaluation_pinned_model_manifest_digest;
-    int64_t evaluation_pinned_model_train_updates = 0;
-    int64_t evaluation_pinned_model_trained_samples = 0;
+        std::string evaluation_pinned_model_checksum;
 
         // 网格是否可通行（越界视为不可通行）
         bool IsWalkable(int gx, int gy) const {

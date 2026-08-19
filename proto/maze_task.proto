@@ -65,39 +65,23 @@ enum EpisodeState {
     EPISODE_STATE_ABORTED = 5;
 }
 
-enum EvaluationState {
-    EVALUATION_STATE_UNSPECIFIED = 0;
-    EVALUATION_STATE_INACTIVE = 1;
-    EVALUATION_STATE_DRAINING = 2;
-    EVALUATION_STATE_MODEL_PINNED = 3;
-    EVALUATION_STATE_ARGMAX_ROUND_1 = 4;
-    EVALUATION_STATE_ARGMAX_ROUND_2 = 5;
-    EVALUATION_STATE_STOCHASTIC_DIAGNOSTIC = 6;
-    EVALUATION_STATE_COMMITTED = 7;
-}
-
 enum EpisodeMode {
     EPISODE_MODE_UNSPECIFIED = 0;
     EPISODE_MODE_TRAINING = 1;
-    EPISODE_MODE_EVALUATION_ARGMAX = 2;
-    EPISODE_MODE_EVALUATION_STOCHASTIC = 3;
-}
-
-enum CurriculumStage {
-    CURRICULUM_STAGE_UNSPECIFIED = 0;
-    CURRICULUM_STAGE_8X = 1;
-    CURRICULUM_STAGE_4X = 2;
-    CURRICULUM_STAGE_2X = 3;
-    CURRICULUM_STAGE_COMPLETE = 4;
-    CURRICULUM_STAGE_FAILED = 5;
+    // Evaluation is always deterministic Argmax inference. It never emits
+    // training samples or training metric facts.
+    EPISODE_MODE_EVALUATION = 2;
+    reserved 3;
+    reserved "EPISODE_MODE_EVALUATION_ARGMAX", "EPISODE_MODE_EVALUATION_STOCHASTIC";
 }
 
 enum WorkloadMode {
     WORKLOAD_MODE_UNSPECIFIED = 0;
     WORKLOAD_MODE_TRAINING = 1;
-    WORKLOAD_MODE_INFERENCE_SMOKE = 2;
-    WORKLOAD_MODE_MODEL_EVALUATION = 3;
-    WORKLOAD_MODE_MAP_VALIDATION = 4;
+    // Evaluation is the only non-training workload in the A3 contract.
+    WORKLOAD_MODE_EVALUATION = 2;
+    reserved 3, 4;
+    reserved "WORKLOAD_MODE_INFERENCE_SMOKE", "WORKLOAD_MODE_MODEL_EVALUATION", "WORKLOAD_MODE_MAP_VALIDATION";
 }
 
 enum ReplayPolicy {
@@ -124,7 +108,8 @@ enum EnvironmentControl {
 
 message TaskIdentity {
     string task_contract_id = 1;
-    string task_id = 2;
+    reserved 2;
+    reserved "task_id";
     uint64 task_revision = 3;
     rl.common.v1.ContentDigest task_config_digest = 4;
     string fixed_map_id = 5;
@@ -133,7 +118,11 @@ message TaskIdentity {
 
 message BehaviorPolicyBinding {
     string model_lineage_id = 1;
-    uint64 model_version = 2;
+    reserved "model_version";
+    // Training bindings require explicit presence, including bootstrap step 0.
+    // Evaluation bindings omit this field and bind only the selected file
+    // digest plus the policy schema facts below.
+    optional uint64 model_step = 2;
     rl.common.v1.ContentDigest model_artifact_digest = 3;
     rl.common.v1.ContentDigest model_manifest_digest = 4;
     string distribution_schema_id = 5;
@@ -148,6 +137,8 @@ message MazeTaskSpec {
     rl.common.v1.SchemaIdentity observation_schema = 5;
     rl.common.v1.SchemaIdentity action_schema = 6;
     string action_rule_id = 7;
+    // Fixed per-task episode horizon. It is not derived from a curriculum.
+    uint32 episode_max_steps = 8;
 }
 
 message MapDescriptor {
@@ -174,7 +165,8 @@ message LifecycleCommand {
     TaskIdentity task = 1;
     string session_id = 2;
     string episode_id = 3;
-    string evaluation_id = 4;
+    reserved 4;
+    reserved "evaluation_id";
     uint64 lifecycle_epoch = 5;
     uint64 command_sequence = 6;
     // Same key and payload returns ALREADY_APPLIED. Same key with a different
@@ -184,7 +176,8 @@ message LifecycleCommand {
     TaskState expected_task_state = 8;
     SessionState expected_session_state = 9;
     EpisodeState expected_episode_state = 10;
-    EvaluationState expected_evaluation_state = 11;
+    reserved 11;
+    reserved "expected_evaluation_state";
 }
 
 message LifecycleReply {
@@ -196,7 +189,8 @@ message LifecycleReply {
     TaskState task_state = 6;
     SessionState session_state = 7;
     EpisodeState episode_state = 8;
-    EvaluationState evaluation_state = 9;
+    reserved 9;
+    reserved "evaluation_state";
 }
 
 message OpenSessionReq {
@@ -230,24 +224,18 @@ message InitRsp {
     uint32 verified_shortest_action_steps = 3;
 }
 
-message EvaluationAssignment {
-    string evaluation_id = 1;
-    uint32 evaluation_round = 2;
-    EvaluationState state = 3;
-    BehaviorPolicyBinding pinned_policy = 4;
-    bool training_sample_emission_allowed = 5;
-}
-
 message EpisodeAssignment {
     string episode_id = 1;
     TaskIdentity task = 2;
     EpisodeMode mode = 3;
-    CurriculumStage curriculum_stage = 4;
+    reserved 4;
+    reserved "curriculum_stage";
     uint32 max_steps = 5;
     bool continue_task = 6;
     BehaviorPolicyBinding behavior_policy = 7;
     bool collect_training_samples = 8;
-    EvaluationAssignment evaluation = 9;
+    reserved 9;
+    reserved "evaluation";
 }
 
 message BeginEpisodeReq {
@@ -270,6 +258,7 @@ message AgentState {
     bool is_done = 3;
     MazeTerminationReason termination_reason = 4;
     bool last_move_blocked = 5;
+    optional int32 executed_action_id = 6;
 }
 
 message UpdateReq {

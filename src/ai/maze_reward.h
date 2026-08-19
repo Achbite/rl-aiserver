@@ -16,15 +16,20 @@ struct RewardDetail {
     std::vector<std::pair<std::string, float>> items;   // 分项明细：<奖励名, 值>
 };
 
-struct MazeRewardConfig {
-    float goal_reward = 10.0f;
-    float timeout_penalty = -2.0f;
-    float progress_budget = 1.0f;
-    float stage_8x_first_visit_budget = 0.75f;
-    float stage_4x_first_visit_budget = 0.25f;
-    float stage_2x_first_visit_budget = 0.0f;
-    float wasted_action_penalty = -0.002f;
+struct MazeRewardV4Parameters {
+    double goal_reward;
+    double timeout_penalty;
+    double progress_budget;
+    double stage_8x_first_visit_budget;
+    double stage_4x_first_visit_budget;
+    double stage_2x_first_visit_budget;
+    double wasted_action_penalty;
 };
+
+// Reward V4 is a compiled algorithm contract, not a runtime configuration.
+// The canonical JSON is also used by the effective Maze task digest.
+const MazeRewardV4Parameters& GetMazeRewardV4Parameters();
+std::string MazeRewardV4CanonicalParametersJson();
 
 // ---- 迷宫奖励计算器 ----
 // 独立模块，负责所有奖励函数的计算和分项记录。
@@ -34,6 +39,5 @@ public:
     // 计算单帧总奖励（含分项明细）
     static RewardDetail Calculate(const SessionManager::Session& session,
                                   int agent_id, int gx, int gy, bool is_done,
-                                  maze::MazeTerminationReason reason,
-                                  const MazeRewardConfig& config);
+                                  maze::MazeTerminationReason reason);
 };

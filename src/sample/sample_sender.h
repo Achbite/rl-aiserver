@@ -2,7 +2,6 @@
 
 #include "config/config_loader.h"
 #include "contracts/contract_namespaces.h"
-#include "model/model_version.h"
 #include "training.grpc.pb.h"
 
 #include <grpcpp/grpcpp.h>
@@ -15,15 +14,17 @@
 #include <mutex>
 #include <string>
 #include <thread>
-#include <unordered_map>
 #include <vector>
 
-class SampleSender {
+// AIServer-owned asynchronous producer-side distributor. It owns only the
+// bounded local outbound queue, exact immutable retries, readiness and drain;
+// SamplePool capacity, eviction and Learner batch assembly are remote facts.
+class SampleDistributor {
 public:
     enum class DeliveryState {
         kStarting,
         kHealthy,
-        kFlowWait,
+        kLocalBackpressure,
         kTransientRetry,
         kTerminalFault,
         kDraining,
@@ -53,9 +54,12 @@ public:
         bool ready = false;
         bool degraded = false;
         bool transient_retry = false;
+        bool backend_recovering = false;
         bool terminal_fault = false;
-        bool training_capacity_wait = false;
+        bool local_backpressure = false;
+        bool sample_delivery_paused = false;
         int retry_after_ms = 0;
+        int64_t recovery_elapsed_ms = 0;
         std::size_t queue_fragments = 0;
         int64_t queue_samples = 0;
         int64_t queue_estimated_bytes = 0;
@@ -73,40 +77,23 @@ public:
         int64_t push_rpc_count = 0;
         double push_rpc_latency_sum_ms = 0.0;
         double push_rpc_latency_max_ms = 0.0;
-        int64_t credit_request_count = 0;
-        int64_t credit_grant_count = 0;
-        int64_t credit_wait_count = 0;
-        int64_t credit_reacquire_count = 0;
-        int64_t producer_stale_count = 0;
-        std::unordered_map<ModelVersion, int64_t>
-            producer_stale_samples_by_model;
-        // The current A3 topology has exactly one Server Pod. Distributor
-        // status has no producer dimension, so these deltas must not be used
-        // as per-producer accounting once multiple producers share a Pool.
-        int64_t pool_stale_count = 0;
-        std::unordered_map<ModelVersion, int64_t> pool_stale_samples_by_model;
-        int64_t capacity_wait_ms = 0;
-        std::string distributor_instance_id;
+        std::string sample_pool_instance_id;
         std::string last_error;
     };
 
-    explicit SampleSender(const AIServerConfig& config);
-    ~SampleSender();
+    explicit SampleDistributor(const AIServerConfig& config);
+    ~SampleDistributor();
 
     bool Start();
     bool Enqueue(const training::SampleBatch& batch);
-    // Reserves capacity for a complete Update without exposing any fragment
-    // to the sender thread. Commit of the exact live token is a no-allocation
-    // visibility step; an unknown token fails the sender closed without
-    // exposing a prefix. Cancellation releases the whole reservation.
     ReservationResult ReserveEnqueueBatchSet(
         const std::vector<training::SampleBatch>& batches,
         uint64_t& reservation_id,
         std::string& error);
-    SealResult SealEnqueueBatchSet(
-        uint64_t reservation_id, std::string& error);
-    CommitResult CommitEnqueueBatchSet(
-        uint64_t reservation_id, std::string& error);
+    SealResult SealEnqueueBatchSet(uint64_t reservation_id,
+                                   std::string& error);
+    CommitResult CommitEnqueueBatchSet(uint64_t reservation_id,
+                                       std::string& error);
     void CancelEnqueueBatchSet(uint64_t reservation_id);
     bool HasEnqueueReservation(uint64_t reservation_id) const;
     bool StopAndDrain();
@@ -114,10 +101,11 @@ public:
     bool IsReady() const;
     bool IsDegraded() const;
     bool IsTrainingDeliveryReady() const;
-    bool IsWaitingForTrainingCapacity() const;
-    int TrainingCapacityRetryAfterMs() const;
+    bool IsPausedAtSafeBoundary() const;
+    int PauseRetryAfterMs() const;
     void MarkDegraded(const std::string& error);
-    void RecordFinalDrop(int64_t samples, int64_t batches,
+    void RecordFinalDrop(int64_t samples,
+                         int64_t batches,
                          const std::string& error);
     Snapshot GetSnapshot() const;
 
@@ -126,9 +114,7 @@ private:
 
     enum class SendResult {
         kCommitted,
-        kWait,
         kTransient,
-        kProducerStale,
         kRejected,
     };
 
@@ -146,30 +132,28 @@ private:
         bool push_outcome_unknown = false;
     };
 
-    bool ProbeDistributor();
-    StatusRefreshResult RefreshDistributorStatus();
-    bool ValidateDistributorStatus(
-        const training::DistributorStatusRsp& response,
+    bool ProbeSamplePool();
+    StatusRefreshResult RefreshSamplePoolStatus();
+    bool ValidateSamplePoolStatus(
+        const training::SamplePoolStatusRsp& response,
         std::string& error) const;
-    bool ApplyDistributorStatus(
-        const training::DistributorStatusRsp& response,
-        bool initialize_baseline,
-        std::string& error);
     void SenderLoop();
-    SendResult SendFront(const QueueItem& item, bool& duplicate,
-                         int& attempts_used, int& retry_after_ms,
+    SendResult SendFront(const QueueItem& item,
+                         bool& duplicate,
+                         int& attempts_used,
+                         int& retry_after_ms,
                          std::string& error);
     void CancelActiveRpc();
     bool ProducerCapacityConstrainedLocked() const;
-    void MarkTransient(const std::string& error, int retry_after_ms);
+    bool MarkTransient(const std::string& error, int retry_after_ms);
     void MarkHealthy();
     void SetDeliveryStateLocked(DeliveryState state);
 
-    SampleOutputConfig config_;
+    SampleDistributorConfig config_;
     ContractConfig contract_;
     std::size_t producer_fragment_reserve_ = 1;
     std::shared_ptr<grpc::Channel> channel_;
-    std::unique_ptr<training::SampleDistributorService::Stub> stub_;
+    std::unique_ptr<training::SamplePoolIngressService::Stub> stub_;
 
     mutable std::mutex mutex_;
     std::condition_variable queue_cv_;
@@ -194,9 +178,8 @@ private:
     uint64_t delivery_generation_ = 0;
     int transient_retry_after_ms_ = 0;
     int status_failure_attempts_ = 0;
-    bool training_capacity_wait_ = false;
-    int training_capacity_retry_after_ms_ = 0;
-    std::chrono::steady_clock::time_point capacity_wait_started_{};
+    bool recovery_active_ = false;
+    std::chrono::steady_clock::time_point recovery_started_{};
     std::thread sender_thread_;
 
     mutable std::mutex rpc_mutex_;
@@ -216,21 +199,7 @@ private:
     int64_t push_rpc_count_ = 0;
     double push_rpc_latency_sum_ms_ = 0.0;
     double push_rpc_latency_max_ms_ = 0.0;
-    int64_t credit_request_count_ = 0;
-    int64_t credit_grant_count_ = 0;
-    int64_t credit_wait_count_ = 0;
-    int64_t credit_reacquire_count_ = 0;
-    int64_t producer_stale_count_ = 0;
-    std::unordered_map<ModelVersion, int64_t>
-        producer_stale_samples_by_model_;
-    // Startup-relative Pool dispositions for the single-producer A3 runtime.
-    int64_t pool_stale_baseline_count_ = 0;
-    std::unordered_map<ModelVersion, int64_t>
-        pool_stale_baseline_by_model_;
-    int64_t pool_stale_count_ = 0;
-    std::unordered_map<ModelVersion, int64_t> pool_stale_samples_by_model_;
-    int64_t capacity_wait_ms_ = 0;
-    std::string distributor_instance_id_;
-    uint64_t distributor_lifecycle_epoch_ = 0;
+    std::string sample_pool_instance_id_;
+    uint64_t sample_pool_lifecycle_epoch_ = 0;
     std::string last_error_;
 };

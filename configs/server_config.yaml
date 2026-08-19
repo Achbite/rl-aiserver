@@ -1,11 +1,20 @@
 # ============================================================================
+# AIServer 默认运行配置
+# Config 提供完整默认值；白名单环境变量和 CLI 只能覆盖已有字段。
+# ============================================================================
 
-# --- 0.11.0 候选协议身份 ---
+# --- 服务参数：启动模式在这里配置，CLI --workload 可显式覆盖 ---
+server:
+  run_mode: "training"          # exact values: training | evaluation
+  listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
+  max_agents: 10                  # 最大支持的 Agent 数量
+
+# --- 0.13.0 A3 协议身份 ---
 contract:
   package_name: "rl-contracts"
-  package_version: "0.11.0"
-  source_digest: "7e3eb7227e67a2a880130c9c82f87041691c0095f838a60f80abc1f387c1c5b3"
-  artifact_digest: "077ac6d61486fafd5f0430eeb05a492764b36e073282f6d7626d0414bb5b2ddf"
+  package_version: "0.13.0"
+  source_digest: "1fc3866efe7e5869cc1a7ed4bc86d58f9c1abedafd7012b9f5dae08246ff145d"
+  artifact_digest: "5ce9dff294e3cab466e2e0f058192f9715530645a41b45851b4d798e19a9a5a7"
   platform: "linux/arm64"
   generator_identity: "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8"
 
@@ -34,25 +43,8 @@ policy:
 observation:
   ray_max_range: 10              # local ray maximum, grid cells, >0
 
-reward:
-  goal_reward: 10.0                       # reward; only GOAL_REACHED, >0
-  timeout_penalty: -2.0                   # reward; only TIME_LIMIT, <0
-  progress_budget: 1.0                    # episode reward budget; >=0
-  stage_8x_first_visit_budget: 0.75       # episode reward budget; >= 4x
-  stage_4x_first_visit_budget: 0.25       # episode reward budget; >= 2x
-  stage_2x_first_visit_budget: 0.0        # episode reward budget; final stage =0
-  wasted_action_penalty: -0.002           # reward/action; Stay or collision, <0
-
-# AIServer 配置文件 - 迷宫训练框架
-# 说明：AI 决策服务的运行参数、策略参数、网络参数集中管理
-#       修改后无需重新编译，重启 AIServer 即可生效
-# ============================================================================
-
-# --- 服务参数（gRPC 服务端配置）---
-server:
-  listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
-  max_agents: 10                  # 最大支持的 Agent 数量
-  run_mode: 1                     # 1=training, 2=local-test, 3=model-evaluation, 4=map-validation
+# Reward V4 的公式与数值由 src/ai/maze_reward.cpp 固定持有。
+# Config 只携带 training_semantics.reward_schema_* 身份，不提供 reward 调参入口。
 
 # --- 网格参数（A* 测试 + 训练共用）---
 strategy:
@@ -61,28 +53,24 @@ strategy:
 
 # --- 模型参数 ---
 model:
-  evaluation_dir: "models/local"  # model-evaluation 从此目录读取 SaveModel.onnx
-  local_train_dir: "models/local-train"  # training 下载、切换模型的运行目录
-  local_test_dir: "/opt/rl/aiserver/models/local-test"  # local-test 内置模型目录，需包含 manifest.json
-  manifest_name: "manifest.json"
+  evaluation_model_path: "../models/eval/0000000/SaveModel.onnx"
+  local_train_dir: "../models/train"
   startup_timeout_ms: 30000
   expected_obs_dim: 17
   expected_action_dim: 9
   model_architecture_id: "maze.mlp-17x64x64.v1"
   tensor_dtype: "float32"
-  expected_model_lineage_id: "maze-fixed-map-seed-0"
 
 # --- Maze 任务所有权（Client 只能执行，不能覆盖）---
 task:
   task_contract_id: "maze.task.v3"
-  task_id: "maze.fixed.single-map.v1"
-  task_revision: 2
-  task_config_digest: "f16411393f778b7a2ffaf688e80f138dc33bd0709f47190c3f7b0f5946178b5b"
+  task_revision: 3
   agent_num: 4
   fixed_map_id: "maze_117436372"
   fixed_map_checksum_sha256: "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9"
   action_rule_id: "maze.action.9-way.no-corner-cut.v1"
   shortest_action_steps: 188
+  episode_max_steps: 1504
 
 # --- 训练模型分发参数（仅 training 生效）---
 model_distribution:
@@ -90,10 +78,12 @@ model_distribution:
   port: 9200
   poll_interval_ms: 200
   rpc_timeout_ms: 5000
-  contract_version: "0.11.0"
+  contract_version: "0.13.0"
 
-# --- 样本输出参数（仅 training 生效，AIServer → LocalSampleService）---
-sample_output:
+# --- AIServer 内置异步样本分发器（仅 training 生效）---
+# 它只负责本地有界队列和向 Learner Pod Sample Pool ingress 异步发送；
+# Learner 消费速度不参与这里的 Client 流控判断。
+sample_distributor:
   enabled: true
   host: "maze-learner"
   port: 9100
@@ -103,7 +93,9 @@ sample_output:
   enqueue_timeout_ms: 100
   drain_timeout_ms: 10000
   health_timeout_ms: 5000
-  status_poll_interval_ms: 200  # 回读 Pool 处置账目，避免 stale 尾批阻塞评测排空
+  status_poll_interval_ms: 200
+  # backend 不可达时允许在安全 frame/fragment 边界暂停的最长时间。
+  recovery_timeout_ms: 30000
   outbound_max_fragments: 64
   outbound_max_estimated_bytes: 67108864
   aiserver_id: "aiserver-0"
@@ -111,4 +103,4 @@ sample_output:
 
 metrics:
   episode_window: 100
-  event_schema_catalog: "../proto/schemas/maze.metrics.v2.json"
+  event_schema_catalog: "../proto/schemas/maze.metrics.v3.json"

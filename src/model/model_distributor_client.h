@@ -17,7 +17,7 @@
 
 class ModelDistributorClient {
 public:
-    static constexpr std::size_t kCacheRetentionVersions = 101;
+    static constexpr std::size_t kCacheRetentionSteps = 101;
     static constexpr const char* kCachedModelFile = "SaveModel.onnx";
 
     enum class AckDisposition {
@@ -34,9 +34,17 @@ public:
     };
 
     struct AvailableRange {
-        ModelVersion floor_model_version = 0;
-        ModelVersion latest_model_version = 0;
+        ModelStep floor_model_step = 0;
+        ModelStep latest_model_step = 0;
+        std::string model_lineage_id;
         std::string latest_checksum;
+        std::string latest_manifest_digest;
+    };
+
+    struct CacheRecoveryFacts {
+        std::string model_lineage_key;
+        std::size_t ignored_legacy_entries = 0;
+        std::size_t recovered_steps = 0;
     };
 
     ModelDistributorClient(const AIServerConfig& config,
@@ -47,13 +55,13 @@ public:
                      ModelManifest& manifest,
                      std::string& error);
 
-    bool FetchVersion(const std::string& aiserver_id,
-                      ModelVersion model_version,
-                      ModelManifest& manifest,
-                      std::string& error);
+    bool FetchStep(const std::string& aiserver_id,
+                   ModelStep model_step,
+                   ModelManifest& manifest,
+                   std::string& error);
 
     bool GetLatestIdentity(const std::string& aiserver_id,
-                           ModelVersion& model_version,
+                           ModelStep& model_step,
                            std::string& checksum,
                            std::string& error);
     bool GetAvailableRange(const std::string& aiserver_id,
@@ -80,26 +88,28 @@ public:
         common::ServiceInstanceIdentity* pinned_authority = nullptr);
 
     bool RecoverCache(std::vector<ModelManifest>& models,
+                      CacheRecoveryFacts& facts,
                       std::string& error);
-    bool LoadCachedVersion(ModelVersion model_version,
-                           ModelManifest& manifest,
-                           std::string& error) const;
+    bool LoadCachedStep(ModelStep model_step,
+                        ModelManifest& manifest,
+                        std::string& error) const;
     bool PublishPrepared(ModelManifest& manifest,
                          std::string& error);
     bool DiscardTemporary(const ModelManifest& manifest,
                           std::string& error) const;
-    bool GetFirstMissingCachedVersion(
-                                      ModelVersion floor_model_version,
-                                      ModelVersion latest_model_version,
-                                      std::optional<ModelVersion>& missing_model_version,
-                                      std::string& error) const;
-    bool PruneCache(std::string& error);
+    bool GetFirstMissingCachedStep(
+        ModelStep floor_model_step,
+        ModelStep latest_model_step,
+        std::optional<ModelStep>& missing_model_step,
+        std::string& error) const;
+    bool PruneCache(const std::set<ModelStep>& protected_steps,
+                    std::string& error);
 
-    static std::string CacheVersionDirectoryName(ModelVersion model_version);
+    static std::string CacheStepDirectoryName(ModelStep model_step);
 
 private:
     bool ValidateManifest(const training::ModelArtifactManifest& source,
-                          std::optional<ModelVersion> expected_version,
+                          std::optional<ModelStep> expected_step,
                           std::string& error) const;
     bool DownloadToTemporary(
         const training::ModelArtifactManifest& source,
@@ -107,17 +117,25 @@ private:
         std::string& local_path,
         std::string& error);
     bool Fetch(const std::string& aiserver_id,
-               ModelVersion model_version,
+               ModelStep model_step,
                bool latest,
                ModelManifest& manifest,
                std::string& error);
     bool ListCachedModels(std::vector<ModelManifest>& models,
                           std::string& error) const;
+    bool PinModelLineage(const std::string& lineage_id,
+                         std::string& error);
+    bool GetPinnedModelLineage(std::string& lineage_id,
+                               std::string& lineage_key,
+                               std::string& error) const;
 
     AIServerConfig config_;
     common::ServiceInstanceIdentity requester_identity_;
     std::shared_ptr<grpc::Channel> channel_;
     std::unique_ptr<training::ModelDistributorService::Stub> stub_;
+    mutable std::mutex lineage_mutex_;
+    std::optional<std::string> pinned_model_lineage_id_;
+    std::optional<std::string> pinned_model_lineage_key_;
     mutable std::mutex cache_mutex_;
-    std::set<ModelVersion> cached_versions_;
+    std::set<ModelStep> cached_steps_;
 };

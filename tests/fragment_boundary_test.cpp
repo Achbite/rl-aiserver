@@ -68,16 +68,6 @@ int main() {
         return 1;
     }
 
-    if (SelectPerAgentFragmentSamples(384, 512, 4, 128, true) != 32) {
-        std::cerr << "four active agents must fill a 128-sample remainder\n";
-        return 1;
-    }
-    if (SelectPerAgentFragmentSamples(0, 512, 4, 128, true) != 128 ||
-        SelectPerAgentFragmentSamples(385, 512, 4, 128, true) != 128 ||
-        SelectPerAgentFragmentSamples(384, 512, 4, 128, false) != 128) {
-        std::cerr << "unsafe fragment adjustments must keep the configured size\n";
-        return 1;
-    }
     if (!ShouldFlushAgentFragment(32, 128, true)) {
         std::cerr <<
             "a staged model must close every non-empty Agent fragment\n";

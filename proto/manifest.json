@@ -1,13 +1,18 @@
 {
+  "artifact_channel": "development",
   "artifact_digest": {
     "algorithm": "sha256",
-    "hex": "077ac6d61486fafd5f0430eeb05a492764b36e073282f6d7626d0414bb5b2ddf"
+    "hex": "5ce9dff294e3cab466e2e0f058192f9715530645a41b45851b4d798e19a9a5a7"
   },
   "contract_packages": [
     "rl.common.v1",
     "rl.training.v1",
     "rl.task.maze.v1"
   ],
+  "development_source_digest": {
+    "algorithm": "sha256",
+    "hex": "612e138044ba383a15b6e96343118951b6905d1aed0dad264a92b8315c97c0e6"
+  },
   "files": {
     "common.proto": "6019ed0edfe5bb971869ab7bc47894345d6cdbe96fa19b25f2ba1354fd44f8de",
     "cpp/common.grpc.pb.cc": "4f3b2a7675699d28f5bedd288561cebe540dc0776d6406cf4b45c6a9922dde86",
@@ -16,46 +21,47 @@
     "cpp/common.pb.h": "51f378e8c2f6669b130f4885ac00fc3ed52643fa631ae0e6523da52d2510cf5d",
     "cpp/maze_task.grpc.pb.cc": "0acc49d19afed5f790e35bd194410934dd83b15b82b0377680ff15cb9d085da0",
     "cpp/maze_task.grpc.pb.h": "662161d3efebbbec2cac43addec3ff0935e2704cc48004ace8a5916ea7ccf7fc",
-    "cpp/maze_task.pb.cc": "12282d5e61d5a92550118648c2fbea5b1eadbf37e9273aaec8ceddd897e90fab",
-    "cpp/maze_task.pb.h": "bd2aacba8b5907189dc7e1e2576ffa6c6a631f27c7dde454a0395d28fbd72949",
-    "cpp/training.grpc.pb.cc": "84e3e0c19e3a8b9bbca74f81506ff931798848149b27448e07957b7303762685",
-    "cpp/training.grpc.pb.h": "17e4016ae07b96d1552e318d008f67b3cbff78ae6d377849aa33300326f3229e",
-    "cpp/training.pb.cc": "ae057289d9c88836677c85c5a7ace1f2b5c7077f62df9b589e01a404769e2e60",
-    "cpp/training.pb.h": "b78283255b1d95844645b98061dbd141f9efcd1295a1191562f8e9ac88d52a9d",
+    "cpp/maze_task.pb.cc": "df1786b1b6fcf15e44d099e24ec6ea70baf7558d95aa0dfa369f5ac776b1a86a",
+    "cpp/maze_task.pb.h": "030a00aca3dd39a3f2039a06703fec0e0d0b205f1979e3fca155b2ac76ab6c91",
+    "cpp/training.grpc.pb.cc": "f3a063bce92b8fdf2f9300bb9729e7f2b7e9597cd3938681db2744485d7ba791",
+    "cpp/training.grpc.pb.h": "0a5fb5468a9364204d109ad8d663def727d2b513de5cbcd3b8fc10e3f378ed21",
+    "cpp/training.pb.cc": "527b5df69ff64a4882e3bb62fb42920e8605ba9582304e87831cb6ab218a0dca",
+    "cpp/training.pb.h": "56f9df66dd5156cd08f5355a28ea807a2d5c6bfc84ccd14e7c9e12b0c272d563",
     "generator-identity.json": "e0ff2ea349578e209b5b5d6f632c967ee8ea46c7999df5cf97502b24ca69532d",
-    "maze_task.proto": "53f2da25d16da1e33b2300d6f550823c8d76569ebe4cf05d3b51ffce0d06a2d6",
+    "maze_task.proto": "ed0a72fea298fb70c4a05be5b7582a81ceb3de6f4bd25e0824d19748ee9bce8d",
     "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "python/common_pb2.py": "823786a30eff49ac558f6030d14900471ac840119b0b32cffddb5641cd0d83f0",
     "python/common_pb2_grpc.py": "75f2f40d6df8e11299b9f9c597e2aff0d602db92286b656fc6dd10eb9b3e4424",
-    "python/maze_task_pb2.py": "3e039358db3e6415a1c5aab0bea0f35c16fc8ba876ebc93bd227ef35c0ca4cb8",
+    "python/maze_task_pb2.py": "7a054b1c7cf834135843ac91786628f72c831cf1733dd86a9ae7a55048639094",
     "python/maze_task_pb2_grpc.py": "bf929f4d04ed8068d6698f3741210d038f778a0a53687e997b83bef1178a0fad",
-    "python/training_pb2.py": "437fd3b8a55e0493009460bc98d9fbcb1a3f96e2d260ca930378ed6ccc8cd276",
-    "python/training_pb2_grpc.py": "2eff50420aa9d354ac5d7d9fe5c96f4bcab4b155227b56350aa00d062a64607c",
-    "schemas/maze.metrics.v2.json": "34622334da8d4aec593ad231eb0e7cf4465fdee0cbfa13a9ea0e6f864797df73",
-    "schemas/maze.metrics.v2.sha256": "07c4fda95f98116c82b95bfe2a125d4d65c9e98e17011016ffed3596102c71c3",
-    "training.proto": "dbc76bb68833ebdc2a5fa8e681a0ca209b13e20844c57e0c38cc7fff108ca0b1"
+    "python/training_pb2.py": "dae4a2a3c2161fee3ffd5c17e441b6c35563055430640261fc4ec5778e7aed1f",
+    "python/training_pb2_grpc.py": "e6c93c5116e7d300b2844aa7a65ae4ee04c7c086ab956ebaeaaf324ce9dc8103",
+    "schemas/maze.metrics.v3.json": "d5acaf298c33400ae4c097c094fcc919091800013b0cd6a965c4f90bb48ded53",
+    "schemas/maze.metrics.v3.sha256": "c078ac26255998a73f0a5e45905bdf49fa90f06586be412b4489f2f483f0eca8",
+    "training.proto": "25b8a601ec1022bbc525dccc7ec3b42bf85ed9b36294ba083a4af21e53a9de36"
   },
   "generator_identity": "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8",
   "metric_schemas": {
-    "maze.metrics.v2": {
+    "maze.metrics.v3": {
       "canonical_digest": {
         "algorithm": "sha256",
-        "hex": "34622334da8d4aec593ad231eb0e7cf4465fdee0cbfa13a9ea0e6f864797df73"
+        "hex": "d5acaf298c33400ae4c097c094fcc919091800013b0cd6a965c4f90bb48ded53"
       },
-      "digest_path": "schemas/maze.metrics.v2.sha256",
-      "path": "schemas/maze.metrics.v2.json",
-      "schema_version": 2
+      "digest_path": "schemas/maze.metrics.v3.sha256",
+      "path": "schemas/maze.metrics.v3.json",
+      "schema_version": 3
     }
   },
   "package": "rl-contracts",
   "platform": "linux/arm64",
   "schema_version": 2,
-  "source_commit": "188f0f858f46",
+  "source_commit": "9e2cab90e35f",
   "source_digest": {
     "algorithm": "sha256",
-    "hex": "7e3eb7227e67a2a880130c9c82f87041691c0095f838a60f80abc1f387c1c5b3"
+    "hex": "1fc3866efe7e5869cc1a7ed4bc86d58f9c1abedafd7012b9f5dae08246ff145d"
   },
-  "source_id": "contract-source-7e3eb7227e67a2a8",
+  "source_head": "9e2cab90e35f79a3da5701d933f3d135a20faec4",
+  "source_id": "contract-source-1fc3866efe7e5869",
   "source_tree_state": "dirty",
-  "version": "0.11.0"
+  "version": "0.13.0"
 }

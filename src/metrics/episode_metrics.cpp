@@ -203,6 +203,19 @@ void MetricEventJournal::Finalize(int64_t finalized_at_unix_ms) {
     changed_.notify_all();
 }
 
+bool MetricEventJournal::WaitForFinalAcknowledgement(
+    std::chrono::milliseconds timeout) {
+    std::unique_lock<std::mutex> lock(mutex_);
+    // A source that never had a consumer has no established delivery stream
+    // to drain. Once a consumer is pinned, however, shutdown must keep the
+    // service reachable until that consumer durably ACKs the final batch.
+    if (!consumer_ || final_batch_acknowledged_) return true;
+    if (timeout <= std::chrono::milliseconds(0)) return false;
+    return changed_.wait_for(lock, timeout, [this] {
+        return final_batch_acknowledged_;
+    });
+}
+
 bool MetricEventJournal::ValidContract(
     const common::ContractIdentity& contract) const {
     return contract.SerializeAsString() == contract_.SerializeAsString();
@@ -552,6 +565,7 @@ void MetricEventJournal::Ack(
     }
     pending_batch_.reset();
     if (acknowledged_final_batch) final_batch_acknowledged_ = true;
+    changed_.notify_all();
     response.set_ret_code(0);
     response.set_result(training::METRIC_BATCH_ACK_RESULT_APPLIED);
     response.set_message("metric batch acknowledged");

@@ -6,16 +6,20 @@
 #include <openssl/evp.h>
 
 #include <array>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
+#include <regex>
+#include <set>
 #include <sstream>
 #include <vector>
 #include <cctype>
 #include <cmath>
-#include <cstdlib>
 #include <limits>
 #include <map>
+
+extern char** environ;
 
 namespace {
 
@@ -171,8 +175,8 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
             google::protobuf::Value::kStringValue ||
         schema_version->second.kind_case() !=
             google::protobuf::Value::kNumberValue ||
-        schema_id->second.string_value() != "maze.metrics.v2" ||
-        schema_version->second.number_value() != 2.0) {
+        schema_id->second.string_value() != "maze.metrics.v3" ||
+        schema_version->second.number_value() != 3.0) {
         error = "metric schema catalog identity is invalid";
         return false;
     }
@@ -204,12 +208,12 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
     const auto* artifact_digest = JsonStruct(manifest, "artifact_digest");
     const auto* metric_schemas = JsonStruct(manifest, "metric_schemas");
     const auto* schema_metadata = metric_schemas
-        ? JsonStruct(*metric_schemas, "maze.metrics.v2") : nullptr;
+        ? JsonStruct(*metric_schemas, "maze.metrics.v3") : nullptr;
     const auto* canonical_digest = schema_metadata
         ? JsonStruct(*schema_metadata, "canonical_digest") : nullptr;
     const auto* files = JsonStruct(manifest, "files");
-    const std::string catalog_relative = "schemas/maze.metrics.v2.json";
-    const std::string digest_relative = "schemas/maze.metrics.v2.sha256";
+    const std::string catalog_relative = "schemas/maze.metrics.v3.json";
+    const std::string digest_relative = "schemas/maze.metrics.v3.sha256";
     if (!JsonStringEquals(manifest, "package", contract.package_name) ||
         !JsonStringEquals(manifest, "version", contract.package_version) ||
         !JsonStringEquals(manifest, "platform", contract.platform) ||
@@ -227,7 +231,7 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
         CanonicalFileTableDigest(*files) !=
             contract.artifact_digest.hex ||
         !schema_metadata ||
-        !JsonNumberEquals(*schema_metadata, "schema_version", 2.0) ||
+        !JsonNumberEquals(*schema_metadata, "schema_version", 3.0) ||
         !JsonStringEquals(*schema_metadata, "path", catalog_relative) ||
         !JsonStringEquals(*schema_metadata, "digest_path", digest_relative) ||
         !canonical_digest ||
@@ -341,15 +345,6 @@ static bool IsStrictBool(const std::string& value) {
            normalized == "on" || normalized == "off";
 }
 
-static std::string GetEnvValue(const char* name) {
-    const char* value = std::getenv(name);
-    return value ? std::string(value) : "";
-}
-
-static int EnvInt(const char* name, int def) {
-    return SafeInt(GetEnvValue(name), def);
-}
-
 static bool IsLowerSha256(const std::string& value) {
     if (value.size() != 64) return false;
     for (const char character : value) {
@@ -428,12 +423,129 @@ static std::string FindValue(const std::vector<YamlEntry>& entries,
     return "";
 }
 
-// ---- 从 YAML 文件加载配置 ----
-bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) {
-    std::ifstream ifs(yaml_path);
+static bool HasPrefix(const std::string& value, const char* prefix) {
+    return value.rfind(prefix, 0) == 0;
+}
+
+static bool ValidateComponentEnvironment(std::string& error) {
+    static const std::set<std::string> allowed = {
+        "RL_AISERVER_MAX_AGENTS",
+        "RL_AISERVER_QUIESCE_FAILURE_MARKER",
+        "RL_AISERVER_QUIESCE_MARKER",
+        "RL_AISERVER_QUIESCE_TIMEOUT_SECONDS",
+        "RL_TASK_AGENT_COUNT",
+        "RL_TASK_EPISODE_MAX_STEPS",
+        "RL_TASK_MAP_EXPECTED_SHA256",
+        "RL_TASK_MAP_ID",
+        "RL_TASK_SHORTEST_ACTION_STEPS",
+    };
+    for (char** item = environ; item && *item; ++item) {
+        const std::string entry(*item);
+        const auto separator = entry.find('=');
+        const std::string name = entry.substr(0, separator);
+        if (allowed.count(name) != 0) continue;
+        if (HasPrefix(name, "RL_AISERVER_") ||
+            HasPrefix(name, "RL_TASK_") || HasPrefix(name, "RL_PPO_") ||
+            name == "RL_RUN_ID" || name == "RL_POD_ATTEMPT_ID") {
+            error = "unknown component configuration environment: " + name;
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool ReadEnvironment(const char* name,
+                            std::optional<std::string>& value,
+                            std::string& error) {
+    const char* raw = std::getenv(name);
+    if (!raw) return true;
+    if (*raw == '\0') {
+        error = std::string(name) + " must not be empty";
+        return false;
+    }
+    const std::string candidate(raw);
+    if (candidate != Trim(candidate)) {
+        error = std::string(name) +
+                " must not contain surrounding whitespace";
+        return false;
+    }
+    value = candidate;
+    return true;
+}
+
+static bool ReadEnvironmentInt(const char* name,
+                               std::optional<int>& value,
+                               std::string& error) {
+    std::optional<std::string> raw;
+    if (!ReadEnvironment(name, raw, error) || !raw.has_value()) {
+        return error.empty();
+    }
+    const int parsed = SafeInt(*raw, std::numeric_limits<int>::min());
+    if (parsed == std::numeric_limits<int>::min()) {
+        error = std::string(name) + " must be an integer";
+        return false;
+    }
+    value = parsed;
+    return true;
+}
+
+static std::string ComputeTaskConfigDigest(const AIServerConfig& config) {
+    std::ostringstream canonical;
+    canonical
+        << "{\"action_rule_id\":" << JsonQuote(config.task.action_rule_id)
+        << ",\"agent_num\":" << config.task.agent_num
+        << ",\"episode_max_steps\":" << config.task.episode_max_steps
+        << ",\"fixed_map_checksum_sha256\":"
+        << JsonQuote(config.task.fixed_map_checksum_sha256)
+        << ",\"fixed_map_id\":" << JsonQuote(config.task.fixed_map_id)
+        << ",\"reward\":" << MazeRewardV4CanonicalParametersJson()
+        << ",\"reward_schema_digest\":"
+        << JsonQuote(
+               config.training_semantics.reward_schema.canonical_digest.hex)
+        << ",\"reward_schema_id\":"
+        << JsonQuote(config.training_semantics.reward_schema.schema_id)
+        << ",\"shortest_action_steps\":"
+        << config.task.shortest_action_steps
+        << ",\"task_contract_id\":"
+        << JsonQuote(config.task.task_contract_id)
+        << ",\"task_revision\":" << config.task.task_revision << '}';
+    return Sha256Hex(canonical.str());
+}
+
+// ---- 从 YAML 文件加载配置，依次应用环境和 CLI 覆盖 ----
+bool LoadServerConfig(const std::string& yaml_path,
+                      const AIServerConfigOverrides& overrides,
+                      AIServerConfig& out_config,
+                      AIServerConfigLoadReport& report,
+                      std::string& error) {
+    namespace fs = std::filesystem;
+    out_config = AIServerConfig{};
+    report = AIServerConfigLoadReport{};
+    error.clear();
+    if (!ValidateComponentEnvironment(error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+
+    std::error_code fs_error;
+    fs::path config_path = fs::absolute(fs::path(yaml_path), fs_error);
+    if (fs_error) {
+        error = "cannot resolve config path: " + yaml_path;
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    config_path = fs::weakly_canonical(config_path, fs_error);
+    if (fs_error) {
+        error = "cannot canonicalize config path: " + yaml_path;
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    report.config_path = config_path.string();
+
+    std::ifstream ifs(config_path);
     if (!ifs.is_open()) {
-        LOG_WARN("Config", "无法打开配置文件: %s，使用默认值", yaml_path.c_str());
-        out_config = AIServerConfig{};
+        error = "cannot open config file: " + config_path.string();
+        LOG_ERROR("Config", "%s", error.c_str());
         return false;
     }
 
@@ -442,9 +554,24 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     std::string content = ss.str();
     ifs.close();
 
-    LOG_INFO("Config", "加载配置文件: %s", yaml_path.c_str());
+    LOG_INFO("Config", "加载配置文件: %s", config_path.c_str());
 
     std::vector<YamlEntry> entries = ParseYaml(content);
+    for (const auto& entry : entries) {
+        if (entry.key == "task_id" || entry.key == "run_id" ||
+            entry.key == "pod_attempt_id") {
+            error = "platform control identity is not an AIServer config field: " +
+                    entry.section + "." + entry.key;
+            LOG_ERROR("Config", "%s", error.c_str());
+            return false;
+        }
+        if (entry.section == "reward") {
+            error = "Reward V4 parameters are compiled C++ contract values, "
+                    "not AIServer config fields: reward." + entry.key;
+            LOG_ERROR("Config", "%s", error.c_str());
+            return false;
+        }
+    }
 
     const std::pair<const char*, const char*> required[] = {
         {"contract", "package_name"},
@@ -471,33 +598,53 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"policy", "policy_spec_digest"},
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
+        {"server", "run_mode"},
+        {"server", "listen_port"},
+        {"server", "max_agents"},
         {"metrics", "event_schema_catalog"},
-        {"reward", "goal_reward"},
-        {"reward", "timeout_penalty"},
-        {"reward", "progress_budget"},
-        {"reward", "stage_8x_first_visit_budget"},
-        {"reward", "stage_4x_first_visit_budget"},
-        {"reward", "stage_2x_first_visit_budget"},
-        {"reward", "wasted_action_penalty"},
         {"task", "task_contract_id"},
-        {"task", "task_id"},
         {"task", "task_revision"},
-        {"task", "task_config_digest"},
         {"task", "agent_num"},
         {"task", "fixed_map_id"},
         {"task", "fixed_map_checksum_sha256"},
         {"task", "action_rule_id"},
         {"task", "shortest_action_steps"},
+        {"task", "episode_max_steps"},
         {"model", "expected_obs_dim"},
         {"model", "expected_action_dim"},
+        {"model", "evaluation_model_path"},
+        {"model", "local_train_dir"},
         {"model", "model_architecture_id"},
         {"model", "tensor_dtype"},
-        {"model", "expected_model_lineage_id"},
+        {"model_distribution", "host"},
+        {"model_distribution", "port"},
+        {"sample_distributor", "host"},
+        {"sample_distributor", "port"},
+        {"sample_distributor", "recovery_timeout_ms"},
     };
     for (const auto& field : required) {
         if (FindValue(entries, field.first, field.second).empty()) {
             LOG_ERROR("Config", "缺少关键配置: %s.%s",
                       field.first, field.second);
+            return false;
+        }
+    }
+
+    const std::pair<const char*, const char*> forbidden_platform_or_legacy[] = {
+        {"task", "task_id"},
+        {"task", "run_id"},
+        {"task", "pod_attempt_id"},
+        {"server", "task_id"},
+        {"server", "run_id"},
+        {"server", "pod_attempt_id"},
+        {"model", "evaluation_dir"},
+        {"task", "task_config_digest"},
+    };
+    for (const auto& field : forbidden_platform_or_legacy) {
+        if (!FindValue(entries, field.first, field.second).empty()) {
+            error = std::string("forbidden config field: ") + field.first +
+                    "." + field.second;
+            LOG_ERROR("Config", "%s", error.c_str());
             return false;
         }
     }
@@ -542,7 +689,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"observation", "ray_max_range"},
         {"server", "listen_port"},
         {"server", "max_agents"},
-        {"server", "run_mode"},
         {"strategy", "grid_size"},
         {"strategy", "replan_interval"},
         {"model", "startup_timeout_ms"},
@@ -551,19 +697,21 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         {"task", "task_revision"},
         {"task", "agent_num"},
         {"task", "shortest_action_steps"},
+        {"task", "episode_max_steps"},
         {"model_distribution", "port"},
         {"model_distribution", "poll_interval_ms"},
         {"model_distribution", "rpc_timeout_ms"},
-        {"sample_output", "port"},
-        {"sample_output", "fragment_samples"},
-        {"sample_output", "rpc_timeout_ms"},
-        {"sample_output", "max_attempts"},
-        {"sample_output", "enqueue_timeout_ms"},
-        {"sample_output", "drain_timeout_ms"},
-        {"sample_output", "health_timeout_ms"},
-        {"sample_output", "status_poll_interval_ms"},
-        {"sample_output", "outbound_max_fragments"},
-        {"sample_output", "outbound_max_estimated_bytes"},
+        {"sample_distributor", "port"},
+        {"sample_distributor", "fragment_samples"},
+        {"sample_distributor", "rpc_timeout_ms"},
+        {"sample_distributor", "max_attempts"},
+        {"sample_distributor", "enqueue_timeout_ms"},
+        {"sample_distributor", "drain_timeout_ms"},
+        {"sample_distributor", "health_timeout_ms"},
+        {"sample_distributor", "status_poll_interval_ms"},
+        {"sample_distributor", "recovery_timeout_ms"},
+        {"sample_distributor", "outbound_max_fragments"},
+        {"sample_distributor", "outbound_max_estimated_bytes"},
         {"metrics", "episode_window"},
     };
     for (const auto& field : integer_fields) {
@@ -578,13 +726,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     }
     const std::pair<const char*, const char*> finite_fields[] = {
         {"policy", "training_temperature"},
-        {"reward", "goal_reward"},
-        {"reward", "timeout_penalty"},
-        {"reward", "progress_budget"},
-        {"reward", "stage_8x_first_visit_budget"},
-        {"reward", "stage_4x_first_visit_budget"},
-        {"reward", "stage_2x_first_visit_budget"},
-        {"reward", "wasted_action_penalty"},
     };
     for (const auto& field : finite_fields) {
         const std::string value = FindValue(entries, field.first, field.second);
@@ -594,11 +735,11 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
             return false;
         }
     }
-    const std::string sample_output_enabled =
-        FindValue(entries, "sample_output", "enabled");
-    if (!sample_output_enabled.empty() &&
-        !IsStrictBool(sample_output_enabled)) {
-        LOG_ERROR("Config", "布尔配置无效: sample_output.enabled");
+    const std::string sample_distributor_enabled =
+        FindValue(entries, "sample_distributor", "enabled");
+    if (!sample_distributor_enabled.empty() &&
+        !IsStrictBool(sample_distributor_enabled)) {
+        LOG_ERROR("Config", "布尔配置无效: sample_distributor.enabled");
         return false;
     }
 
@@ -659,25 +800,6 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     out_config.observation.ray_max_range = SafeInt(
         FindValue(entries, "observation", "ray_max_range"), 0);
 
-    out_config.reward.goal_reward = static_cast<float>(SafeDouble(
-        FindValue(entries, "reward", "goal_reward"), 0.0));
-    out_config.reward.timeout_penalty = static_cast<float>(SafeDouble(
-        FindValue(entries, "reward", "timeout_penalty"), 0.0));
-    out_config.reward.progress_budget = static_cast<float>(SafeDouble(
-        FindValue(entries, "reward", "progress_budget"), -1.0));
-    out_config.reward.stage_8x_first_visit_budget = static_cast<float>(
-        SafeDouble(FindValue(entries, "reward",
-                             "stage_8x_first_visit_budget"), -1.0));
-    out_config.reward.stage_4x_first_visit_budget = static_cast<float>(
-        SafeDouble(FindValue(entries, "reward",
-                             "stage_4x_first_visit_budget"), -1.0));
-    out_config.reward.stage_2x_first_visit_budget = static_cast<float>(
-        SafeDouble(FindValue(entries, "reward",
-                             "stage_2x_first_visit_budget"), -1.0));
-    out_config.reward.wasted_action_penalty = static_cast<float>(
-        SafeDouble(FindValue(entries, "reward",
-                             "wasted_action_penalty"), 0.0));
-
     // --- server ---
     out_config.server.listen_port = SafeInt(FindValue(entries, "server", "listen_port"), 9002);
     out_config.server.max_agents  = SafeInt(FindValue(entries, "server", "max_agents"),  10);
@@ -699,24 +821,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     out_config.strategy.replan_interval  = SafeInt(FindValue(entries, "strategy", "replan_interval"),  10);
 
     // --- model ---
-    std::string evaluation_dir =
-        FindValue(entries, "model", "evaluation_dir");
-    if (!evaluation_dir.empty()) {
-        out_config.model.evaluation_dir = evaluation_dir;
-    }
+    out_config.model.evaluation_model_path =
+        FindValue(entries, "model", "evaluation_model_path");
     std::string local_train_dir =
         FindValue(entries, "model", "local_train_dir");
     if (!local_train_dir.empty()) {
         out_config.model.local_train_dir = local_train_dir;
-    }
-    std::string local_test_dir =
-        FindValue(entries, "model", "local_test_dir");
-    if (!local_test_dir.empty()) {
-        out_config.model.local_test_dir = local_test_dir;
-    }
-    std::string manifest_name = FindValue(entries, "model", "manifest_name");
-    if (!manifest_name.empty()) {
-        out_config.model.manifest_name = manifest_name;
     }
     out_config.model.startup_timeout_ms =
         SafeInt(FindValue(entries, "model", "startup_timeout_ms"), 30000);
@@ -731,18 +841,12 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         FindValue(entries, "model", "model_architecture_id");
     out_config.model.tensor_dtype =
         FindValue(entries, "model", "tensor_dtype");
-    out_config.model.expected_model_lineage_id =
-        FindValue(entries, "model", "expected_model_lineage_id");
 
     // --- task ---
     out_config.task.task_contract_id =
         FindValue(entries, "task", "task_contract_id");
-    std::string task_id = FindValue(entries, "task", "task_id");
-    if (!task_id.empty()) out_config.task.task_id = task_id;
     out_config.task.task_revision = static_cast<uint64_t>(SafeSize(
         FindValue(entries, "task", "task_revision"), 1));
-    out_config.task.task_config_digest.hex =
-        FindValue(entries, "task", "task_config_digest");
     out_config.task.agent_num = SafeInt(
         FindValue(entries, "task", "agent_num"), 4);
     std::string fixed_map_id =
@@ -757,6 +861,8 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         FindValue(entries, "task", "action_rule_id");
     out_config.task.shortest_action_steps = SafeInt(
         FindValue(entries, "task", "shortest_action_steps"), 0);
+    out_config.task.episode_max_steps = SafeInt(
+        FindValue(entries, "task", "episode_max_steps"), 0);
 
     std::string model_host =
         FindValue(entries, "model_distribution", "host");
@@ -775,135 +881,187 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.model_distribution.contract_version = contract_version;
     }
 
-    // --- sample_output ---
-    out_config.sample_output.enabled = SafeBool(FindValue(entries, "sample_output", "enabled"), true);
-    std::string shost = FindValue(entries, "sample_output", "host");
+    // --- AIServer-local asynchronous SampleDistributor ---
+    out_config.sample_distributor.enabled = SafeBool(
+        FindValue(entries, "sample_distributor", "enabled"), true);
+    std::string shost = FindValue(entries, "sample_distributor", "host");
     if (!shost.empty()) {
-        out_config.sample_output.host = shost;
+        out_config.sample_distributor.host = shost;
     }
-    out_config.sample_output.port = SafeInt(FindValue(entries, "sample_output", "port"), 9100);
-    out_config.sample_output.fragment_samples =
-        SafeInt(FindValue(entries, "sample_output", "fragment_samples"), 128);
-    out_config.sample_output.rpc_timeout_ms =
-        SafeInt(FindValue(entries, "sample_output", "rpc_timeout_ms"), 2000);
-    out_config.sample_output.max_attempts =
-        SafeInt(FindValue(entries, "sample_output", "max_attempts"), 4);
-    out_config.sample_output.enqueue_timeout_ms =
-        SafeInt(FindValue(entries, "sample_output", "enqueue_timeout_ms"), 100);
-    out_config.sample_output.drain_timeout_ms =
-        SafeInt(FindValue(entries, "sample_output", "drain_timeout_ms"), 10000);
-    out_config.sample_output.health_timeout_ms =
-        SafeInt(FindValue(entries, "sample_output", "health_timeout_ms"), 5000);
-    out_config.sample_output.status_poll_interval_ms =
-        SafeInt(FindValue(entries, "sample_output", "status_poll_interval_ms"),
+    out_config.sample_distributor.port = SafeInt(
+        FindValue(entries, "sample_distributor", "port"), 9100);
+    out_config.sample_distributor.fragment_samples = SafeInt(
+        FindValue(entries, "sample_distributor", "fragment_samples"), 128);
+    out_config.sample_distributor.rpc_timeout_ms = SafeInt(
+        FindValue(entries, "sample_distributor", "rpc_timeout_ms"), 2000);
+    out_config.sample_distributor.max_attempts = SafeInt(
+        FindValue(entries, "sample_distributor", "max_attempts"), 4);
+    out_config.sample_distributor.enqueue_timeout_ms = SafeInt(
+        FindValue(entries, "sample_distributor", "enqueue_timeout_ms"), 100);
+    out_config.sample_distributor.drain_timeout_ms = SafeInt(
+        FindValue(entries, "sample_distributor", "drain_timeout_ms"), 10000);
+    out_config.sample_distributor.health_timeout_ms = SafeInt(
+        FindValue(entries, "sample_distributor", "health_timeout_ms"), 5000);
+    out_config.sample_distributor.status_poll_interval_ms = SafeInt(
+        FindValue(entries, "sample_distributor", "status_poll_interval_ms"),
                 200);
-    out_config.sample_output.outbound_max_fragments =
-        SafeSize(FindValue(entries, "sample_output", "outbound_max_fragments"), 64);
-    out_config.sample_output.outbound_max_estimated_bytes =
-        SafeSize(FindValue(entries, "sample_output", "outbound_max_estimated_bytes"),
-                 64ULL * 1024ULL * 1024ULL);
-    std::string aiserver_id = FindValue(entries, "sample_output", "aiserver_id");
+    out_config.sample_distributor.recovery_timeout_ms = SafeInt(
+        FindValue(entries, "sample_distributor", "recovery_timeout_ms"),
+        30000);
+    out_config.sample_distributor.outbound_max_fragments = SafeSize(
+        FindValue(entries, "sample_distributor", "outbound_max_fragments"), 64);
+    out_config.sample_distributor.outbound_max_estimated_bytes = SafeSize(
+        FindValue(entries, "sample_distributor", "outbound_max_estimated_bytes"),
+        64ULL * 1024ULL * 1024ULL);
+    std::string aiserver_id =
+        FindValue(entries, "sample_distributor", "aiserver_id");
     if (!aiserver_id.empty()) {
-        out_config.sample_output.aiserver_id = aiserver_id;
+        out_config.sample_distributor.aiserver_id = aiserver_id;
     }
-    std::string env_id = FindValue(entries, "sample_output", "env_id");
+    std::string env_id =
+        FindValue(entries, "sample_distributor", "env_id");
     if (!env_id.empty()) {
-        out_config.sample_output.env_id = env_id;
+        out_config.sample_distributor.env_id = env_id;
     }
     out_config.metrics.episode_window = SafeSize(
         FindValue(entries, "metrics", "episode_window"), 100);
 
-    std::string listen_port = GetEnvValue("RL_AISERVER_LISTEN_PORT");
-    if (!listen_port.empty()) {
-        out_config.server.listen_port = SafeInt(listen_port, out_config.server.listen_port);
-    }
-    std::string run_mode = GetEnvValue("RL_AISERVER_RUN_MODE");
-    if (!run_mode.empty()) {
-        const int candidate = aiserver_mode::Parse(run_mode);
-        if (aiserver_mode::IsValid(candidate)) {
-            out_config.server.run_mode = candidate;
-        } else {
-            LOG_ERROR("Config", "环境运行模式无效: %s",
-                      run_mode.c_str());
-            return false;
-        }
-    }
-    std::string model_distributor_host =
-        GetEnvValue("RL_MODEL_DISTRIBUTOR_HOST");
-    if (!model_distributor_host.empty()) {
-        out_config.model_distribution.host = model_distributor_host;
-    }
-    std::string model_distributor_port =
-        GetEnvValue("RL_MODEL_DISTRIBUTOR_PORT");
-    if (!model_distributor_port.empty()) {
-        out_config.model_distribution.port = SafeInt(
-            model_distributor_port, out_config.model_distribution.port);
-    }
-    std::string local_train_root =
-        GetEnvValue("RL_LOCAL_TRAIN_ROOT");
-    if (!local_train_root.empty()) {
-        out_config.model.local_train_dir = local_train_root;
-    }
-    std::string evaluation_model_dir =
-        GetEnvValue("RL_EVALUATION_MODEL_DIR");
-    if (!evaluation_model_dir.empty()) {
-        out_config.model.evaluation_dir = evaluation_model_dir;
-    }
-    std::string local_test_model_dir =
-        GetEnvValue("RL_LOCAL_TEST_MODEL_DIR");
-    if (!local_test_model_dir.empty()) {
-        out_config.model.local_test_dir = local_test_model_dir;
-    }
-    std::string sd_host = GetEnvValue("RL_SAMPLE_DISTRIBUTOR_HOST");
-    if (!sd_host.empty()) {
-        out_config.sample_output.host = sd_host;
-    }
-    std::string sd_port = GetEnvValue("RL_SAMPLE_DISTRIBUTOR_PORT");
-    if (!sd_port.empty()) {
-        out_config.sample_output.port = SafeInt(sd_port, out_config.sample_output.port);
-    }
-    std::string env_aiserver_id = GetEnvValue("RL_AISERVER_ID");
-    if (!env_aiserver_id.empty()) {
-        out_config.sample_output.aiserver_id = env_aiserver_id;
-    }
-    std::string env_env_id = GetEnvValue("RL_ENVIRONMENT_INSTANCE_ID");
-    if (!env_env_id.empty()) {
-        out_config.sample_output.env_id = env_env_id;
-    }
-    out_config.sample_output.fragment_samples =
-        EnvInt("RL_SAMPLE_FRAGMENT_SIZE", out_config.sample_output.fragment_samples);
-    out_config.sample_output.rpc_timeout_ms =
-        EnvInt("RL_SAMPLE_RPC_TIMEOUT_MS", out_config.sample_output.rpc_timeout_ms);
-    out_config.sample_output.max_attempts =
-        EnvInt("RL_SAMPLE_MAX_ATTEMPTS", out_config.sample_output.max_attempts);
-    out_config.sample_output.enqueue_timeout_ms =
-        EnvInt("RL_SAMPLE_ENQUEUE_TIMEOUT_MS", out_config.sample_output.enqueue_timeout_ms);
-    out_config.sample_output.drain_timeout_ms =
-        EnvInt("RL_SAMPLE_DRAIN_TIMEOUT_MS", out_config.sample_output.drain_timeout_ms);
-    out_config.sample_output.status_poll_interval_ms =
-        EnvInt("RL_SAMPLE_STATUS_POLL_INTERVAL_MS",
-               out_config.sample_output.status_poll_interval_ms);
-    out_config.model.startup_timeout_ms =
-        EnvInt("RL_MODEL_STARTUP_TIMEOUT_MS", out_config.model.startup_timeout_ms);
-    out_config.model_distribution.poll_interval_ms =
-        EnvInt(
-            "RL_MODEL_POLL_INTERVAL_MS",
-            out_config.model_distribution.poll_interval_ms);
-    if (!GetEnvValue("RL_TRAINING_SAMPLE_BUDGET").empty()) {
-        LOG_ERROR(
-            "Config",
-            "RL_TRAINING_SAMPLE_BUDGET was retired; training has no hard cap");
-        return false;
-    }
-    out_config.metrics.episode_window = SafeSize(
-        GetEnvValue("RL_EPISODE_METRICS_WINDOW"),
-        out_config.metrics.episode_window);
     if (out_config.metrics.episode_window == 0) {
         out_config.metrics.episode_window = 100;
     }
+
+    const auto record_environment_override = [&](const char* field) {
+        report.environment_overridden_fields.emplace_back(field);
+    };
+    std::optional<int> environment_integer;
+    std::optional<std::string> environment_string;
+    if (!ReadEnvironmentInt("RL_AISERVER_MAX_AGENTS", environment_integer,
+                            error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_integer.has_value()) {
+        out_config.server.max_agents = *environment_integer;
+        record_environment_override("server.max_agents");
+    }
+    environment_integer.reset();
+    if (!ReadEnvironmentInt("RL_TASK_AGENT_COUNT", environment_integer,
+                            error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_integer.has_value()) {
+        out_config.task.agent_num = *environment_integer;
+        record_environment_override("task.agent_num");
+    }
+    if (!ReadEnvironment("RL_TASK_MAP_ID", environment_string, error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_string.has_value()) {
+        out_config.task.fixed_map_id = *environment_string;
+        record_environment_override("task.fixed_map_id");
+    }
+    environment_string.reset();
+    if (!ReadEnvironment("RL_TASK_MAP_EXPECTED_SHA256", environment_string,
+                         error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_string.has_value()) {
+        out_config.task.fixed_map_checksum_sha256 = *environment_string;
+        record_environment_override("task.fixed_map_checksum_sha256");
+    }
+    environment_integer.reset();
+    if (!ReadEnvironmentInt("RL_TASK_SHORTEST_ACTION_STEPS",
+                            environment_integer, error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_integer.has_value()) {
+        out_config.task.shortest_action_steps = *environment_integer;
+        record_environment_override("task.shortest_action_steps");
+    }
+    environment_integer.reset();
+    if (!ReadEnvironmentInt("RL_TASK_EPISODE_MAX_STEPS",
+                            environment_integer, error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_integer.has_value()) {
+        out_config.task.episode_max_steps = *environment_integer;
+        record_environment_override("task.episode_max_steps");
+    }
+
+    const auto record_cli_override = [&](const char* field) {
+        report.cli_overridden_fields.emplace_back(field);
+    };
+    if (overrides.sample_distributor_host.has_value() !=
+            overrides.sample_distributor_port.has_value() ||
+        overrides.model_distributor_host.has_value() !=
+            overrides.model_distributor_port.has_value()) {
+        error = "distributor CLI overrides require a complete host:port";
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (overrides.workload.has_value()) {
+        out_config.server.run_mode = *overrides.workload;
+        record_cli_override("server.run_mode");
+    }
+    if (overrides.listen_port.has_value()) {
+        out_config.server.listen_port = *overrides.listen_port;
+        record_cli_override("server.listen_port");
+    }
+    if (overrides.evaluation_model_path.has_value()) {
+        out_config.model.evaluation_model_path =
+            *overrides.evaluation_model_path;
+        record_cli_override("model.evaluation_model_path");
+    }
+    if (overrides.sample_distributor_host.has_value()) {
+        out_config.sample_distributor.host = *overrides.sample_distributor_host;
+        out_config.sample_distributor.port = *overrides.sample_distributor_port;
+        record_cli_override("sample_distributor.address");
+    }
+    if (overrides.model_distributor_host.has_value()) {
+        out_config.model_distribution.host =
+            *overrides.model_distributor_host;
+        out_config.model_distribution.port =
+            *overrides.model_distributor_port;
+        record_cli_override("model_distribution.address");
+    }
+
+    const auto resolve_config_path = [&](std::string& value) {
+        fs::path path(value);
+        if (path.is_relative()) path = config_path.parent_path() / path;
+        value = fs::absolute(path).lexically_normal().string();
+    };
+    resolve_config_path(out_config.model.evaluation_model_path);
+    resolve_config_path(out_config.model.local_train_dir);
+
+    if (overrides.evaluation_model_path.has_value() &&
+        out_config.server.run_mode == aiserver_mode::kTraining) {
+        error = "--evaluation-model is invalid for the training workload";
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (out_config.server.run_mode == aiserver_mode::kEvaluation) {
+        const fs::path model_path(out_config.model.evaluation_model_path);
+        const auto model_status = fs::symlink_status(model_path, fs_error);
+        if (out_config.model.evaluation_model_path.empty() ||
+            model_path.filename() != kModelArtifactFile || fs_error ||
+            fs::is_symlink(model_status) ||
+            !fs::is_regular_file(model_status)) {
+            error = "evaluation requires an explicit regular, non-symlink "
+                    "SaveModel.onnx";
+            LOG_ERROR("Config", "%s: %s", error.c_str(),
+                      model_path.c_str());
+            return false;
+        }
+    }
+
     std::string metric_schema_error;
     if (!LoadMetricEventSchema(
-            yaml_path,
+            config_path.string(),
             FindValue(entries, "metrics", "event_schema_catalog"),
             out_config.contract,
             out_config.metrics, metric_schema_error)) {
@@ -914,13 +1072,15 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     const auto digest_valid = [](const DigestConfig& digest) {
         return digest.algorithm == "sha256" && IsLowerSha256(digest.hex);
     };
+    out_config.task.task_config_digest.hex =
+        ComputeTaskConfigDigest(out_config);
     const bool immutable_identity_valid =
         out_config.contract.package_name == "rl-contracts" &&
-        out_config.contract.package_version == "0.11.0" &&
+        out_config.contract.package_version == "0.13.0" &&
         out_config.contract.source_digest.hex ==
-            "7e3eb7227e67a2a880130c9c82f87041691c0095f838a60f80abc1f387c1c5b3" &&
+            "1fc3866efe7e5869cc1a7ed4bc86d58f9c1abedafd7012b9f5dae08246ff145d" &&
         out_config.contract.artifact_digest.hex ==
-            "077ac6d61486fafd5f0430eeb05a492764b36e073282f6d7626d0414bb5b2ddf" &&
+            "5ce9dff294e3cab466e2e0f058192f9715530645a41b45851b4d798e19a9a5a7" &&
         out_config.contract.platform == "linux/arm64" &&
         out_config.contract.generator_identity ==
             "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8" &&
@@ -957,28 +1117,30 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         !digest_valid(out_config.training_semantics.observation_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.action_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.reward_schema.canonical_digest) ||
-        out_config.metrics.event_schema.schema_id != "maze.metrics.v2" ||
-        out_config.metrics.event_schema.schema_version != 2 ||
+        out_config.metrics.event_schema.schema_id != "maze.metrics.v3" ||
+        out_config.metrics.event_schema.schema_version != 3 ||
         !digest_valid(out_config.metrics.event_schema.canonical_digest) ||
         !digest_valid(out_config.training_semantics.semantics_digest) ||
         !digest_valid(out_config.policy.policy_spec_digest)) {
-        LOG_ERROR("Config", "0.11.0 contract/training identity mismatch");
+        error = "0.13.0 contract/training identity mismatch";
+        LOG_ERROR("Config", "%s", error.c_str());
         return false;
     }
     if (out_config.task.task_contract_id != "maze.task.v3" ||
-        out_config.task.task_id != "maze.fixed.single-map.v1" ||
-        out_config.task.task_revision != 2 ||
+        out_config.task.task_revision != 3 ||
         !digest_valid(out_config.task.task_config_digest) ||
-        out_config.task.task_config_digest.hex !=
-            "f16411393f778b7a2ffaf688e80f138dc33bd0709f47190c3f7b0f5946178b5b" ||
-        out_config.task.agent_num != 4 ||
-        out_config.task.fixed_map_id != "maze_117436372" ||
-        out_config.task.fixed_map_checksum_sha256 !=
-            "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9" ||
         out_config.task.action_rule_id !=
-            "maze.action.9-way.no-corner-cut.v1" ||
-        out_config.task.shortest_action_steps != 188) {
-        LOG_ERROR("Config", "fixed Maze task identity mismatch");
+            "maze.action.9-way.no-corner-cut.v1") {
+        LOG_ERROR("Config", "Maze task contract identity mismatch");
+        return false;
+    }
+    static const std::regex map_id_pattern("[A-Za-z0-9_-]+");
+    if (!std::regex_match(out_config.task.fixed_map_id, map_id_pattern) ||
+        !IsLowerSha256(out_config.task.fixed_map_checksum_sha256) ||
+        out_config.task.shortest_action_steps <= 0 ||
+        out_config.task.episode_max_steps <
+            out_config.task.shortest_action_steps) {
+        LOG_ERROR("Config", "effective Maze map or episode identity is invalid");
         return false;
     }
     if (out_config.model.expected_obs_dim != 17 ||
@@ -986,26 +1148,16 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.model.model_architecture_id !=
             out_config.training_semantics.model_architecture_id ||
         out_config.model.tensor_dtype != "float32" ||
-        out_config.model.expected_model_lineage_id.empty() ||
         out_config.policy.training_temperature != 1.0 ||
-        out_config.observation.ray_max_range <= 0 ||
-        std::fabs(out_config.reward.goal_reward - 10.0f) > 1e-6f ||
-        std::fabs(out_config.reward.timeout_penalty + 2.0f) > 1e-6f ||
-        std::fabs(out_config.reward.progress_budget - 1.0f) > 1e-6f ||
-        std::fabs(out_config.reward.stage_8x_first_visit_budget - 0.75f) > 1e-6f ||
-        std::fabs(out_config.reward.stage_4x_first_visit_budget - 0.25f) > 1e-6f ||
-        std::fabs(out_config.reward.stage_2x_first_visit_budget) > 1e-6f ||
-        std::fabs(out_config.reward.wasted_action_penalty + 0.002f) > 1e-6f ||
-        out_config.reward.timeout_penalty +
-                out_config.reward.progress_budget +
-                out_config.reward.stage_8x_first_visit_budget >=
-            0.0f) {
-        LOG_ERROR("Config", "model, policy, observation or Reward V4 mismatch");
+        out_config.observation.ray_max_range <= 0) {
+        LOG_ERROR("Config", "model, policy or observation contract mismatch");
         return false;
     }
     const bool runtime_values_valid =
         out_config.server.listen_port > 0 &&
         out_config.server.listen_port <= 65535 &&
+        out_config.server.max_agents > 0 &&
+        out_config.task.agent_num > 0 &&
         out_config.server.max_agents >= out_config.task.agent_num &&
         aiserver_mode::IsValid(out_config.server.run_mode) &&
         out_config.strategy.grid_size > 0 &&
@@ -1015,18 +1167,19 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
         out_config.model_distribution.port <= 65535 &&
         out_config.model_distribution.poll_interval_ms > 0 &&
         out_config.model_distribution.rpc_timeout_ms > 0 &&
-        out_config.sample_output.port > 0 &&
-        out_config.sample_output.port <= 65535 &&
-        out_config.sample_output.fragment_samples > 0 &&
-        out_config.sample_output.rpc_timeout_ms > 0 &&
-        out_config.sample_output.max_attempts > 0 &&
-        out_config.sample_output.enqueue_timeout_ms > 0 &&
-        out_config.sample_output.drain_timeout_ms > 0 &&
-        out_config.sample_output.health_timeout_ms > 0 &&
-        out_config.sample_output.status_poll_interval_ms > 0 &&
-        out_config.sample_output.outbound_max_fragments >=
+        out_config.sample_distributor.port > 0 &&
+        out_config.sample_distributor.port <= 65535 &&
+        out_config.sample_distributor.fragment_samples > 0 &&
+        out_config.sample_distributor.rpc_timeout_ms > 0 &&
+        out_config.sample_distributor.max_attempts > 0 &&
+        out_config.sample_distributor.enqueue_timeout_ms > 0 &&
+        out_config.sample_distributor.drain_timeout_ms > 0 &&
+        out_config.sample_distributor.health_timeout_ms > 0 &&
+        out_config.sample_distributor.status_poll_interval_ms > 0 &&
+        out_config.sample_distributor.recovery_timeout_ms > 0 &&
+        out_config.sample_distributor.outbound_max_fragments >=
             static_cast<std::size_t>(out_config.task.agent_num) &&
-        out_config.sample_output.outbound_max_estimated_bytes > 0 &&
+        out_config.sample_distributor.outbound_max_estimated_bytes > 0 &&
         out_config.metrics.episode_window > 0 &&
         out_config.metrics.episode_window <= 1000000;
     if (!runtime_values_valid) {
@@ -1035,10 +1188,18 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     }
     const int64_t fragment_quantum =
         static_cast<int64_t>(out_config.task.agent_num) *
-        static_cast<int64_t>(out_config.sample_output.fragment_samples);
-    if (fragment_quantum != 512 || out_config.server.max_agents < 4 ||
-        out_config.model_distribution.contract_version != "0.11.0") {
-        LOG_ERROR("Config", "sample quantum or runtime contract mismatch");
+        static_cast<int64_t>(out_config.sample_distributor.fragment_samples);
+    const bool capacity_multiplication_safe =
+        out_config.sample_distributor.fragment_samples <=
+            std::numeric_limits<int64_t>::max() /
+                out_config.task.agent_num &&
+        static_cast<std::size_t>(out_config.server.max_agents) <=
+            std::numeric_limits<std::size_t>::max() /
+                static_cast<std::size_t>(
+                    out_config.sample_distributor.fragment_samples);
+    if (!capacity_multiplication_safe || fragment_quantum <= 0 ||
+        out_config.model_distribution.contract_version != "0.13.0") {
+        LOG_ERROR("Config", "sample capacity or runtime contract mismatch");
         return false;
     }
 
@@ -1049,45 +1210,52 @@ bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config) 
     LOG_INFO("Config", "strategy: grid=%d, replan=%d",
              out_config.strategy.grid_size,
              out_config.strategy.replan_interval);
-    LOG_INFO("Config", "model: evaluation_dir=%s, evaluation_manifest=%s, local_train=%s, local_test_dir=%s, manifest=%s, startup_timeout_ms=%d, shape=[%d]->[%d], schemas=%s/%s",
-             out_config.model.evaluation_dir.c_str(),
-             LocalEvaluationManifestPath(out_config.model).c_str(),
+    LOG_INFO("Config", "model: evaluation_model=%s, local_train=%s, startup_timeout_ms=%d, shape=[%d]->[%d], schemas=%s/%s",
+             out_config.model.evaluation_model_path.c_str(),
              out_config.model.local_train_dir.c_str(),
-             out_config.model.local_test_dir.c_str(),
-             out_config.model.manifest_name.c_str(),
              out_config.model.startup_timeout_ms,
              out_config.model.expected_obs_dim,
              out_config.model.expected_action_dim,
              out_config.model.observation_schema_id.c_str(),
              out_config.model.action_schema_id.c_str());
-    LOG_INFO("Config", "task: id=%s revision=%llu agents=%d map=%s",
-             out_config.task.task_id.c_str(),
+    LOG_INFO("Config", "task: contract=%s revision=%llu agents=%d map=%s digest=%s",
+             out_config.task.task_contract_id.c_str(),
              static_cast<unsigned long long>(out_config.task.task_revision),
-             out_config.task.agent_num,
-             out_config.task.fixed_map_id.c_str());
+             out_config.task.agent_num, out_config.task.fixed_map_id.c_str(),
+             out_config.task.task_config_digest.hex.c_str());
     LOG_INFO("Config", "model_distribution: target=%s:%d, poll_interval_ms=%d, rpc_timeout_ms=%d, contract=%s",
              out_config.model_distribution.host.c_str(),
              out_config.model_distribution.port,
              out_config.model_distribution.poll_interval_ms,
              out_config.model_distribution.rpc_timeout_ms,
              out_config.model_distribution.contract_version.c_str());
-    const bool sample_output_active =
+    const bool sample_distributor_active =
         out_config.server.run_mode == aiserver_mode::kTraining &&
-        out_config.sample_output.enabled;
-    LOG_INFO("Config", "sample_output: configured_enabled=%s, active=%s, target=%s:%d, fragment=%d, rpc_timeout_ms=%d, status_poll_interval_ms=%d, attempts=%d, queue=%zu/%zuB, aiserver_id=%s, env_id=%s",
-             out_config.sample_output.enabled ? "true" : "false",
-             sample_output_active ? "true" : "false",
-             out_config.sample_output.host.c_str(),
-             out_config.sample_output.port,
-             out_config.sample_output.fragment_samples,
-             out_config.sample_output.rpc_timeout_ms,
-             out_config.sample_output.status_poll_interval_ms,
-             out_config.sample_output.max_attempts,
-             out_config.sample_output.outbound_max_fragments,
-             out_config.sample_output.outbound_max_estimated_bytes,
-             out_config.sample_output.aiserver_id.c_str(),
-             out_config.sample_output.env_id.c_str());
+        out_config.sample_distributor.enabled;
+    LOG_INFO("Config", "sample_distributor: configured_enabled=%s, active=%s, ingress=%s:%d, fragment=%d, rpc_timeout_ms=%d, status_poll_interval_ms=%d, recovery_timeout_ms=%d, attempts=%d, local_queue=%zu/%zuB, aiserver_id=%s, env_id=%s",
+             out_config.sample_distributor.enabled ? "true" : "false",
+             sample_distributor_active ? "true" : "false",
+             out_config.sample_distributor.host.c_str(),
+             out_config.sample_distributor.port,
+             out_config.sample_distributor.fragment_samples,
+             out_config.sample_distributor.rpc_timeout_ms,
+             out_config.sample_distributor.status_poll_interval_ms,
+             out_config.sample_distributor.recovery_timeout_ms,
+             out_config.sample_distributor.max_attempts,
+             out_config.sample_distributor.outbound_max_fragments,
+             out_config.sample_distributor.outbound_max_estimated_bytes,
+             out_config.sample_distributor.aiserver_id.c_str(),
+             out_config.sample_distributor.env_id.c_str());
     LOG_INFO("Config", "metrics: episode_window=%zu",
              out_config.metrics.episode_window);
+    error.clear();
     return true;
+}
+
+bool LoadServerConfig(const std::string& yaml_path,
+                      AIServerConfig& out_config) {
+    AIServerConfigLoadReport report;
+    std::string error;
+    return LoadServerConfig(
+        yaml_path, AIServerConfigOverrides{}, out_config, report, error);
 }

@@ -46,15 +46,14 @@ bool SelectEpisodeAction(const std::vector<float>& logits,
         }
     }
 
-    if (mode == maze::EPISODE_MODE_EVALUATION_ARGMAX) {
+    if (mode == maze::EPISODE_MODE_EVALUATION) {
         action = static_cast<int>(std::distance(
             logits.begin(),
             std::max_element(logits.begin(), logits.end())));
         log_probability = 0.0f;
         return true;
     }
-    if (mode == maze::EPISODE_MODE_TRAINING ||
-        mode == maze::EPISODE_MODE_EVALUATION_STOCHASTIC) {
+    if (mode == maze::EPISODE_MODE_TRAINING) {
         const double maximum = *std::max_element(logits.begin(), logits.end());
         std::vector<double> probabilities;
         probabilities.reserve(logits.size());

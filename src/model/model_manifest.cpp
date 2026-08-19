@@ -65,8 +65,8 @@ bool ReadInteger(const Struct& object, const std::string& name,
     return true;
 }
 
-bool ReadModelVersion(const Struct& object, const std::string& name,
-                      ModelVersion& value, std::string& error) {
+bool ReadModelStep(const Struct& object, const std::string& name,
+                   ModelStep& value, std::string& error) {
     const Value* field = FindField(object, name);
     if (!field) {
         error = "manifest field '" + name + "' is missing";
@@ -79,15 +79,15 @@ bool ReadModelVersion(const Struct& object, const std::string& name,
                     "' must be an unsigned decimal string";
             return false;
         }
-        ModelVersion parsed = 0;
+        ModelStep parsed = 0;
         for (const unsigned char character : decimal) {
             if (character < '0' || character > '9') {
                 error = "manifest field '" + name +
                         "' must be an unsigned decimal string";
                 return false;
             }
-            const ModelVersion digit = character - '0';
-            if (parsed > (std::numeric_limits<ModelVersion>::max() - digit) /
+            const ModelStep digit = character - '0';
+            if (parsed > (std::numeric_limits<ModelStep>::max() - digit) /
                              10) {
                 error = "manifest field '" + name + "' overflows uint64";
                 return false;
@@ -113,7 +113,7 @@ bool ReadModelVersion(const Struct& object, const std::string& name,
                     "' must be an exact integer in [0, 2^53-1]";
             return false;
         }
-        value = static_cast<ModelVersion>(number);
+        value = static_cast<ModelStep>(number);
         return true;
     }
     error = "manifest field '" + name +
@@ -252,7 +252,7 @@ bool ParseManifestDocument(const Struct& document,
                            std::string& error) {
     const Struct* identity = nullptr;
     int64_t schema_version = 0;
-    ModelVersion model_version = 0;
+    ModelStep model_step = 0;
     int64_t size_bytes = 0;
     int64_t seed = 0;
     int64_t train_updates = 0;
@@ -262,9 +262,15 @@ bool ParseManifestDocument(const Struct& document,
     std::string lineage;
     if (!ReadInteger(document, "manifest_schema_version", schema_version, error) ||
         !ReadContract(document, manifest.mutable_contract(), error) ||
-        !ReadStruct(document, "identity", identity, error) ||
-        !ReadString(*identity, "model_lineage_id", lineage, error) ||
-        !ReadModelVersion(*identity, "model_version", model_version, error) ||
+        !ReadStruct(document, "identity", identity, error)) {
+        return false;
+    }
+    if (FindField(*identity, "model_version")) {
+        error = "legacy model_version is not accepted";
+        return false;
+    }
+    if (!ReadString(*identity, "model_lineage_id", lineage, error) ||
+        !ReadModelStep(*identity, "model_step", model_step, error) ||
         !ReadDigest(*identity, "artifact_digest",
                     manifest.mutable_identity()->mutable_artifact_digest(), error) ||
         !ReadDigest(*identity, "manifest_digest",
@@ -295,12 +301,12 @@ bool ParseManifestDocument(const Struct& document,
         return false;
     }
     if (schema_version < 0 || schema_version > UINT32_MAX) {
-        error = "manifest schema or model version is invalid";
+        error = "manifest schema or model step is invalid";
         return false;
     }
     manifest.set_manifest_schema_version(static_cast<uint32_t>(schema_version));
     manifest.mutable_identity()->set_model_lineage_id(lineage);
-    manifest.mutable_identity()->set_model_version(model_version);
+    manifest.mutable_identity()->set_model_step(model_step);
     manifest.set_size_bytes(size_bytes);
     manifest.set_seed(seed);
     manifest.set_train_updates(train_updates);
@@ -461,8 +467,8 @@ std::string ModelManifestJson(
     WriteJsonString(output, manifest.contract().generator_identity());
     output << "},\"identity\":{\"model_lineage_id\":";
     WriteJsonString(output, manifest.identity().model_lineage_id());
-    output << ",\"model_version\":\""
-           << manifest.identity().model_version() << '"'
+    output << ",\"model_step\":"
+           << manifest.identity().model_step()
            << ",\"artifact_digest\":";
     WriteDigestJson(output, manifest.identity().artifact_digest());
     output << ",\"manifest_digest\":";
@@ -554,9 +560,9 @@ bool ComputeFileSha256(const std::string& path,
 
 bool ValidateModelManifest(const AIServerConfig& config,
                            const training::ModelArtifactManifest& source,
-                           std::optional<ModelVersion> expected_version,
+                           std::optional<ModelStep> expected_step,
                            std::string& error) {
-    if (source.manifest_schema_version() != 1 || !source.ready() ||
+    if (source.manifest_schema_version() != 2 || !source.ready() ||
         source.contract().SerializeAsString() !=
             ExpectedContract(config).SerializeAsString() ||
         source.training_semantics().SerializeAsString() !=
@@ -564,10 +570,11 @@ bool ValidateModelManifest(const AIServerConfig& config,
         error = "model manifest contract or training semantics mismatch";
         return false;
     }
-    if (source.identity().model_lineage_id() !=
-            config.model.expected_model_lineage_id ||
-        (expected_version.has_value() &&
-         source.identity().model_version() != *expected_version) ||
+    if (source.identity().model_lineage_id().empty() ||
+        !source.identity().has_model_step() ||
+        (expected_step.has_value() &&
+         source.identity().model_step() != *expected_step) ||
+        source.identity().model_step() != source.train_updates() ||
         !IsSha256(source.identity().artifact_digest()) ||
         !IsSha256(source.identity().manifest_digest()) ||
         !IsSha256(source.training_config_digest()) ||
@@ -588,7 +595,7 @@ bool ValidateModelManifest(const AIServerConfig& config,
         error = "model manifest schema, dtype or shape mismatch";
         return false;
     }
-    if (source.model_file().empty() ||
+    if (source.model_file() != kModelArtifactFile ||
         std::filesystem::path(source.model_file()).filename() !=
             std::filesystem::path(source.model_file())) {
         error = "model_file must be a file name";
@@ -613,7 +620,7 @@ void AssignModelManifest(const training::ModelArtifactManifest& source,
         static_cast<int>(source.manifest_schema_version());
     destination.contract_version = source.contract().package_version();
     destination.model_lineage_id = source.identity().model_lineage_id();
-    destination.model_version = source.identity().model_version();
+    destination.model_step = source.identity().model_step();
     destination.sha256 = source.identity().artifact_digest().hex();
     destination.manifest_digest = source.identity().manifest_digest().hex();
     destination.artifact_uri = source.artifact_uri();

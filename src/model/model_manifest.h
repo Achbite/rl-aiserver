@@ -2,7 +2,7 @@
 
 #include "config/config_loader.h"
 #include "contracts/contract_namespaces.h"
-#include "model/model_version.h"
+#include "model/model_step.h"
 #include "training.pb.h"
 
 #include <cstdint>
@@ -15,7 +15,7 @@ struct ModelManifest {
     int schema_version = 0;
     std::string contract_version;
     std::string model_lineage_id;
-    ModelVersion model_version = 0;
+    ModelStep model_step = 0;
     std::string manifest_digest;
     std::string artifact_uri;
     std::string model_file;
@@ -38,13 +38,14 @@ struct ModelManifest {
 
     bool HasModelIdentity() const {
         return wire.has_identity() &&
-               wire.identity().model_version() == model_version;
+               wire.identity().has_model_step() &&
+               wire.identity().model_step() == model_step;
     }
 };
 
 bool ValidateModelManifest(const AIServerConfig& config,
                            const training::ModelArtifactManifest& source,
-                           std::optional<ModelVersion> expected_version,
+                           std::optional<ModelStep> expected_step,
                            std::string& error);
 
 void AssignModelManifest(const training::ModelArtifactManifest& source,

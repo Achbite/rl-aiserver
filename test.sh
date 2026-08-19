@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-build_dir="${repo_dir}/build"
-source "${repo_dir}/artifact_versions.env"
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+build_dir="$(mktemp -d "${TMPDIR:-/tmp}/rl-aiserver-test.XXXXXX")"
+trap 'rm -rf "${build_dir}"' EXIT
 
 if [ "$#" -ne 0 ]; then
-    echo "usage: $0" >&2
-    echo "tests are run only through: bash ./test.sh" >&2
+    echo "usage: bash ./test.sh" >&2
     exit 2
 fi
 
+source "${repo_dir}/artifact_versions.env"
 bash "${repo_dir}/scripts/verify_source_inventory.sh"
 
 contract_cpp_dir=""
@@ -34,7 +34,7 @@ cmake_args=(
     -B "${build_dir}"
     -G Ninja
     -DCMAKE_BUILD_TYPE=Release
-    -DBUILD_TESTING=OFF
+    -DBUILD_TESTING=ON
 )
 if [ -n "${contract_cpp_dir}" ]; then
     cmake_args+=("-DCONTRACT_CPP_DIR=${contract_cpp_dir}")
@@ -42,5 +42,7 @@ fi
 if command -v ccache >/dev/null 2>&1; then
     cmake_args+=("-DCMAKE_CXX_COMPILER_LAUNCHER=$(command -v ccache)")
 fi
+
 cmake "${cmake_args[@]}"
-cmake --build "${build_dir}" --parallel --target maze_aiserver
+cmake --build "${build_dir}" --parallel
+ctest --test-dir "${build_dir}" --output-on-failure

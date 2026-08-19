@@ -74,26 +74,21 @@ maze::WorkloadMode WorkloadModeForRunMode(int run_mode) {
     switch (run_mode) {
         case aiserver_mode::kTraining:
             return maze::WORKLOAD_MODE_TRAINING;
-        case aiserver_mode::kLocalTest:
-            return maze::WORKLOAD_MODE_INFERENCE_SMOKE;
-        case aiserver_mode::kModelEvaluation:
-            return maze::WORKLOAD_MODE_MODEL_EVALUATION;
-        case aiserver_mode::kMapValidation:
-            return maze::WORKLOAD_MODE_MAP_VALIDATION;
+        case aiserver_mode::kEvaluation:
+            return maze::WORKLOAD_MODE_EVALUATION;
         default:
             return maze::WORKLOAD_MODE_UNSPECIFIED;
     }
 }
 
 maze::ReplayPolicy ReplayPolicyForRunMode(int run_mode) {
-    if (run_mode == aiserver_mode::kLocalTest ||
-        run_mode == aiserver_mode::kModelEvaluation) {
+    if (run_mode == aiserver_mode::kEvaluation) {
         return maze::REPLAY_POLICY_RECORD_AND_SERVE;
     }
     return maze::REPLAY_POLICY_DISABLED;
 }
 
-constexpr uint32_t kSessionProtocolVersion = 3;
+constexpr uint32_t kSessionProtocolVersion = 4;
 constexpr const char* kObservationSchemaId = "maze.observation.v3";
 constexpr const char* kActionSchemaId = "maze.action.v1";
 constexpr const char* kActionRuleId =
@@ -143,7 +138,6 @@ void FillTrainingSemantics(
 void FillTaskIdentity(const AIServerConfig& config,
                       maze::TaskIdentity* target) {
     target->set_task_contract_id(config.task.task_contract_id);
-    target->set_task_id(config.task.task_id);
     target->set_task_revision(config.task.task_revision);
     FillDigest(config.task.task_config_digest,
                target->mutable_task_config_digest());
@@ -157,16 +151,18 @@ void FillTaskIdentity(const AIServerConfig& config,
 void FillBehaviorPolicy(const AIServerConfig& config,
                         const ModelManifest& manifest,
                         maze::BehaviorPolicyBinding* target) {
-    target->set_model_lineage_id(manifest.model_lineage_id);
-    target->set_model_version(
-        static_cast<uint64_t>(manifest.model_version));
+    if (config.server.run_mode == aiserver_mode::kTraining) {
+        target->set_model_lineage_id(manifest.model_lineage_id);
+        target->set_model_step(
+            static_cast<uint64_t>(manifest.model_step));
+        target->mutable_model_manifest_digest()->set_algorithm(
+            common::DIGEST_ALGORITHM_SHA256);
+        target->mutable_model_manifest_digest()->set_hex(
+            manifest.manifest_digest);
+    }
     target->mutable_model_artifact_digest()->set_algorithm(
         common::DIGEST_ALGORITHM_SHA256);
     target->mutable_model_artifact_digest()->set_hex(manifest.sha256);
-    target->mutable_model_manifest_digest()->set_algorithm(
-        common::DIGEST_ALGORITHM_SHA256);
-    target->mutable_model_manifest_digest()->set_hex(
-        manifest.manifest_digest);
     target->set_distribution_schema_id(
         config.policy.distribution_schema_id);
     FillDigest(config.policy.policy_spec_digest,
@@ -261,9 +257,9 @@ common::ServiceInstanceIdentity MetricEventSource(
 MazeServiceImpl::MazeServiceImpl(const AIServerConfig& config)
     : config_(config),
       producer_instance_id_(
-          CreateProducerInstanceId(config.sample_output.aiserver_id)),
+          CreateProducerInstanceId(config.sample_distributor.aiserver_id)),
       producer_lifecycle_epoch_(CreateProducerLifecycleEpoch()),
-      sample_sender_(config),
+      sample_distributor_(config),
       episode_metrics_(config.metrics.episode_window),
       model_distributor_(config, producer_instance_id_,
                          producer_lifecycle_epoch_),
@@ -273,7 +269,7 @@ MazeServiceImpl::MazeServiceImpl(const AIServerConfig& config)
           MetricContract(config), MetricEventSchema(config),
           MetricEventSource(producer_instance_id_,
                             producer_lifecycle_epoch_)),
-      current_fragment_samples_(config.sample_output.fragment_samples) {}
+      current_fragment_samples_(config.sample_distributor.fragment_samples) {}
 
 MazeServiceImpl::~MazeServiceImpl() {
     BeginShutdown();
@@ -287,7 +283,7 @@ int64_t MazeServiceImpl::NowMs() {
 
 SingleMapModelIdentity MazeServiceImpl::ActiveModelIdentity() const {
     SingleMapModelIdentity identity;
-    identity.model_version = model_manifest_.model_version;
+    identity.model_step = model_manifest_.model_step;
     identity.model_checksum = model_manifest_.sha256;
     identity.train_updates = model_manifest_.train_updates;
     identity.trained_samples = model_manifest_.trained_samples;
@@ -301,7 +297,11 @@ bool MazeServiceImpl::ValidateStagedModelProgress(
     if (!active.HasModelIdentity() || !candidate.HasModelIdentity() ||
         active.train_updates < 0 ||
         active.trained_samples < 0 ||
-        candidate.model_version <= active.model_version ||
+        active.model_step !=
+            static_cast<ModelStep>(active.train_updates) ||
+        candidate.model_step !=
+            static_cast<ModelStep>(candidate.train_updates) ||
+        candidate.model_step <= active.model_step ||
         candidate.train_updates < active.train_updates ||
         candidate.trained_samples < active.trained_samples) {
         error = "staged publication must advance without training-counter rollback";
@@ -381,51 +381,115 @@ uint64_t MazeServiceImpl::CreateProducerLifecycleEpoch() {
     return epoch == 0 ? 1 : epoch;
 }
 
-bool MazeServiceImpl::LoadInitialModel() {
-    model_state_.store(training::MODEL_STATE_WAITING);
-
-    if (config_.server.run_mode == aiserver_mode::kModelEvaluation) {
-        std::string error;
-        if (!LoadModelManifestFile(
-                config_,
-                LocalEvaluationManifestPath(config_.model),
-                model_manifest_, error)) {
-            model_state_.store(training::MODEL_STATE_FAILED);
-            last_error_ = "model-evaluation model manifest failed: " + error;
-            return false;
-        }
-        if (!onnx_inferencer_.LoadModel(
-                model_manifest_.model_path,
-                config_.model.expected_obs_dim,
-                config_.model.expected_action_dim, &error)) {
-            model_state_.store(training::MODEL_STATE_FAILED);
-            last_error_ = "model-evaluation model load failed: " + error;
-            return false;
-        }
-        model_state_.store(training::MODEL_STATE_READY);
-        last_error_.clear();
+bool MazeServiceImpl::AcquireTrainingWorkspaceLease(std::string& error) {
+    namespace fs = std::filesystem;
+    if (config_.server.run_mode != aiserver_mode::kTraining ||
+        training_workspace_lease_held_) {
+        error.clear();
         return true;
     }
 
-    if (config_.server.run_mode == aiserver_mode::kLocalTest) {
-        const std::string manifest_path =
-            config_.model.local_test_dir + "/" +
-            config_.model.manifest_name;
+    const fs::path workspace(config_.model.local_train_dir);
+    std::error_code filesystem_error;
+    fs::create_directories(workspace, filesystem_error);
+    if (filesystem_error) {
+        error = "cannot create AIServer training workspace: " +
+                filesystem_error.message();
+        return false;
+    }
+    const auto workspace_status =
+        fs::symlink_status(workspace, filesystem_error);
+    if (filesystem_error || fs::is_symlink(workspace_status) ||
+        !fs::is_directory(workspace_status)) {
+        error = "AIServer training workspace must be a real directory";
+        return false;
+    }
+
+    const fs::path lock_path = workspace / ".aiserver.lock";
+    if (!fs::create_directory(lock_path, filesystem_error)) {
+        error = filesystem_error
+                    ? "cannot acquire AIServer training workspace lease: " +
+                          filesystem_error.message()
+                    : "AIServer training workspace is already in use";
+        return false;
+    }
+    const fs::path pid_path = lock_path / "pid";
+    {
+        std::ofstream pid_file(pid_path, std::ios::trunc);
+        pid_file << getpid() << '\n';
+        pid_file.flush();
+        if (!pid_file) {
+            fs::remove_all(lock_path, filesystem_error);
+            error = "cannot publish AIServer training workspace lease";
+            return false;
+        }
+    }
+    training_workspace_lock_path_ = lock_path.string();
+    training_workspace_lease_held_ = true;
+    error.clear();
+    return true;
+}
+
+bool MazeServiceImpl::ReleaseTrainingWorkspaceLease(std::string& error) {
+    namespace fs = std::filesystem;
+    if (!training_workspace_lease_held_) {
+        error.clear();
+        return true;
+    }
+
+    const fs::path lock_path(training_workspace_lock_path_);
+    std::error_code filesystem_error;
+    fs::remove(lock_path / "pid", filesystem_error);
+    if (filesystem_error) {
+        error = "cannot remove AIServer training workspace lease PID: " +
+                filesystem_error.message();
+        return false;
+    }
+    if (!fs::remove(lock_path, filesystem_error) || filesystem_error) {
+        error = filesystem_error
+                    ? "cannot release AIServer training workspace lease: " +
+                          filesystem_error.message()
+                    : "AIServer training workspace lease is not empty";
+        return false;
+    }
+    training_workspace_lock_path_.clear();
+    training_workspace_lease_held_ = false;
+    error.clear();
+    return true;
+}
+
+bool MazeServiceImpl::LoadInitialModel() {
+    model_state_.store(training::MODEL_STATE_WAITING);
+
+    if (config_.server.run_mode == aiserver_mode::kEvaluation) {
         std::string error;
-        if (!LoadModelManifestFile(
-                config_, manifest_path, model_manifest_, error)) {
+        const std::string model_path =
+            config_.model.evaluation_model_path;
+        std::string checksum;
+        if (!ComputeFileSha256(model_path, checksum, error)) {
             model_state_.store(training::MODEL_STATE_FAILED);
-            last_error_ = "local-test model manifest failed: " + error;
+            last_error_ = "evaluation model failed: " + error;
             return false;
         }
         if (!onnx_inferencer_.LoadModel(
-                model_manifest_.model_path,
+                model_path,
                 config_.model.expected_obs_dim,
                 config_.model.expected_action_dim, &error)) {
             model_state_.store(training::MODEL_STATE_FAILED);
-            last_error_ = "local-test model validation failed: " + error;
+            last_error_ = "evaluation model load failed: " + error;
             return false;
         }
+        model_manifest_ = ModelManifest{};
+        model_manifest_.schema_version = 3;
+        model_manifest_.contract_version = config_.contract.package_version;
+        model_manifest_.model_lineage_id.clear();
+        model_manifest_.model_step = 0;
+        model_manifest_.manifest_digest.clear();
+        model_manifest_.artifact_uri = model_path;
+        model_manifest_.model_file = kModelArtifactFile;
+        model_manifest_.sha256 = checksum;
+        model_manifest_.model_path = model_path;
+        model_manifest_.ready = true;
         model_state_.store(training::MODEL_STATE_READY);
         last_error_.clear();
         return true;
@@ -434,31 +498,51 @@ bool MazeServiceImpl::LoadInitialModel() {
     auto deadline = std::chrono::steady_clock::now() +
                     std::chrono::milliseconds(config_.model.startup_timeout_ms);
     std::string error;
-    std::vector<ModelManifest> recovered_models;
-    if (!model_distributor_.RecoverCache(recovered_models, error)) {
-        model_state_.store(training::MODEL_STATE_FAILED);
-        last_error_ = "model cache recovery failed: " + error;
-        return false;
-    }
+    bool cache_recovered = false;
     while (std::chrono::steady_clock::now() < deadline) {
         ModelDistributorClient::AvailableRange range;
         if (model_distributor_.GetAvailableRange(
-                config_.sample_output.aiserver_id, range, error)) {
+                config_.sample_distributor.aiserver_id, range, error)) {
+            if (!cache_recovered) {
+                std::vector<ModelManifest> recovered_models;
+                ModelDistributorClient::CacheRecoveryFacts recovery_facts;
+                if (!model_distributor_.RecoverCache(
+                        recovered_models, recovery_facts, error)) {
+                    model_state_.store(training::MODEL_STATE_FAILED);
+                    last_error_ = "model cache recovery failed: " + error;
+                    return false;
+                }
+                cache_recovered = true;
+                LOG_INFO(
+                    "MazeService",
+                    "模型缓存 namespace 已恢复: lineage_key=%s steps=%zu",
+                    recovery_facts.model_lineage_key.c_str(),
+                    recovery_facts.recovered_steps);
+                if (recovery_facts.ignored_legacy_entries > 0) {
+                    LOG_WARN(
+                        "MazeService",
+                        "保留并忽略旧平面模型缓存: entries=%zu",
+                        recovery_facts.ignored_legacy_entries);
+                }
+            }
             ModelManifest candidate;
             std::string load_error;
             OnnxInferencer::PreparedModel prepared;
             if (!FetchPrepareAndPublishModel(
-                    range.latest_model_version, candidate, prepared,
-                    load_error, true)) {
+                    range.latest_model_step, candidate, prepared,
+                    load_error, false)) {
                 error = load_error;
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 continue;
             }
-            if (candidate.sha256 != range.latest_checksum ||
+            if (candidate.model_lineage_id != range.model_lineage_id ||
+                candidate.sha256 != range.latest_checksum ||
+                candidate.manifest_digest !=
+                    range.latest_manifest_digest ||
                 !prepared.valid()) {
                 std::string ack_error;
                 model_distributor_.Ack(
-                    candidate, config_.sample_output.aiserver_id,
+                    candidate, config_.sample_distributor.aiserver_id,
                     training::MODEL_LOAD_STATUS_FAILED,
                     "initial model range identity mismatch", ack_error);
                 model_state_.store(training::MODEL_STATE_FAILED);
@@ -477,7 +561,7 @@ bool MazeServiceImpl::LoadInitialModel() {
             }
             std::string ack_error;
             auto ack = model_distributor_.AckIdempotently(
-                candidate, config_.sample_output.aiserver_id,
+                candidate, config_.sample_distributor.aiserver_id,
                 training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
                 &ack_authority);
             if (ack == ModelDistributorClient::AckDisposition::Rejected ||
@@ -491,7 +575,7 @@ bool MazeServiceImpl::LoadInitialModel() {
                    std::chrono::steady_clock::now() < deadline) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 ack = model_distributor_.AckIdempotently(
-                    candidate, config_.sample_output.aiserver_id,
+                    candidate, config_.sample_distributor.aiserver_id,
                     training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
                     &ack_authority);
             }
@@ -509,7 +593,8 @@ bool MazeServiceImpl::LoadInitialModel() {
             onnx_inferencer_.ActivatePreparedModel(std::move(prepared));
             model_manifest_ = candidate;
             std::string prune_error;
-            if (!model_distributor_.PruneCache(prune_error)) {
+            if (!model_distributor_.PruneCache(
+                    ProtectedCachedModelStepsLocked(), prune_error)) {
                 LOG_ERROR("MazeService", "初始模型缓存淘汰延后: %s",
                           prune_error.c_str());
             }
@@ -520,9 +605,9 @@ bool MazeServiceImpl::LoadInitialModel() {
             model_state_.store(training::MODEL_STATE_READY);
             last_error_.clear();
             LOG_INFO("MazeService",
-                     "初始模型就绪: version=%llu sha256=%s",
+                     "初始模型就绪: model_step=%llu sha256=%s",
                      static_cast<unsigned long long>(
-                         model_manifest_.model_version),
+                         model_manifest_.model_step),
                      model_manifest_.sha256.c_str());
             return true;
         }
@@ -547,7 +632,6 @@ training::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
     const SessionManager::Session& session,
     const std::vector<AgentEpisodeResult>& agents) const {
     training::EpisodeMetricFact fact;
-    fact.set_task_id(session.task.task_id());
     fact.set_environment_instance_id(session.environment_instance_id);
     fact.set_episode_id(session.current_episode_id);
     FillTrainingSemantics(config_, fact.mutable_training_semantics());
@@ -573,10 +657,10 @@ training::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
         target->set_attempted_move_count(
             static_cast<uint64_t>(std::max<int64_t>(
                 0, agent.attempted_move_count)));
-        target->set_behavior_model_version_min(
-            agent.behavior_model_version_min);
-        target->set_behavior_model_version_max(
-            agent.behavior_model_version_max);
+        target->set_minimum_behavior_model_step(
+            agent.minimum_behavior_model_step);
+        target->set_maximum_behavior_model_step(
+            agent.maximum_behavior_model_step);
         target->set_behavior_model_lineage_id(
             agent.behavior_model_lineage_id);
         std::vector<std::pair<std::string, double>> components(
@@ -594,15 +678,15 @@ training::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
 }
 
 bool MazeServiceImpl::FetchPrepareAndPublishModel(
-    ModelVersion model_version,
+    ModelStep model_step,
     ModelManifest& manifest,
     OnnxInferencer::PreparedModel& prepared,
     std::string& error,
     bool force_exact_download) {
     ModelManifest cached;
     if (!force_exact_download &&
-        model_distributor_.LoadCachedVersion(
-            model_version, cached, error)) {
+        model_distributor_.LoadCachedStep(
+            model_step, cached, error)) {
         if (!LoadAndPrepareCachedModel(cached, prepared, error)) {
             return false;
         }
@@ -611,8 +695,8 @@ bool MazeServiceImpl::FetchPrepareAndPublishModel(
     }
 
     ModelManifest downloaded;
-    if (!model_distributor_.FetchVersion(
-            config_.sample_output.aiserver_id, model_version,
+    if (!model_distributor_.FetchStep(
+            config_.sample_distributor.aiserver_id, model_step,
             downloaded, error)) {
         return false;
     }
@@ -637,19 +721,19 @@ bool MazeServiceImpl::FetchPrepareAndPublishModel(
 bool MazeServiceImpl::BackfillOneCachedModel(
     const ModelDistributorClient::AvailableRange& range,
     std::string& error) {
-    const ModelVersion retained_span = std::min<ModelVersion>(
-        range.latest_model_version,
-        ModelDistributorClient::kCacheRetentionVersions - 1);
-    const ModelVersion desired_floor = std::max(
-        range.floor_model_version,
-        range.latest_model_version - retained_span);
-    std::optional<ModelVersion> missing_version;
-    if (!model_distributor_.GetFirstMissingCachedVersion(
-            desired_floor, range.latest_model_version,
-            missing_version, error)) {
+    const ModelStep retained_span = std::min<ModelStep>(
+        range.latest_model_step,
+        ModelDistributorClient::kCacheRetentionSteps - 1);
+    const ModelStep desired_floor = std::max(
+        range.floor_model_step,
+        range.latest_model_step - retained_span);
+    std::optional<ModelStep> missing_step;
+    if (!model_distributor_.GetFirstMissingCachedStep(
+            desired_floor, range.latest_model_step,
+            missing_step, error)) {
         return false;
     }
-    if (!missing_version.has_value()) {
+    if (!missing_step.has_value()) {
         error.clear();
         return true;
     }
@@ -657,20 +741,52 @@ bool MazeServiceImpl::BackfillOneCachedModel(
     ModelManifest cached;
     OnnxInferencer::PreparedModel prepared;
     if (!FetchPrepareAndPublishModel(
-            *missing_version, cached, prepared, error, false)) {
+            *missing_step, cached, prepared, error, false)) {
         return false;
     }
     if (!prepared.valid() ||
-        (*missing_version == range.latest_model_version &&
+        (*missing_step == range.latest_model_step &&
          cached.sha256 != range.latest_checksum)) {
         error = "backfilled model identity or prepared state is invalid";
         return false;
     }
-    LOG_INFO("MazeService", "模型缓存已补齐: version=%llu sha256=%s",
-             static_cast<unsigned long long>(cached.model_version),
+    LOG_INFO("MazeService", "模型缓存已补齐: model_step=%llu sha256=%s",
+             static_cast<unsigned long long>(cached.model_step),
              cached.sha256.c_str());
     error.clear();
     return true;
+}
+
+std::set<ModelStep> MazeServiceImpl::ProtectedCachedModelStepsLocked() {
+    std::set<ModelStep> protected_steps;
+    if (model_manifest_.HasModelIdentity()) {
+        protected_steps.insert(model_manifest_.model_step);
+    }
+    if (staged_model_manifest_.HasModelIdentity()) {
+        protected_steps.insert(staged_model_manifest_.model_step);
+    }
+    if (model_ack_pending_ &&
+        pending_model_ack_manifest_.HasModelIdentity()) {
+        protected_steps.insert(pending_model_ack_manifest_.model_step);
+    }
+    for (const auto& session_id : session_mgr_.GetSessionIds()) {
+        const SessionManager::Session* session =
+            session_mgr_.GetSession(session_id);
+        if (!session) continue;
+        for (const auto& item : session->agents) {
+            const auto& agent = item.second;
+            if (agent.has_pending_action &&
+                !agent.pending_model_lineage_id.empty() &&
+                !agent.pending_model_checksum.empty()) {
+                protected_steps.insert(agent.pending_model_step);
+            }
+            if (!agent.fragment_model_lineage_id.empty() &&
+                !agent.fragment_model_checksum.empty()) {
+                protected_steps.insert(agent.fragment_model_step);
+            }
+        }
+    }
+    return protected_steps;
 }
 
 void MazeServiceImpl::StartModelWatcher() {
@@ -709,8 +825,8 @@ void MazeServiceImpl::RecordPendingModelAck(
 
 bool MazeServiceImpl::HasLocallyActivatedPendingModel() const {
     return model_ack_pending_ && onnx_inferencer_.IsLoaded() &&
-           model_manifest_.model_version ==
-               pending_model_ack_manifest_.model_version &&
+           model_manifest_.model_step ==
+               pending_model_ack_manifest_.model_step &&
            model_manifest_.sha256 == pending_model_ack_manifest_.sha256 &&
            model_manifest_.model_lineage_id ==
                pending_model_ack_manifest_.model_lineage_id &&
@@ -737,12 +853,12 @@ bool MazeServiceImpl::RetryPendingModelAck() {
 
     std::string ack_error;
     const auto ack = model_distributor_.AckIdempotently(
-        pending, config_.sample_output.aiserver_id,
+        pending, config_.sample_distributor.aiserver_id,
         training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
         &authority);
     std::lock_guard<std::mutex> lock(mutex_);
     if (!model_ack_pending_ ||
-        pending_model_ack_manifest_.model_version != pending.model_version ||
+        pending_model_ack_manifest_.model_step != pending.model_step ||
         pending_model_ack_manifest_.sha256 != pending.sha256) {
         return !model_ack_pending_;
     }
@@ -756,8 +872,8 @@ bool MazeServiceImpl::RetryPendingModelAck() {
         model_state_.store(training::MODEL_STATE_READY);
         const bool ack_was_only_fault =
             state_.load() == training::AISERVER_STATE_DEGRADED &&
-            last_error_ == ack_cause && sample_sender_.IsReady() &&
-            !sample_sender_.IsDegraded();
+            last_error_ == ack_cause && sample_distributor_.IsReady() &&
+            !sample_distributor_.IsDegraded();
         if (ack_was_only_fault) {
             state_.store(training::AISERVER_STATE_READY);
             last_error_.clear();
@@ -814,13 +930,13 @@ void MazeServiceImpl::ModelWatchLoop() {
             continue;
         }
 
-        ModelVersion active_version = 0;
-        std::optional<ModelVersion> staged_version;
+        ModelStep active_step = 0;
+        std::optional<ModelStep> staged_step;
         {
             std::lock_guard<std::mutex> lock(mutex_);
-            active_version = model_manifest_.model_version;
+            active_step = model_manifest_.model_step;
             if (staged_model_manifest_.HasModelIdentity()) {
-                staged_version = staged_model_manifest_.model_version;
+                staged_step = staged_model_manifest_.model_step;
             }
         }
 
@@ -828,16 +944,16 @@ void MazeServiceImpl::ModelWatchLoop() {
         std::string error;
         std::string cycle_error;
         bool range_ready = model_distributor_.GetAvailableRange(
-            config_.sample_output.aiserver_id, range, error);
+            config_.sample_distributor.aiserver_id, range, error);
         bool latest_ready = range_ready;
         if (range_ready &&
             ShouldFetchModelCandidate(
-                active_version, staged_version,
-                range.latest_model_version)) {
+                active_step, staged_step,
+                range.latest_model_step)) {
             ModelManifest candidate;
             OnnxInferencer::PreparedModel prepared;
             latest_ready = FetchPrepareAndPublishModel(
-                range.latest_model_version, candidate, prepared,
+                range.latest_model_step, candidate, prepared,
                 error, true);
             if (latest_ready && candidate.sha256 != range.latest_checksum) {
                 error = "staged model range identity changed during fetch";
@@ -845,22 +961,22 @@ void MazeServiceImpl::ModelWatchLoop() {
             }
             if (latest_ready) {
                 std::lock_guard<std::mutex> lock(mutex_);
-                const std::optional<ModelVersion> current_staged =
+                const std::optional<ModelStep> current_staged =
                     staged_model_manifest_.HasModelIdentity()
-                        ? std::optional<ModelVersion>(
-                              staged_model_manifest_.model_version)
+                        ? std::optional<ModelStep>(
+                              staged_model_manifest_.model_step)
                         : std::nullopt;
                 if (ShouldFetchModelCandidate(
-                        model_manifest_.model_version,
+                        model_manifest_.model_step,
                         current_staged,
-                        candidate.model_version)) {
+                        candidate.model_step)) {
                     staged_model_manifest_ = std::move(candidate);
                     staged_prepared_model_ = std::move(prepared);
                     LOG_INFO(
                         "MazeService",
-                        "模型已暂存: version=%llu sha256=%s",
+                        "模型已暂存: model_step=%llu sha256=%s",
                         static_cast<unsigned long long>(
-                            staged_model_manifest_.model_version),
+                            staged_model_manifest_.model_step),
                         staged_model_manifest_.sha256.c_str());
                 }
             }
@@ -881,8 +997,14 @@ void MazeServiceImpl::ModelWatchLoop() {
         } else if (!error.empty()) {
             cycle_error = "model refresh delayed: " + error;
         }
+        std::set<ModelStep> protected_steps;
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            protected_steps = ProtectedCachedModelStepsLocked();
+        }
         std::string prune_error;
-        if (!model_distributor_.PruneCache(prune_error)) {
+        if (!model_distributor_.PruneCache(
+                protected_steps, prune_error)) {
             if (!cycle_error.empty()) cycle_error += "; ";
             cycle_error += "model cache pruning delayed: " + prune_error;
         }
@@ -914,24 +1036,38 @@ bool MazeServiceImpl::Start() {
 
         state_.store(training::AISERVER_STATE_STARTING);
         if (config_.server.run_mode == aiserver_mode::kTraining) {
-            if (!sample_sender_.Start()) {
-                auto sender = sample_sender_.GetSnapshot();
+            std::string workspace_error;
+            if (!AcquireTrainingWorkspaceLease(workspace_error)) {
+                last_error_ = workspace_error;
+                state_.store(training::AISERVER_STATE_DEGRADED);
+                LOG_ERROR("MazeService", "训练 workspace 独占失败: %s",
+                          last_error_.c_str());
+                return false;
+            }
+            if (!sample_distributor_.Start()) {
+                auto sender = sample_distributor_.GetSnapshot();
                 last_error_ = sender.last_error;
+                std::string release_error;
+                if (!ReleaseTrainingWorkspaceLease(release_error)) {
+                    last_error_ += "; " + release_error;
+                }
                 state_.store(training::AISERVER_STATE_DEGRADED);
                 LOG_ERROR("MazeService", "样本链路启动失败: %s",
                           last_error_.c_str());
                 return false;
             }
             if (!LoadInitialModel()) {
-                sample_sender_.StopAndDrain();
+                sample_distributor_.StopAndDrain();
+                std::string release_error;
+                if (!ReleaseTrainingWorkspaceLease(release_error)) {
+                    last_error_ += "; " + release_error;
+                }
                 state_.store(training::AISERVER_STATE_DEGRADED);
                 LOG_ERROR("MazeService", "训练模型加载失败: %s",
                           last_error_.c_str());
                 return false;
             }
-        } else if (config_.server.run_mode ==
-                       aiserver_mode::kModelEvaluation ||
-                   config_.server.run_mode == aiserver_mode::kLocalTest) {
+        } else if (config_.server.run_mode == aiserver_mode::kEvaluation) {
             if (!LoadInitialModel()) {
                 state_.store(training::AISERVER_STATE_DEGRADED);
                 LOG_ERROR("MazeService", "启动模型加载失败: %s",
@@ -952,13 +1088,12 @@ bool MazeServiceImpl::Start() {
 bool MazeServiceImpl::IsReady() const {
     return IsCoreInferenceReady() &&
            (config_.server.run_mode != aiserver_mode::kTraining ||
-            sample_sender_.IsTrainingDeliveryReady());
+            sample_distributor_.IsTrainingDeliveryReady());
 }
 
 bool MazeServiceImpl::IsCoreInferenceReady() const {
     return state_.load() == training::AISERVER_STATE_READY &&
-           (config_.server.run_mode == aiserver_mode::kMapValidation ||
-            model_state_.load() == training::MODEL_STATE_READY);
+           model_state_.load() == training::MODEL_STATE_READY;
 }
 
 bool MazeServiceImpl::BeginShutdown() {
@@ -996,15 +1131,27 @@ bool MazeServiceImpl::BeginShutdown() {
 
     bool sender_drained = true;
     if (config_.server.run_mode == aiserver_mode::kTraining) {
-        sender_drained = sample_sender_.StopAndDrain();
+        sender_drained = sample_distributor_.StopAndDrain();
     }
+    const bool metric_events_settled =
+        metric_events_.WaitForFinalAcknowledgement(
+            std::chrono::seconds(10));
+    if (!metric_events_settled) {
+        LOG_ERROR(
+            "MazeService",
+            "AIServer metric source final batch was not acknowledged before "
+            "the shutdown deadline");
+    }
+    std::string workspace_release_error;
+    const bool workspace_released =
+        ReleaseTrainingWorkspaceLease(workspace_release_error);
 
     {
         std::lock_guard<std::mutex> lock(mutex_);
         const int64_t remaining_samples = CountCachedSamples();
         const int64_t remaining_batches = CountCachedFragments();
         if (remaining_samples > 0 || remaining_batches > 0) {
-            sample_sender_.RecordFinalDrop(
+            sample_distributor_.RecordFinalDrop(
                 remaining_samples, remaining_batches,
                 "session cache remained after drain deadline");
         }
@@ -1015,19 +1162,19 @@ bool MazeServiceImpl::BeginShutdown() {
             session->agent_sample_caches.clear();
             session->pending_sample_batches.clear();
         }
-        const auto sender = sample_sender_.GetSnapshot();
+        const auto sender = sample_distributor_.GetSnapshot();
         const bool shutdown_accounting_fault =
             state_.load() == training::AISERVER_STATE_DEGRADED;
         const std::string shutdown_accounting_error = last_error_;
         const bool model_state_settled =
             !model_ack_pending_ &&
             model_state_.load() != training::MODEL_STATE_FAILED &&
-            (!started_ ||
-             config_.server.run_mode == aiserver_mode::kMapValidation ||
-             model_state_.load() == training::MODEL_STATE_READY);
+            (!started_ || model_state_.load() == training::MODEL_STATE_READY);
         shutdown_succeeded_ =
             !preexisting_service_fault && !shutdown_accounting_fault &&
-            model_state_settled && sender_drained && !sender.degraded &&
+            model_state_settled && sender_drained && metric_events_settled &&
+            workspace_released &&
+            !sender.degraded &&
             !sender.terminal_fault &&
             sender.queue_fragments == 0 &&
             sender.unresolved_push_outcome_unknown_samples == 0 &&
@@ -1053,13 +1200,20 @@ bool MazeServiceImpl::BeginShutdown() {
                   << sender.final_drop_unique_batches
                   << " model_ack_pending=" << (model_ack_pending_ ? 1 : 0)
                   << " model_state="
-                  << static_cast<int>(model_state_.load());
+                  << static_cast<int>(model_state_.load())
+                  << " metric_final_ack="
+                  << (metric_events_settled ? 1 : 0)
+                  << " workspace_released="
+                  << (workspace_released ? 1 : 0);
             const std::string& preserved_error =
                 !shutdown_accounting_error.empty()
                     ? shutdown_accounting_error
                     : preexisting_service_error;
             if (!preserved_error.empty()) {
                 error << " cause=" << preserved_error;
+            }
+            if (!workspace_release_error.empty()) {
+                error << " workspace_error=" << workspace_release_error;
             }
             last_error_ = error.str();
             state_.store(training::AISERVER_STATE_DEGRADED);
@@ -1148,7 +1302,7 @@ bool MazeServiceImpl::ActivateStagedModel() {
 
     std::string ack_error;
     const auto ack = model_distributor_.AckIdempotently(
-        candidate, config_.sample_output.aiserver_id,
+        candidate, config_.sample_distributor.aiserver_id,
         training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
         &ack_authority);
     if (ack == ModelDistributorClient::AckDisposition::Rejected ||
@@ -1170,8 +1324,8 @@ bool MazeServiceImpl::ActivateStagedModel() {
     }
     model_state_.store(training::MODEL_STATE_READY);
     LOG_INFO(
-        "MazeService", "模型切换完成: version=%llu sha256=%s",
-        static_cast<unsigned long long>(model_manifest_.model_version),
+        "MazeService", "模型切换完成: model_step=%llu sha256=%s",
+        static_cast<unsigned long long>(model_manifest_.model_step),
         model_manifest_.sha256.c_str());
     return true;
 }
@@ -1188,9 +1342,9 @@ void MazeServiceImpl::RefreshFragmentSampleTarget(
     current_fragment_samples_ = SelectPerAgentFragmentSamples(
         produced_unique_samples_,
         static_cast<int64_t>(config_.task.agent_num) *
-            static_cast<int64_t>(config_.sample_output.fragment_samples),
+            static_cast<int64_t>(config_.sample_distributor.fragment_samples),
         config_.task.agent_num,
-        config_.sample_output.fragment_samples,
+        config_.sample_distributor.fragment_samples,
         all_agents_active);
 }
 
@@ -1226,12 +1380,12 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
         agent.pending_action_frame_id = -1;
         agent.pending_log_prob = 0.0f;
         agent.pending_value = 0.0f;
-        agent.pending_model_version = 0;
+        agent.pending_model_step = 0;
         agent.pending_model_checksum.clear();
         agent.pending_model_lineage_id.clear();
         agent.pending_model_manifest_digest.clear();
         agent.pending_obs.clear();
-        agent.fragment_model_version = 0;
+        agent.fragment_model_step = 0;
         agent.fragment_model_checksum.clear();
         agent.fragment_model_lineage_id.clear();
         agent.fragment_model_manifest_digest.clear();
@@ -1256,17 +1410,12 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
         agent.episode_return = 0.0;
         agent.episode_transition_count = 0;
         agent.episode_behavior_model_seen = false;
-        agent.episode_behavior_model_version_min = 0;
-        agent.episode_behavior_model_version_max = 0;
+        agent.minimum_episode_behavior_model_step = 0;
+        agent.maximum_episode_behavior_model_step = 0;
         agent.episode_behavior_model_lineage_id.clear();
         agent.final_termination_reason =
             maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
         agent.reward_component_sums.clear();
-        if (config_.server.run_mode == aiserver_mode::kMapValidation) {
-            agent.path_valid = agent.solver.PlanPath(
-                session.start_gx, session.start_gy,
-                session.end_gx, session.end_gy);
-        }
     }
     RefreshFragmentSampleTarget(session);
 }
@@ -1353,7 +1502,7 @@ bool MazeServiceImpl::PrepareModelAction(
     agent.pending_action_frame_id = action_frame_id;
     agent.pending_log_prob = log_prob;
     agent.pending_value = value;
-    agent.pending_model_version = behavior_model.model_version;
+    agent.pending_model_step = behavior_model.model_step;
     agent.pending_model_checksum = behavior_model.sha256;
     agent.pending_model_lineage_id = behavior_model.model_lineage_id;
     agent.pending_model_manifest_digest = behavior_model.manifest_digest;
@@ -1422,7 +1571,7 @@ bool MazeServiceImpl::FinalizePendingTransition(
     maze::MazeTerminationReason reason,
     bool collect_training_sample,
     int64_t& produced_unique_samples,
-    std::unordered_map<ModelVersion, int64_t>& produced_samples_by_model,
+    std::unordered_map<ModelStep, int64_t>& produced_samples_by_model,
     std::string& error) {
     auto agent_it = session.agents.find(agent_id);
     if (agent_it == session.agents.end()) {
@@ -1437,7 +1586,7 @@ bool MazeServiceImpl::FinalizePendingTransition(
         (cache_it == session.agent_sample_caches.end() ||
          cache_it->second.empty());
     if (collect_training_sample && !starts_new_fragment &&
-        (agent.fragment_model_version != agent.pending_model_version ||
+        (agent.fragment_model_step != agent.pending_model_step ||
          agent.fragment_model_checksum != agent.pending_model_checksum ||
          agent.fragment_model_lineage_id != agent.pending_model_lineage_id ||
          agent.fragment_model_manifest_digest !=
@@ -1450,7 +1599,7 @@ bool MazeServiceImpl::FinalizePendingTransition(
     training::Sample sample;
     if (collect_training_sample) {
         reward = MazeReward::Calculate(
-            session, agent_id, gx, gy, is_done, reason, config_.reward);
+            session, agent_id, gx, gy, is_done, reason);
         if (!reward.valid) {
             error = reward.error;
             return false;
@@ -1486,7 +1635,7 @@ bool MazeServiceImpl::FinalizePendingTransition(
     // Reward V4 and training fragments belong exclusively to the training
     // workload. Standalone evaluation advances inference/lifecycle state only.
     if (starts_new_fragment) {
-        agent.fragment_model_version = agent.pending_model_version;
+        agent.fragment_model_step = agent.pending_model_step;
         agent.fragment_model_checksum = agent.pending_model_checksum;
         agent.fragment_model_lineage_id = agent.pending_model_lineage_id;
         agent.fragment_model_manifest_digest =
@@ -1498,11 +1647,11 @@ bool MazeServiceImpl::FinalizePendingTransition(
             error = "training transition behavior model identity is incomplete";
             return false;
         }
-        const ModelVersion behavior_version = agent.pending_model_version;
+        const ModelStep behavior_step = agent.pending_model_step;
         if (!agent.episode_behavior_model_seen) {
             agent.episode_behavior_model_seen = true;
-            agent.episode_behavior_model_version_min = behavior_version;
-            agent.episode_behavior_model_version_max = behavior_version;
+            agent.minimum_episode_behavior_model_step = behavior_step;
+            agent.maximum_episode_behavior_model_step = behavior_step;
             agent.episode_behavior_model_lineage_id =
                 agent.pending_model_lineage_id;
         } else {
@@ -1511,10 +1660,10 @@ bool MazeServiceImpl::FinalizePendingTransition(
                 error = "training Episode contains mixed model lineages";
                 return false;
             }
-            agent.episode_behavior_model_version_min = std::min(
-                agent.episode_behavior_model_version_min, behavior_version);
-            agent.episode_behavior_model_version_max = std::max(
-                agent.episode_behavior_model_version_max, behavior_version);
+            agent.minimum_episode_behavior_model_step = std::min(
+                agent.minimum_episode_behavior_model_step, behavior_step);
+            agent.maximum_episode_behavior_model_step = std::max(
+                agent.maximum_episode_behavior_model_step, behavior_step);
         }
     }
     ++agent.episode_transition_count;
@@ -1534,105 +1683,17 @@ bool MazeServiceImpl::FinalizePendingTransition(
         auto& cache = session.agent_sample_caches[agent_id];
         cache.push_back(std::move(sample));
         ++produced_unique_samples;
-        ++produced_samples_by_model[agent.pending_model_version];
+        ++produced_samples_by_model[agent.pending_model_step];
     }
     agent.has_pending_action = false;
     agent.pending_action_frame_id = -1;
-    agent.pending_model_version = 0;
+    agent.pending_model_step = 0;
     agent.pending_model_checksum.clear();
     agent.pending_model_lineage_id.clear();
     agent.pending_model_manifest_digest.clear();
     agent.pending_obs.clear();
 
     error.clear();
-    return true;
-}
-
-bool MazeServiceImpl::ReconcileDiscardedTrainingSamples() {
-    const auto sender = sample_sender_.GetSnapshot();
-    if (sender.producer_stale_count < reconciled_producer_stale_samples_) {
-        MarkDegraded("producer stale counter moved backwards");
-        return false;
-    }
-
-    if (sender.pool_stale_count < reconciled_pool_stale_samples_) {
-        MarkDegraded("sample pool stale counter moved backwards");
-        return false;
-    }
-
-    int64_t producer_delta_total = 0;
-    int64_t pool_delta_total = 0;
-    std::unordered_map<ModelVersion, int64_t> deltas;
-    const auto collect_deltas = [this, &deltas](
-        const std::unordered_map<ModelVersion, int64_t>& current,
-        const std::unordered_map<ModelVersion, int64_t>& reconciled,
-        const char* source,
-        int64_t& delta_total) {
-        for (const auto& item : current) {
-            const auto previous = reconciled.find(item.first);
-            const int64_t previous_value =
-                previous == reconciled.end() ? 0 : previous->second;
-            if (item.second < previous_value) {
-                MarkDegraded(std::string(source) +
-                             " behavior-model counter moved backwards");
-                return false;
-            }
-            const int64_t delta = item.second - previous_value;
-            if (delta == 0) continue;
-            deltas[item.first] += delta;
-            delta_total += delta;
-        }
-        return true;
-    };
-    if (!collect_deltas(sender.producer_stale_samples_by_model,
-                        reconciled_producer_stale_samples_by_model_,
-                        "producer stale", producer_delta_total) ||
-        !collect_deltas(sender.pool_stale_samples_by_model,
-                        reconciled_pool_stale_samples_by_model_,
-                        "sample pool stale", pool_delta_total)) {
-        return false;
-    }
-    if (reconciled_producer_stale_samples_ + producer_delta_total !=
-            sender.producer_stale_count ||
-        reconciled_pool_stale_samples_ + pool_delta_total !=
-            sender.pool_stale_count) {
-        MarkDegraded("discarded sample source accounting is inconsistent");
-        return false;
-    }
-
-    const int64_t delta_total = producer_delta_total + pool_delta_total;
-    for (const auto& item : deltas) {
-        const ModelVersion model_version = item.first;
-        const auto produced = produced_samples_by_model_.find(model_version);
-        if (produced == produced_samples_by_model_.end() ||
-            produced->second < item.second) {
-            MarkDegraded(
-                "discarded sample behavior-model accounting is inconsistent");
-            return false;
-        }
-    }
-    if (produced_unique_samples_ < delta_total) {
-        MarkDegraded("discarded sample accounting is inconsistent");
-        return false;
-    }
-    std::string controller_error;
-    if (delta_total > 0 &&
-        !task_controller_.ReconcileDiscardedTrainingSamples(
-            delta_total, controller_error)) {
-        MarkDegraded("discarded sample task accounting is inconsistent: " +
-                     controller_error);
-        return false;
-    }
-    for (const auto& delta : deltas) {
-        produced_samples_by_model_[delta.first] -= delta.second;
-    }
-    produced_unique_samples_ -= delta_total;
-    reconciled_producer_stale_samples_ = sender.producer_stale_count;
-    reconciled_producer_stale_samples_by_model_ =
-        sender.producer_stale_samples_by_model;
-    reconciled_pool_stale_samples_ = sender.pool_stale_count;
-    reconciled_pool_stale_samples_by_model_ =
-        sender.pool_stale_samples_by_model;
     return true;
 }
 
@@ -1653,8 +1714,8 @@ void MazeServiceImpl::FillSampleBatchMetadata(
         sequence % std::numeric_limits<uint32_t>::max()));
     auto* policy = batch.mutable_behavior_policy();
     policy->set_model_lineage_id(agent.fragment_model_lineage_id);
-    policy->set_model_version(
-        agent.fragment_model_version);
+    policy->set_model_step(
+        agent.fragment_model_step);
     policy->set_distribution_schema_id(
         config_.policy.distribution_schema_id);
     FillDigest(config_.policy.policy_spec_digest,
@@ -1719,13 +1780,13 @@ bool MazeServiceImpl::FlushAgentSamples(
     }
 
     auto start = std::chrono::steady_clock::now();
-    bool enqueued = sample_sender_.Enqueue(pending_it->second);
+    bool enqueued = sample_distributor_.Enqueue(pending_it->second);
     double latency_ms = ElapsedMs(start);
     ++enqueue_count_;
     enqueue_latency_sum_ms_ += latency_ms;
     enqueue_latency_max_ms_ = std::max(enqueue_latency_max_ms_, latency_ms);
     if (!enqueued) {
-        auto sender = sample_sender_.GetSnapshot();
+        auto sender = sample_distributor_.GetSnapshot();
         MarkDegraded(sender.last_error.empty()
                          ? "failed to enqueue sample fragment"
                          : sender.last_error);
@@ -1734,7 +1795,7 @@ bool MazeServiceImpl::FlushAgentSamples(
 
     cache.clear();
     session.pending_sample_batches.erase(pending_it);
-    agent.fragment_model_version = 0;
+    agent.fragment_model_step = 0;
     agent.fragment_model_checksum.clear();
     agent.fragment_model_lineage_id.clear();
     agent.fragment_model_manifest_digest.clear();
@@ -1796,7 +1857,7 @@ bool MazeServiceImpl::PrepareAgentSampleFlush(
     batches.push_back(pending_it->second);
     cache.clear();
     session.pending_sample_batches.erase(pending_it);
-    agent.fragment_model_version = 0;
+    agent.fragment_model_step = 0;
     agent.fragment_model_checksum.clear();
     agent.fragment_model_lineage_id.clear();
     agent.fragment_model_manifest_digest.clear();
@@ -1825,7 +1886,7 @@ void MazeServiceImpl::QuarantineAgentSamples(
     if (!cache.empty()) {
         const int64_t cached_samples = static_cast<int64_t>(cache.size());
         const auto count = produced_samples_by_model_.find(
-            agent.fragment_model_version);
+            agent.fragment_model_step);
         if (count == produced_samples_by_model_.end() ||
             count->second < cached_samples) {
             MarkDegraded(
@@ -1839,12 +1900,12 @@ void MazeServiceImpl::QuarantineAgentSamples(
     session.pending_sample_batches.erase(agent_id);
     agent.has_pending_action = false;
     agent.pending_action_frame_id = -1;
-    agent.pending_model_version = 0;
+    agent.pending_model_step = 0;
     agent.pending_model_checksum.clear();
     agent.pending_model_lineage_id.clear();
     agent.pending_model_manifest_digest.clear();
     agent.pending_obs.clear();
-    agent.fragment_model_version = 0;
+    agent.fragment_model_step = 0;
     agent.fragment_model_checksum.clear();
     agent.fragment_model_lineage_id.clear();
     agent.fragment_model_manifest_digest.clear();
