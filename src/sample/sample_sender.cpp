@@ -22,11 +22,11 @@ bool SameSamplePool(const common::ServiceInstanceIdentity& actual,
            actual.lifecycle_epoch() == expected_lifecycle_epoch;
 }
 
-bool IsPushRejection(training::PushResult result) {
-    return result == training::PUSH_RESULT_REJECTED_CAPACITY ||
-           result == training::PUSH_RESULT_REJECTED_INVALID ||
+bool IsTerminalPushRejection(training::PushResult result) {
+    return result == training::PUSH_RESULT_REJECTED_INVALID ||
            result == training::PUSH_RESULT_REJECTED_IDENTITY ||
-           result == training::PUSH_RESULT_REJECTED_CONFLICT;
+           result == training::PUSH_RESULT_REJECTED_CONFLICT ||
+           result == training::PUSH_RESULT_REJECTED_FINALIZED;
 }
 
 bool IsRetryableOutcomeUnknownTransport(const grpc::Status& status) {
@@ -50,8 +50,8 @@ int RetryBackoffMs(int attempts) {
 }
 
 bool ValidatePushResponse(
-    const training::SampleBatch& batch,
-    int64_t sample_count,
+    const training::ProcessedTransitionEnvelope& envelope,
+    int64_t transition_count,
     const training::PushSamplesRsp& response,
     const std::string& sample_pool_instance_id,
     uint64_t sample_pool_lifecycle_epoch,
@@ -61,30 +61,33 @@ bool ValidatePushResponse(
         error = "PushSamples response SamplePool identity changed";
         return false;
     }
-    if (response.batch_id() != batch.batch_id()) {
-        error = "PushSamples response does not echo the exact batch_id";
+    if (response.envelope_id() != envelope.envelope_id()) {
+        error = "PushSamples response does not echo the exact envelope_id";
         return false;
     }
     if (response.result() == training::PUSH_RESULT_ACCEPTED) {
         if (response.ret_code() != 0 ||
-            response.accepted_samples() != sample_count ||
-            response.accepted_unique_samples() != sample_count) {
+            response.accepted_transitions() != transition_count ||
+            response.accepted_unique_transitions() != transition_count) {
             error = "PushSamples ACCEPTED response has inconsistent counts";
             return false;
         }
         return true;
     }
     if (response.result() == training::PUSH_RESULT_DUPLICATE) {
-        if (response.ret_code() != 0 || response.accepted_samples() != 0 ||
-            response.accepted_unique_samples() != 0) {
+        if (response.ret_code() != 0 ||
+            response.accepted_transitions() != 0 ||
+            response.accepted_unique_transitions() != 0) {
             error = "PushSamples DUPLICATE response claims new acceptance";
             return false;
         }
         return true;
     }
-    if (IsPushRejection(response.result())) {
-        if (response.ret_code() == 0 || response.accepted_samples() != 0 ||
-            response.accepted_unique_samples() != 0) {
+    if (response.result() == training::PUSH_RESULT_REJECTED_CAPACITY ||
+        IsTerminalPushRejection(response.result())) {
+        if (response.ret_code() == 0 ||
+            response.accepted_transitions() != 0 ||
+            response.accepted_unique_transitions() != 0) {
             error = "PushSamples rejection has inconsistent status or counts";
             return false;
         }
@@ -97,10 +100,7 @@ bool ValidatePushResponse(
 }  // namespace
 
 SampleDistributor::SampleDistributor(const AIServerConfig& config)
-    : config_(config.sample_distributor),
-      contract_(config.contract),
-      producer_fragment_reserve_(
-          static_cast<std::size_t>(std::max(1, config.task.agent_num))) {}
+    : config_(config.sample_distributor), contract_(config.contract) {}
 
 SampleDistributor::~SampleDistributor() {
     StopAndDrain();
@@ -126,8 +126,7 @@ bool SampleDistributor::ProbeSamplePool() {
 
     std::lock_guard<std::mutex> lock(mutex_);
     sample_pool_instance_id_ = response.sample_pool().instance_id();
-    sample_pool_lifecycle_epoch_ =
-        response.sample_pool().lifecycle_epoch();
+    sample_pool_lifecycle_epoch_ = response.sample_pool().lifecycle_epoch();
     ready_ = true;
     degraded_ = false;
     SetDeliveryStateLocked(DeliveryState::kHealthy);
@@ -155,12 +154,15 @@ bool SampleDistributor::ValidateSamplePoolStatus(
         response.sample_pool().component() != "sample-pool" ||
         response.sample_pool().instance_id().empty() ||
         response.sample_pool().lifecycle_epoch() == 0) {
-        error = "SamplePool ingress identity does not match rl-contracts 0.13.0";
+        error = "SamplePool ingress identity does not match configured " +
+                contract_.package_version;
         return false;
     }
+    // pool_ready is a data-availability fact. An empty Pool remains a valid
+    // ingress, so producer readiness depends only on the service and ingress.
     if (!response.ready() || !response.ingress_ready() ||
-        !response.pool_ready()) {
-        error = "SamplePool ingress is not ready";
+        response.finalized()) {
+        error = "SamplePool ingress is not accepting transitions";
         return false;
     }
     return true;
@@ -189,8 +191,7 @@ SampleDistributor::RefreshSamplePoolStatus() {
             int attempts = 0;
             {
                 std::lock_guard<std::mutex> lock(mutex_);
-                status_failure_attempts_ =
-                    std::min(6, status_failure_attempts_ + 1);
+                ++status_failure_attempts_;
                 attempts = status_failure_attempts_;
             }
             return MarkTransient(error, RetryBackoffMs(attempts))
@@ -255,22 +256,24 @@ bool SampleDistributor::Start() {
     }
     sender_thread_ = std::thread(&SampleDistributor::SenderLoop, this);
     LOG_INFO("SampleDistributor",
-             "就绪: ingress=%s, sample_pool_instance_id=%s",
+             "就绪: ingress=%s sample_pool_instance_id=%s",
              target.c_str(), sample_pool_instance_id_.c_str());
     return true;
 }
 
-bool SampleDistributor::Enqueue(const training::SampleBatch& batch) {
+bool SampleDistributor::Enqueue(
+    const training::ProcessedTransitionEnvelope& envelope) {
     QueueItem item;
-    item.batch = batch;
-    item.samples = batch.samples_size();
-    item.estimated_bytes = static_cast<int64_t>(batch.ByteSizeLong());
+    item.envelope = envelope;
+    item.transitions = envelope.transitions_size();
+    item.estimated_bytes = static_cast<int64_t>(envelope.ByteSizeLong());
+    if (item.transitions <= 0 || item.estimated_bytes <= 0) return false;
 
     std::unique_lock<std::mutex> lock(mutex_);
     const auto has_capacity = [this, &item]() {
         return force_stop_ || !accepting_ || degraded_ ||
                (queue_.size() + reserved_items_.size() <
-                    config_.outbound_max_fragments &&
+                    config_.outbound_max_envelopes &&
                 queue_estimated_bytes_ + reserved_estimated_bytes_ +
                         item.estimated_bytes <=
                     static_cast<int64_t>(
@@ -279,15 +282,12 @@ bool SampleDistributor::Enqueue(const training::SampleBatch& batch) {
     if (!space_cv_.wait_for(
             lock, std::chrono::milliseconds(config_.enqueue_timeout_ms),
             has_capacity)) {
-        degraded_ = true;
-        SetDeliveryStateLocked(DeliveryState::kTerminalFault);
-        last_error_ = "outbound queue enqueue timeout";
         return false;
     }
     if (!accepting_ || force_stop_ || degraded_) return false;
 
     queue_.push_back(std::move(item));
-    queue_samples_ += queue_.back().samples;
+    queue_transitions_ += queue_.back().transitions;
     queue_estimated_bytes_ += queue_.back().estimated_bytes;
     queue_high_watermark_ =
         std::max(queue_high_watermark_, static_cast<int64_t>(queue_.size()));
@@ -296,30 +296,32 @@ bool SampleDistributor::Enqueue(const training::SampleBatch& batch) {
 }
 
 SampleDistributor::ReservationResult
-SampleDistributor::ReserveEnqueueBatchSet(
-    const std::vector<training::SampleBatch>& batches,
+SampleDistributor::ReserveEnqueueEnvelopeSet(
+    const std::vector<training::ProcessedTransitionEnvelope>& envelopes,
     uint64_t& reservation_id,
     std::string& error) {
     reservation_id = 0;
     error.clear();
-    if (batches.empty()) return ReservationResult::kReserved;
+    if (envelopes.empty()) return ReservationResult::kReserved;
 
     std::list<QueueItem> items;
-    int64_t samples = 0;
+    int64_t transitions = 0;
     int64_t estimated_bytes = 0;
-    for (const auto& batch : batches) {
+    for (const auto& envelope : envelopes) {
         QueueItem item;
-        item.batch = batch;
-        item.samples = batch.samples_size();
-        item.estimated_bytes = static_cast<int64_t>(batch.ByteSizeLong());
-        if (item.samples <= 0 || item.estimated_bytes <= 0 ||
-            samples > std::numeric_limits<int64_t>::max() - item.samples ||
+        item.envelope = envelope;
+        item.transitions = envelope.transitions_size();
+        item.estimated_bytes =
+            static_cast<int64_t>(envelope.ByteSizeLong());
+        if (item.transitions <= 0 || item.estimated_bytes <= 0 ||
+            transitions >
+                std::numeric_limits<int64_t>::max() - item.transitions ||
             estimated_bytes >
                 std::numeric_limits<int64_t>::max() - item.estimated_bytes) {
-            error = "sample batch reservation is invalid";
+            error = "processed envelope reservation is invalid";
             return ReservationResult::kTerminalFault;
         }
-        samples += item.samples;
+        transitions += item.transitions;
         estimated_bytes += item.estimated_bytes;
         items.push_back(std::move(item));
     }
@@ -330,7 +332,7 @@ SampleDistributor::ReserveEnqueueBatchSet(
                delivery_state_ != DeliveryState::kHealthy ||
                (reserved_items_.empty() &&
                 queue_.size() + items.size() <=
-                    config_.outbound_max_fragments &&
+                    config_.outbound_max_envelopes &&
                 queue_estimated_bytes_ + estimated_bytes <=
                     static_cast<int64_t>(
                         config_.outbound_max_estimated_bytes));
@@ -338,7 +340,7 @@ SampleDistributor::ReserveEnqueueBatchSet(
     if (!space_cv_.wait_for(
             lock, std::chrono::milliseconds(config_.enqueue_timeout_ms),
             has_capacity)) {
-        error = "outbound queue batch-set reservation timeout";
+        error = "outbound envelope-set reservation timeout";
         return ReservationResult::kRetryableUnavailable;
     }
     if (!accepting_ || force_stop_ || degraded_ || !ready_ ||
@@ -358,7 +360,7 @@ SampleDistributor::ReserveEnqueueBatchSet(
         return ReservationResult::kRetryableUnavailable;
     }
     if (!reserved_items_.empty()) {
-        error = "another outbound batch-set reservation is active";
+        error = "another outbound envelope-set reservation is active";
         return ReservationResult::kTerminalFault;
     }
 
@@ -367,7 +369,7 @@ SampleDistributor::ReserveEnqueueBatchSet(
         active_reservation_id_ = next_reservation_id_++;
     }
     reserved_items_.splice(reserved_items_.end(), items);
-    reserved_samples_ = samples;
+    reserved_transitions_ = transitions;
     reserved_estimated_bytes_ = estimated_bytes;
     active_reservation_delivery_generation_ = delivery_generation_;
     active_reservation_sealed_ = false;
@@ -375,7 +377,7 @@ SampleDistributor::ReserveEnqueueBatchSet(
     return ReservationResult::kReserved;
 }
 
-SampleDistributor::SealResult SampleDistributor::SealEnqueueBatchSet(
+SampleDistributor::SealResult SampleDistributor::SealEnqueueEnvelopeSet(
     uint64_t reservation_id,
     std::string& error) {
     error.clear();
@@ -383,7 +385,7 @@ SampleDistributor::SealResult SampleDistributor::SealEnqueueBatchSet(
     std::lock_guard<std::mutex> lock(mutex_);
     const auto release_reservation = [this]() {
         reserved_items_.clear();
-        reserved_samples_ = 0;
+        reserved_transitions_ = 0;
         reserved_estimated_bytes_ = 0;
         active_reservation_id_ = 0;
         active_reservation_delivery_generation_ = 0;
@@ -422,7 +424,7 @@ SampleDistributor::SealResult SampleDistributor::SealEnqueueBatchSet(
     return SealResult::kSealed;
 }
 
-SampleDistributor::CommitResult SampleDistributor::CommitEnqueueBatchSet(
+SampleDistributor::CommitResult SampleDistributor::CommitEnqueueEnvelopeSet(
     uint64_t reservation_id,
     std::string& error) {
     error.clear();
@@ -430,7 +432,7 @@ SampleDistributor::CommitResult SampleDistributor::CommitEnqueueBatchSet(
     std::lock_guard<std::mutex> lock(mutex_);
     const auto release_reservation = [this]() {
         reserved_items_.clear();
-        reserved_samples_ = 0;
+        reserved_transitions_ = 0;
         reserved_estimated_bytes_ = 0;
         active_reservation_id_ = 0;
         active_reservation_delivery_generation_ = 0;
@@ -448,7 +450,7 @@ SampleDistributor::CommitResult SampleDistributor::CommitEnqueueBatchSet(
     }
     if (active_reservation_sealed_) {
         queue_.splice(queue_.end(), reserved_items_);
-        queue_samples_ += reserved_samples_;
+        queue_transitions_ += reserved_transitions_;
         queue_estimated_bytes_ += reserved_estimated_bytes_;
         queue_high_watermark_ = std::max(
             queue_high_watermark_, static_cast<int64_t>(queue_.size()));
@@ -484,16 +486,11 @@ SampleDistributor::CommitResult SampleDistributor::CommitEnqueueBatchSet(
         return CommitResult::kRetryableUnavailable;
     }
     queue_.splice(queue_.end(), reserved_items_);
-    queue_samples_ += reserved_samples_;
+    queue_transitions_ += reserved_transitions_;
     queue_estimated_bytes_ += reserved_estimated_bytes_;
     queue_high_watermark_ =
         std::max(queue_high_watermark_, static_cast<int64_t>(queue_.size()));
-    reserved_items_.clear();
-    reserved_samples_ = 0;
-    reserved_estimated_bytes_ = 0;
-    active_reservation_id_ = 0;
-    active_reservation_delivery_generation_ = 0;
-    active_reservation_sealed_ = false;
+    release_reservation();
     queue_cv_.notify_one();
     return CommitResult::kCommitted;
 }
@@ -508,12 +505,12 @@ bool SampleDistributor::HasEnqueueReservation(
            active_reservation_delivery_generation_ == delivery_generation_;
 }
 
-void SampleDistributor::CancelEnqueueBatchSet(uint64_t reservation_id) {
+void SampleDistributor::CancelEnqueueEnvelopeSet(uint64_t reservation_id) {
     if (reservation_id == 0) return;
     std::lock_guard<std::mutex> lock(mutex_);
     if (reservation_id != active_reservation_id_) return;
     reserved_items_.clear();
-    reserved_samples_ = 0;
+    reserved_transitions_ = 0;
     reserved_estimated_bytes_ = 0;
     active_reservation_id_ = 0;
     active_reservation_delivery_generation_ = 0;
@@ -530,7 +527,6 @@ SampleDistributor::SendResult SampleDistributor::SendFront(
     duplicate = false;
     attempts_used = 0;
     retry_after_ms = 0;
-    const int attempts = std::max(1, config_.max_attempts);
     std::string pinned_sample_pool_instance_id;
     uint64_t pinned_sample_pool_lifecycle_epoch = 0;
     {
@@ -539,7 +535,7 @@ SampleDistributor::SendResult SampleDistributor::SendFront(
         pinned_sample_pool_lifecycle_epoch = sample_pool_lifecycle_epoch_;
     }
 
-    for (int attempt = 0; attempt < attempts; ++attempt) {
+    for (int attempt = 0; attempt < config_.max_attempts; ++attempt) {
         {
             std::lock_guard<std::mutex> lock(mutex_);
             if (force_stop_) {
@@ -550,13 +546,14 @@ SampleDistributor::SendResult SampleDistributor::SendFront(
             ++attempts_used;
             if (item.attempts + attempt > 0) ++retry_attempt_count_;
             if (!queue_.empty() &&
-                queue_.front().batch.batch_id() == item.batch.batch_id()) {
+                queue_.front().envelope.envelope_id() ==
+                    item.envelope.envelope_id()) {
                 queue_.front().push_outcome_unknown = true;
             }
         }
 
         training::PushSamplesReq request;
-        *request.mutable_batch() = item.batch;
+        *request.mutable_envelope() = item.envelope;
         training::PushSamplesRsp response;
         grpc::ClientContext context;
         context.set_deadline(std::chrono::system_clock::now() +
@@ -582,18 +579,21 @@ SampleDistributor::SendResult SampleDistributor::SendFront(
         }
 
         if (status.ok()) {
+            {
+                std::lock_guard<std::mutex> lock(mutex_);
+                if (!queue_.empty() &&
+                    queue_.front().envelope.envelope_id() ==
+                        item.envelope.envelope_id()) {
+                    queue_.front().push_outcome_unknown = false;
+                }
+            }
             if (!ValidatePushResponse(
-                    item.batch, item.samples, response,
+                    item.envelope, item.transitions, response,
                     pinned_sample_pool_instance_id,
                     pinned_sample_pool_lifecycle_epoch, error)) {
-                if (attempt + 1 < attempts) {
-                    std::this_thread::sleep_for(
-                        std::chrono::milliseconds(50 * (attempt + 1)));
-                    continue;
-                }
-                retry_after_ms =
-                    RetryBackoffMs(item.attempts + attempts_used);
-                return SendResult::kTransient;
+                std::lock_guard<std::mutex> lock(mutex_);
+                ++rejected_push_attempt_count_;
+                return SendResult::kRejected;
             }
             if (response.result() == training::PUSH_RESULT_ACCEPTED ||
                 response.result() == training::PUSH_RESULT_DUPLICATE) {
@@ -603,25 +603,33 @@ SampleDistributor::SendResult SampleDistributor::SendFront(
                 return SendResult::kCommitted;
             }
 
-            error = response.message().empty()
-                        ? "SamplePool rejected the immutable fragment"
-                        : response.message();
             {
                 std::lock_guard<std::mutex> lock(mutex_);
-                if (!queue_.empty() &&
-                    queue_.front().batch.batch_id() == item.batch.batch_id()) {
-                    queue_.front().push_outcome_unknown = false;
-                }
                 ++rejected_push_attempt_count_;
+            }
+            error = response.message().empty()
+                        ? "SamplePool rejected the immutable envelope"
+                        : response.message();
+            if (response.result() ==
+                training::PUSH_RESULT_REJECTED_CAPACITY) {
+                retry_after_ms = RetryBackoffMs(item.attempts + attempts_used);
+                return SendResult::kTransient;
             }
             return SendResult::kRejected;
         }
 
         error = "PushSamples failed: " + status.error_message();
         if (!IsRetryableOutcomeUnknownTransport(status)) {
+            std::lock_guard<std::mutex> lock(mutex_);
+            if (!queue_.empty() &&
+                queue_.front().envelope.envelope_id() ==
+                    item.envelope.envelope_id()) {
+                queue_.front().push_outcome_unknown = false;
+            }
+            ++rejected_push_attempt_count_;
             return SendResult::kRejected;
         }
-        if (attempt + 1 >= attempts) {
+        if (attempt + 1 >= config_.max_attempts) {
             retry_after_ms = RetryBackoffMs(item.attempts + attempts_used);
             return SendResult::kTransient;
         }
@@ -651,8 +659,7 @@ void SampleDistributor::SenderLoop() {
                     std::unique_lock<std::mutex> retry_lock(mutex_);
                     queue_cv_.wait_for(
                         retry_lock,
-                        std::chrono::milliseconds(
-                            std::max(1, transient_retry_after_ms_)),
+                        std::chrono::milliseconds(transient_retry_after_ms_),
                         [this]() {
                             return force_stop_ || stop_requested_ ||
                                    !queue_.empty();
@@ -672,13 +679,17 @@ void SampleDistributor::SenderLoop() {
         if (result == SendResult::kCommitted) {
             std::lock_guard<std::mutex> lock(mutex_);
             if (!queue_.empty() &&
-                queue_.front().batch.batch_id() == item.batch.batch_id()) {
-                queue_samples_ -= queue_.front().samples;
+                queue_.front().envelope.envelope_id() ==
+                    item.envelope.envelope_id()) {
+                queue_transitions_ -= queue_.front().transitions;
                 queue_estimated_bytes_ -= queue_.front().estimated_bytes;
                 queue_.pop_front();
-                accepted_unique_samples_ += item.samples;
-                ++accepted_unique_batches_;
-                if (duplicate) ++duplicate_push_attempt_count_;
+                if (duplicate) {
+                    ++duplicate_push_attempt_count_;
+                } else {
+                    accepted_unique_transitions_ += item.transitions;
+                    ++accepted_unique_envelopes_;
+                }
                 space_cv_.notify_all();
                 if (queue_.empty()) drained_cv_.notify_all();
             }
@@ -689,7 +700,8 @@ void SampleDistributor::SenderLoop() {
             {
                 std::lock_guard<std::mutex> lock(mutex_);
                 if (!queue_.empty() &&
-                    queue_.front().batch.batch_id() == item.batch.batch_id()) {
+                    queue_.front().envelope.envelope_id() ==
+                        item.envelope.envelope_id()) {
                     queue_.front().attempts += attempts_used;
                 }
                 if (force_stop_) break;
@@ -698,14 +710,12 @@ void SampleDistributor::SenderLoop() {
                     error.empty()
                         ? "SamplePool ingress transport is unavailable"
                         : error,
-                    std::max(1, retry_after_ms))) {
+                    retry_after_ms)) {
                 break;
             }
             std::unique_lock<std::mutex> lock(mutex_);
             queue_cv_.wait_for(
-                lock,
-                std::chrono::milliseconds(
-                    std::max(1, transient_retry_after_ms_)),
+                lock, std::chrono::milliseconds(transient_retry_after_ms_),
                 [this]() { return force_stop_; });
             continue;
         }
@@ -713,7 +723,8 @@ void SampleDistributor::SenderLoop() {
         {
             std::lock_guard<std::mutex> lock(mutex_);
             if (!queue_.empty() &&
-                queue_.front().batch.batch_id() == item.batch.batch_id()) {
+                queue_.front().envelope.envelope_id() ==
+                    item.envelope.envelope_id()) {
                 queue_.front().attempts += attempts_used;
             }
         }
@@ -738,7 +749,7 @@ bool SampleDistributor::StopAndDrain() {
     {
         std::lock_guard<std::mutex> lock(mutex_);
         reserved_items_.clear();
-        reserved_samples_ = 0;
+        reserved_transitions_ = 0;
         reserved_estimated_bytes_ = 0;
         active_reservation_id_ = 0;
         active_reservation_delivery_generation_ = 0;
@@ -779,19 +790,20 @@ bool SampleDistributor::StopAndDrain() {
         if (!drained) {
             for (const auto& item : queue_) {
                 if (item.push_outcome_unknown) {
-                    unresolved_push_outcome_unknown_samples_ += item.samples;
-                    ++unresolved_push_outcome_unknown_batches_;
+                    unresolved_push_outcome_unknown_transitions_ +=
+                        item.transitions;
+                    ++unresolved_push_outcome_unknown_envelopes_;
                 } else {
-                    final_drop_unique_samples_ += item.samples;
-                    ++final_drop_unique_batches_;
+                    final_drop_unique_transitions_ += item.transitions;
+                    ++final_drop_unique_envelopes_;
                 }
             }
             queue_.clear();
-            queue_samples_ = 0;
+            queue_transitions_ = 0;
             queue_estimated_bytes_ = 0;
             degraded_ = true;
             SetDeliveryStateLocked(DeliveryState::kTerminalFault);
-            last_error_ = unresolved_push_outcome_unknown_batches_ > 0
+            last_error_ = unresolved_push_outcome_unknown_envelopes_ > 0
                               ? "outbound drain deadline exceeded with "
                                 "unresolved PushSamples outcomes"
                               : "outbound drain deadline exceeded";
@@ -826,22 +838,15 @@ bool SampleDistributor::IsPausedAtSafeBoundary() const {
 int SampleDistributor::PauseRetryAfterMs() const {
     std::lock_guard<std::mutex> lock(mutex_);
     if (transient_retry_after_ms_ > 0) return transient_retry_after_ms_;
-    return std::max(1, config_.enqueue_timeout_ms);
+    return config_.enqueue_timeout_ms;
 }
 
 bool SampleDistributor::ProducerCapacityConstrainedLocked() const {
-    if (queue_.size() + reserved_items_.size() +
-            producer_fragment_reserve_ >
-        config_.outbound_max_fragments) {
-        return true;
-    }
-    const auto bytes_per_slot = config_.outbound_max_estimated_bytes /
-                                config_.outbound_max_fragments;
-    const auto byte_reserve = bytes_per_slot * producer_fragment_reserve_;
-    return byte_reserve > config_.outbound_max_estimated_bytes ||
-           queue_estimated_bytes_ + reserved_estimated_bytes_ >
+    return queue_.size() + reserved_items_.size() >=
+               config_.outbound_max_envelopes ||
+           queue_estimated_bytes_ + reserved_estimated_bytes_ >=
                static_cast<int64_t>(
-                   config_.outbound_max_estimated_bytes - byte_reserve);
+                   config_.outbound_max_estimated_bytes);
 }
 
 void SampleDistributor::SetDeliveryStateLocked(DeliveryState state) {
@@ -897,7 +902,7 @@ bool SampleDistributor::MarkTransient(const std::string& error,
                 std::to_string(elapsed_ms) + "ms: " + error;
         } else {
             SetDeliveryStateLocked(DeliveryState::kTransientRetry);
-            transient_retry_after_ms_ = std::max(1, retry_after_ms);
+            transient_retry_after_ms_ = retry_after_ms;
             last_error_ = error;
         }
         space_cv_.notify_all();
@@ -911,7 +916,7 @@ bool SampleDistributor::MarkTransient(const std::string& error,
     if (entered_retry) {
         LOG_WARN("SampleDistributor",
                  "SamplePool ingress 进入有界恢复: retry_after_ms=%d recovery_timeout_ms=%d error=%s",
-                 std::max(1, retry_after_ms), config_.recovery_timeout_ms,
+                 retry_after_ms, config_.recovery_timeout_ms,
                  error.c_str());
     }
     return true;
@@ -939,12 +944,12 @@ void SampleDistributor::MarkHealthy() {
     }
 }
 
-void SampleDistributor::RecordFinalDrop(int64_t samples,
-                                        int64_t batches,
+void SampleDistributor::RecordFinalDrop(int64_t transitions,
+                                        int64_t envelopes,
                                         const std::string& error) {
     std::lock_guard<std::mutex> lock(mutex_);
-    final_drop_unique_samples_ += samples;
-    final_drop_unique_batches_ += batches;
+    final_drop_unique_transitions_ += transitions;
+    final_drop_unique_envelopes_ += envelopes;
     degraded_ = true;
     SetDeliveryStateLocked(DeliveryState::kTerminalFault);
     last_error_ = error;
@@ -970,25 +975,25 @@ SampleDistributor::Snapshot SampleDistributor::GetSnapshot() const {
                 std::chrono::steady_clock::now() - recovery_started_)
                 .count();
     }
-    snapshot.retry_after_ms = transient_retry_after_ms_ > 0
-                                  ? transient_retry_after_ms_
-                                  : std::max(1, config_.enqueue_timeout_ms);
-    snapshot.queue_fragments = queue_.size();
-    snapshot.queue_samples = queue_samples_;
+    snapshot.retry_after_ms = transient_retry_after_ms_;
+    snapshot.queue_envelopes = queue_.size();
+    snapshot.queue_transitions = queue_transitions_;
     snapshot.queue_estimated_bytes = queue_estimated_bytes_;
     snapshot.queue_high_watermark = queue_high_watermark_;
     snapshot.push_attempt_count = push_attempt_count_;
-    snapshot.accepted_unique_samples = accepted_unique_samples_;
-    snapshot.accepted_unique_batches = accepted_unique_batches_;
+    snapshot.accepted_unique_transitions =
+        accepted_unique_transitions_;
+    snapshot.accepted_unique_envelopes = accepted_unique_envelopes_;
     snapshot.duplicate_push_attempt_count = duplicate_push_attempt_count_;
     snapshot.rejected_push_attempt_count = rejected_push_attempt_count_;
     snapshot.retry_attempt_count = retry_attempt_count_;
-    snapshot.final_drop_unique_samples = final_drop_unique_samples_;
-    snapshot.final_drop_unique_batches = final_drop_unique_batches_;
-    snapshot.unresolved_push_outcome_unknown_samples =
-        unresolved_push_outcome_unknown_samples_;
-    snapshot.unresolved_push_outcome_unknown_batches =
-        unresolved_push_outcome_unknown_batches_;
+    snapshot.final_drop_unique_transitions =
+        final_drop_unique_transitions_;
+    snapshot.final_drop_unique_envelopes = final_drop_unique_envelopes_;
+    snapshot.unresolved_push_outcome_unknown_transitions =
+        unresolved_push_outcome_unknown_transitions_;
+    snapshot.unresolved_push_outcome_unknown_envelopes =
+        unresolved_push_outcome_unknown_envelopes_;
     snapshot.push_rpc_count = push_rpc_count_;
     snapshot.push_rpc_latency_sum_ms = push_rpc_latency_sum_ms_;
     snapshot.push_rpc_latency_max_ms = push_rpc_latency_max_ms_;

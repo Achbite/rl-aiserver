@@ -307,7 +307,7 @@ int main(int argc, char* argv[]) {
     std::string config_error;
     if (!LoadServerConfig(parsed.config_path, parsed.overrides, cfg,
                           load_report, config_error)) {
-        LOG_ERROR("Main", "配置加载或 0.13.0 身份校验失败: %s (%s)",
+        LOG_ERROR("Main", "配置加载或 0.14.0 身份校验失败: %s (%s)",
                   parsed.config_path.c_str(),
                   config_error.empty() ? "see config diagnostics"
                                        : config_error.c_str());
@@ -345,7 +345,7 @@ int main(int argc, char* argv[]) {
         cfg.model_distribution.port,
         cfg.sample_distributor.host.c_str(),
         cfg.sample_distributor.port, cfg.server.max_agents,
-        cfg.task.agent_num, cfg.task.fixed_map_id.c_str(),
+        cfg.environment.agent_count, cfg.task.fixed_map_id.c_str(),
         cfg.task.task_config_digest.hex.c_str());
 
     // ---- 3. 创建 gRPC 服务 ----

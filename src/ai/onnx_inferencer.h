@@ -42,6 +42,7 @@ public:
                        std::vector<float>& action_logits,
                        float& value);
     void ActivatePreparedModel(PreparedModel prepared);
+    PreparedModel SnapshotPreparedModel() const;
 
     // 推理：输入 observation，输出 categorical logits 和状态价值
     // 线程安全，多线程可同时调用

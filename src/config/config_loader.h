@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "ai/maze_reward.h"
 #include "config/run_mode.h"
 #include "task/single_map_task_controller.h"
 
@@ -53,7 +52,7 @@ struct SchemaConfig {
 
 struct ContractConfig {
     std::string package_name = "rl-contracts";
-    std::string package_version = "0.13.0";
+    std::string package_version = "0.14.0";
     DigestConfig source_digest;
     DigestConfig artifact_digest;
     std::string platform = "linux/arm64";
@@ -87,7 +86,13 @@ struct ModelDistributionConfig {
     int port = 9200;
     int poll_interval_ms = 200;
     int rpc_timeout_ms = 5000;
-    std::string contract_version = "0.13.0";
+    std::string contract_version = "0.14.0";
+};
+
+// Runtime Environment assignment owned only by AIServer. It is deliberately
+// excluded from MazeTaskSpec and the task configuration digest.
+struct EnvironmentConfig {
+    int agent_count = 4;
 };
 
 // Maze task ownership belongs to AIServer. Client configuration cannot
@@ -98,7 +103,6 @@ struct MazeTaskConfig {
     DigestConfig task_config_digest{
         "sha256",
         "2502369d3df20d5c02001e7481cacd6c5be32c263cb88bdb2a40db2aee4bb167"};
-    int agent_num = 4;
     std::string fixed_map_id = "maze_117436372";
     std::string fixed_map_checksum_sha256 =
         "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9";
@@ -113,7 +117,8 @@ struct SampleDistributorConfig {
     bool        enabled           = true;
     std::string host              = "maze-learner";
     int         port              = 9100;
-    int         fragment_samples  = 128;
+    int         envelope_max_transitions = 128;
+    std::size_t envelope_max_bytes = 8ULL * 1024ULL * 1024ULL;
     int         rpc_timeout_ms    = 2000;
     int         max_attempts      = 4;
     int         enqueue_timeout_ms = 100;
@@ -123,7 +128,7 @@ struct SampleDistributorConfig {
     // Maximum time allowed for SamplePool ingress recovery before training
     // fails closed. The default is explicit and may be overridden by config.
     int         recovery_timeout_ms = 30000;
-    std::size_t outbound_max_fragments = 64;
+    std::size_t outbound_max_envelopes = 64;
     std::size_t outbound_max_estimated_bytes = 64ULL * 1024ULL * 1024ULL;
     std::string aiserver_id       = "aiserver-0";
     std::string env_id            = "env-0";
@@ -145,6 +150,7 @@ struct AIServerConfig {
     ObservationConfig observation;
     ModelConfig    model;
     ModelDistributionConfig model_distribution;
+    EnvironmentConfig environment;
     MazeTaskConfig task;
     SampleDistributorConfig sample_distributor;
     MetricsConfig metrics;

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "ai/astar_solver.h"
+#include "ai/onnx_inferencer.h"
 #include "contracts/contract_namespaces.h"
 #include "model/behavior_policy_scope.h"
+#include "model/model_manifest.h"
 #include "model/model_step.h"
 #include "session/lifecycle_replay_window.h"
 
@@ -29,6 +31,20 @@ public:
         Aborted,
     };
 
+    // One complete, trusted Environment transition before the AIServer closes
+    // the Agent segment and computes GAE/value targets. Pending actions are not
+    // represented here because they have no trusted result or next state yet.
+    struct RawRolloutTransition {
+        std::vector<float> observation;
+        std::vector<float> next_observation;
+        int action = 0;
+        float reward = 0.0f;
+        float behavior_log_probability = 0.0f;
+        float behavior_value = 0.0f;
+        uint64_t action_step = 0;
+        int64_t created_at_unix_ms = 0;
+    };
+
     // ---- Agent 运行时状态（每个 session 内独立）----
     struct AgentRuntime {
         AStarSolver solver;             // 独立寻路器
@@ -45,16 +61,19 @@ public:
         int64_t pending_action_frame_id = -1;
         float pending_log_prob = 0.0f;
         float pending_value = 0.0f;
-        ModelStep pending_model_step = 0;
-        std::string pending_model_checksum;
-        std::string pending_model_lineage_id;
-        std::string pending_model_manifest_digest;
         std::vector<float> pending_obs;
-        ModelStep fragment_model_step = 0;
-        std::string fragment_model_checksum;
-        std::string fragment_model_lineage_id;
-        std::string fragment_model_manifest_digest;
-        int64_t fragment_first_action_frame_id = -1;
+
+        // R-PIN segment state. The prepared ORT session is copied as a shared
+        // owner so model-cache pruning cannot invalidate in-flight inference.
+        bool segment_open = false;
+        std::string segment_id;
+        ModelManifest pinned_model;
+        OnnxInferencer::PreparedModel pinned_prepared_model;
+        std::vector<RawRolloutTransition> segment_transitions;
+        bool activated_model_seen = false;
+        ModelStep last_activated_model_step = 0;
+        std::string last_activated_model_lineage_id;
+        int64_t last_completed_transition_at_unix_ms = 0;
 
         // --- 奖励与 observation 辅助状态 ---
         std::unordered_set<int> visited;
@@ -67,6 +86,7 @@ public:
         int64_t blocked_move_count = 0;
         bool observation_done = false;
         int64_t last_observation_frame_id = -1;
+        int64_t terminal_frame_id = -1;
         double episode_return = 0.0;
         int64_t episode_transition_count = 0;
         bool episode_behavior_model_seen = false;
@@ -103,9 +123,6 @@ public:
         EpisodeState episode_state = EpisodeState::None;
         int64_t last_frame_id = -1;
         std::vector<maze::AgentAction> last_actions;
-        std::unordered_map<int, std::vector<training::Sample>> agent_sample_caches;  // agent_id → 样本缓存（多 Agent 隔离）
-        std::unordered_map<int, training::SampleBatch> pending_sample_batches;
-
         // 地图参数（每个 session 独立，支持不同地图配置）
         float map_width  = 0.0f;
         float map_height = 0.0f;

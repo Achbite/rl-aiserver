@@ -16,23 +16,6 @@
 
 namespace {
 
-bool SnakeCase(const std::string& value) {
-    if (value.empty() || value.front() == '_' || value.back() == '_') {
-        return false;
-    }
-    bool previous_underscore = false;
-    for (const char character : value) {
-        const bool underscore = character == '_';
-        if (!underscore && !(character >= 'a' && character <= 'z') &&
-            !(character >= '0' && character <= '9')) {
-            return false;
-        }
-        if (underscore && previous_underscore) return false;
-        previous_underscore = underscore;
-    }
-    return true;
-}
-
 void FillMetricSchema(common::SchemaIdentity* schema) {
     schema->set_schema_id("maze.metrics.v1");
     schema->set_schema_version(1);
@@ -151,34 +134,36 @@ MetricEventJournal::MetricEventJournal(
     : contract_(std::move(contract)),
       schema_(std::move(schema)),
       source_(std::move(source)),
-      capacity_(std::max<std::size_t>(1, capacity)),
-      byte_capacity_(std::max<std::size_t>(1, byte_capacity)),
-      flush_interval_(std::max(std::chrono::milliseconds(0), flush_interval)),
+      capacity_(capacity),
+      byte_capacity_(byte_capacity),
+      flush_interval_(flush_interval),
       last_batch_created_at_(std::chrono::steady_clock::now()) {
     *committed_cursor_.mutable_source() = source_;
 }
 
-bool MetricEventJournal::AppendEpisode(
+MetricEventJournal::AppendResult MetricEventJournal::AppendEpisode(
     training::EpisodeMetricFact fact,
-    int64_t committed_at_unix_ms) {
+    int64_t observed_at_unix_ms) {
     std::lock_guard<std::mutex> lock(mutex_);
-    if (source_final_) return false;
+    AppendResult result;
+    if (source_final_) {
+        result.code = AppendResult::Code::SourceFinal;
+        return result;
+    }
     training::MetricEvent event;
     *event.mutable_contract() = contract_;
     *event.mutable_schema_identity() = schema_;
     *event.mutable_source() = source_;
+    if (last_event_observed_at_unix_ms_ &&
+        observed_at_unix_ms < *last_event_observed_at_unix_ms_) {
+        result.wall_clock_regressed = true;
+        result.previous_observed_at_unix_ms =
+            *last_event_observed_at_unix_ms_;
+    }
     event.set_event_sequence(next_event_sequence_++);
-    const int64_t pending_watermark = pending_batch_
-        ? pending_batch_->event_time_watermark_unix_ms()
-        : 0;
-    const int64_t monotonic_committed_at = std::max(
-        committed_at_unix_ms,
-        std::max({last_event_committed_at_unix_ms_,
-                  last_acked_watermark_unix_ms_,
-                  pending_watermark}) + 1);
-    event.set_committed_at_unix_ms(monotonic_committed_at);
+    event.set_observed_at_unix_ms(observed_at_unix_ms);
     *event.mutable_episode() = std::move(fact);
-    last_event_committed_at_unix_ms_ = monotonic_committed_at;
+    last_event_observed_at_unix_ms_ = observed_at_unix_ms;
     event_bytes_ += event.ByteSizeLong();
     events_.push_back(std::move(event));
     event_enqueued_at_.push_back(std::chrono::steady_clock::now());
@@ -188,18 +173,14 @@ bool MetricEventJournal::AppendEpisode(
         event_enqueued_at_.pop_front();
     }
     changed_.notify_all();
-    return true;
+    return result;
 }
 
-void MetricEventJournal::Finalize(int64_t finalized_at_unix_ms) {
+void MetricEventJournal::Finalize() {
     std::lock_guard<std::mutex> lock(mutex_);
     if (source_final_) return;
     source_final_ = true;
     final_event_sequence_ = next_event_sequence_ - 1;
-    final_watermark_unix_ms_ = std::max(
-        finalized_at_unix_ms,
-        std::max(last_event_committed_at_unix_ms_,
-                 last_acked_watermark_unix_ms_));
     changed_.notify_all();
 }
 
@@ -339,8 +320,6 @@ bool MetricEventJournal::BuildPendingBatch(
         gap->set_last_unavailable_event_sequence(oldest - 1);
         gap->set_oldest_available_event_sequence(oldest);
         gap->set_reason("bounded metric event journal overflow");
-        batch.set_event_time_watermark_unix_ms(
-            last_acked_watermark_unix_ms_);
     } else {
         const std::size_t max_events = request.max_events();
         const int64_t max_bytes = request.max_bytes();
@@ -360,19 +339,11 @@ bool MetricEventJournal::BuildPendingBatch(
                 batch.events(0).event_sequence());
             batch.set_last_event_sequence(
                 batch.events(batch.events_size() - 1).event_sequence());
-            batch.set_event_time_watermark_unix_ms(
-                std::max(last_acked_watermark_unix_ms_,
-                         batch.events(batch.events_size() - 1)
-                             .committed_at_unix_ms()));
         } else if (next_event_exists) {
             error = "max_bytes is smaller than the next metric event";
             return false;
         } else {
             batch.set_heartbeat(true);
-            batch.set_event_time_watermark_unix_ms(
-                source_final_
-                    ? final_watermark_unix_ms_
-                    : std::max(last_acked_watermark_unix_ms_, now_unix_ms));
         }
     }
     const bool final_event_batch =
@@ -389,7 +360,6 @@ bool MetricEventJournal::BuildPendingBatch(
         (final_event_batch || final_gap_batch || final_heartbeat)) {
         batch.set_source_final(true);
         batch.set_final_event_sequence(final_event_sequence_);
-        batch.set_event_time_watermark_unix_ms(final_watermark_unix_ms_);
     }
     batch.mutable_batch_digest()->set_algorithm(
         common::DIGEST_ALGORITHM_SHA256);
@@ -553,9 +523,6 @@ void MetricEventJournal::Ack(
     }
     const bool acknowledged_final_batch = pending_batch_->source_final();
     committed_cursor_ = cursor;
-    last_acked_watermark_unix_ms_ = std::max(
-        last_acked_watermark_unix_ms_,
-        pending_batch_->event_time_watermark_unix_ms());
     while (!events_.empty() &&
            events_.front().event_sequence() <=
                committed_cursor_.acknowledged_event_sequence()) {
@@ -574,7 +541,7 @@ void MetricEventJournal::Ack(
 }
 
 EpisodeMetricsWindow::EpisodeMetricsWindow(std::size_t capacity)
-    : capacity_(std::max<std::size_t>(1, capacity)) {}
+    : capacity_(capacity) {}
 
 void EpisodeMetricsWindow::Push(Entry entry) {
     entries_.push_back(std::move(entry));
@@ -684,8 +651,8 @@ void EpisodeMetricsWindow::Fill(
             aggregate.episode_step_sum += agent.transition_count;
             aggregate.unique_cells_sum += agent.unique_cell_count;
             aggregate.blocked_moves_sum += agent.blocked_move_count;
-            aggregate.reward_transitions += static_cast<uint64_t>(
-                std::max<int64_t>(0, agent.transition_count));
+            aggregate.reward_transitions +=
+                static_cast<uint64_t>(agent.transition_count);
             if (agent.success) {
                 ++aggregate.successes;
                 if (agent.shortest_action_steps > 0) {
@@ -696,9 +663,7 @@ void EpisodeMetricsWindow::Fill(
                 }
             }
             for (const auto& item : agent.reward_component_sums) {
-                if (SnakeCase(item.first)) {
-                    aggregate.reward_component_sums[item.first] += item.second;
-                }
+                aggregate.reward_component_sums[item.first] += item.second;
             }
         }
     };
@@ -874,16 +839,8 @@ void EpisodeMetricsWindow::Fill(
         const auto& name = component.first;
         const auto aggregate_value =
             training_aggregate.reward_component_sums.find(name);
-        const double aggregate_sum =
-            aggregate_value == training_aggregate.reward_component_sums.end()
-                ? 0.0
-                : aggregate_value->second;
         const auto latest_value =
             latest_training_episode.reward_component_sums.find(name);
-        const double latest_sum =
-            latest_value == latest_training_episode.reward_component_sums.end()
-                ? 0.0
-                : latest_value->second;
 
         const std::string prefix =
             "server.training.reward.component." + name;
@@ -892,23 +849,36 @@ void EpisodeMetricsWindow::Fill(
                       "reward/agent_episode", "mean",
                       training::METRIC_VALUE_KIND_MEAN,
                       training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
-        AddMean(snapshot, prefix + ".episode_mean.v1", aggregate_sum,
-                training_aggregate.completed_agents, timestamp_unix_ms);
+        if (aggregate_value !=
+            training_aggregate.reward_component_sums.end()) {
+            AddMean(snapshot, prefix + ".episode_mean.v1",
+                    aggregate_value->second,
+                    training_aggregate.completed_agents,
+                    timestamp_unix_ms);
+        }
         AddDescriptor(snapshot, prefix + ".transition_mean.v1", name,
                       "reward_components", "transition_reward",
                       "reward/transition", "mean",
                       training::METRIC_VALUE_KIND_MEAN,
                       training::METRIC_AGGREGATION_KIND_WEIGHTED_MEAN);
-        AddMean(snapshot, prefix + ".transition_mean.v1", aggregate_sum,
-                training_aggregate.reward_transitions, timestamp_unix_ms);
+        if (aggregate_value !=
+            training_aggregate.reward_component_sums.end()) {
+            AddMean(snapshot, prefix + ".transition_mean.v1",
+                    aggregate_value->second,
+                    training_aggregate.reward_transitions,
+                    timestamp_unix_ms);
+        }
         AddDescriptor(snapshot, prefix + ".latest_episode_mean.v1", name,
                       "reward_components", "episode_reward",
                       "reward/agent_episode", "latest_mean",
                       training::METRIC_VALUE_KIND_MEAN,
                       training::METRIC_AGGREGATION_KIND_LATEST,
                       training::METRIC_WINDOW_KIND_INSTANT);
-        if (has_latest_training_episode) {
-            AddMean(snapshot, prefix + ".latest_episode_mean.v1", latest_sum,
+        if (has_latest_training_episode &&
+            latest_value !=
+                latest_training_episode.reward_component_sums.end()) {
+            AddMean(snapshot, prefix + ".latest_episode_mean.v1",
+                    latest_value->second,
                     latest_training_episode.completed_agents,
                     timestamp_unix_ms);
         }

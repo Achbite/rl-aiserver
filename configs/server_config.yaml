@@ -5,16 +5,16 @@
 
 # --- 服务参数：启动模式在这里配置，CLI --workload 可显式覆盖 ---
 server:
-  run_mode: "training"          # exact values: training | evaluation
+  run_mode: "evaluation"          # exact values: training | evaluation
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
 
-# --- 0.13.0 A3 协议身份 ---
+# --- 0.14.0 A3 R-PIN 协议身份 ---
 contract:
   package_name: "rl-contracts"
-  package_version: "0.13.0"
-  source_digest: "1fc3866efe7e5869cc1a7ed4bc86d58f9c1abedafd7012b9f5dae08246ff145d"
-  artifact_digest: "5ce9dff294e3cab466e2e0f058192f9715530645a41b45851b4d798e19a9a5a7"
+  package_version: "0.14.0"
+  source_digest: "61d633bde1ad4a8dccc2a5e8505d122bbabc8c8cd69eb1cfa97b253c4c2d4c0d"
+  artifact_digest: "4642b1a7e18150f9dfc0b7dba6e6ff3b5f0173cb10dee4c432c0155bfa596779"
   platform: "linux/arm64"
   generator_identity: "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8"
 
@@ -61,11 +61,14 @@ model:
   model_architecture_id: "maze.mlp-17x64x64.v1"
   tensor_dtype: "float32"
 
-# --- Maze 任务所有权（Client 只能执行，不能覆盖）---
+# --- Environment 运行 assignment（实际 Agent 数唯一权威）---
+environment:
+  agent_count: 4
+
+# --- Maze 任务语义（Client 只能执行，不能覆盖）---
 task:
   task_contract_id: "maze.task.v3"
   task_revision: 3
-  agent_num: 4
   fixed_map_id: "maze_117436372"
   fixed_map_checksum_sha256: "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9"
   action_rule_id: "maze.action.9-way.no-corner-cut.v1"
@@ -78,7 +81,7 @@ model_distribution:
   port: 9200
   poll_interval_ms: 200
   rpc_timeout_ms: 5000
-  contract_version: "0.13.0"
+  contract_version: "0.14.0"
 
 # --- AIServer 内置异步样本分发器（仅 training 生效）---
 # 它只负责本地有界队列和向 Learner Pod Sample Pool ingress 异步发送；
@@ -87,20 +90,21 @@ sample_distributor:
   enabled: true
   host: "maze-learner"
   port: 9100
-  fragment_samples: 128
+  envelope_max_transitions: 128
+  envelope_max_bytes: 8388608
   rpc_timeout_ms: 2000
   max_attempts: 4
   enqueue_timeout_ms: 100
   drain_timeout_ms: 10000
   health_timeout_ms: 5000
   status_poll_interval_ms: 200
-  # backend 不可达时允许在安全 frame/fragment 边界暂停的最长时间。
+  # SamplePool ingress 不可达时，SampleDistributor 允许恢复的最长时间。
   recovery_timeout_ms: 30000
-  outbound_max_fragments: 64
+  outbound_max_envelopes: 64
   outbound_max_estimated_bytes: 67108864
   aiserver_id: "aiserver-0"
   env_id: "env-0"
 
 metrics:
   episode_window: 100
-  event_schema_catalog: "../proto/schemas/maze.metrics.v3.json"
+  event_schema_catalog: "../proto/schemas/maze.metrics.v4.json"

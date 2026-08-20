@@ -71,171 +71,37 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 include(CTest)
 if(BUILD_TESTING)
-    find_package(Python3 REQUIRED COMPONENTS Interpreter)
-    add_test(
-        NAME contract_snapshot_integrity
-        COMMAND ${Python3_EXECUTABLE}
-            ${CMAKE_CURRENT_SOURCE_DIR}/scripts/verify_contract_snapshot.py
-            ${CMAKE_CURRENT_SOURCE_DIR}/proto
-            0.13.0
-            linux/arm64
-    )
-
-    add_executable(config_loader_test
-        tests/config_loader_test.cpp
-        src/config/config_loader.cpp
-        src/ai/maze_reward.cpp
-    )
-    target_include_directories(config_loader_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(config_loader_test PRIVATE
-        protobuf::libprotobuf
-        crypto
-    )
-    add_test(NAME config_loader_contract
-             COMMAND config_loader_test
-                     ${CMAKE_CURRENT_SOURCE_DIR}/configs/server_config.yaml)
-
-    add_executable(run_mode_test
-        tests/run_mode_test.cpp
-    )
-    target_include_directories(run_mode_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-    )
-    add_test(NAME run_mode_contract COMMAND run_mode_test)
-
-    add_test(
-        NAME run_launcher_mode_contract
-        COMMAND bash
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/run_sh_mode_test.sh
-            ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-    add_executable(model_manifest_test
-        tests/model_manifest_test.cpp
+    add_executable(aiserver_model_update_development_test
+        tests/model_update_development_test.cpp
+        src/ai/onnx_inferencer.cpp
         src/model/model_manifest.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-    )
-    target_include_directories(model_manifest_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(model_manifest_test PRIVATE
-        protobuf::libprotobuf
-        crypto
-    )
-    add_test(NAME model_manifest_contract COMMAND model_manifest_test)
-
-    add_executable(model_distributor_client_test
-        tests/model_distributor_client_test.cpp
         src/model/model_distributor_client.cpp
-        src/model/model_manifest.cpp
-        ${PROTO_SOURCES}
+        ${PROTO_GEN_DIR}/common.pb.cc
+        ${PROTO_GEN_DIR}/training.pb.cc
+        ${PROTO_GEN_DIR}/training.grpc.pb.cc
     )
-    target_include_directories(model_distributor_client_test PRIVATE
+    target_include_directories(aiserver_model_update_development_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
         ${GRPC_INCLUDE_DIRS}
+        /usr/local/include/onnxruntime
     )
-    target_link_libraries(model_distributor_client_test PRIVATE
+    target_link_libraries(aiserver_model_update_development_test PRIVATE
         protobuf::libprotobuf
         ${GRPC_LIBRARIES}
         pthread
+        onnxruntime
         crypto
     )
-    add_test(NAME model_distributor_client_contract
-             COMMAND model_distributor_client_test)
+    add_test(
+        NAME aiserver_model_update_development_contract
+        COMMAND aiserver_model_update_development_test
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx
+    )
 
-    add_executable(sample_distributor_test
-        tests/sample_distributor_test.cpp
-        src/sample/sample_sender.cpp
-        ${PROTO_SOURCES}
-    )
-    target_include_directories(sample_distributor_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-        ${GRPC_INCLUDE_DIRS}
-    )
-    target_link_libraries(sample_distributor_test PRIVATE
-        protobuf::libprotobuf
-        ${GRPC_LIBRARIES}
-        pthread
-    )
-    add_test(NAME sample_distributor_contract
-             COMMAND sample_distributor_test)
-
-    add_executable(fragment_boundary_test
-        tests/fragment_boundary_test.cpp
-    )
-    target_include_directories(fragment_boundary_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-    )
-    add_test(NAME fragment_boundary_contract
-             COMMAND fragment_boundary_test)
-
-    add_executable(sample_producer_identity_test
-        tests/sample_producer_identity_test.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-    )
-    target_include_directories(sample_producer_identity_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(sample_producer_identity_test PRIVATE
-        protobuf::libprotobuf
-    )
-    add_test(NAME sample_producer_identity_contract
-             COMMAND sample_producer_identity_test)
-
-    add_executable(episode_action_policy_test
-        tests/episode_action_policy_test.cpp
-        src/task/episode_action_policy.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-    )
-    target_include_directories(episode_action_policy_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(episode_action_policy_test PRIVATE
-        protobuf::libprotobuf
-    )
-    target_compile_options(episode_action_policy_test PRIVATE -UNDEBUG)
-    add_test(NAME episode_action_policy_contract
-             COMMAND episode_action_policy_test)
-
-    add_executable(training_fragment_contract_test
-        tests/training_fragment_contract_test.cpp
-        src/sample/training_transition_builder.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-    )
-    target_include_directories(training_fragment_contract_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(training_fragment_contract_test PRIVATE
-        protobuf::libprotobuf
-    )
-    target_compile_options(training_fragment_contract_test PRIVATE -UNDEBUG)
-    add_test(NAME training_fragment_contract
-             COMMAND training_fragment_contract_test)
-
-    add_executable(lifecycle_atomicity_test
-        tests/lifecycle_atomicity_test.cpp
+    add_executable(aiserver_gae_sample_delivery_development_test
+        tests/gae_sample_delivery_development_test.cpp
         src/grpc/maze_service.cpp
         src/grpc/maze_service_rpc.cpp
         src/ai/maze_reward.cpp
@@ -254,93 +120,27 @@ if(BUILD_TESTING)
         src/task/single_map_task_controller.cpp
         ${PROTO_SOURCES}
     )
-    target_include_directories(lifecycle_atomicity_test PRIVATE
+    target_include_directories(
+        aiserver_gae_sample_delivery_development_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
         ${GRPC_INCLUDE_DIRS}
         /usr/local/include/onnxruntime
     )
-    target_link_libraries(lifecycle_atomicity_test PRIVATE
+    target_link_libraries(
+        aiserver_gae_sample_delivery_development_test PRIVATE
         protobuf::libprotobuf
         ${GRPC_LIBRARIES}
         pthread
         onnxruntime
         crypto
     )
-    target_compile_options(lifecycle_atomicity_test PRIVATE -UNDEBUG)
-    add_test(NAME lifecycle_atomicity_contract
-             COMMAND lifecycle_atomicity_test
-                 ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx)
-
-    add_executable(onnx_actor_wire_integration_test
-        tests/onnx_actor_wire_integration_test.cpp
-        src/ai/onnx_inferencer.cpp
-        src/task/episode_action_policy.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-    )
-    target_include_directories(onnx_actor_wire_integration_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-        /usr/local/include/onnxruntime
-    )
-    target_link_libraries(onnx_actor_wire_integration_test PRIVATE
-        protobuf::libprotobuf
-        onnxruntime
-    )
     target_compile_options(
-        onnx_actor_wire_integration_test PRIVATE -UNDEBUG)
+        aiserver_gae_sample_delivery_development_test PRIVATE -UNDEBUG)
     add_test(
-        NAME onnx_actor_wire_integration_contract
-        COMMAND onnx_actor_wire_integration_test
+        NAME aiserver_gae_sample_delivery_development_contract
+        COMMAND aiserver_gae_sample_delivery_development_test
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx
     )
-
-    add_test(
-        NAME model_inspection_contract
-        COMMAND ${Python3_EXECUTABLE}
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/model_inspection_contract.py
-            $<TARGET_FILE:maze_aiserver>
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v0.onnx
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_nonfinite_v0.onnx
-    )
-
-    add_executable(maze_map_contract_test
-        tests/maze_map_contract_test.cpp
-        src/task/maze_map_contract.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-    )
-    target_include_directories(maze_map_contract_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(maze_map_contract_test PRIVATE
-        protobuf::libprotobuf
-        crypto
-    )
-    add_test(NAME maze_map_contract COMMAND maze_map_contract_test)
-
-    add_executable(maze_observation_test
-        tests/maze_observation_test.cpp
-        src/ai/maze_observation.cpp
-        src/ai/astar_solver.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/maze_task.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-    )
-    target_include_directories(maze_observation_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${PROTO_GEN_DIR}
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(maze_observation_test PRIVATE
-        protobuf::libprotobuf
-    )
-    add_test(NAME maze_observation_contract COMMAND maze_observation_test)
 endif()

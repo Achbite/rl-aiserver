@@ -2,9 +2,9 @@
 
 [简体中文](README.md) | English
 
-AIServer provides static model evaluation plus training inference, trajectory
-assembly, and sample delivery. For the A3 local chain, developers start Learner,
-AIServer, and Client separately; Framework no longer orchestrates runtime.
+AIServer provides static model evaluation plus training inference, per-Agent
+R-PIN segments, GAE/value targets, and processed-transition delivery. For local
+training, start it after Learner is ready and connect Client afterwards.
 
 ## 1. Development container, incremental build, and tests
 
@@ -54,6 +54,20 @@ The default workload is `server.run_mode` in `configs/server_config.yaml`, and
 are compiled in `src/ai/maze_reward.cpp`; runtime YAML must not contain a
 `reward:` tuning section and retains only the reward schema identity.
 
+Training uses the `RolloutEstimatorProfile` embedded in the model manifest.
+AIServer pins a behavior model independently for each Agent, closes the segment
+after at most 128 completed transitions by default, computes unnormalised
+GAE/value targets, and submits the resulting items in batches through its
+in-process SampleDistributor. The only authority for the actual Agent count is
+`environment.agent_count/RL_AISERVER_AGENT_COUNT`; `server.max_agents` is only
+a capacity limit. Client, MazeTaskSpec, Learner, and SamplePool expose no second
+Agent-count authority.
+
+The close reason and bootstrap appear only on the final
+transition. A terminal carries an explicit zero bootstrap; TMax and controlled
+close use the pinned model's finite value; non-final items carry neither fact.
+A prepared and acknowledged model activates only at each Agent's next segment.
+
 The same runtime image exposes a read-only model diagnostic for tensor-contract
 and finite-inference checks:
 
@@ -79,12 +93,19 @@ bash ./run.sh --config configs/server_config.yaml --workload training
 
 Models always come from the isolated training invocation's Learner Model Distributor. AIServer discovers the internal model lineage from Distributor status and pins the first lineage; a different lineage in the same service lifetime fails closed. AIServer never starts training from a local savepoint and never removes its cache on a normal stop.
 
-## 4. Formal artifacts and image
+## 4. Build the runtime image
 
-Only after Level 1/2 pass, user review, and clean savepoints may the host sync
-the formal Contracts artifact and run `bash build_image.sh`. The formal build
-requires clean runtime repositories and never consumes development artifacts or
-a development-container build directory.
+The runtime image accepts only clean source and a synchronized formal Contracts
+artifact. Run from the host:
+
+```bash
+bash scripts/sync_contract_snapshot.sh
+bash build_image.sh
+```
+
+The build never consumes development artifacts or a development-container build
+directory. It prints the image reference derived from the current stack source
+identity.
 
 ## 5. Default addresses
 

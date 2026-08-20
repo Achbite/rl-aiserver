@@ -26,11 +26,28 @@ struct AgentEpisodeResult {
     uint64_t minimum_behavior_model_step = 0;
     uint64_t maximum_behavior_model_step = 0;
     std::string behavior_model_lineage_id;
+    uint64_t terminal_frame_id = 0;
+    int final_grid_x = 0;
+    int final_grid_y = 0;
+    std::optional<uint32_t> goal_rank_group;
     std::unordered_map<std::string, double> reward_component_sums;
 };
 
 class MetricEventJournal {
 public:
+    struct AppendResult {
+        enum class Code {
+            Applied,
+            SourceFinal,
+        };
+
+        Code code = Code::Applied;
+        bool wall_clock_regressed = false;
+        int64_t previous_observed_at_unix_ms = 0;
+
+        bool applied() const { return code == Code::Applied; }
+    };
+
     static constexpr std::size_t kDefaultEventCapacity = 4096;
     static constexpr std::size_t kDefaultByteCapacity = 16 * 1024 * 1024;
 
@@ -44,9 +61,9 @@ public:
 
     const common::ServiceInstanceIdentity& source() const { return source_; }
 
-    bool AppendEpisode(training::EpisodeMetricFact fact,
-                       int64_t committed_at_unix_ms);
-    void Finalize(int64_t finalized_at_unix_ms);
+    AppendResult AppendEpisode(training::EpisodeMetricFact fact,
+                               int64_t observed_at_unix_ms);
+    void Finalize();
     bool WaitForFinalAcknowledgement(
         std::chrono::milliseconds timeout);
     void Get(const training::GetMetricBatchReq& request,
@@ -91,9 +108,7 @@ private:
     bool source_final_ = false;
     bool final_batch_acknowledged_ = false;
     uint64_t final_event_sequence_ = 0;
-    int64_t final_watermark_unix_ms_ = 0;
-    int64_t last_event_committed_at_unix_ms_ = 0;
-    int64_t last_acked_watermark_unix_ms_ = 0;
+    std::optional<int64_t> last_event_observed_at_unix_ms_;
     std::chrono::steady_clock::time_point last_batch_created_at_;
 };
 

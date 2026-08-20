@@ -20,8 +20,8 @@ SNAPSHOT_FILES = {
     "cpp/maze_task.pb.h": "maze_task.pb.h",
     "cpp/maze_task.grpc.pb.cc": "maze_task.grpc.pb.cc",
     "cpp/maze_task.grpc.pb.h": "maze_task.grpc.pb.h",
-    "schemas/maze.metrics.v3.json": "schemas/maze.metrics.v3.json",
-    "schemas/maze.metrics.v3.sha256": "schemas/maze.metrics.v3.sha256",
+    "schemas/maze.metrics.v4.json": "schemas/maze.metrics.v4.json",
+    "schemas/maze.metrics.v4.sha256": "schemas/maze.metrics.v4.sha256",
 }
 
 
@@ -76,10 +76,10 @@ def verify_snapshot(
         if actual != expected:
             fail(f"contract snapshot checksum mismatch: {path}")
     schema_metadata = manifest.get("metric_schemas", {}).get(
-        "maze.metrics.v3"
+        "maze.metrics.v4"
     )
-    catalog = root / "schemas/maze.metrics.v3.json"
-    digest_file = root / "schemas/maze.metrics.v3.sha256"
+    catalog = root / "schemas/maze.metrics.v4.json"
+    digest_file = root / "schemas/maze.metrics.v4.sha256"
     catalog_digest = hashlib.sha256(catalog.read_bytes()).hexdigest()
     if (
         digest_file.read_text(encoding="utf-8").strip() != catalog_digest
@@ -89,12 +89,12 @@ def verify_snapshot(
                 "algorithm": "sha256",
                 "hex": catalog_digest,
             },
-            "digest_path": "schemas/maze.metrics.v3.sha256",
-            "path": "schemas/maze.metrics.v3.json",
-            "schema_version": 3,
+            "digest_path": "schemas/maze.metrics.v4.sha256",
+            "path": "schemas/maze.metrics.v4.json",
+            "schema_version": 4,
         }
     ):
-        fail("maze.metrics.v3 snapshot identity mismatch")
+        fail("maze.metrics.v4 snapshot identity mismatch")
     return manifest
 
 

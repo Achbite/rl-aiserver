@@ -26,7 +26,7 @@ struct SingleMapTaskSnapshot {
     std::string baseline_model_checksum;
     int64_t baseline_train_updates = 0;
     int64_t baseline_trained_samples = 0;
-    int64_t produced_samples = 0;
+    int64_t produced_transitions = 0;
     int episode_max_steps = 0;
 };
 
@@ -38,17 +38,17 @@ public:
 
     bool Initialize(int episode_max_steps,
                     const SingleMapModelIdentity& initial_model,
-                    int64_t initial_produced_samples,
+                    int64_t initial_produced_transitions,
                     std::string& error);
 
     bool PlanNextEpisode(const SingleMapModelIdentity& active_model,
-                         int64_t produced_samples,
+                         int64_t produced_transitions,
                          SingleMapEpisodePlan& plan,
                          std::string& error);
 
     bool ObserveTrainingProgress(
         const SingleMapModelIdentity& active_model,
-        int64_t produced_samples,
+        int64_t produced_transitions,
         std::string& error);
 
     SingleMapTaskSnapshot GetSnapshot() const;
@@ -58,12 +58,12 @@ private:
     bool ValidateModel(const SingleMapModelIdentity& model,
                        std::string& error) const;
     bool ValidateTrainingProgress(const SingleMapModelIdentity& model,
-                                  int64_t produced_samples,
+                                  int64_t produced_transitions,
                                   int64_t& trained_samples_delta,
                                   std::string& error) const;
     bool initialized_ = false;
     SingleMapModelIdentity baseline_model_;
     SingleMapModelIdentity latest_model_;
     int episode_max_steps_ = 0;
-    int64_t latest_produced_samples_ = 0;
+    int64_t latest_produced_transitions_ = 0;
 };

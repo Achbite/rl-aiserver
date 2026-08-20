@@ -65,6 +65,18 @@ bool ReadInteger(const Struct& object, const std::string& name,
     return true;
 }
 
+bool ReadDouble(const Struct& object, const std::string& name,
+                double& value, std::string& error) {
+    const Value* field = FindField(object, name);
+    if (!field || field->kind_case() != Value::kNumberValue ||
+        !std::isfinite(field->number_value())) {
+        error = "manifest field '" + name + "' must be a finite number";
+        return false;
+    }
+    value = field->number_value();
+    return true;
+}
+
 bool ReadModelStep(const Struct& object, const std::string& name,
                    ModelStep& value, std::string& error) {
     const Value* field = FindField(object, name);
@@ -247,6 +259,55 @@ bool ReadTrainingSemantics(const Struct& object,
     return true;
 }
 
+bool ReadRolloutEstimatorProfile(
+    const Struct& object,
+    training::RolloutEstimatorProfile* profile,
+    std::string& error) {
+    const Struct* source = nullptr;
+    int64_t schema_version = 0;
+    int64_t tmax = 0;
+    double gamma = 0.0;
+    double gae_lambda = 0.0;
+    if (!ReadStruct(object, "rollout_estimator_profile", source, error) ||
+        !ReadInteger(*source, "profile_schema_version", schema_version,
+                     error) ||
+        !ReadDouble(*source, "gamma", gamma, error) ||
+        !ReadDouble(*source, "gae_lambda", gae_lambda, error) ||
+        !ReadInteger(*source, "tmax", tmax, error) ||
+        !ReadString(*source, "gae_formula_id",
+                    *profile->mutable_gae_formula_id(), error) ||
+        !ReadString(*source, "terminal_bootstrap_semantics_id",
+                    *profile->mutable_terminal_bootstrap_semantics_id(),
+                    error) ||
+        !ReadString(*source, "value_target_formula_id",
+                    *profile->mutable_value_target_formula_id(), error) ||
+        !ReadString(*source, "value_head_abi_id",
+                    *profile->mutable_value_head_abi_id(), error) ||
+        !ReadDigest(*source, "reward_semantics_digest",
+                    profile->mutable_reward_semantics_digest(), error) ||
+        !ReadString(*source, "numeric_dtype",
+                    *profile->mutable_numeric_dtype(), error) ||
+        !ReadString(*source, "finite_rule_id",
+                    *profile->mutable_finite_rule_id(), error) ||
+        !ReadString(*source, "model_pin_semantics_id",
+                    *profile->mutable_model_pin_semantics_id(), error) ||
+        !ReadDigest(*source, "profile_digest",
+                    profile->mutable_profile_digest(), error)) {
+        return false;
+    }
+    if (schema_version <= 0 || schema_version > UINT32_MAX ||
+        tmax <= 0 || tmax > UINT32_MAX) {
+        error = "rollout estimator profile integer is out of range";
+        return false;
+    }
+    profile->set_profile_schema_version(
+        static_cast<uint32_t>(schema_version));
+    profile->set_gamma(gamma);
+    profile->set_gae_lambda(gae_lambda);
+    profile->set_tmax(static_cast<uint32_t>(tmax));
+    return true;
+}
+
 bool ParseManifestDocument(const Struct& document,
                            training::ModelArtifactManifest& manifest,
                            std::string& error) {
@@ -296,6 +357,8 @@ bool ParseManifestDocument(const Struct& document,
                     manifest.mutable_training_config_digest(), error) ||
         !ReadTrainingSemantics(document,
                                manifest.mutable_training_semantics(), error) ||
+        !ReadRolloutEstimatorProfile(
+            document, manifest.mutable_rollout_estimator_profile(), error) ||
         !ReadInteger(document, "published_at_unix_ms", published_at, error) ||
         !ReadBoolean(document, "ready", ready, error)) {
         return false;
@@ -448,6 +511,36 @@ void WriteShapeJson(
     output << ']';
 }
 
+void WriteRolloutEstimatorProfileJson(
+    std::ostream& output,
+    const training::RolloutEstimatorProfile& profile) {
+    output << "{\"profile_schema_version\":"
+           << profile.profile_schema_version()
+           << ",\"gamma\":" << std::setprecision(17) << profile.gamma()
+           << ",\"gae_lambda\":" << std::setprecision(17)
+           << profile.gae_lambda()
+           << ",\"tmax\":" << profile.tmax()
+           << ",\"gae_formula_id\":";
+    WriteJsonString(output, profile.gae_formula_id());
+    output << ",\"terminal_bootstrap_semantics_id\":";
+    WriteJsonString(output, profile.terminal_bootstrap_semantics_id());
+    output << ",\"value_target_formula_id\":";
+    WriteJsonString(output, profile.value_target_formula_id());
+    output << ",\"value_head_abi_id\":";
+    WriteJsonString(output, profile.value_head_abi_id());
+    output << ",\"reward_semantics_digest\":";
+    WriteDigestJson(output, profile.reward_semantics_digest());
+    output << ",\"numeric_dtype\":";
+    WriteJsonString(output, profile.numeric_dtype());
+    output << ",\"finite_rule_id\":";
+    WriteJsonString(output, profile.finite_rule_id());
+    output << ",\"model_pin_semantics_id\":";
+    WriteJsonString(output, profile.model_pin_semantics_id());
+    output << ",\"profile_digest\":";
+    WriteDigestJson(output, profile.profile_digest());
+    output << '}';
+}
+
 std::string ModelManifestJson(
     const training::ModelArtifactManifest& manifest) {
     std::ostringstream output;
@@ -516,7 +609,10 @@ std::string ModelManifestJson(
         output, manifest.training_semantics().model_architecture_id());
     output << ",\"semantics_digest\":";
     WriteDigestJson(output, manifest.training_semantics().semantics_digest());
-    output << "},\"published_at_unix_ms\":"
+    output << "},\"rollout_estimator_profile\":";
+    WriteRolloutEstimatorProfileJson(
+        output, manifest.rollout_estimator_profile());
+    output << ",\"published_at_unix_ms\":"
            << manifest.published_at_unix_ms()
            << ",\"ready\":" << (manifest.ready() ? "true" : "false")
            << "}\n";
@@ -562,7 +658,7 @@ bool ValidateModelManifest(const AIServerConfig& config,
                            const training::ModelArtifactManifest& source,
                            std::optional<ModelStep> expected_step,
                            std::string& error) {
-    if (source.manifest_schema_version() != 2 || !source.ready() ||
+    if (source.manifest_schema_version() != 3 || !source.ready() ||
         source.contract().SerializeAsString() !=
             ExpectedContract(config).SerializeAsString() ||
         source.training_semantics().SerializeAsString() !=
@@ -581,6 +677,36 @@ bool ValidateModelManifest(const AIServerConfig& config,
         source.size_bytes() <= 0 || source.train_updates() < 0 ||
         source.trained_samples() < 0) {
         error = "model manifest identity or counters are invalid";
+        return false;
+    }
+    const auto& profile = source.rollout_estimator_profile();
+    training::RolloutEstimatorProfile canonical_profile(profile);
+    canonical_profile.clear_profile_digest();
+    const std::string canonical_profile_digest =
+        Sha256Bytes(DeterministicBytes(canonical_profile));
+    if (profile.profile_schema_version() != 1 ||
+        !std::isfinite(profile.gamma()) || profile.gamma() < 0.0 ||
+        profile.gamma() > 1.0 ||
+        !std::isfinite(profile.gae_lambda()) ||
+        profile.gae_lambda() < 0.0 || profile.gae_lambda() > 1.0 ||
+        profile.tmax() == 0 ||
+        profile.gae_formula_id() != "gae.backward.v1" ||
+        profile.terminal_bootstrap_semantics_id() !=
+            "maze.timeout-keep-and-cut-bootstrap.v1" ||
+        profile.value_target_formula_id() !=
+            "advantage-plus-behavior-value.v1" ||
+        profile.value_head_abi_id() != "scalar-value.float32.v1" ||
+        profile.numeric_dtype() != "float32" ||
+        profile.finite_rule_id() != "reject-nonfinite.v1" ||
+        profile.model_pin_semantics_id() !=
+            "per-agent-segment-pin.v1" ||
+        !IsSha256(profile.reward_semantics_digest()) ||
+        profile.reward_semantics_digest().hex() !=
+            config.training_semantics.reward_schema.canonical_digest.hex ||
+        !IsSha256(profile.profile_digest()) ||
+        canonical_profile_digest.empty() ||
+        canonical_profile_digest != profile.profile_digest().hex()) {
+        error = "rollout estimator profile is invalid or non-canonical";
         return false;
     }
     if (source.observation_schema().SerializeAsString() !=

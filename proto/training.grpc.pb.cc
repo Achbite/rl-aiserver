@@ -187,67 +187,6 @@ MetricEventService::Service::~Service() {
 }
 
 
-static const char* LearnerService_method_names[] = {
-  "/rl.training.v1.LearnerService/SendSamples",
-};
-
-std::unique_ptr< LearnerService::Stub> LearnerService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
-  (void)options;
-  std::unique_ptr< LearnerService::Stub> stub(new LearnerService::Stub(channel, options));
-  return stub;
-}
-
-LearnerService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
-  : channel_(channel), rpcmethod_SendSamples_(LearnerService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  {}
-
-::grpc::Status LearnerService::Stub::SendSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::rl::training::v1::SampleResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::SampleBatch, ::rl::training::v1::SampleResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SendSamples_, context, request, response);
-}
-
-void LearnerService::Stub::async::SendSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::SampleResponse* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::SampleBatch, ::rl::training::v1::SampleResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SendSamples_, context, request, response, std::move(f));
-}
-
-void LearnerService::Stub::async::SendSamples(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::SampleResponse* response, ::grpc::ClientUnaryReactor* reactor) {
-  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SendSamples_, context, request, response, reactor);
-}
-
-::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleResponse>* LearnerService::Stub::PrepareAsyncSendSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::SampleResponse, ::rl::training::v1::SampleBatch, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SendSamples_, context, request);
-}
-
-::grpc::ClientAsyncResponseReader< ::rl::training::v1::SampleResponse>* LearnerService::Stub::AsyncSendSamplesRaw(::grpc::ClientContext* context, const ::rl::training::v1::SampleBatch& request, ::grpc::CompletionQueue* cq) {
-  auto* result =
-    this->PrepareAsyncSendSamplesRaw(context, request, cq);
-  result->StartCall();
-  return result;
-}
-
-LearnerService::Service::Service() {
-  AddMethod(new ::grpc::internal::RpcServiceMethod(
-      LearnerService_method_names[0],
-      ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< LearnerService::Service, ::rl::training::v1::SampleBatch, ::rl::training::v1::SampleResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
-          [](LearnerService::Service* service,
-             ::grpc::ServerContext* ctx,
-             const ::rl::training::v1::SampleBatch* req,
-             ::rl::training::v1::SampleResponse* resp) {
-               return service->SendSamples(ctx, req, resp);
-             }, this)));
-}
-
-LearnerService::Service::~Service() {
-}
-
-::grpc::Status LearnerService::Service::SendSamples(::grpc::ServerContext* context, const ::rl::training::v1::SampleBatch* request, ::rl::training::v1::SampleResponse* response) {
-  (void) context;
-  (void) request;
-  (void) response;
-  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-}
-
-
 static const char* SamplePoolIngressService_method_names[] = {
   "/rl.training.v1.SamplePoolIngressService/PushSamples",
   "/rl.training.v1.SamplePoolIngressService/GetStatus",

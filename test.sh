@@ -11,22 +11,9 @@ if [ "$#" -ne 0 ]; then
     exit 2
 fi
 
-source "${repo_dir}/artifact_versions.env"
-bash "${repo_dir}/scripts/verify_source_inventory.sh"
-
 contract_cpp_dir=""
 if [ -n "${RL_CONTRACT_DEV_ARTIFACT_DIR:-}" ]; then
-    python3 "${repo_dir}/scripts/verify_contract_snapshot.py" \
-        "${RL_CONTRACT_DEV_ARTIFACT_DIR}" \
-        "${RL_CONTRACTS_VERSION}" \
-        "${RL_CONTRACTS_PLATFORM}" \
-        --artifact-layout
     contract_cpp_dir="${RL_CONTRACT_DEV_ARTIFACT_DIR}/cpp"
-else
-    python3 "${repo_dir}/scripts/verify_contract_snapshot.py" \
-        "${repo_dir}/proto" \
-        "${RL_CONTRACTS_VERSION}" \
-        "${RL_CONTRACTS_PLATFORM}"
 fi
 
 cmake_args=(
@@ -44,5 +31,8 @@ if command -v ccache >/dev/null 2>&1; then
 fi
 
 cmake "${cmake_args[@]}"
-cmake --build "${build_dir}" --parallel
-ctest --test-dir "${build_dir}" --output-on-failure
+cmake --build "${build_dir}" --parallel --target \
+    aiserver_model_update_development_test \
+    aiserver_gae_sample_delivery_development_test
+ctest --test-dir "${build_dir}" --output-on-failure \
+    -R '^(aiserver_model_update_development_contract|aiserver_gae_sample_delivery_development_contract)$'

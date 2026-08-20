@@ -2,8 +2,8 @@
 
 简体中文 | [English](README.en.md)
 
-AIServer 提供静态模型评测，以及训练中的推理、轨迹组装和样本发送。A3 本地链由开发者分别
-启动 Learner、AIServer 与 Client；Framework 不再编排运行时。
+AIServer 提供静态模型评测，以及训练中的推理、per-Agent R-PIN segment、GAE/Value Target 和
+processed-transition 样本发送。本地训练在 Learner ready 后启动 AIServer，再连接 Client。
 
 ## 1. 开发容器、增量构建与测试
 
@@ -50,6 +50,16 @@ config/CLI 层解释。
 YAML 中不提供 `reward:` 调参段；若出现 `reward.*`，配置加载会失败关闭。config 只保留
 `training_semantics.reward_schema_*` 身份以验证训练语义。
 
+Training 使用模型 manifest 中的 `RolloutEstimatorProfile`。AIServer 为每个 Agent 独立 pin
+behavior model，默认最多累计 128 条 completed transition 后封口，计算未归一化 GAE/Value Target，
+再由进程内 SampleDistributor 批量提交。实际 Agent 数唯一来自
+`environment.agent_count/RL_AISERVER_AGENT_COUNT`；`server.max_agents` 只是容量上限。Client、
+MazeTaskSpec、Learner 和 SamplePool 不提供第二个 Agent 数权威入口。
+
+close reason 和 bootstrap 只在 segment 最后一条 transition 出现：
+terminal 显式记录 zero bootstrap，TMax/受控关闭使用 pinned model 的有限 Value；非末尾 Item 不
+携带这两项。已 Prepare/ACK 的新模型只在每个 Agent 自己的下一个 segment 激活。
+
 同一运行镜像提供只读模型诊断，用于验证张量合约和有限值推理：
 
 ```bash
@@ -71,11 +81,17 @@ bash ./run.sh --config configs/server_config.yaml --workload training
 
 模型始终从本次隔离训练的 Learner Model Distributor 拉取。AIServer 从 Distributor 状态发现内部模型 lineage，首次发现后固定；同一生命周期出现另一 lineage 会失败关闭。AIServer 不从本地保存点开始训练，也不会在正常停止时删除缓存。
 
-## 4. 正式制品与镜像
+## 4. 构建运行镜像
 
-只有 Level 1/2 通过、用户 Review 并形成 clean savepoint 后，才同步正式 Contracts artifact
-并在宿主机执行 `bash build_image.sh`。正式构建要求运行仓 clean，且不读取开发 artifact 或
-开发容器 build 目录。
+运行镜像只接受 clean source 和已同步的正式 Contracts artifact。在宿主机执行：
+
+```bash
+bash scripts/sync_contract_snapshot.sh
+bash build_image.sh
+```
+
+正式构建不读取开发 artifact 或开发容器 build 目录，并输出按当前 stack source identity
+计算的镜像引用。
 
 ## 5. 默认地址
 

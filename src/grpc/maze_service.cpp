@@ -2,9 +2,6 @@
 
 #include "log/logger.h"
 #include "ai/maze_observation.h"
-#include "contracts/sample_producer_identity.h"
-#include "model/fragment_boundary.h"
-#include "model/model_boundary.h"
 #include "sample/training_transition_builder.h"
 #include "task/maze_map_contract.h"
 #include "task/episode_action_policy.h"
@@ -21,6 +18,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
+#include <iterator>
 #include <limits>
 #include <random>
 #include <sstream>
@@ -39,6 +37,15 @@ double ElapsedMs(std::chrono::steady_clock::time_point start) {
 bool IsTerminalReason(maze::MazeTerminationReason reason) {
     return reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED ||
            reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
+}
+
+bool ShouldFetchModelCandidate(
+    ModelStep latest_prepared_step,
+    const std::optional<ModelStep>& staged_step,
+    ModelStep distributor_latest_step) {
+    return distributor_latest_step > latest_prepared_step &&
+           (!staged_step.has_value() ||
+            distributor_latest_step > *staged_step);
 }
 
 constexpr int kActionDirections[9][2] = {
@@ -268,8 +275,7 @@ MazeServiceImpl::MazeServiceImpl(const AIServerConfig& config)
       metric_events_(
           MetricContract(config), MetricEventSchema(config),
           MetricEventSource(producer_instance_id_,
-                            producer_lifecycle_epoch_)),
-      current_fragment_samples_(config.sample_distributor.fragment_samples) {}
+                            producer_lifecycle_epoch_)) {}
 
 MazeServiceImpl::~MazeServiceImpl() {
     BeginShutdown();
@@ -586,9 +592,13 @@ bool MazeServiceImpl::LoadInitialModel() {
                 return false;
             }
 
-            // Local model publication is the point of no return. If the exact
-            // ACK remains outcome-unknown, publish once and let the watcher
-            // reconcile it; startup must not pretend the activation failed.
+            if (ack != ModelDistributorClient::AckDisposition::Applied) {
+                model_state_.store(training::MODEL_STATE_FAILED);
+                last_error_ =
+                    "initial model ACK remained outcome-unknown before "
+                    "the startup deadline: " + ack_error;
+                return false;
+            }
             prepared.model_path = candidate.model_path;
             onnx_inferencer_.ActivatePreparedModel(std::move(prepared));
             model_manifest_ = candidate;
@@ -598,10 +608,7 @@ bool MazeServiceImpl::LoadInitialModel() {
                 LOG_ERROR("MazeService", "初始模型缓存淘汰延后: %s",
                           prune_error.c_str());
             }
-            if (ack == ModelDistributorClient::AckDisposition::Uncertain) {
-                RecordPendingModelAck(candidate, ack_authority, ack_error);
-                return true;
-            }
+            latest_prepared_used_by_agent_ = false;
             model_state_.store(training::MODEL_STATE_READY);
             last_error_.clear();
             LOG_INFO("MazeService",
@@ -640,29 +647,28 @@ training::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
         target->set_agent_id(agent.agent_id);
         target->set_episode_return(agent.episode_return);
         target->set_transition_count(
-            static_cast<uint64_t>(std::max<int64_t>(
-                0, agent.transition_count)));
+            static_cast<uint64_t>(agent.transition_count));
         target->set_success(agent.success);
         target->set_termination_reason(
             maze::MazeTerminationReason_Name(agent.termination_reason));
         target->set_shortest_action_steps(
-            static_cast<uint32_t>(std::max<int64_t>(
-                0, agent.shortest_action_steps)));
+            static_cast<uint32_t>(agent.shortest_action_steps));
         target->set_unique_cell_count(
-            static_cast<uint64_t>(std::max<int64_t>(
-                0, agent.unique_cell_count)));
+            static_cast<uint64_t>(agent.unique_cell_count));
         target->set_blocked_move_count(
-            static_cast<uint64_t>(std::max<int64_t>(
-                0, agent.blocked_move_count)));
+            static_cast<uint64_t>(agent.blocked_move_count));
         target->set_attempted_move_count(
-            static_cast<uint64_t>(std::max<int64_t>(
-                0, agent.attempted_move_count)));
+            static_cast<uint64_t>(agent.attempted_move_count));
         target->set_minimum_behavior_model_step(
             agent.minimum_behavior_model_step);
         target->set_maximum_behavior_model_step(
             agent.maximum_behavior_model_step);
         target->set_behavior_model_lineage_id(
             agent.behavior_model_lineage_id);
+        target->set_terminal_frame_id(agent.terminal_frame_id);
+        if (agent.goal_rank_group) {
+            target->set_goal_rank_group(*agent.goal_rank_group);
+        }
         std::vector<std::pair<std::string, double>> components(
             agent.reward_component_sums.begin(),
             agent.reward_component_sums.end());
@@ -675,6 +681,27 @@ training::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
         }
     }
     return fact;
+}
+
+maze::EpisodeOutcome MazeServiceImpl::BuildEpisodeOutcome(
+    const SessionManager::Session& session,
+    const std::vector<AgentEpisodeResult>& agents) const {
+    maze::EpisodeOutcome outcome;
+    outcome.set_episode_id(session.current_episode_id);
+    for (const auto& agent : agents) {
+        auto* target = outcome.add_agents();
+        target->set_agent_id(agent.agent_id);
+        target->set_termination_reason(agent.termination_reason);
+        target->set_terminal_frame_id(agent.terminal_frame_id);
+        target->mutable_final_position()->set_x(
+            static_cast<float>(agent.final_grid_x));
+        target->mutable_final_position()->set_y(
+            static_cast<float>(agent.final_grid_y));
+        if (agent.goal_rank_group) {
+            target->set_goal_rank_group(*agent.goal_rank_group);
+        }
+    }
+    return outcome;
 }
 
 bool MazeServiceImpl::FetchPrepareAndPublishModel(
@@ -775,14 +802,9 @@ std::set<ModelStep> MazeServiceImpl::ProtectedCachedModelStepsLocked() {
         if (!session) continue;
         for (const auto& item : session->agents) {
             const auto& agent = item.second;
-            if (agent.has_pending_action &&
-                !agent.pending_model_lineage_id.empty() &&
-                !agent.pending_model_checksum.empty()) {
-                protected_steps.insert(agent.pending_model_step);
-            }
-            if (!agent.fragment_model_lineage_id.empty() &&
-                !agent.fragment_model_checksum.empty()) {
-                protected_steps.insert(agent.fragment_model_step);
+            if (agent.segment_open &&
+                agent.pinned_model.HasModelIdentity()) {
+                protected_steps.insert(agent.pinned_model.model_step);
             }
         }
     }
@@ -815,30 +837,9 @@ void MazeServiceImpl::RecordPendingModelAck(
     pending_model_ack_authority_ = authority;
     pending_model_ack_error_ = error;
     pending_model_ack_cause_ =
-        "model ACK remains outcome-uncertain after local roll-forward: " +
+        "model ACK remains outcome-uncertain before latest-prepared publish: " +
         error;
-    model_state_.store(training::MODEL_STATE_WAITING);
-    state_.store(training::AISERVER_STATE_DEGRADED);
-    last_error_ = pending_model_ack_cause_;
-    LOG_ERROR("MazeService", "%s", last_error_.c_str());
-}
-
-bool MazeServiceImpl::HasLocallyActivatedPendingModel() const {
-    return model_ack_pending_ && onnx_inferencer_.IsLoaded() &&
-           model_manifest_.model_step ==
-               pending_model_ack_manifest_.model_step &&
-           model_manifest_.sha256 == pending_model_ack_manifest_.sha256 &&
-           model_manifest_.model_lineage_id ==
-               pending_model_ack_manifest_.model_lineage_id &&
-           model_manifest_.manifest_digest ==
-               pending_model_ack_manifest_.manifest_digest &&
-           model_manifest_.train_updates ==
-               pending_model_ack_manifest_.train_updates &&
-           model_manifest_.trained_samples ==
-               pending_model_ack_manifest_.trained_samples &&
-           model_manifest_.model_path ==
-               pending_model_ack_manifest_.model_path &&
-           onnx_inferencer_.GetModelPath() == model_manifest_.model_path;
+    LOG_WARN("MazeService", "%s", pending_model_ack_cause_.c_str());
 }
 
 bool MazeServiceImpl::RetryPendingModelAck() {
@@ -863,22 +864,40 @@ bool MazeServiceImpl::RetryPendingModelAck() {
         return !model_ack_pending_;
     }
     if (ack == ModelDistributorClient::AckDisposition::Applied) {
-        const std::string ack_cause = pending_model_ack_cause_;
+        if (!staged_model_manifest_.HasModelIdentity() ||
+            staged_model_manifest_.model_step != pending.model_step ||
+            staged_model_manifest_.sha256 != pending.sha256 ||
+            !staged_prepared_model_.valid()) {
+            model_state_.store(training::MODEL_STATE_FAILED);
+            state_.store(training::AISERVER_STATE_DEGRADED);
+            last_error_ =
+                "acknowledged staged model is no longer available locally";
+            return false;
+        }
+        if (model_manifest_.HasModelIdentity() &&
+            !latest_prepared_used_by_agent_) {
+            ++superseded_without_agent_activation_count_;
+        }
+        staged_prepared_model_.model_path =
+            staged_model_manifest_.model_path;
+        onnx_inferencer_.ActivatePreparedModel(
+            std::move(staged_prepared_model_));
+        model_manifest_ = staged_model_manifest_;
+        staged_model_manifest_ = ModelManifest{};
+        staged_prepared_model_ = OnnxInferencer::PreparedModel{};
+        ++model_switch_count_;
+        latest_prepared_used_by_agent_ = false;
         model_ack_pending_ = false;
         pending_model_ack_manifest_ = ModelManifest{};
         pending_model_ack_authority_.Clear();
         pending_model_ack_error_.clear();
         pending_model_ack_cause_.clear();
         model_state_.store(training::MODEL_STATE_READY);
-        const bool ack_was_only_fault =
-            state_.load() == training::AISERVER_STATE_DEGRADED &&
-            last_error_ == ack_cause && sample_distributor_.IsReady() &&
-            !sample_distributor_.IsDegraded();
-        if (ack_was_only_fault) {
-            state_.store(training::AISERVER_STATE_READY);
-            last_error_.clear();
-        }
-        return state_.load() == training::AISERVER_STATE_READY;
+        LOG_INFO("MazeService",
+                 "模型已成为 latest-prepared: model_step=%llu sha256=%s",
+                 static_cast<unsigned long long>(model_manifest_.model_step),
+                 model_manifest_.sha256.c_str());
+        return true;
     }
     if (ack == ModelDistributorClient::AckDisposition::Rejected ||
         ack == ModelDistributorClient::AckDisposition::NotApplied) {
@@ -900,19 +919,223 @@ bool MazeServiceImpl::RetryPendingModelAck() {
     return false;
 }
 
-bool MazeServiceImpl::TryActivateStagedModelForWatcher() {
+bool MazeServiceImpl::TryPromoteStagedModelForWatcher() {
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!IsReady() || model_ack_pending_ || !CanActivateStagedModel()) {
+    if (shutdown_started_ || model_ack_pending_ ||
+        !staged_model_manifest_.HasModelIdentity() ||
+        !staged_prepared_model_.valid()) {
         return false;
     }
     return ActivateStagedModel();
 }
 
+bool MazeServiceImpl::RecoverExpiredClientSessions() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (shutdown_started_ ||
+        config_.server.run_mode != aiserver_mode::kTraining) {
+        return true;
+    }
+
+    const int64_t now = NowMs();
+    for (const auto& session_id : session_mgr_.GetSessionIds()) {
+        auto* session = session_mgr_.GetSession(session_id);
+        if (!session ||
+            session->episode_state !=
+                SessionManager::EpisodeState::Active ||
+            session->last_valid_client_activity_unix_ms <= 0 ||
+            now < session->last_valid_client_activity_unix_ms ||
+            now - session->last_valid_client_activity_unix_ms <
+                config_.sample_distributor.recovery_timeout_ms) {
+            continue;
+        }
+
+        SessionManager::Session candidate = *session;
+        int64_t candidate_produced_transitions =
+            produced_unique_transitions_;
+        int64_t candidate_produced_envelopes =
+            produced_unique_envelopes_;
+        auto candidate_produced_by_model =
+            produced_transitions_by_model_;
+        int64_t candidate_quarantined_transitions =
+            quarantined_transition_count_;
+        int64_t candidate_pending_actions_excluded =
+            pending_action_excluded_count_;
+        int64_t candidate_closed_segments =
+            closed_segment_count_;
+        auto candidate_close_counts = segment_close_counts_;
+        std::vector<training::ProcessedTransitionEnvelope> envelopes;
+        std::string error;
+        bool preparation_ok = true;
+
+        for (auto& item : candidate.agents) {
+            auto& agent = item.second;
+            if (!agent.segment_open && !agent.has_pending_action &&
+                agent.segment_transitions.empty()) {
+                continue;
+            }
+            if (agent.segment_open &&
+                !agent.segment_transitions.empty()) {
+                const bool had_pending_action =
+                    agent.has_pending_action;
+                float bootstrap_value = 0.0f;
+                bool bootstrap_valid = true;
+                if (had_pending_action) {
+                    bootstrap_value = agent.pending_value;
+                    bootstrap_valid =
+                        std::isfinite(bootstrap_value);
+                } else {
+                    bootstrap_valid = InferPinnedValue(
+                        agent,
+                        agent.segment_transitions.back()
+                            .next_observation,
+                        bootstrap_value);
+                }
+                if (!bootstrap_valid ||
+                    !PrepareAgentSegmentClose(
+                        candidate, item.first,
+                        training::
+                            SEGMENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT,
+                        bootstrap_value, true,
+                        candidate_produced_transitions,
+                        candidate_produced_envelopes,
+                        candidate_produced_by_model, envelopes,
+                        candidate_close_counts, error)) {
+                    ++rollout_estimator_failure_count_;
+                    if (error.empty()) {
+                        error =
+                            "client recovery timeout has no finite pinned "
+                            "bootstrap";
+                    }
+                    preparation_ok = false;
+                    break;
+                }
+                ++candidate_closed_segments;
+                if (had_pending_action) {
+                    ++candidate_pending_actions_excluded;
+                    agent.has_pending_action = false;
+                    agent.pending_action_frame_id = -1;
+                    agent.pending_obs.clear();
+                }
+            } else {
+                DiscardAgentSegment(
+                    candidate, item.first,
+                    training::
+                        SEGMENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT,
+                    true, candidate_quarantined_transitions,
+                    candidate_pending_actions_excluded,
+                    candidate_closed_segments,
+                    candidate_close_counts);
+            }
+        }
+
+        if (!preparation_ok) {
+            for (auto& item : session->agents) {
+                DiscardAgentSegment(
+                    *session, item.first,
+                    training::
+                        SEGMENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT,
+                    true, quarantined_transition_count_,
+                    pending_action_excluded_count_,
+                    closed_segment_count_, segment_close_counts_);
+            }
+            session->episode_state =
+                SessionManager::EpisodeState::Aborted;
+            session->protocol_episode_state =
+                maze::EPISODE_STATE_ABORTED;
+            session->session_state = maze::SESSION_STATE_IDLE;
+            session->behavior_policy_scope =
+                BehaviorPolicyScope::Unspecified;
+            session->task_state = maze::TASK_STATE_STOPPING;
+            MarkDegraded(
+                "client recovery timeout segment close failed: " + error);
+            return false;
+        }
+
+        uint64_t reservation_id = 0;
+        const auto reservation =
+            sample_distributor_.ReserveEnqueueEnvelopeSet(
+                envelopes, reservation_id, error);
+        if (reservation ==
+            SampleDistributor::ReservationResult::kRetryableUnavailable) {
+            LOG_WARN(
+                "MazeService",
+                "Client recovery timeout output waits for SampleDistributor: session=%s cause=%s",
+                session_id.c_str(), error.c_str());
+            continue;
+        }
+        if (reservation ==
+            SampleDistributor::ReservationResult::kTerminalFault) {
+            MarkDegraded(
+                "client recovery timeout reservation failed: " + error);
+            return false;
+        }
+        const auto seal =
+            sample_distributor_.SealEnqueueEnvelopeSet(
+                reservation_id, error);
+        if (seal ==
+            SampleDistributor::SealResult::kRetryableUnavailable) {
+            LOG_WARN(
+                "MazeService",
+                "Client recovery timeout output seal waits: session=%s cause=%s",
+                session_id.c_str(), error.c_str());
+            continue;
+        }
+        if (seal ==
+            SampleDistributor::SealResult::kTerminalFault) {
+            MarkDegraded(
+                "client recovery timeout seal failed: " + error);
+            return false;
+        }
+        if (sample_distributor_.CommitEnqueueEnvelopeSet(
+                reservation_id, error) !=
+            SampleDistributor::CommitResult::kCommitted) {
+            MarkDegraded(
+                "client recovery timeout envelope commit failed: " +
+                error);
+            return false;
+        }
+
+        candidate.episode_state =
+            SessionManager::EpisodeState::Aborted;
+        candidate.protocol_episode_state =
+            maze::EPISODE_STATE_ABORTED;
+        candidate.session_state = maze::SESSION_STATE_IDLE;
+        candidate.behavior_policy_scope =
+            BehaviorPolicyScope::Unspecified;
+        candidate.evaluation_pinned_model_checksum.clear();
+        candidate.task_state = maze::TASK_STATE_STOPPING;
+        *session = std::move(candidate);
+        produced_unique_transitions_ =
+            candidate_produced_transitions;
+        produced_unique_envelopes_ =
+            candidate_produced_envelopes;
+        produced_transitions_by_model_ =
+            std::move(candidate_produced_by_model);
+        quarantined_transition_count_ =
+            candidate_quarantined_transitions;
+        pending_action_excluded_count_ =
+            candidate_pending_actions_excluded;
+        closed_segment_count_ = candidate_closed_segments;
+        segment_close_counts_ = std::move(candidate_close_counts);
+        episode_metrics_.AddExcluded(
+            maze::EPISODE_MODE_TRAINING, session->agents.size(),
+            maze::MAZE_TERMINATION_REASON_CHAIN_FAILURE);
+        LOG_WARN(
+            "MazeService",
+            "Client recovery timeout closed active Episode: session=%s episode=%s idle_ms=%lld",
+            session_id.c_str(), session->current_episode_id.c_str(),
+            static_cast<long long>(
+                now - session->last_valid_client_activity_unix_ms));
+    }
+    return true;
+}
+
 void MazeServiceImpl::ModelWatchLoop() {
     const auto poll_interval = std::chrono::milliseconds(
-        std::max(50, config_.model_distribution.poll_interval_ms));
+        config_.model_distribution.poll_interval_ms);
     std::string last_reported_watch_error;
     while (!model_watch_stop_.load()) {
+        RecoverExpiredClientSessions();
         bool has_pending_ack = false;
         {
             std::lock_guard<std::mutex> lock(mutex_);
@@ -981,7 +1204,7 @@ void MazeServiceImpl::ModelWatchLoop() {
                 }
             }
         }
-        TryActivateStagedModelForWatcher();
+        TryPromoteStagedModelForWatcher();
         bool has_pending_ack_after_activation = false;
         {
             std::lock_guard<std::mutex> lock(mutex_);
@@ -1098,8 +1321,23 @@ bool MazeServiceImpl::IsCoreInferenceReady() const {
 
 bool MazeServiceImpl::BeginShutdown() {
     StopModelWatcher();
+
     bool preexisting_service_fault = false;
     std::string preexisting_service_error;
+    bool close_preparation_ok = true;
+    std::string close_preparation_error;
+    std::vector<training::ProcessedTransitionEnvelope> envelopes;
+    std::unordered_map<std::string, SessionManager::Session>
+        candidate_sessions;
+    int64_t candidate_produced_transitions = 0;
+    int64_t candidate_produced_envelopes = 0;
+    std::unordered_map<ModelStep, int64_t> candidate_produced_by_model;
+    int64_t candidate_quarantined_transitions = 0;
+    int64_t candidate_pending_actions_excluded = 0;
+    int64_t candidate_closed_segments = 0;
+    std::unordered_map<training::SegmentCloseReason, int64_t>
+        candidate_close_counts;
+
     {
         std::lock_guard<std::mutex> lock(mutex_);
         if (shutdown_started_) {
@@ -1112,21 +1350,229 @@ bool MazeServiceImpl::BeginShutdown() {
         shutdown_completed_ = false;
         shutdown_succeeded_ = false;
         state_.store(training::AISERVER_STATE_DRAINING);
-        // EndEpisode uses this same lifecycle mutex. Closing admission and
-        // finalizing the metric source in this critical section guarantees
-        // that no successfully committed Episode fact can appear after the
-        // source-final boundary.
-        metric_events_.Finalize(NowMs());
+
+        candidate_produced_transitions = produced_unique_transitions_;
+        candidate_produced_envelopes = produced_unique_envelopes_;
+        candidate_produced_by_model = produced_transitions_by_model_;
+        candidate_quarantined_transitions =
+            quarantined_transition_count_;
+        candidate_pending_actions_excluded =
+            pending_action_excluded_count_;
+        candidate_closed_segments = closed_segment_count_;
+        candidate_close_counts = segment_close_counts_;
 
         for (const auto& session_id : session_mgr_.GetSessionIds()) {
-            SessionManager::Session* session =
-                session_mgr_.GetSession(session_id);
-            if (!session) continue;
-            for (auto& item : session->agents) {
-                int agent_id = item.first;
-                QuarantineAgentSamples(*session, agent_id);
+            auto* current = session_mgr_.GetSession(session_id);
+            if (!current) continue;
+            SessionManager::Session candidate = *current;
+            const bool training_episode =
+                config_.server.run_mode == aiserver_mode::kTraining &&
+                candidate.current_episode_mode ==
+                    maze::EPISODE_MODE_TRAINING;
+            for (auto& item : candidate.agents) {
+                auto& agent = item.second;
+                if (!training_episode) {
+                    agent.has_pending_action = false;
+                    agent.pending_action_frame_id = -1;
+                    agent.pending_obs.clear();
+                    continue;
+                }
+                if (!agent.segment_open && !agent.has_pending_action &&
+                    agent.segment_transitions.empty()) {
+                    continue;
+                }
+                if (agent.segment_open &&
+                    !agent.segment_transitions.empty()) {
+                    const bool had_pending_action =
+                        agent.has_pending_action;
+                    float bootstrap_value = 0.0f;
+                    bool bootstrap_valid = true;
+                    if (had_pending_action) {
+                        bootstrap_value = agent.pending_value;
+                        bootstrap_valid =
+                            std::isfinite(bootstrap_value);
+                    } else {
+                        bootstrap_valid = InferPinnedValue(
+                            agent,
+                            agent.segment_transitions.back()
+                                .next_observation,
+                            bootstrap_value);
+                    }
+                    std::string error;
+                    if (!bootstrap_valid ||
+                        !PrepareAgentSegmentClose(
+                            candidate, item.first,
+                            training::
+                                SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN,
+                            bootstrap_value, true,
+                            candidate_produced_transitions,
+                            candidate_produced_envelopes,
+                            candidate_produced_by_model, envelopes,
+                            candidate_close_counts, error)) {
+                        ++rollout_estimator_failure_count_;
+                        if (close_preparation_error.empty()) {
+                            close_preparation_error =
+                                bootstrap_valid
+                                    ? "shutdown Agent segment close failed: " +
+                                          error
+                                    : "shutdown Agent segment has no finite "
+                                      "pinned bootstrap";
+                        }
+                        close_preparation_ok = false;
+                        break;
+                    }
+                    ++candidate_closed_segments;
+                    if (had_pending_action) {
+                        ++candidate_pending_actions_excluded;
+                        agent.has_pending_action = false;
+                        agent.pending_action_frame_id = -1;
+                        agent.pending_obs.clear();
+                    }
+                } else {
+                    DiscardAgentSegment(
+                        candidate, item.first,
+                        training::
+                            SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN,
+                        true, candidate_quarantined_transitions,
+                        candidate_pending_actions_excluded,
+                        candidate_closed_segments,
+                        candidate_close_counts);
+                }
+            }
+            if (!close_preparation_ok) break;
+            if (candidate.episode_state ==
+                SessionManager::EpisodeState::Active) {
+                candidate.episode_state =
+                    SessionManager::EpisodeState::Aborted;
+                candidate.protocol_episode_state =
+                    maze::EPISODE_STATE_ABORTED;
+                candidate.session_state = maze::SESSION_STATE_IDLE;
+                candidate.behavior_policy_scope =
+                    BehaviorPolicyScope::Unspecified;
+                candidate.evaluation_pinned_model_checksum.clear();
+                candidate.task_state = maze::TASK_STATE_STOPPING;
+            }
+            candidate_sessions.emplace(
+                session_id, std::move(candidate));
+        }
+    }
+
+    bool close_transaction_committed =
+        config_.server.run_mode != aiserver_mode::kTraining ||
+        envelopes.empty();
+    if (config_.server.run_mode == aiserver_mode::kTraining &&
+        close_preparation_ok && !envelopes.empty()) {
+        const auto deadline =
+            std::chrono::steady_clock::now() +
+            std::chrono::milliseconds(
+                config_.sample_distributor.recovery_timeout_ms);
+        while (std::chrono::steady_clock::now() < deadline) {
+            uint64_t reservation_id = 0;
+            std::string error;
+            const auto reservation =
+                sample_distributor_.ReserveEnqueueEnvelopeSet(
+                    envelopes, reservation_id, error);
+            if (reservation ==
+                SampleDistributor::ReservationResult::kTerminalFault) {
+                close_preparation_error =
+                    "shutdown envelope reservation failed: " + error;
+                break;
+            }
+            if (reservation ==
+                SampleDistributor::ReservationResult::
+                    kRetryableUnavailable) {
+                close_preparation_error =
+                    error.empty()
+                        ? "shutdown envelope reservation is temporarily "
+                          "unavailable"
+                        : error;
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(50));
+                continue;
+            }
+
+            const auto seal =
+                sample_distributor_.SealEnqueueEnvelopeSet(
+                    reservation_id, error);
+            if (seal ==
+                SampleDistributor::SealResult::kTerminalFault) {
+                close_preparation_error =
+                    "shutdown envelope seal failed: " + error;
+                break;
+            }
+            if (seal ==
+                SampleDistributor::SealResult::
+                    kRetryableUnavailable) {
+                close_preparation_error =
+                    error.empty()
+                        ? "shutdown envelope seal is temporarily unavailable"
+                        : error;
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(50));
+                continue;
+            }
+
+            if (sample_distributor_.CommitEnqueueEnvelopeSet(
+                    reservation_id, error) !=
+                SampleDistributor::CommitResult::kCommitted) {
+                close_preparation_error =
+                    "shutdown sealed envelope commit failed: " + error;
+                break;
+            }
+            close_transaction_committed = true;
+            close_preparation_error.clear();
+            break;
+        }
+        if (!close_transaction_committed &&
+            close_preparation_error.empty()) {
+            close_preparation_error =
+                "shutdown envelope recovery deadline expired";
+        }
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        if (close_preparation_ok && close_transaction_committed) {
+            for (auto& item : candidate_sessions) {
+                auto* current = session_mgr_.GetSession(item.first);
+                if (current) *current = std::move(item.second);
+            }
+            produced_unique_transitions_ =
+                candidate_produced_transitions;
+            produced_unique_envelopes_ =
+                candidate_produced_envelopes;
+            produced_transitions_by_model_ =
+                std::move(candidate_produced_by_model);
+            quarantined_transition_count_ =
+                candidate_quarantined_transitions;
+            pending_action_excluded_count_ =
+                candidate_pending_actions_excluded;
+            closed_segment_count_ = candidate_closed_segments;
+            segment_close_counts_ =
+                std::move(candidate_close_counts);
+        } else {
+            quarantined_envelope_count_ +=
+                static_cast<int64_t>(envelopes.size());
+            for (const auto& session_id :
+                 session_mgr_.GetSessionIds()) {
+                auto* session = session_mgr_.GetSession(session_id);
+                if (!session) continue;
+                for (auto& item : session->agents) {
+                    DiscardAgentSegment(
+                        *session, item.first,
+                        training::
+                            SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN,
+                        true, quarantined_transition_count_,
+                        pending_action_excluded_count_,
+                        closed_segment_count_,
+                        segment_close_counts_);
+                }
+            }
+            if (!close_preparation_error.empty()) {
+                last_error_ = close_preparation_error;
             }
         }
+        metric_events_.Finalize();
     }
 
     bool sender_drained = true;
@@ -1134,6 +1580,7 @@ bool MazeServiceImpl::BeginShutdown() {
         sender_drained = sample_distributor_.StopAndDrain();
     }
     const bool metric_events_settled =
+        config_.server.run_mode != aiserver_mode::kTraining ||
         metric_events_.WaitForFinalAcknowledgement(
             std::chrono::seconds(10));
     if (!metric_events_settled) {
@@ -1146,136 +1593,164 @@ bool MazeServiceImpl::BeginShutdown() {
     const bool workspace_released =
         ReleaseTrainingWorkspaceLease(workspace_release_error);
 
-    {
-        std::lock_guard<std::mutex> lock(mutex_);
-        const int64_t remaining_samples = CountCachedSamples();
-        const int64_t remaining_batches = CountCachedFragments();
-        if (remaining_samples > 0 || remaining_batches > 0) {
-            sample_distributor_.RecordFinalDrop(
-                remaining_samples, remaining_batches,
-                "session cache remained after drain deadline");
-        }
-        for (const auto& session_id : session_mgr_.GetSessionIds()) {
-            SessionManager::Session* session =
-                session_mgr_.GetSession(session_id);
-            if (!session) continue;
-            session->agent_sample_caches.clear();
-            session->pending_sample_batches.clear();
-        }
-        const auto sender = sample_distributor_.GetSnapshot();
-        const bool shutdown_accounting_fault =
-            state_.load() == training::AISERVER_STATE_DEGRADED;
-        const std::string shutdown_accounting_error = last_error_;
-        const bool model_state_settled =
-            !model_ack_pending_ &&
-            model_state_.load() != training::MODEL_STATE_FAILED &&
-            (!started_ || model_state_.load() == training::MODEL_STATE_READY);
-        shutdown_succeeded_ =
-            !preexisting_service_fault && !shutdown_accounting_fault &&
-            model_state_settled && sender_drained && metric_events_settled &&
-            workspace_released &&
-            !sender.degraded &&
-            !sender.terminal_fault &&
-            sender.queue_fragments == 0 &&
-            sender.unresolved_push_outcome_unknown_samples == 0 &&
-            sender.unresolved_push_outcome_unknown_batches == 0 &&
-            sender.final_drop_unique_samples == 0 &&
-            sender.final_drop_unique_batches == 0;
-        shutdown_completed_ = true;
-        if (shutdown_succeeded_) {
-            state_.store(training::AISERVER_STATE_STOPPED);
-        } else {
-            std::ostringstream error;
-            error << "AIServer shutdown sample disposition failed: drained="
-                  << (sender_drained ? 1 : 0)
-                  << " outbound_samples=" << sender.queue_samples
-                  << " outbound_batches=" << sender.queue_fragments
-                  << " unresolved_push_samples="
-                  << sender.unresolved_push_outcome_unknown_samples
-                  << " unresolved_push_batches="
-                  << sender.unresolved_push_outcome_unknown_batches
-                  << " final_drop_samples="
-                  << sender.final_drop_unique_samples
-                  << " final_drop_batches="
-                  << sender.final_drop_unique_batches
-                  << " model_ack_pending=" << (model_ack_pending_ ? 1 : 0)
-                  << " model_state="
-                  << static_cast<int>(model_state_.load())
-                  << " metric_final_ack="
-                  << (metric_events_settled ? 1 : 0)
-                  << " workspace_released="
-                  << (workspace_released ? 1 : 0);
-            const std::string& preserved_error =
-                !shutdown_accounting_error.empty()
-                    ? shutdown_accounting_error
-                    : preexisting_service_error;
-            if (!preserved_error.empty()) {
-                error << " cause=" << preserved_error;
-            }
-            if (!workspace_release_error.empty()) {
-                error << " workspace_error=" << workspace_release_error;
-            }
-            last_error_ = error.str();
-            state_.store(training::AISERVER_STATE_DEGRADED);
-            LOG_ERROR("MazeService", "%s", last_error_.c_str());
-        }
-        return shutdown_succeeded_;
+    std::lock_guard<std::mutex> lock(mutex_);
+    const auto sender = sample_distributor_.GetSnapshot();
+    const bool shutdown_accounting_fault =
+        !close_preparation_ok || !close_transaction_committed ||
+        state_.load() == training::AISERVER_STATE_DEGRADED;
+    const std::string shutdown_accounting_error = last_error_;
+    const bool model_state_settled =
+        !model_ack_pending_ &&
+        model_state_.load() != training::MODEL_STATE_FAILED &&
+        (!started_ ||
+         model_state_.load() == training::MODEL_STATE_READY);
+    shutdown_succeeded_ =
+        !preexisting_service_fault && !shutdown_accounting_fault &&
+        model_state_settled && sender_drained &&
+        metric_events_settled && workspace_released &&
+        !sender.degraded && !sender.terminal_fault &&
+        sender.queue_envelopes == 0 &&
+        sender.queue_transitions == 0 &&
+        sender.unresolved_push_outcome_unknown_transitions == 0 &&
+        sender.unresolved_push_outcome_unknown_envelopes == 0 &&
+        sender.final_drop_unique_transitions == 0 &&
+        sender.final_drop_unique_envelopes == 0 &&
+        CountCachedTransitions() == 0 &&
+        CountCachedSegments() == 0;
+    shutdown_completed_ = true;
+    if (shutdown_succeeded_) {
+        state_.store(training::AISERVER_STATE_STOPPED);
+        return true;
     }
+
+    std::ostringstream error;
+    error << "AIServer shutdown did not settle: drained="
+          << (sender_drained ? 1 : 0)
+          << " outbound_transitions=" << sender.queue_transitions
+          << " outbound_envelopes=" << sender.queue_envelopes
+          << " cached_transitions=" << CountCachedTransitions()
+          << " cached_segments=" << CountCachedSegments()
+          << " unresolved_push_transitions="
+          << sender.unresolved_push_outcome_unknown_transitions
+          << " unresolved_push_envelopes="
+          << sender.unresolved_push_outcome_unknown_envelopes
+          << " final_drop_transitions="
+          << sender.final_drop_unique_transitions
+          << " final_drop_envelopes="
+          << sender.final_drop_unique_envelopes
+          << " model_ack_pending=" << (model_ack_pending_ ? 1 : 0)
+          << " model_state=" << static_cast<int>(model_state_.load())
+          << " metric_final_ack="
+          << (metric_events_settled ? 1 : 0)
+          << " workspace_released="
+          << (workspace_released ? 1 : 0);
+    const std::string& preserved_error =
+        !shutdown_accounting_error.empty()
+            ? shutdown_accounting_error
+            : preexisting_service_error;
+    if (!preserved_error.empty()) {
+        error << " cause=" << preserved_error;
+    }
+    if (!workspace_release_error.empty()) {
+        error << " workspace_error=" << workspace_release_error;
+    }
+    last_error_ = error.str();
+    state_.store(training::AISERVER_STATE_DEGRADED);
+    LOG_ERROR("MazeService", "%s", last_error_.c_str());
+    return false;
+}
+bool MazeServiceImpl::EnsureAgentSegmentPin(
+    SessionManager::Session& session,
+    SessionManager::AgentRuntime& agent,
+    int agent_id,
+    uint64_t& next_segment_sequence,
+    int64_t& per_agent_activation_count,
+    bool& latest_model_used,
+    std::string& error) {
+    if (agent.segment_open) {
+        if (!agent.pinned_model.HasModelIdentity() ||
+            !agent.pinned_prepared_model.valid() ||
+            agent.segment_id.empty()) {
+            error = "open Agent segment has incomplete pinned model state";
+            return false;
+        }
+        return true;
+    }
+    if (!model_manifest_.HasModelIdentity()) {
+        error = "latest prepared training model has no identity";
+        return false;
+    }
+    auto prepared = onnx_inferencer_.SnapshotPreparedModel();
+    if (!prepared.valid() ||
+        prepared.model_path != model_manifest_.model_path) {
+        error = "latest model manifest and prepared ORT session disagree";
+        return false;
+    }
+    const auto& profile = model_manifest_.wire.rollout_estimator_profile();
+    if (profile.tmax() == 0 ||
+        profile.profile_digest().hex().empty()) {
+        error = "latest model has no executable rollout estimator profile";
+        return false;
+    }
+
+    std::ostringstream segment_id;
+    segment_id << producer_instance_id_ << '/' << session.session_id << '/'
+               << session.current_episode_id << "/agent-" << agent_id
+               << "/segment-" << next_segment_sequence;
+    ++next_segment_sequence;
+    if (next_segment_sequence == 0) ++next_segment_sequence;
+    agent.segment_open = true;
+    agent.segment_id = segment_id.str();
+    agent.pinned_model = model_manifest_;
+    agent.pinned_prepared_model = std::move(prepared);
+    agent.segment_transitions.clear();
+    ++per_agent_activation_count;
+    latest_model_used = true;
+    LOG_INFO("MazeService",
+             "Agent segment 激活: session=%s episode=%s agent_id=%d segment=%s model_step=%llu",
+             session.session_id.c_str(), session.current_episode_id.c_str(),
+             agent_id, agent.segment_id.c_str(),
+             static_cast<unsigned long long>(
+                 agent.pinned_model.model_step));
+    error.clear();
+    return true;
 }
 
-bool MazeServiceImpl::AtLocalFragmentBoundary(
-    const SessionManager::Session* candidate_session) {
-    std::vector<FragmentBoundaryState> agents;
-    for (const auto& session_id : session_mgr_.GetSessionIds()) {
-        const SessionManager::Session* session =
-            candidate_session &&
-                    candidate_session->session_id == session_id
-                ? candidate_session
-                : session_mgr_.GetSession(session_id);
-        if (!session ||
-            session->episode_state != SessionManager::EpisodeState::Active) {
-            continue;
-        }
-        for (const auto& item : session->agents) {
-            const int agent_id = item.first;
-            const auto& agent = item.second;
-            const auto cache = session->agent_sample_caches.find(agent_id);
-            agents.push_back(FragmentBoundaryState{
-                agent.has_pending_action,
-                cache != session->agent_sample_caches.end() &&
-                    !cache->second.empty(),
-                session->pending_sample_batches.find(agent_id) !=
-                    session->pending_sample_batches.end(),
-            });
-        }
+bool MazeServiceImpl::InferPinnedValue(
+    const SessionManager::AgentRuntime& agent,
+    const std::vector<float>& observation,
+    float& value) {
+    if (!agent.segment_open || !agent.pinned_prepared_model.valid() ||
+        static_cast<int>(observation.size()) !=
+            config_.model.expected_obs_dim) {
+        MarkDegraded("pinned bootstrap inference inputs are incomplete");
+        return false;
     }
-    return AllLocalAgentsAtFragmentBoundary(agents);
-}
-
-bool MazeServiceImpl::ActiveEpisodesAllowModelActivation() {
-    std::vector<ActiveBehaviorPolicyState> episodes;
-    for (const auto& session_id : session_mgr_.GetSessionIds()) {
-        const SessionManager::Session* session =
-            session_mgr_.GetSession(session_id);
-        if (!session) continue;
-        episodes.push_back(ActiveBehaviorPolicyState{
-            session->episode_state == SessionManager::EpisodeState::Active,
-            session->behavior_policy_scope,
-        });
+    std::vector<float> logits;
+    const auto start = std::chrono::steady_clock::now();
+    const bool inferred = onnx_inferencer_.InferPrepared(
+        agent.pinned_prepared_model, observation,
+        static_cast<int>(observation.size()), logits, value);
+    const double latency_ms = ElapsedMs(start);
+    ++inference_count_;
+    inference_latency_sum_ms_ += latency_ms;
+    inference_latency_max_ms_ =
+        std::max(inference_latency_max_ms_, latency_ms);
+    std::string output_error;
+    if (!inferred || !ValidateEpisodeModelOutput(
+                         logits, config_.model.expected_action_dim, value,
+                         output_error)) {
+        MarkDegraded("pinned bootstrap inference failed: " + output_error);
+        return false;
     }
-    return ActiveEpisodesAllowFragmentPolicySwitch(episodes);
-}
-
-bool MazeServiceImpl::CanActivateStagedModel(
-    const SessionManager::Session* candidate_session) {
-    return staged_model_manifest_.HasModelIdentity() &&
-           staged_prepared_model_.valid() &&
-           ActiveEpisodesAllowModelActivation() &&
-           AtLocalFragmentBoundary(candidate_session);
+    return true;
 }
 
 bool MazeServiceImpl::ActivateStagedModel() {
-    if (!CanActivateStagedModel()) return true;
+    if (!staged_model_manifest_.HasModelIdentity() ||
+        !staged_prepared_model_.valid()) {
+        return true;
+    }
 
     std::string error;
     if (!ValidateStagedModelProgress(
@@ -1311,6 +1786,14 @@ bool MazeServiceImpl::ActivateStagedModel() {
         return false;
     }
 
+    if (ack == ModelDistributorClient::AckDisposition::Uncertain) {
+        RecordPendingModelAck(candidate, ack_authority, ack_error);
+        return false;
+    }
+    if (model_manifest_.HasModelIdentity() &&
+        !latest_prepared_used_by_agent_) {
+        ++superseded_without_agent_activation_count_;
+    }
     staged_prepared_model_.model_path = candidate.model_path;
     onnx_inferencer_.ActivatePreparedModel(
         std::move(staged_prepared_model_));
@@ -1318,34 +1801,13 @@ bool MazeServiceImpl::ActivateStagedModel() {
     staged_model_manifest_ = ModelManifest{};
     staged_prepared_model_ = OnnxInferencer::PreparedModel{};
     ++model_switch_count_;
-    if (ack == ModelDistributorClient::AckDisposition::Uncertain) {
-        RecordPendingModelAck(candidate, ack_authority, ack_error);
-        return true;
-    }
+    latest_prepared_used_by_agent_ = false;
     model_state_.store(training::MODEL_STATE_READY);
     LOG_INFO(
-        "MazeService", "模型切换完成: model_step=%llu sha256=%s",
+        "MazeService", "模型已成为 latest-prepared: model_step=%llu sha256=%s",
         static_cast<unsigned long long>(model_manifest_.model_step),
         model_manifest_.sha256.c_str());
     return true;
-}
-
-void MazeServiceImpl::RefreshFragmentSampleTarget(
-    const SessionManager::Session& session) {
-    bool all_agents_active = !session.agents.empty();
-    for (const auto& item : session.agents) {
-        if (item.second.done_collected) {
-            all_agents_active = false;
-            break;
-        }
-    }
-    current_fragment_samples_ = SelectPerAgentFragmentSamples(
-        produced_unique_samples_,
-        static_cast<int64_t>(config_.task.agent_num) *
-            static_cast<int64_t>(config_.sample_distributor.fragment_samples),
-        config_.task.agent_num,
-        config_.sample_distributor.fragment_samples,
-        all_agents_active);
 }
 
 void MazeServiceImpl::InitAgentSolver(
@@ -1366,9 +1828,6 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
     session.episode_state = SessionManager::EpisodeState::Active;
     session.last_frame_id = -1;
     session.last_actions.clear();
-    session.agent_sample_caches.clear();
-    session.pending_sample_batches.clear();
-
     for (auto& item : session.agents) {
         auto& agent = item.second;
         agent.prev_grid_x = -1;
@@ -1380,16 +1839,13 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
         agent.pending_action_frame_id = -1;
         agent.pending_log_prob = 0.0f;
         agent.pending_value = 0.0f;
-        agent.pending_model_step = 0;
-        agent.pending_model_checksum.clear();
-        agent.pending_model_lineage_id.clear();
-        agent.pending_model_manifest_digest.clear();
         agent.pending_obs.clear();
-        agent.fragment_model_step = 0;
-        agent.fragment_model_checksum.clear();
-        agent.fragment_model_lineage_id.clear();
-        agent.fragment_model_manifest_digest.clear();
-        agent.fragment_first_action_frame_id = -1;
+        agent.segment_open = false;
+        agent.segment_id.clear();
+        agent.pinned_model = ModelManifest{};
+        agent.pinned_prepared_model = OnnxInferencer::PreparedModel{};
+        agent.segment_transitions.clear();
+        agent.last_completed_transition_at_unix_ms = 0;
         agent.visited.clear();
         agent.visited.insert(
             session.start_gy * session.grid_cols + session.start_gx);
@@ -1407,6 +1863,7 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
         agent.blocked_move_count = 0;
         agent.observation_done = false;
         agent.last_observation_frame_id = -1;
+        agent.terminal_frame_id = -1;
         agent.episode_return = 0.0;
         agent.episode_transition_count = 0;
         agent.episode_behavior_model_seen = false;
@@ -1417,35 +1874,33 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
             maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
         agent.reward_component_sums.clear();
     }
-    RefreshFragmentSampleTarget(session);
-}
-
-bool MazeServiceImpl::ChooseModelAction(
-    SessionManager::Session& session,
-    SessionManager::AgentRuntime& agent,
-    int gx,
-    int gy,
-    int64_t action_frame_id,
-    int& action,
-    float& log_prob,
-    float& value) {
-    return PrepareModelAction(
-        session, agent, gx, gy, action_frame_id, nullptr,
-        model_manifest_, action_rng_, action, log_prob, value);
 }
 
 bool MazeServiceImpl::PrepareModelAction(
     SessionManager::Session& session,
     SessionManager::AgentRuntime& agent,
+    int agent_id,
     int gx,
     int gy,
     int64_t action_frame_id,
-    const OnnxInferencer::PreparedModel* prepared_model,
-    const ModelManifest& behavior_model,
+    uint64_t& next_segment_sequence,
+    int64_t& per_agent_activation_count,
+    bool& latest_model_used,
     std::mt19937& action_rng,
     int& action,
     float& log_prob,
     float& value) {
+    const bool training_episode =
+        session.current_episode_mode == maze::EPISODE_MODE_TRAINING;
+    std::string pin_error;
+    if (training_episode &&
+        !EnsureAgentSegmentPin(
+            session, agent, agent_id, next_segment_sequence,
+            per_agent_activation_count, latest_model_used, pin_error)) {
+        MarkDegraded("Agent segment pin failed: " + pin_error);
+        return false;
+    }
+
     std::vector<float> obs;
     std::string observation_error;
     if (!MazeObservation::Build(
@@ -1459,14 +1914,14 @@ bool MazeServiceImpl::PrepareModelAction(
     }
     std::vector<float> logits;
 
-    auto start = std::chrono::steady_clock::now();
-    const bool inferred = prepared_model
+    const auto start = std::chrono::steady_clock::now();
+    const bool inferred = training_episode
         ? onnx_inferencer_.InferPrepared(
-              *prepared_model, obs, static_cast<int>(obs.size()),
-              logits, value)
+              agent.pinned_prepared_model, obs,
+              static_cast<int>(obs.size()), logits, value)
         : onnx_inferencer_.Infer(
               obs, static_cast<int>(obs.size()), logits, value);
-    double latency_ms = ElapsedMs(start);
+    const double latency_ms = ElapsedMs(start);
     ++inference_count_;
     inference_latency_sum_ms_ += latency_ms;
     inference_latency_max_ms_ =
@@ -1502,63 +1957,9 @@ bool MazeServiceImpl::PrepareModelAction(
     agent.pending_action_frame_id = action_frame_id;
     agent.pending_log_prob = log_prob;
     agent.pending_value = value;
-    agent.pending_model_step = behavior_model.model_step;
-    agent.pending_model_checksum = behavior_model.sha256;
-    agent.pending_model_lineage_id = behavior_model.model_lineage_id;
-    agent.pending_model_manifest_digest = behavior_model.manifest_digest;
     agent.has_pending_action = true;
     agent.prev_grid_x = gx;
     agent.prev_grid_y = gy;
-    return true;
-}
-
-bool MazeServiceImpl::InferStateValue(
-    const SessionManager::Session& session,
-    const SessionManager::AgentRuntime& agent,
-    int gx,
-    int gy,
-    int64_t episode_step,
-    float& value) {
-    return PrepareStateValue(
-        session, agent, gx, gy, episode_step, nullptr, value);
-}
-
-bool MazeServiceImpl::PrepareStateValue(
-    const SessionManager::Session& session,
-    const SessionManager::AgentRuntime& agent,
-    int gx,
-    int gy,
-    int64_t episode_step,
-    const OnnxInferencer::PreparedModel* prepared_model,
-    float& value) {
-    std::vector<float> obs;
-    std::string observation_error;
-    if (!MazeObservation::Build(
-            session, agent, gx, gy, episode_step,
-            config_.observation.ray_max_range,
-            config_.model.expected_obs_dim,
-            obs, observation_error)) {
-        MarkDegraded("maze.observation.v3 bootstrap construction failed: " +
-                     observation_error);
-        return false;
-    }
-    std::vector<float> probabilities;
-    auto start = std::chrono::steady_clock::now();
-    const bool inferred = prepared_model
-        ? onnx_inferencer_.InferPrepared(
-              *prepared_model, obs, static_cast<int>(obs.size()),
-              probabilities, value)
-        : onnx_inferencer_.Infer(
-              obs, static_cast<int>(obs.size()), probabilities, value);
-    const double latency_ms = ElapsedMs(start);
-    ++inference_count_;
-    inference_latency_sum_ms_ += latency_ms;
-    inference_latency_max_ms_ =
-        std::max(inference_latency_max_ms_, latency_ms);
-    if (!inferred || !std::isfinite(value)) {
-        MarkDegraded("ONNX bootstrap value inference failed");
-        return false;
-    }
     return true;
 }
 
@@ -1570,8 +1971,6 @@ bool MazeServiceImpl::FinalizePendingTransition(
     bool is_done,
     maze::MazeTerminationReason reason,
     bool collect_training_sample,
-    int64_t& produced_unique_samples,
-    std::unordered_map<ModelStep, int64_t>& produced_samples_by_model,
     std::string& error) {
     auto agent_it = session.agents.find(agent_id);
     if (agent_it == session.agents.end()) {
@@ -1580,24 +1979,15 @@ bool MazeServiceImpl::FinalizePendingTransition(
     }
     auto& agent = agent_it->second;
     if (!agent.has_pending_action) return true;
-    const auto cache_it = session.agent_sample_caches.find(agent_id);
-    const bool starts_new_fragment =
-        collect_training_sample &&
-        (cache_it == session.agent_sample_caches.end() ||
-         cache_it->second.empty());
-    if (collect_training_sample && !starts_new_fragment &&
-        (agent.fragment_model_step != agent.pending_model_step ||
-         agent.fragment_model_checksum != agent.pending_model_checksum ||
-         agent.fragment_model_lineage_id != agent.pending_model_lineage_id ||
-         agent.fragment_model_manifest_digest !=
-             agent.pending_model_manifest_digest)) {
-        error = "fragment contains mixed behavior models";
-        return false;
-    }
-
     RewardDetail reward;
-    training::Sample sample;
+    SessionManager::RawRolloutTransition transition;
     if (collect_training_sample) {
+        if (!agent.segment_open ||
+            !agent.pinned_model.HasModelIdentity() ||
+            !agent.pinned_prepared_model.valid()) {
+            error = "training action result has no pinned Agent segment";
+            return false;
+        }
         reward = MazeReward::Calculate(
             session, agent_id, gx, gy, is_done, reason);
         if (!reward.valid) {
@@ -1616,47 +2006,33 @@ bool MazeServiceImpl::FinalizePendingTransition(
                     observation_error;
             return false;
         }
-        const std::vector<training::Sample> empty_fragment;
-        const auto& fragment =
-            cache_it == session.agent_sample_caches.end()
-                ? empty_fragment
-                : cache_it->second;
-        if (!BuildTrainingSample(
-                agent, next_observation, reward, is_done, reason,
+        if (!BuildRawRolloutTransition(
+                agent, next_observation, reward,
                 config_.model.expected_obs_dim,
-                config_.model.expected_action_dim, fragment, sample,
-                error)) {
-            error = "training sample continuity is invalid: " + error;
+                config_.model.expected_action_dim, transition, error)) {
+            error = "training transition continuity is invalid: " + error;
             return false;
         }
     }
 
     // Commit only after all workload-specific validation has succeeded.
-    // Reward V4 and training fragments belong exclusively to the training
+    // Reward V4 and R-PIN transitions belong exclusively to the training
     // workload. Standalone evaluation advances inference/lifecycle state only.
-    if (starts_new_fragment) {
-        agent.fragment_model_step = agent.pending_model_step;
-        agent.fragment_model_checksum = agent.pending_model_checksum;
-        agent.fragment_model_lineage_id = agent.pending_model_lineage_id;
-        agent.fragment_model_manifest_digest =
-            agent.pending_model_manifest_digest;
-        agent.fragment_first_action_frame_id = agent.pending_action_frame_id;
-    }
     if (collect_training_sample) {
-        if (agent.pending_model_lineage_id.empty()) {
+        if (agent.pinned_model.model_lineage_id.empty()) {
             error = "training transition behavior model identity is incomplete";
             return false;
         }
-        const ModelStep behavior_step = agent.pending_model_step;
+        const ModelStep behavior_step = agent.pinned_model.model_step;
         if (!agent.episode_behavior_model_seen) {
             agent.episode_behavior_model_seen = true;
             agent.minimum_episode_behavior_model_step = behavior_step;
             agent.maximum_episode_behavior_model_step = behavior_step;
             agent.episode_behavior_model_lineage_id =
-                agent.pending_model_lineage_id;
+                agent.pinned_model.model_lineage_id;
         } else {
             if (agent.episode_behavior_model_lineage_id !=
-                agent.pending_model_lineage_id) {
+                agent.pinned_model.model_lineage_id) {
                 error = "training Episode contains mixed model lineages";
                 return false;
             }
@@ -1680,234 +2056,231 @@ bool MazeServiceImpl::FinalizePendingTransition(
         agent.final_termination_reason = reason;
     }
     if (collect_training_sample) {
-        auto& cache = session.agent_sample_caches[agent_id];
-        cache.push_back(std::move(sample));
-        ++produced_unique_samples;
-        ++produced_samples_by_model[agent.pending_model_step];
+        agent.last_completed_transition_at_unix_ms =
+            transition.created_at_unix_ms;
+        agent.segment_transitions.push_back(std::move(transition));
     }
     agent.has_pending_action = false;
     agent.pending_action_frame_id = -1;
-    agent.pending_model_step = 0;
-    agent.pending_model_checksum.clear();
-    agent.pending_model_lineage_id.clear();
-    agent.pending_model_manifest_digest.clear();
     agent.pending_obs.clear();
 
     error.clear();
     return true;
 }
 
-void MazeServiceImpl::FillSampleBatchMetadata(
-    training::SampleBatch& batch,
-    const SessionManager::Session& session,
-    int agent_id,
-    maze::MazeTerminationReason,
-    uint64_t sequence) {
-    const auto agent_it = session.agents.find(agent_id);
-    if (agent_it == session.agents.end()) return;
-    const auto& agent = agent_it->second;
-    batch.set_actor_session_id(session.session_id);
-    batch.set_trajectory_id(session.current_episode_id);
-    batch.set_actor_id(static_cast<uint32_t>(agent_id));
-    batch.set_fragment_sequence(sequence);
-    batch.set_fragment_id(static_cast<uint32_t>(
-        sequence % std::numeric_limits<uint32_t>::max()));
-    auto* policy = batch.mutable_behavior_policy();
-    policy->set_model_lineage_id(agent.fragment_model_lineage_id);
-    policy->set_model_step(
-        agent.fragment_model_step);
-    policy->set_distribution_schema_id(
-        config_.policy.distribution_schema_id);
-    FillDigest(config_.policy.policy_spec_digest,
-               policy->mutable_policy_spec_digest());
-    FillTrainingSemantics(config_, batch.mutable_training_semantics());
-    aiserver_contract::FillSampleProducerIdentity(
-        producer_instance_id_, producer_lifecycle_epoch_,
-        batch.mutable_producer());
-    FillContract(config_, batch.mutable_contract());
-    batch.set_created_at_unix_ms(NowMs());
-
-    std::ostringstream batch_id;
-    batch_id << producer_instance_id_ << "/"
-             << session.session_id << "/"
-             << session.current_episode_id << "/"
-             << agent_id << "/" << sequence;
-    batch.set_batch_id(batch_id.str());
-}
-
-bool MazeServiceImpl::FlushAgentSamples(
+bool MazeServiceImpl::PrepareAgentSegmentClose(
     SessionManager::Session& session,
     int agent_id,
-    bool is_episode_end,
-    maze::MazeTerminationReason reason,
+    training::SegmentCloseReason reason,
     float bootstrap_value,
-    bool bootstrap_valid) {
-    auto& cache = session.agent_sample_caches[agent_id];
-    if (cache.empty()) return true;
-    auto agent_it = session.agents.find(agent_id);
-    if (agent_it == session.agents.end()) return false;
-    auto& agent = agent_it->second;
-
-    auto pending_it = session.pending_sample_batches.find(agent_id);
-    if (pending_it == session.pending_sample_batches.end()) {
-        training::SampleBatch batch;
-        batch.set_trajectory_end(is_episode_end);
-        FillSampleBatchMetadata(
-            batch, session, agent_id, reason,
-            next_fragment_seq_.fetch_add(1));
-        batch.set_bootstrap_value(bootstrap_value);
-        batch.set_bootstrap_valid(bootstrap_valid);
-        batch.set_first_action_step(static_cast<uint64_t>(
-            agent.fragment_first_action_frame_id));
-        batch.set_last_action_step(cache.back().action_step());
-        for (const auto& sample : cache) {
-            *batch.add_samples() = sample;
-        }
-        training::SampleBatch digest_source = batch;
-        digest_source.clear_payload_digest();
-        batch.mutable_payload_digest()->set_algorithm(
-            common::DIGEST_ALGORITHM_SHA256);
-        batch.mutable_payload_digest()->set_hex(
-            Sha256Bytes(DeterministicBytes(digest_source)));
-        if (batch.payload_digest().hex().empty()) {
-            MarkDegraded("failed to calculate sample payload digest");
-            return false;
-        }
-        pending_it =
-            session.pending_sample_batches.emplace(agent_id, std::move(batch))
-                .first;
-        ++produced_unique_batches_;
-    }
-
-    auto start = std::chrono::steady_clock::now();
-    bool enqueued = sample_distributor_.Enqueue(pending_it->second);
-    double latency_ms = ElapsedMs(start);
-    ++enqueue_count_;
-    enqueue_latency_sum_ms_ += latency_ms;
-    enqueue_latency_max_ms_ = std::max(enqueue_latency_max_ms_, latency_ms);
-    if (!enqueued) {
-        auto sender = sample_distributor_.GetSnapshot();
-        MarkDegraded(sender.last_error.empty()
-                         ? "failed to enqueue sample fragment"
-                         : sender.last_error);
-        return false;
-    }
-
-    cache.clear();
-    session.pending_sample_batches.erase(pending_it);
-    agent.fragment_model_step = 0;
-    agent.fragment_model_checksum.clear();
-    agent.fragment_model_lineage_id.clear();
-    agent.fragment_model_manifest_digest.clear();
-    agent.fragment_first_action_frame_id = -1;
-    return true;
-}
-
-bool MazeServiceImpl::PrepareAgentSampleFlush(
-    SessionManager::Session& session,
-    int agent_id,
-    bool is_episode_end,
-    maze::MazeTerminationReason reason,
-    float bootstrap_value,
-    bool bootstrap_valid,
-    uint64_t& next_fragment_sequence,
-    int64_t& produced_unique_batches,
-    std::vector<training::SampleBatch>& batches,
+    bool bootstrap_applied,
+    int64_t& produced_unique_transitions,
+    int64_t& produced_unique_envelopes,
+    std::unordered_map<ModelStep, int64_t>& produced_by_model,
+    std::vector<training::ProcessedTransitionEnvelope>& envelopes,
+    std::unordered_map<training::SegmentCloseReason, int64_t>& close_counts,
     std::string& error) {
-    auto& cache = session.agent_sample_caches[agent_id];
-    if (cache.empty()) return true;
     auto agent_it = session.agents.find(agent_id);
     if (agent_it == session.agents.end()) {
-        error = "sample flush Agent identity is unknown";
+        error = "segment close Agent identity is unknown";
         return false;
     }
     auto& agent = agent_it->second;
-
-    auto pending_it = session.pending_sample_batches.find(agent_id);
-    if (pending_it == session.pending_sample_batches.end()) {
-        training::SampleBatch batch;
-        batch.set_trajectory_end(is_episode_end);
-        FillSampleBatchMetadata(
-            batch, session, agent_id, reason, next_fragment_sequence);
-        batch.set_bootstrap_value(bootstrap_value);
-        batch.set_bootstrap_valid(bootstrap_valid);
-        batch.set_first_action_step(static_cast<uint64_t>(
-            agent.fragment_first_action_frame_id));
-        batch.set_last_action_step(cache.back().action_step());
-        for (const auto& sample : cache) {
-            *batch.add_samples() = sample;
-        }
-        training::SampleBatch digest_source = batch;
-        digest_source.clear_payload_digest();
-        batch.mutable_payload_digest()->set_algorithm(
-            common::DIGEST_ALGORITHM_SHA256);
-        batch.mutable_payload_digest()->set_hex(
-            Sha256Bytes(DeterministicBytes(digest_source)));
-        if (batch.payload_digest().hex().empty()) {
-            error = "failed to calculate sample payload digest";
-            return false;
-        }
-        ++next_fragment_sequence;
-        ++produced_unique_batches;
-        pending_it = session.pending_sample_batches
-                         .emplace(agent_id, std::move(batch))
-                         .first;
+    if (!agent.segment_open || agent.segment_transitions.empty() ||
+        agent.segment_id.empty() ||
+        !agent.pinned_model.HasModelIdentity() ||
+        !agent.pinned_prepared_model.valid()) {
+        error = "cannot close an empty or unpinned Agent segment";
+        return false;
+    }
+    const bool terminal =
+        reason == training::SEGMENT_CLOSE_REASON_GOAL ||
+        reason == training::SEGMENT_CLOSE_REASON_TIME_LIMIT;
+    if ((terminal && (bootstrap_applied || bootstrap_value != 0.0f)) ||
+        (!terminal && !bootstrap_applied) ||
+        !std::isfinite(bootstrap_value)) {
+        error = "segment close bootstrap facts contradict the close reason";
+        return false;
     }
 
-    batches.push_back(pending_it->second);
-    cache.clear();
-    session.pending_sample_batches.erase(pending_it);
-    agent.fragment_model_step = 0;
-    agent.fragment_model_checksum.clear();
-    agent.fragment_model_lineage_id.clear();
-    agent.fragment_model_manifest_digest.clear();
-    agent.fragment_first_action_frame_id = -1;
+    const auto& profile =
+        agent.pinned_model.wire.rollout_estimator_profile();
+    std::vector<float> advantages;
+    std::vector<float> value_targets;
+    if (!EstimateRolloutSegment(
+            agent.segment_transitions, profile.gamma(),
+            profile.gae_lambda(), bootstrap_value,
+            advantages, value_targets, error)) {
+        return false;
+    }
+
+    std::vector<training::ProcessedTransition> processed;
+    processed.reserve(agent.segment_transitions.size());
+    const uint32_t segment_size = static_cast<uint32_t>(
+        agent.segment_transitions.size());
+    for (uint32_t index = 0; index < segment_size; ++index) {
+        const auto& raw = agent.segment_transitions[index];
+        training::ProcessedTransition item;
+        item.set_item_id(agent.segment_id + "/transition-" +
+                         std::to_string(index));
+        item.set_environment_session_id(session.environment_instance_id);
+        item.set_episode_id(session.current_episode_id);
+        item.set_agent_id(static_cast<uint32_t>(agent_id));
+        item.set_segment_id(agent.segment_id);
+        item.set_transition_index(index);
+        item.set_segment_transition_count(segment_size);
+        item.set_action_step(raw.action_step);
+        for (float value : raw.observation) item.add_observation(value);
+        for (float value : raw.next_observation) {
+            item.add_next_observation(value);
+        }
+        item.set_action(raw.action);
+        item.set_reward(raw.reward);
+        item.set_behavior_log_probability(
+            raw.behavior_log_probability);
+        item.set_behavior_value(raw.behavior_value);
+        item.set_advantage(advantages[index]);
+        item.set_value_target(value_targets[index]);
+        const bool boundary = index + 1 == segment_size;
+        item.set_environment_terminal(terminal && boundary);
+        item.set_end_kind(
+            !boundary
+                ? training::TRANSITION_END_KIND_CONTINUING
+                : terminal
+                      ? training::TRANSITION_END_KIND_ENVIRONMENT_TERMINATED
+                      : reason == training::SEGMENT_CLOSE_REASON_TMAX
+                            ? training::TRANSITION_END_KIND_EXTERNAL_TRUNCATION
+                            : training::TRANSITION_END_KIND_PRODUCER_ABORT);
+        if (boundary) item.set_segment_close_reason(reason);
+        item.set_segment_boundary(boundary);
+        item.set_bootstrap_applied(boundary && bootstrap_applied);
+        if (boundary) item.set_bootstrap_value(bootstrap_value);
+        auto* policy = item.mutable_behavior_policy();
+        policy->set_model_lineage_id(
+            agent.pinned_model.model_lineage_id);
+        policy->set_model_step(agent.pinned_model.model_step);
+        policy->set_distribution_schema_id(
+            config_.policy.distribution_schema_id);
+        FillDigest(config_.policy.policy_spec_digest,
+                   policy->mutable_policy_spec_digest());
+        policy->mutable_artifact_digest()->CopyFrom(
+            agent.pinned_model.wire.identity().artifact_digest());
+        policy->mutable_manifest_digest()->CopyFrom(
+            agent.pinned_model.wire.identity().manifest_digest());
+        item.mutable_rollout_estimator_profile_digest()->CopyFrom(
+            profile.profile_digest());
+        item.set_created_at_unix_ms(raw.created_at_unix_ms);
+        processed.push_back(std::move(item));
+    }
+
+    std::size_t offset = 0;
+    std::size_t chunk_index = 0;
+    std::vector<training::ProcessedTransitionEnvelope> built;
+    while (offset < processed.size()) {
+        training::ProcessedTransitionEnvelope envelope;
+        envelope.set_envelope_id(
+            agent.segment_id + "/envelope-" +
+            std::to_string(chunk_index));
+        FillTrainingSemantics(
+            config_, envelope.mutable_training_semantics());
+        FillServiceIdentity(
+            "sample-distributor", producer_instance_id_,
+            producer_lifecycle_epoch_, envelope.mutable_producer());
+        FillContract(config_, envelope.mutable_contract());
+        envelope.set_created_at_unix_ms(NowMs());
+        envelope.mutable_payload_digest()->set_algorithm(
+            common::DIGEST_ALGORITHM_SHA256);
+        envelope.mutable_payload_digest()->set_hex(std::string(64, '0'));
+
+        while (offset < processed.size() &&
+               envelope.transitions_size() <
+                   config_.sample_distributor.envelope_max_transitions) {
+            *envelope.add_transitions() = processed[offset];
+            if (envelope.ByteSizeLong() >
+                config_.sample_distributor.envelope_max_bytes) {
+                envelope.mutable_transitions()->RemoveLast();
+                break;
+            }
+            ++offset;
+        }
+        if (envelope.transitions_size() == 0) {
+            error = "one processed transition exceeds envelope_max_bytes";
+            return false;
+        }
+        envelope.clear_payload_digest();
+        const std::string digest =
+            Sha256Bytes(DeterministicBytes(envelope));
+        if (digest.empty()) {
+            error = "failed to calculate processed envelope digest";
+            return false;
+        }
+        envelope.mutable_payload_digest()->set_algorithm(
+            common::DIGEST_ALGORITHM_SHA256);
+        envelope.mutable_payload_digest()->set_hex(digest);
+        if (envelope.ByteSizeLong() >
+            config_.sample_distributor.envelope_max_bytes) {
+            error = "processed envelope exceeds envelope_max_bytes after digest";
+            return false;
+        }
+        built.push_back(std::move(envelope));
+        ++chunk_index;
+    }
+
+    produced_unique_transitions +=
+        static_cast<int64_t>(agent.segment_transitions.size());
+    produced_unique_envelopes += static_cast<int64_t>(built.size());
+    produced_by_model[agent.pinned_model.model_step] +=
+        static_cast<int64_t>(agent.segment_transitions.size());
+    envelopes.insert(envelopes.end(),
+                     std::make_move_iterator(built.begin()),
+                     std::make_move_iterator(built.end()));
+    ++close_counts[reason];
+    LOG_INFO(
+        "MazeService",
+        "Agent segment 封口: session=%s episode=%s agent_id=%d segment=%s model_step=%llu reason=%s transitions=%u envelopes=%zu bootstrap_applied=%d bootstrap_value=%.9g",
+        session.session_id.c_str(), session.current_episode_id.c_str(),
+        agent_id, agent.segment_id.c_str(),
+        static_cast<unsigned long long>(agent.pinned_model.model_step),
+        training::SegmentCloseReason_Name(reason).c_str(), segment_size,
+        built.size(), bootstrap_applied ? 1 : 0,
+        static_cast<double>(bootstrap_value));
+    agent.segment_open = false;
+    agent.segment_id.clear();
+    agent.pinned_model = ModelManifest{};
+    agent.pinned_prepared_model = OnnxInferencer::PreparedModel{};
+    agent.segment_transitions.clear();
     error.clear();
     return true;
 }
 
-void MazeServiceImpl::QuarantineAgentSamples(
+void MazeServiceImpl::DiscardAgentSegment(
     SessionManager::Session& session,
-    int agent_id) {
+    int agent_id,
+    training::SegmentCloseReason reason,
+    bool exclude_pending_action,
+    int64_t& quarantined_transitions,
+    int64_t& pending_actions_excluded,
+    int64_t& closed_segments,
+    std::unordered_map<training::SegmentCloseReason, int64_t>& close_counts) {
     auto agent_it = session.agents.find(agent_id);
     if (agent_it == session.agents.end()) return;
     auto& agent = agent_it->second;
-    auto& cache = session.agent_sample_caches[agent_id];
-    const bool training_episode =
-        session.current_episode_mode == maze::EPISODE_MODE_TRAINING;
-    const int64_t discarded = training_episode
-        ? static_cast<int64_t>(cache.size()) +
-              (agent.has_pending_action ? 1 : 0)
-        : 0;
-    if (discarded > 0) {
-        quarantined_sample_count_ += discarded;
-        ++quarantined_fragment_count_;
+    if (exclude_pending_action && agent.has_pending_action) {
+        ++pending_actions_excluded;
     }
-    if (!cache.empty()) {
-        const int64_t cached_samples = static_cast<int64_t>(cache.size());
-        const auto count = produced_samples_by_model_.find(
-            agent.fragment_model_step);
-        if (count == produced_samples_by_model_.end() ||
-            count->second < cached_samples) {
-            MarkDegraded(
-                "quarantined behavior-model accounting is inconsistent");
-        } else {
-            count->second -= cached_samples;
-        }
-        produced_unique_samples_ -= cached_samples;
+    if (agent.segment_open || agent.has_pending_action ||
+        !agent.segment_transitions.empty()) {
+        quarantined_transitions +=
+            static_cast<int64_t>(agent.segment_transitions.size());
+        ++close_counts[reason];
+        ++closed_segments;
     }
-    cache.clear();
-    session.pending_sample_batches.erase(agent_id);
     agent.has_pending_action = false;
     agent.pending_action_frame_id = -1;
-    agent.pending_model_step = 0;
-    agent.pending_model_checksum.clear();
-    agent.pending_model_lineage_id.clear();
-    agent.pending_model_manifest_digest.clear();
     agent.pending_obs.clear();
-    agent.fragment_model_step = 0;
-    agent.fragment_model_checksum.clear();
-    agent.fragment_model_lineage_id.clear();
-    agent.fragment_model_manifest_digest.clear();
-    agent.fragment_first_action_frame_id = -1;
+    agent.segment_open = false;
+    agent.segment_id.clear();
+    agent.pinned_model = ModelManifest{};
+    agent.pinned_prepared_model = OnnxInferencer::PreparedModel{};
+    agent.segment_transitions.clear();
 }

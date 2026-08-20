@@ -16,9 +16,10 @@
 #include <thread>
 #include <vector>
 
-// AIServer-owned asynchronous producer-side distributor. It owns only the
-// bounded local outbound queue, exact immutable retries, readiness and drain;
-// SamplePool capacity, eviction and Learner batch assembly are remote facts.
+// AIServer-owned producer-side transport. This class knows only immutable
+// processed-transition envelopes, exact retry identity, its bounded local
+// outbound queue, transport recovery, and drain. It does not implement rollout
+// segmentation, GAE, SamplePool sampling/eviction, or Learner batching.
 class SampleDistributor {
 public:
     enum class DeliveryState {
@@ -60,20 +61,20 @@ public:
         bool sample_delivery_paused = false;
         int retry_after_ms = 0;
         int64_t recovery_elapsed_ms = 0;
-        std::size_t queue_fragments = 0;
-        int64_t queue_samples = 0;
+        std::size_t queue_envelopes = 0;
+        int64_t queue_transitions = 0;
         int64_t queue_estimated_bytes = 0;
         int64_t queue_high_watermark = 0;
         int64_t push_attempt_count = 0;
-        int64_t accepted_unique_samples = 0;
-        int64_t accepted_unique_batches = 0;
+        int64_t accepted_unique_transitions = 0;
+        int64_t accepted_unique_envelopes = 0;
         int64_t duplicate_push_attempt_count = 0;
         int64_t rejected_push_attempt_count = 0;
         int64_t retry_attempt_count = 0;
-        int64_t final_drop_unique_samples = 0;
-        int64_t final_drop_unique_batches = 0;
-        int64_t unresolved_push_outcome_unknown_samples = 0;
-        int64_t unresolved_push_outcome_unknown_batches = 0;
+        int64_t final_drop_unique_transitions = 0;
+        int64_t final_drop_unique_envelopes = 0;
+        int64_t unresolved_push_outcome_unknown_transitions = 0;
+        int64_t unresolved_push_outcome_unknown_envelopes = 0;
         int64_t push_rpc_count = 0;
         double push_rpc_latency_sum_ms = 0.0;
         double push_rpc_latency_max_ms = 0.0;
@@ -85,16 +86,16 @@ public:
     ~SampleDistributor();
 
     bool Start();
-    bool Enqueue(const training::SampleBatch& batch);
-    ReservationResult ReserveEnqueueBatchSet(
-        const std::vector<training::SampleBatch>& batches,
+    bool Enqueue(const training::ProcessedTransitionEnvelope& envelope);
+    ReservationResult ReserveEnqueueEnvelopeSet(
+        const std::vector<training::ProcessedTransitionEnvelope>& envelopes,
         uint64_t& reservation_id,
         std::string& error);
-    SealResult SealEnqueueBatchSet(uint64_t reservation_id,
-                                   std::string& error);
-    CommitResult CommitEnqueueBatchSet(uint64_t reservation_id,
-                                       std::string& error);
-    void CancelEnqueueBatchSet(uint64_t reservation_id);
+    SealResult SealEnqueueEnvelopeSet(uint64_t reservation_id,
+                                      std::string& error);
+    CommitResult CommitEnqueueEnvelopeSet(uint64_t reservation_id,
+                                          std::string& error);
+    void CancelEnqueueEnvelopeSet(uint64_t reservation_id);
     bool HasEnqueueReservation(uint64_t reservation_id) const;
     bool StopAndDrain();
 
@@ -104,14 +105,12 @@ public:
     bool IsPausedAtSafeBoundary() const;
     int PauseRetryAfterMs() const;
     void MarkDegraded(const std::string& error);
-    void RecordFinalDrop(int64_t samples,
-                         int64_t batches,
+    void RecordFinalDrop(int64_t transitions,
+                         int64_t envelopes,
                          const std::string& error);
     Snapshot GetSnapshot() const;
 
 private:
-    friend struct MazeServiceUpdateTestAccess;
-
     enum class SendResult {
         kCommitted,
         kTransient,
@@ -125,8 +124,8 @@ private:
     };
 
     struct QueueItem {
-        training::SampleBatch batch;
-        int64_t samples = 0;
+        training::ProcessedTransitionEnvelope envelope;
+        int64_t transitions = 0;
         int64_t estimated_bytes = 0;
         int attempts = 0;
         bool push_outcome_unknown = false;
@@ -151,7 +150,6 @@ private:
 
     SampleDistributorConfig config_;
     ContractConfig contract_;
-    std::size_t producer_fragment_reserve_ = 1;
     std::shared_ptr<grpc::Channel> channel_;
     std::unique_ptr<training::SamplePoolIngressService::Stub> stub_;
 
@@ -165,9 +163,9 @@ private:
     uint64_t active_reservation_delivery_generation_ = 0;
     bool active_reservation_sealed_ = false;
     uint64_t next_reservation_id_ = 1;
-    int64_t reserved_samples_ = 0;
+    int64_t reserved_transitions_ = 0;
     int64_t reserved_estimated_bytes_ = 0;
-    int64_t queue_samples_ = 0;
+    int64_t queue_transitions_ = 0;
     int64_t queue_estimated_bytes_ = 0;
     bool accepting_ = false;
     bool stop_requested_ = false;
@@ -187,15 +185,15 @@ private:
 
     int64_t queue_high_watermark_ = 0;
     int64_t push_attempt_count_ = 0;
-    int64_t accepted_unique_samples_ = 0;
-    int64_t accepted_unique_batches_ = 0;
+    int64_t accepted_unique_transitions_ = 0;
+    int64_t accepted_unique_envelopes_ = 0;
     int64_t duplicate_push_attempt_count_ = 0;
     int64_t rejected_push_attempt_count_ = 0;
     int64_t retry_attempt_count_ = 0;
-    int64_t final_drop_unique_samples_ = 0;
-    int64_t final_drop_unique_batches_ = 0;
-    int64_t unresolved_push_outcome_unknown_samples_ = 0;
-    int64_t unresolved_push_outcome_unknown_batches_ = 0;
+    int64_t final_drop_unique_transitions_ = 0;
+    int64_t final_drop_unique_envelopes_ = 0;
+    int64_t unresolved_push_outcome_unknown_transitions_ = 0;
+    int64_t unresolved_push_outcome_unknown_envelopes_ = 0;
     int64_t push_rpc_count_ = 0;
     double push_rpc_latency_sum_ms_ = 0.0;
     double push_rpc_latency_max_ms_ = 0.0;

@@ -157,6 +157,14 @@ void OnnxInferencer::ActivatePreparedModel(PreparedModel prepared) {
     loaded_.store(true);
 }
 
+OnnxInferencer::PreparedModel OnnxInferencer::SnapshotPreparedModel() const {
+    std::lock_guard<std::mutex> lock(load_mutex_);
+    PreparedModel snapshot;
+    snapshot.session = std::atomic_load(&session_);
+    snapshot.model_path = current_model_path_;
+    return snapshot;
+}
+
 // ---- 推理（线程安全，无锁读取）----
 bool OnnxInferencer::Infer(const std::vector<float>& obs, int obs_dim,
                            std::vector<float>& action_logits, float& value) {

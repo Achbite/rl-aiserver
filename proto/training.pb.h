@@ -74,15 +74,9 @@ extern AckModelRspDefaultTypeInternal _AckModelRsp_default_instance_;
 class AgentEpisodeMetricFact;
 struct AgentEpisodeMetricFactDefaultTypeInternal;
 extern AgentEpisodeMetricFactDefaultTypeInternal _AgentEpisodeMetricFact_default_instance_;
-class BatchAssemblySpec;
-struct BatchAssemblySpecDefaultTypeInternal;
-extern BatchAssemblySpecDefaultTypeInternal _BatchAssemblySpec_default_instance_;
 class BehaviorPolicyReference;
 struct BehaviorPolicyReferenceDefaultTypeInternal;
 extern BehaviorPolicyReferenceDefaultTypeInternal _BehaviorPolicyReference_default_instance_;
-class BehaviorStepQueueStatus;
-struct BehaviorStepQueueStatusDefaultTypeInternal;
-extern BehaviorStepQueueStatusDefaultTypeInternal _BehaviorStepQueueStatus_default_instance_;
 class DeliveryRsp;
 struct DeliveryRspDefaultTypeInternal;
 extern DeliveryRspDefaultTypeInternal _DeliveryRsp_default_instance_;
@@ -155,6 +149,12 @@ extern ModelIdentityDefaultTypeInternal _ModelIdentity_default_instance_;
 class NackBatchReq;
 struct NackBatchReqDefaultTypeInternal;
 extern NackBatchReqDefaultTypeInternal _NackBatchReq_default_instance_;
+class ProcessedTransition;
+struct ProcessedTransitionDefaultTypeInternal;
+extern ProcessedTransitionDefaultTypeInternal _ProcessedTransition_default_instance_;
+class ProcessedTransitionEnvelope;
+struct ProcessedTransitionEnvelopeDefaultTypeInternal;
+extern ProcessedTransitionEnvelopeDefaultTypeInternal _ProcessedTransitionEnvelope_default_instance_;
 class PushSamplesReq;
 struct PushSamplesReqDefaultTypeInternal;
 extern PushSamplesReqDefaultTypeInternal _PushSamplesReq_default_instance_;
@@ -173,24 +173,21 @@ extern RegisterModelRspDefaultTypeInternal _RegisterModelRsp_default_instance_;
 class RenewLeaseReq;
 struct RenewLeaseReqDefaultTypeInternal;
 extern RenewLeaseReqDefaultTypeInternal _RenewLeaseReq_default_instance_;
-class Sample;
-struct SampleDefaultTypeInternal;
-extern SampleDefaultTypeInternal _Sample_default_instance_;
-class SampleBatch;
-struct SampleBatchDefaultTypeInternal;
-extern SampleBatchDefaultTypeInternal _SampleBatch_default_instance_;
-class SampleFreshnessPolicy;
-struct SampleFreshnessPolicyDefaultTypeInternal;
-extern SampleFreshnessPolicyDefaultTypeInternal _SampleFreshnessPolicy_default_instance_;
+class RolloutEstimatorProfile;
+struct RolloutEstimatorProfileDefaultTypeInternal;
+extern RolloutEstimatorProfileDefaultTypeInternal _RolloutEstimatorProfile_default_instance_;
+class SamplePoolItem;
+struct SamplePoolItemDefaultTypeInternal;
+extern SamplePoolItemDefaultTypeInternal _SamplePoolItem_default_instance_;
 class SamplePoolStatusReq;
 struct SamplePoolStatusReqDefaultTypeInternal;
 extern SamplePoolStatusReqDefaultTypeInternal _SamplePoolStatusReq_default_instance_;
 class SamplePoolStatusRsp;
 struct SamplePoolStatusRspDefaultTypeInternal;
 extern SamplePoolStatusRspDefaultTypeInternal _SamplePoolStatusRsp_default_instance_;
-class SampleResponse;
-struct SampleResponseDefaultTypeInternal;
-extern SampleResponseDefaultTypeInternal _SampleResponse_default_instance_;
+class SegmentCloseCount;
+struct SegmentCloseCountDefaultTypeInternal;
+extern SegmentCloseCountDefaultTypeInternal _SegmentCloseCount_default_instance_;
 class TrainUpdateMetricFact;
 struct TrainUpdateMetricFactDefaultTypeInternal;
 extern TrainUpdateMetricFactDefaultTypeInternal _TrainUpdateMetricFact_default_instance_;
@@ -209,9 +206,7 @@ template<> ::rl::training::v1::AckMetricBatchRsp* Arena::CreateMaybeMessage<::rl
 template<> ::rl::training::v1::AckModelReq* Arena::CreateMaybeMessage<::rl::training::v1::AckModelReq>(Arena*);
 template<> ::rl::training::v1::AckModelRsp* Arena::CreateMaybeMessage<::rl::training::v1::AckModelRsp>(Arena*);
 template<> ::rl::training::v1::AgentEpisodeMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::AgentEpisodeMetricFact>(Arena*);
-template<> ::rl::training::v1::BatchAssemblySpec* Arena::CreateMaybeMessage<::rl::training::v1::BatchAssemblySpec>(Arena*);
 template<> ::rl::training::v1::BehaviorPolicyReference* Arena::CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(Arena*);
-template<> ::rl::training::v1::BehaviorStepQueueStatus* Arena::CreateMaybeMessage<::rl::training::v1::BehaviorStepQueueStatus>(Arena*);
 template<> ::rl::training::v1::DeliveryRsp* Arena::CreateMaybeMessage<::rl::training::v1::DeliveryRsp>(Arena*);
 template<> ::rl::training::v1::DownloadModelReq* Arena::CreateMaybeMessage<::rl::training::v1::DownloadModelReq>(Arena*);
 template<> ::rl::training::v1::EpisodeMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::EpisodeMetricFact>(Arena*);
@@ -236,18 +231,19 @@ template<> ::rl::training::v1::ModelDistributorStatusReq* Arena::CreateMaybeMess
 template<> ::rl::training::v1::ModelDistributorStatusRsp* Arena::CreateMaybeMessage<::rl::training::v1::ModelDistributorStatusRsp>(Arena*);
 template<> ::rl::training::v1::ModelIdentity* Arena::CreateMaybeMessage<::rl::training::v1::ModelIdentity>(Arena*);
 template<> ::rl::training::v1::NackBatchReq* Arena::CreateMaybeMessage<::rl::training::v1::NackBatchReq>(Arena*);
+template<> ::rl::training::v1::ProcessedTransition* Arena::CreateMaybeMessage<::rl::training::v1::ProcessedTransition>(Arena*);
+template<> ::rl::training::v1::ProcessedTransitionEnvelope* Arena::CreateMaybeMessage<::rl::training::v1::ProcessedTransitionEnvelope>(Arena*);
 template<> ::rl::training::v1::PushSamplesReq* Arena::CreateMaybeMessage<::rl::training::v1::PushSamplesReq>(Arena*);
 template<> ::rl::training::v1::PushSamplesRsp* Arena::CreateMaybeMessage<::rl::training::v1::PushSamplesRsp>(Arena*);
 template<> ::rl::training::v1::RawMetricSumCount* Arena::CreateMaybeMessage<::rl::training::v1::RawMetricSumCount>(Arena*);
 template<> ::rl::training::v1::RegisterModelReq* Arena::CreateMaybeMessage<::rl::training::v1::RegisterModelReq>(Arena*);
 template<> ::rl::training::v1::RegisterModelRsp* Arena::CreateMaybeMessage<::rl::training::v1::RegisterModelRsp>(Arena*);
 template<> ::rl::training::v1::RenewLeaseReq* Arena::CreateMaybeMessage<::rl::training::v1::RenewLeaseReq>(Arena*);
-template<> ::rl::training::v1::Sample* Arena::CreateMaybeMessage<::rl::training::v1::Sample>(Arena*);
-template<> ::rl::training::v1::SampleBatch* Arena::CreateMaybeMessage<::rl::training::v1::SampleBatch>(Arena*);
-template<> ::rl::training::v1::SampleFreshnessPolicy* Arena::CreateMaybeMessage<::rl::training::v1::SampleFreshnessPolicy>(Arena*);
+template<> ::rl::training::v1::RolloutEstimatorProfile* Arena::CreateMaybeMessage<::rl::training::v1::RolloutEstimatorProfile>(Arena*);
+template<> ::rl::training::v1::SamplePoolItem* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolItem>(Arena*);
 template<> ::rl::training::v1::SamplePoolStatusReq* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolStatusReq>(Arena*);
 template<> ::rl::training::v1::SamplePoolStatusRsp* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolStatusRsp>(Arena*);
-template<> ::rl::training::v1::SampleResponse* Arena::CreateMaybeMessage<::rl::training::v1::SampleResponse>(Arena*);
+template<> ::rl::training::v1::SegmentCloseCount* Arena::CreateMaybeMessage<::rl::training::v1::SegmentCloseCount>(Arena*);
 template<> ::rl::training::v1::TrainUpdateMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::TrainUpdateMetricFact>(Arena*);
 template<> ::rl::training::v1::TrainingSemanticsIdentity* Arena::CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -282,6 +278,36 @@ inline bool TransitionEndKind_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, TransitionEndKind* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<TransitionEndKind>(
     TransitionEndKind_descriptor(), name, value);
+}
+enum SegmentCloseReason : int {
+  SEGMENT_CLOSE_REASON_UNSPECIFIED = 0,
+  SEGMENT_CLOSE_REASON_GOAL = 1,
+  SEGMENT_CLOSE_REASON_TIME_LIMIT = 2,
+  SEGMENT_CLOSE_REASON_TMAX = 3,
+  SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE = 4,
+  SEGMENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT = 5,
+  SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN = 6,
+  SegmentCloseReason_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SegmentCloseReason_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SegmentCloseReason_IsValid(int value);
+constexpr SegmentCloseReason SegmentCloseReason_MIN = SEGMENT_CLOSE_REASON_UNSPECIFIED;
+constexpr SegmentCloseReason SegmentCloseReason_MAX = SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN;
+constexpr int SegmentCloseReason_ARRAYSIZE = SegmentCloseReason_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SegmentCloseReason_descriptor();
+template<typename T>
+inline const std::string& SegmentCloseReason_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SegmentCloseReason>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SegmentCloseReason_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SegmentCloseReason_descriptor(), enum_t_value);
+}
+inline bool SegmentCloseReason_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SegmentCloseReason* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SegmentCloseReason>(
+    SegmentCloseReason_descriptor(), name, value);
 }
 enum PushResult : int {
   PUSH_RESULT_UNSPECIFIED = 0,
@@ -369,32 +395,6 @@ inline bool GetBatchResult_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<GetBatchResult>(
     GetBatchResult_descriptor(), name, value);
 }
-enum BatchAssemblyMode : int {
-  BATCH_ASSEMBLY_MODE_UNSPECIFIED = 0,
-  BATCH_ASSEMBLY_MODE_TARGET_BOUNDED = 1,
-  BATCH_ASSEMBLY_MODE_DRAIN_AVAILABLE = 2,
-  BatchAssemblyMode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  BatchAssemblyMode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool BatchAssemblyMode_IsValid(int value);
-constexpr BatchAssemblyMode BatchAssemblyMode_MIN = BATCH_ASSEMBLY_MODE_UNSPECIFIED;
-constexpr BatchAssemblyMode BatchAssemblyMode_MAX = BATCH_ASSEMBLY_MODE_DRAIN_AVAILABLE;
-constexpr int BatchAssemblyMode_ARRAYSIZE = BatchAssemblyMode_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* BatchAssemblyMode_descriptor();
-template<typename T>
-inline const std::string& BatchAssemblyMode_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, BatchAssemblyMode>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function BatchAssemblyMode_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    BatchAssemblyMode_descriptor(), enum_t_value);
-}
-inline bool BatchAssemblyMode_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, BatchAssemblyMode* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<BatchAssemblyMode>(
-    BatchAssemblyMode_descriptor(), name, value);
-}
 enum DeliveryResult : int {
   DELIVERY_RESULT_UNSPECIFIED = 0,
   DELIVERY_RESULT_APPLIED = 1,
@@ -427,7 +427,6 @@ inline bool DeliveryResult_Parse(
 enum AckDisposition : int {
   ACK_DISPOSITION_UNSPECIFIED = 0,
   ACK_DISPOSITION_TRAINED = 1,
-  ACK_DISPOSITION_STALE = 2,
   ACK_DISPOSITION_INVALID = 3,
   ACK_DISPOSITION_SHUTDOWN_UNTRAINED = 4,
   AckDisposition_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
@@ -1125,6 +1124,8 @@ class BehaviorPolicyReference final :
     kModelLineageIdFieldNumber = 1,
     kDistributionSchemaIdFieldNumber = 3,
     kPolicySpecDigestFieldNumber = 4,
+    kArtifactDigestFieldNumber = 5,
+    kManifestDigestFieldNumber = 6,
     kModelStepFieldNumber = 2,
   };
   // string model_lineage_id = 1;
@@ -1173,6 +1174,42 @@ class BehaviorPolicyReference final :
       ::rl::common::v1::ContentDigest* policy_spec_digest);
   ::rl::common::v1::ContentDigest* unsafe_arena_release_policy_spec_digest();
 
+  // .rl.common.v1.ContentDigest artifact_digest = 5;
+  bool has_artifact_digest() const;
+  private:
+  bool _internal_has_artifact_digest() const;
+  public:
+  void clear_artifact_digest();
+  const ::rl::common::v1::ContentDigest& artifact_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_artifact_digest();
+  ::rl::common::v1::ContentDigest* mutable_artifact_digest();
+  void set_allocated_artifact_digest(::rl::common::v1::ContentDigest* artifact_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_artifact_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_artifact_digest();
+  public:
+  void unsafe_arena_set_allocated_artifact_digest(
+      ::rl::common::v1::ContentDigest* artifact_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_artifact_digest();
+
+  // .rl.common.v1.ContentDigest manifest_digest = 6;
+  bool has_manifest_digest() const;
+  private:
+  bool _internal_has_manifest_digest() const;
+  public:
+  void clear_manifest_digest();
+  const ::rl::common::v1::ContentDigest& manifest_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_manifest_digest();
+  ::rl::common::v1::ContentDigest* mutable_manifest_digest();
+  void set_allocated_manifest_digest(::rl::common::v1::ContentDigest* manifest_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_manifest_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_manifest_digest();
+  public:
+  void unsafe_arena_set_allocated_manifest_digest(
+      ::rl::common::v1::ContentDigest* manifest_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_manifest_digest();
+
   // optional uint64 model_step = 2;
   bool has_model_step() const;
   private:
@@ -1199,6 +1236,8 @@ class BehaviorPolicyReference final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_lineage_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr distribution_schema_id_;
     ::rl::common::v1::ContentDigest* policy_spec_digest_;
+    ::rl::common::v1::ContentDigest* artifact_digest_;
+    ::rl::common::v1::ContentDigest* manifest_digest_;
     uint64_t model_step_;
   };
   union { Impl_ _impl_; };
@@ -1206,24 +1245,24 @@ class BehaviorPolicyReference final :
 };
 // -------------------------------------------------------------------
 
-class SampleFreshnessPolicy final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SampleFreshnessPolicy) */ {
+class RolloutEstimatorProfile final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.RolloutEstimatorProfile) */ {
  public:
-  inline SampleFreshnessPolicy() : SampleFreshnessPolicy(nullptr) {}
-  ~SampleFreshnessPolicy() override;
-  explicit PROTOBUF_CONSTEXPR SampleFreshnessPolicy(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline RolloutEstimatorProfile() : RolloutEstimatorProfile(nullptr) {}
+  ~RolloutEstimatorProfile() override;
+  explicit PROTOBUF_CONSTEXPR RolloutEstimatorProfile(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  SampleFreshnessPolicy(const SampleFreshnessPolicy& from);
-  SampleFreshnessPolicy(SampleFreshnessPolicy&& from) noexcept
-    : SampleFreshnessPolicy() {
+  RolloutEstimatorProfile(const RolloutEstimatorProfile& from);
+  RolloutEstimatorProfile(RolloutEstimatorProfile&& from) noexcept
+    : RolloutEstimatorProfile() {
     *this = ::std::move(from);
   }
 
-  inline SampleFreshnessPolicy& operator=(const SampleFreshnessPolicy& from) {
+  inline RolloutEstimatorProfile& operator=(const RolloutEstimatorProfile& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SampleFreshnessPolicy& operator=(SampleFreshnessPolicy&& from) noexcept {
+  inline RolloutEstimatorProfile& operator=(RolloutEstimatorProfile&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1246,20 +1285,20 @@ class SampleFreshnessPolicy final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const SampleFreshnessPolicy& default_instance() {
+  static const RolloutEstimatorProfile& default_instance() {
     return *internal_default_instance();
   }
-  static inline const SampleFreshnessPolicy* internal_default_instance() {
-    return reinterpret_cast<const SampleFreshnessPolicy*>(
-               &_SampleFreshnessPolicy_default_instance_);
+  static inline const RolloutEstimatorProfile* internal_default_instance() {
+    return reinterpret_cast<const RolloutEstimatorProfile*>(
+               &_RolloutEstimatorProfile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     2;
 
-  friend void swap(SampleFreshnessPolicy& a, SampleFreshnessPolicy& b) {
+  friend void swap(RolloutEstimatorProfile& a, RolloutEstimatorProfile& b) {
     a.Swap(&b);
   }
-  inline void Swap(SampleFreshnessPolicy* other) {
+  inline void Swap(RolloutEstimatorProfile* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1272,7 +1311,7 @@ class SampleFreshnessPolicy final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SampleFreshnessPolicy* other) {
+  void UnsafeArenaSwap(RolloutEstimatorProfile* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1280,14 +1319,14 @@ class SampleFreshnessPolicy final :
 
   // implements Message ----------------------------------------------
 
-  SampleFreshnessPolicy* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<SampleFreshnessPolicy>(arena);
+  RolloutEstimatorProfile* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RolloutEstimatorProfile>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const SampleFreshnessPolicy& from);
+  void CopyFrom(const RolloutEstimatorProfile& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const SampleFreshnessPolicy& from) {
-    SampleFreshnessPolicy::MergeImpl(*this, from);
+  void MergeFrom( const RolloutEstimatorProfile& from) {
+    RolloutEstimatorProfile::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1305,15 +1344,15 @@ class SampleFreshnessPolicy final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SampleFreshnessPolicy* other);
+  void InternalSwap(RolloutEstimatorProfile* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.SampleFreshnessPolicy";
+    return "rl.training.v1.RolloutEstimatorProfile";
   }
   protected:
-  explicit SampleFreshnessPolicy(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit RolloutEstimatorProfile(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1327,91 +1366,191 @@ class SampleFreshnessPolicy final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kModelLineageIdFieldNumber = 1,
-    kDistributionSchemaIdFieldNumber = 5,
-    kPolicySpecDigestFieldNumber = 6,
-    kReferenceModelStepFieldNumber = 2,
-    kMaxSampleAgeMsFieldNumber = 4,
-    kMaxModelStepLagFieldNumber = 3,
+    kGaeFormulaIdFieldNumber = 5,
+    kTerminalBootstrapSemanticsIdFieldNumber = 6,
+    kValueTargetFormulaIdFieldNumber = 7,
+    kValueHeadAbiIdFieldNumber = 8,
+    kNumericDtypeFieldNumber = 10,
+    kFiniteRuleIdFieldNumber = 11,
+    kModelPinSemanticsIdFieldNumber = 12,
+    kRewardSemanticsDigestFieldNumber = 9,
+    kProfileDigestFieldNumber = 13,
+    kGammaFieldNumber = 2,
+    kProfileSchemaVersionFieldNumber = 1,
+    kTmaxFieldNumber = 4,
+    kGaeLambdaFieldNumber = 3,
   };
-  // string model_lineage_id = 1;
-  void clear_model_lineage_id();
-  const std::string& model_lineage_id() const;
+  // string gae_formula_id = 5;
+  void clear_gae_formula_id();
+  const std::string& gae_formula_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_model_lineage_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_model_lineage_id();
-  PROTOBUF_NODISCARD std::string* release_model_lineage_id();
-  void set_allocated_model_lineage_id(std::string* model_lineage_id);
+  void set_gae_formula_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_gae_formula_id();
+  PROTOBUF_NODISCARD std::string* release_gae_formula_id();
+  void set_allocated_gae_formula_id(std::string* gae_formula_id);
   private:
-  const std::string& _internal_model_lineage_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_lineage_id(const std::string& value);
-  std::string* _internal_mutable_model_lineage_id();
+  const std::string& _internal_gae_formula_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_gae_formula_id(const std::string& value);
+  std::string* _internal_mutable_gae_formula_id();
   public:
 
-  // string distribution_schema_id = 5;
-  void clear_distribution_schema_id();
-  const std::string& distribution_schema_id() const;
+  // string terminal_bootstrap_semantics_id = 6;
+  void clear_terminal_bootstrap_semantics_id();
+  const std::string& terminal_bootstrap_semantics_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_distribution_schema_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_distribution_schema_id();
-  PROTOBUF_NODISCARD std::string* release_distribution_schema_id();
-  void set_allocated_distribution_schema_id(std::string* distribution_schema_id);
+  void set_terminal_bootstrap_semantics_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_terminal_bootstrap_semantics_id();
+  PROTOBUF_NODISCARD std::string* release_terminal_bootstrap_semantics_id();
+  void set_allocated_terminal_bootstrap_semantics_id(std::string* terminal_bootstrap_semantics_id);
   private:
-  const std::string& _internal_distribution_schema_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_distribution_schema_id(const std::string& value);
-  std::string* _internal_mutable_distribution_schema_id();
+  const std::string& _internal_terminal_bootstrap_semantics_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_terminal_bootstrap_semantics_id(const std::string& value);
+  std::string* _internal_mutable_terminal_bootstrap_semantics_id();
   public:
 
-  // .rl.common.v1.ContentDigest policy_spec_digest = 6;
-  bool has_policy_spec_digest() const;
+  // string value_target_formula_id = 7;
+  void clear_value_target_formula_id();
+  const std::string& value_target_formula_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_value_target_formula_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_value_target_formula_id();
+  PROTOBUF_NODISCARD std::string* release_value_target_formula_id();
+  void set_allocated_value_target_formula_id(std::string* value_target_formula_id);
   private:
-  bool _internal_has_policy_spec_digest() const;
-  public:
-  void clear_policy_spec_digest();
-  const ::rl::common::v1::ContentDigest& policy_spec_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_policy_spec_digest();
-  ::rl::common::v1::ContentDigest* mutable_policy_spec_digest();
-  void set_allocated_policy_spec_digest(::rl::common::v1::ContentDigest* policy_spec_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_policy_spec_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_policy_spec_digest();
-  public:
-  void unsafe_arena_set_allocated_policy_spec_digest(
-      ::rl::common::v1::ContentDigest* policy_spec_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_policy_spec_digest();
-
-  // optional uint64 reference_model_step = 2;
-  bool has_reference_model_step() const;
-  private:
-  bool _internal_has_reference_model_step() const;
-  public:
-  void clear_reference_model_step();
-  uint64_t reference_model_step() const;
-  void set_reference_model_step(uint64_t value);
-  private:
-  uint64_t _internal_reference_model_step() const;
-  void _internal_set_reference_model_step(uint64_t value);
+  const std::string& _internal_value_target_formula_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_value_target_formula_id(const std::string& value);
+  std::string* _internal_mutable_value_target_formula_id();
   public:
 
-  // int64 max_sample_age_ms = 4;
-  void clear_max_sample_age_ms();
-  int64_t max_sample_age_ms() const;
-  void set_max_sample_age_ms(int64_t value);
+  // string value_head_abi_id = 8;
+  void clear_value_head_abi_id();
+  const std::string& value_head_abi_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_value_head_abi_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_value_head_abi_id();
+  PROTOBUF_NODISCARD std::string* release_value_head_abi_id();
+  void set_allocated_value_head_abi_id(std::string* value_head_abi_id);
   private:
-  int64_t _internal_max_sample_age_ms() const;
-  void _internal_set_max_sample_age_ms(int64_t value);
+  const std::string& _internal_value_head_abi_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_value_head_abi_id(const std::string& value);
+  std::string* _internal_mutable_value_head_abi_id();
   public:
 
-  // uint32 max_model_step_lag = 3;
-  void clear_max_model_step_lag();
-  uint32_t max_model_step_lag() const;
-  void set_max_model_step_lag(uint32_t value);
+  // string numeric_dtype = 10;
+  void clear_numeric_dtype();
+  const std::string& numeric_dtype() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_numeric_dtype(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_numeric_dtype();
+  PROTOBUF_NODISCARD std::string* release_numeric_dtype();
+  void set_allocated_numeric_dtype(std::string* numeric_dtype);
   private:
-  uint32_t _internal_max_model_step_lag() const;
-  void _internal_set_max_model_step_lag(uint32_t value);
+  const std::string& _internal_numeric_dtype() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_numeric_dtype(const std::string& value);
+  std::string* _internal_mutable_numeric_dtype();
   public:
 
-  // @@protoc_insertion_point(class_scope:rl.training.v1.SampleFreshnessPolicy)
+  // string finite_rule_id = 11;
+  void clear_finite_rule_id();
+  const std::string& finite_rule_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_finite_rule_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_finite_rule_id();
+  PROTOBUF_NODISCARD std::string* release_finite_rule_id();
+  void set_allocated_finite_rule_id(std::string* finite_rule_id);
+  private:
+  const std::string& _internal_finite_rule_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_finite_rule_id(const std::string& value);
+  std::string* _internal_mutable_finite_rule_id();
+  public:
+
+  // string model_pin_semantics_id = 12;
+  void clear_model_pin_semantics_id();
+  const std::string& model_pin_semantics_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_model_pin_semantics_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_model_pin_semantics_id();
+  PROTOBUF_NODISCARD std::string* release_model_pin_semantics_id();
+  void set_allocated_model_pin_semantics_id(std::string* model_pin_semantics_id);
+  private:
+  const std::string& _internal_model_pin_semantics_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_pin_semantics_id(const std::string& value);
+  std::string* _internal_mutable_model_pin_semantics_id();
+  public:
+
+  // .rl.common.v1.ContentDigest reward_semantics_digest = 9;
+  bool has_reward_semantics_digest() const;
+  private:
+  bool _internal_has_reward_semantics_digest() const;
+  public:
+  void clear_reward_semantics_digest();
+  const ::rl::common::v1::ContentDigest& reward_semantics_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_reward_semantics_digest();
+  ::rl::common::v1::ContentDigest* mutable_reward_semantics_digest();
+  void set_allocated_reward_semantics_digest(::rl::common::v1::ContentDigest* reward_semantics_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_reward_semantics_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_reward_semantics_digest();
+  public:
+  void unsafe_arena_set_allocated_reward_semantics_digest(
+      ::rl::common::v1::ContentDigest* reward_semantics_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_reward_semantics_digest();
+
+  // .rl.common.v1.ContentDigest profile_digest = 13;
+  bool has_profile_digest() const;
+  private:
+  bool _internal_has_profile_digest() const;
+  public:
+  void clear_profile_digest();
+  const ::rl::common::v1::ContentDigest& profile_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_profile_digest();
+  ::rl::common::v1::ContentDigest* mutable_profile_digest();
+  void set_allocated_profile_digest(::rl::common::v1::ContentDigest* profile_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_profile_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_profile_digest();
+  public:
+  void unsafe_arena_set_allocated_profile_digest(
+      ::rl::common::v1::ContentDigest* profile_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_profile_digest();
+
+  // double gamma = 2;
+  void clear_gamma();
+  double gamma() const;
+  void set_gamma(double value);
+  private:
+  double _internal_gamma() const;
+  void _internal_set_gamma(double value);
+  public:
+
+  // uint32 profile_schema_version = 1;
+  void clear_profile_schema_version();
+  uint32_t profile_schema_version() const;
+  void set_profile_schema_version(uint32_t value);
+  private:
+  uint32_t _internal_profile_schema_version() const;
+  void _internal_set_profile_schema_version(uint32_t value);
+  public:
+
+  // uint32 tmax = 4;
+  void clear_tmax();
+  uint32_t tmax() const;
+  void set_tmax(uint32_t value);
+  private:
+  uint32_t _internal_tmax() const;
+  void _internal_set_tmax(uint32_t value);
+  public:
+
+  // double gae_lambda = 3;
+  void clear_gae_lambda();
+  double gae_lambda() const;
+  void set_gae_lambda(double value);
+  private:
+  double _internal_gae_lambda() const;
+  void _internal_set_gae_lambda(double value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.RolloutEstimatorProfile)
  private:
   class _Internal;
 
@@ -1419,183 +1558,19 @@ class SampleFreshnessPolicy final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_lineage_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr distribution_schema_id_;
-    ::rl::common::v1::ContentDigest* policy_spec_digest_;
-    uint64_t reference_model_step_;
-    int64_t max_sample_age_ms_;
-    uint32_t max_model_step_lag_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
-class BatchAssemblySpec final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.BatchAssemblySpec) */ {
- public:
-  inline BatchAssemblySpec() : BatchAssemblySpec(nullptr) {}
-  ~BatchAssemblySpec() override;
-  explicit PROTOBUF_CONSTEXPR BatchAssemblySpec(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  BatchAssemblySpec(const BatchAssemblySpec& from);
-  BatchAssemblySpec(BatchAssemblySpec&& from) noexcept
-    : BatchAssemblySpec() {
-    *this = ::std::move(from);
-  }
-
-  inline BatchAssemblySpec& operator=(const BatchAssemblySpec& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline BatchAssemblySpec& operator=(BatchAssemblySpec&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const BatchAssemblySpec& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const BatchAssemblySpec* internal_default_instance() {
-    return reinterpret_cast<const BatchAssemblySpec*>(
-               &_BatchAssemblySpec_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    3;
-
-  friend void swap(BatchAssemblySpec& a, BatchAssemblySpec& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(BatchAssemblySpec* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(BatchAssemblySpec* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  BatchAssemblySpec* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<BatchAssemblySpec>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const BatchAssemblySpec& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const BatchAssemblySpec& from) {
-    BatchAssemblySpec::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(BatchAssemblySpec* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.BatchAssemblySpec";
-  }
-  protected:
-  explicit BatchAssemblySpec(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kTargetSamplesFieldNumber = 1,
-    kMaxSamplesFieldNumber = 2,
-    kModeFieldNumber = 3,
-  };
-  // int32 target_samples = 1;
-  void clear_target_samples();
-  int32_t target_samples() const;
-  void set_target_samples(int32_t value);
-  private:
-  int32_t _internal_target_samples() const;
-  void _internal_set_target_samples(int32_t value);
-  public:
-
-  // int32 max_samples = 2;
-  void clear_max_samples();
-  int32_t max_samples() const;
-  void set_max_samples(int32_t value);
-  private:
-  int32_t _internal_max_samples() const;
-  void _internal_set_max_samples(int32_t value);
-  public:
-
-  // .rl.training.v1.BatchAssemblyMode mode = 3;
-  void clear_mode();
-  ::rl::training::v1::BatchAssemblyMode mode() const;
-  void set_mode(::rl::training::v1::BatchAssemblyMode value);
-  private:
-  ::rl::training::v1::BatchAssemblyMode _internal_mode() const;
-  void _internal_set_mode(::rl::training::v1::BatchAssemblyMode value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.BatchAssemblySpec)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    int32_t target_samples_;
-    int32_t max_samples_;
-    int mode_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gae_formula_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr terminal_bootstrap_semantics_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr value_target_formula_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr value_head_abi_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr numeric_dtype_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr finite_rule_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_pin_semantics_id_;
+    ::rl::common::v1::ContentDigest* reward_semantics_digest_;
+    ::rl::common::v1::ContentDigest* profile_digest_;
+    double gamma_;
+    uint32_t profile_schema_version_;
+    uint32_t tmax_;
+    double gae_lambda_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1651,7 +1626,7 @@ class TrainingSemanticsIdentity final :
                &_TrainingSemanticsIdentity_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    3;
 
   friend void swap(TrainingSemanticsIdentity& a, TrainingSemanticsIdentity& b) {
     a.Swap(&b);
@@ -1868,24 +1843,24 @@ class TrainingSemanticsIdentity final :
 };
 // -------------------------------------------------------------------
 
-class Sample final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.Sample) */ {
+class ProcessedTransition final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.ProcessedTransition) */ {
  public:
-  inline Sample() : Sample(nullptr) {}
-  ~Sample() override;
-  explicit PROTOBUF_CONSTEXPR Sample(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline ProcessedTransition() : ProcessedTransition(nullptr) {}
+  ~ProcessedTransition() override;
+  explicit PROTOBUF_CONSTEXPR ProcessedTransition(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  Sample(const Sample& from);
-  Sample(Sample&& from) noexcept
-    : Sample() {
+  ProcessedTransition(const ProcessedTransition& from);
+  ProcessedTransition(ProcessedTransition&& from) noexcept
+    : ProcessedTransition() {
     *this = ::std::move(from);
   }
 
-  inline Sample& operator=(const Sample& from) {
+  inline ProcessedTransition& operator=(const ProcessedTransition& from) {
     CopyFrom(from);
     return *this;
   }
-  inline Sample& operator=(Sample&& from) noexcept {
+  inline ProcessedTransition& operator=(ProcessedTransition&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1908,20 +1883,20 @@ class Sample final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const Sample& default_instance() {
+  static const ProcessedTransition& default_instance() {
     return *internal_default_instance();
   }
-  static inline const Sample* internal_default_instance() {
-    return reinterpret_cast<const Sample*>(
-               &_Sample_default_instance_);
+  static inline const ProcessedTransition* internal_default_instance() {
+    return reinterpret_cast<const ProcessedTransition*>(
+               &_ProcessedTransition_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    4;
 
-  friend void swap(Sample& a, Sample& b) {
+  friend void swap(ProcessedTransition& a, ProcessedTransition& b) {
     a.Swap(&b);
   }
-  inline void Swap(Sample* other) {
+  inline void Swap(ProcessedTransition* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1934,7 +1909,7 @@ class Sample final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(Sample* other) {
+  void UnsafeArenaSwap(ProcessedTransition* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1942,14 +1917,14 @@ class Sample final :
 
   // implements Message ----------------------------------------------
 
-  Sample* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<Sample>(arena);
+  ProcessedTransition* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ProcessedTransition>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const Sample& from);
+  void CopyFrom(const ProcessedTransition& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const Sample& from) {
-    Sample::MergeImpl(*this, from);
+  void MergeFrom( const ProcessedTransition& from) {
+    ProcessedTransition::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1967,15 +1942,15 @@ class Sample final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(Sample* other);
+  void InternalSwap(ProcessedTransition* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.Sample";
+    return "rl.training.v1.ProcessedTransition";
   }
   protected:
-  explicit Sample(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit ProcessedTransition(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1989,18 +1964,33 @@ class Sample final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kObservationFieldNumber = 1,
-    kNextObservationFieldNumber = 2,
-    kActionFieldNumber = 3,
-    kRewardFieldNumber = 4,
-    kOldLogProbabilityFieldNumber = 5,
-    kOldValuePredictionFieldNumber = 6,
-    kTerminatedFieldNumber = 7,
-    kTruncatedFieldNumber = 8,
-    kEndKindFieldNumber = 9,
-    kActionStepFieldNumber = 10,
+    kObservationFieldNumber = 9,
+    kNextObservationFieldNumber = 10,
+    kItemIdFieldNumber = 1,
+    kEnvironmentSessionIdFieldNumber = 2,
+    kEpisodeIdFieldNumber = 3,
+    kSegmentIdFieldNumber = 5,
+    kBehaviorPolicyFieldNumber = 23,
+    kRolloutEstimatorProfileDigestFieldNumber = 24,
+    kAgentIdFieldNumber = 4,
+    kTransitionIndexFieldNumber = 6,
+    kActionStepFieldNumber = 8,
+    kSegmentTransitionCountFieldNumber = 7,
+    kActionFieldNumber = 11,
+    kRewardFieldNumber = 12,
+    kBehaviorLogProbabilityFieldNumber = 13,
+    kBehaviorValueFieldNumber = 14,
+    kAdvantageFieldNumber = 15,
+    kValueTargetFieldNumber = 16,
+    kEndKindFieldNumber = 18,
+    kSegmentCloseReasonFieldNumber = 19,
+    kEnvironmentTerminalFieldNumber = 17,
+    kSegmentBoundaryFieldNumber = 20,
+    kBootstrapAppliedFieldNumber = 21,
+    kCreatedAtUnixMsFieldNumber = 25,
+    kBootstrapValueFieldNumber = 22,
   };
-  // repeated float observation = 1;
+  // repeated float observation = 9;
   int observation_size() const;
   private:
   int _internal_observation_size() const;
@@ -2022,7 +2012,7 @@ class Sample final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_observation();
 
-  // repeated float next_observation = 2;
+  // repeated float next_observation = 10;
   int next_observation_size() const;
   private:
   int _internal_next_observation_size() const;
@@ -2044,70 +2034,117 @@ class Sample final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_next_observation();
 
-  // int32 action = 3;
-  void clear_action();
-  int32_t action() const;
-  void set_action(int32_t value);
+  // string item_id = 1;
+  void clear_item_id();
+  const std::string& item_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_item_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_item_id();
+  PROTOBUF_NODISCARD std::string* release_item_id();
+  void set_allocated_item_id(std::string* item_id);
   private:
-  int32_t _internal_action() const;
-  void _internal_set_action(int32_t value);
+  const std::string& _internal_item_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_item_id(const std::string& value);
+  std::string* _internal_mutable_item_id();
   public:
 
-  // float reward = 4;
-  void clear_reward();
-  float reward() const;
-  void set_reward(float value);
+  // string environment_session_id = 2;
+  void clear_environment_session_id();
+  const std::string& environment_session_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_environment_session_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_environment_session_id();
+  PROTOBUF_NODISCARD std::string* release_environment_session_id();
+  void set_allocated_environment_session_id(std::string* environment_session_id);
   private:
-  float _internal_reward() const;
-  void _internal_set_reward(float value);
+  const std::string& _internal_environment_session_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_environment_session_id(const std::string& value);
+  std::string* _internal_mutable_environment_session_id();
   public:
 
-  // float old_log_probability = 5;
-  void clear_old_log_probability();
-  float old_log_probability() const;
-  void set_old_log_probability(float value);
+  // string episode_id = 3;
+  void clear_episode_id();
+  const std::string& episode_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_episode_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_episode_id();
+  PROTOBUF_NODISCARD std::string* release_episode_id();
+  void set_allocated_episode_id(std::string* episode_id);
   private:
-  float _internal_old_log_probability() const;
-  void _internal_set_old_log_probability(float value);
+  const std::string& _internal_episode_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_episode_id(const std::string& value);
+  std::string* _internal_mutable_episode_id();
   public:
 
-  // float old_value_prediction = 6;
-  void clear_old_value_prediction();
-  float old_value_prediction() const;
-  void set_old_value_prediction(float value);
+  // string segment_id = 5;
+  void clear_segment_id();
+  const std::string& segment_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_segment_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_segment_id();
+  PROTOBUF_NODISCARD std::string* release_segment_id();
+  void set_allocated_segment_id(std::string* segment_id);
   private:
-  float _internal_old_value_prediction() const;
-  void _internal_set_old_value_prediction(float value);
+  const std::string& _internal_segment_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_segment_id(const std::string& value);
+  std::string* _internal_mutable_segment_id();
   public:
 
-  // bool terminated = 7;
-  void clear_terminated();
-  bool terminated() const;
-  void set_terminated(bool value);
+  // .rl.training.v1.BehaviorPolicyReference behavior_policy = 23;
+  bool has_behavior_policy() const;
   private:
-  bool _internal_terminated() const;
-  void _internal_set_terminated(bool value);
+  bool _internal_has_behavior_policy() const;
+  public:
+  void clear_behavior_policy();
+  const ::rl::training::v1::BehaviorPolicyReference& behavior_policy() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::BehaviorPolicyReference* release_behavior_policy();
+  ::rl::training::v1::BehaviorPolicyReference* mutable_behavior_policy();
+  void set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy);
+  private:
+  const ::rl::training::v1::BehaviorPolicyReference& _internal_behavior_policy() const;
+  ::rl::training::v1::BehaviorPolicyReference* _internal_mutable_behavior_policy();
+  public:
+  void unsafe_arena_set_allocated_behavior_policy(
+      ::rl::training::v1::BehaviorPolicyReference* behavior_policy);
+  ::rl::training::v1::BehaviorPolicyReference* unsafe_arena_release_behavior_policy();
+
+  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 24;
+  bool has_rollout_estimator_profile_digest() const;
+  private:
+  bool _internal_has_rollout_estimator_profile_digest() const;
+  public:
+  void clear_rollout_estimator_profile_digest();
+  const ::rl::common::v1::ContentDigest& rollout_estimator_profile_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_rollout_estimator_profile_digest();
+  ::rl::common::v1::ContentDigest* mutable_rollout_estimator_profile_digest();
+  void set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_rollout_estimator_profile_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_rollout_estimator_profile_digest();
+  public:
+  void unsafe_arena_set_allocated_rollout_estimator_profile_digest(
+      ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_rollout_estimator_profile_digest();
+
+  // uint32 agent_id = 4;
+  void clear_agent_id();
+  uint32_t agent_id() const;
+  void set_agent_id(uint32_t value);
+  private:
+  uint32_t _internal_agent_id() const;
+  void _internal_set_agent_id(uint32_t value);
   public:
 
-  // bool truncated = 8;
-  void clear_truncated();
-  bool truncated() const;
-  void set_truncated(bool value);
+  // uint32 transition_index = 6;
+  void clear_transition_index();
+  uint32_t transition_index() const;
+  void set_transition_index(uint32_t value);
   private:
-  bool _internal_truncated() const;
-  void _internal_set_truncated(bool value);
+  uint32_t _internal_transition_index() const;
+  void _internal_set_transition_index(uint32_t value);
   public:
 
-  // .rl.training.v1.TransitionEndKind end_kind = 9;
-  void clear_end_kind();
-  ::rl::training::v1::TransitionEndKind end_kind() const;
-  void set_end_kind(::rl::training::v1::TransitionEndKind value);
-  private:
-  ::rl::training::v1::TransitionEndKind _internal_end_kind() const;
-  void _internal_set_end_kind(::rl::training::v1::TransitionEndKind value);
-  public:
-
-  // uint64 action_step = 10;
+  // uint64 action_step = 8;
   void clear_action_step();
   uint64_t action_step() const;
   void set_action_step(uint64_t value);
@@ -2116,7 +2153,137 @@ class Sample final :
   void _internal_set_action_step(uint64_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:rl.training.v1.Sample)
+  // uint32 segment_transition_count = 7;
+  void clear_segment_transition_count();
+  uint32_t segment_transition_count() const;
+  void set_segment_transition_count(uint32_t value);
+  private:
+  uint32_t _internal_segment_transition_count() const;
+  void _internal_set_segment_transition_count(uint32_t value);
+  public:
+
+  // int32 action = 11;
+  void clear_action();
+  int32_t action() const;
+  void set_action(int32_t value);
+  private:
+  int32_t _internal_action() const;
+  void _internal_set_action(int32_t value);
+  public:
+
+  // float reward = 12;
+  void clear_reward();
+  float reward() const;
+  void set_reward(float value);
+  private:
+  float _internal_reward() const;
+  void _internal_set_reward(float value);
+  public:
+
+  // float behavior_log_probability = 13;
+  void clear_behavior_log_probability();
+  float behavior_log_probability() const;
+  void set_behavior_log_probability(float value);
+  private:
+  float _internal_behavior_log_probability() const;
+  void _internal_set_behavior_log_probability(float value);
+  public:
+
+  // float behavior_value = 14;
+  void clear_behavior_value();
+  float behavior_value() const;
+  void set_behavior_value(float value);
+  private:
+  float _internal_behavior_value() const;
+  void _internal_set_behavior_value(float value);
+  public:
+
+  // float advantage = 15;
+  void clear_advantage();
+  float advantage() const;
+  void set_advantage(float value);
+  private:
+  float _internal_advantage() const;
+  void _internal_set_advantage(float value);
+  public:
+
+  // float value_target = 16;
+  void clear_value_target();
+  float value_target() const;
+  void set_value_target(float value);
+  private:
+  float _internal_value_target() const;
+  void _internal_set_value_target(float value);
+  public:
+
+  // .rl.training.v1.TransitionEndKind end_kind = 18;
+  void clear_end_kind();
+  ::rl::training::v1::TransitionEndKind end_kind() const;
+  void set_end_kind(::rl::training::v1::TransitionEndKind value);
+  private:
+  ::rl::training::v1::TransitionEndKind _internal_end_kind() const;
+  void _internal_set_end_kind(::rl::training::v1::TransitionEndKind value);
+  public:
+
+  // .rl.training.v1.SegmentCloseReason segment_close_reason = 19;
+  void clear_segment_close_reason();
+  ::rl::training::v1::SegmentCloseReason segment_close_reason() const;
+  void set_segment_close_reason(::rl::training::v1::SegmentCloseReason value);
+  private:
+  ::rl::training::v1::SegmentCloseReason _internal_segment_close_reason() const;
+  void _internal_set_segment_close_reason(::rl::training::v1::SegmentCloseReason value);
+  public:
+
+  // bool environment_terminal = 17;
+  void clear_environment_terminal();
+  bool environment_terminal() const;
+  void set_environment_terminal(bool value);
+  private:
+  bool _internal_environment_terminal() const;
+  void _internal_set_environment_terminal(bool value);
+  public:
+
+  // bool segment_boundary = 20;
+  void clear_segment_boundary();
+  bool segment_boundary() const;
+  void set_segment_boundary(bool value);
+  private:
+  bool _internal_segment_boundary() const;
+  void _internal_set_segment_boundary(bool value);
+  public:
+
+  // bool bootstrap_applied = 21;
+  void clear_bootstrap_applied();
+  bool bootstrap_applied() const;
+  void set_bootstrap_applied(bool value);
+  private:
+  bool _internal_bootstrap_applied() const;
+  void _internal_set_bootstrap_applied(bool value);
+  public:
+
+  // int64 created_at_unix_ms = 25;
+  void clear_created_at_unix_ms();
+  int64_t created_at_unix_ms() const;
+  void set_created_at_unix_ms(int64_t value);
+  private:
+  int64_t _internal_created_at_unix_ms() const;
+  void _internal_set_created_at_unix_ms(int64_t value);
+  public:
+
+  // optional float bootstrap_value = 22;
+  bool has_bootstrap_value() const;
+  private:
+  bool _internal_has_bootstrap_value() const;
+  public:
+  void clear_bootstrap_value();
+  float bootstrap_value() const;
+  void set_bootstrap_value(float value);
+  private:
+  float _internal_bootstrap_value() const;
+  void _internal_set_bootstrap_value(float value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.ProcessedTransition)
  private:
   class _Internal;
 
@@ -2124,41 +2291,57 @@ class Sample final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > observation_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > next_observation_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr item_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_session_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr segment_id_;
+    ::rl::training::v1::BehaviorPolicyReference* behavior_policy_;
+    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
+    uint32_t agent_id_;
+    uint32_t transition_index_;
+    uint64_t action_step_;
+    uint32_t segment_transition_count_;
     int32_t action_;
     float reward_;
-    float old_log_probability_;
-    float old_value_prediction_;
-    bool terminated_;
-    bool truncated_;
+    float behavior_log_probability_;
+    float behavior_value_;
+    float advantage_;
+    float value_target_;
     int end_kind_;
-    uint64_t action_step_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    int segment_close_reason_;
+    bool environment_terminal_;
+    bool segment_boundary_;
+    bool bootstrap_applied_;
+    int64_t created_at_unix_ms_;
+    float bootstrap_value_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
 };
 // -------------------------------------------------------------------
 
-class SampleBatch final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SampleBatch) */ {
+class ProcessedTransitionEnvelope final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.ProcessedTransitionEnvelope) */ {
  public:
-  inline SampleBatch() : SampleBatch(nullptr) {}
-  ~SampleBatch() override;
-  explicit PROTOBUF_CONSTEXPR SampleBatch(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline ProcessedTransitionEnvelope() : ProcessedTransitionEnvelope(nullptr) {}
+  ~ProcessedTransitionEnvelope() override;
+  explicit PROTOBUF_CONSTEXPR ProcessedTransitionEnvelope(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  SampleBatch(const SampleBatch& from);
-  SampleBatch(SampleBatch&& from) noexcept
-    : SampleBatch() {
+  ProcessedTransitionEnvelope(const ProcessedTransitionEnvelope& from);
+  ProcessedTransitionEnvelope(ProcessedTransitionEnvelope&& from) noexcept
+    : ProcessedTransitionEnvelope() {
     *this = ::std::move(from);
   }
 
-  inline SampleBatch& operator=(const SampleBatch& from) {
+  inline ProcessedTransitionEnvelope& operator=(const ProcessedTransitionEnvelope& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SampleBatch& operator=(SampleBatch&& from) noexcept {
+  inline ProcessedTransitionEnvelope& operator=(ProcessedTransitionEnvelope&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2181,20 +2364,20 @@ class SampleBatch final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const SampleBatch& default_instance() {
+  static const ProcessedTransitionEnvelope& default_instance() {
     return *internal_default_instance();
   }
-  static inline const SampleBatch* internal_default_instance() {
-    return reinterpret_cast<const SampleBatch*>(
-               &_SampleBatch_default_instance_);
+  static inline const ProcessedTransitionEnvelope* internal_default_instance() {
+    return reinterpret_cast<const ProcessedTransitionEnvelope*>(
+               &_ProcessedTransitionEnvelope_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    5;
 
-  friend void swap(SampleBatch& a, SampleBatch& b) {
+  friend void swap(ProcessedTransitionEnvelope& a, ProcessedTransitionEnvelope& b) {
     a.Swap(&b);
   }
-  inline void Swap(SampleBatch* other) {
+  inline void Swap(ProcessedTransitionEnvelope* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2207,7 +2390,7 @@ class SampleBatch final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SampleBatch* other) {
+  void UnsafeArenaSwap(ProcessedTransitionEnvelope* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2215,14 +2398,14 @@ class SampleBatch final :
 
   // implements Message ----------------------------------------------
 
-  SampleBatch* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<SampleBatch>(arena);
+  ProcessedTransitionEnvelope* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ProcessedTransitionEnvelope>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const SampleBatch& from);
+  void CopyFrom(const ProcessedTransitionEnvelope& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const SampleBatch& from) {
-    SampleBatch::MergeImpl(*this, from);
+  void MergeFrom( const ProcessedTransitionEnvelope& from) {
+    ProcessedTransitionEnvelope::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -2240,15 +2423,15 @@ class SampleBatch final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SampleBatch* other);
+  void InternalSwap(ProcessedTransitionEnvelope* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.SampleBatch";
+    return "rl.training.v1.ProcessedTransitionEnvelope";
   }
   protected:
-  explicit SampleBatch(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit ProcessedTransitionEnvelope(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -2262,83 +2445,44 @@ class SampleBatch final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kSamplesFieldNumber = 8,
-    kBatchIdFieldNumber = 1,
-    kActorSessionIdFieldNumber = 3,
-    kTrajectoryIdFieldNumber = 4,
+    kTransitionsFieldNumber = 3,
+    kEnvelopeIdFieldNumber = 1,
     kPayloadDigestFieldNumber = 2,
-    kBehaviorPolicyFieldNumber = 12,
     kTrainingSemanticsFieldNumber = 13,
     kProducerFieldNumber = 14,
     kContractFieldNumber = 15,
-    kActorIdFieldNumber = 5,
-    kFragmentIdFieldNumber = 6,
-    kFragmentSequenceFieldNumber = 7,
-    kBootstrapValueFieldNumber = 10,
-    kTrajectoryEndFieldNumber = 9,
-    kBootstrapValidFieldNumber = 11,
     kCreatedAtUnixMsFieldNumber = 16,
-    kFirstActionStepFieldNumber = 17,
-    kLastActionStepFieldNumber = 18,
   };
-  // repeated .rl.training.v1.Sample samples = 8;
-  int samples_size() const;
+  // repeated .rl.training.v1.ProcessedTransition transitions = 3;
+  int transitions_size() const;
   private:
-  int _internal_samples_size() const;
+  int _internal_transitions_size() const;
   public:
-  void clear_samples();
-  ::rl::training::v1::Sample* mutable_samples(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::Sample >*
-      mutable_samples();
+  void clear_transitions();
+  ::rl::training::v1::ProcessedTransition* mutable_transitions(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >*
+      mutable_transitions();
   private:
-  const ::rl::training::v1::Sample& _internal_samples(int index) const;
-  ::rl::training::v1::Sample* _internal_add_samples();
+  const ::rl::training::v1::ProcessedTransition& _internal_transitions(int index) const;
+  ::rl::training::v1::ProcessedTransition* _internal_add_transitions();
   public:
-  const ::rl::training::v1::Sample& samples(int index) const;
-  ::rl::training::v1::Sample* add_samples();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::Sample >&
-      samples() const;
+  const ::rl::training::v1::ProcessedTransition& transitions(int index) const;
+  ::rl::training::v1::ProcessedTransition* add_transitions();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >&
+      transitions() const;
 
-  // string batch_id = 1;
-  void clear_batch_id();
-  const std::string& batch_id() const;
+  // string envelope_id = 1;
+  void clear_envelope_id();
+  const std::string& envelope_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_batch_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_batch_id();
-  PROTOBUF_NODISCARD std::string* release_batch_id();
-  void set_allocated_batch_id(std::string* batch_id);
+  void set_envelope_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_envelope_id();
+  PROTOBUF_NODISCARD std::string* release_envelope_id();
+  void set_allocated_envelope_id(std::string* envelope_id);
   private:
-  const std::string& _internal_batch_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_batch_id(const std::string& value);
-  std::string* _internal_mutable_batch_id();
-  public:
-
-  // string actor_session_id = 3;
-  void clear_actor_session_id();
-  const std::string& actor_session_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_actor_session_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_actor_session_id();
-  PROTOBUF_NODISCARD std::string* release_actor_session_id();
-  void set_allocated_actor_session_id(std::string* actor_session_id);
-  private:
-  const std::string& _internal_actor_session_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_actor_session_id(const std::string& value);
-  std::string* _internal_mutable_actor_session_id();
-  public:
-
-  // string trajectory_id = 4;
-  void clear_trajectory_id();
-  const std::string& trajectory_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_trajectory_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_trajectory_id();
-  PROTOBUF_NODISCARD std::string* release_trajectory_id();
-  void set_allocated_trajectory_id(std::string* trajectory_id);
-  private:
-  const std::string& _internal_trajectory_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_trajectory_id(const std::string& value);
-  std::string* _internal_mutable_trajectory_id();
+  const std::string& _internal_envelope_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_envelope_id(const std::string& value);
+  std::string* _internal_mutable_envelope_id();
   public:
 
   // .rl.common.v1.ContentDigest payload_digest = 2;
@@ -2358,24 +2502,6 @@ class SampleBatch final :
   void unsafe_arena_set_allocated_payload_digest(
       ::rl::common::v1::ContentDigest* payload_digest);
   ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
-
-  // .rl.training.v1.BehaviorPolicyReference behavior_policy = 12;
-  bool has_behavior_policy() const;
-  private:
-  bool _internal_has_behavior_policy() const;
-  public:
-  void clear_behavior_policy();
-  const ::rl::training::v1::BehaviorPolicyReference& behavior_policy() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::BehaviorPolicyReference* release_behavior_policy();
-  ::rl::training::v1::BehaviorPolicyReference* mutable_behavior_policy();
-  void set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy);
-  private:
-  const ::rl::training::v1::BehaviorPolicyReference& _internal_behavior_policy() const;
-  ::rl::training::v1::BehaviorPolicyReference* _internal_mutable_behavior_policy();
-  public:
-  void unsafe_arena_set_allocated_behavior_policy(
-      ::rl::training::v1::BehaviorPolicyReference* behavior_policy);
-  ::rl::training::v1::BehaviorPolicyReference* unsafe_arena_release_behavior_policy();
 
   // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 13;
   bool has_training_semantics() const;
@@ -2431,60 +2557,6 @@ class SampleBatch final :
       ::rl::common::v1::ContractIdentity* contract);
   ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
 
-  // uint32 actor_id = 5;
-  void clear_actor_id();
-  uint32_t actor_id() const;
-  void set_actor_id(uint32_t value);
-  private:
-  uint32_t _internal_actor_id() const;
-  void _internal_set_actor_id(uint32_t value);
-  public:
-
-  // uint32 fragment_id = 6;
-  void clear_fragment_id();
-  uint32_t fragment_id() const;
-  void set_fragment_id(uint32_t value);
-  private:
-  uint32_t _internal_fragment_id() const;
-  void _internal_set_fragment_id(uint32_t value);
-  public:
-
-  // uint64 fragment_sequence = 7;
-  void clear_fragment_sequence();
-  uint64_t fragment_sequence() const;
-  void set_fragment_sequence(uint64_t value);
-  private:
-  uint64_t _internal_fragment_sequence() const;
-  void _internal_set_fragment_sequence(uint64_t value);
-  public:
-
-  // float bootstrap_value = 10;
-  void clear_bootstrap_value();
-  float bootstrap_value() const;
-  void set_bootstrap_value(float value);
-  private:
-  float _internal_bootstrap_value() const;
-  void _internal_set_bootstrap_value(float value);
-  public:
-
-  // bool trajectory_end = 9;
-  void clear_trajectory_end();
-  bool trajectory_end() const;
-  void set_trajectory_end(bool value);
-  private:
-  bool _internal_trajectory_end() const;
-  void _internal_set_trajectory_end(bool value);
-  public:
-
-  // bool bootstrap_valid = 11;
-  void clear_bootstrap_valid();
-  bool bootstrap_valid() const;
-  void set_bootstrap_valid(bool value);
-  private:
-  bool _internal_bootstrap_valid() const;
-  void _internal_set_bootstrap_valid(bool value);
-  public:
-
   // int64 created_at_unix_ms = 16;
   void clear_created_at_unix_ms();
   int64_t created_at_unix_ms() const;
@@ -2494,25 +2566,7 @@ class SampleBatch final :
   void _internal_set_created_at_unix_ms(int64_t value);
   public:
 
-  // uint64 first_action_step = 17;
-  void clear_first_action_step();
-  uint64_t first_action_step() const;
-  void set_first_action_step(uint64_t value);
-  private:
-  uint64_t _internal_first_action_step() const;
-  void _internal_set_first_action_step(uint64_t value);
-  public:
-
-  // uint64 last_action_step = 18;
-  void clear_last_action_step();
-  uint64_t last_action_step() const;
-  void set_last_action_step(uint64_t value);
-  private:
-  uint64_t _internal_last_action_step() const;
-  void _internal_set_last_action_step(uint64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.SampleBatch)
+  // @@protoc_insertion_point(class_scope:rl.training.v1.ProcessedTransitionEnvelope)
  private:
   class _Internal;
 
@@ -2520,24 +2574,13 @@ class SampleBatch final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::Sample > samples_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr batch_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr actor_session_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr trajectory_id_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition > transitions_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr envelope_id_;
     ::rl::common::v1::ContentDigest* payload_digest_;
-    ::rl::training::v1::BehaviorPolicyReference* behavior_policy_;
     ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
     ::rl::common::v1::ServiceInstanceIdentity* producer_;
     ::rl::common::v1::ContractIdentity* contract_;
-    uint32_t actor_id_;
-    uint32_t fragment_id_;
-    uint64_t fragment_sequence_;
-    float bootstrap_value_;
-    bool trajectory_end_;
-    bool bootstrap_valid_;
     int64_t created_at_unix_ms_;
-    uint64_t first_action_step_;
-    uint64_t last_action_step_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2545,24 +2588,24 @@ class SampleBatch final :
 };
 // -------------------------------------------------------------------
 
-class SampleResponse final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SampleResponse) */ {
+class SamplePoolItem final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SamplePoolItem) */ {
  public:
-  inline SampleResponse() : SampleResponse(nullptr) {}
-  ~SampleResponse() override;
-  explicit PROTOBUF_CONSTEXPR SampleResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SamplePoolItem() : SamplePoolItem(nullptr) {}
+  ~SamplePoolItem() override;
+  explicit PROTOBUF_CONSTEXPR SamplePoolItem(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  SampleResponse(const SampleResponse& from);
-  SampleResponse(SampleResponse&& from) noexcept
-    : SampleResponse() {
+  SamplePoolItem(const SamplePoolItem& from);
+  SamplePoolItem(SamplePoolItem&& from) noexcept
+    : SamplePoolItem() {
     *this = ::std::move(from);
   }
 
-  inline SampleResponse& operator=(const SampleResponse& from) {
+  inline SamplePoolItem& operator=(const SamplePoolItem& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SampleResponse& operator=(SampleResponse&& from) noexcept {
+  inline SamplePoolItem& operator=(SamplePoolItem&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -2585,20 +2628,20 @@ class SampleResponse final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const SampleResponse& default_instance() {
+  static const SamplePoolItem& default_instance() {
     return *internal_default_instance();
   }
-  static inline const SampleResponse* internal_default_instance() {
-    return reinterpret_cast<const SampleResponse*>(
-               &_SampleResponse_default_instance_);
+  static inline const SamplePoolItem* internal_default_instance() {
+    return reinterpret_cast<const SamplePoolItem*>(
+               &_SamplePoolItem_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    6;
 
-  friend void swap(SampleResponse& a, SampleResponse& b) {
+  friend void swap(SamplePoolItem& a, SamplePoolItem& b) {
     a.Swap(&b);
   }
-  inline void Swap(SampleResponse* other) {
+  inline void Swap(SamplePoolItem* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -2611,7 +2654,7 @@ class SampleResponse final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SampleResponse* other) {
+  void UnsafeArenaSwap(SamplePoolItem* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -2619,14 +2662,14 @@ class SampleResponse final :
 
   // implements Message ----------------------------------------------
 
-  SampleResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<SampleResponse>(arena);
+  SamplePoolItem* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SamplePoolItem>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const SampleResponse& from);
+  void CopyFrom(const SamplePoolItem& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const SampleResponse& from) {
-    SampleResponse::MergeImpl(*this, from);
+  void MergeFrom( const SamplePoolItem& from) {
+    SamplePoolItem::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -2644,15 +2687,15 @@ class SampleResponse final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SampleResponse* other);
+  void InternalSwap(SamplePoolItem* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.SampleResponse";
+    return "rl.training.v1.SamplePoolItem";
   }
   protected:
-  explicit SampleResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SamplePoolItem(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -2666,32 +2709,57 @@ class SampleResponse final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kModelStepFieldNumber = 2,
-    kRetCodeFieldNumber = 1,
+    kTransitionFieldNumber = 1,
+    kInsertSequenceFieldNumber = 2,
+    kInsertedAtUnixMsFieldNumber = 3,
+    kDrawCountFieldNumber = 4,
   };
-  // optional uint64 model_step = 2;
-  bool has_model_step() const;
+  // .rl.training.v1.ProcessedTransition transition = 1;
+  bool has_transition() const;
   private:
-  bool _internal_has_model_step() const;
+  bool _internal_has_transition() const;
   public:
-  void clear_model_step();
-  uint64_t model_step() const;
-  void set_model_step(uint64_t value);
+  void clear_transition();
+  const ::rl::training::v1::ProcessedTransition& transition() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::ProcessedTransition* release_transition();
+  ::rl::training::v1::ProcessedTransition* mutable_transition();
+  void set_allocated_transition(::rl::training::v1::ProcessedTransition* transition);
   private:
-  uint64_t _internal_model_step() const;
-  void _internal_set_model_step(uint64_t value);
+  const ::rl::training::v1::ProcessedTransition& _internal_transition() const;
+  ::rl::training::v1::ProcessedTransition* _internal_mutable_transition();
+  public:
+  void unsafe_arena_set_allocated_transition(
+      ::rl::training::v1::ProcessedTransition* transition);
+  ::rl::training::v1::ProcessedTransition* unsafe_arena_release_transition();
+
+  // uint64 insert_sequence = 2;
+  void clear_insert_sequence();
+  uint64_t insert_sequence() const;
+  void set_insert_sequence(uint64_t value);
+  private:
+  uint64_t _internal_insert_sequence() const;
+  void _internal_set_insert_sequence(uint64_t value);
   public:
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
+  // int64 inserted_at_unix_ms = 3;
+  void clear_inserted_at_unix_ms();
+  int64_t inserted_at_unix_ms() const;
+  void set_inserted_at_unix_ms(int64_t value);
   private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
+  int64_t _internal_inserted_at_unix_ms() const;
+  void _internal_set_inserted_at_unix_ms(int64_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:rl.training.v1.SampleResponse)
+  // uint32 draw_count = 4;
+  void clear_draw_count();
+  uint32_t draw_count() const;
+  void set_draw_count(uint32_t value);
+  private:
+  uint32_t _internal_draw_count() const;
+  void _internal_set_draw_count(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.SamplePoolItem)
  private:
   class _Internal;
 
@@ -2699,10 +2767,11 @@ class SampleResponse final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+    ::rl::training::v1::ProcessedTransition* transition_;
+    uint64_t insert_sequence_;
+    int64_t inserted_at_unix_ms_;
+    uint32_t draw_count_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    uint64_t model_step_;
-    int32_t ret_code_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -2757,7 +2826,7 @@ class PushSamplesReq final :
                &_PushSamplesReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    7;
 
   friend void swap(PushSamplesReq& a, PushSamplesReq& b) {
     a.Swap(&b);
@@ -2830,25 +2899,25 @@ class PushSamplesReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBatchFieldNumber = 2,
+    kEnvelopeFieldNumber = 2,
   };
-  // .rl.training.v1.SampleBatch batch = 2;
-  bool has_batch() const;
+  // .rl.training.v1.ProcessedTransitionEnvelope envelope = 2;
+  bool has_envelope() const;
   private:
-  bool _internal_has_batch() const;
+  bool _internal_has_envelope() const;
   public:
-  void clear_batch();
-  const ::rl::training::v1::SampleBatch& batch() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::SampleBatch* release_batch();
-  ::rl::training::v1::SampleBatch* mutable_batch();
-  void set_allocated_batch(::rl::training::v1::SampleBatch* batch);
+  void clear_envelope();
+  const ::rl::training::v1::ProcessedTransitionEnvelope& envelope() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::ProcessedTransitionEnvelope* release_envelope();
+  ::rl::training::v1::ProcessedTransitionEnvelope* mutable_envelope();
+  void set_allocated_envelope(::rl::training::v1::ProcessedTransitionEnvelope* envelope);
   private:
-  const ::rl::training::v1::SampleBatch& _internal_batch() const;
-  ::rl::training::v1::SampleBatch* _internal_mutable_batch();
+  const ::rl::training::v1::ProcessedTransitionEnvelope& _internal_envelope() const;
+  ::rl::training::v1::ProcessedTransitionEnvelope* _internal_mutable_envelope();
   public:
-  void unsafe_arena_set_allocated_batch(
-      ::rl::training::v1::SampleBatch* batch);
-  ::rl::training::v1::SampleBatch* unsafe_arena_release_batch();
+  void unsafe_arena_set_allocated_envelope(
+      ::rl::training::v1::ProcessedTransitionEnvelope* envelope);
+  ::rl::training::v1::ProcessedTransitionEnvelope* unsafe_arena_release_envelope();
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.PushSamplesReq)
  private:
@@ -2858,7 +2927,7 @@ class PushSamplesReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::training::v1::SampleBatch* batch_;
+    ::rl::training::v1::ProcessedTransitionEnvelope* envelope_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2914,7 +2983,7 @@ class PushSamplesRsp final :
                &_PushSamplesRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    8;
 
   friend void swap(PushSamplesRsp& a, PushSamplesRsp& b) {
     a.Swap(&b);
@@ -2988,15 +3057,15 @@ class PushSamplesRsp final :
 
   enum : int {
     kMessageFieldNumber = 2,
-    kBatchIdFieldNumber = 6,
+    kEnvelopeIdFieldNumber = 6,
     kSamplePoolFieldNumber = 12,
-    kAcceptedSamplesFieldNumber = 3,
+    kAcceptedTransitionsFieldNumber = 3,
     kRetCodeFieldNumber = 1,
     kResultFieldNumber = 5,
     kQueueSizeFieldNumber = 4,
-    kAcceptedUniqueSamplesFieldNumber = 7,
-    kResidentSamplesFieldNumber = 8,
-    kResidentFragmentsFieldNumber = 9,
+    kAcceptedUniqueTransitionsFieldNumber = 7,
+    kResidentTransitionsFieldNumber = 8,
+    kResidentEnvelopesFieldNumber = 9,
     kResidentEstimatedBytesFieldNumber = 10,
     kPressureStateFieldNumber = 11,
   };
@@ -3014,18 +3083,18 @@ class PushSamplesRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // string batch_id = 6;
-  void clear_batch_id();
-  const std::string& batch_id() const;
+  // string envelope_id = 6;
+  void clear_envelope_id();
+  const std::string& envelope_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_batch_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_batch_id();
-  PROTOBUF_NODISCARD std::string* release_batch_id();
-  void set_allocated_batch_id(std::string* batch_id);
+  void set_envelope_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_envelope_id();
+  PROTOBUF_NODISCARD std::string* release_envelope_id();
+  void set_allocated_envelope_id(std::string* envelope_id);
   private:
-  const std::string& _internal_batch_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_batch_id(const std::string& value);
-  std::string* _internal_mutable_batch_id();
+  const std::string& _internal_envelope_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_envelope_id(const std::string& value);
+  std::string* _internal_mutable_envelope_id();
   public:
 
   // .rl.common.v1.ServiceInstanceIdentity sample_pool = 12;
@@ -3046,13 +3115,13 @@ class PushSamplesRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* sample_pool);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_sample_pool();
 
-  // int64 accepted_samples = 3;
-  void clear_accepted_samples();
-  int64_t accepted_samples() const;
-  void set_accepted_samples(int64_t value);
+  // int64 accepted_transitions = 3;
+  void clear_accepted_transitions();
+  int64_t accepted_transitions() const;
+  void set_accepted_transitions(int64_t value);
   private:
-  int64_t _internal_accepted_samples() const;
-  void _internal_set_accepted_samples(int64_t value);
+  int64_t _internal_accepted_transitions() const;
+  void _internal_set_accepted_transitions(int64_t value);
   public:
 
   // int32 ret_code = 1;
@@ -3082,31 +3151,31 @@ class PushSamplesRsp final :
   void _internal_set_queue_size(int64_t value);
   public:
 
-  // int64 accepted_unique_samples = 7;
-  void clear_accepted_unique_samples();
-  int64_t accepted_unique_samples() const;
-  void set_accepted_unique_samples(int64_t value);
+  // int64 accepted_unique_transitions = 7;
+  void clear_accepted_unique_transitions();
+  int64_t accepted_unique_transitions() const;
+  void set_accepted_unique_transitions(int64_t value);
   private:
-  int64_t _internal_accepted_unique_samples() const;
-  void _internal_set_accepted_unique_samples(int64_t value);
+  int64_t _internal_accepted_unique_transitions() const;
+  void _internal_set_accepted_unique_transitions(int64_t value);
   public:
 
-  // int64 resident_samples = 8;
-  void clear_resident_samples();
-  int64_t resident_samples() const;
-  void set_resident_samples(int64_t value);
+  // int64 resident_transitions = 8;
+  void clear_resident_transitions();
+  int64_t resident_transitions() const;
+  void set_resident_transitions(int64_t value);
   private:
-  int64_t _internal_resident_samples() const;
-  void _internal_set_resident_samples(int64_t value);
+  int64_t _internal_resident_transitions() const;
+  void _internal_set_resident_transitions(int64_t value);
   public:
 
-  // int64 resident_fragments = 9;
-  void clear_resident_fragments();
-  int64_t resident_fragments() const;
-  void set_resident_fragments(int64_t value);
+  // int64 resident_envelopes = 9;
+  void clear_resident_envelopes();
+  int64_t resident_envelopes() const;
+  void set_resident_envelopes(int64_t value);
   private:
-  int64_t _internal_resident_fragments() const;
-  void _internal_set_resident_fragments(int64_t value);
+  int64_t _internal_resident_envelopes() const;
+  void _internal_set_resident_envelopes(int64_t value);
   public:
 
   // int64 resident_estimated_bytes = 10;
@@ -3136,15 +3205,15 @@ class PushSamplesRsp final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr batch_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr envelope_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
-    int64_t accepted_samples_;
+    int64_t accepted_transitions_;
     int32_t ret_code_;
     int result_;
     int64_t queue_size_;
-    int64_t accepted_unique_samples_;
-    int64_t resident_samples_;
-    int64_t resident_fragments_;
+    int64_t accepted_unique_transitions_;
+    int64_t resident_transitions_;
+    int64_t resident_envelopes_;
     int64_t resident_estimated_bytes_;
     int pressure_state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3202,7 +3271,7 @@ class GetBatchReq final :
                &_GetBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    9;
 
   friend void swap(GetBatchReq& a, GetBatchReq& b) {
     a.Swap(&b);
@@ -3275,31 +3344,13 @@ class GetBatchReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kAssemblyFieldNumber = 1,
     kConsumerFieldNumber = 3,
-    kFreshnessFieldNumber = 5,
-    kRequiredSemanticsFieldNumber = 7,
+    kRequiredSemanticsFieldNumber = 5,
+    kRequiredRolloutEstimatorProfileDigestFieldNumber = 6,
+    kRequestedTransitionsFieldNumber = 1,
     kTimeoutMsFieldNumber = 2,
     kLeaseTimeoutMsFieldNumber = 4,
   };
-  // .rl.training.v1.BatchAssemblySpec assembly = 1;
-  bool has_assembly() const;
-  private:
-  bool _internal_has_assembly() const;
-  public:
-  void clear_assembly();
-  const ::rl::training::v1::BatchAssemblySpec& assembly() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::BatchAssemblySpec* release_assembly();
-  ::rl::training::v1::BatchAssemblySpec* mutable_assembly();
-  void set_allocated_assembly(::rl::training::v1::BatchAssemblySpec* assembly);
-  private:
-  const ::rl::training::v1::BatchAssemblySpec& _internal_assembly() const;
-  ::rl::training::v1::BatchAssemblySpec* _internal_mutable_assembly();
-  public:
-  void unsafe_arena_set_allocated_assembly(
-      ::rl::training::v1::BatchAssemblySpec* assembly);
-  ::rl::training::v1::BatchAssemblySpec* unsafe_arena_release_assembly();
-
   // .rl.common.v1.ServiceInstanceIdentity consumer = 3;
   bool has_consumer() const;
   private:
@@ -3318,25 +3369,7 @@ class GetBatchReq final :
       ::rl::common::v1::ServiceInstanceIdentity* consumer);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_consumer();
 
-  // .rl.training.v1.SampleFreshnessPolicy freshness = 5;
-  bool has_freshness() const;
-  private:
-  bool _internal_has_freshness() const;
-  public:
-  void clear_freshness();
-  const ::rl::training::v1::SampleFreshnessPolicy& freshness() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::SampleFreshnessPolicy* release_freshness();
-  ::rl::training::v1::SampleFreshnessPolicy* mutable_freshness();
-  void set_allocated_freshness(::rl::training::v1::SampleFreshnessPolicy* freshness);
-  private:
-  const ::rl::training::v1::SampleFreshnessPolicy& _internal_freshness() const;
-  ::rl::training::v1::SampleFreshnessPolicy* _internal_mutable_freshness();
-  public:
-  void unsafe_arena_set_allocated_freshness(
-      ::rl::training::v1::SampleFreshnessPolicy* freshness);
-  ::rl::training::v1::SampleFreshnessPolicy* unsafe_arena_release_freshness();
-
-  // .rl.training.v1.TrainingSemanticsIdentity required_semantics = 7;
+  // .rl.training.v1.TrainingSemanticsIdentity required_semantics = 5;
   bool has_required_semantics() const;
   private:
   bool _internal_has_required_semantics() const;
@@ -3353,6 +3386,33 @@ class GetBatchReq final :
   void unsafe_arena_set_allocated_required_semantics(
       ::rl::training::v1::TrainingSemanticsIdentity* required_semantics);
   ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_required_semantics();
+
+  // .rl.common.v1.ContentDigest required_rollout_estimator_profile_digest = 6;
+  bool has_required_rollout_estimator_profile_digest() const;
+  private:
+  bool _internal_has_required_rollout_estimator_profile_digest() const;
+  public:
+  void clear_required_rollout_estimator_profile_digest();
+  const ::rl::common::v1::ContentDigest& required_rollout_estimator_profile_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_required_rollout_estimator_profile_digest();
+  ::rl::common::v1::ContentDigest* mutable_required_rollout_estimator_profile_digest();
+  void set_allocated_required_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_required_rollout_estimator_profile_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_required_rollout_estimator_profile_digest();
+  public:
+  void unsafe_arena_set_allocated_required_rollout_estimator_profile_digest(
+      ::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_required_rollout_estimator_profile_digest();
+
+  // int32 requested_transitions = 1;
+  void clear_requested_transitions();
+  int32_t requested_transitions() const;
+  void set_requested_transitions(int32_t value);
+  private:
+  int32_t _internal_requested_transitions() const;
+  void _internal_set_requested_transitions(int32_t value);
+  public:
 
   // int32 timeout_ms = 2;
   void clear_timeout_ms();
@@ -3380,10 +3440,10 @@ class GetBatchReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::training::v1::BatchAssemblySpec* assembly_;
     ::rl::common::v1::ServiceInstanceIdentity* consumer_;
-    ::rl::training::v1::SampleFreshnessPolicy* freshness_;
     ::rl::training::v1::TrainingSemanticsIdentity* required_semantics_;
+    ::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest_;
+    int32_t requested_transitions_;
     int32_t timeout_ms_;
     int32_t lease_timeout_ms_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3441,7 +3501,7 @@ class GetBatchRsp final :
                &_GetBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    10;
 
   friend void swap(GetBatchRsp& a, GetBatchRsp& b) {
     a.Swap(&b);
@@ -3514,41 +3574,40 @@ class GetBatchRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBatchesFieldNumber = 2,
+    kItemsFieldNumber = 2,
     kMessageFieldNumber = 5,
     kDeliveryIdFieldNumber = 7,
     kSamplePoolFieldNumber = 13,
     kQueueSizeFieldNumber = 3,
     kRetCodeFieldNumber = 1,
     kResultFieldNumber = 6,
-    kReturnedSamplesFieldNumber = 4,
+    kReturnedTransitionsFieldNumber = 4,
     kLeaseDeadlineUnixMsFieldNumber = 8,
-    kReturnedFragmentsFieldNumber = 9,
-    kActualBatchSizeFieldNumber = 10,
+    kActualTransitionCountFieldNumber = 10,
     kWaitMsFieldNumber = 11,
-    kLeasedSamplesFieldNumber = 12,
+    kLeasedTransitionsFieldNumber = 12,
     kMinimumBehaviorModelStepFieldNumber = 14,
     kMaximumBehaviorModelStepFieldNumber = 15,
-    kOldestSampleCreatedAtUnixMsFieldNumber = 16,
-    kNewestSampleCreatedAtUnixMsFieldNumber = 17,
+    kOldestTransitionCreatedAtUnixMsFieldNumber = 16,
+    kNewestTransitionCreatedAtUnixMsFieldNumber = 17,
   };
-  // repeated .rl.training.v1.SampleBatch batches = 2;
-  int batches_size() const;
+  // repeated .rl.training.v1.SamplePoolItem items = 2;
+  int items_size() const;
   private:
-  int _internal_batches_size() const;
+  int _internal_items_size() const;
   public:
-  void clear_batches();
-  ::rl::training::v1::SampleBatch* mutable_batches(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SampleBatch >*
-      mutable_batches();
+  void clear_items();
+  ::rl::training::v1::SamplePoolItem* mutable_items(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >*
+      mutable_items();
   private:
-  const ::rl::training::v1::SampleBatch& _internal_batches(int index) const;
-  ::rl::training::v1::SampleBatch* _internal_add_batches();
+  const ::rl::training::v1::SamplePoolItem& _internal_items(int index) const;
+  ::rl::training::v1::SamplePoolItem* _internal_add_items();
   public:
-  const ::rl::training::v1::SampleBatch& batches(int index) const;
-  ::rl::training::v1::SampleBatch* add_batches();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SampleBatch >&
-      batches() const;
+  const ::rl::training::v1::SamplePoolItem& items(int index) const;
+  ::rl::training::v1::SamplePoolItem* add_items();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >&
+      items() const;
 
   // string message = 5;
   void clear_message();
@@ -3623,13 +3682,13 @@ class GetBatchRsp final :
   void _internal_set_result(::rl::training::v1::GetBatchResult value);
   public:
 
-  // int64 returned_samples = 4;
-  void clear_returned_samples();
-  int64_t returned_samples() const;
-  void set_returned_samples(int64_t value);
+  // int64 returned_transitions = 4;
+  void clear_returned_transitions();
+  int64_t returned_transitions() const;
+  void set_returned_transitions(int64_t value);
   private:
-  int64_t _internal_returned_samples() const;
-  void _internal_set_returned_samples(int64_t value);
+  int64_t _internal_returned_transitions() const;
+  void _internal_set_returned_transitions(int64_t value);
   public:
 
   // int64 lease_deadline_unix_ms = 8;
@@ -3641,22 +3700,13 @@ class GetBatchRsp final :
   void _internal_set_lease_deadline_unix_ms(int64_t value);
   public:
 
-  // int64 returned_fragments = 9;
-  void clear_returned_fragments();
-  int64_t returned_fragments() const;
-  void set_returned_fragments(int64_t value);
+  // int64 actual_transition_count = 10;
+  void clear_actual_transition_count();
+  int64_t actual_transition_count() const;
+  void set_actual_transition_count(int64_t value);
   private:
-  int64_t _internal_returned_fragments() const;
-  void _internal_set_returned_fragments(int64_t value);
-  public:
-
-  // int64 actual_batch_size = 10;
-  void clear_actual_batch_size();
-  int64_t actual_batch_size() const;
-  void set_actual_batch_size(int64_t value);
-  private:
-  int64_t _internal_actual_batch_size() const;
-  void _internal_set_actual_batch_size(int64_t value);
+  int64_t _internal_actual_transition_count() const;
+  void _internal_set_actual_transition_count(int64_t value);
   public:
 
   // int64 wait_ms = 11;
@@ -3668,13 +3718,13 @@ class GetBatchRsp final :
   void _internal_set_wait_ms(int64_t value);
   public:
 
-  // int64 leased_samples = 12;
-  void clear_leased_samples();
-  int64_t leased_samples() const;
-  void set_leased_samples(int64_t value);
+  // int64 leased_transitions = 12;
+  void clear_leased_transitions();
+  int64_t leased_transitions() const;
+  void set_leased_transitions(int64_t value);
   private:
-  int64_t _internal_leased_samples() const;
-  void _internal_set_leased_samples(int64_t value);
+  int64_t _internal_leased_transitions() const;
+  void _internal_set_leased_transitions(int64_t value);
   public:
 
   // optional uint64 minimum_behavior_model_step = 14;
@@ -3703,22 +3753,30 @@ class GetBatchRsp final :
   void _internal_set_maximum_behavior_model_step(uint64_t value);
   public:
 
-  // int64 oldest_sample_created_at_unix_ms = 16;
-  void clear_oldest_sample_created_at_unix_ms();
-  int64_t oldest_sample_created_at_unix_ms() const;
-  void set_oldest_sample_created_at_unix_ms(int64_t value);
+  // optional int64 oldest_transition_created_at_unix_ms = 16;
+  bool has_oldest_transition_created_at_unix_ms() const;
   private:
-  int64_t _internal_oldest_sample_created_at_unix_ms() const;
-  void _internal_set_oldest_sample_created_at_unix_ms(int64_t value);
+  bool _internal_has_oldest_transition_created_at_unix_ms() const;
+  public:
+  void clear_oldest_transition_created_at_unix_ms();
+  int64_t oldest_transition_created_at_unix_ms() const;
+  void set_oldest_transition_created_at_unix_ms(int64_t value);
+  private:
+  int64_t _internal_oldest_transition_created_at_unix_ms() const;
+  void _internal_set_oldest_transition_created_at_unix_ms(int64_t value);
   public:
 
-  // int64 newest_sample_created_at_unix_ms = 17;
-  void clear_newest_sample_created_at_unix_ms();
-  int64_t newest_sample_created_at_unix_ms() const;
-  void set_newest_sample_created_at_unix_ms(int64_t value);
+  // optional int64 newest_transition_created_at_unix_ms = 17;
+  bool has_newest_transition_created_at_unix_ms() const;
   private:
-  int64_t _internal_newest_sample_created_at_unix_ms() const;
-  void _internal_set_newest_sample_created_at_unix_ms(int64_t value);
+  bool _internal_has_newest_transition_created_at_unix_ms() const;
+  public:
+  void clear_newest_transition_created_at_unix_ms();
+  int64_t newest_transition_created_at_unix_ms() const;
+  void set_newest_transition_created_at_unix_ms(int64_t value);
+  private:
+  int64_t _internal_newest_transition_created_at_unix_ms() const;
+  void _internal_set_newest_transition_created_at_unix_ms(int64_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.GetBatchRsp)
@@ -3731,23 +3789,22 @@ class GetBatchRsp final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SampleBatch > batches_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem > items_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
     int64_t queue_size_;
     int32_t ret_code_;
     int result_;
-    int64_t returned_samples_;
+    int64_t returned_transitions_;
     int64_t lease_deadline_unix_ms_;
-    int64_t returned_fragments_;
-    int64_t actual_batch_size_;
+    int64_t actual_transition_count_;
     int64_t wait_ms_;
-    int64_t leased_samples_;
+    int64_t leased_transitions_;
     uint64_t minimum_behavior_model_step_;
     uint64_t maximum_behavior_model_step_;
-    int64_t oldest_sample_created_at_unix_ms_;
-    int64_t newest_sample_created_at_unix_ms_;
+    int64_t oldest_transition_created_at_unix_ms_;
+    int64_t newest_transition_created_at_unix_ms_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -3802,7 +3859,7 @@ class AckBatchReq final :
                &_AckBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    11;
 
   friend void swap(AckBatchReq& a, AckBatchReq& b) {
     a.Swap(&b);
@@ -4002,7 +4059,7 @@ class NackBatchReq final :
                &_NackBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    12;
 
   friend void swap(NackBatchReq& a, NackBatchReq& b) {
     a.Swap(&b);
@@ -4191,7 +4248,7 @@ class RenewLeaseReq final :
                &_RenewLeaseReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    13;
 
   friend void swap(RenewLeaseReq& a, RenewLeaseReq& b) {
     a.Swap(&b);
@@ -4375,7 +4432,7 @@ class DeliveryRsp final :
                &_DeliveryRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    14;
 
   friend void swap(DeliveryRsp& a, DeliveryRsp& b) {
     a.Swap(&b);
@@ -4453,7 +4510,7 @@ class DeliveryRsp final :
     kTrainUpdateIdFieldNumber = 9,
     kRetCodeFieldNumber = 1,
     kResultFieldNumber = 2,
-    kAffectedSamplesFieldNumber = 5,
+    kAffectedTransitionsFieldNumber = 5,
     kQueueSizeFieldNumber = 6,
     kLeaseDeadlineUnixMsFieldNumber = 7,
     kDispositionFieldNumber = 8,
@@ -4518,13 +4575,13 @@ class DeliveryRsp final :
   void _internal_set_result(::rl::training::v1::DeliveryResult value);
   public:
 
-  // int64 affected_samples = 5;
-  void clear_affected_samples();
-  int64_t affected_samples() const;
-  void set_affected_samples(int64_t value);
+  // int64 affected_transitions = 5;
+  void clear_affected_transitions();
+  int64_t affected_transitions() const;
+  void set_affected_transitions(int64_t value);
   private:
-  int64_t _internal_affected_samples() const;
-  void _internal_set_affected_samples(int64_t value);
+  int64_t _internal_affected_transitions() const;
+  void _internal_set_affected_transitions(int64_t value);
   public:
 
   // int64 queue_size = 6;
@@ -4567,7 +4624,7 @@ class DeliveryRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr train_update_id_;
     int32_t ret_code_;
     int result_;
-    int64_t affected_samples_;
+    int64_t affected_transitions_;
     int64_t queue_size_;
     int64_t lease_deadline_unix_ms_;
     int disposition_;
@@ -4626,7 +4683,7 @@ class FinalizeSamplePoolReq final :
                &_FinalizeSamplePoolReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    15;
 
   friend void swap(FinalizeSamplePoolReq& a, FinalizeSamplePoolReq& b) {
     a.Swap(&b);
@@ -4819,7 +4876,7 @@ class FinalizeSamplePoolRsp final :
                &_FinalizeSamplePoolRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    16;
 
   friend void swap(FinalizeSamplePoolRsp& a, FinalizeSamplePoolRsp& b) {
     a.Swap(&b);
@@ -4897,14 +4954,10 @@ class FinalizeSamplePoolRsp final :
     kSamplePoolFieldNumber = 5,
     kRetCodeFieldNumber = 1,
     kResultFieldNumber = 2,
-    kSettledSamplesFieldNumber = 6,
-    kSettledFragmentsFieldNumber = 7,
-    kReadySamplesFieldNumber = 8,
-    kReadyFragmentsFieldNumber = 9,
-    kLeasedSamplesFieldNumber = 10,
-    kLeasedFragmentsFieldNumber = 11,
-    kResidentSamplesFieldNumber = 12,
-    kResidentFragmentsFieldNumber = 13,
+    kSettledTransitionsFieldNumber = 6,
+    kReadyTransitionsFieldNumber = 8,
+    kLeasedTransitionsFieldNumber = 10,
+    kResidentTransitionsFieldNumber = 12,
     kFinalizedAtUnixMsFieldNumber = 14,
   };
   // string message = 3;
@@ -4971,79 +5024,47 @@ class FinalizeSamplePoolRsp final :
   void _internal_set_result(::rl::training::v1::SamplePoolFinalizeResult value);
   public:
 
-  // int64 settled_samples = 6;
-  void clear_settled_samples();
-  int64_t settled_samples() const;
-  void set_settled_samples(int64_t value);
+  // int64 settled_transitions = 6;
+  void clear_settled_transitions();
+  int64_t settled_transitions() const;
+  void set_settled_transitions(int64_t value);
   private:
-  int64_t _internal_settled_samples() const;
-  void _internal_set_settled_samples(int64_t value);
+  int64_t _internal_settled_transitions() const;
+  void _internal_set_settled_transitions(int64_t value);
   public:
 
-  // int64 settled_fragments = 7;
-  void clear_settled_fragments();
-  int64_t settled_fragments() const;
-  void set_settled_fragments(int64_t value);
+  // int64 ready_transitions = 8;
+  void clear_ready_transitions();
+  int64_t ready_transitions() const;
+  void set_ready_transitions(int64_t value);
   private:
-  int64_t _internal_settled_fragments() const;
-  void _internal_set_settled_fragments(int64_t value);
+  int64_t _internal_ready_transitions() const;
+  void _internal_set_ready_transitions(int64_t value);
   public:
 
-  // int64 ready_samples = 8;
-  void clear_ready_samples();
-  int64_t ready_samples() const;
-  void set_ready_samples(int64_t value);
+  // int64 leased_transitions = 10;
+  void clear_leased_transitions();
+  int64_t leased_transitions() const;
+  void set_leased_transitions(int64_t value);
   private:
-  int64_t _internal_ready_samples() const;
-  void _internal_set_ready_samples(int64_t value);
+  int64_t _internal_leased_transitions() const;
+  void _internal_set_leased_transitions(int64_t value);
   public:
 
-  // int64 ready_fragments = 9;
-  void clear_ready_fragments();
-  int64_t ready_fragments() const;
-  void set_ready_fragments(int64_t value);
+  // int64 resident_transitions = 12;
+  void clear_resident_transitions();
+  int64_t resident_transitions() const;
+  void set_resident_transitions(int64_t value);
   private:
-  int64_t _internal_ready_fragments() const;
-  void _internal_set_ready_fragments(int64_t value);
+  int64_t _internal_resident_transitions() const;
+  void _internal_set_resident_transitions(int64_t value);
   public:
 
-  // int64 leased_samples = 10;
-  void clear_leased_samples();
-  int64_t leased_samples() const;
-  void set_leased_samples(int64_t value);
+  // optional int64 finalized_at_unix_ms = 14;
+  bool has_finalized_at_unix_ms() const;
   private:
-  int64_t _internal_leased_samples() const;
-  void _internal_set_leased_samples(int64_t value);
+  bool _internal_has_finalized_at_unix_ms() const;
   public:
-
-  // int64 leased_fragments = 11;
-  void clear_leased_fragments();
-  int64_t leased_fragments() const;
-  void set_leased_fragments(int64_t value);
-  private:
-  int64_t _internal_leased_fragments() const;
-  void _internal_set_leased_fragments(int64_t value);
-  public:
-
-  // int64 resident_samples = 12;
-  void clear_resident_samples();
-  int64_t resident_samples() const;
-  void set_resident_samples(int64_t value);
-  private:
-  int64_t _internal_resident_samples() const;
-  void _internal_set_resident_samples(int64_t value);
-  public:
-
-  // int64 resident_fragments = 13;
-  void clear_resident_fragments();
-  int64_t resident_fragments() const;
-  void set_resident_fragments(int64_t value);
-  private:
-  int64_t _internal_resident_fragments() const;
-  void _internal_set_resident_fragments(int64_t value);
-  public:
-
-  // int64 finalized_at_unix_ms = 14;
   void clear_finalized_at_unix_ms();
   int64_t finalized_at_unix_ms() const;
   void set_finalized_at_unix_ms(int64_t value);
@@ -5060,21 +5081,18 @@ class FinalizeSamplePoolRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr finalization_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
     int32_t ret_code_;
     int result_;
-    int64_t settled_samples_;
-    int64_t settled_fragments_;
-    int64_t ready_samples_;
-    int64_t ready_fragments_;
-    int64_t leased_samples_;
-    int64_t leased_fragments_;
-    int64_t resident_samples_;
-    int64_t resident_fragments_;
+    int64_t settled_transitions_;
+    int64_t ready_transitions_;
+    int64_t leased_transitions_;
+    int64_t resident_transitions_;
     int64_t finalized_at_unix_ms_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -5128,7 +5146,7 @@ class SamplePoolStatusReq final :
                &_SamplePoolStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    17;
 
   friend void swap(SamplePoolStatusReq& a, SamplePoolStatusReq& b) {
     a.Swap(&b);
@@ -5199,273 +5217,6 @@ class SamplePoolStatusReq final :
 };
 // -------------------------------------------------------------------
 
-class BehaviorStepQueueStatus final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.BehaviorStepQueueStatus) */ {
- public:
-  inline BehaviorStepQueueStatus() : BehaviorStepQueueStatus(nullptr) {}
-  ~BehaviorStepQueueStatus() override;
-  explicit PROTOBUF_CONSTEXPR BehaviorStepQueueStatus(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  BehaviorStepQueueStatus(const BehaviorStepQueueStatus& from);
-  BehaviorStepQueueStatus(BehaviorStepQueueStatus&& from) noexcept
-    : BehaviorStepQueueStatus() {
-    *this = ::std::move(from);
-  }
-
-  inline BehaviorStepQueueStatus& operator=(const BehaviorStepQueueStatus& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline BehaviorStepQueueStatus& operator=(BehaviorStepQueueStatus&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const BehaviorStepQueueStatus& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const BehaviorStepQueueStatus* internal_default_instance() {
-    return reinterpret_cast<const BehaviorStepQueueStatus*>(
-               &_BehaviorStepQueueStatus_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    19;
-
-  friend void swap(BehaviorStepQueueStatus& a, BehaviorStepQueueStatus& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(BehaviorStepQueueStatus* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(BehaviorStepQueueStatus* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  BehaviorStepQueueStatus* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<BehaviorStepQueueStatus>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const BehaviorStepQueueStatus& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const BehaviorStepQueueStatus& from) {
-    BehaviorStepQueueStatus::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(BehaviorStepQueueStatus* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.BehaviorStepQueueStatus";
-  }
-  protected:
-  explicit BehaviorStepQueueStatus(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kBehaviorPolicyFieldNumber = 1,
-    kReadySamplesFieldNumber = 2,
-    kReadyFragmentsFieldNumber = 3,
-    kLeasedSamplesFieldNumber = 4,
-    kLeasedFragmentsFieldNumber = 5,
-    kAckedSamplesFieldNumber = 6,
-    kAckedFragmentsFieldNumber = 7,
-    kTrainedSamplesFieldNumber = 8,
-    kStaleSamplesFieldNumber = 9,
-    kInvalidSamplesFieldNumber = 10,
-    kShutdownUntrainedSamplesFieldNumber = 11,
-  };
-  // .rl.training.v1.BehaviorPolicyReference behavior_policy = 1;
-  bool has_behavior_policy() const;
-  private:
-  bool _internal_has_behavior_policy() const;
-  public:
-  void clear_behavior_policy();
-  const ::rl::training::v1::BehaviorPolicyReference& behavior_policy() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::BehaviorPolicyReference* release_behavior_policy();
-  ::rl::training::v1::BehaviorPolicyReference* mutable_behavior_policy();
-  void set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy);
-  private:
-  const ::rl::training::v1::BehaviorPolicyReference& _internal_behavior_policy() const;
-  ::rl::training::v1::BehaviorPolicyReference* _internal_mutable_behavior_policy();
-  public:
-  void unsafe_arena_set_allocated_behavior_policy(
-      ::rl::training::v1::BehaviorPolicyReference* behavior_policy);
-  ::rl::training::v1::BehaviorPolicyReference* unsafe_arena_release_behavior_policy();
-
-  // int64 ready_samples = 2;
-  void clear_ready_samples();
-  int64_t ready_samples() const;
-  void set_ready_samples(int64_t value);
-  private:
-  int64_t _internal_ready_samples() const;
-  void _internal_set_ready_samples(int64_t value);
-  public:
-
-  // int64 ready_fragments = 3;
-  void clear_ready_fragments();
-  int64_t ready_fragments() const;
-  void set_ready_fragments(int64_t value);
-  private:
-  int64_t _internal_ready_fragments() const;
-  void _internal_set_ready_fragments(int64_t value);
-  public:
-
-  // int64 leased_samples = 4;
-  void clear_leased_samples();
-  int64_t leased_samples() const;
-  void set_leased_samples(int64_t value);
-  private:
-  int64_t _internal_leased_samples() const;
-  void _internal_set_leased_samples(int64_t value);
-  public:
-
-  // int64 leased_fragments = 5;
-  void clear_leased_fragments();
-  int64_t leased_fragments() const;
-  void set_leased_fragments(int64_t value);
-  private:
-  int64_t _internal_leased_fragments() const;
-  void _internal_set_leased_fragments(int64_t value);
-  public:
-
-  // int64 acked_samples = 6;
-  void clear_acked_samples();
-  int64_t acked_samples() const;
-  void set_acked_samples(int64_t value);
-  private:
-  int64_t _internal_acked_samples() const;
-  void _internal_set_acked_samples(int64_t value);
-  public:
-
-  // int64 acked_fragments = 7;
-  void clear_acked_fragments();
-  int64_t acked_fragments() const;
-  void set_acked_fragments(int64_t value);
-  private:
-  int64_t _internal_acked_fragments() const;
-  void _internal_set_acked_fragments(int64_t value);
-  public:
-
-  // int64 trained_samples = 8;
-  void clear_trained_samples();
-  int64_t trained_samples() const;
-  void set_trained_samples(int64_t value);
-  private:
-  int64_t _internal_trained_samples() const;
-  void _internal_set_trained_samples(int64_t value);
-  public:
-
-  // int64 stale_samples = 9;
-  void clear_stale_samples();
-  int64_t stale_samples() const;
-  void set_stale_samples(int64_t value);
-  private:
-  int64_t _internal_stale_samples() const;
-  void _internal_set_stale_samples(int64_t value);
-  public:
-
-  // int64 invalid_samples = 10;
-  void clear_invalid_samples();
-  int64_t invalid_samples() const;
-  void set_invalid_samples(int64_t value);
-  private:
-  int64_t _internal_invalid_samples() const;
-  void _internal_set_invalid_samples(int64_t value);
-  public:
-
-  // int64 shutdown_untrained_samples = 11;
-  void clear_shutdown_untrained_samples();
-  int64_t shutdown_untrained_samples() const;
-  void set_shutdown_untrained_samples(int64_t value);
-  private:
-  int64_t _internal_shutdown_untrained_samples() const;
-  void _internal_set_shutdown_untrained_samples(int64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.BehaviorStepQueueStatus)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::rl::training::v1::BehaviorPolicyReference* behavior_policy_;
-    int64_t ready_samples_;
-    int64_t ready_fragments_;
-    int64_t leased_samples_;
-    int64_t leased_fragments_;
-    int64_t acked_samples_;
-    int64_t acked_fragments_;
-    int64_t trained_samples_;
-    int64_t stale_samples_;
-    int64_t invalid_samples_;
-    int64_t shutdown_untrained_samples_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
 class SamplePoolStatusRsp final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SamplePoolStatusRsp) */ {
  public:
@@ -5514,7 +5265,7 @@ class SamplePoolStatusRsp final :
                &_SamplePoolStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    18;
 
   friend void swap(SamplePoolStatusRsp& a, SamplePoolStatusRsp& b) {
     a.Swap(&b);
@@ -5587,30 +5338,26 @@ class SamplePoolStatusRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBehaviorStepsFieldNumber = 32,
     kLastErrorFieldNumber = 31,
     kFinalizationIdFieldNumber = 69,
     kContractFieldNumber = 1,
     kSamplePoolFieldNumber = 2,
     kPushAttemptCountFieldNumber = 4,
-    kAcceptedUniqueSamplesFieldNumber = 5,
-    kAcceptedUniqueBatchesFieldNumber = 6,
+    kAcceptedUniqueTransitionsFieldNumber = 5,
+    kAcceptedUniqueEnvelopesFieldNumber = 6,
     kDuplicatePushAttemptCountFieldNumber = 7,
-    kDuplicateSampleAttemptsFieldNumber = 8,
+    kDuplicateTransitionAttemptsFieldNumber = 8,
     kRejectedPushAttemptCountFieldNumber = 9,
-    kRejectedSampleAttemptsFieldNumber = 10,
-    kAckedUniqueSamplesFieldNumber = 11,
-    kAckedUniqueBatchesFieldNumber = 12,
-    kReadyQueueSamplesFieldNumber = 13,
-    kReadyQueueFragmentsFieldNumber = 14,
-    kLeasedSamplesFieldNumber = 15,
-    kLeasedFragmentsFieldNumber = 16,
-    kResidentSamplesFieldNumber = 17,
-    kResidentFragmentsFieldNumber = 18,
+    kRejectedTransitionAttemptsFieldNumber = 10,
+    kAckedUniqueTransitionsFieldNumber = 11,
+    kAckedUniqueDeliveriesFieldNumber = 12,
+    kReadyTransitionsFieldNumber = 13,
+    kLeasedTransitionsFieldNumber = 15,
+    kResidentTransitionsFieldNumber = 17,
+    kResidentEnvelopesFieldNumber = 18,
     kResidentEstimatedBytesFieldNumber = 19,
-    kCapacitySamplesFieldNumber = 20,
-    kCapacityFragmentsFieldNumber = 21,
-    kCapacityEstimatedBytesFieldNumber = 22,
+    kCapacityTransitionsFieldNumber = 20,
+    kCapacityBytesFieldNumber = 22,
     kRedeliveryCountFieldNumber = 24,
     kNackCountFieldNumber = 25,
     kExpiredLeaseCountFieldNumber = 26,
@@ -5620,10 +5367,9 @@ class SamplePoolStatusRsp final :
     kEmptyTimeoutCountFieldNumber = 30,
     kPressureStateFieldNumber = 23,
     kBackendTypeFieldNumber = 38,
-    kTrainedSampleCountFieldNumber = 33,
-    kStaleSampleCountFieldNumber = 34,
-    kInvalidSampleCountFieldNumber = 35,
-    kShutdownUntrainedSampleCountFieldNumber = 36,
+    kTrainedTransitionCountFieldNumber = 33,
+    kInvalidTransitionCountFieldNumber = 35,
+    kShutdownUntrainedTransitionCountFieldNumber = 36,
     kLeaseRenewCountFieldNumber = 37,
     kMaxConcurrentConsumersFieldNumber = 39,
     kReadyFieldNumber = 3,
@@ -5632,34 +5378,19 @@ class SamplePoolStatusRsp final :
     kFinalizedFieldNumber = 68,
     kConsumerBusyCountFieldNumber = 41,
     kTimestampUnixMsFieldNumber = 44,
-    kOldestReadySampleAgeMsFieldNumber = 45,
+    kOldestReadyTransitionAgeMsFieldNumber = 45,
     kMinimumReadyModelStepFieldNumber = 46,
     kMaximumReadyModelStepFieldNumber = 47,
-    kEvictedSampleCountFieldNumber = 66,
-    kEvictedFragmentCountFieldNumber = 67,
+    kEvictedTransitionCountFieldNumber = 66,
+    kEvictedEnvelopeCountFieldNumber = 67,
     kFinalizedAtUnixMsFieldNumber = 70,
-    kFinalizedSampleCountFieldNumber = 71,
-    kFinalizedFragmentCountFieldNumber = 72,
+    kFinalizedTransitionCountFieldNumber = 71,
+    kDrawAttemptCountFieldNumber = 73,
+    kDrawnTransitionSlotCountFieldNumber = 74,
+    kUnsampledEvictedTransitionCountFieldNumber = 75,
+    kPreviouslyDrawnEvictedTransitionCountFieldNumber = 76,
     kActiveConsumerCountFieldNumber = 40,
   };
-  // repeated .rl.training.v1.BehaviorStepQueueStatus behavior_steps = 32;
-  int behavior_steps_size() const;
-  private:
-  int _internal_behavior_steps_size() const;
-  public:
-  void clear_behavior_steps();
-  ::rl::training::v1::BehaviorStepQueueStatus* mutable_behavior_steps(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::BehaviorStepQueueStatus >*
-      mutable_behavior_steps();
-  private:
-  const ::rl::training::v1::BehaviorStepQueueStatus& _internal_behavior_steps(int index) const;
-  ::rl::training::v1::BehaviorStepQueueStatus* _internal_add_behavior_steps();
-  public:
-  const ::rl::training::v1::BehaviorStepQueueStatus& behavior_steps(int index) const;
-  ::rl::training::v1::BehaviorStepQueueStatus* add_behavior_steps();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::BehaviorStepQueueStatus >&
-      behavior_steps() const;
-
   // string last_error = 31;
   void clear_last_error();
   const std::string& last_error() const;
@@ -5733,22 +5464,22 @@ class SamplePoolStatusRsp final :
   void _internal_set_push_attempt_count(int64_t value);
   public:
 
-  // int64 accepted_unique_samples = 5;
-  void clear_accepted_unique_samples();
-  int64_t accepted_unique_samples() const;
-  void set_accepted_unique_samples(int64_t value);
+  // int64 accepted_unique_transitions = 5;
+  void clear_accepted_unique_transitions();
+  int64_t accepted_unique_transitions() const;
+  void set_accepted_unique_transitions(int64_t value);
   private:
-  int64_t _internal_accepted_unique_samples() const;
-  void _internal_set_accepted_unique_samples(int64_t value);
+  int64_t _internal_accepted_unique_transitions() const;
+  void _internal_set_accepted_unique_transitions(int64_t value);
   public:
 
-  // int64 accepted_unique_batches = 6;
-  void clear_accepted_unique_batches();
-  int64_t accepted_unique_batches() const;
-  void set_accepted_unique_batches(int64_t value);
+  // int64 accepted_unique_envelopes = 6;
+  void clear_accepted_unique_envelopes();
+  int64_t accepted_unique_envelopes() const;
+  void set_accepted_unique_envelopes(int64_t value);
   private:
-  int64_t _internal_accepted_unique_batches() const;
-  void _internal_set_accepted_unique_batches(int64_t value);
+  int64_t _internal_accepted_unique_envelopes() const;
+  void _internal_set_accepted_unique_envelopes(int64_t value);
   public:
 
   // int64 duplicate_push_attempt_count = 7;
@@ -5760,13 +5491,13 @@ class SamplePoolStatusRsp final :
   void _internal_set_duplicate_push_attempt_count(int64_t value);
   public:
 
-  // int64 duplicate_sample_attempts = 8;
-  void clear_duplicate_sample_attempts();
-  int64_t duplicate_sample_attempts() const;
-  void set_duplicate_sample_attempts(int64_t value);
+  // int64 duplicate_transition_attempts = 8;
+  void clear_duplicate_transition_attempts();
+  int64_t duplicate_transition_attempts() const;
+  void set_duplicate_transition_attempts(int64_t value);
   private:
-  int64_t _internal_duplicate_sample_attempts() const;
-  void _internal_set_duplicate_sample_attempts(int64_t value);
+  int64_t _internal_duplicate_transition_attempts() const;
+  void _internal_set_duplicate_transition_attempts(int64_t value);
   public:
 
   // int64 rejected_push_attempt_count = 9;
@@ -5778,85 +5509,67 @@ class SamplePoolStatusRsp final :
   void _internal_set_rejected_push_attempt_count(int64_t value);
   public:
 
-  // int64 rejected_sample_attempts = 10;
-  void clear_rejected_sample_attempts();
-  int64_t rejected_sample_attempts() const;
-  void set_rejected_sample_attempts(int64_t value);
+  // int64 rejected_transition_attempts = 10;
+  void clear_rejected_transition_attempts();
+  int64_t rejected_transition_attempts() const;
+  void set_rejected_transition_attempts(int64_t value);
   private:
-  int64_t _internal_rejected_sample_attempts() const;
-  void _internal_set_rejected_sample_attempts(int64_t value);
+  int64_t _internal_rejected_transition_attempts() const;
+  void _internal_set_rejected_transition_attempts(int64_t value);
   public:
 
-  // int64 acked_unique_samples = 11;
-  void clear_acked_unique_samples();
-  int64_t acked_unique_samples() const;
-  void set_acked_unique_samples(int64_t value);
+  // int64 acked_unique_transitions = 11;
+  void clear_acked_unique_transitions();
+  int64_t acked_unique_transitions() const;
+  void set_acked_unique_transitions(int64_t value);
   private:
-  int64_t _internal_acked_unique_samples() const;
-  void _internal_set_acked_unique_samples(int64_t value);
+  int64_t _internal_acked_unique_transitions() const;
+  void _internal_set_acked_unique_transitions(int64_t value);
   public:
 
-  // int64 acked_unique_batches = 12;
-  void clear_acked_unique_batches();
-  int64_t acked_unique_batches() const;
-  void set_acked_unique_batches(int64_t value);
+  // int64 acked_unique_deliveries = 12;
+  void clear_acked_unique_deliveries();
+  int64_t acked_unique_deliveries() const;
+  void set_acked_unique_deliveries(int64_t value);
   private:
-  int64_t _internal_acked_unique_batches() const;
-  void _internal_set_acked_unique_batches(int64_t value);
+  int64_t _internal_acked_unique_deliveries() const;
+  void _internal_set_acked_unique_deliveries(int64_t value);
   public:
 
-  // int64 ready_queue_samples = 13;
-  void clear_ready_queue_samples();
-  int64_t ready_queue_samples() const;
-  void set_ready_queue_samples(int64_t value);
+  // int64 ready_transitions = 13;
+  void clear_ready_transitions();
+  int64_t ready_transitions() const;
+  void set_ready_transitions(int64_t value);
   private:
-  int64_t _internal_ready_queue_samples() const;
-  void _internal_set_ready_queue_samples(int64_t value);
+  int64_t _internal_ready_transitions() const;
+  void _internal_set_ready_transitions(int64_t value);
   public:
 
-  // int64 ready_queue_fragments = 14;
-  void clear_ready_queue_fragments();
-  int64_t ready_queue_fragments() const;
-  void set_ready_queue_fragments(int64_t value);
+  // int64 leased_transitions = 15;
+  void clear_leased_transitions();
+  int64_t leased_transitions() const;
+  void set_leased_transitions(int64_t value);
   private:
-  int64_t _internal_ready_queue_fragments() const;
-  void _internal_set_ready_queue_fragments(int64_t value);
+  int64_t _internal_leased_transitions() const;
+  void _internal_set_leased_transitions(int64_t value);
   public:
 
-  // int64 leased_samples = 15;
-  void clear_leased_samples();
-  int64_t leased_samples() const;
-  void set_leased_samples(int64_t value);
+  // int64 resident_transitions = 17;
+  void clear_resident_transitions();
+  int64_t resident_transitions() const;
+  void set_resident_transitions(int64_t value);
   private:
-  int64_t _internal_leased_samples() const;
-  void _internal_set_leased_samples(int64_t value);
+  int64_t _internal_resident_transitions() const;
+  void _internal_set_resident_transitions(int64_t value);
   public:
 
-  // int64 leased_fragments = 16;
-  void clear_leased_fragments();
-  int64_t leased_fragments() const;
-  void set_leased_fragments(int64_t value);
+  // int64 resident_envelopes = 18;
+  void clear_resident_envelopes();
+  int64_t resident_envelopes() const;
+  void set_resident_envelopes(int64_t value);
   private:
-  int64_t _internal_leased_fragments() const;
-  void _internal_set_leased_fragments(int64_t value);
-  public:
-
-  // int64 resident_samples = 17;
-  void clear_resident_samples();
-  int64_t resident_samples() const;
-  void set_resident_samples(int64_t value);
-  private:
-  int64_t _internal_resident_samples() const;
-  void _internal_set_resident_samples(int64_t value);
-  public:
-
-  // int64 resident_fragments = 18;
-  void clear_resident_fragments();
-  int64_t resident_fragments() const;
-  void set_resident_fragments(int64_t value);
-  private:
-  int64_t _internal_resident_fragments() const;
-  void _internal_set_resident_fragments(int64_t value);
+  int64_t _internal_resident_envelopes() const;
+  void _internal_set_resident_envelopes(int64_t value);
   public:
 
   // int64 resident_estimated_bytes = 19;
@@ -5868,31 +5581,22 @@ class SamplePoolStatusRsp final :
   void _internal_set_resident_estimated_bytes(int64_t value);
   public:
 
-  // int64 capacity_samples = 20;
-  void clear_capacity_samples();
-  int64_t capacity_samples() const;
-  void set_capacity_samples(int64_t value);
+  // int64 capacity_transitions = 20;
+  void clear_capacity_transitions();
+  int64_t capacity_transitions() const;
+  void set_capacity_transitions(int64_t value);
   private:
-  int64_t _internal_capacity_samples() const;
-  void _internal_set_capacity_samples(int64_t value);
+  int64_t _internal_capacity_transitions() const;
+  void _internal_set_capacity_transitions(int64_t value);
   public:
 
-  // int64 capacity_fragments = 21;
-  void clear_capacity_fragments();
-  int64_t capacity_fragments() const;
-  void set_capacity_fragments(int64_t value);
+  // int64 capacity_bytes = 22;
+  void clear_capacity_bytes();
+  int64_t capacity_bytes() const;
+  void set_capacity_bytes(int64_t value);
   private:
-  int64_t _internal_capacity_fragments() const;
-  void _internal_set_capacity_fragments(int64_t value);
-  public:
-
-  // int64 capacity_estimated_bytes = 22;
-  void clear_capacity_estimated_bytes();
-  int64_t capacity_estimated_bytes() const;
-  void set_capacity_estimated_bytes(int64_t value);
-  private:
-  int64_t _internal_capacity_estimated_bytes() const;
-  void _internal_set_capacity_estimated_bytes(int64_t value);
+  int64_t _internal_capacity_bytes() const;
+  void _internal_set_capacity_bytes(int64_t value);
   public:
 
   // int64 redelivery_count = 24;
@@ -5922,7 +5626,11 @@ class SamplePoolStatusRsp final :
   void _internal_set_expired_lease_count(int64_t value);
   public:
 
-  // int64 latest_ack_at_unix_ms = 27;
+  // optional int64 latest_ack_at_unix_ms = 27;
+  bool has_latest_ack_at_unix_ms() const;
+  private:
+  bool _internal_has_latest_ack_at_unix_ms() const;
+  public:
   void clear_latest_ack_at_unix_ms();
   int64_t latest_ack_at_unix_ms() const;
   void set_latest_ack_at_unix_ms(int64_t value);
@@ -5976,40 +5684,31 @@ class SamplePoolStatusRsp final :
   void _internal_set_backend_type(::rl::training::v1::SampleBackendType value);
   public:
 
-  // int64 trained_sample_count = 33;
-  void clear_trained_sample_count();
-  int64_t trained_sample_count() const;
-  void set_trained_sample_count(int64_t value);
+  // int64 trained_transition_count = 33;
+  void clear_trained_transition_count();
+  int64_t trained_transition_count() const;
+  void set_trained_transition_count(int64_t value);
   private:
-  int64_t _internal_trained_sample_count() const;
-  void _internal_set_trained_sample_count(int64_t value);
+  int64_t _internal_trained_transition_count() const;
+  void _internal_set_trained_transition_count(int64_t value);
   public:
 
-  // int64 stale_sample_count = 34;
-  void clear_stale_sample_count();
-  int64_t stale_sample_count() const;
-  void set_stale_sample_count(int64_t value);
+  // int64 invalid_transition_count = 35;
+  void clear_invalid_transition_count();
+  int64_t invalid_transition_count() const;
+  void set_invalid_transition_count(int64_t value);
   private:
-  int64_t _internal_stale_sample_count() const;
-  void _internal_set_stale_sample_count(int64_t value);
+  int64_t _internal_invalid_transition_count() const;
+  void _internal_set_invalid_transition_count(int64_t value);
   public:
 
-  // int64 invalid_sample_count = 35;
-  void clear_invalid_sample_count();
-  int64_t invalid_sample_count() const;
-  void set_invalid_sample_count(int64_t value);
+  // int64 shutdown_untrained_transition_count = 36;
+  void clear_shutdown_untrained_transition_count();
+  int64_t shutdown_untrained_transition_count() const;
+  void set_shutdown_untrained_transition_count(int64_t value);
   private:
-  int64_t _internal_invalid_sample_count() const;
-  void _internal_set_invalid_sample_count(int64_t value);
-  public:
-
-  // int64 shutdown_untrained_sample_count = 36;
-  void clear_shutdown_untrained_sample_count();
-  int64_t shutdown_untrained_sample_count() const;
-  void set_shutdown_untrained_sample_count(int64_t value);
-  private:
-  int64_t _internal_shutdown_untrained_sample_count() const;
-  void _internal_set_shutdown_untrained_sample_count(int64_t value);
+  int64_t _internal_shutdown_untrained_transition_count() const;
+  void _internal_set_shutdown_untrained_transition_count(int64_t value);
   public:
 
   // int64 lease_renew_count = 37;
@@ -6084,13 +5783,17 @@ class SamplePoolStatusRsp final :
   void _internal_set_timestamp_unix_ms(int64_t value);
   public:
 
-  // int64 oldest_ready_sample_age_ms = 45;
-  void clear_oldest_ready_sample_age_ms();
-  int64_t oldest_ready_sample_age_ms() const;
-  void set_oldest_ready_sample_age_ms(int64_t value);
+  // optional int64 oldest_ready_transition_age_ms = 45;
+  bool has_oldest_ready_transition_age_ms() const;
   private:
-  int64_t _internal_oldest_ready_sample_age_ms() const;
-  void _internal_set_oldest_ready_sample_age_ms(int64_t value);
+  bool _internal_has_oldest_ready_transition_age_ms() const;
+  public:
+  void clear_oldest_ready_transition_age_ms();
+  int64_t oldest_ready_transition_age_ms() const;
+  void set_oldest_ready_transition_age_ms(int64_t value);
+  private:
+  int64_t _internal_oldest_ready_transition_age_ms() const;
+  void _internal_set_oldest_ready_transition_age_ms(int64_t value);
   public:
 
   // optional uint64 minimum_ready_model_step = 46;
@@ -6119,25 +5822,29 @@ class SamplePoolStatusRsp final :
   void _internal_set_maximum_ready_model_step(uint64_t value);
   public:
 
-  // int64 evicted_sample_count = 66;
-  void clear_evicted_sample_count();
-  int64_t evicted_sample_count() const;
-  void set_evicted_sample_count(int64_t value);
+  // int64 evicted_transition_count = 66;
+  void clear_evicted_transition_count();
+  int64_t evicted_transition_count() const;
+  void set_evicted_transition_count(int64_t value);
   private:
-  int64_t _internal_evicted_sample_count() const;
-  void _internal_set_evicted_sample_count(int64_t value);
+  int64_t _internal_evicted_transition_count() const;
+  void _internal_set_evicted_transition_count(int64_t value);
   public:
 
-  // int64 evicted_fragment_count = 67;
-  void clear_evicted_fragment_count();
-  int64_t evicted_fragment_count() const;
-  void set_evicted_fragment_count(int64_t value);
+  // int64 evicted_envelope_count = 67;
+  void clear_evicted_envelope_count();
+  int64_t evicted_envelope_count() const;
+  void set_evicted_envelope_count(int64_t value);
   private:
-  int64_t _internal_evicted_fragment_count() const;
-  void _internal_set_evicted_fragment_count(int64_t value);
+  int64_t _internal_evicted_envelope_count() const;
+  void _internal_set_evicted_envelope_count(int64_t value);
   public:
 
-  // int64 finalized_at_unix_ms = 70;
+  // optional int64 finalized_at_unix_ms = 70;
+  bool has_finalized_at_unix_ms() const;
+  private:
+  bool _internal_has_finalized_at_unix_ms() const;
+  public:
   void clear_finalized_at_unix_ms();
   int64_t finalized_at_unix_ms() const;
   void set_finalized_at_unix_ms(int64_t value);
@@ -6146,22 +5853,49 @@ class SamplePoolStatusRsp final :
   void _internal_set_finalized_at_unix_ms(int64_t value);
   public:
 
-  // int64 finalized_sample_count = 71;
-  void clear_finalized_sample_count();
-  int64_t finalized_sample_count() const;
-  void set_finalized_sample_count(int64_t value);
+  // int64 finalized_transition_count = 71;
+  void clear_finalized_transition_count();
+  int64_t finalized_transition_count() const;
+  void set_finalized_transition_count(int64_t value);
   private:
-  int64_t _internal_finalized_sample_count() const;
-  void _internal_set_finalized_sample_count(int64_t value);
+  int64_t _internal_finalized_transition_count() const;
+  void _internal_set_finalized_transition_count(int64_t value);
   public:
 
-  // int64 finalized_fragment_count = 72;
-  void clear_finalized_fragment_count();
-  int64_t finalized_fragment_count() const;
-  void set_finalized_fragment_count(int64_t value);
+  // int64 draw_attempt_count = 73;
+  void clear_draw_attempt_count();
+  int64_t draw_attempt_count() const;
+  void set_draw_attempt_count(int64_t value);
   private:
-  int64_t _internal_finalized_fragment_count() const;
-  void _internal_set_finalized_fragment_count(int64_t value);
+  int64_t _internal_draw_attempt_count() const;
+  void _internal_set_draw_attempt_count(int64_t value);
+  public:
+
+  // int64 drawn_transition_slot_count = 74;
+  void clear_drawn_transition_slot_count();
+  int64_t drawn_transition_slot_count() const;
+  void set_drawn_transition_slot_count(int64_t value);
+  private:
+  int64_t _internal_drawn_transition_slot_count() const;
+  void _internal_set_drawn_transition_slot_count(int64_t value);
+  public:
+
+  // int64 unsampled_evicted_transition_count = 75;
+  void clear_unsampled_evicted_transition_count();
+  int64_t unsampled_evicted_transition_count() const;
+  void set_unsampled_evicted_transition_count(int64_t value);
+  private:
+  int64_t _internal_unsampled_evicted_transition_count() const;
+  void _internal_set_unsampled_evicted_transition_count(int64_t value);
+  public:
+
+  // int64 previously_drawn_evicted_transition_count = 76;
+  void clear_previously_drawn_evicted_transition_count();
+  int64_t previously_drawn_evicted_transition_count() const;
+  void set_previously_drawn_evicted_transition_count(int64_t value);
+  private:
+  int64_t _internal_previously_drawn_evicted_transition_count() const;
+  void _internal_set_previously_drawn_evicted_transition_count(int64_t value);
   public:
 
   // int32 active_consumer_count = 40;
@@ -6183,30 +5917,26 @@ class SamplePoolStatusRsp final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::BehaviorStepQueueStatus > behavior_steps_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr finalization_id_;
     ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
     int64_t push_attempt_count_;
-    int64_t accepted_unique_samples_;
-    int64_t accepted_unique_batches_;
+    int64_t accepted_unique_transitions_;
+    int64_t accepted_unique_envelopes_;
     int64_t duplicate_push_attempt_count_;
-    int64_t duplicate_sample_attempts_;
+    int64_t duplicate_transition_attempts_;
     int64_t rejected_push_attempt_count_;
-    int64_t rejected_sample_attempts_;
-    int64_t acked_unique_samples_;
-    int64_t acked_unique_batches_;
-    int64_t ready_queue_samples_;
-    int64_t ready_queue_fragments_;
-    int64_t leased_samples_;
-    int64_t leased_fragments_;
-    int64_t resident_samples_;
-    int64_t resident_fragments_;
+    int64_t rejected_transition_attempts_;
+    int64_t acked_unique_transitions_;
+    int64_t acked_unique_deliveries_;
+    int64_t ready_transitions_;
+    int64_t leased_transitions_;
+    int64_t resident_transitions_;
+    int64_t resident_envelopes_;
     int64_t resident_estimated_bytes_;
-    int64_t capacity_samples_;
-    int64_t capacity_fragments_;
-    int64_t capacity_estimated_bytes_;
+    int64_t capacity_transitions_;
+    int64_t capacity_bytes_;
     int64_t redelivery_count_;
     int64_t nack_count_;
     int64_t expired_lease_count_;
@@ -6216,10 +5946,9 @@ class SamplePoolStatusRsp final :
     int64_t empty_timeout_count_;
     int pressure_state_;
     int backend_type_;
-    int64_t trained_sample_count_;
-    int64_t stale_sample_count_;
-    int64_t invalid_sample_count_;
-    int64_t shutdown_untrained_sample_count_;
+    int64_t trained_transition_count_;
+    int64_t invalid_transition_count_;
+    int64_t shutdown_untrained_transition_count_;
     int64_t lease_renew_count_;
     int32_t max_concurrent_consumers_;
     bool ready_;
@@ -6228,14 +5957,17 @@ class SamplePoolStatusRsp final :
     bool finalized_;
     int64_t consumer_busy_count_;
     int64_t timestamp_unix_ms_;
-    int64_t oldest_ready_sample_age_ms_;
+    int64_t oldest_ready_transition_age_ms_;
     uint64_t minimum_ready_model_step_;
     uint64_t maximum_ready_model_step_;
-    int64_t evicted_sample_count_;
-    int64_t evicted_fragment_count_;
+    int64_t evicted_transition_count_;
+    int64_t evicted_envelope_count_;
     int64_t finalized_at_unix_ms_;
-    int64_t finalized_sample_count_;
-    int64_t finalized_fragment_count_;
+    int64_t finalized_transition_count_;
+    int64_t draw_attempt_count_;
+    int64_t drawn_transition_slot_count_;
+    int64_t unsampled_evicted_transition_count_;
+    int64_t previously_drawn_evicted_transition_count_;
     int32_t active_consumer_count_;
   };
   union { Impl_ _impl_; };
@@ -6291,7 +6023,7 @@ class MetricDescriptor final :
                &_MetricDescriptor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    19;
 
   friend void swap(MetricDescriptor& a, MetricDescriptor& b) {
     a.Swap(&b);
@@ -6609,7 +6341,7 @@ class MetricValue final :
                &_MetricValue_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    20;
 
   friend void swap(MetricValue& a, MetricValue& b) {
     a.Swap(&b);
@@ -6828,7 +6560,7 @@ class MetricSnapshot final :
                &_MetricSnapshot_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    21;
 
   friend void swap(MetricSnapshot& a, MetricSnapshot& b) {
     a.Swap(&b);
@@ -7047,7 +6779,7 @@ class RawMetricSumCount final :
                &_RawMetricSumCount_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    22;
 
   friend void swap(RawMetricSumCount& a, RawMetricSumCount& b) {
     a.Swap(&b);
@@ -7222,7 +6954,7 @@ class AgentEpisodeMetricFact final :
                &_AgentEpisodeMetricFact_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    23;
 
   friend void swap(AgentEpisodeMetricFact& a, AgentEpisodeMetricFact& b) {
     a.Swap(&b);
@@ -7305,9 +7037,11 @@ class AgentEpisodeMetricFact final :
     kUniqueCellCountFieldNumber = 7,
     kBlockedMoveCountFieldNumber = 8,
     kAttemptedMoveCountFieldNumber = 9,
+    kShortestActionStepsFieldNumber = 6,
+    kGoalRankGroupFieldNumber = 15,
     kMinimumBehaviorModelStepFieldNumber = 11,
     kMaximumBehaviorModelStepFieldNumber = 12,
-    kShortestActionStepsFieldNumber = 6,
+    kTerminalFrameIdFieldNumber = 14,
   };
   // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
   int reward_components_size() const;
@@ -7418,6 +7152,28 @@ class AgentEpisodeMetricFact final :
   void _internal_set_attempted_move_count(uint64_t value);
   public:
 
+  // uint32 shortest_action_steps = 6;
+  void clear_shortest_action_steps();
+  uint32_t shortest_action_steps() const;
+  void set_shortest_action_steps(uint32_t value);
+  private:
+  uint32_t _internal_shortest_action_steps() const;
+  void _internal_set_shortest_action_steps(uint32_t value);
+  public:
+
+  // optional uint32 goal_rank_group = 15;
+  bool has_goal_rank_group() const;
+  private:
+  bool _internal_has_goal_rank_group() const;
+  public:
+  void clear_goal_rank_group();
+  uint32_t goal_rank_group() const;
+  void set_goal_rank_group(uint32_t value);
+  private:
+  uint32_t _internal_goal_rank_group() const;
+  void _internal_set_goal_rank_group(uint32_t value);
+  public:
+
   // optional uint64 minimum_behavior_model_step = 11;
   bool has_minimum_behavior_model_step() const;
   private:
@@ -7444,13 +7200,17 @@ class AgentEpisodeMetricFact final :
   void _internal_set_maximum_behavior_model_step(uint64_t value);
   public:
 
-  // uint32 shortest_action_steps = 6;
-  void clear_shortest_action_steps();
-  uint32_t shortest_action_steps() const;
-  void set_shortest_action_steps(uint32_t value);
+  // optional uint64 terminal_frame_id = 14;
+  bool has_terminal_frame_id() const;
   private:
-  uint32_t _internal_shortest_action_steps() const;
-  void _internal_set_shortest_action_steps(uint32_t value);
+  bool _internal_has_terminal_frame_id() const;
+  public:
+  void clear_terminal_frame_id();
+  uint64_t terminal_frame_id() const;
+  void set_terminal_frame_id(uint64_t value);
+  private:
+  uint64_t _internal_terminal_frame_id() const;
+  void _internal_set_terminal_frame_id(uint64_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.AgentEpisodeMetricFact)
@@ -7473,9 +7233,11 @@ class AgentEpisodeMetricFact final :
     uint64_t unique_cell_count_;
     uint64_t blocked_move_count_;
     uint64_t attempted_move_count_;
+    uint32_t shortest_action_steps_;
+    uint32_t goal_rank_group_;
     uint64_t minimum_behavior_model_step_;
     uint64_t maximum_behavior_model_step_;
-    uint32_t shortest_action_steps_;
+    uint64_t terminal_frame_id_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -7530,7 +7292,7 @@ class EpisodeMetricFact final :
                &_EpisodeMetricFact_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    24;
 
   friend void swap(EpisodeMetricFact& a, EpisodeMetricFact& b) {
     a.Swap(&b);
@@ -7739,7 +7501,7 @@ class TrainUpdateMetricFact final :
                &_TrainUpdateMetricFact_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    25;
 
   friend void swap(TrainUpdateMetricFact& a, TrainUpdateMetricFact& b) {
     a.Swap(&b);
@@ -7818,11 +7580,18 @@ class TrainUpdateMetricFact final :
     kBehaviorModelLineageIdFieldNumber = 11,
     kPublishedModelFieldNumber = 3,
     kTrainingSemanticsFieldNumber = 5,
+    kRolloutEstimatorProfileDigestFieldNumber = 18,
     kTrainUpdateSequenceFieldNumber = 2,
     kCumulativeTrainedSamplesFieldNumber = 6,
     kActualBatchSizeFieldNumber = 7,
     kMinimumBehaviorModelStepFieldNumber = 8,
     kMaximumBehaviorModelStepFieldNumber = 9,
+    kRequestedTrainBatchSizeFieldNumber = 12,
+    kPoolDrawSlotCountFieldNumber = 13,
+    kUniqueItemCountFieldNumber = 14,
+    kDuplicateItemSlotCountFieldNumber = 15,
+    kSampleEvaluationCountFieldNumber = 16,
+    kOptimizerStepCountFieldNumber = 17,
   };
   // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
   int ppo_statistics_size() const;
@@ -7920,6 +7689,24 @@ class TrainUpdateMetricFact final :
       ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
   ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
 
+  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
+  bool has_rollout_estimator_profile_digest() const;
+  private:
+  bool _internal_has_rollout_estimator_profile_digest() const;
+  public:
+  void clear_rollout_estimator_profile_digest();
+  const ::rl::common::v1::ContentDigest& rollout_estimator_profile_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_rollout_estimator_profile_digest();
+  ::rl::common::v1::ContentDigest* mutable_rollout_estimator_profile_digest();
+  void set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_rollout_estimator_profile_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_rollout_estimator_profile_digest();
+  public:
+  void unsafe_arena_set_allocated_rollout_estimator_profile_digest(
+      ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_rollout_estimator_profile_digest();
+
   // uint64 train_update_sequence = 2;
   void clear_train_update_sequence();
   uint64_t train_update_sequence() const;
@@ -7973,6 +7760,60 @@ class TrainUpdateMetricFact final :
   void _internal_set_maximum_behavior_model_step(uint64_t value);
   public:
 
+  // int64 requested_train_batch_size = 12;
+  void clear_requested_train_batch_size();
+  int64_t requested_train_batch_size() const;
+  void set_requested_train_batch_size(int64_t value);
+  private:
+  int64_t _internal_requested_train_batch_size() const;
+  void _internal_set_requested_train_batch_size(int64_t value);
+  public:
+
+  // int64 pool_draw_slot_count = 13;
+  void clear_pool_draw_slot_count();
+  int64_t pool_draw_slot_count() const;
+  void set_pool_draw_slot_count(int64_t value);
+  private:
+  int64_t _internal_pool_draw_slot_count() const;
+  void _internal_set_pool_draw_slot_count(int64_t value);
+  public:
+
+  // int64 unique_item_count = 14;
+  void clear_unique_item_count();
+  int64_t unique_item_count() const;
+  void set_unique_item_count(int64_t value);
+  private:
+  int64_t _internal_unique_item_count() const;
+  void _internal_set_unique_item_count(int64_t value);
+  public:
+
+  // int64 duplicate_item_slot_count = 15;
+  void clear_duplicate_item_slot_count();
+  int64_t duplicate_item_slot_count() const;
+  void set_duplicate_item_slot_count(int64_t value);
+  private:
+  int64_t _internal_duplicate_item_slot_count() const;
+  void _internal_set_duplicate_item_slot_count(int64_t value);
+  public:
+
+  // int64 sample_evaluation_count = 16;
+  void clear_sample_evaluation_count();
+  int64_t sample_evaluation_count() const;
+  void set_sample_evaluation_count(int64_t value);
+  private:
+  int64_t _internal_sample_evaluation_count() const;
+  void _internal_set_sample_evaluation_count(int64_t value);
+  public:
+
+  // int64 optimizer_step_count = 17;
+  void clear_optimizer_step_count();
+  int64_t optimizer_step_count() const;
+  void set_optimizer_step_count(int64_t value);
+  private:
+  int64_t _internal_optimizer_step_count() const;
+  void _internal_set_optimizer_step_count(int64_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.training.v1.TrainUpdateMetricFact)
  private:
   class _Internal;
@@ -7989,11 +7830,18 @@ class TrainUpdateMetricFact final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr behavior_model_lineage_id_;
     ::rl::training::v1::ModelIdentity* published_model_;
     ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
+    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
     uint64_t train_update_sequence_;
     int64_t cumulative_trained_samples_;
     int64_t actual_batch_size_;
     uint64_t minimum_behavior_model_step_;
     uint64_t maximum_behavior_model_step_;
+    int64_t requested_train_batch_size_;
+    int64_t pool_draw_slot_count_;
+    int64_t unique_item_count_;
+    int64_t duplicate_item_slot_count_;
+    int64_t sample_evaluation_count_;
+    int64_t optimizer_step_count_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -8054,7 +7902,7 @@ class MetricEvent final :
                &_MetricEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    26;
 
   friend void swap(MetricEvent& a, MetricEvent& b) {
     a.Swap(&b);
@@ -8131,7 +7979,7 @@ class MetricEvent final :
     kSchemaIdentityFieldNumber = 2,
     kSourceFieldNumber = 3,
     kEventSequenceFieldNumber = 4,
-    kCommittedAtUnixMsFieldNumber = 5,
+    kObservedAtUnixMsFieldNumber = 5,
     kEpisodeFieldNumber = 6,
     kTrainUpdateFieldNumber = 7,
   };
@@ -8198,13 +8046,17 @@ class MetricEvent final :
   void _internal_set_event_sequence(uint64_t value);
   public:
 
-  // int64 committed_at_unix_ms = 5;
-  void clear_committed_at_unix_ms();
-  int64_t committed_at_unix_ms() const;
-  void set_committed_at_unix_ms(int64_t value);
+  // optional int64 observed_at_unix_ms = 5;
+  bool has_observed_at_unix_ms() const;
   private:
-  int64_t _internal_committed_at_unix_ms() const;
-  void _internal_set_committed_at_unix_ms(int64_t value);
+  bool _internal_has_observed_at_unix_ms() const;
+  public:
+  void clear_observed_at_unix_ms();
+  int64_t observed_at_unix_ms() const;
+  void set_observed_at_unix_ms(int64_t value);
+  private:
+  int64_t _internal_observed_at_unix_ms() const;
+  void _internal_set_observed_at_unix_ms(int64_t value);
   public:
 
   // .rl.training.v1.EpisodeMetricFact episode = 6;
@@ -8258,18 +8110,19 @@ class MetricEvent final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::SchemaIdentity* schema_identity_;
     ::rl::common::v1::ServiceInstanceIdentity* source_;
     uint64_t event_sequence_;
-    int64_t committed_at_unix_ms_;
+    int64_t observed_at_unix_ms_;
     union FactUnion {
       constexpr FactUnion() : _constinit_{} {}
         ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
       ::rl::training::v1::EpisodeMetricFact* episode_;
       ::rl::training::v1::TrainUpdateMetricFact* train_update_;
     } fact_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     uint32_t _oneof_case_[1];
 
   };
@@ -8326,7 +8179,7 @@ class MetricSequenceGap final :
                &_MetricSequenceGap_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    27;
 
   friend void swap(MetricSequenceGap& a, MetricSequenceGap& b) {
     a.Swap(&b);
@@ -8512,7 +8365,7 @@ class MetricBatch final :
                &_MetricBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    28;
 
   friend void swap(MetricBatch& a, MetricBatch& b) {
     a.Swap(&b);
@@ -8596,7 +8449,6 @@ class MetricBatch final :
     kFirstEventSequenceFieldNumber = 7,
     kLastEventSequenceFieldNumber = 8,
     kFinalEventSequenceFieldNumber = 12,
-    kEventTimeWatermarkUnixMsFieldNumber = 13,
     kHeartbeatFieldNumber = 10,
     kSourceFinalFieldNumber = 11,
   };
@@ -8753,15 +8605,6 @@ class MetricBatch final :
   void _internal_set_final_event_sequence(uint64_t value);
   public:
 
-  // int64 event_time_watermark_unix_ms = 13;
-  void clear_event_time_watermark_unix_ms();
-  int64_t event_time_watermark_unix_ms() const;
-  void set_event_time_watermark_unix_ms(int64_t value);
-  private:
-  int64_t _internal_event_time_watermark_unix_ms() const;
-  void _internal_set_event_time_watermark_unix_ms(int64_t value);
-  public:
-
   // bool heartbeat = 10;
   void clear_heartbeat();
   bool heartbeat() const;
@@ -8799,7 +8642,6 @@ class MetricBatch final :
     uint64_t first_event_sequence_;
     uint64_t last_event_sequence_;
     uint64_t final_event_sequence_;
-    int64_t event_time_watermark_unix_ms_;
     bool heartbeat_;
     bool source_final_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -8857,7 +8699,7 @@ class MetricBatchCursor final :
                &_MetricBatchCursor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    29;
 
   friend void swap(MetricBatchCursor& a, MetricBatchCursor& b) {
     a.Swap(&b);
@@ -9056,7 +8898,7 @@ class GetMetricBatchReq final :
                &_GetMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    30;
 
   friend void swap(GetMetricBatchReq& a, GetMetricBatchReq& b) {
     a.Swap(&b);
@@ -9286,7 +9128,7 @@ class GetMetricBatchRsp final :
                &_GetMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    31;
 
   friend void swap(GetMetricBatchRsp& a, GetMetricBatchRsp& b) {
     a.Swap(&b);
@@ -9523,7 +9365,7 @@ class AckMetricBatchReq final :
                &_AckMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    32;
 
   friend void swap(AckMetricBatchReq& a, AckMetricBatchReq& b) {
     a.Swap(&b);
@@ -9720,7 +9562,7 @@ class AckMetricBatchRsp final :
                &_AckMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    33;
 
   friend void swap(AckMetricBatchRsp& a, AckMetricBatchRsp& b) {
     a.Swap(&b);
@@ -9956,7 +9798,7 @@ class AIServerStatusReq final :
                &_AIServerStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    34;
 
   friend void swap(AIServerStatusReq& a, AIServerStatusReq& b) {
     a.Swap(&b);
@@ -10075,7 +9917,7 @@ class AIServerStatusRsp final :
                &_AIServerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    35;
 
   friend void swap(AIServerStatusRsp& a, AIServerStatusRsp& b) {
     a.Swap(&b);
@@ -10148,29 +9990,31 @@ class AIServerStatusRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kSegmentCloseCountsFieldNumber = 41,
     kLastErrorFieldNumber = 32,
     kContractFieldNumber = 1,
     kAiserverFieldNumber = 2,
     kLoadedModelFieldNumber = 7,
     kStagedModelFieldNumber = 8,
     kMetricsFieldNumber = 34,
+    kRolloutEstimatorProfileDigestFieldNumber = 35,
     kStateFieldNumber = 3,
     kReadyFieldNumber = 4,
     kDistributorReadyFieldNumber = 5,
-    kOutboundQueueFragmentsFieldNumber = 9,
-    kOutboundQueueSamplesFieldNumber = 10,
+    kOutboundQueueEnvelopesFieldNumber = 9,
+    kOutboundQueueTransitionsFieldNumber = 10,
     kOutboundQueueEstimatedBytesFieldNumber = 11,
     kOutboundQueueHighWatermarkFieldNumber = 12,
-    kProducedUniqueSamplesFieldNumber = 13,
-    kProducedUniqueBatchesFieldNumber = 14,
+    kProducedUniqueTransitionsFieldNumber = 13,
+    kProducedUniqueEnvelopesFieldNumber = 14,
     kPushAttemptCountFieldNumber = 15,
-    kAcceptedUniqueSamplesFieldNumber = 16,
+    kAcceptedUniqueTransitionsFieldNumber = 16,
     kDuplicatePushAttemptCountFieldNumber = 17,
     kRejectedPushAttemptCountFieldNumber = 18,
     kRetryAttemptCountFieldNumber = 19,
-    kFinalDropUniqueSamplesFieldNumber = 20,
+    kFinalDropUniqueTransitionsFieldNumber = 20,
     kActiveActorSessionCountFieldNumber = 21,
-    kActiveTrajectoryCountFieldNumber = 22,
+    kActiveSegmentCountFieldNumber = 22,
     kInferenceCountFieldNumber = 23,
     kInferenceLatencySumMsFieldNumber = 24,
     kInferenceLatencyMaxMsFieldNumber = 25,
@@ -10178,11 +10022,34 @@ class AIServerStatusRsp final :
     kPushRpcLatencySumMsFieldNumber = 27,
     kPushRpcLatencyMaxMsFieldNumber = 28,
     kModelSwitchCountFieldNumber = 29,
-    kQuarantinedSampleCountFieldNumber = 30,
-    kQuarantinedFragmentCountFieldNumber = 31,
+    kQuarantinedTransitionCountFieldNumber = 30,
+    kQuarantinedEnvelopeCountFieldNumber = 31,
     kTimestampUnixMsFieldNumber = 33,
+    kClosedSegmentCountFieldNumber = 36,
+    kPendingActionExcludedCountFieldNumber = 37,
+    kRolloutEstimatorFailureCountFieldNumber = 38,
+    kPerAgentModelActivationCountFieldNumber = 39,
+    kSupersededWithoutAgentActivationCountFieldNumber = 40,
     kModelStateFieldNumber = 6,
   };
+  // repeated .rl.training.v1.SegmentCloseCount segment_close_counts = 41;
+  int segment_close_counts_size() const;
+  private:
+  int _internal_segment_close_counts_size() const;
+  public:
+  void clear_segment_close_counts();
+  ::rl::training::v1::SegmentCloseCount* mutable_segment_close_counts(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SegmentCloseCount >*
+      mutable_segment_close_counts();
+  private:
+  const ::rl::training::v1::SegmentCloseCount& _internal_segment_close_counts(int index) const;
+  ::rl::training::v1::SegmentCloseCount* _internal_add_segment_close_counts();
+  public:
+  const ::rl::training::v1::SegmentCloseCount& segment_close_counts(int index) const;
+  ::rl::training::v1::SegmentCloseCount* add_segment_close_counts();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SegmentCloseCount >&
+      segment_close_counts() const;
+
   // string last_error = 32;
   void clear_last_error();
   const std::string& last_error() const;
@@ -10287,6 +10154,24 @@ class AIServerStatusRsp final :
       ::rl::training::v1::MetricSnapshot* metrics);
   ::rl::training::v1::MetricSnapshot* unsafe_arena_release_metrics();
 
+  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 35;
+  bool has_rollout_estimator_profile_digest() const;
+  private:
+  bool _internal_has_rollout_estimator_profile_digest() const;
+  public:
+  void clear_rollout_estimator_profile_digest();
+  const ::rl::common::v1::ContentDigest& rollout_estimator_profile_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_rollout_estimator_profile_digest();
+  ::rl::common::v1::ContentDigest* mutable_rollout_estimator_profile_digest();
+  void set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
+  private:
+  const ::rl::common::v1::ContentDigest& _internal_rollout_estimator_profile_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_rollout_estimator_profile_digest();
+  public:
+  void unsafe_arena_set_allocated_rollout_estimator_profile_digest(
+      ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_rollout_estimator_profile_digest();
+
   // .rl.training.v1.AIServerState state = 3;
   void clear_state();
   ::rl::training::v1::AIServerState state() const;
@@ -10314,22 +10199,22 @@ class AIServerStatusRsp final :
   void _internal_set_distributor_ready(bool value);
   public:
 
-  // int64 outbound_queue_fragments = 9;
-  void clear_outbound_queue_fragments();
-  int64_t outbound_queue_fragments() const;
-  void set_outbound_queue_fragments(int64_t value);
+  // int64 outbound_queue_envelopes = 9;
+  void clear_outbound_queue_envelopes();
+  int64_t outbound_queue_envelopes() const;
+  void set_outbound_queue_envelopes(int64_t value);
   private:
-  int64_t _internal_outbound_queue_fragments() const;
-  void _internal_set_outbound_queue_fragments(int64_t value);
+  int64_t _internal_outbound_queue_envelopes() const;
+  void _internal_set_outbound_queue_envelopes(int64_t value);
   public:
 
-  // int64 outbound_queue_samples = 10;
-  void clear_outbound_queue_samples();
-  int64_t outbound_queue_samples() const;
-  void set_outbound_queue_samples(int64_t value);
+  // int64 outbound_queue_transitions = 10;
+  void clear_outbound_queue_transitions();
+  int64_t outbound_queue_transitions() const;
+  void set_outbound_queue_transitions(int64_t value);
   private:
-  int64_t _internal_outbound_queue_samples() const;
-  void _internal_set_outbound_queue_samples(int64_t value);
+  int64_t _internal_outbound_queue_transitions() const;
+  void _internal_set_outbound_queue_transitions(int64_t value);
   public:
 
   // int64 outbound_queue_estimated_bytes = 11;
@@ -10350,22 +10235,22 @@ class AIServerStatusRsp final :
   void _internal_set_outbound_queue_high_watermark(int64_t value);
   public:
 
-  // int64 produced_unique_samples = 13;
-  void clear_produced_unique_samples();
-  int64_t produced_unique_samples() const;
-  void set_produced_unique_samples(int64_t value);
+  // int64 produced_unique_transitions = 13;
+  void clear_produced_unique_transitions();
+  int64_t produced_unique_transitions() const;
+  void set_produced_unique_transitions(int64_t value);
   private:
-  int64_t _internal_produced_unique_samples() const;
-  void _internal_set_produced_unique_samples(int64_t value);
+  int64_t _internal_produced_unique_transitions() const;
+  void _internal_set_produced_unique_transitions(int64_t value);
   public:
 
-  // int64 produced_unique_batches = 14;
-  void clear_produced_unique_batches();
-  int64_t produced_unique_batches() const;
-  void set_produced_unique_batches(int64_t value);
+  // int64 produced_unique_envelopes = 14;
+  void clear_produced_unique_envelopes();
+  int64_t produced_unique_envelopes() const;
+  void set_produced_unique_envelopes(int64_t value);
   private:
-  int64_t _internal_produced_unique_batches() const;
-  void _internal_set_produced_unique_batches(int64_t value);
+  int64_t _internal_produced_unique_envelopes() const;
+  void _internal_set_produced_unique_envelopes(int64_t value);
   public:
 
   // int64 push_attempt_count = 15;
@@ -10377,13 +10262,13 @@ class AIServerStatusRsp final :
   void _internal_set_push_attempt_count(int64_t value);
   public:
 
-  // int64 accepted_unique_samples = 16;
-  void clear_accepted_unique_samples();
-  int64_t accepted_unique_samples() const;
-  void set_accepted_unique_samples(int64_t value);
+  // int64 accepted_unique_transitions = 16;
+  void clear_accepted_unique_transitions();
+  int64_t accepted_unique_transitions() const;
+  void set_accepted_unique_transitions(int64_t value);
   private:
-  int64_t _internal_accepted_unique_samples() const;
-  void _internal_set_accepted_unique_samples(int64_t value);
+  int64_t _internal_accepted_unique_transitions() const;
+  void _internal_set_accepted_unique_transitions(int64_t value);
   public:
 
   // int64 duplicate_push_attempt_count = 17;
@@ -10413,13 +10298,13 @@ class AIServerStatusRsp final :
   void _internal_set_retry_attempt_count(int64_t value);
   public:
 
-  // int64 final_drop_unique_samples = 20;
-  void clear_final_drop_unique_samples();
-  int64_t final_drop_unique_samples() const;
-  void set_final_drop_unique_samples(int64_t value);
+  // int64 final_drop_unique_transitions = 20;
+  void clear_final_drop_unique_transitions();
+  int64_t final_drop_unique_transitions() const;
+  void set_final_drop_unique_transitions(int64_t value);
   private:
-  int64_t _internal_final_drop_unique_samples() const;
-  void _internal_set_final_drop_unique_samples(int64_t value);
+  int64_t _internal_final_drop_unique_transitions() const;
+  void _internal_set_final_drop_unique_transitions(int64_t value);
   public:
 
   // int64 active_actor_session_count = 21;
@@ -10431,13 +10316,13 @@ class AIServerStatusRsp final :
   void _internal_set_active_actor_session_count(int64_t value);
   public:
 
-  // int64 active_trajectory_count = 22;
-  void clear_active_trajectory_count();
-  int64_t active_trajectory_count() const;
-  void set_active_trajectory_count(int64_t value);
+  // int64 active_segment_count = 22;
+  void clear_active_segment_count();
+  int64_t active_segment_count() const;
+  void set_active_segment_count(int64_t value);
   private:
-  int64_t _internal_active_trajectory_count() const;
-  void _internal_set_active_trajectory_count(int64_t value);
+  int64_t _internal_active_segment_count() const;
+  void _internal_set_active_segment_count(int64_t value);
   public:
 
   // int64 inference_count = 23;
@@ -10503,22 +10388,22 @@ class AIServerStatusRsp final :
   void _internal_set_model_switch_count(int64_t value);
   public:
 
-  // int64 quarantined_sample_count = 30;
-  void clear_quarantined_sample_count();
-  int64_t quarantined_sample_count() const;
-  void set_quarantined_sample_count(int64_t value);
+  // int64 quarantined_transition_count = 30;
+  void clear_quarantined_transition_count();
+  int64_t quarantined_transition_count() const;
+  void set_quarantined_transition_count(int64_t value);
   private:
-  int64_t _internal_quarantined_sample_count() const;
-  void _internal_set_quarantined_sample_count(int64_t value);
+  int64_t _internal_quarantined_transition_count() const;
+  void _internal_set_quarantined_transition_count(int64_t value);
   public:
 
-  // int64 quarantined_fragment_count = 31;
-  void clear_quarantined_fragment_count();
-  int64_t quarantined_fragment_count() const;
-  void set_quarantined_fragment_count(int64_t value);
+  // int64 quarantined_envelope_count = 31;
+  void clear_quarantined_envelope_count();
+  int64_t quarantined_envelope_count() const;
+  void set_quarantined_envelope_count(int64_t value);
   private:
-  int64_t _internal_quarantined_fragment_count() const;
-  void _internal_set_quarantined_fragment_count(int64_t value);
+  int64_t _internal_quarantined_envelope_count() const;
+  void _internal_set_quarantined_envelope_count(int64_t value);
   public:
 
   // int64 timestamp_unix_ms = 33;
@@ -10528,6 +10413,51 @@ class AIServerStatusRsp final :
   private:
   int64_t _internal_timestamp_unix_ms() const;
   void _internal_set_timestamp_unix_ms(int64_t value);
+  public:
+
+  // int64 closed_segment_count = 36;
+  void clear_closed_segment_count();
+  int64_t closed_segment_count() const;
+  void set_closed_segment_count(int64_t value);
+  private:
+  int64_t _internal_closed_segment_count() const;
+  void _internal_set_closed_segment_count(int64_t value);
+  public:
+
+  // int64 pending_action_excluded_count = 37;
+  void clear_pending_action_excluded_count();
+  int64_t pending_action_excluded_count() const;
+  void set_pending_action_excluded_count(int64_t value);
+  private:
+  int64_t _internal_pending_action_excluded_count() const;
+  void _internal_set_pending_action_excluded_count(int64_t value);
+  public:
+
+  // int64 rollout_estimator_failure_count = 38;
+  void clear_rollout_estimator_failure_count();
+  int64_t rollout_estimator_failure_count() const;
+  void set_rollout_estimator_failure_count(int64_t value);
+  private:
+  int64_t _internal_rollout_estimator_failure_count() const;
+  void _internal_set_rollout_estimator_failure_count(int64_t value);
+  public:
+
+  // int64 per_agent_model_activation_count = 39;
+  void clear_per_agent_model_activation_count();
+  int64_t per_agent_model_activation_count() const;
+  void set_per_agent_model_activation_count(int64_t value);
+  private:
+  int64_t _internal_per_agent_model_activation_count() const;
+  void _internal_set_per_agent_model_activation_count(int64_t value);
+  public:
+
+  // int64 superseded_without_agent_activation_count = 40;
+  void clear_superseded_without_agent_activation_count();
+  int64_t superseded_without_agent_activation_count() const;
+  void set_superseded_without_agent_activation_count(int64_t value);
+  private:
+  int64_t _internal_superseded_without_agent_activation_count() const;
+  void _internal_set_superseded_without_agent_activation_count(int64_t value);
   public:
 
   // .rl.training.v1.ModelState model_state = 6;
@@ -10547,29 +10477,31 @@ class AIServerStatusRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SegmentCloseCount > segment_close_counts_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
     ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::ServiceInstanceIdentity* aiserver_;
     ::rl::training::v1::ModelIdentity* loaded_model_;
     ::rl::training::v1::ModelIdentity* staged_model_;
     ::rl::training::v1::MetricSnapshot* metrics_;
+    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
     int state_;
     bool ready_;
     bool distributor_ready_;
-    int64_t outbound_queue_fragments_;
-    int64_t outbound_queue_samples_;
+    int64_t outbound_queue_envelopes_;
+    int64_t outbound_queue_transitions_;
     int64_t outbound_queue_estimated_bytes_;
     int64_t outbound_queue_high_watermark_;
-    int64_t produced_unique_samples_;
-    int64_t produced_unique_batches_;
+    int64_t produced_unique_transitions_;
+    int64_t produced_unique_envelopes_;
     int64_t push_attempt_count_;
-    int64_t accepted_unique_samples_;
+    int64_t accepted_unique_transitions_;
     int64_t duplicate_push_attempt_count_;
     int64_t rejected_push_attempt_count_;
     int64_t retry_attempt_count_;
-    int64_t final_drop_unique_samples_;
+    int64_t final_drop_unique_transitions_;
     int64_t active_actor_session_count_;
-    int64_t active_trajectory_count_;
+    int64_t active_segment_count_;
     int64_t inference_count_;
     double inference_latency_sum_ms_;
     double inference_latency_max_ms_;
@@ -10577,10 +10509,174 @@ class AIServerStatusRsp final :
     double push_rpc_latency_sum_ms_;
     double push_rpc_latency_max_ms_;
     int64_t model_switch_count_;
-    int64_t quarantined_sample_count_;
-    int64_t quarantined_fragment_count_;
+    int64_t quarantined_transition_count_;
+    int64_t quarantined_envelope_count_;
     int64_t timestamp_unix_ms_;
+    int64_t closed_segment_count_;
+    int64_t pending_action_excluded_count_;
+    int64_t rollout_estimator_failure_count_;
+    int64_t per_agent_model_activation_count_;
+    int64_t superseded_without_agent_activation_count_;
     int model_state_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_training_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SegmentCloseCount final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.SegmentCloseCount) */ {
+ public:
+  inline SegmentCloseCount() : SegmentCloseCount(nullptr) {}
+  ~SegmentCloseCount() override;
+  explicit PROTOBUF_CONSTEXPR SegmentCloseCount(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SegmentCloseCount(const SegmentCloseCount& from);
+  SegmentCloseCount(SegmentCloseCount&& from) noexcept
+    : SegmentCloseCount() {
+    *this = ::std::move(from);
+  }
+
+  inline SegmentCloseCount& operator=(const SegmentCloseCount& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SegmentCloseCount& operator=(SegmentCloseCount&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SegmentCloseCount& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SegmentCloseCount* internal_default_instance() {
+    return reinterpret_cast<const SegmentCloseCount*>(
+               &_SegmentCloseCount_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    36;
+
+  friend void swap(SegmentCloseCount& a, SegmentCloseCount& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SegmentCloseCount* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SegmentCloseCount* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SegmentCloseCount* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SegmentCloseCount>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SegmentCloseCount& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SegmentCloseCount& from) {
+    SegmentCloseCount::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SegmentCloseCount* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.SegmentCloseCount";
+  }
+  protected:
+  explicit SegmentCloseCount(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCountFieldNumber = 2,
+    kReasonFieldNumber = 1,
+  };
+  // int64 count = 2;
+  void clear_count();
+  int64_t count() const;
+  void set_count(int64_t value);
+  private:
+  int64_t _internal_count() const;
+  void _internal_set_count(int64_t value);
+  public:
+
+  // .rl.training.v1.SegmentCloseReason reason = 1;
+  void clear_reason();
+  ::rl::training::v1::SegmentCloseReason reason() const;
+  void set_reason(::rl::training::v1::SegmentCloseReason value);
+  private:
+  ::rl::training::v1::SegmentCloseReason _internal_reason() const;
+  void _internal_set_reason(::rl::training::v1::SegmentCloseReason value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.SegmentCloseCount)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    int64_t count_;
+    int reason_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -10636,7 +10732,7 @@ class ModelArtifactManifest final :
                &_ModelArtifactManifest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    37;
 
   friend void swap(ModelArtifactManifest& a, ModelArtifactManifest& b) {
     a.Swap(&b);
@@ -10722,6 +10818,7 @@ class ModelArtifactManifest final :
     kActionSchemaFieldNumber = 5,
     kTrainingConfigDigestFieldNumber = 17,
     kTrainingSemanticsFieldNumber = 18,
+    kRolloutEstimatorProfileFieldNumber = 21,
     kManifestSchemaVersionFieldNumber = 1,
     kReadyFieldNumber = 20,
     kSizeBytesFieldNumber = 13,
@@ -10960,6 +11057,24 @@ class ModelArtifactManifest final :
       ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
   ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
 
+  // .rl.training.v1.RolloutEstimatorProfile rollout_estimator_profile = 21;
+  bool has_rollout_estimator_profile() const;
+  private:
+  bool _internal_has_rollout_estimator_profile() const;
+  public:
+  void clear_rollout_estimator_profile();
+  const ::rl::training::v1::RolloutEstimatorProfile& rollout_estimator_profile() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::RolloutEstimatorProfile* release_rollout_estimator_profile();
+  ::rl::training::v1::RolloutEstimatorProfile* mutable_rollout_estimator_profile();
+  void set_allocated_rollout_estimator_profile(::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile);
+  private:
+  const ::rl::training::v1::RolloutEstimatorProfile& _internal_rollout_estimator_profile() const;
+  ::rl::training::v1::RolloutEstimatorProfile* _internal_mutable_rollout_estimator_profile();
+  public:
+  void unsafe_arena_set_allocated_rollout_estimator_profile(
+      ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile);
+  ::rl::training::v1::RolloutEstimatorProfile* unsafe_arena_release_rollout_estimator_profile();
+
   // uint32 manifest_schema_version = 1;
   void clear_manifest_schema_version();
   uint32_t manifest_schema_version() const;
@@ -11047,6 +11162,7 @@ class ModelArtifactManifest final :
     ::rl::common::v1::SchemaIdentity* action_schema_;
     ::rl::common::v1::ContentDigest* training_config_digest_;
     ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
+    ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile_;
     uint32_t manifest_schema_version_;
     bool ready_;
     int64_t size_bytes_;
@@ -11109,7 +11225,7 @@ class RegisterModelReq final :
                &_RegisterModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    38;
 
   friend void swap(RegisterModelReq& a, RegisterModelReq& b) {
     a.Swap(&b);
@@ -11266,7 +11382,7 @@ class RegisterModelRsp final :
                &_RegisterModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    39;
 
   friend void swap(RegisterModelRsp& a, RegisterModelRsp& b) {
     a.Swap(&b);
@@ -11481,7 +11597,7 @@ class GetModelManifestReq final :
                &_GetModelManifestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    40;
 
   friend void swap(GetModelManifestReq& a, GetModelManifestReq& b) {
     a.Swap(&b);
@@ -11669,7 +11785,7 @@ class GetModelManifestRsp final :
                &_GetModelManifestRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    41;
 
   friend void swap(GetModelManifestRsp& a, GetModelManifestRsp& b) {
     a.Swap(&b);
@@ -11904,7 +12020,7 @@ class DownloadModelReq final :
                &_DownloadModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    42;
 
   friend void swap(DownloadModelReq& a, DownloadModelReq& b) {
     a.Swap(&b);
@@ -12081,7 +12197,7 @@ class ModelChunk final :
                &_ModelChunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    43;
 
   friend void swap(ModelChunk& a, ModelChunk& b) {
     a.Swap(&b);
@@ -12265,7 +12381,7 @@ class AckModelReq final :
                &_AckModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    44;
 
   friend void swap(AckModelReq& a, AckModelReq& b) {
     a.Swap(&b);
@@ -12485,7 +12601,7 @@ class AckModelRsp final :
                &_AckModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    45;
 
   friend void swap(AckModelRsp& a, AckModelRsp& b) {
     a.Swap(&b);
@@ -12679,7 +12795,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    46;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -12798,7 +12914,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    47;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -13651,211 +13767,39 @@ inline void BehaviorPolicyReference::set_allocated_policy_spec_digest(::rl::comm
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.policy_spec_digest)
 }
 
-// -------------------------------------------------------------------
-
-// SampleFreshnessPolicy
-
-// string model_lineage_id = 1;
-inline void SampleFreshnessPolicy::clear_model_lineage_id() {
-  _impl_.model_lineage_id_.ClearToEmpty();
+// .rl.common.v1.ContentDigest artifact_digest = 5;
+inline bool BehaviorPolicyReference::_internal_has_artifact_digest() const {
+  return this != internal_default_instance() && _impl_.artifact_digest_ != nullptr;
 }
-inline const std::string& SampleFreshnessPolicy::model_lineage_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleFreshnessPolicy.model_lineage_id)
-  return _internal_model_lineage_id();
+inline bool BehaviorPolicyReference::has_artifact_digest() const {
+  return _internal_has_artifact_digest();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void SampleFreshnessPolicy::set_model_lineage_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.model_lineage_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleFreshnessPolicy.model_lineage_id)
-}
-inline std::string* SampleFreshnessPolicy::mutable_model_lineage_id() {
-  std::string* _s = _internal_mutable_model_lineage_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleFreshnessPolicy.model_lineage_id)
-  return _s;
-}
-inline const std::string& SampleFreshnessPolicy::_internal_model_lineage_id() const {
-  return _impl_.model_lineage_id_.Get();
-}
-inline void SampleFreshnessPolicy::_internal_set_model_lineage_id(const std::string& value) {
-  
-  _impl_.model_lineage_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* SampleFreshnessPolicy::_internal_mutable_model_lineage_id() {
-  
-  return _impl_.model_lineage_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* SampleFreshnessPolicy::release_model_lineage_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleFreshnessPolicy.model_lineage_id)
-  return _impl_.model_lineage_id_.Release();
-}
-inline void SampleFreshnessPolicy::set_allocated_model_lineage_id(std::string* model_lineage_id) {
-  if (model_lineage_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.model_lineage_id_.SetAllocated(model_lineage_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.model_lineage_id_.IsDefault()) {
-    _impl_.model_lineage_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleFreshnessPolicy.model_lineage_id)
-}
-
-// optional uint64 reference_model_step = 2;
-inline bool SampleFreshnessPolicy::_internal_has_reference_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline bool SampleFreshnessPolicy::has_reference_model_step() const {
-  return _internal_has_reference_model_step();
-}
-inline void SampleFreshnessPolicy::clear_reference_model_step() {
-  _impl_.reference_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline uint64_t SampleFreshnessPolicy::_internal_reference_model_step() const {
-  return _impl_.reference_model_step_;
-}
-inline uint64_t SampleFreshnessPolicy::reference_model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleFreshnessPolicy.reference_model_step)
-  return _internal_reference_model_step();
-}
-inline void SampleFreshnessPolicy::_internal_set_reference_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.reference_model_step_ = value;
-}
-inline void SampleFreshnessPolicy::set_reference_model_step(uint64_t value) {
-  _internal_set_reference_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleFreshnessPolicy.reference_model_step)
-}
-
-// uint32 max_model_step_lag = 3;
-inline void SampleFreshnessPolicy::clear_max_model_step_lag() {
-  _impl_.max_model_step_lag_ = 0u;
-}
-inline uint32_t SampleFreshnessPolicy::_internal_max_model_step_lag() const {
-  return _impl_.max_model_step_lag_;
-}
-inline uint32_t SampleFreshnessPolicy::max_model_step_lag() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleFreshnessPolicy.max_model_step_lag)
-  return _internal_max_model_step_lag();
-}
-inline void SampleFreshnessPolicy::_internal_set_max_model_step_lag(uint32_t value) {
-  
-  _impl_.max_model_step_lag_ = value;
-}
-inline void SampleFreshnessPolicy::set_max_model_step_lag(uint32_t value) {
-  _internal_set_max_model_step_lag(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleFreshnessPolicy.max_model_step_lag)
-}
-
-// int64 max_sample_age_ms = 4;
-inline void SampleFreshnessPolicy::clear_max_sample_age_ms() {
-  _impl_.max_sample_age_ms_ = int64_t{0};
-}
-inline int64_t SampleFreshnessPolicy::_internal_max_sample_age_ms() const {
-  return _impl_.max_sample_age_ms_;
-}
-inline int64_t SampleFreshnessPolicy::max_sample_age_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleFreshnessPolicy.max_sample_age_ms)
-  return _internal_max_sample_age_ms();
-}
-inline void SampleFreshnessPolicy::_internal_set_max_sample_age_ms(int64_t value) {
-  
-  _impl_.max_sample_age_ms_ = value;
-}
-inline void SampleFreshnessPolicy::set_max_sample_age_ms(int64_t value) {
-  _internal_set_max_sample_age_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleFreshnessPolicy.max_sample_age_ms)
-}
-
-// string distribution_schema_id = 5;
-inline void SampleFreshnessPolicy::clear_distribution_schema_id() {
-  _impl_.distribution_schema_id_.ClearToEmpty();
-}
-inline const std::string& SampleFreshnessPolicy::distribution_schema_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleFreshnessPolicy.distribution_schema_id)
-  return _internal_distribution_schema_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void SampleFreshnessPolicy::set_distribution_schema_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.distribution_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleFreshnessPolicy.distribution_schema_id)
-}
-inline std::string* SampleFreshnessPolicy::mutable_distribution_schema_id() {
-  std::string* _s = _internal_mutable_distribution_schema_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleFreshnessPolicy.distribution_schema_id)
-  return _s;
-}
-inline const std::string& SampleFreshnessPolicy::_internal_distribution_schema_id() const {
-  return _impl_.distribution_schema_id_.Get();
-}
-inline void SampleFreshnessPolicy::_internal_set_distribution_schema_id(const std::string& value) {
-  
-  _impl_.distribution_schema_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* SampleFreshnessPolicy::_internal_mutable_distribution_schema_id() {
-  
-  return _impl_.distribution_schema_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* SampleFreshnessPolicy::release_distribution_schema_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleFreshnessPolicy.distribution_schema_id)
-  return _impl_.distribution_schema_id_.Release();
-}
-inline void SampleFreshnessPolicy::set_allocated_distribution_schema_id(std::string* distribution_schema_id) {
-  if (distribution_schema_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.distribution_schema_id_.SetAllocated(distribution_schema_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.distribution_schema_id_.IsDefault()) {
-    _impl_.distribution_schema_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleFreshnessPolicy.distribution_schema_id)
-}
-
-// .rl.common.v1.ContentDigest policy_spec_digest = 6;
-inline bool SampleFreshnessPolicy::_internal_has_policy_spec_digest() const {
-  return this != internal_default_instance() && _impl_.policy_spec_digest_ != nullptr;
-}
-inline bool SampleFreshnessPolicy::has_policy_spec_digest() const {
-  return _internal_has_policy_spec_digest();
-}
-inline const ::rl::common::v1::ContentDigest& SampleFreshnessPolicy::_internal_policy_spec_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.policy_spec_digest_;
+inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::_internal_artifact_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.artifact_digest_;
   return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
       ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::common::v1::ContentDigest& SampleFreshnessPolicy::policy_spec_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleFreshnessPolicy.policy_spec_digest)
-  return _internal_policy_spec_digest();
+inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::artifact_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.artifact_digest)
+  return _internal_artifact_digest();
 }
-inline void SampleFreshnessPolicy::unsafe_arena_set_allocated_policy_spec_digest(
-    ::rl::common::v1::ContentDigest* policy_spec_digest) {
+inline void BehaviorPolicyReference::unsafe_arena_set_allocated_artifact_digest(
+    ::rl::common::v1::ContentDigest* artifact_digest) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.policy_spec_digest_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.artifact_digest_);
   }
-  _impl_.policy_spec_digest_ = policy_spec_digest;
-  if (policy_spec_digest) {
+  _impl_.artifact_digest_ = artifact_digest;
+  if (artifact_digest) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleFreshnessPolicy.policy_spec_digest)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.BehaviorPolicyReference.artifact_digest)
 }
-inline ::rl::common::v1::ContentDigest* SampleFreshnessPolicy::release_policy_spec_digest() {
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::release_artifact_digest() {
   
-  ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
-  _impl_.policy_spec_digest_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.artifact_digest_;
+  _impl_.artifact_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -13867,109 +13811,734 @@ inline ::rl::common::v1::ContentDigest* SampleFreshnessPolicy::release_policy_sp
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* SampleFreshnessPolicy::unsafe_arena_release_policy_spec_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleFreshnessPolicy.policy_spec_digest)
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::unsafe_arena_release_artifact_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorPolicyReference.artifact_digest)
   
-  ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
-  _impl_.policy_spec_digest_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.artifact_digest_;
+  _impl_.artifact_digest_ = nullptr;
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* SampleFreshnessPolicy::_internal_mutable_policy_spec_digest() {
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::_internal_mutable_artifact_digest() {
   
-  if (_impl_.policy_spec_digest_ == nullptr) {
+  if (_impl_.artifact_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.policy_spec_digest_ = p;
+    _impl_.artifact_digest_ = p;
   }
-  return _impl_.policy_spec_digest_;
+  return _impl_.artifact_digest_;
 }
-inline ::rl::common::v1::ContentDigest* SampleFreshnessPolicy::mutable_policy_spec_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_policy_spec_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleFreshnessPolicy.policy_spec_digest)
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::mutable_artifact_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_artifact_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorPolicyReference.artifact_digest)
   return _msg;
 }
-inline void SampleFreshnessPolicy::set_allocated_policy_spec_digest(::rl::common::v1::ContentDigest* policy_spec_digest) {
+inline void BehaviorPolicyReference::set_allocated_artifact_digest(::rl::common::v1::ContentDigest* artifact_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.policy_spec_digest_);
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.artifact_digest_);
   }
-  if (policy_spec_digest) {
+  if (artifact_digest) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
         ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(policy_spec_digest));
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(artifact_digest));
     if (message_arena != submessage_arena) {
-      policy_spec_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, policy_spec_digest, submessage_arena);
+      artifact_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, artifact_digest, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.policy_spec_digest_ = policy_spec_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleFreshnessPolicy.policy_spec_digest)
+  _impl_.artifact_digest_ = artifact_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.artifact_digest)
+}
+
+// .rl.common.v1.ContentDigest manifest_digest = 6;
+inline bool BehaviorPolicyReference::_internal_has_manifest_digest() const {
+  return this != internal_default_instance() && _impl_.manifest_digest_ != nullptr;
+}
+inline bool BehaviorPolicyReference::has_manifest_digest() const {
+  return _internal_has_manifest_digest();
+}
+inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::_internal_manifest_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.manifest_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::manifest_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.manifest_digest)
+  return _internal_manifest_digest();
+}
+inline void BehaviorPolicyReference::unsafe_arena_set_allocated_manifest_digest(
+    ::rl::common::v1::ContentDigest* manifest_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.manifest_digest_);
+  }
+  _impl_.manifest_digest_ = manifest_digest;
+  if (manifest_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.BehaviorPolicyReference.manifest_digest)
+}
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::release_manifest_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.manifest_digest_;
+  _impl_.manifest_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::unsafe_arena_release_manifest_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorPolicyReference.manifest_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.manifest_digest_;
+  _impl_.manifest_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::_internal_mutable_manifest_digest() {
+  
+  if (_impl_.manifest_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.manifest_digest_ = p;
+  }
+  return _impl_.manifest_digest_;
+}
+inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::mutable_manifest_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_manifest_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorPolicyReference.manifest_digest)
+  return _msg;
+}
+inline void BehaviorPolicyReference::set_allocated_manifest_digest(::rl::common::v1::ContentDigest* manifest_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.manifest_digest_);
+  }
+  if (manifest_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(manifest_digest));
+    if (message_arena != submessage_arena) {
+      manifest_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, manifest_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.manifest_digest_ = manifest_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.manifest_digest)
 }
 
 // -------------------------------------------------------------------
 
-// BatchAssemblySpec
+// RolloutEstimatorProfile
 
-// int32 target_samples = 1;
-inline void BatchAssemblySpec::clear_target_samples() {
-  _impl_.target_samples_ = 0;
+// uint32 profile_schema_version = 1;
+inline void RolloutEstimatorProfile::clear_profile_schema_version() {
+  _impl_.profile_schema_version_ = 0u;
 }
-inline int32_t BatchAssemblySpec::_internal_target_samples() const {
-  return _impl_.target_samples_;
+inline uint32_t RolloutEstimatorProfile::_internal_profile_schema_version() const {
+  return _impl_.profile_schema_version_;
 }
-inline int32_t BatchAssemblySpec::target_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BatchAssemblySpec.target_samples)
-  return _internal_target_samples();
+inline uint32_t RolloutEstimatorProfile::profile_schema_version() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.profile_schema_version)
+  return _internal_profile_schema_version();
 }
-inline void BatchAssemblySpec::_internal_set_target_samples(int32_t value) {
+inline void RolloutEstimatorProfile::_internal_set_profile_schema_version(uint32_t value) {
   
-  _impl_.target_samples_ = value;
+  _impl_.profile_schema_version_ = value;
 }
-inline void BatchAssemblySpec::set_target_samples(int32_t value) {
-  _internal_set_target_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BatchAssemblySpec.target_samples)
-}
-
-// int32 max_samples = 2;
-inline void BatchAssemblySpec::clear_max_samples() {
-  _impl_.max_samples_ = 0;
-}
-inline int32_t BatchAssemblySpec::_internal_max_samples() const {
-  return _impl_.max_samples_;
-}
-inline int32_t BatchAssemblySpec::max_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BatchAssemblySpec.max_samples)
-  return _internal_max_samples();
-}
-inline void BatchAssemblySpec::_internal_set_max_samples(int32_t value) {
-  
-  _impl_.max_samples_ = value;
-}
-inline void BatchAssemblySpec::set_max_samples(int32_t value) {
-  _internal_set_max_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BatchAssemblySpec.max_samples)
+inline void RolloutEstimatorProfile::set_profile_schema_version(uint32_t value) {
+  _internal_set_profile_schema_version(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.profile_schema_version)
 }
 
-// .rl.training.v1.BatchAssemblyMode mode = 3;
-inline void BatchAssemblySpec::clear_mode() {
-  _impl_.mode_ = 0;
+// double gamma = 2;
+inline void RolloutEstimatorProfile::clear_gamma() {
+  _impl_.gamma_ = 0;
 }
-inline ::rl::training::v1::BatchAssemblyMode BatchAssemblySpec::_internal_mode() const {
-  return static_cast< ::rl::training::v1::BatchAssemblyMode >(_impl_.mode_);
+inline double RolloutEstimatorProfile::_internal_gamma() const {
+  return _impl_.gamma_;
 }
-inline ::rl::training::v1::BatchAssemblyMode BatchAssemblySpec::mode() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BatchAssemblySpec.mode)
-  return _internal_mode();
+inline double RolloutEstimatorProfile::gamma() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.gamma)
+  return _internal_gamma();
 }
-inline void BatchAssemblySpec::_internal_set_mode(::rl::training::v1::BatchAssemblyMode value) {
+inline void RolloutEstimatorProfile::_internal_set_gamma(double value) {
   
-  _impl_.mode_ = value;
+  _impl_.gamma_ = value;
 }
-inline void BatchAssemblySpec::set_mode(::rl::training::v1::BatchAssemblyMode value) {
-  _internal_set_mode(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BatchAssemblySpec.mode)
+inline void RolloutEstimatorProfile::set_gamma(double value) {
+  _internal_set_gamma(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.gamma)
+}
+
+// double gae_lambda = 3;
+inline void RolloutEstimatorProfile::clear_gae_lambda() {
+  _impl_.gae_lambda_ = 0;
+}
+inline double RolloutEstimatorProfile::_internal_gae_lambda() const {
+  return _impl_.gae_lambda_;
+}
+inline double RolloutEstimatorProfile::gae_lambda() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.gae_lambda)
+  return _internal_gae_lambda();
+}
+inline void RolloutEstimatorProfile::_internal_set_gae_lambda(double value) {
+  
+  _impl_.gae_lambda_ = value;
+}
+inline void RolloutEstimatorProfile::set_gae_lambda(double value) {
+  _internal_set_gae_lambda(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.gae_lambda)
+}
+
+// uint32 tmax = 4;
+inline void RolloutEstimatorProfile::clear_tmax() {
+  _impl_.tmax_ = 0u;
+}
+inline uint32_t RolloutEstimatorProfile::_internal_tmax() const {
+  return _impl_.tmax_;
+}
+inline uint32_t RolloutEstimatorProfile::tmax() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.tmax)
+  return _internal_tmax();
+}
+inline void RolloutEstimatorProfile::_internal_set_tmax(uint32_t value) {
+  
+  _impl_.tmax_ = value;
+}
+inline void RolloutEstimatorProfile::set_tmax(uint32_t value) {
+  _internal_set_tmax(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.tmax)
+}
+
+// string gae_formula_id = 5;
+inline void RolloutEstimatorProfile::clear_gae_formula_id() {
+  _impl_.gae_formula_id_.ClearToEmpty();
+}
+inline const std::string& RolloutEstimatorProfile::gae_formula_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
+  return _internal_gae_formula_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RolloutEstimatorProfile::set_gae_formula_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.gae_formula_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
+}
+inline std::string* RolloutEstimatorProfile::mutable_gae_formula_id() {
+  std::string* _s = _internal_mutable_gae_formula_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
+  return _s;
+}
+inline const std::string& RolloutEstimatorProfile::_internal_gae_formula_id() const {
+  return _impl_.gae_formula_id_.Get();
+}
+inline void RolloutEstimatorProfile::_internal_set_gae_formula_id(const std::string& value) {
+  
+  _impl_.gae_formula_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::_internal_mutable_gae_formula_id() {
+  
+  return _impl_.gae_formula_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::release_gae_formula_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
+  return _impl_.gae_formula_id_.Release();
+}
+inline void RolloutEstimatorProfile::set_allocated_gae_formula_id(std::string* gae_formula_id) {
+  if (gae_formula_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.gae_formula_id_.SetAllocated(gae_formula_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.gae_formula_id_.IsDefault()) {
+    _impl_.gae_formula_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
+}
+
+// string terminal_bootstrap_semantics_id = 6;
+inline void RolloutEstimatorProfile::clear_terminal_bootstrap_semantics_id() {
+  _impl_.terminal_bootstrap_semantics_id_.ClearToEmpty();
+}
+inline const std::string& RolloutEstimatorProfile::terminal_bootstrap_semantics_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
+  return _internal_terminal_bootstrap_semantics_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RolloutEstimatorProfile::set_terminal_bootstrap_semantics_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.terminal_bootstrap_semantics_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
+}
+inline std::string* RolloutEstimatorProfile::mutable_terminal_bootstrap_semantics_id() {
+  std::string* _s = _internal_mutable_terminal_bootstrap_semantics_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
+  return _s;
+}
+inline const std::string& RolloutEstimatorProfile::_internal_terminal_bootstrap_semantics_id() const {
+  return _impl_.terminal_bootstrap_semantics_id_.Get();
+}
+inline void RolloutEstimatorProfile::_internal_set_terminal_bootstrap_semantics_id(const std::string& value) {
+  
+  _impl_.terminal_bootstrap_semantics_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::_internal_mutable_terminal_bootstrap_semantics_id() {
+  
+  return _impl_.terminal_bootstrap_semantics_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::release_terminal_bootstrap_semantics_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
+  return _impl_.terminal_bootstrap_semantics_id_.Release();
+}
+inline void RolloutEstimatorProfile::set_allocated_terminal_bootstrap_semantics_id(std::string* terminal_bootstrap_semantics_id) {
+  if (terminal_bootstrap_semantics_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.terminal_bootstrap_semantics_id_.SetAllocated(terminal_bootstrap_semantics_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.terminal_bootstrap_semantics_id_.IsDefault()) {
+    _impl_.terminal_bootstrap_semantics_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
+}
+
+// string value_target_formula_id = 7;
+inline void RolloutEstimatorProfile::clear_value_target_formula_id() {
+  _impl_.value_target_formula_id_.ClearToEmpty();
+}
+inline const std::string& RolloutEstimatorProfile::value_target_formula_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
+  return _internal_value_target_formula_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RolloutEstimatorProfile::set_value_target_formula_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.value_target_formula_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
+}
+inline std::string* RolloutEstimatorProfile::mutable_value_target_formula_id() {
+  std::string* _s = _internal_mutable_value_target_formula_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
+  return _s;
+}
+inline const std::string& RolloutEstimatorProfile::_internal_value_target_formula_id() const {
+  return _impl_.value_target_formula_id_.Get();
+}
+inline void RolloutEstimatorProfile::_internal_set_value_target_formula_id(const std::string& value) {
+  
+  _impl_.value_target_formula_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::_internal_mutable_value_target_formula_id() {
+  
+  return _impl_.value_target_formula_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::release_value_target_formula_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
+  return _impl_.value_target_formula_id_.Release();
+}
+inline void RolloutEstimatorProfile::set_allocated_value_target_formula_id(std::string* value_target_formula_id) {
+  if (value_target_formula_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.value_target_formula_id_.SetAllocated(value_target_formula_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.value_target_formula_id_.IsDefault()) {
+    _impl_.value_target_formula_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
+}
+
+// string value_head_abi_id = 8;
+inline void RolloutEstimatorProfile::clear_value_head_abi_id() {
+  _impl_.value_head_abi_id_.ClearToEmpty();
+}
+inline const std::string& RolloutEstimatorProfile::value_head_abi_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
+  return _internal_value_head_abi_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RolloutEstimatorProfile::set_value_head_abi_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.value_head_abi_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
+}
+inline std::string* RolloutEstimatorProfile::mutable_value_head_abi_id() {
+  std::string* _s = _internal_mutable_value_head_abi_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
+  return _s;
+}
+inline const std::string& RolloutEstimatorProfile::_internal_value_head_abi_id() const {
+  return _impl_.value_head_abi_id_.Get();
+}
+inline void RolloutEstimatorProfile::_internal_set_value_head_abi_id(const std::string& value) {
+  
+  _impl_.value_head_abi_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::_internal_mutable_value_head_abi_id() {
+  
+  return _impl_.value_head_abi_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::release_value_head_abi_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
+  return _impl_.value_head_abi_id_.Release();
+}
+inline void RolloutEstimatorProfile::set_allocated_value_head_abi_id(std::string* value_head_abi_id) {
+  if (value_head_abi_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.value_head_abi_id_.SetAllocated(value_head_abi_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.value_head_abi_id_.IsDefault()) {
+    _impl_.value_head_abi_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
+}
+
+// .rl.common.v1.ContentDigest reward_semantics_digest = 9;
+inline bool RolloutEstimatorProfile::_internal_has_reward_semantics_digest() const {
+  return this != internal_default_instance() && _impl_.reward_semantics_digest_ != nullptr;
+}
+inline bool RolloutEstimatorProfile::has_reward_semantics_digest() const {
+  return _internal_has_reward_semantics_digest();
+}
+inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::_internal_reward_semantics_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.reward_semantics_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::reward_semantics_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
+  return _internal_reward_semantics_digest();
+}
+inline void RolloutEstimatorProfile::unsafe_arena_set_allocated_reward_semantics_digest(
+    ::rl::common::v1::ContentDigest* reward_semantics_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reward_semantics_digest_);
+  }
+  _impl_.reward_semantics_digest_ = reward_semantics_digest;
+  if (reward_semantics_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::release_reward_semantics_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.reward_semantics_digest_;
+  _impl_.reward_semantics_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::unsafe_arena_release_reward_semantics_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.reward_semantics_digest_;
+  _impl_.reward_semantics_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::_internal_mutable_reward_semantics_digest() {
+  
+  if (_impl_.reward_semantics_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.reward_semantics_digest_ = p;
+  }
+  return _impl_.reward_semantics_digest_;
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::mutable_reward_semantics_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_reward_semantics_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
+  return _msg;
+}
+inline void RolloutEstimatorProfile::set_allocated_reward_semantics_digest(::rl::common::v1::ContentDigest* reward_semantics_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reward_semantics_digest_);
+  }
+  if (reward_semantics_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(reward_semantics_digest));
+    if (message_arena != submessage_arena) {
+      reward_semantics_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reward_semantics_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.reward_semantics_digest_ = reward_semantics_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
+}
+
+// string numeric_dtype = 10;
+inline void RolloutEstimatorProfile::clear_numeric_dtype() {
+  _impl_.numeric_dtype_.ClearToEmpty();
+}
+inline const std::string& RolloutEstimatorProfile::numeric_dtype() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
+  return _internal_numeric_dtype();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RolloutEstimatorProfile::set_numeric_dtype(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.numeric_dtype_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
+}
+inline std::string* RolloutEstimatorProfile::mutable_numeric_dtype() {
+  std::string* _s = _internal_mutable_numeric_dtype();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
+  return _s;
+}
+inline const std::string& RolloutEstimatorProfile::_internal_numeric_dtype() const {
+  return _impl_.numeric_dtype_.Get();
+}
+inline void RolloutEstimatorProfile::_internal_set_numeric_dtype(const std::string& value) {
+  
+  _impl_.numeric_dtype_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::_internal_mutable_numeric_dtype() {
+  
+  return _impl_.numeric_dtype_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::release_numeric_dtype() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
+  return _impl_.numeric_dtype_.Release();
+}
+inline void RolloutEstimatorProfile::set_allocated_numeric_dtype(std::string* numeric_dtype) {
+  if (numeric_dtype != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.numeric_dtype_.SetAllocated(numeric_dtype, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.numeric_dtype_.IsDefault()) {
+    _impl_.numeric_dtype_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
+}
+
+// string finite_rule_id = 11;
+inline void RolloutEstimatorProfile::clear_finite_rule_id() {
+  _impl_.finite_rule_id_.ClearToEmpty();
+}
+inline const std::string& RolloutEstimatorProfile::finite_rule_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
+  return _internal_finite_rule_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RolloutEstimatorProfile::set_finite_rule_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.finite_rule_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
+}
+inline std::string* RolloutEstimatorProfile::mutable_finite_rule_id() {
+  std::string* _s = _internal_mutable_finite_rule_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
+  return _s;
+}
+inline const std::string& RolloutEstimatorProfile::_internal_finite_rule_id() const {
+  return _impl_.finite_rule_id_.Get();
+}
+inline void RolloutEstimatorProfile::_internal_set_finite_rule_id(const std::string& value) {
+  
+  _impl_.finite_rule_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::_internal_mutable_finite_rule_id() {
+  
+  return _impl_.finite_rule_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::release_finite_rule_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
+  return _impl_.finite_rule_id_.Release();
+}
+inline void RolloutEstimatorProfile::set_allocated_finite_rule_id(std::string* finite_rule_id) {
+  if (finite_rule_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.finite_rule_id_.SetAllocated(finite_rule_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.finite_rule_id_.IsDefault()) {
+    _impl_.finite_rule_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
+}
+
+// string model_pin_semantics_id = 12;
+inline void RolloutEstimatorProfile::clear_model_pin_semantics_id() {
+  _impl_.model_pin_semantics_id_.ClearToEmpty();
+}
+inline const std::string& RolloutEstimatorProfile::model_pin_semantics_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
+  return _internal_model_pin_semantics_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RolloutEstimatorProfile::set_model_pin_semantics_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.model_pin_semantics_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
+}
+inline std::string* RolloutEstimatorProfile::mutable_model_pin_semantics_id() {
+  std::string* _s = _internal_mutable_model_pin_semantics_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
+  return _s;
+}
+inline const std::string& RolloutEstimatorProfile::_internal_model_pin_semantics_id() const {
+  return _impl_.model_pin_semantics_id_.Get();
+}
+inline void RolloutEstimatorProfile::_internal_set_model_pin_semantics_id(const std::string& value) {
+  
+  _impl_.model_pin_semantics_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::_internal_mutable_model_pin_semantics_id() {
+  
+  return _impl_.model_pin_semantics_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RolloutEstimatorProfile::release_model_pin_semantics_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
+  return _impl_.model_pin_semantics_id_.Release();
+}
+inline void RolloutEstimatorProfile::set_allocated_model_pin_semantics_id(std::string* model_pin_semantics_id) {
+  if (model_pin_semantics_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.model_pin_semantics_id_.SetAllocated(model_pin_semantics_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.model_pin_semantics_id_.IsDefault()) {
+    _impl_.model_pin_semantics_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
+}
+
+// .rl.common.v1.ContentDigest profile_digest = 13;
+inline bool RolloutEstimatorProfile::_internal_has_profile_digest() const {
+  return this != internal_default_instance() && _impl_.profile_digest_ != nullptr;
+}
+inline bool RolloutEstimatorProfile::has_profile_digest() const {
+  return _internal_has_profile_digest();
+}
+inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::_internal_profile_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.profile_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::profile_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.profile_digest)
+  return _internal_profile_digest();
+}
+inline void RolloutEstimatorProfile::unsafe_arena_set_allocated_profile_digest(
+    ::rl::common::v1::ContentDigest* profile_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.profile_digest_);
+  }
+  _impl_.profile_digest_ = profile_digest;
+  if (profile_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.RolloutEstimatorProfile.profile_digest)
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::release_profile_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.profile_digest_;
+  _impl_.profile_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::unsafe_arena_release_profile_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.profile_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.profile_digest_;
+  _impl_.profile_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::_internal_mutable_profile_digest() {
+  
+  if (_impl_.profile_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.profile_digest_ = p;
+  }
+  return _impl_.profile_digest_;
+}
+inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::mutable_profile_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_profile_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.profile_digest)
+  return _msg;
+}
+inline void RolloutEstimatorProfile::set_allocated_profile_digest(::rl::common::v1::ContentDigest* profile_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.profile_digest_);
+  }
+  if (profile_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(profile_digest));
+    if (message_arena != submessage_arena) {
+      profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, profile_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.profile_digest_ = profile_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.profile_digest)
 }
 
 // -------------------------------------------------------------------
@@ -14468,333 +15037,896 @@ inline void TrainingSemanticsIdentity::set_allocated_semantics_digest(::rl::comm
 
 // -------------------------------------------------------------------
 
-// Sample
+// ProcessedTransition
 
-// repeated float observation = 1;
-inline int Sample::_internal_observation_size() const {
-  return _impl_.observation_.size();
-}
-inline int Sample::observation_size() const {
-  return _internal_observation_size();
-}
-inline void Sample::clear_observation() {
-  _impl_.observation_.Clear();
-}
-inline float Sample::_internal_observation(int index) const {
-  return _impl_.observation_.Get(index);
-}
-inline float Sample::observation(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.observation)
-  return _internal_observation(index);
-}
-inline void Sample::set_observation(int index, float value) {
-  _impl_.observation_.Set(index, value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.observation)
-}
-inline void Sample::_internal_add_observation(float value) {
-  _impl_.observation_.Add(value);
-}
-inline void Sample::add_observation(float value) {
-  _internal_add_observation(value);
-  // @@protoc_insertion_point(field_add:rl.training.v1.Sample.observation)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-Sample::_internal_observation() const {
-  return _impl_.observation_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-Sample::observation() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.Sample.observation)
-  return _internal_observation();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-Sample::_internal_mutable_observation() {
-  return &_impl_.observation_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-Sample::mutable_observation() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.Sample.observation)
-  return _internal_mutable_observation();
-}
-
-// repeated float next_observation = 2;
-inline int Sample::_internal_next_observation_size() const {
-  return _impl_.next_observation_.size();
-}
-inline int Sample::next_observation_size() const {
-  return _internal_next_observation_size();
-}
-inline void Sample::clear_next_observation() {
-  _impl_.next_observation_.Clear();
-}
-inline float Sample::_internal_next_observation(int index) const {
-  return _impl_.next_observation_.Get(index);
-}
-inline float Sample::next_observation(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.next_observation)
-  return _internal_next_observation(index);
-}
-inline void Sample::set_next_observation(int index, float value) {
-  _impl_.next_observation_.Set(index, value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.next_observation)
-}
-inline void Sample::_internal_add_next_observation(float value) {
-  _impl_.next_observation_.Add(value);
-}
-inline void Sample::add_next_observation(float value) {
-  _internal_add_next_observation(value);
-  // @@protoc_insertion_point(field_add:rl.training.v1.Sample.next_observation)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-Sample::_internal_next_observation() const {
-  return _impl_.next_observation_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-Sample::next_observation() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.Sample.next_observation)
-  return _internal_next_observation();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-Sample::_internal_mutable_next_observation() {
-  return &_impl_.next_observation_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-Sample::mutable_next_observation() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.Sample.next_observation)
-  return _internal_mutable_next_observation();
-}
-
-// int32 action = 3;
-inline void Sample::clear_action() {
-  _impl_.action_ = 0;
-}
-inline int32_t Sample::_internal_action() const {
-  return _impl_.action_;
-}
-inline int32_t Sample::action() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.action)
-  return _internal_action();
-}
-inline void Sample::_internal_set_action(int32_t value) {
-  
-  _impl_.action_ = value;
-}
-inline void Sample::set_action(int32_t value) {
-  _internal_set_action(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.action)
-}
-
-// float reward = 4;
-inline void Sample::clear_reward() {
-  _impl_.reward_ = 0;
-}
-inline float Sample::_internal_reward() const {
-  return _impl_.reward_;
-}
-inline float Sample::reward() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.reward)
-  return _internal_reward();
-}
-inline void Sample::_internal_set_reward(float value) {
-  
-  _impl_.reward_ = value;
-}
-inline void Sample::set_reward(float value) {
-  _internal_set_reward(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.reward)
-}
-
-// float old_log_probability = 5;
-inline void Sample::clear_old_log_probability() {
-  _impl_.old_log_probability_ = 0;
-}
-inline float Sample::_internal_old_log_probability() const {
-  return _impl_.old_log_probability_;
-}
-inline float Sample::old_log_probability() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.old_log_probability)
-  return _internal_old_log_probability();
-}
-inline void Sample::_internal_set_old_log_probability(float value) {
-  
-  _impl_.old_log_probability_ = value;
-}
-inline void Sample::set_old_log_probability(float value) {
-  _internal_set_old_log_probability(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.old_log_probability)
-}
-
-// float old_value_prediction = 6;
-inline void Sample::clear_old_value_prediction() {
-  _impl_.old_value_prediction_ = 0;
-}
-inline float Sample::_internal_old_value_prediction() const {
-  return _impl_.old_value_prediction_;
-}
-inline float Sample::old_value_prediction() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.old_value_prediction)
-  return _internal_old_value_prediction();
-}
-inline void Sample::_internal_set_old_value_prediction(float value) {
-  
-  _impl_.old_value_prediction_ = value;
-}
-inline void Sample::set_old_value_prediction(float value) {
-  _internal_set_old_value_prediction(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.old_value_prediction)
-}
-
-// bool terminated = 7;
-inline void Sample::clear_terminated() {
-  _impl_.terminated_ = false;
-}
-inline bool Sample::_internal_terminated() const {
-  return _impl_.terminated_;
-}
-inline bool Sample::terminated() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.terminated)
-  return _internal_terminated();
-}
-inline void Sample::_internal_set_terminated(bool value) {
-  
-  _impl_.terminated_ = value;
-}
-inline void Sample::set_terminated(bool value) {
-  _internal_set_terminated(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.terminated)
-}
-
-// bool truncated = 8;
-inline void Sample::clear_truncated() {
-  _impl_.truncated_ = false;
-}
-inline bool Sample::_internal_truncated() const {
-  return _impl_.truncated_;
-}
-inline bool Sample::truncated() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.truncated)
-  return _internal_truncated();
-}
-inline void Sample::_internal_set_truncated(bool value) {
-  
-  _impl_.truncated_ = value;
-}
-inline void Sample::set_truncated(bool value) {
-  _internal_set_truncated(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.truncated)
-}
-
-// .rl.training.v1.TransitionEndKind end_kind = 9;
-inline void Sample::clear_end_kind() {
-  _impl_.end_kind_ = 0;
-}
-inline ::rl::training::v1::TransitionEndKind Sample::_internal_end_kind() const {
-  return static_cast< ::rl::training::v1::TransitionEndKind >(_impl_.end_kind_);
-}
-inline ::rl::training::v1::TransitionEndKind Sample::end_kind() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.end_kind)
-  return _internal_end_kind();
-}
-inline void Sample::_internal_set_end_kind(::rl::training::v1::TransitionEndKind value) {
-  
-  _impl_.end_kind_ = value;
-}
-inline void Sample::set_end_kind(::rl::training::v1::TransitionEndKind value) {
-  _internal_set_end_kind(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.end_kind)
-}
-
-// uint64 action_step = 10;
-inline void Sample::clear_action_step() {
-  _impl_.action_step_ = uint64_t{0u};
-}
-inline uint64_t Sample::_internal_action_step() const {
-  return _impl_.action_step_;
-}
-inline uint64_t Sample::action_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.Sample.action_step)
-  return _internal_action_step();
-}
-inline void Sample::_internal_set_action_step(uint64_t value) {
-  
-  _impl_.action_step_ = value;
-}
-inline void Sample::set_action_step(uint64_t value) {
-  _internal_set_action_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.Sample.action_step)
-}
-
-// -------------------------------------------------------------------
-
-// SampleBatch
-
-// string batch_id = 1;
-inline void SampleBatch::clear_batch_id() {
-  _impl_.batch_id_.ClearToEmpty();
-}
-inline const std::string& SampleBatch::batch_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.batch_id)
-  return _internal_batch_id();
+// string item_id = 1;
+inline void ProcessedTransition::clear_item_id() {
+  _impl_.item_id_.ClearToEmpty();
+}
+inline const std::string& ProcessedTransition::item_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.item_id)
+  return _internal_item_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void SampleBatch::set_batch_id(ArgT0&& arg0, ArgT... args) {
+void ProcessedTransition::set_item_id(ArgT0&& arg0, ArgT... args) {
  
- _impl_.batch_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.batch_id)
+ _impl_.item_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.item_id)
 }
-inline std::string* SampleBatch::mutable_batch_id() {
-  std::string* _s = _internal_mutable_batch_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.batch_id)
+inline std::string* ProcessedTransition::mutable_item_id() {
+  std::string* _s = _internal_mutable_item_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.item_id)
   return _s;
 }
-inline const std::string& SampleBatch::_internal_batch_id() const {
-  return _impl_.batch_id_.Get();
+inline const std::string& ProcessedTransition::_internal_item_id() const {
+  return _impl_.item_id_.Get();
 }
-inline void SampleBatch::_internal_set_batch_id(const std::string& value) {
+inline void ProcessedTransition::_internal_set_item_id(const std::string& value) {
   
-  _impl_.batch_id_.Set(value, GetArenaForAllocation());
+  _impl_.item_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* SampleBatch::_internal_mutable_batch_id() {
+inline std::string* ProcessedTransition::_internal_mutable_item_id() {
   
-  return _impl_.batch_id_.Mutable(GetArenaForAllocation());
+  return _impl_.item_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* SampleBatch::release_batch_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.batch_id)
-  return _impl_.batch_id_.Release();
+inline std::string* ProcessedTransition::release_item_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.item_id)
+  return _impl_.item_id_.Release();
 }
-inline void SampleBatch::set_allocated_batch_id(std::string* batch_id) {
-  if (batch_id != nullptr) {
+inline void ProcessedTransition::set_allocated_item_id(std::string* item_id) {
+  if (item_id != nullptr) {
     
   } else {
     
   }
-  _impl_.batch_id_.SetAllocated(batch_id, GetArenaForAllocation());
+  _impl_.item_id_.SetAllocated(item_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.batch_id_.IsDefault()) {
-    _impl_.batch_id_.Set("", GetArenaForAllocation());
+  if (_impl_.item_id_.IsDefault()) {
+    _impl_.item_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.batch_id)
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.item_id)
+}
+
+// string environment_session_id = 2;
+inline void ProcessedTransition::clear_environment_session_id() {
+  _impl_.environment_session_id_.ClearToEmpty();
+}
+inline const std::string& ProcessedTransition::environment_session_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.environment_session_id)
+  return _internal_environment_session_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ProcessedTransition::set_environment_session_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.environment_session_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.environment_session_id)
+}
+inline std::string* ProcessedTransition::mutable_environment_session_id() {
+  std::string* _s = _internal_mutable_environment_session_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.environment_session_id)
+  return _s;
+}
+inline const std::string& ProcessedTransition::_internal_environment_session_id() const {
+  return _impl_.environment_session_id_.Get();
+}
+inline void ProcessedTransition::_internal_set_environment_session_id(const std::string& value) {
+  
+  _impl_.environment_session_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ProcessedTransition::_internal_mutable_environment_session_id() {
+  
+  return _impl_.environment_session_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ProcessedTransition::release_environment_session_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.environment_session_id)
+  return _impl_.environment_session_id_.Release();
+}
+inline void ProcessedTransition::set_allocated_environment_session_id(std::string* environment_session_id) {
+  if (environment_session_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.environment_session_id_.SetAllocated(environment_session_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.environment_session_id_.IsDefault()) {
+    _impl_.environment_session_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.environment_session_id)
+}
+
+// string episode_id = 3;
+inline void ProcessedTransition::clear_episode_id() {
+  _impl_.episode_id_.ClearToEmpty();
+}
+inline const std::string& ProcessedTransition::episode_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.episode_id)
+  return _internal_episode_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ProcessedTransition::set_episode_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.episode_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.episode_id)
+}
+inline std::string* ProcessedTransition::mutable_episode_id() {
+  std::string* _s = _internal_mutable_episode_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.episode_id)
+  return _s;
+}
+inline const std::string& ProcessedTransition::_internal_episode_id() const {
+  return _impl_.episode_id_.Get();
+}
+inline void ProcessedTransition::_internal_set_episode_id(const std::string& value) {
+  
+  _impl_.episode_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ProcessedTransition::_internal_mutable_episode_id() {
+  
+  return _impl_.episode_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ProcessedTransition::release_episode_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.episode_id)
+  return _impl_.episode_id_.Release();
+}
+inline void ProcessedTransition::set_allocated_episode_id(std::string* episode_id) {
+  if (episode_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.episode_id_.SetAllocated(episode_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.episode_id_.IsDefault()) {
+    _impl_.episode_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.episode_id)
+}
+
+// uint32 agent_id = 4;
+inline void ProcessedTransition::clear_agent_id() {
+  _impl_.agent_id_ = 0u;
+}
+inline uint32_t ProcessedTransition::_internal_agent_id() const {
+  return _impl_.agent_id_;
+}
+inline uint32_t ProcessedTransition::agent_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.agent_id)
+  return _internal_agent_id();
+}
+inline void ProcessedTransition::_internal_set_agent_id(uint32_t value) {
+  
+  _impl_.agent_id_ = value;
+}
+inline void ProcessedTransition::set_agent_id(uint32_t value) {
+  _internal_set_agent_id(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.agent_id)
+}
+
+// string segment_id = 5;
+inline void ProcessedTransition::clear_segment_id() {
+  _impl_.segment_id_.ClearToEmpty();
+}
+inline const std::string& ProcessedTransition::segment_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_id)
+  return _internal_segment_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ProcessedTransition::set_segment_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.segment_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_id)
+}
+inline std::string* ProcessedTransition::mutable_segment_id() {
+  std::string* _s = _internal_mutable_segment_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.segment_id)
+  return _s;
+}
+inline const std::string& ProcessedTransition::_internal_segment_id() const {
+  return _impl_.segment_id_.Get();
+}
+inline void ProcessedTransition::_internal_set_segment_id(const std::string& value) {
+  
+  _impl_.segment_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ProcessedTransition::_internal_mutable_segment_id() {
+  
+  return _impl_.segment_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ProcessedTransition::release_segment_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.segment_id)
+  return _impl_.segment_id_.Release();
+}
+inline void ProcessedTransition::set_allocated_segment_id(std::string* segment_id) {
+  if (segment_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.segment_id_.SetAllocated(segment_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.segment_id_.IsDefault()) {
+    _impl_.segment_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.segment_id)
+}
+
+// uint32 transition_index = 6;
+inline void ProcessedTransition::clear_transition_index() {
+  _impl_.transition_index_ = 0u;
+}
+inline uint32_t ProcessedTransition::_internal_transition_index() const {
+  return _impl_.transition_index_;
+}
+inline uint32_t ProcessedTransition::transition_index() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.transition_index)
+  return _internal_transition_index();
+}
+inline void ProcessedTransition::_internal_set_transition_index(uint32_t value) {
+  
+  _impl_.transition_index_ = value;
+}
+inline void ProcessedTransition::set_transition_index(uint32_t value) {
+  _internal_set_transition_index(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.transition_index)
+}
+
+// uint32 segment_transition_count = 7;
+inline void ProcessedTransition::clear_segment_transition_count() {
+  _impl_.segment_transition_count_ = 0u;
+}
+inline uint32_t ProcessedTransition::_internal_segment_transition_count() const {
+  return _impl_.segment_transition_count_;
+}
+inline uint32_t ProcessedTransition::segment_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_transition_count)
+  return _internal_segment_transition_count();
+}
+inline void ProcessedTransition::_internal_set_segment_transition_count(uint32_t value) {
+  
+  _impl_.segment_transition_count_ = value;
+}
+inline void ProcessedTransition::set_segment_transition_count(uint32_t value) {
+  _internal_set_segment_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_transition_count)
+}
+
+// uint64 action_step = 8;
+inline void ProcessedTransition::clear_action_step() {
+  _impl_.action_step_ = uint64_t{0u};
+}
+inline uint64_t ProcessedTransition::_internal_action_step() const {
+  return _impl_.action_step_;
+}
+inline uint64_t ProcessedTransition::action_step() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.action_step)
+  return _internal_action_step();
+}
+inline void ProcessedTransition::_internal_set_action_step(uint64_t value) {
+  
+  _impl_.action_step_ = value;
+}
+inline void ProcessedTransition::set_action_step(uint64_t value) {
+  _internal_set_action_step(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.action_step)
+}
+
+// repeated float observation = 9;
+inline int ProcessedTransition::_internal_observation_size() const {
+  return _impl_.observation_.size();
+}
+inline int ProcessedTransition::observation_size() const {
+  return _internal_observation_size();
+}
+inline void ProcessedTransition::clear_observation() {
+  _impl_.observation_.Clear();
+}
+inline float ProcessedTransition::_internal_observation(int index) const {
+  return _impl_.observation_.Get(index);
+}
+inline float ProcessedTransition::observation(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.observation)
+  return _internal_observation(index);
+}
+inline void ProcessedTransition::set_observation(int index, float value) {
+  _impl_.observation_.Set(index, value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.observation)
+}
+inline void ProcessedTransition::_internal_add_observation(float value) {
+  _impl_.observation_.Add(value);
+}
+inline void ProcessedTransition::add_observation(float value) {
+  _internal_add_observation(value);
+  // @@protoc_insertion_point(field_add:rl.training.v1.ProcessedTransition.observation)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+ProcessedTransition::_internal_observation() const {
+  return _impl_.observation_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+ProcessedTransition::observation() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.ProcessedTransition.observation)
+  return _internal_observation();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+ProcessedTransition::_internal_mutable_observation() {
+  return &_impl_.observation_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+ProcessedTransition::mutable_observation() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ProcessedTransition.observation)
+  return _internal_mutable_observation();
+}
+
+// repeated float next_observation = 10;
+inline int ProcessedTransition::_internal_next_observation_size() const {
+  return _impl_.next_observation_.size();
+}
+inline int ProcessedTransition::next_observation_size() const {
+  return _internal_next_observation_size();
+}
+inline void ProcessedTransition::clear_next_observation() {
+  _impl_.next_observation_.Clear();
+}
+inline float ProcessedTransition::_internal_next_observation(int index) const {
+  return _impl_.next_observation_.Get(index);
+}
+inline float ProcessedTransition::next_observation(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.next_observation)
+  return _internal_next_observation(index);
+}
+inline void ProcessedTransition::set_next_observation(int index, float value) {
+  _impl_.next_observation_.Set(index, value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.next_observation)
+}
+inline void ProcessedTransition::_internal_add_next_observation(float value) {
+  _impl_.next_observation_.Add(value);
+}
+inline void ProcessedTransition::add_next_observation(float value) {
+  _internal_add_next_observation(value);
+  // @@protoc_insertion_point(field_add:rl.training.v1.ProcessedTransition.next_observation)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+ProcessedTransition::_internal_next_observation() const {
+  return _impl_.next_observation_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
+ProcessedTransition::next_observation() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.ProcessedTransition.next_observation)
+  return _internal_next_observation();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+ProcessedTransition::_internal_mutable_next_observation() {
+  return &_impl_.next_observation_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
+ProcessedTransition::mutable_next_observation() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ProcessedTransition.next_observation)
+  return _internal_mutable_next_observation();
+}
+
+// int32 action = 11;
+inline void ProcessedTransition::clear_action() {
+  _impl_.action_ = 0;
+}
+inline int32_t ProcessedTransition::_internal_action() const {
+  return _impl_.action_;
+}
+inline int32_t ProcessedTransition::action() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.action)
+  return _internal_action();
+}
+inline void ProcessedTransition::_internal_set_action(int32_t value) {
+  
+  _impl_.action_ = value;
+}
+inline void ProcessedTransition::set_action(int32_t value) {
+  _internal_set_action(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.action)
+}
+
+// float reward = 12;
+inline void ProcessedTransition::clear_reward() {
+  _impl_.reward_ = 0;
+}
+inline float ProcessedTransition::_internal_reward() const {
+  return _impl_.reward_;
+}
+inline float ProcessedTransition::reward() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.reward)
+  return _internal_reward();
+}
+inline void ProcessedTransition::_internal_set_reward(float value) {
+  
+  _impl_.reward_ = value;
+}
+inline void ProcessedTransition::set_reward(float value) {
+  _internal_set_reward(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.reward)
+}
+
+// float behavior_log_probability = 13;
+inline void ProcessedTransition::clear_behavior_log_probability() {
+  _impl_.behavior_log_probability_ = 0;
+}
+inline float ProcessedTransition::_internal_behavior_log_probability() const {
+  return _impl_.behavior_log_probability_;
+}
+inline float ProcessedTransition::behavior_log_probability() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.behavior_log_probability)
+  return _internal_behavior_log_probability();
+}
+inline void ProcessedTransition::_internal_set_behavior_log_probability(float value) {
+  
+  _impl_.behavior_log_probability_ = value;
+}
+inline void ProcessedTransition::set_behavior_log_probability(float value) {
+  _internal_set_behavior_log_probability(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.behavior_log_probability)
+}
+
+// float behavior_value = 14;
+inline void ProcessedTransition::clear_behavior_value() {
+  _impl_.behavior_value_ = 0;
+}
+inline float ProcessedTransition::_internal_behavior_value() const {
+  return _impl_.behavior_value_;
+}
+inline float ProcessedTransition::behavior_value() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.behavior_value)
+  return _internal_behavior_value();
+}
+inline void ProcessedTransition::_internal_set_behavior_value(float value) {
+  
+  _impl_.behavior_value_ = value;
+}
+inline void ProcessedTransition::set_behavior_value(float value) {
+  _internal_set_behavior_value(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.behavior_value)
+}
+
+// float advantage = 15;
+inline void ProcessedTransition::clear_advantage() {
+  _impl_.advantage_ = 0;
+}
+inline float ProcessedTransition::_internal_advantage() const {
+  return _impl_.advantage_;
+}
+inline float ProcessedTransition::advantage() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.advantage)
+  return _internal_advantage();
+}
+inline void ProcessedTransition::_internal_set_advantage(float value) {
+  
+  _impl_.advantage_ = value;
+}
+inline void ProcessedTransition::set_advantage(float value) {
+  _internal_set_advantage(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.advantage)
+}
+
+// float value_target = 16;
+inline void ProcessedTransition::clear_value_target() {
+  _impl_.value_target_ = 0;
+}
+inline float ProcessedTransition::_internal_value_target() const {
+  return _impl_.value_target_;
+}
+inline float ProcessedTransition::value_target() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.value_target)
+  return _internal_value_target();
+}
+inline void ProcessedTransition::_internal_set_value_target(float value) {
+  
+  _impl_.value_target_ = value;
+}
+inline void ProcessedTransition::set_value_target(float value) {
+  _internal_set_value_target(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.value_target)
+}
+
+// bool environment_terminal = 17;
+inline void ProcessedTransition::clear_environment_terminal() {
+  _impl_.environment_terminal_ = false;
+}
+inline bool ProcessedTransition::_internal_environment_terminal() const {
+  return _impl_.environment_terminal_;
+}
+inline bool ProcessedTransition::environment_terminal() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.environment_terminal)
+  return _internal_environment_terminal();
+}
+inline void ProcessedTransition::_internal_set_environment_terminal(bool value) {
+  
+  _impl_.environment_terminal_ = value;
+}
+inline void ProcessedTransition::set_environment_terminal(bool value) {
+  _internal_set_environment_terminal(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.environment_terminal)
+}
+
+// .rl.training.v1.TransitionEndKind end_kind = 18;
+inline void ProcessedTransition::clear_end_kind() {
+  _impl_.end_kind_ = 0;
+}
+inline ::rl::training::v1::TransitionEndKind ProcessedTransition::_internal_end_kind() const {
+  return static_cast< ::rl::training::v1::TransitionEndKind >(_impl_.end_kind_);
+}
+inline ::rl::training::v1::TransitionEndKind ProcessedTransition::end_kind() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.end_kind)
+  return _internal_end_kind();
+}
+inline void ProcessedTransition::_internal_set_end_kind(::rl::training::v1::TransitionEndKind value) {
+  
+  _impl_.end_kind_ = value;
+}
+inline void ProcessedTransition::set_end_kind(::rl::training::v1::TransitionEndKind value) {
+  _internal_set_end_kind(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.end_kind)
+}
+
+// .rl.training.v1.SegmentCloseReason segment_close_reason = 19;
+inline void ProcessedTransition::clear_segment_close_reason() {
+  _impl_.segment_close_reason_ = 0;
+}
+inline ::rl::training::v1::SegmentCloseReason ProcessedTransition::_internal_segment_close_reason() const {
+  return static_cast< ::rl::training::v1::SegmentCloseReason >(_impl_.segment_close_reason_);
+}
+inline ::rl::training::v1::SegmentCloseReason ProcessedTransition::segment_close_reason() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_close_reason)
+  return _internal_segment_close_reason();
+}
+inline void ProcessedTransition::_internal_set_segment_close_reason(::rl::training::v1::SegmentCloseReason value) {
+  
+  _impl_.segment_close_reason_ = value;
+}
+inline void ProcessedTransition::set_segment_close_reason(::rl::training::v1::SegmentCloseReason value) {
+  _internal_set_segment_close_reason(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_close_reason)
+}
+
+// bool segment_boundary = 20;
+inline void ProcessedTransition::clear_segment_boundary() {
+  _impl_.segment_boundary_ = false;
+}
+inline bool ProcessedTransition::_internal_segment_boundary() const {
+  return _impl_.segment_boundary_;
+}
+inline bool ProcessedTransition::segment_boundary() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_boundary)
+  return _internal_segment_boundary();
+}
+inline void ProcessedTransition::_internal_set_segment_boundary(bool value) {
+  
+  _impl_.segment_boundary_ = value;
+}
+inline void ProcessedTransition::set_segment_boundary(bool value) {
+  _internal_set_segment_boundary(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_boundary)
+}
+
+// bool bootstrap_applied = 21;
+inline void ProcessedTransition::clear_bootstrap_applied() {
+  _impl_.bootstrap_applied_ = false;
+}
+inline bool ProcessedTransition::_internal_bootstrap_applied() const {
+  return _impl_.bootstrap_applied_;
+}
+inline bool ProcessedTransition::bootstrap_applied() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.bootstrap_applied)
+  return _internal_bootstrap_applied();
+}
+inline void ProcessedTransition::_internal_set_bootstrap_applied(bool value) {
+  
+  _impl_.bootstrap_applied_ = value;
+}
+inline void ProcessedTransition::set_bootstrap_applied(bool value) {
+  _internal_set_bootstrap_applied(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.bootstrap_applied)
+}
+
+// optional float bootstrap_value = 22;
+inline bool ProcessedTransition::_internal_has_bootstrap_value() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool ProcessedTransition::has_bootstrap_value() const {
+  return _internal_has_bootstrap_value();
+}
+inline void ProcessedTransition::clear_bootstrap_value() {
+  _impl_.bootstrap_value_ = 0;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline float ProcessedTransition::_internal_bootstrap_value() const {
+  return _impl_.bootstrap_value_;
+}
+inline float ProcessedTransition::bootstrap_value() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.bootstrap_value)
+  return _internal_bootstrap_value();
+}
+inline void ProcessedTransition::_internal_set_bootstrap_value(float value) {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.bootstrap_value_ = value;
+}
+inline void ProcessedTransition::set_bootstrap_value(float value) {
+  _internal_set_bootstrap_value(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.bootstrap_value)
+}
+
+// .rl.training.v1.BehaviorPolicyReference behavior_policy = 23;
+inline bool ProcessedTransition::_internal_has_behavior_policy() const {
+  return this != internal_default_instance() && _impl_.behavior_policy_ != nullptr;
+}
+inline bool ProcessedTransition::has_behavior_policy() const {
+  return _internal_has_behavior_policy();
+}
+inline void ProcessedTransition::clear_behavior_policy() {
+  if (GetArenaForAllocation() == nullptr && _impl_.behavior_policy_ != nullptr) {
+    delete _impl_.behavior_policy_;
+  }
+  _impl_.behavior_policy_ = nullptr;
+}
+inline const ::rl::training::v1::BehaviorPolicyReference& ProcessedTransition::_internal_behavior_policy() const {
+  const ::rl::training::v1::BehaviorPolicyReference* p = _impl_.behavior_policy_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::BehaviorPolicyReference&>(
+      ::rl::training::v1::_BehaviorPolicyReference_default_instance_);
+}
+inline const ::rl::training::v1::BehaviorPolicyReference& ProcessedTransition::behavior_policy() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.behavior_policy)
+  return _internal_behavior_policy();
+}
+inline void ProcessedTransition::unsafe_arena_set_allocated_behavior_policy(
+    ::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_policy_);
+  }
+  _impl_.behavior_policy_ = behavior_policy;
+  if (behavior_policy) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransition.behavior_policy)
+}
+inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::release_behavior_policy() {
+  
+  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
+  _impl_.behavior_policy_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::unsafe_arena_release_behavior_policy() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.behavior_policy)
+  
+  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
+  _impl_.behavior_policy_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::_internal_mutable_behavior_policy() {
+  
+  if (_impl_.behavior_policy_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(GetArenaForAllocation());
+    _impl_.behavior_policy_ = p;
+  }
+  return _impl_.behavior_policy_;
+}
+inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::mutable_behavior_policy() {
+  ::rl::training::v1::BehaviorPolicyReference* _msg = _internal_mutable_behavior_policy();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.behavior_policy)
+  return _msg;
+}
+inline void ProcessedTransition::set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.behavior_policy_;
+  }
+  if (behavior_policy) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(behavior_policy);
+    if (message_arena != submessage_arena) {
+      behavior_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, behavior_policy, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.behavior_policy_ = behavior_policy;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.behavior_policy)
+}
+
+// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 24;
+inline bool ProcessedTransition::_internal_has_rollout_estimator_profile_digest() const {
+  return this != internal_default_instance() && _impl_.rollout_estimator_profile_digest_ != nullptr;
+}
+inline bool ProcessedTransition::has_rollout_estimator_profile_digest() const {
+  return _internal_has_rollout_estimator_profile_digest();
+}
+inline const ::rl::common::v1::ContentDigest& ProcessedTransition::_internal_rollout_estimator_profile_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.rollout_estimator_profile_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& ProcessedTransition::rollout_estimator_profile_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
+  return _internal_rollout_estimator_profile_digest();
+}
+inline void ProcessedTransition::unsafe_arena_set_allocated_rollout_estimator_profile_digest(
+    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
+  }
+  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
+  if (rollout_estimator_profile_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
+}
+inline ::rl::common::v1::ContentDigest* ProcessedTransition::release_rollout_estimator_profile_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
+  _impl_.rollout_estimator_profile_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* ProcessedTransition::unsafe_arena_release_rollout_estimator_profile_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
+  _impl_.rollout_estimator_profile_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* ProcessedTransition::_internal_mutable_rollout_estimator_profile_digest() {
+  
+  if (_impl_.rollout_estimator_profile_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.rollout_estimator_profile_digest_ = p;
+  }
+  return _impl_.rollout_estimator_profile_digest_;
+}
+inline ::rl::common::v1::ContentDigest* ProcessedTransition::mutable_rollout_estimator_profile_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_rollout_estimator_profile_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
+  return _msg;
+}
+inline void ProcessedTransition::set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
+  }
+  if (rollout_estimator_profile_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(rollout_estimator_profile_digest));
+    if (message_arena != submessage_arena) {
+      rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, rollout_estimator_profile_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
+}
+
+// int64 created_at_unix_ms = 25;
+inline void ProcessedTransition::clear_created_at_unix_ms() {
+  _impl_.created_at_unix_ms_ = int64_t{0};
+}
+inline int64_t ProcessedTransition::_internal_created_at_unix_ms() const {
+  return _impl_.created_at_unix_ms_;
+}
+inline int64_t ProcessedTransition::created_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.created_at_unix_ms)
+  return _internal_created_at_unix_ms();
+}
+inline void ProcessedTransition::_internal_set_created_at_unix_ms(int64_t value) {
+  
+  _impl_.created_at_unix_ms_ = value;
+}
+inline void ProcessedTransition::set_created_at_unix_ms(int64_t value) {
+  _internal_set_created_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.created_at_unix_ms)
+}
+
+// -------------------------------------------------------------------
+
+// ProcessedTransitionEnvelope
+
+// string envelope_id = 1;
+inline void ProcessedTransitionEnvelope::clear_envelope_id() {
+  _impl_.envelope_id_.ClearToEmpty();
+}
+inline const std::string& ProcessedTransitionEnvelope::envelope_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.envelope_id)
+  return _internal_envelope_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ProcessedTransitionEnvelope::set_envelope_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.envelope_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransitionEnvelope.envelope_id)
+}
+inline std::string* ProcessedTransitionEnvelope::mutable_envelope_id() {
+  std::string* _s = _internal_mutable_envelope_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.envelope_id)
+  return _s;
+}
+inline const std::string& ProcessedTransitionEnvelope::_internal_envelope_id() const {
+  return _impl_.envelope_id_.Get();
+}
+inline void ProcessedTransitionEnvelope::_internal_set_envelope_id(const std::string& value) {
+  
+  _impl_.envelope_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ProcessedTransitionEnvelope::_internal_mutable_envelope_id() {
+  
+  return _impl_.envelope_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ProcessedTransitionEnvelope::release_envelope_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.envelope_id)
+  return _impl_.envelope_id_.Release();
+}
+inline void ProcessedTransitionEnvelope::set_allocated_envelope_id(std::string* envelope_id) {
+  if (envelope_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.envelope_id_.SetAllocated(envelope_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.envelope_id_.IsDefault()) {
+    _impl_.envelope_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.envelope_id)
 }
 
 // .rl.common.v1.ContentDigest payload_digest = 2;
-inline bool SampleBatch::_internal_has_payload_digest() const {
+inline bool ProcessedTransitionEnvelope::_internal_has_payload_digest() const {
   return this != internal_default_instance() && _impl_.payload_digest_ != nullptr;
 }
-inline bool SampleBatch::has_payload_digest() const {
+inline bool ProcessedTransitionEnvelope::has_payload_digest() const {
   return _internal_has_payload_digest();
 }
-inline const ::rl::common::v1::ContentDigest& SampleBatch::_internal_payload_digest() const {
+inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::_internal_payload_digest() const {
   const ::rl::common::v1::ContentDigest* p = _impl_.payload_digest_;
   return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
       ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::common::v1::ContentDigest& SampleBatch::payload_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.payload_digest)
+inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::payload_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
   return _internal_payload_digest();
 }
-inline void SampleBatch::unsafe_arena_set_allocated_payload_digest(
+inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_payload_digest(
     ::rl::common::v1::ContentDigest* payload_digest) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
@@ -14805,9 +15937,9 @@ inline void SampleBatch::unsafe_arena_set_allocated_payload_digest(
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleBatch.payload_digest)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
 }
-inline ::rl::common::v1::ContentDigest* SampleBatch::release_payload_digest() {
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::release_payload_digest() {
   
   ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
   _impl_.payload_digest_ = nullptr;
@@ -14822,14 +15954,14 @@ inline ::rl::common::v1::ContentDigest* SampleBatch::release_payload_digest() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* SampleBatch::unsafe_arena_release_payload_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.payload_digest)
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::unsafe_arena_release_payload_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
   
   ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
   _impl_.payload_digest_ = nullptr;
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* SampleBatch::_internal_mutable_payload_digest() {
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::_internal_mutable_payload_digest() {
   
   if (_impl_.payload_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
@@ -14837,12 +15969,12 @@ inline ::rl::common::v1::ContentDigest* SampleBatch::_internal_mutable_payload_d
   }
   return _impl_.payload_digest_;
 }
-inline ::rl::common::v1::ContentDigest* SampleBatch::mutable_payload_digest() {
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::mutable_payload_digest() {
   ::rl::common::v1::ContentDigest* _msg = _internal_mutable_payload_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.payload_digest)
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
   return _msg;
 }
-inline void SampleBatch::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
+inline void ProcessedTransitionEnvelope::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
@@ -14860,382 +15992,72 @@ inline void SampleBatch::set_allocated_payload_digest(::rl::common::v1::ContentD
     
   }
   _impl_.payload_digest_ = payload_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.payload_digest)
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
 }
 
-// string actor_session_id = 3;
-inline void SampleBatch::clear_actor_session_id() {
-  _impl_.actor_session_id_.ClearToEmpty();
+// repeated .rl.training.v1.ProcessedTransition transitions = 3;
+inline int ProcessedTransitionEnvelope::_internal_transitions_size() const {
+  return _impl_.transitions_.size();
 }
-inline const std::string& SampleBatch::actor_session_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.actor_session_id)
-  return _internal_actor_session_id();
+inline int ProcessedTransitionEnvelope::transitions_size() const {
+  return _internal_transitions_size();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void SampleBatch::set_actor_session_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.actor_session_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.actor_session_id)
+inline void ProcessedTransitionEnvelope::clear_transitions() {
+  _impl_.transitions_.Clear();
 }
-inline std::string* SampleBatch::mutable_actor_session_id() {
-  std::string* _s = _internal_mutable_actor_session_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.actor_session_id)
-  return _s;
+inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::mutable_transitions(int index) {
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.transitions)
+  return _impl_.transitions_.Mutable(index);
 }
-inline const std::string& SampleBatch::_internal_actor_session_id() const {
-  return _impl_.actor_session_id_.Get();
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >*
+ProcessedTransitionEnvelope::mutable_transitions() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ProcessedTransitionEnvelope.transitions)
+  return &_impl_.transitions_;
 }
-inline void SampleBatch::_internal_set_actor_session_id(const std::string& value) {
-  
-  _impl_.actor_session_id_.Set(value, GetArenaForAllocation());
+inline const ::rl::training::v1::ProcessedTransition& ProcessedTransitionEnvelope::_internal_transitions(int index) const {
+  return _impl_.transitions_.Get(index);
 }
-inline std::string* SampleBatch::_internal_mutable_actor_session_id() {
-  
-  return _impl_.actor_session_id_.Mutable(GetArenaForAllocation());
+inline const ::rl::training::v1::ProcessedTransition& ProcessedTransitionEnvelope::transitions(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.transitions)
+  return _internal_transitions(index);
 }
-inline std::string* SampleBatch::release_actor_session_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.actor_session_id)
-  return _impl_.actor_session_id_.Release();
+inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::_internal_add_transitions() {
+  return _impl_.transitions_.Add();
 }
-inline void SampleBatch::set_allocated_actor_session_id(std::string* actor_session_id) {
-  if (actor_session_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.actor_session_id_.SetAllocated(actor_session_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.actor_session_id_.IsDefault()) {
-    _impl_.actor_session_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.actor_session_id)
-}
-
-// string trajectory_id = 4;
-inline void SampleBatch::clear_trajectory_id() {
-  _impl_.trajectory_id_.ClearToEmpty();
-}
-inline const std::string& SampleBatch::trajectory_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.trajectory_id)
-  return _internal_trajectory_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void SampleBatch::set_trajectory_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.trajectory_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.trajectory_id)
-}
-inline std::string* SampleBatch::mutable_trajectory_id() {
-  std::string* _s = _internal_mutable_trajectory_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.trajectory_id)
-  return _s;
-}
-inline const std::string& SampleBatch::_internal_trajectory_id() const {
-  return _impl_.trajectory_id_.Get();
-}
-inline void SampleBatch::_internal_set_trajectory_id(const std::string& value) {
-  
-  _impl_.trajectory_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* SampleBatch::_internal_mutable_trajectory_id() {
-  
-  return _impl_.trajectory_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* SampleBatch::release_trajectory_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.trajectory_id)
-  return _impl_.trajectory_id_.Release();
-}
-inline void SampleBatch::set_allocated_trajectory_id(std::string* trajectory_id) {
-  if (trajectory_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.trajectory_id_.SetAllocated(trajectory_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.trajectory_id_.IsDefault()) {
-    _impl_.trajectory_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.trajectory_id)
-}
-
-// uint32 actor_id = 5;
-inline void SampleBatch::clear_actor_id() {
-  _impl_.actor_id_ = 0u;
-}
-inline uint32_t SampleBatch::_internal_actor_id() const {
-  return _impl_.actor_id_;
-}
-inline uint32_t SampleBatch::actor_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.actor_id)
-  return _internal_actor_id();
-}
-inline void SampleBatch::_internal_set_actor_id(uint32_t value) {
-  
-  _impl_.actor_id_ = value;
-}
-inline void SampleBatch::set_actor_id(uint32_t value) {
-  _internal_set_actor_id(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.actor_id)
-}
-
-// uint32 fragment_id = 6;
-inline void SampleBatch::clear_fragment_id() {
-  _impl_.fragment_id_ = 0u;
-}
-inline uint32_t SampleBatch::_internal_fragment_id() const {
-  return _impl_.fragment_id_;
-}
-inline uint32_t SampleBatch::fragment_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.fragment_id)
-  return _internal_fragment_id();
-}
-inline void SampleBatch::_internal_set_fragment_id(uint32_t value) {
-  
-  _impl_.fragment_id_ = value;
-}
-inline void SampleBatch::set_fragment_id(uint32_t value) {
-  _internal_set_fragment_id(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.fragment_id)
-}
-
-// uint64 fragment_sequence = 7;
-inline void SampleBatch::clear_fragment_sequence() {
-  _impl_.fragment_sequence_ = uint64_t{0u};
-}
-inline uint64_t SampleBatch::_internal_fragment_sequence() const {
-  return _impl_.fragment_sequence_;
-}
-inline uint64_t SampleBatch::fragment_sequence() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.fragment_sequence)
-  return _internal_fragment_sequence();
-}
-inline void SampleBatch::_internal_set_fragment_sequence(uint64_t value) {
-  
-  _impl_.fragment_sequence_ = value;
-}
-inline void SampleBatch::set_fragment_sequence(uint64_t value) {
-  _internal_set_fragment_sequence(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.fragment_sequence)
-}
-
-// repeated .rl.training.v1.Sample samples = 8;
-inline int SampleBatch::_internal_samples_size() const {
-  return _impl_.samples_.size();
-}
-inline int SampleBatch::samples_size() const {
-  return _internal_samples_size();
-}
-inline void SampleBatch::clear_samples() {
-  _impl_.samples_.Clear();
-}
-inline ::rl::training::v1::Sample* SampleBatch::mutable_samples(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.samples)
-  return _impl_.samples_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::Sample >*
-SampleBatch::mutable_samples() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.SampleBatch.samples)
-  return &_impl_.samples_;
-}
-inline const ::rl::training::v1::Sample& SampleBatch::_internal_samples(int index) const {
-  return _impl_.samples_.Get(index);
-}
-inline const ::rl::training::v1::Sample& SampleBatch::samples(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.samples)
-  return _internal_samples(index);
-}
-inline ::rl::training::v1::Sample* SampleBatch::_internal_add_samples() {
-  return _impl_.samples_.Add();
-}
-inline ::rl::training::v1::Sample* SampleBatch::add_samples() {
-  ::rl::training::v1::Sample* _add = _internal_add_samples();
-  // @@protoc_insertion_point(field_add:rl.training.v1.SampleBatch.samples)
+inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::add_transitions() {
+  ::rl::training::v1::ProcessedTransition* _add = _internal_add_transitions();
+  // @@protoc_insertion_point(field_add:rl.training.v1.ProcessedTransitionEnvelope.transitions)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::Sample >&
-SampleBatch::samples() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.SampleBatch.samples)
-  return _impl_.samples_;
-}
-
-// bool trajectory_end = 9;
-inline void SampleBatch::clear_trajectory_end() {
-  _impl_.trajectory_end_ = false;
-}
-inline bool SampleBatch::_internal_trajectory_end() const {
-  return _impl_.trajectory_end_;
-}
-inline bool SampleBatch::trajectory_end() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.trajectory_end)
-  return _internal_trajectory_end();
-}
-inline void SampleBatch::_internal_set_trajectory_end(bool value) {
-  
-  _impl_.trajectory_end_ = value;
-}
-inline void SampleBatch::set_trajectory_end(bool value) {
-  _internal_set_trajectory_end(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.trajectory_end)
-}
-
-// float bootstrap_value = 10;
-inline void SampleBatch::clear_bootstrap_value() {
-  _impl_.bootstrap_value_ = 0;
-}
-inline float SampleBatch::_internal_bootstrap_value() const {
-  return _impl_.bootstrap_value_;
-}
-inline float SampleBatch::bootstrap_value() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.bootstrap_value)
-  return _internal_bootstrap_value();
-}
-inline void SampleBatch::_internal_set_bootstrap_value(float value) {
-  
-  _impl_.bootstrap_value_ = value;
-}
-inline void SampleBatch::set_bootstrap_value(float value) {
-  _internal_set_bootstrap_value(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.bootstrap_value)
-}
-
-// bool bootstrap_valid = 11;
-inline void SampleBatch::clear_bootstrap_valid() {
-  _impl_.bootstrap_valid_ = false;
-}
-inline bool SampleBatch::_internal_bootstrap_valid() const {
-  return _impl_.bootstrap_valid_;
-}
-inline bool SampleBatch::bootstrap_valid() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.bootstrap_valid)
-  return _internal_bootstrap_valid();
-}
-inline void SampleBatch::_internal_set_bootstrap_valid(bool value) {
-  
-  _impl_.bootstrap_valid_ = value;
-}
-inline void SampleBatch::set_bootstrap_valid(bool value) {
-  _internal_set_bootstrap_valid(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.bootstrap_valid)
-}
-
-// .rl.training.v1.BehaviorPolicyReference behavior_policy = 12;
-inline bool SampleBatch::_internal_has_behavior_policy() const {
-  return this != internal_default_instance() && _impl_.behavior_policy_ != nullptr;
-}
-inline bool SampleBatch::has_behavior_policy() const {
-  return _internal_has_behavior_policy();
-}
-inline void SampleBatch::clear_behavior_policy() {
-  if (GetArenaForAllocation() == nullptr && _impl_.behavior_policy_ != nullptr) {
-    delete _impl_.behavior_policy_;
-  }
-  _impl_.behavior_policy_ = nullptr;
-}
-inline const ::rl::training::v1::BehaviorPolicyReference& SampleBatch::_internal_behavior_policy() const {
-  const ::rl::training::v1::BehaviorPolicyReference* p = _impl_.behavior_policy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::BehaviorPolicyReference&>(
-      ::rl::training::v1::_BehaviorPolicyReference_default_instance_);
-}
-inline const ::rl::training::v1::BehaviorPolicyReference& SampleBatch::behavior_policy() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.behavior_policy)
-  return _internal_behavior_policy();
-}
-inline void SampleBatch::unsafe_arena_set_allocated_behavior_policy(
-    ::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_policy_);
-  }
-  _impl_.behavior_policy_ = behavior_policy;
-  if (behavior_policy) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleBatch.behavior_policy)
-}
-inline ::rl::training::v1::BehaviorPolicyReference* SampleBatch::release_behavior_policy() {
-  
-  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* SampleBatch::unsafe_arena_release_behavior_policy() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.behavior_policy)
-  
-  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* SampleBatch::_internal_mutable_behavior_policy() {
-  
-  if (_impl_.behavior_policy_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(GetArenaForAllocation());
-    _impl_.behavior_policy_ = p;
-  }
-  return _impl_.behavior_policy_;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* SampleBatch::mutable_behavior_policy() {
-  ::rl::training::v1::BehaviorPolicyReference* _msg = _internal_mutable_behavior_policy();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.behavior_policy)
-  return _msg;
-}
-inline void SampleBatch::set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.behavior_policy_;
-  }
-  if (behavior_policy) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(behavior_policy);
-    if (message_arena != submessage_arena) {
-      behavior_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, behavior_policy, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.behavior_policy_ = behavior_policy;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.behavior_policy)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >&
+ProcessedTransitionEnvelope::transitions() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.ProcessedTransitionEnvelope.transitions)
+  return _impl_.transitions_;
 }
 
 // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 13;
-inline bool SampleBatch::_internal_has_training_semantics() const {
+inline bool ProcessedTransitionEnvelope::_internal_has_training_semantics() const {
   return this != internal_default_instance() && _impl_.training_semantics_ != nullptr;
 }
-inline bool SampleBatch::has_training_semantics() const {
+inline bool ProcessedTransitionEnvelope::has_training_semantics() const {
   return _internal_has_training_semantics();
 }
-inline void SampleBatch::clear_training_semantics() {
+inline void ProcessedTransitionEnvelope::clear_training_semantics() {
   if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
     delete _impl_.training_semantics_;
   }
   _impl_.training_semantics_ = nullptr;
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& SampleBatch::_internal_training_semantics() const {
+inline const ::rl::training::v1::TrainingSemanticsIdentity& ProcessedTransitionEnvelope::_internal_training_semantics() const {
   const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.training_semantics_;
   return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
       ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& SampleBatch::training_semantics() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.training_semantics)
+inline const ::rl::training::v1::TrainingSemanticsIdentity& ProcessedTransitionEnvelope::training_semantics() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
   return _internal_training_semantics();
 }
-inline void SampleBatch::unsafe_arena_set_allocated_training_semantics(
+inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_training_semantics(
     ::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_semantics_);
@@ -15246,9 +16068,9 @@ inline void SampleBatch::unsafe_arena_set_allocated_training_semantics(
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleBatch.training_semantics)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* SampleBatch::release_training_semantics() {
+inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::release_training_semantics() {
   
   ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
   _impl_.training_semantics_ = nullptr;
@@ -15263,14 +16085,14 @@ inline ::rl::training::v1::TrainingSemanticsIdentity* SampleBatch::release_train
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* SampleBatch::unsafe_arena_release_training_semantics() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.training_semantics)
+inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::unsafe_arena_release_training_semantics() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
   
   ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
   _impl_.training_semantics_ = nullptr;
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* SampleBatch::_internal_mutable_training_semantics() {
+inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::_internal_mutable_training_semantics() {
   
   if (_impl_.training_semantics_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
@@ -15278,12 +16100,12 @@ inline ::rl::training::v1::TrainingSemanticsIdentity* SampleBatch::_internal_mut
   }
   return _impl_.training_semantics_;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* SampleBatch::mutable_training_semantics() {
+inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::mutable_training_semantics() {
   ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_training_semantics();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.training_semantics)
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
   return _msg;
 }
-inline void SampleBatch::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+inline void ProcessedTransitionEnvelope::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete _impl_.training_semantics_;
@@ -15300,26 +16122,26 @@ inline void SampleBatch::set_allocated_training_semantics(::rl::training::v1::Tr
     
   }
   _impl_.training_semantics_ = training_semantics;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.training_semantics)
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
 }
 
 // .rl.common.v1.ServiceInstanceIdentity producer = 14;
-inline bool SampleBatch::_internal_has_producer() const {
+inline bool ProcessedTransitionEnvelope::_internal_has_producer() const {
   return this != internal_default_instance() && _impl_.producer_ != nullptr;
 }
-inline bool SampleBatch::has_producer() const {
+inline bool ProcessedTransitionEnvelope::has_producer() const {
   return _internal_has_producer();
 }
-inline const ::rl::common::v1::ServiceInstanceIdentity& SampleBatch::_internal_producer() const {
+inline const ::rl::common::v1::ServiceInstanceIdentity& ProcessedTransitionEnvelope::_internal_producer() const {
   const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.producer_;
   return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
       ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
 }
-inline const ::rl::common::v1::ServiceInstanceIdentity& SampleBatch::producer() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.producer)
+inline const ::rl::common::v1::ServiceInstanceIdentity& ProcessedTransitionEnvelope::producer() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.producer)
   return _internal_producer();
 }
-inline void SampleBatch::unsafe_arena_set_allocated_producer(
+inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_producer(
     ::rl::common::v1::ServiceInstanceIdentity* producer) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
@@ -15330,9 +16152,9 @@ inline void SampleBatch::unsafe_arena_set_allocated_producer(
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleBatch.producer)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.producer)
 }
-inline ::rl::common::v1::ServiceInstanceIdentity* SampleBatch::release_producer() {
+inline ::rl::common::v1::ServiceInstanceIdentity* ProcessedTransitionEnvelope::release_producer() {
   
   ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
   _impl_.producer_ = nullptr;
@@ -15347,14 +16169,14 @@ inline ::rl::common::v1::ServiceInstanceIdentity* SampleBatch::release_producer(
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::common::v1::ServiceInstanceIdentity* SampleBatch::unsafe_arena_release_producer() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.producer)
+inline ::rl::common::v1::ServiceInstanceIdentity* ProcessedTransitionEnvelope::unsafe_arena_release_producer() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.producer)
   
   ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
   _impl_.producer_ = nullptr;
   return temp;
 }
-inline ::rl::common::v1::ServiceInstanceIdentity* SampleBatch::_internal_mutable_producer() {
+inline ::rl::common::v1::ServiceInstanceIdentity* ProcessedTransitionEnvelope::_internal_mutable_producer() {
   
   if (_impl_.producer_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
@@ -15362,12 +16184,12 @@ inline ::rl::common::v1::ServiceInstanceIdentity* SampleBatch::_internal_mutable
   }
   return _impl_.producer_;
 }
-inline ::rl::common::v1::ServiceInstanceIdentity* SampleBatch::mutable_producer() {
+inline ::rl::common::v1::ServiceInstanceIdentity* ProcessedTransitionEnvelope::mutable_producer() {
   ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_producer();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.producer)
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.producer)
   return _msg;
 }
-inline void SampleBatch::set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer) {
+inline void ProcessedTransitionEnvelope::set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
@@ -15385,26 +16207,26 @@ inline void SampleBatch::set_allocated_producer(::rl::common::v1::ServiceInstanc
     
   }
   _impl_.producer_ = producer;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.producer)
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.producer)
 }
 
 // .rl.common.v1.ContractIdentity contract = 15;
-inline bool SampleBatch::_internal_has_contract() const {
+inline bool ProcessedTransitionEnvelope::_internal_has_contract() const {
   return this != internal_default_instance() && _impl_.contract_ != nullptr;
 }
-inline bool SampleBatch::has_contract() const {
+inline bool ProcessedTransitionEnvelope::has_contract() const {
   return _internal_has_contract();
 }
-inline const ::rl::common::v1::ContractIdentity& SampleBatch::_internal_contract() const {
+inline const ::rl::common::v1::ContractIdentity& ProcessedTransitionEnvelope::_internal_contract() const {
   const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
   return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
       ::rl::common::v1::_ContractIdentity_default_instance_);
 }
-inline const ::rl::common::v1::ContractIdentity& SampleBatch::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.contract)
+inline const ::rl::common::v1::ContractIdentity& ProcessedTransitionEnvelope::contract() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.contract)
   return _internal_contract();
 }
-inline void SampleBatch::unsafe_arena_set_allocated_contract(
+inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_contract(
     ::rl::common::v1::ContractIdentity* contract) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
@@ -15415,9 +16237,9 @@ inline void SampleBatch::unsafe_arena_set_allocated_contract(
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SampleBatch.contract)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.contract)
 }
-inline ::rl::common::v1::ContractIdentity* SampleBatch::release_contract() {
+inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::release_contract() {
   
   ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
   _impl_.contract_ = nullptr;
@@ -15432,14 +16254,14 @@ inline ::rl::common::v1::ContractIdentity* SampleBatch::release_contract() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::common::v1::ContractIdentity* SampleBatch::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SampleBatch.contract)
+inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::unsafe_arena_release_contract() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.contract)
   
   ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
   _impl_.contract_ = nullptr;
   return temp;
 }
-inline ::rl::common::v1::ContractIdentity* SampleBatch::_internal_mutable_contract() {
+inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::_internal_mutable_contract() {
   
   if (_impl_.contract_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
@@ -15447,12 +16269,12 @@ inline ::rl::common::v1::ContractIdentity* SampleBatch::_internal_mutable_contra
   }
   return _impl_.contract_;
 }
-inline ::rl::common::v1::ContractIdentity* SampleBatch::mutable_contract() {
+inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::mutable_contract() {
   ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SampleBatch.contract)
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.contract)
   return _msg;
 }
-inline void SampleBatch::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
+inline void ProcessedTransitionEnvelope::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
@@ -15470,164 +16292,72 @@ inline void SampleBatch::set_allocated_contract(::rl::common::v1::ContractIdenti
     
   }
   _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SampleBatch.contract)
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.contract)
 }
 
 // int64 created_at_unix_ms = 16;
-inline void SampleBatch::clear_created_at_unix_ms() {
+inline void ProcessedTransitionEnvelope::clear_created_at_unix_ms() {
   _impl_.created_at_unix_ms_ = int64_t{0};
 }
-inline int64_t SampleBatch::_internal_created_at_unix_ms() const {
+inline int64_t ProcessedTransitionEnvelope::_internal_created_at_unix_ms() const {
   return _impl_.created_at_unix_ms_;
 }
-inline int64_t SampleBatch::created_at_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.created_at_unix_ms)
+inline int64_t ProcessedTransitionEnvelope::created_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.created_at_unix_ms)
   return _internal_created_at_unix_ms();
 }
-inline void SampleBatch::_internal_set_created_at_unix_ms(int64_t value) {
+inline void ProcessedTransitionEnvelope::_internal_set_created_at_unix_ms(int64_t value) {
   
   _impl_.created_at_unix_ms_ = value;
 }
-inline void SampleBatch::set_created_at_unix_ms(int64_t value) {
+inline void ProcessedTransitionEnvelope::set_created_at_unix_ms(int64_t value) {
   _internal_set_created_at_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.created_at_unix_ms)
-}
-
-// uint64 first_action_step = 17;
-inline void SampleBatch::clear_first_action_step() {
-  _impl_.first_action_step_ = uint64_t{0u};
-}
-inline uint64_t SampleBatch::_internal_first_action_step() const {
-  return _impl_.first_action_step_;
-}
-inline uint64_t SampleBatch::first_action_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.first_action_step)
-  return _internal_first_action_step();
-}
-inline void SampleBatch::_internal_set_first_action_step(uint64_t value) {
-  
-  _impl_.first_action_step_ = value;
-}
-inline void SampleBatch::set_first_action_step(uint64_t value) {
-  _internal_set_first_action_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.first_action_step)
-}
-
-// uint64 last_action_step = 18;
-inline void SampleBatch::clear_last_action_step() {
-  _impl_.last_action_step_ = uint64_t{0u};
-}
-inline uint64_t SampleBatch::_internal_last_action_step() const {
-  return _impl_.last_action_step_;
-}
-inline uint64_t SampleBatch::last_action_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleBatch.last_action_step)
-  return _internal_last_action_step();
-}
-inline void SampleBatch::_internal_set_last_action_step(uint64_t value) {
-  
-  _impl_.last_action_step_ = value;
-}
-inline void SampleBatch::set_last_action_step(uint64_t value) {
-  _internal_set_last_action_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleBatch.last_action_step)
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransitionEnvelope.created_at_unix_ms)
 }
 
 // -------------------------------------------------------------------
 
-// SampleResponse
+// SamplePoolItem
 
-// int32 ret_code = 1;
-inline void SampleResponse::clear_ret_code() {
-  _impl_.ret_code_ = 0;
+// .rl.training.v1.ProcessedTransition transition = 1;
+inline bool SamplePoolItem::_internal_has_transition() const {
+  return this != internal_default_instance() && _impl_.transition_ != nullptr;
 }
-inline int32_t SampleResponse::_internal_ret_code() const {
-  return _impl_.ret_code_;
+inline bool SamplePoolItem::has_transition() const {
+  return _internal_has_transition();
 }
-inline int32_t SampleResponse::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleResponse.ret_code)
-  return _internal_ret_code();
-}
-inline void SampleResponse::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void SampleResponse::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleResponse.ret_code)
-}
-
-// optional uint64 model_step = 2;
-inline bool SampleResponse::_internal_has_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline bool SampleResponse::has_model_step() const {
-  return _internal_has_model_step();
-}
-inline void SampleResponse::clear_model_step() {
-  _impl_.model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline uint64_t SampleResponse::_internal_model_step() const {
-  return _impl_.model_step_;
-}
-inline uint64_t SampleResponse::model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SampleResponse.model_step)
-  return _internal_model_step();
-}
-inline void SampleResponse::_internal_set_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.model_step_ = value;
-}
-inline void SampleResponse::set_model_step(uint64_t value) {
-  _internal_set_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SampleResponse.model_step)
-}
-
-// -------------------------------------------------------------------
-
-// PushSamplesReq
-
-// .rl.training.v1.SampleBatch batch = 2;
-inline bool PushSamplesReq::_internal_has_batch() const {
-  return this != internal_default_instance() && _impl_.batch_ != nullptr;
-}
-inline bool PushSamplesReq::has_batch() const {
-  return _internal_has_batch();
-}
-inline void PushSamplesReq::clear_batch() {
-  if (GetArenaForAllocation() == nullptr && _impl_.batch_ != nullptr) {
-    delete _impl_.batch_;
+inline void SamplePoolItem::clear_transition() {
+  if (GetArenaForAllocation() == nullptr && _impl_.transition_ != nullptr) {
+    delete _impl_.transition_;
   }
-  _impl_.batch_ = nullptr;
+  _impl_.transition_ = nullptr;
 }
-inline const ::rl::training::v1::SampleBatch& PushSamplesReq::_internal_batch() const {
-  const ::rl::training::v1::SampleBatch* p = _impl_.batch_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::SampleBatch&>(
-      ::rl::training::v1::_SampleBatch_default_instance_);
+inline const ::rl::training::v1::ProcessedTransition& SamplePoolItem::_internal_transition() const {
+  const ::rl::training::v1::ProcessedTransition* p = _impl_.transition_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::ProcessedTransition&>(
+      ::rl::training::v1::_ProcessedTransition_default_instance_);
 }
-inline const ::rl::training::v1::SampleBatch& PushSamplesReq::batch() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesReq.batch)
-  return _internal_batch();
+inline const ::rl::training::v1::ProcessedTransition& SamplePoolItem::transition() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolItem.transition)
+  return _internal_transition();
 }
-inline void PushSamplesReq::unsafe_arena_set_allocated_batch(
-    ::rl::training::v1::SampleBatch* batch) {
+inline void SamplePoolItem::unsafe_arena_set_allocated_transition(
+    ::rl::training::v1::ProcessedTransition* transition) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.batch_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.transition_);
   }
-  _impl_.batch_ = batch;
-  if (batch) {
+  _impl_.transition_ = transition;
+  if (transition) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.PushSamplesReq.batch)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SamplePoolItem.transition)
 }
-inline ::rl::training::v1::SampleBatch* PushSamplesReq::release_batch() {
+inline ::rl::training::v1::ProcessedTransition* SamplePoolItem::release_transition() {
   
-  ::rl::training::v1::SampleBatch* temp = _impl_.batch_;
-  _impl_.batch_ = nullptr;
+  ::rl::training::v1::ProcessedTransition* temp = _impl_.transition_;
+  _impl_.transition_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -15639,44 +16369,198 @@ inline ::rl::training::v1::SampleBatch* PushSamplesReq::release_batch() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::training::v1::SampleBatch* PushSamplesReq::unsafe_arena_release_batch() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesReq.batch)
+inline ::rl::training::v1::ProcessedTransition* SamplePoolItem::unsafe_arena_release_transition() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SamplePoolItem.transition)
   
-  ::rl::training::v1::SampleBatch* temp = _impl_.batch_;
-  _impl_.batch_ = nullptr;
+  ::rl::training::v1::ProcessedTransition* temp = _impl_.transition_;
+  _impl_.transition_ = nullptr;
   return temp;
 }
-inline ::rl::training::v1::SampleBatch* PushSamplesReq::_internal_mutable_batch() {
+inline ::rl::training::v1::ProcessedTransition* SamplePoolItem::_internal_mutable_transition() {
   
-  if (_impl_.batch_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::SampleBatch>(GetArenaForAllocation());
-    _impl_.batch_ = p;
+  if (_impl_.transition_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::ProcessedTransition>(GetArenaForAllocation());
+    _impl_.transition_ = p;
   }
-  return _impl_.batch_;
+  return _impl_.transition_;
 }
-inline ::rl::training::v1::SampleBatch* PushSamplesReq::mutable_batch() {
-  ::rl::training::v1::SampleBatch* _msg = _internal_mutable_batch();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesReq.batch)
+inline ::rl::training::v1::ProcessedTransition* SamplePoolItem::mutable_transition() {
+  ::rl::training::v1::ProcessedTransition* _msg = _internal_mutable_transition();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SamplePoolItem.transition)
   return _msg;
 }
-inline void PushSamplesReq::set_allocated_batch(::rl::training::v1::SampleBatch* batch) {
+inline void SamplePoolItem::set_allocated_transition(::rl::training::v1::ProcessedTransition* transition) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.batch_;
+    delete _impl_.transition_;
   }
-  if (batch) {
+  if (transition) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(batch);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(transition);
     if (message_arena != submessage_arena) {
-      batch = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, batch, submessage_arena);
+      transition = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, transition, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.batch_ = batch;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesReq.batch)
+  _impl_.transition_ = transition;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SamplePoolItem.transition)
+}
+
+// uint64 insert_sequence = 2;
+inline void SamplePoolItem::clear_insert_sequence() {
+  _impl_.insert_sequence_ = uint64_t{0u};
+}
+inline uint64_t SamplePoolItem::_internal_insert_sequence() const {
+  return _impl_.insert_sequence_;
+}
+inline uint64_t SamplePoolItem::insert_sequence() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolItem.insert_sequence)
+  return _internal_insert_sequence();
+}
+inline void SamplePoolItem::_internal_set_insert_sequence(uint64_t value) {
+  
+  _impl_.insert_sequence_ = value;
+}
+inline void SamplePoolItem::set_insert_sequence(uint64_t value) {
+  _internal_set_insert_sequence(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolItem.insert_sequence)
+}
+
+// int64 inserted_at_unix_ms = 3;
+inline void SamplePoolItem::clear_inserted_at_unix_ms() {
+  _impl_.inserted_at_unix_ms_ = int64_t{0};
+}
+inline int64_t SamplePoolItem::_internal_inserted_at_unix_ms() const {
+  return _impl_.inserted_at_unix_ms_;
+}
+inline int64_t SamplePoolItem::inserted_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolItem.inserted_at_unix_ms)
+  return _internal_inserted_at_unix_ms();
+}
+inline void SamplePoolItem::_internal_set_inserted_at_unix_ms(int64_t value) {
+  
+  _impl_.inserted_at_unix_ms_ = value;
+}
+inline void SamplePoolItem::set_inserted_at_unix_ms(int64_t value) {
+  _internal_set_inserted_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolItem.inserted_at_unix_ms)
+}
+
+// uint32 draw_count = 4;
+inline void SamplePoolItem::clear_draw_count() {
+  _impl_.draw_count_ = 0u;
+}
+inline uint32_t SamplePoolItem::_internal_draw_count() const {
+  return _impl_.draw_count_;
+}
+inline uint32_t SamplePoolItem::draw_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolItem.draw_count)
+  return _internal_draw_count();
+}
+inline void SamplePoolItem::_internal_set_draw_count(uint32_t value) {
+  
+  _impl_.draw_count_ = value;
+}
+inline void SamplePoolItem::set_draw_count(uint32_t value) {
+  _internal_set_draw_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolItem.draw_count)
+}
+
+// -------------------------------------------------------------------
+
+// PushSamplesReq
+
+// .rl.training.v1.ProcessedTransitionEnvelope envelope = 2;
+inline bool PushSamplesReq::_internal_has_envelope() const {
+  return this != internal_default_instance() && _impl_.envelope_ != nullptr;
+}
+inline bool PushSamplesReq::has_envelope() const {
+  return _internal_has_envelope();
+}
+inline void PushSamplesReq::clear_envelope() {
+  if (GetArenaForAllocation() == nullptr && _impl_.envelope_ != nullptr) {
+    delete _impl_.envelope_;
+  }
+  _impl_.envelope_ = nullptr;
+}
+inline const ::rl::training::v1::ProcessedTransitionEnvelope& PushSamplesReq::_internal_envelope() const {
+  const ::rl::training::v1::ProcessedTransitionEnvelope* p = _impl_.envelope_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::ProcessedTransitionEnvelope&>(
+      ::rl::training::v1::_ProcessedTransitionEnvelope_default_instance_);
+}
+inline const ::rl::training::v1::ProcessedTransitionEnvelope& PushSamplesReq::envelope() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesReq.envelope)
+  return _internal_envelope();
+}
+inline void PushSamplesReq::unsafe_arena_set_allocated_envelope(
+    ::rl::training::v1::ProcessedTransitionEnvelope* envelope) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.envelope_);
+  }
+  _impl_.envelope_ = envelope;
+  if (envelope) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.PushSamplesReq.envelope)
+}
+inline ::rl::training::v1::ProcessedTransitionEnvelope* PushSamplesReq::release_envelope() {
+  
+  ::rl::training::v1::ProcessedTransitionEnvelope* temp = _impl_.envelope_;
+  _impl_.envelope_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::ProcessedTransitionEnvelope* PushSamplesReq::unsafe_arena_release_envelope() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesReq.envelope)
+  
+  ::rl::training::v1::ProcessedTransitionEnvelope* temp = _impl_.envelope_;
+  _impl_.envelope_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::ProcessedTransitionEnvelope* PushSamplesReq::_internal_mutable_envelope() {
+  
+  if (_impl_.envelope_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::ProcessedTransitionEnvelope>(GetArenaForAllocation());
+    _impl_.envelope_ = p;
+  }
+  return _impl_.envelope_;
+}
+inline ::rl::training::v1::ProcessedTransitionEnvelope* PushSamplesReq::mutable_envelope() {
+  ::rl::training::v1::ProcessedTransitionEnvelope* _msg = _internal_mutable_envelope();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesReq.envelope)
+  return _msg;
+}
+inline void PushSamplesReq::set_allocated_envelope(::rl::training::v1::ProcessedTransitionEnvelope* envelope) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.envelope_;
+  }
+  if (envelope) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(envelope);
+    if (message_arena != submessage_arena) {
+      envelope = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, envelope, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.envelope_ = envelope;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesReq.envelope)
 }
 
 // -------------------------------------------------------------------
@@ -15753,24 +16637,24 @@ inline void PushSamplesRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.message)
 }
 
-// int64 accepted_samples = 3;
-inline void PushSamplesRsp::clear_accepted_samples() {
-  _impl_.accepted_samples_ = int64_t{0};
+// int64 accepted_transitions = 3;
+inline void PushSamplesRsp::clear_accepted_transitions() {
+  _impl_.accepted_transitions_ = int64_t{0};
 }
-inline int64_t PushSamplesRsp::_internal_accepted_samples() const {
-  return _impl_.accepted_samples_;
+inline int64_t PushSamplesRsp::_internal_accepted_transitions() const {
+  return _impl_.accepted_transitions_;
 }
-inline int64_t PushSamplesRsp::accepted_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.accepted_samples)
-  return _internal_accepted_samples();
+inline int64_t PushSamplesRsp::accepted_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.accepted_transitions)
+  return _internal_accepted_transitions();
 }
-inline void PushSamplesRsp::_internal_set_accepted_samples(int64_t value) {
+inline void PushSamplesRsp::_internal_set_accepted_transitions(int64_t value) {
   
-  _impl_.accepted_samples_ = value;
+  _impl_.accepted_transitions_ = value;
 }
-inline void PushSamplesRsp::set_accepted_samples(int64_t value) {
-  _internal_set_accepted_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.accepted_samples)
+inline void PushSamplesRsp::set_accepted_transitions(int64_t value) {
+  _internal_set_accepted_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.accepted_transitions)
 }
 
 // int64 queue_size = 4;
@@ -15813,114 +16697,114 @@ inline void PushSamplesRsp::set_result(::rl::training::v1::PushResult value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.result)
 }
 
-// string batch_id = 6;
-inline void PushSamplesRsp::clear_batch_id() {
-  _impl_.batch_id_.ClearToEmpty();
+// string envelope_id = 6;
+inline void PushSamplesRsp::clear_envelope_id() {
+  _impl_.envelope_id_.ClearToEmpty();
 }
-inline const std::string& PushSamplesRsp::batch_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.batch_id)
-  return _internal_batch_id();
+inline const std::string& PushSamplesRsp::envelope_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.envelope_id)
+  return _internal_envelope_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void PushSamplesRsp::set_batch_id(ArgT0&& arg0, ArgT... args) {
+void PushSamplesRsp::set_envelope_id(ArgT0&& arg0, ArgT... args) {
  
- _impl_.batch_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.batch_id)
+ _impl_.envelope_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.envelope_id)
 }
-inline std::string* PushSamplesRsp::mutable_batch_id() {
-  std::string* _s = _internal_mutable_batch_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesRsp.batch_id)
+inline std::string* PushSamplesRsp::mutable_envelope_id() {
+  std::string* _s = _internal_mutable_envelope_id();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesRsp.envelope_id)
   return _s;
 }
-inline const std::string& PushSamplesRsp::_internal_batch_id() const {
-  return _impl_.batch_id_.Get();
+inline const std::string& PushSamplesRsp::_internal_envelope_id() const {
+  return _impl_.envelope_id_.Get();
 }
-inline void PushSamplesRsp::_internal_set_batch_id(const std::string& value) {
+inline void PushSamplesRsp::_internal_set_envelope_id(const std::string& value) {
   
-  _impl_.batch_id_.Set(value, GetArenaForAllocation());
+  _impl_.envelope_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* PushSamplesRsp::_internal_mutable_batch_id() {
+inline std::string* PushSamplesRsp::_internal_mutable_envelope_id() {
   
-  return _impl_.batch_id_.Mutable(GetArenaForAllocation());
+  return _impl_.envelope_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* PushSamplesRsp::release_batch_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesRsp.batch_id)
-  return _impl_.batch_id_.Release();
+inline std::string* PushSamplesRsp::release_envelope_id() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesRsp.envelope_id)
+  return _impl_.envelope_id_.Release();
 }
-inline void PushSamplesRsp::set_allocated_batch_id(std::string* batch_id) {
-  if (batch_id != nullptr) {
+inline void PushSamplesRsp::set_allocated_envelope_id(std::string* envelope_id) {
+  if (envelope_id != nullptr) {
     
   } else {
     
   }
-  _impl_.batch_id_.SetAllocated(batch_id, GetArenaForAllocation());
+  _impl_.envelope_id_.SetAllocated(envelope_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.batch_id_.IsDefault()) {
-    _impl_.batch_id_.Set("", GetArenaForAllocation());
+  if (_impl_.envelope_id_.IsDefault()) {
+    _impl_.envelope_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.batch_id)
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.envelope_id)
 }
 
-// int64 accepted_unique_samples = 7;
-inline void PushSamplesRsp::clear_accepted_unique_samples() {
-  _impl_.accepted_unique_samples_ = int64_t{0};
+// int64 accepted_unique_transitions = 7;
+inline void PushSamplesRsp::clear_accepted_unique_transitions() {
+  _impl_.accepted_unique_transitions_ = int64_t{0};
 }
-inline int64_t PushSamplesRsp::_internal_accepted_unique_samples() const {
-  return _impl_.accepted_unique_samples_;
+inline int64_t PushSamplesRsp::_internal_accepted_unique_transitions() const {
+  return _impl_.accepted_unique_transitions_;
 }
-inline int64_t PushSamplesRsp::accepted_unique_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.accepted_unique_samples)
-  return _internal_accepted_unique_samples();
+inline int64_t PushSamplesRsp::accepted_unique_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.accepted_unique_transitions)
+  return _internal_accepted_unique_transitions();
 }
-inline void PushSamplesRsp::_internal_set_accepted_unique_samples(int64_t value) {
+inline void PushSamplesRsp::_internal_set_accepted_unique_transitions(int64_t value) {
   
-  _impl_.accepted_unique_samples_ = value;
+  _impl_.accepted_unique_transitions_ = value;
 }
-inline void PushSamplesRsp::set_accepted_unique_samples(int64_t value) {
-  _internal_set_accepted_unique_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.accepted_unique_samples)
+inline void PushSamplesRsp::set_accepted_unique_transitions(int64_t value) {
+  _internal_set_accepted_unique_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.accepted_unique_transitions)
 }
 
-// int64 resident_samples = 8;
-inline void PushSamplesRsp::clear_resident_samples() {
-  _impl_.resident_samples_ = int64_t{0};
+// int64 resident_transitions = 8;
+inline void PushSamplesRsp::clear_resident_transitions() {
+  _impl_.resident_transitions_ = int64_t{0};
 }
-inline int64_t PushSamplesRsp::_internal_resident_samples() const {
-  return _impl_.resident_samples_;
+inline int64_t PushSamplesRsp::_internal_resident_transitions() const {
+  return _impl_.resident_transitions_;
 }
-inline int64_t PushSamplesRsp::resident_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.resident_samples)
-  return _internal_resident_samples();
+inline int64_t PushSamplesRsp::resident_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.resident_transitions)
+  return _internal_resident_transitions();
 }
-inline void PushSamplesRsp::_internal_set_resident_samples(int64_t value) {
+inline void PushSamplesRsp::_internal_set_resident_transitions(int64_t value) {
   
-  _impl_.resident_samples_ = value;
+  _impl_.resident_transitions_ = value;
 }
-inline void PushSamplesRsp::set_resident_samples(int64_t value) {
-  _internal_set_resident_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.resident_samples)
+inline void PushSamplesRsp::set_resident_transitions(int64_t value) {
+  _internal_set_resident_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.resident_transitions)
 }
 
-// int64 resident_fragments = 9;
-inline void PushSamplesRsp::clear_resident_fragments() {
-  _impl_.resident_fragments_ = int64_t{0};
+// int64 resident_envelopes = 9;
+inline void PushSamplesRsp::clear_resident_envelopes() {
+  _impl_.resident_envelopes_ = int64_t{0};
 }
-inline int64_t PushSamplesRsp::_internal_resident_fragments() const {
-  return _impl_.resident_fragments_;
+inline int64_t PushSamplesRsp::_internal_resident_envelopes() const {
+  return _impl_.resident_envelopes_;
 }
-inline int64_t PushSamplesRsp::resident_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.resident_fragments)
-  return _internal_resident_fragments();
+inline int64_t PushSamplesRsp::resident_envelopes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.resident_envelopes)
+  return _internal_resident_envelopes();
 }
-inline void PushSamplesRsp::_internal_set_resident_fragments(int64_t value) {
+inline void PushSamplesRsp::_internal_set_resident_envelopes(int64_t value) {
   
-  _impl_.resident_fragments_ = value;
+  _impl_.resident_envelopes_ = value;
 }
-inline void PushSamplesRsp::set_resident_fragments(int64_t value) {
-  _internal_set_resident_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.resident_fragments)
+inline void PushSamplesRsp::set_resident_envelopes(int64_t value) {
+  _internal_set_resident_envelopes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.resident_envelopes)
 }
 
 // int64 resident_estimated_bytes = 10;
@@ -16052,94 +16936,24 @@ inline void PushSamplesRsp::set_allocated_sample_pool(::rl::common::v1::ServiceI
 
 // GetBatchReq
 
-// .rl.training.v1.BatchAssemblySpec assembly = 1;
-inline bool GetBatchReq::_internal_has_assembly() const {
-  return this != internal_default_instance() && _impl_.assembly_ != nullptr;
+// int32 requested_transitions = 1;
+inline void GetBatchReq::clear_requested_transitions() {
+  _impl_.requested_transitions_ = 0;
 }
-inline bool GetBatchReq::has_assembly() const {
-  return _internal_has_assembly();
+inline int32_t GetBatchReq::_internal_requested_transitions() const {
+  return _impl_.requested_transitions_;
 }
-inline void GetBatchReq::clear_assembly() {
-  if (GetArenaForAllocation() == nullptr && _impl_.assembly_ != nullptr) {
-    delete _impl_.assembly_;
-  }
-  _impl_.assembly_ = nullptr;
+inline int32_t GetBatchReq::requested_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.requested_transitions)
+  return _internal_requested_transitions();
 }
-inline const ::rl::training::v1::BatchAssemblySpec& GetBatchReq::_internal_assembly() const {
-  const ::rl::training::v1::BatchAssemblySpec* p = _impl_.assembly_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::BatchAssemblySpec&>(
-      ::rl::training::v1::_BatchAssemblySpec_default_instance_);
-}
-inline const ::rl::training::v1::BatchAssemblySpec& GetBatchReq::assembly() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.assembly)
-  return _internal_assembly();
-}
-inline void GetBatchReq::unsafe_arena_set_allocated_assembly(
-    ::rl::training::v1::BatchAssemblySpec* assembly) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.assembly_);
-  }
-  _impl_.assembly_ = assembly;
-  if (assembly) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetBatchReq.assembly)
-}
-inline ::rl::training::v1::BatchAssemblySpec* GetBatchReq::release_assembly() {
+inline void GetBatchReq::_internal_set_requested_transitions(int32_t value) {
   
-  ::rl::training::v1::BatchAssemblySpec* temp = _impl_.assembly_;
-  _impl_.assembly_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
+  _impl_.requested_transitions_ = value;
 }
-inline ::rl::training::v1::BatchAssemblySpec* GetBatchReq::unsafe_arena_release_assembly() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.GetBatchReq.assembly)
-  
-  ::rl::training::v1::BatchAssemblySpec* temp = _impl_.assembly_;
-  _impl_.assembly_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::BatchAssemblySpec* GetBatchReq::_internal_mutable_assembly() {
-  
-  if (_impl_.assembly_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::BatchAssemblySpec>(GetArenaForAllocation());
-    _impl_.assembly_ = p;
-  }
-  return _impl_.assembly_;
-}
-inline ::rl::training::v1::BatchAssemblySpec* GetBatchReq::mutable_assembly() {
-  ::rl::training::v1::BatchAssemblySpec* _msg = _internal_mutable_assembly();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchReq.assembly)
-  return _msg;
-}
-inline void GetBatchReq::set_allocated_assembly(::rl::training::v1::BatchAssemblySpec* assembly) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.assembly_;
-  }
-  if (assembly) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(assembly);
-    if (message_arena != submessage_arena) {
-      assembly = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, assembly, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.assembly_ = assembly;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.assembly)
+inline void GetBatchReq::set_requested_transitions(int32_t value) {
+  _internal_set_requested_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchReq.requested_transitions)
 }
 
 // int32 timeout_ms = 2;
@@ -16267,97 +17081,7 @@ inline void GetBatchReq::set_lease_timeout_ms(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchReq.lease_timeout_ms)
 }
 
-// .rl.training.v1.SampleFreshnessPolicy freshness = 5;
-inline bool GetBatchReq::_internal_has_freshness() const {
-  return this != internal_default_instance() && _impl_.freshness_ != nullptr;
-}
-inline bool GetBatchReq::has_freshness() const {
-  return _internal_has_freshness();
-}
-inline void GetBatchReq::clear_freshness() {
-  if (GetArenaForAllocation() == nullptr && _impl_.freshness_ != nullptr) {
-    delete _impl_.freshness_;
-  }
-  _impl_.freshness_ = nullptr;
-}
-inline const ::rl::training::v1::SampleFreshnessPolicy& GetBatchReq::_internal_freshness() const {
-  const ::rl::training::v1::SampleFreshnessPolicy* p = _impl_.freshness_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::SampleFreshnessPolicy&>(
-      ::rl::training::v1::_SampleFreshnessPolicy_default_instance_);
-}
-inline const ::rl::training::v1::SampleFreshnessPolicy& GetBatchReq::freshness() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.freshness)
-  return _internal_freshness();
-}
-inline void GetBatchReq::unsafe_arena_set_allocated_freshness(
-    ::rl::training::v1::SampleFreshnessPolicy* freshness) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.freshness_);
-  }
-  _impl_.freshness_ = freshness;
-  if (freshness) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetBatchReq.freshness)
-}
-inline ::rl::training::v1::SampleFreshnessPolicy* GetBatchReq::release_freshness() {
-  
-  ::rl::training::v1::SampleFreshnessPolicy* temp = _impl_.freshness_;
-  _impl_.freshness_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::SampleFreshnessPolicy* GetBatchReq::unsafe_arena_release_freshness() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.GetBatchReq.freshness)
-  
-  ::rl::training::v1::SampleFreshnessPolicy* temp = _impl_.freshness_;
-  _impl_.freshness_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::SampleFreshnessPolicy* GetBatchReq::_internal_mutable_freshness() {
-  
-  if (_impl_.freshness_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::SampleFreshnessPolicy>(GetArenaForAllocation());
-    _impl_.freshness_ = p;
-  }
-  return _impl_.freshness_;
-}
-inline ::rl::training::v1::SampleFreshnessPolicy* GetBatchReq::mutable_freshness() {
-  ::rl::training::v1::SampleFreshnessPolicy* _msg = _internal_mutable_freshness();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchReq.freshness)
-  return _msg;
-}
-inline void GetBatchReq::set_allocated_freshness(::rl::training::v1::SampleFreshnessPolicy* freshness) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.freshness_;
-  }
-  if (freshness) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(freshness);
-    if (message_arena != submessage_arena) {
-      freshness = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, freshness, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.freshness_ = freshness;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.freshness)
-}
-
-// .rl.training.v1.TrainingSemanticsIdentity required_semantics = 7;
+// .rl.training.v1.TrainingSemanticsIdentity required_semantics = 5;
 inline bool GetBatchReq::_internal_has_required_semantics() const {
   return this != internal_default_instance() && _impl_.required_semantics_ != nullptr;
 }
@@ -16447,6 +17171,91 @@ inline void GetBatchReq::set_allocated_required_semantics(::rl::training::v1::Tr
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.required_semantics)
 }
 
+// .rl.common.v1.ContentDigest required_rollout_estimator_profile_digest = 6;
+inline bool GetBatchReq::_internal_has_required_rollout_estimator_profile_digest() const {
+  return this != internal_default_instance() && _impl_.required_rollout_estimator_profile_digest_ != nullptr;
+}
+inline bool GetBatchReq::has_required_rollout_estimator_profile_digest() const {
+  return _internal_has_required_rollout_estimator_profile_digest();
+}
+inline const ::rl::common::v1::ContentDigest& GetBatchReq::_internal_required_rollout_estimator_profile_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.required_rollout_estimator_profile_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& GetBatchReq::required_rollout_estimator_profile_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+  return _internal_required_rollout_estimator_profile_digest();
+}
+inline void GetBatchReq::unsafe_arena_set_allocated_required_rollout_estimator_profile_digest(
+    ::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_rollout_estimator_profile_digest_);
+  }
+  _impl_.required_rollout_estimator_profile_digest_ = required_rollout_estimator_profile_digest;
+  if (required_rollout_estimator_profile_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+}
+inline ::rl::common::v1::ContentDigest* GetBatchReq::release_required_rollout_estimator_profile_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.required_rollout_estimator_profile_digest_;
+  _impl_.required_rollout_estimator_profile_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* GetBatchReq::unsafe_arena_release_required_rollout_estimator_profile_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.required_rollout_estimator_profile_digest_;
+  _impl_.required_rollout_estimator_profile_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* GetBatchReq::_internal_mutable_required_rollout_estimator_profile_digest() {
+  
+  if (_impl_.required_rollout_estimator_profile_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.required_rollout_estimator_profile_digest_ = p;
+  }
+  return _impl_.required_rollout_estimator_profile_digest_;
+}
+inline ::rl::common::v1::ContentDigest* GetBatchReq::mutable_required_rollout_estimator_profile_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_required_rollout_estimator_profile_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+  return _msg;
+}
+inline void GetBatchReq::set_allocated_required_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_rollout_estimator_profile_digest_);
+  }
+  if (required_rollout_estimator_profile_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(required_rollout_estimator_profile_digest));
+    if (message_arena != submessage_arena) {
+      required_rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, required_rollout_estimator_profile_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.required_rollout_estimator_profile_digest_ = required_rollout_estimator_profile_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+}
+
 // -------------------------------------------------------------------
 
 // GetBatchRsp
@@ -16471,44 +17280,44 @@ inline void GetBatchRsp::set_ret_code(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.ret_code)
 }
 
-// repeated .rl.training.v1.SampleBatch batches = 2;
-inline int GetBatchRsp::_internal_batches_size() const {
-  return _impl_.batches_.size();
+// repeated .rl.training.v1.SamplePoolItem items = 2;
+inline int GetBatchRsp::_internal_items_size() const {
+  return _impl_.items_.size();
 }
-inline int GetBatchRsp::batches_size() const {
-  return _internal_batches_size();
+inline int GetBatchRsp::items_size() const {
+  return _internal_items_size();
 }
-inline void GetBatchRsp::clear_batches() {
-  _impl_.batches_.Clear();
+inline void GetBatchRsp::clear_items() {
+  _impl_.items_.Clear();
 }
-inline ::rl::training::v1::SampleBatch* GetBatchRsp::mutable_batches(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchRsp.batches)
-  return _impl_.batches_.Mutable(index);
+inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchRsp.items)
+  return _impl_.items_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SampleBatch >*
-GetBatchRsp::mutable_batches() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.GetBatchRsp.batches)
-  return &_impl_.batches_;
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >*
+GetBatchRsp::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.GetBatchRsp.items)
+  return &_impl_.items_;
 }
-inline const ::rl::training::v1::SampleBatch& GetBatchRsp::_internal_batches(int index) const {
-  return _impl_.batches_.Get(index);
+inline const ::rl::training::v1::SamplePoolItem& GetBatchRsp::_internal_items(int index) const {
+  return _impl_.items_.Get(index);
 }
-inline const ::rl::training::v1::SampleBatch& GetBatchRsp::batches(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.batches)
-  return _internal_batches(index);
+inline const ::rl::training::v1::SamplePoolItem& GetBatchRsp::items(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.items)
+  return _internal_items(index);
 }
-inline ::rl::training::v1::SampleBatch* GetBatchRsp::_internal_add_batches() {
-  return _impl_.batches_.Add();
+inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::_internal_add_items() {
+  return _impl_.items_.Add();
 }
-inline ::rl::training::v1::SampleBatch* GetBatchRsp::add_batches() {
-  ::rl::training::v1::SampleBatch* _add = _internal_add_batches();
-  // @@protoc_insertion_point(field_add:rl.training.v1.GetBatchRsp.batches)
+inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::add_items() {
+  ::rl::training::v1::SamplePoolItem* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:rl.training.v1.GetBatchRsp.items)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SampleBatch >&
-GetBatchRsp::batches() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.GetBatchRsp.batches)
-  return _impl_.batches_;
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >&
+GetBatchRsp::items() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.GetBatchRsp.items)
+  return _impl_.items_;
 }
 
 // int64 queue_size = 3;
@@ -16531,24 +17340,24 @@ inline void GetBatchRsp::set_queue_size(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.queue_size)
 }
 
-// int64 returned_samples = 4;
-inline void GetBatchRsp::clear_returned_samples() {
-  _impl_.returned_samples_ = int64_t{0};
+// int64 returned_transitions = 4;
+inline void GetBatchRsp::clear_returned_transitions() {
+  _impl_.returned_transitions_ = int64_t{0};
 }
-inline int64_t GetBatchRsp::_internal_returned_samples() const {
-  return _impl_.returned_samples_;
+inline int64_t GetBatchRsp::_internal_returned_transitions() const {
+  return _impl_.returned_transitions_;
 }
-inline int64_t GetBatchRsp::returned_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.returned_samples)
-  return _internal_returned_samples();
+inline int64_t GetBatchRsp::returned_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.returned_transitions)
+  return _internal_returned_transitions();
 }
-inline void GetBatchRsp::_internal_set_returned_samples(int64_t value) {
+inline void GetBatchRsp::_internal_set_returned_transitions(int64_t value) {
   
-  _impl_.returned_samples_ = value;
+  _impl_.returned_transitions_ = value;
 }
-inline void GetBatchRsp::set_returned_samples(int64_t value) {
-  _internal_set_returned_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.returned_samples)
+inline void GetBatchRsp::set_returned_transitions(int64_t value) {
+  _internal_set_returned_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.returned_transitions)
 }
 
 // string message = 5;
@@ -16691,44 +17500,24 @@ inline void GetBatchRsp::set_lease_deadline_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.lease_deadline_unix_ms)
 }
 
-// int64 returned_fragments = 9;
-inline void GetBatchRsp::clear_returned_fragments() {
-  _impl_.returned_fragments_ = int64_t{0};
+// int64 actual_transition_count = 10;
+inline void GetBatchRsp::clear_actual_transition_count() {
+  _impl_.actual_transition_count_ = int64_t{0};
 }
-inline int64_t GetBatchRsp::_internal_returned_fragments() const {
-  return _impl_.returned_fragments_;
+inline int64_t GetBatchRsp::_internal_actual_transition_count() const {
+  return _impl_.actual_transition_count_;
 }
-inline int64_t GetBatchRsp::returned_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.returned_fragments)
-  return _internal_returned_fragments();
+inline int64_t GetBatchRsp::actual_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.actual_transition_count)
+  return _internal_actual_transition_count();
 }
-inline void GetBatchRsp::_internal_set_returned_fragments(int64_t value) {
+inline void GetBatchRsp::_internal_set_actual_transition_count(int64_t value) {
   
-  _impl_.returned_fragments_ = value;
+  _impl_.actual_transition_count_ = value;
 }
-inline void GetBatchRsp::set_returned_fragments(int64_t value) {
-  _internal_set_returned_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.returned_fragments)
-}
-
-// int64 actual_batch_size = 10;
-inline void GetBatchRsp::clear_actual_batch_size() {
-  _impl_.actual_batch_size_ = int64_t{0};
-}
-inline int64_t GetBatchRsp::_internal_actual_batch_size() const {
-  return _impl_.actual_batch_size_;
-}
-inline int64_t GetBatchRsp::actual_batch_size() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.actual_batch_size)
-  return _internal_actual_batch_size();
-}
-inline void GetBatchRsp::_internal_set_actual_batch_size(int64_t value) {
-  
-  _impl_.actual_batch_size_ = value;
-}
-inline void GetBatchRsp::set_actual_batch_size(int64_t value) {
-  _internal_set_actual_batch_size(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.actual_batch_size)
+inline void GetBatchRsp::set_actual_transition_count(int64_t value) {
+  _internal_set_actual_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.actual_transition_count)
 }
 
 // int64 wait_ms = 11;
@@ -16751,24 +17540,24 @@ inline void GetBatchRsp::set_wait_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.wait_ms)
 }
 
-// int64 leased_samples = 12;
-inline void GetBatchRsp::clear_leased_samples() {
-  _impl_.leased_samples_ = int64_t{0};
+// int64 leased_transitions = 12;
+inline void GetBatchRsp::clear_leased_transitions() {
+  _impl_.leased_transitions_ = int64_t{0};
 }
-inline int64_t GetBatchRsp::_internal_leased_samples() const {
-  return _impl_.leased_samples_;
+inline int64_t GetBatchRsp::_internal_leased_transitions() const {
+  return _impl_.leased_transitions_;
 }
-inline int64_t GetBatchRsp::leased_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.leased_samples)
-  return _internal_leased_samples();
+inline int64_t GetBatchRsp::leased_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.leased_transitions)
+  return _internal_leased_transitions();
 }
-inline void GetBatchRsp::_internal_set_leased_samples(int64_t value) {
+inline void GetBatchRsp::_internal_set_leased_transitions(int64_t value) {
   
-  _impl_.leased_samples_ = value;
+  _impl_.leased_transitions_ = value;
 }
-inline void GetBatchRsp::set_leased_samples(int64_t value) {
-  _internal_set_leased_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.leased_samples)
+inline void GetBatchRsp::set_leased_transitions(int64_t value) {
+  _internal_set_leased_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.leased_transitions)
 }
 
 // .rl.common.v1.ServiceInstanceIdentity sample_pool = 13;
@@ -16912,44 +17701,60 @@ inline void GetBatchRsp::set_maximum_behavior_model_step(uint64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.maximum_behavior_model_step)
 }
 
-// int64 oldest_sample_created_at_unix_ms = 16;
-inline void GetBatchRsp::clear_oldest_sample_created_at_unix_ms() {
-  _impl_.oldest_sample_created_at_unix_ms_ = int64_t{0};
+// optional int64 oldest_transition_created_at_unix_ms = 16;
+inline bool GetBatchRsp::_internal_has_oldest_transition_created_at_unix_ms() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  return value;
 }
-inline int64_t GetBatchRsp::_internal_oldest_sample_created_at_unix_ms() const {
-  return _impl_.oldest_sample_created_at_unix_ms_;
+inline bool GetBatchRsp::has_oldest_transition_created_at_unix_ms() const {
+  return _internal_has_oldest_transition_created_at_unix_ms();
 }
-inline int64_t GetBatchRsp::oldest_sample_created_at_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.oldest_sample_created_at_unix_ms)
-  return _internal_oldest_sample_created_at_unix_ms();
+inline void GetBatchRsp::clear_oldest_transition_created_at_unix_ms() {
+  _impl_.oldest_transition_created_at_unix_ms_ = int64_t{0};
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
-inline void GetBatchRsp::_internal_set_oldest_sample_created_at_unix_ms(int64_t value) {
-  
-  _impl_.oldest_sample_created_at_unix_ms_ = value;
+inline int64_t GetBatchRsp::_internal_oldest_transition_created_at_unix_ms() const {
+  return _impl_.oldest_transition_created_at_unix_ms_;
 }
-inline void GetBatchRsp::set_oldest_sample_created_at_unix_ms(int64_t value) {
-  _internal_set_oldest_sample_created_at_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.oldest_sample_created_at_unix_ms)
+inline int64_t GetBatchRsp::oldest_transition_created_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.oldest_transition_created_at_unix_ms)
+  return _internal_oldest_transition_created_at_unix_ms();
+}
+inline void GetBatchRsp::_internal_set_oldest_transition_created_at_unix_ms(int64_t value) {
+  _impl_._has_bits_[0] |= 0x00000004u;
+  _impl_.oldest_transition_created_at_unix_ms_ = value;
+}
+inline void GetBatchRsp::set_oldest_transition_created_at_unix_ms(int64_t value) {
+  _internal_set_oldest_transition_created_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.oldest_transition_created_at_unix_ms)
 }
 
-// int64 newest_sample_created_at_unix_ms = 17;
-inline void GetBatchRsp::clear_newest_sample_created_at_unix_ms() {
-  _impl_.newest_sample_created_at_unix_ms_ = int64_t{0};
+// optional int64 newest_transition_created_at_unix_ms = 17;
+inline bool GetBatchRsp::_internal_has_newest_transition_created_at_unix_ms() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
 }
-inline int64_t GetBatchRsp::_internal_newest_sample_created_at_unix_ms() const {
-  return _impl_.newest_sample_created_at_unix_ms_;
+inline bool GetBatchRsp::has_newest_transition_created_at_unix_ms() const {
+  return _internal_has_newest_transition_created_at_unix_ms();
 }
-inline int64_t GetBatchRsp::newest_sample_created_at_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.newest_sample_created_at_unix_ms)
-  return _internal_newest_sample_created_at_unix_ms();
+inline void GetBatchRsp::clear_newest_transition_created_at_unix_ms() {
+  _impl_.newest_transition_created_at_unix_ms_ = int64_t{0};
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
-inline void GetBatchRsp::_internal_set_newest_sample_created_at_unix_ms(int64_t value) {
-  
-  _impl_.newest_sample_created_at_unix_ms_ = value;
+inline int64_t GetBatchRsp::_internal_newest_transition_created_at_unix_ms() const {
+  return _impl_.newest_transition_created_at_unix_ms_;
 }
-inline void GetBatchRsp::set_newest_sample_created_at_unix_ms(int64_t value) {
-  _internal_set_newest_sample_created_at_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.newest_sample_created_at_unix_ms)
+inline int64_t GetBatchRsp::newest_transition_created_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.newest_transition_created_at_unix_ms)
+  return _internal_newest_transition_created_at_unix_ms();
+}
+inline void GetBatchRsp::_internal_set_newest_transition_created_at_unix_ms(int64_t value) {
+  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_.newest_transition_created_at_unix_ms_ = value;
+}
+inline void GetBatchRsp::set_newest_transition_created_at_unix_ms(int64_t value) {
+  _internal_set_newest_transition_created_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.newest_transition_created_at_unix_ms)
 }
 
 // -------------------------------------------------------------------
@@ -17653,24 +18458,24 @@ inline void DeliveryRsp::set_allocated_delivery_id(std::string* delivery_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.DeliveryRsp.delivery_id)
 }
 
-// int64 affected_samples = 5;
-inline void DeliveryRsp::clear_affected_samples() {
-  _impl_.affected_samples_ = int64_t{0};
+// int64 affected_transitions = 5;
+inline void DeliveryRsp::clear_affected_transitions() {
+  _impl_.affected_transitions_ = int64_t{0};
 }
-inline int64_t DeliveryRsp::_internal_affected_samples() const {
-  return _impl_.affected_samples_;
+inline int64_t DeliveryRsp::_internal_affected_transitions() const {
+  return _impl_.affected_transitions_;
 }
-inline int64_t DeliveryRsp::affected_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.DeliveryRsp.affected_samples)
-  return _internal_affected_samples();
+inline int64_t DeliveryRsp::affected_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.DeliveryRsp.affected_transitions)
+  return _internal_affected_transitions();
 }
-inline void DeliveryRsp::_internal_set_affected_samples(int64_t value) {
+inline void DeliveryRsp::_internal_set_affected_transitions(int64_t value) {
   
-  _impl_.affected_samples_ = value;
+  _impl_.affected_transitions_ = value;
 }
-inline void DeliveryRsp::set_affected_samples(int64_t value) {
-  _internal_set_affected_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.affected_samples)
+inline void DeliveryRsp::set_affected_transitions(int64_t value) {
+  _internal_set_affected_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.affected_transitions)
 }
 
 // int64 queue_size = 6;
@@ -18236,169 +19041,97 @@ inline void FinalizeSamplePoolRsp::set_allocated_sample_pool(::rl::common::v1::S
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.FinalizeSamplePoolRsp.sample_pool)
 }
 
-// int64 settled_samples = 6;
-inline void FinalizeSamplePoolRsp::clear_settled_samples() {
-  _impl_.settled_samples_ = int64_t{0};
+// int64 settled_transitions = 6;
+inline void FinalizeSamplePoolRsp::clear_settled_transitions() {
+  _impl_.settled_transitions_ = int64_t{0};
 }
-inline int64_t FinalizeSamplePoolRsp::_internal_settled_samples() const {
-  return _impl_.settled_samples_;
+inline int64_t FinalizeSamplePoolRsp::_internal_settled_transitions() const {
+  return _impl_.settled_transitions_;
 }
-inline int64_t FinalizeSamplePoolRsp::settled_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.settled_samples)
-  return _internal_settled_samples();
+inline int64_t FinalizeSamplePoolRsp::settled_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.settled_transitions)
+  return _internal_settled_transitions();
 }
-inline void FinalizeSamplePoolRsp::_internal_set_settled_samples(int64_t value) {
+inline void FinalizeSamplePoolRsp::_internal_set_settled_transitions(int64_t value) {
   
-  _impl_.settled_samples_ = value;
+  _impl_.settled_transitions_ = value;
 }
-inline void FinalizeSamplePoolRsp::set_settled_samples(int64_t value) {
-  _internal_set_settled_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.settled_samples)
+inline void FinalizeSamplePoolRsp::set_settled_transitions(int64_t value) {
+  _internal_set_settled_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.settled_transitions)
 }
 
-// int64 settled_fragments = 7;
-inline void FinalizeSamplePoolRsp::clear_settled_fragments() {
-  _impl_.settled_fragments_ = int64_t{0};
+// int64 ready_transitions = 8;
+inline void FinalizeSamplePoolRsp::clear_ready_transitions() {
+  _impl_.ready_transitions_ = int64_t{0};
 }
-inline int64_t FinalizeSamplePoolRsp::_internal_settled_fragments() const {
-  return _impl_.settled_fragments_;
+inline int64_t FinalizeSamplePoolRsp::_internal_ready_transitions() const {
+  return _impl_.ready_transitions_;
 }
-inline int64_t FinalizeSamplePoolRsp::settled_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.settled_fragments)
-  return _internal_settled_fragments();
+inline int64_t FinalizeSamplePoolRsp::ready_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.ready_transitions)
+  return _internal_ready_transitions();
 }
-inline void FinalizeSamplePoolRsp::_internal_set_settled_fragments(int64_t value) {
+inline void FinalizeSamplePoolRsp::_internal_set_ready_transitions(int64_t value) {
   
-  _impl_.settled_fragments_ = value;
+  _impl_.ready_transitions_ = value;
 }
-inline void FinalizeSamplePoolRsp::set_settled_fragments(int64_t value) {
-  _internal_set_settled_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.settled_fragments)
+inline void FinalizeSamplePoolRsp::set_ready_transitions(int64_t value) {
+  _internal_set_ready_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.ready_transitions)
 }
 
-// int64 ready_samples = 8;
-inline void FinalizeSamplePoolRsp::clear_ready_samples() {
-  _impl_.ready_samples_ = int64_t{0};
+// int64 leased_transitions = 10;
+inline void FinalizeSamplePoolRsp::clear_leased_transitions() {
+  _impl_.leased_transitions_ = int64_t{0};
 }
-inline int64_t FinalizeSamplePoolRsp::_internal_ready_samples() const {
-  return _impl_.ready_samples_;
+inline int64_t FinalizeSamplePoolRsp::_internal_leased_transitions() const {
+  return _impl_.leased_transitions_;
 }
-inline int64_t FinalizeSamplePoolRsp::ready_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.ready_samples)
-  return _internal_ready_samples();
+inline int64_t FinalizeSamplePoolRsp::leased_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.leased_transitions)
+  return _internal_leased_transitions();
 }
-inline void FinalizeSamplePoolRsp::_internal_set_ready_samples(int64_t value) {
+inline void FinalizeSamplePoolRsp::_internal_set_leased_transitions(int64_t value) {
   
-  _impl_.ready_samples_ = value;
+  _impl_.leased_transitions_ = value;
 }
-inline void FinalizeSamplePoolRsp::set_ready_samples(int64_t value) {
-  _internal_set_ready_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.ready_samples)
+inline void FinalizeSamplePoolRsp::set_leased_transitions(int64_t value) {
+  _internal_set_leased_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.leased_transitions)
 }
 
-// int64 ready_fragments = 9;
-inline void FinalizeSamplePoolRsp::clear_ready_fragments() {
-  _impl_.ready_fragments_ = int64_t{0};
+// int64 resident_transitions = 12;
+inline void FinalizeSamplePoolRsp::clear_resident_transitions() {
+  _impl_.resident_transitions_ = int64_t{0};
 }
-inline int64_t FinalizeSamplePoolRsp::_internal_ready_fragments() const {
-  return _impl_.ready_fragments_;
+inline int64_t FinalizeSamplePoolRsp::_internal_resident_transitions() const {
+  return _impl_.resident_transitions_;
 }
-inline int64_t FinalizeSamplePoolRsp::ready_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.ready_fragments)
-  return _internal_ready_fragments();
+inline int64_t FinalizeSamplePoolRsp::resident_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.resident_transitions)
+  return _internal_resident_transitions();
 }
-inline void FinalizeSamplePoolRsp::_internal_set_ready_fragments(int64_t value) {
+inline void FinalizeSamplePoolRsp::_internal_set_resident_transitions(int64_t value) {
   
-  _impl_.ready_fragments_ = value;
+  _impl_.resident_transitions_ = value;
 }
-inline void FinalizeSamplePoolRsp::set_ready_fragments(int64_t value) {
-  _internal_set_ready_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.ready_fragments)
+inline void FinalizeSamplePoolRsp::set_resident_transitions(int64_t value) {
+  _internal_set_resident_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.resident_transitions)
 }
 
-// int64 leased_samples = 10;
-inline void FinalizeSamplePoolRsp::clear_leased_samples() {
-  _impl_.leased_samples_ = int64_t{0};
+// optional int64 finalized_at_unix_ms = 14;
+inline bool FinalizeSamplePoolRsp::_internal_has_finalized_at_unix_ms() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
 }
-inline int64_t FinalizeSamplePoolRsp::_internal_leased_samples() const {
-  return _impl_.leased_samples_;
+inline bool FinalizeSamplePoolRsp::has_finalized_at_unix_ms() const {
+  return _internal_has_finalized_at_unix_ms();
 }
-inline int64_t FinalizeSamplePoolRsp::leased_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.leased_samples)
-  return _internal_leased_samples();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_leased_samples(int64_t value) {
-  
-  _impl_.leased_samples_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_leased_samples(int64_t value) {
-  _internal_set_leased_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.leased_samples)
-}
-
-// int64 leased_fragments = 11;
-inline void FinalizeSamplePoolRsp::clear_leased_fragments() {
-  _impl_.leased_fragments_ = int64_t{0};
-}
-inline int64_t FinalizeSamplePoolRsp::_internal_leased_fragments() const {
-  return _impl_.leased_fragments_;
-}
-inline int64_t FinalizeSamplePoolRsp::leased_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.leased_fragments)
-  return _internal_leased_fragments();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_leased_fragments(int64_t value) {
-  
-  _impl_.leased_fragments_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_leased_fragments(int64_t value) {
-  _internal_set_leased_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.leased_fragments)
-}
-
-// int64 resident_samples = 12;
-inline void FinalizeSamplePoolRsp::clear_resident_samples() {
-  _impl_.resident_samples_ = int64_t{0};
-}
-inline int64_t FinalizeSamplePoolRsp::_internal_resident_samples() const {
-  return _impl_.resident_samples_;
-}
-inline int64_t FinalizeSamplePoolRsp::resident_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.resident_samples)
-  return _internal_resident_samples();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_resident_samples(int64_t value) {
-  
-  _impl_.resident_samples_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_resident_samples(int64_t value) {
-  _internal_set_resident_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.resident_samples)
-}
-
-// int64 resident_fragments = 13;
-inline void FinalizeSamplePoolRsp::clear_resident_fragments() {
-  _impl_.resident_fragments_ = int64_t{0};
-}
-inline int64_t FinalizeSamplePoolRsp::_internal_resident_fragments() const {
-  return _impl_.resident_fragments_;
-}
-inline int64_t FinalizeSamplePoolRsp::resident_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.resident_fragments)
-  return _internal_resident_fragments();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_resident_fragments(int64_t value) {
-  
-  _impl_.resident_fragments_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_resident_fragments(int64_t value) {
-  _internal_set_resident_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.resident_fragments)
-}
-
-// int64 finalized_at_unix_ms = 14;
 inline void FinalizeSamplePoolRsp::clear_finalized_at_unix_ms() {
   _impl_.finalized_at_unix_ms_ = int64_t{0};
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline int64_t FinalizeSamplePoolRsp::_internal_finalized_at_unix_ms() const {
   return _impl_.finalized_at_unix_ms_;
@@ -18408,7 +19141,7 @@ inline int64_t FinalizeSamplePoolRsp::finalized_at_unix_ms() const {
   return _internal_finalized_at_unix_ms();
 }
 inline void FinalizeSamplePoolRsp::_internal_set_finalized_at_unix_ms(int64_t value) {
-  
+  _impl_._has_bits_[0] |= 0x00000001u;
   _impl_.finalized_at_unix_ms_ = value;
 }
 inline void FinalizeSamplePoolRsp::set_finalized_at_unix_ms(int64_t value) {
@@ -18419,300 +19152,6 @@ inline void FinalizeSamplePoolRsp::set_finalized_at_unix_ms(int64_t value) {
 // -------------------------------------------------------------------
 
 // SamplePoolStatusReq
-
-// -------------------------------------------------------------------
-
-// BehaviorStepQueueStatus
-
-// .rl.training.v1.BehaviorPolicyReference behavior_policy = 1;
-inline bool BehaviorStepQueueStatus::_internal_has_behavior_policy() const {
-  return this != internal_default_instance() && _impl_.behavior_policy_ != nullptr;
-}
-inline bool BehaviorStepQueueStatus::has_behavior_policy() const {
-  return _internal_has_behavior_policy();
-}
-inline void BehaviorStepQueueStatus::clear_behavior_policy() {
-  if (GetArenaForAllocation() == nullptr && _impl_.behavior_policy_ != nullptr) {
-    delete _impl_.behavior_policy_;
-  }
-  _impl_.behavior_policy_ = nullptr;
-}
-inline const ::rl::training::v1::BehaviorPolicyReference& BehaviorStepQueueStatus::_internal_behavior_policy() const {
-  const ::rl::training::v1::BehaviorPolicyReference* p = _impl_.behavior_policy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::BehaviorPolicyReference&>(
-      ::rl::training::v1::_BehaviorPolicyReference_default_instance_);
-}
-inline const ::rl::training::v1::BehaviorPolicyReference& BehaviorStepQueueStatus::behavior_policy() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.behavior_policy)
-  return _internal_behavior_policy();
-}
-inline void BehaviorStepQueueStatus::unsafe_arena_set_allocated_behavior_policy(
-    ::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_policy_);
-  }
-  _impl_.behavior_policy_ = behavior_policy;
-  if (behavior_policy) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.BehaviorStepQueueStatus.behavior_policy)
-}
-inline ::rl::training::v1::BehaviorPolicyReference* BehaviorStepQueueStatus::release_behavior_policy() {
-  
-  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* BehaviorStepQueueStatus::unsafe_arena_release_behavior_policy() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorStepQueueStatus.behavior_policy)
-  
-  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* BehaviorStepQueueStatus::_internal_mutable_behavior_policy() {
-  
-  if (_impl_.behavior_policy_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(GetArenaForAllocation());
-    _impl_.behavior_policy_ = p;
-  }
-  return _impl_.behavior_policy_;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* BehaviorStepQueueStatus::mutable_behavior_policy() {
-  ::rl::training::v1::BehaviorPolicyReference* _msg = _internal_mutable_behavior_policy();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorStepQueueStatus.behavior_policy)
-  return _msg;
-}
-inline void BehaviorStepQueueStatus::set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.behavior_policy_;
-  }
-  if (behavior_policy) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(behavior_policy);
-    if (message_arena != submessage_arena) {
-      behavior_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, behavior_policy, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.behavior_policy_ = behavior_policy;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorStepQueueStatus.behavior_policy)
-}
-
-// int64 ready_samples = 2;
-inline void BehaviorStepQueueStatus::clear_ready_samples() {
-  _impl_.ready_samples_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_ready_samples() const {
-  return _impl_.ready_samples_;
-}
-inline int64_t BehaviorStepQueueStatus::ready_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.ready_samples)
-  return _internal_ready_samples();
-}
-inline void BehaviorStepQueueStatus::_internal_set_ready_samples(int64_t value) {
-  
-  _impl_.ready_samples_ = value;
-}
-inline void BehaviorStepQueueStatus::set_ready_samples(int64_t value) {
-  _internal_set_ready_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.ready_samples)
-}
-
-// int64 ready_fragments = 3;
-inline void BehaviorStepQueueStatus::clear_ready_fragments() {
-  _impl_.ready_fragments_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_ready_fragments() const {
-  return _impl_.ready_fragments_;
-}
-inline int64_t BehaviorStepQueueStatus::ready_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.ready_fragments)
-  return _internal_ready_fragments();
-}
-inline void BehaviorStepQueueStatus::_internal_set_ready_fragments(int64_t value) {
-  
-  _impl_.ready_fragments_ = value;
-}
-inline void BehaviorStepQueueStatus::set_ready_fragments(int64_t value) {
-  _internal_set_ready_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.ready_fragments)
-}
-
-// int64 leased_samples = 4;
-inline void BehaviorStepQueueStatus::clear_leased_samples() {
-  _impl_.leased_samples_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_leased_samples() const {
-  return _impl_.leased_samples_;
-}
-inline int64_t BehaviorStepQueueStatus::leased_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.leased_samples)
-  return _internal_leased_samples();
-}
-inline void BehaviorStepQueueStatus::_internal_set_leased_samples(int64_t value) {
-  
-  _impl_.leased_samples_ = value;
-}
-inline void BehaviorStepQueueStatus::set_leased_samples(int64_t value) {
-  _internal_set_leased_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.leased_samples)
-}
-
-// int64 leased_fragments = 5;
-inline void BehaviorStepQueueStatus::clear_leased_fragments() {
-  _impl_.leased_fragments_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_leased_fragments() const {
-  return _impl_.leased_fragments_;
-}
-inline int64_t BehaviorStepQueueStatus::leased_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.leased_fragments)
-  return _internal_leased_fragments();
-}
-inline void BehaviorStepQueueStatus::_internal_set_leased_fragments(int64_t value) {
-  
-  _impl_.leased_fragments_ = value;
-}
-inline void BehaviorStepQueueStatus::set_leased_fragments(int64_t value) {
-  _internal_set_leased_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.leased_fragments)
-}
-
-// int64 acked_samples = 6;
-inline void BehaviorStepQueueStatus::clear_acked_samples() {
-  _impl_.acked_samples_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_acked_samples() const {
-  return _impl_.acked_samples_;
-}
-inline int64_t BehaviorStepQueueStatus::acked_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.acked_samples)
-  return _internal_acked_samples();
-}
-inline void BehaviorStepQueueStatus::_internal_set_acked_samples(int64_t value) {
-  
-  _impl_.acked_samples_ = value;
-}
-inline void BehaviorStepQueueStatus::set_acked_samples(int64_t value) {
-  _internal_set_acked_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.acked_samples)
-}
-
-// int64 acked_fragments = 7;
-inline void BehaviorStepQueueStatus::clear_acked_fragments() {
-  _impl_.acked_fragments_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_acked_fragments() const {
-  return _impl_.acked_fragments_;
-}
-inline int64_t BehaviorStepQueueStatus::acked_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.acked_fragments)
-  return _internal_acked_fragments();
-}
-inline void BehaviorStepQueueStatus::_internal_set_acked_fragments(int64_t value) {
-  
-  _impl_.acked_fragments_ = value;
-}
-inline void BehaviorStepQueueStatus::set_acked_fragments(int64_t value) {
-  _internal_set_acked_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.acked_fragments)
-}
-
-// int64 trained_samples = 8;
-inline void BehaviorStepQueueStatus::clear_trained_samples() {
-  _impl_.trained_samples_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_trained_samples() const {
-  return _impl_.trained_samples_;
-}
-inline int64_t BehaviorStepQueueStatus::trained_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.trained_samples)
-  return _internal_trained_samples();
-}
-inline void BehaviorStepQueueStatus::_internal_set_trained_samples(int64_t value) {
-  
-  _impl_.trained_samples_ = value;
-}
-inline void BehaviorStepQueueStatus::set_trained_samples(int64_t value) {
-  _internal_set_trained_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.trained_samples)
-}
-
-// int64 stale_samples = 9;
-inline void BehaviorStepQueueStatus::clear_stale_samples() {
-  _impl_.stale_samples_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_stale_samples() const {
-  return _impl_.stale_samples_;
-}
-inline int64_t BehaviorStepQueueStatus::stale_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.stale_samples)
-  return _internal_stale_samples();
-}
-inline void BehaviorStepQueueStatus::_internal_set_stale_samples(int64_t value) {
-  
-  _impl_.stale_samples_ = value;
-}
-inline void BehaviorStepQueueStatus::set_stale_samples(int64_t value) {
-  _internal_set_stale_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.stale_samples)
-}
-
-// int64 invalid_samples = 10;
-inline void BehaviorStepQueueStatus::clear_invalid_samples() {
-  _impl_.invalid_samples_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_invalid_samples() const {
-  return _impl_.invalid_samples_;
-}
-inline int64_t BehaviorStepQueueStatus::invalid_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.invalid_samples)
-  return _internal_invalid_samples();
-}
-inline void BehaviorStepQueueStatus::_internal_set_invalid_samples(int64_t value) {
-  
-  _impl_.invalid_samples_ = value;
-}
-inline void BehaviorStepQueueStatus::set_invalid_samples(int64_t value) {
-  _internal_set_invalid_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.invalid_samples)
-}
-
-// int64 shutdown_untrained_samples = 11;
-inline void BehaviorStepQueueStatus::clear_shutdown_untrained_samples() {
-  _impl_.shutdown_untrained_samples_ = int64_t{0};
-}
-inline int64_t BehaviorStepQueueStatus::_internal_shutdown_untrained_samples() const {
-  return _impl_.shutdown_untrained_samples_;
-}
-inline int64_t BehaviorStepQueueStatus::shutdown_untrained_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorStepQueueStatus.shutdown_untrained_samples)
-  return _internal_shutdown_untrained_samples();
-}
-inline void BehaviorStepQueueStatus::_internal_set_shutdown_untrained_samples(int64_t value) {
-  
-  _impl_.shutdown_untrained_samples_ = value;
-}
-inline void BehaviorStepQueueStatus::set_shutdown_untrained_samples(int64_t value) {
-  _internal_set_shutdown_untrained_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorStepQueueStatus.shutdown_untrained_samples)
-}
 
 // -------------------------------------------------------------------
 
@@ -18928,44 +19367,44 @@ inline void SamplePoolStatusRsp::set_push_attempt_count(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.push_attempt_count)
 }
 
-// int64 accepted_unique_samples = 5;
-inline void SamplePoolStatusRsp::clear_accepted_unique_samples() {
-  _impl_.accepted_unique_samples_ = int64_t{0};
+// int64 accepted_unique_transitions = 5;
+inline void SamplePoolStatusRsp::clear_accepted_unique_transitions() {
+  _impl_.accepted_unique_transitions_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_accepted_unique_samples() const {
-  return _impl_.accepted_unique_samples_;
+inline int64_t SamplePoolStatusRsp::_internal_accepted_unique_transitions() const {
+  return _impl_.accepted_unique_transitions_;
 }
-inline int64_t SamplePoolStatusRsp::accepted_unique_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.accepted_unique_samples)
-  return _internal_accepted_unique_samples();
+inline int64_t SamplePoolStatusRsp::accepted_unique_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.accepted_unique_transitions)
+  return _internal_accepted_unique_transitions();
 }
-inline void SamplePoolStatusRsp::_internal_set_accepted_unique_samples(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_accepted_unique_transitions(int64_t value) {
   
-  _impl_.accepted_unique_samples_ = value;
+  _impl_.accepted_unique_transitions_ = value;
 }
-inline void SamplePoolStatusRsp::set_accepted_unique_samples(int64_t value) {
-  _internal_set_accepted_unique_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.accepted_unique_samples)
+inline void SamplePoolStatusRsp::set_accepted_unique_transitions(int64_t value) {
+  _internal_set_accepted_unique_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.accepted_unique_transitions)
 }
 
-// int64 accepted_unique_batches = 6;
-inline void SamplePoolStatusRsp::clear_accepted_unique_batches() {
-  _impl_.accepted_unique_batches_ = int64_t{0};
+// int64 accepted_unique_envelopes = 6;
+inline void SamplePoolStatusRsp::clear_accepted_unique_envelopes() {
+  _impl_.accepted_unique_envelopes_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_accepted_unique_batches() const {
-  return _impl_.accepted_unique_batches_;
+inline int64_t SamplePoolStatusRsp::_internal_accepted_unique_envelopes() const {
+  return _impl_.accepted_unique_envelopes_;
 }
-inline int64_t SamplePoolStatusRsp::accepted_unique_batches() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.accepted_unique_batches)
-  return _internal_accepted_unique_batches();
+inline int64_t SamplePoolStatusRsp::accepted_unique_envelopes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.accepted_unique_envelopes)
+  return _internal_accepted_unique_envelopes();
 }
-inline void SamplePoolStatusRsp::_internal_set_accepted_unique_batches(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_accepted_unique_envelopes(int64_t value) {
   
-  _impl_.accepted_unique_batches_ = value;
+  _impl_.accepted_unique_envelopes_ = value;
 }
-inline void SamplePoolStatusRsp::set_accepted_unique_batches(int64_t value) {
-  _internal_set_accepted_unique_batches(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.accepted_unique_batches)
+inline void SamplePoolStatusRsp::set_accepted_unique_envelopes(int64_t value) {
+  _internal_set_accepted_unique_envelopes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.accepted_unique_envelopes)
 }
 
 // int64 duplicate_push_attempt_count = 7;
@@ -18988,24 +19427,24 @@ inline void SamplePoolStatusRsp::set_duplicate_push_attempt_count(int64_t value)
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.duplicate_push_attempt_count)
 }
 
-// int64 duplicate_sample_attempts = 8;
-inline void SamplePoolStatusRsp::clear_duplicate_sample_attempts() {
-  _impl_.duplicate_sample_attempts_ = int64_t{0};
+// int64 duplicate_transition_attempts = 8;
+inline void SamplePoolStatusRsp::clear_duplicate_transition_attempts() {
+  _impl_.duplicate_transition_attempts_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_duplicate_sample_attempts() const {
-  return _impl_.duplicate_sample_attempts_;
+inline int64_t SamplePoolStatusRsp::_internal_duplicate_transition_attempts() const {
+  return _impl_.duplicate_transition_attempts_;
 }
-inline int64_t SamplePoolStatusRsp::duplicate_sample_attempts() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.duplicate_sample_attempts)
-  return _internal_duplicate_sample_attempts();
+inline int64_t SamplePoolStatusRsp::duplicate_transition_attempts() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.duplicate_transition_attempts)
+  return _internal_duplicate_transition_attempts();
 }
-inline void SamplePoolStatusRsp::_internal_set_duplicate_sample_attempts(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_duplicate_transition_attempts(int64_t value) {
   
-  _impl_.duplicate_sample_attempts_ = value;
+  _impl_.duplicate_transition_attempts_ = value;
 }
-inline void SamplePoolStatusRsp::set_duplicate_sample_attempts(int64_t value) {
-  _internal_set_duplicate_sample_attempts(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.duplicate_sample_attempts)
+inline void SamplePoolStatusRsp::set_duplicate_transition_attempts(int64_t value) {
+  _internal_set_duplicate_transition_attempts(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.duplicate_transition_attempts)
 }
 
 // int64 rejected_push_attempt_count = 9;
@@ -19028,184 +19467,144 @@ inline void SamplePoolStatusRsp::set_rejected_push_attempt_count(int64_t value) 
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.rejected_push_attempt_count)
 }
 
-// int64 rejected_sample_attempts = 10;
-inline void SamplePoolStatusRsp::clear_rejected_sample_attempts() {
-  _impl_.rejected_sample_attempts_ = int64_t{0};
+// int64 rejected_transition_attempts = 10;
+inline void SamplePoolStatusRsp::clear_rejected_transition_attempts() {
+  _impl_.rejected_transition_attempts_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_rejected_sample_attempts() const {
-  return _impl_.rejected_sample_attempts_;
+inline int64_t SamplePoolStatusRsp::_internal_rejected_transition_attempts() const {
+  return _impl_.rejected_transition_attempts_;
 }
-inline int64_t SamplePoolStatusRsp::rejected_sample_attempts() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.rejected_sample_attempts)
-  return _internal_rejected_sample_attempts();
+inline int64_t SamplePoolStatusRsp::rejected_transition_attempts() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.rejected_transition_attempts)
+  return _internal_rejected_transition_attempts();
 }
-inline void SamplePoolStatusRsp::_internal_set_rejected_sample_attempts(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_rejected_transition_attempts(int64_t value) {
   
-  _impl_.rejected_sample_attempts_ = value;
+  _impl_.rejected_transition_attempts_ = value;
 }
-inline void SamplePoolStatusRsp::set_rejected_sample_attempts(int64_t value) {
-  _internal_set_rejected_sample_attempts(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.rejected_sample_attempts)
+inline void SamplePoolStatusRsp::set_rejected_transition_attempts(int64_t value) {
+  _internal_set_rejected_transition_attempts(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.rejected_transition_attempts)
 }
 
-// int64 acked_unique_samples = 11;
-inline void SamplePoolStatusRsp::clear_acked_unique_samples() {
-  _impl_.acked_unique_samples_ = int64_t{0};
+// int64 acked_unique_transitions = 11;
+inline void SamplePoolStatusRsp::clear_acked_unique_transitions() {
+  _impl_.acked_unique_transitions_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_acked_unique_samples() const {
-  return _impl_.acked_unique_samples_;
+inline int64_t SamplePoolStatusRsp::_internal_acked_unique_transitions() const {
+  return _impl_.acked_unique_transitions_;
 }
-inline int64_t SamplePoolStatusRsp::acked_unique_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.acked_unique_samples)
-  return _internal_acked_unique_samples();
+inline int64_t SamplePoolStatusRsp::acked_unique_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.acked_unique_transitions)
+  return _internal_acked_unique_transitions();
 }
-inline void SamplePoolStatusRsp::_internal_set_acked_unique_samples(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_acked_unique_transitions(int64_t value) {
   
-  _impl_.acked_unique_samples_ = value;
+  _impl_.acked_unique_transitions_ = value;
 }
-inline void SamplePoolStatusRsp::set_acked_unique_samples(int64_t value) {
-  _internal_set_acked_unique_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.acked_unique_samples)
+inline void SamplePoolStatusRsp::set_acked_unique_transitions(int64_t value) {
+  _internal_set_acked_unique_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.acked_unique_transitions)
 }
 
-// int64 acked_unique_batches = 12;
-inline void SamplePoolStatusRsp::clear_acked_unique_batches() {
-  _impl_.acked_unique_batches_ = int64_t{0};
+// int64 acked_unique_deliveries = 12;
+inline void SamplePoolStatusRsp::clear_acked_unique_deliveries() {
+  _impl_.acked_unique_deliveries_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_acked_unique_batches() const {
-  return _impl_.acked_unique_batches_;
+inline int64_t SamplePoolStatusRsp::_internal_acked_unique_deliveries() const {
+  return _impl_.acked_unique_deliveries_;
 }
-inline int64_t SamplePoolStatusRsp::acked_unique_batches() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.acked_unique_batches)
-  return _internal_acked_unique_batches();
+inline int64_t SamplePoolStatusRsp::acked_unique_deliveries() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.acked_unique_deliveries)
+  return _internal_acked_unique_deliveries();
 }
-inline void SamplePoolStatusRsp::_internal_set_acked_unique_batches(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_acked_unique_deliveries(int64_t value) {
   
-  _impl_.acked_unique_batches_ = value;
+  _impl_.acked_unique_deliveries_ = value;
 }
-inline void SamplePoolStatusRsp::set_acked_unique_batches(int64_t value) {
-  _internal_set_acked_unique_batches(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.acked_unique_batches)
+inline void SamplePoolStatusRsp::set_acked_unique_deliveries(int64_t value) {
+  _internal_set_acked_unique_deliveries(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.acked_unique_deliveries)
 }
 
-// int64 ready_queue_samples = 13;
-inline void SamplePoolStatusRsp::clear_ready_queue_samples() {
-  _impl_.ready_queue_samples_ = int64_t{0};
+// int64 ready_transitions = 13;
+inline void SamplePoolStatusRsp::clear_ready_transitions() {
+  _impl_.ready_transitions_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_ready_queue_samples() const {
-  return _impl_.ready_queue_samples_;
+inline int64_t SamplePoolStatusRsp::_internal_ready_transitions() const {
+  return _impl_.ready_transitions_;
 }
-inline int64_t SamplePoolStatusRsp::ready_queue_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.ready_queue_samples)
-  return _internal_ready_queue_samples();
+inline int64_t SamplePoolStatusRsp::ready_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.ready_transitions)
+  return _internal_ready_transitions();
 }
-inline void SamplePoolStatusRsp::_internal_set_ready_queue_samples(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_ready_transitions(int64_t value) {
   
-  _impl_.ready_queue_samples_ = value;
+  _impl_.ready_transitions_ = value;
 }
-inline void SamplePoolStatusRsp::set_ready_queue_samples(int64_t value) {
-  _internal_set_ready_queue_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.ready_queue_samples)
+inline void SamplePoolStatusRsp::set_ready_transitions(int64_t value) {
+  _internal_set_ready_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.ready_transitions)
 }
 
-// int64 ready_queue_fragments = 14;
-inline void SamplePoolStatusRsp::clear_ready_queue_fragments() {
-  _impl_.ready_queue_fragments_ = int64_t{0};
+// int64 leased_transitions = 15;
+inline void SamplePoolStatusRsp::clear_leased_transitions() {
+  _impl_.leased_transitions_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_ready_queue_fragments() const {
-  return _impl_.ready_queue_fragments_;
+inline int64_t SamplePoolStatusRsp::_internal_leased_transitions() const {
+  return _impl_.leased_transitions_;
 }
-inline int64_t SamplePoolStatusRsp::ready_queue_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.ready_queue_fragments)
-  return _internal_ready_queue_fragments();
+inline int64_t SamplePoolStatusRsp::leased_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.leased_transitions)
+  return _internal_leased_transitions();
 }
-inline void SamplePoolStatusRsp::_internal_set_ready_queue_fragments(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_leased_transitions(int64_t value) {
   
-  _impl_.ready_queue_fragments_ = value;
+  _impl_.leased_transitions_ = value;
 }
-inline void SamplePoolStatusRsp::set_ready_queue_fragments(int64_t value) {
-  _internal_set_ready_queue_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.ready_queue_fragments)
+inline void SamplePoolStatusRsp::set_leased_transitions(int64_t value) {
+  _internal_set_leased_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.leased_transitions)
 }
 
-// int64 leased_samples = 15;
-inline void SamplePoolStatusRsp::clear_leased_samples() {
-  _impl_.leased_samples_ = int64_t{0};
+// int64 resident_transitions = 17;
+inline void SamplePoolStatusRsp::clear_resident_transitions() {
+  _impl_.resident_transitions_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_leased_samples() const {
-  return _impl_.leased_samples_;
+inline int64_t SamplePoolStatusRsp::_internal_resident_transitions() const {
+  return _impl_.resident_transitions_;
 }
-inline int64_t SamplePoolStatusRsp::leased_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.leased_samples)
-  return _internal_leased_samples();
+inline int64_t SamplePoolStatusRsp::resident_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.resident_transitions)
+  return _internal_resident_transitions();
 }
-inline void SamplePoolStatusRsp::_internal_set_leased_samples(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_resident_transitions(int64_t value) {
   
-  _impl_.leased_samples_ = value;
+  _impl_.resident_transitions_ = value;
 }
-inline void SamplePoolStatusRsp::set_leased_samples(int64_t value) {
-  _internal_set_leased_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.leased_samples)
+inline void SamplePoolStatusRsp::set_resident_transitions(int64_t value) {
+  _internal_set_resident_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.resident_transitions)
 }
 
-// int64 leased_fragments = 16;
-inline void SamplePoolStatusRsp::clear_leased_fragments() {
-  _impl_.leased_fragments_ = int64_t{0};
+// int64 resident_envelopes = 18;
+inline void SamplePoolStatusRsp::clear_resident_envelopes() {
+  _impl_.resident_envelopes_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_leased_fragments() const {
-  return _impl_.leased_fragments_;
+inline int64_t SamplePoolStatusRsp::_internal_resident_envelopes() const {
+  return _impl_.resident_envelopes_;
 }
-inline int64_t SamplePoolStatusRsp::leased_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.leased_fragments)
-  return _internal_leased_fragments();
+inline int64_t SamplePoolStatusRsp::resident_envelopes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.resident_envelopes)
+  return _internal_resident_envelopes();
 }
-inline void SamplePoolStatusRsp::_internal_set_leased_fragments(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_resident_envelopes(int64_t value) {
   
-  _impl_.leased_fragments_ = value;
+  _impl_.resident_envelopes_ = value;
 }
-inline void SamplePoolStatusRsp::set_leased_fragments(int64_t value) {
-  _internal_set_leased_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.leased_fragments)
-}
-
-// int64 resident_samples = 17;
-inline void SamplePoolStatusRsp::clear_resident_samples() {
-  _impl_.resident_samples_ = int64_t{0};
-}
-inline int64_t SamplePoolStatusRsp::_internal_resident_samples() const {
-  return _impl_.resident_samples_;
-}
-inline int64_t SamplePoolStatusRsp::resident_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.resident_samples)
-  return _internal_resident_samples();
-}
-inline void SamplePoolStatusRsp::_internal_set_resident_samples(int64_t value) {
-  
-  _impl_.resident_samples_ = value;
-}
-inline void SamplePoolStatusRsp::set_resident_samples(int64_t value) {
-  _internal_set_resident_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.resident_samples)
-}
-
-// int64 resident_fragments = 18;
-inline void SamplePoolStatusRsp::clear_resident_fragments() {
-  _impl_.resident_fragments_ = int64_t{0};
-}
-inline int64_t SamplePoolStatusRsp::_internal_resident_fragments() const {
-  return _impl_.resident_fragments_;
-}
-inline int64_t SamplePoolStatusRsp::resident_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.resident_fragments)
-  return _internal_resident_fragments();
-}
-inline void SamplePoolStatusRsp::_internal_set_resident_fragments(int64_t value) {
-  
-  _impl_.resident_fragments_ = value;
-}
-inline void SamplePoolStatusRsp::set_resident_fragments(int64_t value) {
-  _internal_set_resident_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.resident_fragments)
+inline void SamplePoolStatusRsp::set_resident_envelopes(int64_t value) {
+  _internal_set_resident_envelopes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.resident_envelopes)
 }
 
 // int64 resident_estimated_bytes = 19;
@@ -19228,64 +19627,44 @@ inline void SamplePoolStatusRsp::set_resident_estimated_bytes(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.resident_estimated_bytes)
 }
 
-// int64 capacity_samples = 20;
-inline void SamplePoolStatusRsp::clear_capacity_samples() {
-  _impl_.capacity_samples_ = int64_t{0};
+// int64 capacity_transitions = 20;
+inline void SamplePoolStatusRsp::clear_capacity_transitions() {
+  _impl_.capacity_transitions_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_capacity_samples() const {
-  return _impl_.capacity_samples_;
+inline int64_t SamplePoolStatusRsp::_internal_capacity_transitions() const {
+  return _impl_.capacity_transitions_;
 }
-inline int64_t SamplePoolStatusRsp::capacity_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.capacity_samples)
-  return _internal_capacity_samples();
+inline int64_t SamplePoolStatusRsp::capacity_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.capacity_transitions)
+  return _internal_capacity_transitions();
 }
-inline void SamplePoolStatusRsp::_internal_set_capacity_samples(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_capacity_transitions(int64_t value) {
   
-  _impl_.capacity_samples_ = value;
+  _impl_.capacity_transitions_ = value;
 }
-inline void SamplePoolStatusRsp::set_capacity_samples(int64_t value) {
-  _internal_set_capacity_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.capacity_samples)
+inline void SamplePoolStatusRsp::set_capacity_transitions(int64_t value) {
+  _internal_set_capacity_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.capacity_transitions)
 }
 
-// int64 capacity_fragments = 21;
-inline void SamplePoolStatusRsp::clear_capacity_fragments() {
-  _impl_.capacity_fragments_ = int64_t{0};
+// int64 capacity_bytes = 22;
+inline void SamplePoolStatusRsp::clear_capacity_bytes() {
+  _impl_.capacity_bytes_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_capacity_fragments() const {
-  return _impl_.capacity_fragments_;
+inline int64_t SamplePoolStatusRsp::_internal_capacity_bytes() const {
+  return _impl_.capacity_bytes_;
 }
-inline int64_t SamplePoolStatusRsp::capacity_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.capacity_fragments)
-  return _internal_capacity_fragments();
+inline int64_t SamplePoolStatusRsp::capacity_bytes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.capacity_bytes)
+  return _internal_capacity_bytes();
 }
-inline void SamplePoolStatusRsp::_internal_set_capacity_fragments(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_capacity_bytes(int64_t value) {
   
-  _impl_.capacity_fragments_ = value;
+  _impl_.capacity_bytes_ = value;
 }
-inline void SamplePoolStatusRsp::set_capacity_fragments(int64_t value) {
-  _internal_set_capacity_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.capacity_fragments)
-}
-
-// int64 capacity_estimated_bytes = 22;
-inline void SamplePoolStatusRsp::clear_capacity_estimated_bytes() {
-  _impl_.capacity_estimated_bytes_ = int64_t{0};
-}
-inline int64_t SamplePoolStatusRsp::_internal_capacity_estimated_bytes() const {
-  return _impl_.capacity_estimated_bytes_;
-}
-inline int64_t SamplePoolStatusRsp::capacity_estimated_bytes() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.capacity_estimated_bytes)
-  return _internal_capacity_estimated_bytes();
-}
-inline void SamplePoolStatusRsp::_internal_set_capacity_estimated_bytes(int64_t value) {
-  
-  _impl_.capacity_estimated_bytes_ = value;
-}
-inline void SamplePoolStatusRsp::set_capacity_estimated_bytes(int64_t value) {
-  _internal_set_capacity_estimated_bytes(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.capacity_estimated_bytes)
+inline void SamplePoolStatusRsp::set_capacity_bytes(int64_t value) {
+  _internal_set_capacity_bytes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.capacity_bytes)
 }
 
 // .rl.training.v1.PressureState pressure_state = 23;
@@ -19368,9 +19747,17 @@ inline void SamplePoolStatusRsp::set_expired_lease_count(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.expired_lease_count)
 }
 
-// int64 latest_ack_at_unix_ms = 27;
+// optional int64 latest_ack_at_unix_ms = 27;
+inline bool SamplePoolStatusRsp::_internal_has_latest_ack_at_unix_ms() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool SamplePoolStatusRsp::has_latest_ack_at_unix_ms() const {
+  return _internal_has_latest_ack_at_unix_ms();
+}
 inline void SamplePoolStatusRsp::clear_latest_ack_at_unix_ms() {
   _impl_.latest_ack_at_unix_ms_ = int64_t{0};
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
 inline int64_t SamplePoolStatusRsp::_internal_latest_ack_at_unix_ms() const {
   return _impl_.latest_ack_at_unix_ms_;
@@ -19380,7 +19767,7 @@ inline int64_t SamplePoolStatusRsp::latest_ack_at_unix_ms() const {
   return _internal_latest_ack_at_unix_ms();
 }
 inline void SamplePoolStatusRsp::_internal_set_latest_ack_at_unix_ms(int64_t value) {
-  
+  _impl_._has_bits_[0] |= 0x00000001u;
   _impl_.latest_ack_at_unix_ms_ = value;
 }
 inline void SamplePoolStatusRsp::set_latest_ack_at_unix_ms(int64_t value) {
@@ -19498,124 +19885,64 @@ inline void SamplePoolStatusRsp::set_allocated_last_error(std::string* last_erro
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SamplePoolStatusRsp.last_error)
 }
 
-// repeated .rl.training.v1.BehaviorStepQueueStatus behavior_steps = 32;
-inline int SamplePoolStatusRsp::_internal_behavior_steps_size() const {
-  return _impl_.behavior_steps_.size();
+// int64 trained_transition_count = 33;
+inline void SamplePoolStatusRsp::clear_trained_transition_count() {
+  _impl_.trained_transition_count_ = int64_t{0};
 }
-inline int SamplePoolStatusRsp::behavior_steps_size() const {
-  return _internal_behavior_steps_size();
+inline int64_t SamplePoolStatusRsp::_internal_trained_transition_count() const {
+  return _impl_.trained_transition_count_;
 }
-inline void SamplePoolStatusRsp::clear_behavior_steps() {
-  _impl_.behavior_steps_.Clear();
+inline int64_t SamplePoolStatusRsp::trained_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.trained_transition_count)
+  return _internal_trained_transition_count();
 }
-inline ::rl::training::v1::BehaviorStepQueueStatus* SamplePoolStatusRsp::mutable_behavior_steps(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SamplePoolStatusRsp.behavior_steps)
-  return _impl_.behavior_steps_.Mutable(index);
+inline void SamplePoolStatusRsp::_internal_set_trained_transition_count(int64_t value) {
+  
+  _impl_.trained_transition_count_ = value;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::BehaviorStepQueueStatus >*
-SamplePoolStatusRsp::mutable_behavior_steps() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.SamplePoolStatusRsp.behavior_steps)
-  return &_impl_.behavior_steps_;
-}
-inline const ::rl::training::v1::BehaviorStepQueueStatus& SamplePoolStatusRsp::_internal_behavior_steps(int index) const {
-  return _impl_.behavior_steps_.Get(index);
-}
-inline const ::rl::training::v1::BehaviorStepQueueStatus& SamplePoolStatusRsp::behavior_steps(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.behavior_steps)
-  return _internal_behavior_steps(index);
-}
-inline ::rl::training::v1::BehaviorStepQueueStatus* SamplePoolStatusRsp::_internal_add_behavior_steps() {
-  return _impl_.behavior_steps_.Add();
-}
-inline ::rl::training::v1::BehaviorStepQueueStatus* SamplePoolStatusRsp::add_behavior_steps() {
-  ::rl::training::v1::BehaviorStepQueueStatus* _add = _internal_add_behavior_steps();
-  // @@protoc_insertion_point(field_add:rl.training.v1.SamplePoolStatusRsp.behavior_steps)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::BehaviorStepQueueStatus >&
-SamplePoolStatusRsp::behavior_steps() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.SamplePoolStatusRsp.behavior_steps)
-  return _impl_.behavior_steps_;
+inline void SamplePoolStatusRsp::set_trained_transition_count(int64_t value) {
+  _internal_set_trained_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.trained_transition_count)
 }
 
-// int64 trained_sample_count = 33;
-inline void SamplePoolStatusRsp::clear_trained_sample_count() {
-  _impl_.trained_sample_count_ = int64_t{0};
+// int64 invalid_transition_count = 35;
+inline void SamplePoolStatusRsp::clear_invalid_transition_count() {
+  _impl_.invalid_transition_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_trained_sample_count() const {
-  return _impl_.trained_sample_count_;
+inline int64_t SamplePoolStatusRsp::_internal_invalid_transition_count() const {
+  return _impl_.invalid_transition_count_;
 }
-inline int64_t SamplePoolStatusRsp::trained_sample_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.trained_sample_count)
-  return _internal_trained_sample_count();
+inline int64_t SamplePoolStatusRsp::invalid_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.invalid_transition_count)
+  return _internal_invalid_transition_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_trained_sample_count(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_invalid_transition_count(int64_t value) {
   
-  _impl_.trained_sample_count_ = value;
+  _impl_.invalid_transition_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_trained_sample_count(int64_t value) {
-  _internal_set_trained_sample_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.trained_sample_count)
+inline void SamplePoolStatusRsp::set_invalid_transition_count(int64_t value) {
+  _internal_set_invalid_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.invalid_transition_count)
 }
 
-// int64 stale_sample_count = 34;
-inline void SamplePoolStatusRsp::clear_stale_sample_count() {
-  _impl_.stale_sample_count_ = int64_t{0};
+// int64 shutdown_untrained_transition_count = 36;
+inline void SamplePoolStatusRsp::clear_shutdown_untrained_transition_count() {
+  _impl_.shutdown_untrained_transition_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_stale_sample_count() const {
-  return _impl_.stale_sample_count_;
+inline int64_t SamplePoolStatusRsp::_internal_shutdown_untrained_transition_count() const {
+  return _impl_.shutdown_untrained_transition_count_;
 }
-inline int64_t SamplePoolStatusRsp::stale_sample_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.stale_sample_count)
-  return _internal_stale_sample_count();
+inline int64_t SamplePoolStatusRsp::shutdown_untrained_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.shutdown_untrained_transition_count)
+  return _internal_shutdown_untrained_transition_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_stale_sample_count(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_shutdown_untrained_transition_count(int64_t value) {
   
-  _impl_.stale_sample_count_ = value;
+  _impl_.shutdown_untrained_transition_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_stale_sample_count(int64_t value) {
-  _internal_set_stale_sample_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.stale_sample_count)
-}
-
-// int64 invalid_sample_count = 35;
-inline void SamplePoolStatusRsp::clear_invalid_sample_count() {
-  _impl_.invalid_sample_count_ = int64_t{0};
-}
-inline int64_t SamplePoolStatusRsp::_internal_invalid_sample_count() const {
-  return _impl_.invalid_sample_count_;
-}
-inline int64_t SamplePoolStatusRsp::invalid_sample_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.invalid_sample_count)
-  return _internal_invalid_sample_count();
-}
-inline void SamplePoolStatusRsp::_internal_set_invalid_sample_count(int64_t value) {
-  
-  _impl_.invalid_sample_count_ = value;
-}
-inline void SamplePoolStatusRsp::set_invalid_sample_count(int64_t value) {
-  _internal_set_invalid_sample_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.invalid_sample_count)
-}
-
-// int64 shutdown_untrained_sample_count = 36;
-inline void SamplePoolStatusRsp::clear_shutdown_untrained_sample_count() {
-  _impl_.shutdown_untrained_sample_count_ = int64_t{0};
-}
-inline int64_t SamplePoolStatusRsp::_internal_shutdown_untrained_sample_count() const {
-  return _impl_.shutdown_untrained_sample_count_;
-}
-inline int64_t SamplePoolStatusRsp::shutdown_untrained_sample_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.shutdown_untrained_sample_count)
-  return _internal_shutdown_untrained_sample_count();
-}
-inline void SamplePoolStatusRsp::_internal_set_shutdown_untrained_sample_count(int64_t value) {
-  
-  _impl_.shutdown_untrained_sample_count_ = value;
-}
-inline void SamplePoolStatusRsp::set_shutdown_untrained_sample_count(int64_t value) {
-  _internal_set_shutdown_untrained_sample_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.shutdown_untrained_sample_count)
+inline void SamplePoolStatusRsp::set_shutdown_untrained_transition_count(int64_t value) {
+  _internal_set_shutdown_untrained_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.shutdown_untrained_transition_count)
 }
 
 // int64 lease_renew_count = 37;
@@ -19778,29 +20105,37 @@ inline void SamplePoolStatusRsp::set_timestamp_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.timestamp_unix_ms)
 }
 
-// int64 oldest_ready_sample_age_ms = 45;
-inline void SamplePoolStatusRsp::clear_oldest_ready_sample_age_ms() {
-  _impl_.oldest_ready_sample_age_ms_ = int64_t{0};
+// optional int64 oldest_ready_transition_age_ms = 45;
+inline bool SamplePoolStatusRsp::_internal_has_oldest_ready_transition_age_ms() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
 }
-inline int64_t SamplePoolStatusRsp::_internal_oldest_ready_sample_age_ms() const {
-  return _impl_.oldest_ready_sample_age_ms_;
+inline bool SamplePoolStatusRsp::has_oldest_ready_transition_age_ms() const {
+  return _internal_has_oldest_ready_transition_age_ms();
 }
-inline int64_t SamplePoolStatusRsp::oldest_ready_sample_age_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.oldest_ready_sample_age_ms)
-  return _internal_oldest_ready_sample_age_ms();
+inline void SamplePoolStatusRsp::clear_oldest_ready_transition_age_ms() {
+  _impl_.oldest_ready_transition_age_ms_ = int64_t{0};
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
-inline void SamplePoolStatusRsp::_internal_set_oldest_ready_sample_age_ms(int64_t value) {
-  
-  _impl_.oldest_ready_sample_age_ms_ = value;
+inline int64_t SamplePoolStatusRsp::_internal_oldest_ready_transition_age_ms() const {
+  return _impl_.oldest_ready_transition_age_ms_;
 }
-inline void SamplePoolStatusRsp::set_oldest_ready_sample_age_ms(int64_t value) {
-  _internal_set_oldest_ready_sample_age_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.oldest_ready_sample_age_ms)
+inline int64_t SamplePoolStatusRsp::oldest_ready_transition_age_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.oldest_ready_transition_age_ms)
+  return _internal_oldest_ready_transition_age_ms();
+}
+inline void SamplePoolStatusRsp::_internal_set_oldest_ready_transition_age_ms(int64_t value) {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_.oldest_ready_transition_age_ms_ = value;
+}
+inline void SamplePoolStatusRsp::set_oldest_ready_transition_age_ms(int64_t value) {
+  _internal_set_oldest_ready_transition_age_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.oldest_ready_transition_age_ms)
 }
 
 // optional uint64 minimum_ready_model_step = 46;
 inline bool SamplePoolStatusRsp::_internal_has_minimum_ready_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline bool SamplePoolStatusRsp::has_minimum_ready_model_step() const {
@@ -19808,7 +20143,7 @@ inline bool SamplePoolStatusRsp::has_minimum_ready_model_step() const {
 }
 inline void SamplePoolStatusRsp::clear_minimum_ready_model_step() {
   _impl_.minimum_ready_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline uint64_t SamplePoolStatusRsp::_internal_minimum_ready_model_step() const {
   return _impl_.minimum_ready_model_step_;
@@ -19818,7 +20153,7 @@ inline uint64_t SamplePoolStatusRsp::minimum_ready_model_step() const {
   return _internal_minimum_ready_model_step();
 }
 inline void SamplePoolStatusRsp::_internal_set_minimum_ready_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   _impl_.minimum_ready_model_step_ = value;
 }
 inline void SamplePoolStatusRsp::set_minimum_ready_model_step(uint64_t value) {
@@ -19828,7 +20163,7 @@ inline void SamplePoolStatusRsp::set_minimum_ready_model_step(uint64_t value) {
 
 // optional uint64 maximum_ready_model_step = 47;
 inline bool SamplePoolStatusRsp::_internal_has_maximum_ready_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
   return value;
 }
 inline bool SamplePoolStatusRsp::has_maximum_ready_model_step() const {
@@ -19836,7 +20171,7 @@ inline bool SamplePoolStatusRsp::has_maximum_ready_model_step() const {
 }
 inline void SamplePoolStatusRsp::clear_maximum_ready_model_step() {
   _impl_.maximum_ready_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000008u;
 }
 inline uint64_t SamplePoolStatusRsp::_internal_maximum_ready_model_step() const {
   return _impl_.maximum_ready_model_step_;
@@ -19846,7 +20181,7 @@ inline uint64_t SamplePoolStatusRsp::maximum_ready_model_step() const {
   return _internal_maximum_ready_model_step();
 }
 inline void SamplePoolStatusRsp::_internal_set_maximum_ready_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000008u;
   _impl_.maximum_ready_model_step_ = value;
 }
 inline void SamplePoolStatusRsp::set_maximum_ready_model_step(uint64_t value) {
@@ -19854,44 +20189,44 @@ inline void SamplePoolStatusRsp::set_maximum_ready_model_step(uint64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.maximum_ready_model_step)
 }
 
-// int64 evicted_sample_count = 66;
-inline void SamplePoolStatusRsp::clear_evicted_sample_count() {
-  _impl_.evicted_sample_count_ = int64_t{0};
+// int64 evicted_transition_count = 66;
+inline void SamplePoolStatusRsp::clear_evicted_transition_count() {
+  _impl_.evicted_transition_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_evicted_sample_count() const {
-  return _impl_.evicted_sample_count_;
+inline int64_t SamplePoolStatusRsp::_internal_evicted_transition_count() const {
+  return _impl_.evicted_transition_count_;
 }
-inline int64_t SamplePoolStatusRsp::evicted_sample_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.evicted_sample_count)
-  return _internal_evicted_sample_count();
+inline int64_t SamplePoolStatusRsp::evicted_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.evicted_transition_count)
+  return _internal_evicted_transition_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_evicted_sample_count(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_evicted_transition_count(int64_t value) {
   
-  _impl_.evicted_sample_count_ = value;
+  _impl_.evicted_transition_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_evicted_sample_count(int64_t value) {
-  _internal_set_evicted_sample_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.evicted_sample_count)
+inline void SamplePoolStatusRsp::set_evicted_transition_count(int64_t value) {
+  _internal_set_evicted_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.evicted_transition_count)
 }
 
-// int64 evicted_fragment_count = 67;
-inline void SamplePoolStatusRsp::clear_evicted_fragment_count() {
-  _impl_.evicted_fragment_count_ = int64_t{0};
+// int64 evicted_envelope_count = 67;
+inline void SamplePoolStatusRsp::clear_evicted_envelope_count() {
+  _impl_.evicted_envelope_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_evicted_fragment_count() const {
-  return _impl_.evicted_fragment_count_;
+inline int64_t SamplePoolStatusRsp::_internal_evicted_envelope_count() const {
+  return _impl_.evicted_envelope_count_;
 }
-inline int64_t SamplePoolStatusRsp::evicted_fragment_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.evicted_fragment_count)
-  return _internal_evicted_fragment_count();
+inline int64_t SamplePoolStatusRsp::evicted_envelope_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.evicted_envelope_count)
+  return _internal_evicted_envelope_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_evicted_fragment_count(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_evicted_envelope_count(int64_t value) {
   
-  _impl_.evicted_fragment_count_ = value;
+  _impl_.evicted_envelope_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_evicted_fragment_count(int64_t value) {
-  _internal_set_evicted_fragment_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.evicted_fragment_count)
+inline void SamplePoolStatusRsp::set_evicted_envelope_count(int64_t value) {
+  _internal_set_evicted_envelope_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.evicted_envelope_count)
 }
 
 // bool finalized = 68;
@@ -19964,9 +20299,17 @@ inline void SamplePoolStatusRsp::set_allocated_finalization_id(std::string* fina
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SamplePoolStatusRsp.finalization_id)
 }
 
-// int64 finalized_at_unix_ms = 70;
+// optional int64 finalized_at_unix_ms = 70;
+inline bool SamplePoolStatusRsp::_internal_has_finalized_at_unix_ms() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool SamplePoolStatusRsp::has_finalized_at_unix_ms() const {
+  return _internal_has_finalized_at_unix_ms();
+}
 inline void SamplePoolStatusRsp::clear_finalized_at_unix_ms() {
   _impl_.finalized_at_unix_ms_ = int64_t{0};
+  _impl_._has_bits_[0] &= ~0x00000010u;
 }
 inline int64_t SamplePoolStatusRsp::_internal_finalized_at_unix_ms() const {
   return _impl_.finalized_at_unix_ms_;
@@ -19976,7 +20319,7 @@ inline int64_t SamplePoolStatusRsp::finalized_at_unix_ms() const {
   return _internal_finalized_at_unix_ms();
 }
 inline void SamplePoolStatusRsp::_internal_set_finalized_at_unix_ms(int64_t value) {
-  
+  _impl_._has_bits_[0] |= 0x00000010u;
   _impl_.finalized_at_unix_ms_ = value;
 }
 inline void SamplePoolStatusRsp::set_finalized_at_unix_ms(int64_t value) {
@@ -19984,44 +20327,104 @@ inline void SamplePoolStatusRsp::set_finalized_at_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.finalized_at_unix_ms)
 }
 
-// int64 finalized_sample_count = 71;
-inline void SamplePoolStatusRsp::clear_finalized_sample_count() {
-  _impl_.finalized_sample_count_ = int64_t{0};
+// int64 finalized_transition_count = 71;
+inline void SamplePoolStatusRsp::clear_finalized_transition_count() {
+  _impl_.finalized_transition_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_finalized_sample_count() const {
-  return _impl_.finalized_sample_count_;
+inline int64_t SamplePoolStatusRsp::_internal_finalized_transition_count() const {
+  return _impl_.finalized_transition_count_;
 }
-inline int64_t SamplePoolStatusRsp::finalized_sample_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.finalized_sample_count)
-  return _internal_finalized_sample_count();
+inline int64_t SamplePoolStatusRsp::finalized_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.finalized_transition_count)
+  return _internal_finalized_transition_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_finalized_sample_count(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_finalized_transition_count(int64_t value) {
   
-  _impl_.finalized_sample_count_ = value;
+  _impl_.finalized_transition_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_finalized_sample_count(int64_t value) {
-  _internal_set_finalized_sample_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.finalized_sample_count)
+inline void SamplePoolStatusRsp::set_finalized_transition_count(int64_t value) {
+  _internal_set_finalized_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.finalized_transition_count)
 }
 
-// int64 finalized_fragment_count = 72;
-inline void SamplePoolStatusRsp::clear_finalized_fragment_count() {
-  _impl_.finalized_fragment_count_ = int64_t{0};
+// int64 draw_attempt_count = 73;
+inline void SamplePoolStatusRsp::clear_draw_attempt_count() {
+  _impl_.draw_attempt_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_finalized_fragment_count() const {
-  return _impl_.finalized_fragment_count_;
+inline int64_t SamplePoolStatusRsp::_internal_draw_attempt_count() const {
+  return _impl_.draw_attempt_count_;
 }
-inline int64_t SamplePoolStatusRsp::finalized_fragment_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.finalized_fragment_count)
-  return _internal_finalized_fragment_count();
+inline int64_t SamplePoolStatusRsp::draw_attempt_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.draw_attempt_count)
+  return _internal_draw_attempt_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_finalized_fragment_count(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_draw_attempt_count(int64_t value) {
   
-  _impl_.finalized_fragment_count_ = value;
+  _impl_.draw_attempt_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_finalized_fragment_count(int64_t value) {
-  _internal_set_finalized_fragment_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.finalized_fragment_count)
+inline void SamplePoolStatusRsp::set_draw_attempt_count(int64_t value) {
+  _internal_set_draw_attempt_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.draw_attempt_count)
+}
+
+// int64 drawn_transition_slot_count = 74;
+inline void SamplePoolStatusRsp::clear_drawn_transition_slot_count() {
+  _impl_.drawn_transition_slot_count_ = int64_t{0};
+}
+inline int64_t SamplePoolStatusRsp::_internal_drawn_transition_slot_count() const {
+  return _impl_.drawn_transition_slot_count_;
+}
+inline int64_t SamplePoolStatusRsp::drawn_transition_slot_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.drawn_transition_slot_count)
+  return _internal_drawn_transition_slot_count();
+}
+inline void SamplePoolStatusRsp::_internal_set_drawn_transition_slot_count(int64_t value) {
+  
+  _impl_.drawn_transition_slot_count_ = value;
+}
+inline void SamplePoolStatusRsp::set_drawn_transition_slot_count(int64_t value) {
+  _internal_set_drawn_transition_slot_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.drawn_transition_slot_count)
+}
+
+// int64 unsampled_evicted_transition_count = 75;
+inline void SamplePoolStatusRsp::clear_unsampled_evicted_transition_count() {
+  _impl_.unsampled_evicted_transition_count_ = int64_t{0};
+}
+inline int64_t SamplePoolStatusRsp::_internal_unsampled_evicted_transition_count() const {
+  return _impl_.unsampled_evicted_transition_count_;
+}
+inline int64_t SamplePoolStatusRsp::unsampled_evicted_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.unsampled_evicted_transition_count)
+  return _internal_unsampled_evicted_transition_count();
+}
+inline void SamplePoolStatusRsp::_internal_set_unsampled_evicted_transition_count(int64_t value) {
+  
+  _impl_.unsampled_evicted_transition_count_ = value;
+}
+inline void SamplePoolStatusRsp::set_unsampled_evicted_transition_count(int64_t value) {
+  _internal_set_unsampled_evicted_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.unsampled_evicted_transition_count)
+}
+
+// int64 previously_drawn_evicted_transition_count = 76;
+inline void SamplePoolStatusRsp::clear_previously_drawn_evicted_transition_count() {
+  _impl_.previously_drawn_evicted_transition_count_ = int64_t{0};
+}
+inline int64_t SamplePoolStatusRsp::_internal_previously_drawn_evicted_transition_count() const {
+  return _impl_.previously_drawn_evicted_transition_count_;
+}
+inline int64_t SamplePoolStatusRsp::previously_drawn_evicted_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.previously_drawn_evicted_transition_count)
+  return _internal_previously_drawn_evicted_transition_count();
+}
+inline void SamplePoolStatusRsp::_internal_set_previously_drawn_evicted_transition_count(int64_t value) {
+  
+  _impl_.previously_drawn_evicted_transition_count_ = value;
+}
+inline void SamplePoolStatusRsp::set_previously_drawn_evicted_transition_count(int64_t value) {
+  _internal_set_previously_drawn_evicted_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.previously_drawn_evicted_transition_count)
 }
 
 // -------------------------------------------------------------------
@@ -21306,7 +21709,7 @@ AgentEpisodeMetricFact::reward_components() const {
 
 // optional uint64 minimum_behavior_model_step = 11;
 inline bool AgentEpisodeMetricFact::_internal_has_minimum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
   return value;
 }
 inline bool AgentEpisodeMetricFact::has_minimum_behavior_model_step() const {
@@ -21314,7 +21717,7 @@ inline bool AgentEpisodeMetricFact::has_minimum_behavior_model_step() const {
 }
 inline void AgentEpisodeMetricFact::clear_minimum_behavior_model_step() {
   _impl_.minimum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
 }
 inline uint64_t AgentEpisodeMetricFact::_internal_minimum_behavior_model_step() const {
   return _impl_.minimum_behavior_model_step_;
@@ -21324,7 +21727,7 @@ inline uint64_t AgentEpisodeMetricFact::minimum_behavior_model_step() const {
   return _internal_minimum_behavior_model_step();
 }
 inline void AgentEpisodeMetricFact::_internal_set_minimum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_._has_bits_[0] |= 0x00000002u;
   _impl_.minimum_behavior_model_step_ = value;
 }
 inline void AgentEpisodeMetricFact::set_minimum_behavior_model_step(uint64_t value) {
@@ -21334,7 +21737,7 @@ inline void AgentEpisodeMetricFact::set_minimum_behavior_model_step(uint64_t val
 
 // optional uint64 maximum_behavior_model_step = 12;
 inline bool AgentEpisodeMetricFact::_internal_has_maximum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
   return value;
 }
 inline bool AgentEpisodeMetricFact::has_maximum_behavior_model_step() const {
@@ -21342,7 +21745,7 @@ inline bool AgentEpisodeMetricFact::has_maximum_behavior_model_step() const {
 }
 inline void AgentEpisodeMetricFact::clear_maximum_behavior_model_step() {
   _impl_.maximum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000002u;
+  _impl_._has_bits_[0] &= ~0x00000004u;
 }
 inline uint64_t AgentEpisodeMetricFact::_internal_maximum_behavior_model_step() const {
   return _impl_.maximum_behavior_model_step_;
@@ -21352,7 +21755,7 @@ inline uint64_t AgentEpisodeMetricFact::maximum_behavior_model_step() const {
   return _internal_maximum_behavior_model_step();
 }
 inline void AgentEpisodeMetricFact::_internal_set_maximum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_._has_bits_[0] |= 0x00000004u;
   _impl_.maximum_behavior_model_step_ = value;
 }
 inline void AgentEpisodeMetricFact::set_maximum_behavior_model_step(uint64_t value) {
@@ -21408,6 +21811,62 @@ inline void AgentEpisodeMetricFact::set_allocated_behavior_model_lineage_id(std:
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id)
+}
+
+// optional uint64 terminal_frame_id = 14;
+inline bool AgentEpisodeMetricFact::_internal_has_terminal_frame_id() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool AgentEpisodeMetricFact::has_terminal_frame_id() const {
+  return _internal_has_terminal_frame_id();
+}
+inline void AgentEpisodeMetricFact::clear_terminal_frame_id() {
+  _impl_.terminal_frame_id_ = uint64_t{0u};
+  _impl_._has_bits_[0] &= ~0x00000008u;
+}
+inline uint64_t AgentEpisodeMetricFact::_internal_terminal_frame_id() const {
+  return _impl_.terminal_frame_id_;
+}
+inline uint64_t AgentEpisodeMetricFact::terminal_frame_id() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.terminal_frame_id)
+  return _internal_terminal_frame_id();
+}
+inline void AgentEpisodeMetricFact::_internal_set_terminal_frame_id(uint64_t value) {
+  _impl_._has_bits_[0] |= 0x00000008u;
+  _impl_.terminal_frame_id_ = value;
+}
+inline void AgentEpisodeMetricFact::set_terminal_frame_id(uint64_t value) {
+  _internal_set_terminal_frame_id(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.terminal_frame_id)
+}
+
+// optional uint32 goal_rank_group = 15;
+inline bool AgentEpisodeMetricFact::_internal_has_goal_rank_group() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool AgentEpisodeMetricFact::has_goal_rank_group() const {
+  return _internal_has_goal_rank_group();
+}
+inline void AgentEpisodeMetricFact::clear_goal_rank_group() {
+  _impl_.goal_rank_group_ = 0u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline uint32_t AgentEpisodeMetricFact::_internal_goal_rank_group() const {
+  return _impl_.goal_rank_group_;
+}
+inline uint32_t AgentEpisodeMetricFact::goal_rank_group() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.goal_rank_group)
+  return _internal_goal_rank_group();
+}
+inline void AgentEpisodeMetricFact::_internal_set_goal_rank_group(uint32_t value) {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.goal_rank_group_ = value;
+}
+inline void AgentEpisodeMetricFact::set_goal_rank_group(uint32_t value) {
+  _internal_set_goal_rank_group(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.goal_rank_group)
 }
 
 // -------------------------------------------------------------------
@@ -22134,6 +22593,211 @@ inline void TrainUpdateMetricFact::set_allocated_behavior_model_lineage_id(std::
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id)
 }
 
+// int64 requested_train_batch_size = 12;
+inline void TrainUpdateMetricFact::clear_requested_train_batch_size() {
+  _impl_.requested_train_batch_size_ = int64_t{0};
+}
+inline int64_t TrainUpdateMetricFact::_internal_requested_train_batch_size() const {
+  return _impl_.requested_train_batch_size_;
+}
+inline int64_t TrainUpdateMetricFact::requested_train_batch_size() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.requested_train_batch_size)
+  return _internal_requested_train_batch_size();
+}
+inline void TrainUpdateMetricFact::_internal_set_requested_train_batch_size(int64_t value) {
+  
+  _impl_.requested_train_batch_size_ = value;
+}
+inline void TrainUpdateMetricFact::set_requested_train_batch_size(int64_t value) {
+  _internal_set_requested_train_batch_size(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.requested_train_batch_size)
+}
+
+// int64 pool_draw_slot_count = 13;
+inline void TrainUpdateMetricFact::clear_pool_draw_slot_count() {
+  _impl_.pool_draw_slot_count_ = int64_t{0};
+}
+inline int64_t TrainUpdateMetricFact::_internal_pool_draw_slot_count() const {
+  return _impl_.pool_draw_slot_count_;
+}
+inline int64_t TrainUpdateMetricFact::pool_draw_slot_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.pool_draw_slot_count)
+  return _internal_pool_draw_slot_count();
+}
+inline void TrainUpdateMetricFact::_internal_set_pool_draw_slot_count(int64_t value) {
+  
+  _impl_.pool_draw_slot_count_ = value;
+}
+inline void TrainUpdateMetricFact::set_pool_draw_slot_count(int64_t value) {
+  _internal_set_pool_draw_slot_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.pool_draw_slot_count)
+}
+
+// int64 unique_item_count = 14;
+inline void TrainUpdateMetricFact::clear_unique_item_count() {
+  _impl_.unique_item_count_ = int64_t{0};
+}
+inline int64_t TrainUpdateMetricFact::_internal_unique_item_count() const {
+  return _impl_.unique_item_count_;
+}
+inline int64_t TrainUpdateMetricFact::unique_item_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.unique_item_count)
+  return _internal_unique_item_count();
+}
+inline void TrainUpdateMetricFact::_internal_set_unique_item_count(int64_t value) {
+  
+  _impl_.unique_item_count_ = value;
+}
+inline void TrainUpdateMetricFact::set_unique_item_count(int64_t value) {
+  _internal_set_unique_item_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.unique_item_count)
+}
+
+// int64 duplicate_item_slot_count = 15;
+inline void TrainUpdateMetricFact::clear_duplicate_item_slot_count() {
+  _impl_.duplicate_item_slot_count_ = int64_t{0};
+}
+inline int64_t TrainUpdateMetricFact::_internal_duplicate_item_slot_count() const {
+  return _impl_.duplicate_item_slot_count_;
+}
+inline int64_t TrainUpdateMetricFact::duplicate_item_slot_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.duplicate_item_slot_count)
+  return _internal_duplicate_item_slot_count();
+}
+inline void TrainUpdateMetricFact::_internal_set_duplicate_item_slot_count(int64_t value) {
+  
+  _impl_.duplicate_item_slot_count_ = value;
+}
+inline void TrainUpdateMetricFact::set_duplicate_item_slot_count(int64_t value) {
+  _internal_set_duplicate_item_slot_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.duplicate_item_slot_count)
+}
+
+// int64 sample_evaluation_count = 16;
+inline void TrainUpdateMetricFact::clear_sample_evaluation_count() {
+  _impl_.sample_evaluation_count_ = int64_t{0};
+}
+inline int64_t TrainUpdateMetricFact::_internal_sample_evaluation_count() const {
+  return _impl_.sample_evaluation_count_;
+}
+inline int64_t TrainUpdateMetricFact::sample_evaluation_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.sample_evaluation_count)
+  return _internal_sample_evaluation_count();
+}
+inline void TrainUpdateMetricFact::_internal_set_sample_evaluation_count(int64_t value) {
+  
+  _impl_.sample_evaluation_count_ = value;
+}
+inline void TrainUpdateMetricFact::set_sample_evaluation_count(int64_t value) {
+  _internal_set_sample_evaluation_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.sample_evaluation_count)
+}
+
+// int64 optimizer_step_count = 17;
+inline void TrainUpdateMetricFact::clear_optimizer_step_count() {
+  _impl_.optimizer_step_count_ = int64_t{0};
+}
+inline int64_t TrainUpdateMetricFact::_internal_optimizer_step_count() const {
+  return _impl_.optimizer_step_count_;
+}
+inline int64_t TrainUpdateMetricFact::optimizer_step_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.optimizer_step_count)
+  return _internal_optimizer_step_count();
+}
+inline void TrainUpdateMetricFact::_internal_set_optimizer_step_count(int64_t value) {
+  
+  _impl_.optimizer_step_count_ = value;
+}
+inline void TrainUpdateMetricFact::set_optimizer_step_count(int64_t value) {
+  _internal_set_optimizer_step_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.optimizer_step_count)
+}
+
+// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
+inline bool TrainUpdateMetricFact::_internal_has_rollout_estimator_profile_digest() const {
+  return this != internal_default_instance() && _impl_.rollout_estimator_profile_digest_ != nullptr;
+}
+inline bool TrainUpdateMetricFact::has_rollout_estimator_profile_digest() const {
+  return _internal_has_rollout_estimator_profile_digest();
+}
+inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::_internal_rollout_estimator_profile_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.rollout_estimator_profile_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::rollout_estimator_profile_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
+  return _internal_rollout_estimator_profile_digest();
+}
+inline void TrainUpdateMetricFact::unsafe_arena_set_allocated_rollout_estimator_profile_digest(
+    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
+  }
+  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
+  if (rollout_estimator_profile_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
+}
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::release_rollout_estimator_profile_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
+  _impl_.rollout_estimator_profile_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::unsafe_arena_release_rollout_estimator_profile_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
+  _impl_.rollout_estimator_profile_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::_internal_mutable_rollout_estimator_profile_digest() {
+  
+  if (_impl_.rollout_estimator_profile_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.rollout_estimator_profile_digest_ = p;
+  }
+  return _impl_.rollout_estimator_profile_digest_;
+}
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::mutable_rollout_estimator_profile_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_rollout_estimator_profile_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
+  return _msg;
+}
+inline void TrainUpdateMetricFact::set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
+  }
+  if (rollout_estimator_profile_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(rollout_estimator_profile_digest));
+    if (message_arena != submessage_arena) {
+      rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, rollout_estimator_profile_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
+}
+
 // -------------------------------------------------------------------
 
 // MetricEvent
@@ -22413,24 +23077,32 @@ inline void MetricEvent::set_event_sequence(uint64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.MetricEvent.event_sequence)
 }
 
-// int64 committed_at_unix_ms = 5;
-inline void MetricEvent::clear_committed_at_unix_ms() {
-  _impl_.committed_at_unix_ms_ = int64_t{0};
+// optional int64 observed_at_unix_ms = 5;
+inline bool MetricEvent::_internal_has_observed_at_unix_ms() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
 }
-inline int64_t MetricEvent::_internal_committed_at_unix_ms() const {
-  return _impl_.committed_at_unix_ms_;
+inline bool MetricEvent::has_observed_at_unix_ms() const {
+  return _internal_has_observed_at_unix_ms();
 }
-inline int64_t MetricEvent::committed_at_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.committed_at_unix_ms)
-  return _internal_committed_at_unix_ms();
+inline void MetricEvent::clear_observed_at_unix_ms() {
+  _impl_.observed_at_unix_ms_ = int64_t{0};
+  _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline void MetricEvent::_internal_set_committed_at_unix_ms(int64_t value) {
-  
-  _impl_.committed_at_unix_ms_ = value;
+inline int64_t MetricEvent::_internal_observed_at_unix_ms() const {
+  return _impl_.observed_at_unix_ms_;
 }
-inline void MetricEvent::set_committed_at_unix_ms(int64_t value) {
-  _internal_set_committed_at_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricEvent.committed_at_unix_ms)
+inline int64_t MetricEvent::observed_at_unix_ms() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.observed_at_unix_ms)
+  return _internal_observed_at_unix_ms();
+}
+inline void MetricEvent::_internal_set_observed_at_unix_ms(int64_t value) {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.observed_at_unix_ms_ = value;
+}
+inline void MetricEvent::set_observed_at_unix_ms(int64_t value) {
+  _internal_set_observed_at_unix_ms(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.MetricEvent.observed_at_unix_ms)
 }
 
 // .rl.training.v1.EpisodeMetricFact episode = 6;
@@ -23226,26 +23898,6 @@ inline void MetricBatch::_internal_set_final_event_sequence(uint64_t value) {
 inline void MetricBatch::set_final_event_sequence(uint64_t value) {
   _internal_set_final_event_sequence(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.MetricBatch.final_event_sequence)
-}
-
-// int64 event_time_watermark_unix_ms = 13;
-inline void MetricBatch::clear_event_time_watermark_unix_ms() {
-  _impl_.event_time_watermark_unix_ms_ = int64_t{0};
-}
-inline int64_t MetricBatch::_internal_event_time_watermark_unix_ms() const {
-  return _impl_.event_time_watermark_unix_ms_;
-}
-inline int64_t MetricBatch::event_time_watermark_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricBatch.event_time_watermark_unix_ms)
-  return _internal_event_time_watermark_unix_ms();
-}
-inline void MetricBatch::_internal_set_event_time_watermark_unix_ms(int64_t value) {
-  
-  _impl_.event_time_watermark_unix_ms_ = value;
-}
-inline void MetricBatch::set_event_time_watermark_unix_ms(int64_t value) {
-  _internal_set_event_time_watermark_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricBatch.event_time_watermark_unix_ms)
 }
 
 // .rl.training.v1.MetricSequenceGap gap = 14;
@@ -25196,44 +25848,44 @@ inline void AIServerStatusRsp::set_allocated_staged_model(::rl::training::v1::Mo
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.staged_model)
 }
 
-// int64 outbound_queue_fragments = 9;
-inline void AIServerStatusRsp::clear_outbound_queue_fragments() {
-  _impl_.outbound_queue_fragments_ = int64_t{0};
+// int64 outbound_queue_envelopes = 9;
+inline void AIServerStatusRsp::clear_outbound_queue_envelopes() {
+  _impl_.outbound_queue_envelopes_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_outbound_queue_fragments() const {
-  return _impl_.outbound_queue_fragments_;
+inline int64_t AIServerStatusRsp::_internal_outbound_queue_envelopes() const {
+  return _impl_.outbound_queue_envelopes_;
 }
-inline int64_t AIServerStatusRsp::outbound_queue_fragments() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.outbound_queue_fragments)
-  return _internal_outbound_queue_fragments();
+inline int64_t AIServerStatusRsp::outbound_queue_envelopes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.outbound_queue_envelopes)
+  return _internal_outbound_queue_envelopes();
 }
-inline void AIServerStatusRsp::_internal_set_outbound_queue_fragments(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_outbound_queue_envelopes(int64_t value) {
   
-  _impl_.outbound_queue_fragments_ = value;
+  _impl_.outbound_queue_envelopes_ = value;
 }
-inline void AIServerStatusRsp::set_outbound_queue_fragments(int64_t value) {
-  _internal_set_outbound_queue_fragments(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.outbound_queue_fragments)
+inline void AIServerStatusRsp::set_outbound_queue_envelopes(int64_t value) {
+  _internal_set_outbound_queue_envelopes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.outbound_queue_envelopes)
 }
 
-// int64 outbound_queue_samples = 10;
-inline void AIServerStatusRsp::clear_outbound_queue_samples() {
-  _impl_.outbound_queue_samples_ = int64_t{0};
+// int64 outbound_queue_transitions = 10;
+inline void AIServerStatusRsp::clear_outbound_queue_transitions() {
+  _impl_.outbound_queue_transitions_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_outbound_queue_samples() const {
-  return _impl_.outbound_queue_samples_;
+inline int64_t AIServerStatusRsp::_internal_outbound_queue_transitions() const {
+  return _impl_.outbound_queue_transitions_;
 }
-inline int64_t AIServerStatusRsp::outbound_queue_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.outbound_queue_samples)
-  return _internal_outbound_queue_samples();
+inline int64_t AIServerStatusRsp::outbound_queue_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.outbound_queue_transitions)
+  return _internal_outbound_queue_transitions();
 }
-inline void AIServerStatusRsp::_internal_set_outbound_queue_samples(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_outbound_queue_transitions(int64_t value) {
   
-  _impl_.outbound_queue_samples_ = value;
+  _impl_.outbound_queue_transitions_ = value;
 }
-inline void AIServerStatusRsp::set_outbound_queue_samples(int64_t value) {
-  _internal_set_outbound_queue_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.outbound_queue_samples)
+inline void AIServerStatusRsp::set_outbound_queue_transitions(int64_t value) {
+  _internal_set_outbound_queue_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.outbound_queue_transitions)
 }
 
 // int64 outbound_queue_estimated_bytes = 11;
@@ -25276,44 +25928,44 @@ inline void AIServerStatusRsp::set_outbound_queue_high_watermark(int64_t value) 
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.outbound_queue_high_watermark)
 }
 
-// int64 produced_unique_samples = 13;
-inline void AIServerStatusRsp::clear_produced_unique_samples() {
-  _impl_.produced_unique_samples_ = int64_t{0};
+// int64 produced_unique_transitions = 13;
+inline void AIServerStatusRsp::clear_produced_unique_transitions() {
+  _impl_.produced_unique_transitions_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_produced_unique_samples() const {
-  return _impl_.produced_unique_samples_;
+inline int64_t AIServerStatusRsp::_internal_produced_unique_transitions() const {
+  return _impl_.produced_unique_transitions_;
 }
-inline int64_t AIServerStatusRsp::produced_unique_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.produced_unique_samples)
-  return _internal_produced_unique_samples();
+inline int64_t AIServerStatusRsp::produced_unique_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.produced_unique_transitions)
+  return _internal_produced_unique_transitions();
 }
-inline void AIServerStatusRsp::_internal_set_produced_unique_samples(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_produced_unique_transitions(int64_t value) {
   
-  _impl_.produced_unique_samples_ = value;
+  _impl_.produced_unique_transitions_ = value;
 }
-inline void AIServerStatusRsp::set_produced_unique_samples(int64_t value) {
-  _internal_set_produced_unique_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.produced_unique_samples)
+inline void AIServerStatusRsp::set_produced_unique_transitions(int64_t value) {
+  _internal_set_produced_unique_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.produced_unique_transitions)
 }
 
-// int64 produced_unique_batches = 14;
-inline void AIServerStatusRsp::clear_produced_unique_batches() {
-  _impl_.produced_unique_batches_ = int64_t{0};
+// int64 produced_unique_envelopes = 14;
+inline void AIServerStatusRsp::clear_produced_unique_envelopes() {
+  _impl_.produced_unique_envelopes_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_produced_unique_batches() const {
-  return _impl_.produced_unique_batches_;
+inline int64_t AIServerStatusRsp::_internal_produced_unique_envelopes() const {
+  return _impl_.produced_unique_envelopes_;
 }
-inline int64_t AIServerStatusRsp::produced_unique_batches() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.produced_unique_batches)
-  return _internal_produced_unique_batches();
+inline int64_t AIServerStatusRsp::produced_unique_envelopes() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.produced_unique_envelopes)
+  return _internal_produced_unique_envelopes();
 }
-inline void AIServerStatusRsp::_internal_set_produced_unique_batches(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_produced_unique_envelopes(int64_t value) {
   
-  _impl_.produced_unique_batches_ = value;
+  _impl_.produced_unique_envelopes_ = value;
 }
-inline void AIServerStatusRsp::set_produced_unique_batches(int64_t value) {
-  _internal_set_produced_unique_batches(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.produced_unique_batches)
+inline void AIServerStatusRsp::set_produced_unique_envelopes(int64_t value) {
+  _internal_set_produced_unique_envelopes(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.produced_unique_envelopes)
 }
 
 // int64 push_attempt_count = 15;
@@ -25336,24 +25988,24 @@ inline void AIServerStatusRsp::set_push_attempt_count(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.push_attempt_count)
 }
 
-// int64 accepted_unique_samples = 16;
-inline void AIServerStatusRsp::clear_accepted_unique_samples() {
-  _impl_.accepted_unique_samples_ = int64_t{0};
+// int64 accepted_unique_transitions = 16;
+inline void AIServerStatusRsp::clear_accepted_unique_transitions() {
+  _impl_.accepted_unique_transitions_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_accepted_unique_samples() const {
-  return _impl_.accepted_unique_samples_;
+inline int64_t AIServerStatusRsp::_internal_accepted_unique_transitions() const {
+  return _impl_.accepted_unique_transitions_;
 }
-inline int64_t AIServerStatusRsp::accepted_unique_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.accepted_unique_samples)
-  return _internal_accepted_unique_samples();
+inline int64_t AIServerStatusRsp::accepted_unique_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.accepted_unique_transitions)
+  return _internal_accepted_unique_transitions();
 }
-inline void AIServerStatusRsp::_internal_set_accepted_unique_samples(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_accepted_unique_transitions(int64_t value) {
   
-  _impl_.accepted_unique_samples_ = value;
+  _impl_.accepted_unique_transitions_ = value;
 }
-inline void AIServerStatusRsp::set_accepted_unique_samples(int64_t value) {
-  _internal_set_accepted_unique_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.accepted_unique_samples)
+inline void AIServerStatusRsp::set_accepted_unique_transitions(int64_t value) {
+  _internal_set_accepted_unique_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.accepted_unique_transitions)
 }
 
 // int64 duplicate_push_attempt_count = 17;
@@ -25416,24 +26068,24 @@ inline void AIServerStatusRsp::set_retry_attempt_count(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.retry_attempt_count)
 }
 
-// int64 final_drop_unique_samples = 20;
-inline void AIServerStatusRsp::clear_final_drop_unique_samples() {
-  _impl_.final_drop_unique_samples_ = int64_t{0};
+// int64 final_drop_unique_transitions = 20;
+inline void AIServerStatusRsp::clear_final_drop_unique_transitions() {
+  _impl_.final_drop_unique_transitions_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_final_drop_unique_samples() const {
-  return _impl_.final_drop_unique_samples_;
+inline int64_t AIServerStatusRsp::_internal_final_drop_unique_transitions() const {
+  return _impl_.final_drop_unique_transitions_;
 }
-inline int64_t AIServerStatusRsp::final_drop_unique_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.final_drop_unique_samples)
-  return _internal_final_drop_unique_samples();
+inline int64_t AIServerStatusRsp::final_drop_unique_transitions() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.final_drop_unique_transitions)
+  return _internal_final_drop_unique_transitions();
 }
-inline void AIServerStatusRsp::_internal_set_final_drop_unique_samples(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_final_drop_unique_transitions(int64_t value) {
   
-  _impl_.final_drop_unique_samples_ = value;
+  _impl_.final_drop_unique_transitions_ = value;
 }
-inline void AIServerStatusRsp::set_final_drop_unique_samples(int64_t value) {
-  _internal_set_final_drop_unique_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.final_drop_unique_samples)
+inline void AIServerStatusRsp::set_final_drop_unique_transitions(int64_t value) {
+  _internal_set_final_drop_unique_transitions(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.final_drop_unique_transitions)
 }
 
 // int64 active_actor_session_count = 21;
@@ -25456,24 +26108,24 @@ inline void AIServerStatusRsp::set_active_actor_session_count(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.active_actor_session_count)
 }
 
-// int64 active_trajectory_count = 22;
-inline void AIServerStatusRsp::clear_active_trajectory_count() {
-  _impl_.active_trajectory_count_ = int64_t{0};
+// int64 active_segment_count = 22;
+inline void AIServerStatusRsp::clear_active_segment_count() {
+  _impl_.active_segment_count_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_active_trajectory_count() const {
-  return _impl_.active_trajectory_count_;
+inline int64_t AIServerStatusRsp::_internal_active_segment_count() const {
+  return _impl_.active_segment_count_;
 }
-inline int64_t AIServerStatusRsp::active_trajectory_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.active_trajectory_count)
-  return _internal_active_trajectory_count();
+inline int64_t AIServerStatusRsp::active_segment_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.active_segment_count)
+  return _internal_active_segment_count();
 }
-inline void AIServerStatusRsp::_internal_set_active_trajectory_count(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_active_segment_count(int64_t value) {
   
-  _impl_.active_trajectory_count_ = value;
+  _impl_.active_segment_count_ = value;
 }
-inline void AIServerStatusRsp::set_active_trajectory_count(int64_t value) {
-  _internal_set_active_trajectory_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.active_trajectory_count)
+inline void AIServerStatusRsp::set_active_segment_count(int64_t value) {
+  _internal_set_active_segment_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.active_segment_count)
 }
 
 // int64 inference_count = 23;
@@ -25616,44 +26268,44 @@ inline void AIServerStatusRsp::set_model_switch_count(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.model_switch_count)
 }
 
-// int64 quarantined_sample_count = 30;
-inline void AIServerStatusRsp::clear_quarantined_sample_count() {
-  _impl_.quarantined_sample_count_ = int64_t{0};
+// int64 quarantined_transition_count = 30;
+inline void AIServerStatusRsp::clear_quarantined_transition_count() {
+  _impl_.quarantined_transition_count_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_quarantined_sample_count() const {
-  return _impl_.quarantined_sample_count_;
+inline int64_t AIServerStatusRsp::_internal_quarantined_transition_count() const {
+  return _impl_.quarantined_transition_count_;
 }
-inline int64_t AIServerStatusRsp::quarantined_sample_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.quarantined_sample_count)
-  return _internal_quarantined_sample_count();
+inline int64_t AIServerStatusRsp::quarantined_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.quarantined_transition_count)
+  return _internal_quarantined_transition_count();
 }
-inline void AIServerStatusRsp::_internal_set_quarantined_sample_count(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_quarantined_transition_count(int64_t value) {
   
-  _impl_.quarantined_sample_count_ = value;
+  _impl_.quarantined_transition_count_ = value;
 }
-inline void AIServerStatusRsp::set_quarantined_sample_count(int64_t value) {
-  _internal_set_quarantined_sample_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.quarantined_sample_count)
+inline void AIServerStatusRsp::set_quarantined_transition_count(int64_t value) {
+  _internal_set_quarantined_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.quarantined_transition_count)
 }
 
-// int64 quarantined_fragment_count = 31;
-inline void AIServerStatusRsp::clear_quarantined_fragment_count() {
-  _impl_.quarantined_fragment_count_ = int64_t{0};
+// int64 quarantined_envelope_count = 31;
+inline void AIServerStatusRsp::clear_quarantined_envelope_count() {
+  _impl_.quarantined_envelope_count_ = int64_t{0};
 }
-inline int64_t AIServerStatusRsp::_internal_quarantined_fragment_count() const {
-  return _impl_.quarantined_fragment_count_;
+inline int64_t AIServerStatusRsp::_internal_quarantined_envelope_count() const {
+  return _impl_.quarantined_envelope_count_;
 }
-inline int64_t AIServerStatusRsp::quarantined_fragment_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.quarantined_fragment_count)
-  return _internal_quarantined_fragment_count();
+inline int64_t AIServerStatusRsp::quarantined_envelope_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.quarantined_envelope_count)
+  return _internal_quarantined_envelope_count();
 }
-inline void AIServerStatusRsp::_internal_set_quarantined_fragment_count(int64_t value) {
+inline void AIServerStatusRsp::_internal_set_quarantined_envelope_count(int64_t value) {
   
-  _impl_.quarantined_fragment_count_ = value;
+  _impl_.quarantined_envelope_count_ = value;
 }
-inline void AIServerStatusRsp::set_quarantined_fragment_count(int64_t value) {
-  _internal_set_quarantined_fragment_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.quarantined_fragment_count)
+inline void AIServerStatusRsp::set_quarantined_envelope_count(int64_t value) {
+  _internal_set_quarantined_envelope_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.quarantined_envelope_count)
 }
 
 // string last_error = 32;
@@ -25814,6 +26466,275 @@ inline void AIServerStatusRsp::set_allocated_metrics(::rl::training::v1::MetricS
   }
   _impl_.metrics_ = metrics;
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.metrics)
+}
+
+// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 35;
+inline bool AIServerStatusRsp::_internal_has_rollout_estimator_profile_digest() const {
+  return this != internal_default_instance() && _impl_.rollout_estimator_profile_digest_ != nullptr;
+}
+inline bool AIServerStatusRsp::has_rollout_estimator_profile_digest() const {
+  return _internal_has_rollout_estimator_profile_digest();
+}
+inline const ::rl::common::v1::ContentDigest& AIServerStatusRsp::_internal_rollout_estimator_profile_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.rollout_estimator_profile_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& AIServerStatusRsp::rollout_estimator_profile_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
+  return _internal_rollout_estimator_profile_digest();
+}
+inline void AIServerStatusRsp::unsafe_arena_set_allocated_rollout_estimator_profile_digest(
+    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
+  }
+  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
+  if (rollout_estimator_profile_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
+}
+inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::release_rollout_estimator_profile_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
+  _impl_.rollout_estimator_profile_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::unsafe_arena_release_rollout_estimator_profile_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
+  _impl_.rollout_estimator_profile_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::_internal_mutable_rollout_estimator_profile_digest() {
+  
+  if (_impl_.rollout_estimator_profile_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.rollout_estimator_profile_digest_ = p;
+  }
+  return _impl_.rollout_estimator_profile_digest_;
+}
+inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::mutable_rollout_estimator_profile_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_rollout_estimator_profile_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
+  return _msg;
+}
+inline void AIServerStatusRsp::set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
+  }
+  if (rollout_estimator_profile_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(rollout_estimator_profile_digest));
+    if (message_arena != submessage_arena) {
+      rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, rollout_estimator_profile_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
+}
+
+// int64 closed_segment_count = 36;
+inline void AIServerStatusRsp::clear_closed_segment_count() {
+  _impl_.closed_segment_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_closed_segment_count() const {
+  return _impl_.closed_segment_count_;
+}
+inline int64_t AIServerStatusRsp::closed_segment_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.closed_segment_count)
+  return _internal_closed_segment_count();
+}
+inline void AIServerStatusRsp::_internal_set_closed_segment_count(int64_t value) {
+  
+  _impl_.closed_segment_count_ = value;
+}
+inline void AIServerStatusRsp::set_closed_segment_count(int64_t value) {
+  _internal_set_closed_segment_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.closed_segment_count)
+}
+
+// int64 pending_action_excluded_count = 37;
+inline void AIServerStatusRsp::clear_pending_action_excluded_count() {
+  _impl_.pending_action_excluded_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_pending_action_excluded_count() const {
+  return _impl_.pending_action_excluded_count_;
+}
+inline int64_t AIServerStatusRsp::pending_action_excluded_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.pending_action_excluded_count)
+  return _internal_pending_action_excluded_count();
+}
+inline void AIServerStatusRsp::_internal_set_pending_action_excluded_count(int64_t value) {
+  
+  _impl_.pending_action_excluded_count_ = value;
+}
+inline void AIServerStatusRsp::set_pending_action_excluded_count(int64_t value) {
+  _internal_set_pending_action_excluded_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.pending_action_excluded_count)
+}
+
+// int64 rollout_estimator_failure_count = 38;
+inline void AIServerStatusRsp::clear_rollout_estimator_failure_count() {
+  _impl_.rollout_estimator_failure_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_rollout_estimator_failure_count() const {
+  return _impl_.rollout_estimator_failure_count_;
+}
+inline int64_t AIServerStatusRsp::rollout_estimator_failure_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.rollout_estimator_failure_count)
+  return _internal_rollout_estimator_failure_count();
+}
+inline void AIServerStatusRsp::_internal_set_rollout_estimator_failure_count(int64_t value) {
+  
+  _impl_.rollout_estimator_failure_count_ = value;
+}
+inline void AIServerStatusRsp::set_rollout_estimator_failure_count(int64_t value) {
+  _internal_set_rollout_estimator_failure_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.rollout_estimator_failure_count)
+}
+
+// int64 per_agent_model_activation_count = 39;
+inline void AIServerStatusRsp::clear_per_agent_model_activation_count() {
+  _impl_.per_agent_model_activation_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_per_agent_model_activation_count() const {
+  return _impl_.per_agent_model_activation_count_;
+}
+inline int64_t AIServerStatusRsp::per_agent_model_activation_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.per_agent_model_activation_count)
+  return _internal_per_agent_model_activation_count();
+}
+inline void AIServerStatusRsp::_internal_set_per_agent_model_activation_count(int64_t value) {
+  
+  _impl_.per_agent_model_activation_count_ = value;
+}
+inline void AIServerStatusRsp::set_per_agent_model_activation_count(int64_t value) {
+  _internal_set_per_agent_model_activation_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.per_agent_model_activation_count)
+}
+
+// int64 superseded_without_agent_activation_count = 40;
+inline void AIServerStatusRsp::clear_superseded_without_agent_activation_count() {
+  _impl_.superseded_without_agent_activation_count_ = int64_t{0};
+}
+inline int64_t AIServerStatusRsp::_internal_superseded_without_agent_activation_count() const {
+  return _impl_.superseded_without_agent_activation_count_;
+}
+inline int64_t AIServerStatusRsp::superseded_without_agent_activation_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.superseded_without_agent_activation_count)
+  return _internal_superseded_without_agent_activation_count();
+}
+inline void AIServerStatusRsp::_internal_set_superseded_without_agent_activation_count(int64_t value) {
+  
+  _impl_.superseded_without_agent_activation_count_ = value;
+}
+inline void AIServerStatusRsp::set_superseded_without_agent_activation_count(int64_t value) {
+  _internal_set_superseded_without_agent_activation_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.superseded_without_agent_activation_count)
+}
+
+// repeated .rl.training.v1.SegmentCloseCount segment_close_counts = 41;
+inline int AIServerStatusRsp::_internal_segment_close_counts_size() const {
+  return _impl_.segment_close_counts_.size();
+}
+inline int AIServerStatusRsp::segment_close_counts_size() const {
+  return _internal_segment_close_counts_size();
+}
+inline void AIServerStatusRsp::clear_segment_close_counts() {
+  _impl_.segment_close_counts_.Clear();
+}
+inline ::rl::training::v1::SegmentCloseCount* AIServerStatusRsp::mutable_segment_close_counts(int index) {
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.AIServerStatusRsp.segment_close_counts)
+  return _impl_.segment_close_counts_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SegmentCloseCount >*
+AIServerStatusRsp::mutable_segment_close_counts() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.AIServerStatusRsp.segment_close_counts)
+  return &_impl_.segment_close_counts_;
+}
+inline const ::rl::training::v1::SegmentCloseCount& AIServerStatusRsp::_internal_segment_close_counts(int index) const {
+  return _impl_.segment_close_counts_.Get(index);
+}
+inline const ::rl::training::v1::SegmentCloseCount& AIServerStatusRsp::segment_close_counts(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.segment_close_counts)
+  return _internal_segment_close_counts(index);
+}
+inline ::rl::training::v1::SegmentCloseCount* AIServerStatusRsp::_internal_add_segment_close_counts() {
+  return _impl_.segment_close_counts_.Add();
+}
+inline ::rl::training::v1::SegmentCloseCount* AIServerStatusRsp::add_segment_close_counts() {
+  ::rl::training::v1::SegmentCloseCount* _add = _internal_add_segment_close_counts();
+  // @@protoc_insertion_point(field_add:rl.training.v1.AIServerStatusRsp.segment_close_counts)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SegmentCloseCount >&
+AIServerStatusRsp::segment_close_counts() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.AIServerStatusRsp.segment_close_counts)
+  return _impl_.segment_close_counts_;
+}
+
+// -------------------------------------------------------------------
+
+// SegmentCloseCount
+
+// .rl.training.v1.SegmentCloseReason reason = 1;
+inline void SegmentCloseCount::clear_reason() {
+  _impl_.reason_ = 0;
+}
+inline ::rl::training::v1::SegmentCloseReason SegmentCloseCount::_internal_reason() const {
+  return static_cast< ::rl::training::v1::SegmentCloseReason >(_impl_.reason_);
+}
+inline ::rl::training::v1::SegmentCloseReason SegmentCloseCount::reason() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SegmentCloseCount.reason)
+  return _internal_reason();
+}
+inline void SegmentCloseCount::_internal_set_reason(::rl::training::v1::SegmentCloseReason value) {
+  
+  _impl_.reason_ = value;
+}
+inline void SegmentCloseCount::set_reason(::rl::training::v1::SegmentCloseReason value) {
+  _internal_set_reason(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SegmentCloseCount.reason)
+}
+
+// int64 count = 2;
+inline void SegmentCloseCount::clear_count() {
+  _impl_.count_ = int64_t{0};
+}
+inline int64_t SegmentCloseCount::_internal_count() const {
+  return _impl_.count_;
+}
+inline int64_t SegmentCloseCount::count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SegmentCloseCount.count)
+  return _internal_count();
+}
+inline void SegmentCloseCount::_internal_set_count(int64_t value) {
+  
+  _impl_.count_ = value;
+}
+inline void SegmentCloseCount::set_count(int64_t value) {
+  _internal_set_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SegmentCloseCount.count)
 }
 
 // -------------------------------------------------------------------
@@ -26819,6 +27740,96 @@ inline void ModelArtifactManifest::_internal_set_ready(bool value) {
 inline void ModelArtifactManifest::set_ready(bool value) {
   _internal_set_ready(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.ready)
+}
+
+// .rl.training.v1.RolloutEstimatorProfile rollout_estimator_profile = 21;
+inline bool ModelArtifactManifest::_internal_has_rollout_estimator_profile() const {
+  return this != internal_default_instance() && _impl_.rollout_estimator_profile_ != nullptr;
+}
+inline bool ModelArtifactManifest::has_rollout_estimator_profile() const {
+  return _internal_has_rollout_estimator_profile();
+}
+inline void ModelArtifactManifest::clear_rollout_estimator_profile() {
+  if (GetArenaForAllocation() == nullptr && _impl_.rollout_estimator_profile_ != nullptr) {
+    delete _impl_.rollout_estimator_profile_;
+  }
+  _impl_.rollout_estimator_profile_ = nullptr;
+}
+inline const ::rl::training::v1::RolloutEstimatorProfile& ModelArtifactManifest::_internal_rollout_estimator_profile() const {
+  const ::rl::training::v1::RolloutEstimatorProfile* p = _impl_.rollout_estimator_profile_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::RolloutEstimatorProfile&>(
+      ::rl::training::v1::_RolloutEstimatorProfile_default_instance_);
+}
+inline const ::rl::training::v1::RolloutEstimatorProfile& ModelArtifactManifest::rollout_estimator_profile() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
+  return _internal_rollout_estimator_profile();
+}
+inline void ModelArtifactManifest::unsafe_arena_set_allocated_rollout_estimator_profile(
+    ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_);
+  }
+  _impl_.rollout_estimator_profile_ = rollout_estimator_profile;
+  if (rollout_estimator_profile) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
+}
+inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::release_rollout_estimator_profile() {
+  
+  ::rl::training::v1::RolloutEstimatorProfile* temp = _impl_.rollout_estimator_profile_;
+  _impl_.rollout_estimator_profile_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::unsafe_arena_release_rollout_estimator_profile() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
+  
+  ::rl::training::v1::RolloutEstimatorProfile* temp = _impl_.rollout_estimator_profile_;
+  _impl_.rollout_estimator_profile_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::_internal_mutable_rollout_estimator_profile() {
+  
+  if (_impl_.rollout_estimator_profile_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::RolloutEstimatorProfile>(GetArenaForAllocation());
+    _impl_.rollout_estimator_profile_ = p;
+  }
+  return _impl_.rollout_estimator_profile_;
+}
+inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::mutable_rollout_estimator_profile() {
+  ::rl::training::v1::RolloutEstimatorProfile* _msg = _internal_mutable_rollout_estimator_profile();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
+  return _msg;
+}
+inline void ModelArtifactManifest::set_allocated_rollout_estimator_profile(::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.rollout_estimator_profile_;
+  }
+  if (rollout_estimator_profile) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(rollout_estimator_profile);
+    if (message_arena != submessage_arena) {
+      rollout_estimator_profile = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, rollout_estimator_profile, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.rollout_estimator_profile_ = rollout_estimator_profile;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
 }
 
 // -------------------------------------------------------------------
@@ -29415,8 +30426,6 @@ inline void ModelDistributorStatusRsp::set_latest_available_model_step(uint64_t 
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -29430,6 +30439,11 @@ template <> struct is_proto_enum< ::rl::training::v1::TransitionEndKind> : ::std
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::TransitionEndKind>() {
   return ::rl::training::v1::TransitionEndKind_descriptor();
+}
+template <> struct is_proto_enum< ::rl::training::v1::SegmentCloseReason> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SegmentCloseReason>() {
+  return ::rl::training::v1::SegmentCloseReason_descriptor();
 }
 template <> struct is_proto_enum< ::rl::training::v1::PushResult> : ::std::true_type {};
 template <>
@@ -29445,11 +30459,6 @@ template <> struct is_proto_enum< ::rl::training::v1::GetBatchResult> : ::std::t
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::GetBatchResult>() {
   return ::rl::training::v1::GetBatchResult_descriptor();
-}
-template <> struct is_proto_enum< ::rl::training::v1::BatchAssemblyMode> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::BatchAssemblyMode>() {
-  return ::rl::training::v1::BatchAssemblyMode_descriptor();
 }
 template <> struct is_proto_enum< ::rl::training::v1::DeliveryResult> : ::std::true_type {};
 template <>

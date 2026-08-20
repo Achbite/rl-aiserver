@@ -131,7 +131,8 @@ message BehaviorPolicyBinding {
 
 message MazeTaskSpec {
     TaskIdentity identity = 1;
-    uint32 agent_count = 2;
+    reserved 2;
+    reserved "agent_count";
     string fixed_map_id = 3;
     rl.common.v1.ContentDigest expected_map_digest = 4;
     rl.common.v1.SchemaIdentity observation_schema = 5;
@@ -139,6 +140,12 @@ message MazeTaskSpec {
     string action_rule_id = 7;
     // Fixed per-task episode horizon. It is not derived from a curriculum.
     uint32 episode_max_steps = 8;
+}
+
+// Runtime facts assigned by AIServer to the connected Environment instance.
+// These values are not part of the task identity or task configuration digest.
+message EnvironmentRuntimeSpec {
+    uint32 agent_count = 1;
 }
 
 message MapDescriptor {
@@ -211,6 +218,7 @@ message OpenSessionRsp {
     MazeTaskSpec task_spec = 6;
     WorkloadMode workload_mode = 7;
     ReplayPolicy replay_policy = 8;
+    EnvironmentRuntimeSpec environment_runtime = 9;
 }
 
 message InitReq {
@@ -286,8 +294,22 @@ message EndEpisodeReq {
     LifecycleCommand command = 1;
 }
 
+message AgentEpisodeOutcome {
+    uint32 agent_id = 1;
+    MazeTerminationReason termination_reason = 2;
+    uint64 terminal_frame_id = 3;
+    Vec2 final_position = 4;
+    optional uint32 goal_rank_group = 5;
+}
+
+message EpisodeOutcome {
+    string episode_id = 1;
+    repeated AgentEpisodeOutcome agents = 2;
+}
+
 message EndEpisodeRsp {
     LifecycleReply lifecycle = 1;
+    EpisodeOutcome outcome = 2;
 }
 
 message AbortEpisodeReq {

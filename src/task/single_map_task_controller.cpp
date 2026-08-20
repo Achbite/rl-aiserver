@@ -28,14 +28,14 @@ bool SingleMapTaskController::ValidateModel(
 
 bool SingleMapTaskController::ValidateTrainingProgress(
     const SingleMapModelIdentity& model,
-    int64_t produced_samples,
+    int64_t produced_transitions,
     int64_t& trained_samples_delta,
     std::string& error) const {
     trained_samples_delta = 0;
     if (!ValidateModel(model, error)) return false;
-    if (produced_samples < 0 ||
-        produced_samples < latest_produced_samples_) {
-        error = "single-map produced-sample counter moved backwards";
+    if (produced_transitions < 0 ||
+        produced_transitions < latest_produced_transitions_) {
+        error = "single-map produced-transition counter moved backwards";
         return false;
     }
     if (model.model_step < baseline_model_.model_step ||
@@ -59,8 +59,8 @@ bool SingleMapTaskController::ValidateTrainingProgress(
 
     trained_samples_delta =
         model.trained_samples - baseline_model_.trained_samples;
-    if (trained_samples_delta > produced_samples) {
-        error = "single-map trained samples exceed produced samples";
+    if (trained_samples_delta > produced_transitions) {
+        error = "single-map trained samples exceed produced transitions";
         return false;
     }
     return true;
@@ -69,7 +69,7 @@ bool SingleMapTaskController::ValidateTrainingProgress(
 bool SingleMapTaskController::Initialize(
     int episode_max_steps,
     const SingleMapModelIdentity& initial_model,
-    int64_t initial_produced_samples,
+    int64_t initial_produced_transitions,
     std::string& error) {
     if (initialized_) {
         error = "single-map task controller is already initialized";
@@ -78,8 +78,8 @@ bool SingleMapTaskController::Initialize(
     if (!ValidateModel(initial_model, error)) {
         return false;
     }
-    if (episode_max_steps <= 0 || initial_produced_samples != 0) {
-        error = "single-map training must start with zero produced samples";
+    if (episode_max_steps <= 0 || initial_produced_transitions != 0) {
+        error = "single-map training must start with zero produced transitions";
         return false;
     }
     if (initial_model.model_step != 0 ||
@@ -91,7 +91,7 @@ bool SingleMapTaskController::Initialize(
     episode_max_steps_ = episode_max_steps;
     baseline_model_ = initial_model;
     latest_model_ = initial_model;
-    latest_produced_samples_ = 0;
+    latest_produced_transitions_ = 0;
     initialized_ = true;
     error.clear();
     return true;
@@ -99,7 +99,7 @@ bool SingleMapTaskController::Initialize(
 
 bool SingleMapTaskController::PlanNextEpisode(
     const SingleMapModelIdentity& active_model,
-    int64_t produced_samples,
+    int64_t produced_transitions,
     SingleMapEpisodePlan& plan,
     std::string& error) {
     plan = SingleMapEpisodePlan{};
@@ -108,7 +108,7 @@ bool SingleMapTaskController::PlanNextEpisode(
         return false;
     }
     int64_t trained_samples_delta = 0;
-    if (!ValidateTrainingProgress(active_model, produced_samples,
+    if (!ValidateTrainingProgress(active_model, produced_transitions,
                                   trained_samples_delta, error)) {
         return false;
     }
@@ -118,21 +118,21 @@ bool SingleMapTaskController::PlanNextEpisode(
     plan.episode_mode = maze::EPISODE_MODE_TRAINING;
     plan.model = active_model;
     latest_model_ = active_model;
-    latest_produced_samples_ = produced_samples;
+    latest_produced_transitions_ = produced_transitions;
     error.clear();
     return true;
 }
 
 bool SingleMapTaskController::ObserveTrainingProgress(
     const SingleMapModelIdentity& active_model,
-    int64_t produced_samples,
+    int64_t produced_transitions,
     std::string& error) {
     if (!initialized_) {
         error = "single-map task controller is not initialized";
         return false;
     }
     int64_t trained_samples_delta = 0;
-    if (!ValidateTrainingProgress(active_model, produced_samples,
+    if (!ValidateTrainingProgress(active_model, produced_transitions,
                                   trained_samples_delta, error)) {
         return false;
     }
@@ -140,7 +140,7 @@ bool SingleMapTaskController::ObserveTrainingProgress(
     // transport own flow control; explicit external stop owns the process
     // lifetime. Model evaluation cannot pause or terminate training.
     latest_model_ = active_model;
-    latest_produced_samples_ = produced_samples;
+    latest_produced_transitions_ = produced_transitions;
     error.clear();
     return true;
 }
@@ -152,7 +152,7 @@ SingleMapTaskSnapshot SingleMapTaskController::GetSnapshot() const {
     snapshot.baseline_model_checksum = baseline_model_.model_checksum;
     snapshot.baseline_train_updates = baseline_model_.train_updates;
     snapshot.baseline_trained_samples = baseline_model_.trained_samples;
-    snapshot.produced_samples = latest_produced_samples_;
+    snapshot.produced_transitions = latest_produced_transitions_;
     snapshot.episode_max_steps = episode_max_steps_;
     return snapshot;
 }
@@ -170,8 +170,8 @@ std::string SingleMapTaskController::ToJson() const {
            << snapshot.baseline_train_updates
            << ",\"trained_samples\":"
            << snapshot.baseline_trained_samples << '}'
-           << ",\"produced_samples\":"
-           << snapshot.produced_samples
+           << ",\"produced_transitions\":"
+           << snapshot.produced_transitions
            << ",\"episode_max_steps\":" << snapshot.episode_max_steps
            << '}';
     return output.str();
