@@ -1,16 +1,22 @@
 #pragma once
 
 #include "config/config_loader.h"
+#include "contracts/contract_namespaces.h"
+#include "model/model_step.h"
+#include "training.pb.h"
 
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <vector>
 
 struct ModelManifest {
+    training::ModelArtifactManifest wire;
     int schema_version = 0;
     std::string contract_version;
-    std::string run_id;
-    int model_version = -1;
+    std::string model_lineage_id;
+    ModelStep model_step = 0;
+    std::string manifest_digest;
     std::string artifact_uri;
     std::string model_file;
     int64_t size_bytes = 0;
@@ -20,21 +26,41 @@ struct ModelManifest {
     std::vector<int64_t> value_shape;
     int64_t seed = 0;
     int64_t published_ts_ms = 0;
+    std::string observation_schema_id;
+    std::string action_schema_id;
+    std::string model_architecture_id;
+    std::string tensor_dtype;
+    int64_t train_updates = 0;
+    int64_t trained_samples = 0;
     bool ready = false;
     std::string model_path;
     std::string manifest_path;
+
+    bool HasModelIdentity() const {
+        return wire.has_identity() &&
+               wire.identity().has_model_step() &&
+               wire.identity().model_step() == model_step;
+    }
 };
 
-bool LoadModelManifest(const ModelConfig& config,
-                       const std::string& run_id,
-                       ModelManifest& manifest,
-                       std::string& error);
+bool ValidateModelManifest(const AIServerConfig& config,
+                           const training::ModelArtifactManifest& source,
+                           std::optional<ModelStep> expected_step,
+                           std::string& error);
 
-bool LoadModelManifestFile(const ModelConfig& config,
+void AssignModelManifest(const training::ModelArtifactManifest& source,
+                         const std::string& model_path,
+                         ModelManifest& destination);
+
+bool LoadModelManifestFile(const AIServerConfig& config,
                            const std::string& manifest_path,
-                           const std::string& expected_run_id,
                            ModelManifest& manifest,
                            std::string& error);
+
+bool WriteModelManifestFile(
+    const training::ModelArtifactManifest& manifest,
+    const std::string& manifest_path,
+    std::string& error);
 
 bool ComputeFileSha256(const std::string& path,
                        std::string& checksum,

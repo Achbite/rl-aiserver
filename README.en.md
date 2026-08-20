@@ -1,50 +1,119 @@
 # RL AIServer
 
-English | [简体中文](README.md)
+[简体中文](README.md) | English
 
-C++ environment-interaction and inference service. Training mode also starts SampleDistributor, while inference smoke mode uses the model embedded in the image.
+AIServer provides static model evaluation plus training inference, per-Agent
+R-PIN segments, GAE/value targets, and processed-transition delivery. For local
+training, start it after Learner is ready and connect Client afterwards.
 
-## Quick Start
-
-Build Sample Pool and stage the binary:
-
-```bash
-(cd ../rl-sample-pool && bash build_artifact.sh)
-cp -R ../.workspace/artifacts/rl-sample-pool/0.3.0/linux-arm64/. \
-  sample-distributor/
-```
-
-Build the image:
+## 1. Development container, incremental build, and tests
 
 ```bash
-AISERVER_IMAGE_TAG=training-001 bash build_image.sh
-```
-
-Enter the development container and start the inference smoke test:
-
-```bash
+# Host: build or reuse the independent development image and enter it
 make shell
-bash ./run.sh inference-smoke
+
+# Inside the container: build and test are explicit, separate entrypoints
+./build.sh
+bash ./test.sh
+
+# The host can also reuse the same container for a build
+make build
 ```
 
-Start training mode:
+The development image does not inherit an old runtime image and uses a
+persistent ccache volume. `ninja: no work to do.` means no source changed; it
+does not automatically rerun tests. Tests may be started only from the
+repository root with `bash ./test.sh`; `build.sh`, Docker image builds, and
+other wrappers do not run them implicitly. Run `make shell` only on the host.
+
+## 2. Run modes
+
+Inside the development container:
 
 ```bash
-bash ./run.sh training
+# Show the executable CLI-to-config mapping without starting the service
+bash ./run.sh --help
+
+# Deterministic evaluation from an explicit SaveModel.onnx
+bash ./run.sh --config configs/server_config.yaml --workload evaluation \
+  --evaluation-model /absolute/path/SaveModel.onnx
+
+# Training; config supplies defaults and CLI explicitly overrides Learner endpoints
+bash ./run.sh --config configs/server_config.yaml --workload training \
+  --sample-distributor maze-learner:9100 \
+  --model-distributor maze-learner:9200
 ```
 
-Use `rl-framework` to start the complete workflow.
+The final evaluation config/CLI value must point to a regular, non-symlink
+`SaveModel.onnx`. AIServer does not read a neighboring manifest or accept a
+directory entrypoint. `run.sh` only supervises the process and propagates its
+exit status; only the C++ config/CLI layer interprets business arguments.
 
-## Run Modes
+The default workload is `server.run_mode` in `configs/server_config.yaml`, and
+`--workload` only overrides that field. Reward V4 formulas and numeric values
+are compiled in `src/ai/maze_reward.cpp`; runtime YAML must not contain a
+`reward:` tuning section and retains only the reward schema identity.
 
-```text
-1 / training
-2 / inference-smoke
-3 / model-evaluation
-4 / astar-test
+Training uses the `RolloutEstimatorProfile` embedded in the model manifest.
+AIServer pins a behavior model independently for each Agent, closes the segment
+after at most 128 completed transitions by default, computes unnormalised
+GAE/value targets, and submits the resulting items in batches through its
+in-process SampleDistributor. The only authority for the actual Agent count is
+`environment.agent_count/RL_AISERVER_AGENT_COUNT`; `server.max_agents` is only
+a capacity limit. Client, MazeTaskSpec, Learner, and SamplePool expose no second
+Agent-count authority.
+
+The close reason and bootstrap appear only on the final
+transition. A terminal carries an explicit zero bootstrap; TMax and controlled
+close use the pinned model's finite value; non-final items carry neither fact.
+A prepared and acknowledged model activates only at each Agent's next segment.
+
+The same runtime image exposes a read-only model diagnostic for tensor-contract
+and finite-inference checks:
+
+```bash
+/opt/rl/aiserver/bin/maze_aiserver \
+  --inspect-model /absolute/path/SaveModel.onnx
 ```
 
-The default AIServer port is `9002`, and SampleDistributor uses `9100`.
+The inspector emits only tensor identity; it loads no service configuration and
+opens no port.
+
+## 3. Training cache
+
+AIServer uses the private `cache` under `model.local_train_dir` and neither
+receives nor interprets platform `task_id/run_id`. A `.aiserver.lock` prevents
+two AIServers from concurrently using the same directory. A normal restart
+validates and recovers an existing valid cache instead of deleting or rejecting
+it merely because it is non-empty:
+
+```bash
+bash ./run.sh --config configs/server_config.yaml --workload training
+```
+
+Models always come from the isolated training invocation's Learner Model Distributor. AIServer discovers the internal model lineage from Distributor status and pins the first lineage; a different lineage in the same service lifetime fails closed. AIServer never starts training from a local savepoint and never removes its cache on a normal stop.
+
+## 4. Build the runtime image
+
+The runtime image accepts only clean source and a synchronized formal Contracts
+artifact. Run from the host:
+
+```bash
+bash scripts/sync_contract_snapshot.sh
+bash build_image.sh
+```
+
+The build never consumes development artifacts or a development-container build
+directory. It prints the image reference derived from the current stack source
+identity.
+
+## 5. Default addresses
+
+| Service | Address |
+| --- | --- |
+| AIServer gRPC | `0.0.0.0:9002` |
+| Learner Sample Pool | `maze-learner:9100` |
+| Learner Model Distributor | `maze-learner:9200` |
 
 ## License
 

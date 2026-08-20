@@ -1,10 +1,13 @@
-ARG AISERVER_RUNTIME_IMAGE=rl-training/aiserver:test-001
-FROM ${AISERVER_RUNTIME_IMAGE}
+ARG CPP_DEV_BASE_IMAGE=python@sha256:b27df5841f3355e9473f9a516d38a6783b6c8dfeacaf2d14a240f443b368ddb6
+FROM ${CPP_DEV_BASE_IMAGE}
 
 ARG ONNXRUNTIME_VERSION=1.17.0
 ARG TARGETARCH
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    ca-certificates \
+    ccache \
     cmake \
     git \
     libabsl-dev \
@@ -14,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     ninja-build \
     pkg-config \
+    procps \
     protobuf-compiler \
     protobuf-compiler-grpc \
     wget \
@@ -27,8 +31,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget -q "https://github.com/microsoft/onnxruntime/releases/download/v${ONNXRUNTIME_VERSION}/${ORT_PACKAGE}.tgz" && \
     tar xzf "${ORT_PACKAGE}.tgz" && \
     cp -R "${ORT_PACKAGE}"/include/* /usr/local/include/ && \
+    cp "${ORT_PACKAGE}"/lib/* /usr/local/lib/ && \
+    ldconfig && \
     rm -rf "${ORT_PACKAGE}" "${ORT_PACKAGE}.tgz"
 
+LABEL org.rl-training.dev-toolchain="cpp17-debian13-onnxruntime-1.17.0"
 WORKDIR /workspace/rl-aiserver
 ENTRYPOINT []
 CMD ["sleep", "infinity"]

@@ -1,14 +1,50 @@
 # ============================================================================
-# AIServer 配置文件 - 迷宫训练框架
-# 说明：AI 决策服务的运行参数、策略参数、网络参数集中管理
-#       修改后无需重新编译，重启 AIServer 即可生效
+# AIServer 默认运行配置
+# Config 提供完整默认值；白名单环境变量和 CLI 只能覆盖已有字段。
 # ============================================================================
 
-# --- 服务参数（gRPC 服务端配置）---
+# --- 服务参数：启动模式在这里配置，CLI --workload 可显式覆盖 ---
 server:
+  run_mode: "evaluation"          # exact values: training | evaluation
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
-  run_mode: 2                     # 1=training, 2=local-test, 3=model-evaluation, 4=A*测试
+
+# --- 0.14.0 A3 R-PIN 协议身份 ---
+contract:
+  package_name: "rl-contracts"
+  package_version: "0.14.0"
+  source_digest: "61d633bde1ad4a8dccc2a5e8505d122bbabc8c8cd69eb1cfa97b253c4c2d4c0d"
+  artifact_digest: "4642b1a7e18150f9dfc0b7dba6e6ff3b5f0173cb10dee4c432c0155bfa596779"
+  platform: "linux/arm64"
+  generator_identity: "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8"
+
+# --- Learner 与 AIServer 对齐的 task-neutral 训练语义 ---
+training_semantics:
+  training_contract_id: "maze.training.v3"
+  observation_schema_id: "maze.observation.v3"
+  observation_schema_version: 1
+  observation_schema_digest: "7cee41136020f3ffc8c6ae799f630d55d0588c6a99ab7f717eac3b3d08aa18b4"
+  action_schema_id: "maze.action.v1"
+  action_schema_version: 1
+  action_schema_digest: "ce84c564e128f98adcc48fd420ac0df5acea61774a25de8705b602464009cfd8"
+  reward_schema_id: "maze.reward.v4"
+  reward_schema_version: 1
+  reward_schema_digest: "ed284084b79413473d5053b6d3f69320d2a4639c81451ba598ca45ac8ce15929"
+  policy_distribution_schema_id: "categorical.logits.v1"
+  model_architecture_id: "maze.mlp-17x64x64.v1"
+  semantics_digest: "6cd834542f8263135b4bfd069f372ddfdb99334060d305f58b00ce56eea10b4c"
+
+policy:
+  distribution_schema_id: "categorical.logits.v1"
+  training_temperature: 1.0      # categorical temperature, unitless, >0
+  policy_spec_digest: "e1efb81040681fd13fdae439caab09778c8e0b0f6bba16b7808c30fbbb632617"
+  sampling_seed: 0               # behavior-policy RNG seed, integer >=0
+
+observation:
+  ray_max_range: 10              # local ray maximum, grid cells, >0
+
+# Reward V4 的公式与数值由 src/ai/maze_reward.cpp 固定持有。
+# Config 只携带 training_semantics.reward_schema_* 身份，不提供 reward 调参入口。
 
 # --- 网格参数（A* 测试 + 训练共用）---
 strategy:
@@ -17,36 +53,58 @@ strategy:
 
 # --- 模型参数 ---
 model:
-  local_dir: "models/local"
-  p2p_dir: "models/cache"
-  smoke_dir: "models/smoke"
-  save_name: "SaveModel"          # 本地保存的模型文件名（不含扩展名）
-  manifest_name: "manifest.json"
+  evaluation_model_path: "../models/eval/0000000/SaveModel.onnx"
+  local_train_dir: "../models/train"
   startup_timeout_ms: 30000
-  expected_obs_dim: 13
+  expected_obs_dim: 17
   expected_action_dim: 9
+  model_architecture_id: "maze.mlp-17x64x64.v1"
+  tensor_dtype: "float32"
 
+# --- Environment 运行 assignment（实际 Agent 数唯一权威）---
+environment:
+  agent_count: 4
+
+# --- Maze 任务语义（Client 只能执行，不能覆盖）---
+task:
+  task_contract_id: "maze.task.v3"
+  task_revision: 3
+  fixed_map_id: "maze_117436372"
+  fixed_map_checksum_sha256: "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9"
+  action_rule_id: "maze.action.9-way.no-corner-cut.v1"
+  shortest_action_steps: 188
+  episode_max_steps: 1504
+
+# --- 训练模型分发参数（仅 training 生效）---
 model_distribution:
   host: "maze-learner"
   port: 9200
   poll_interval_ms: 200
-  boundary_wait_ms: 1000
   rpc_timeout_ms: 5000
-  contract_version: "0.3.0"
+  contract_version: "0.14.0"
 
-# --- 样本输出参数（AIServer → SampleDistributor）---
-sample_output:
+# --- AIServer 内置异步样本分发器（仅 training 生效）---
+# 它只负责本地有界队列和向 Learner Pod Sample Pool ingress 异步发送；
+# Learner 消费速度不参与这里的 Client 流控判断。
+sample_distributor:
   enabled: true
-  host: "127.0.0.1"
+  host: "maze-learner"
   port: 9100
-  fragment_samples: 128
+  envelope_max_transitions: 128
+  envelope_max_bytes: 8388608
   rpc_timeout_ms: 2000
   max_attempts: 4
   enqueue_timeout_ms: 100
   drain_timeout_ms: 10000
   health_timeout_ms: 5000
-  outbound_max_fragments: 64
+  status_poll_interval_ms: 200
+  # SamplePool ingress 不可达时，SampleDistributor 允许恢复的最长时间。
+  recovery_timeout_ms: 30000
+  outbound_max_envelopes: 64
   outbound_max_estimated_bytes: 67108864
-  run_id: "local-run"
   aiserver_id: "aiserver-0"
   env_id: "env-0"
+
+metrics:
+  episode_window: 100
+  event_schema_catalog: "../proto/schemas/maze.metrics.v4.json"

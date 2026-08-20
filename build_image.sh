@@ -2,74 +2,59 @@
 
 set -euo pipefail
 
-AISERVER_IMAGE_TAG="${AISERVER_IMAGE_TAG:-training-001}"
+requested_image_tag="${RL_AISERVER_IMAGE_TAG:-}"
 AISERVER_IMAGE_NAME="rl-training/aiserver"
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 workspace_root="${RL_TRAINING_WORKSPACE:-$(cd "${repo_dir}/.." && pwd)}"
-artifact_root="${workspace_root}/.workspace/artifacts"
 context_root="${workspace_root}/.workspace/build-contexts/rl-aiserver-$$"
 source "${repo_dir}/artifact_versions.env"
-platform="$(docker version --format '{{.Server.Os}}/{{.Server.Arch}}')"
-platform_dir="${platform//\//-}"
 contract_dir="${repo_dir}/proto"
-sample_pool_dir="${repo_dir}/sample-distributor"
-smoke_model_dir="${artifact_root}/rl-smoke-model/${RL_SMOKE_MODEL_VERSION}/any"
+
+if test -n "$(git -C "${repo_dir}" status --porcelain --untracked-files=all)"; then
+    echo "refusing to build an AIServer runtime image from a dirty worktree" >&2
+    exit 1
+fi
+
+bash "${repo_dir}/scripts/verify_source_inventory.sh"
 
 if [ ! -f "${contract_dir}/manifest.json" ] ||
-   [ ! -f "${contract_dir}/maze.pb.cc" ] ||
-   [ ! -f "${contract_dir}/maze.grpc.pb.cc" ]; then
+   [ ! -f "${contract_dir}/common.pb.cc" ] ||
+   [ ! -f "${contract_dir}/training.pb.cc" ] ||
+   [ ! -f "${contract_dir}/training.grpc.pb.cc" ] ||
+   [ ! -f "${contract_dir}/maze_task.pb.cc" ] ||
+   [ ! -f "${contract_dir}/maze_task.grpc.pb.cc" ]; then
     echo "Repository-local contract snapshot is incomplete: ${contract_dir}" >&2
     exit 1
 fi
-if [ ! -f "${sample_pool_dir}/manifest.json" ] ||
-   [ ! -x "${sample_pool_dir}/bin/maze_sample_distributor" ]; then
-    echo "Staged SampleDistributor artifact is missing: ${sample_pool_dir}" >&2
-    echo "Build it in rl-sample-pool, then copy the selected version here explicitly:" >&2
-    echo "  cp -R ../.workspace/artifacts/rl-sample-pool/${RL_SAMPLE_POOL_VERSION}/${platform_dir}/. sample-distributor/" >&2
-    exit 1
-fi
-if [ ! -f "${smoke_model_dir}/manifest.json" ]; then
-    echo "Smoke model artifact is missing. Run ../rl-learner/build_image.sh" >&2
-    exit 1
-fi
-
 python3 - \
     "${contract_dir}/manifest.json" \
-    "${sample_pool_dir}/manifest.json" \
-    "${smoke_model_dir}/manifest.json" \
     "${RL_CONTRACTS_VERSION}" \
-    "${RL_SAMPLE_POOL_VERSION}" \
-    "${RL_SMOKE_MODEL_VERSION}" \
-    "${platform}" <<'PY'
+    "${RL_CONTRACTS_PLATFORM}" \
+    <<'PY'
 import hashlib
 import json
 from pathlib import Path
 import sys
 
 contract_path = Path(sys.argv[1])
-sample_path = Path(sys.argv[2])
-smoke_path = Path(sys.argv[3])
 contract = json.loads(contract_path.read_text(encoding="utf-8"))
-sample = json.loads(sample_path.read_text(encoding="utf-8"))
-smoke = json.loads(smoke_path.read_text(encoding="utf-8"))
-
-def verify_files(root, manifest):
-    for relative, expected_checksum in manifest.get("files", {}).items():
-        path = root / relative
-        if not path.is_file():
-            raise SystemExit(f"Artifact file is missing: {path}")
-        actual_checksum = hashlib.sha256(path.read_bytes()).hexdigest()
-        if actual_checksum != expected_checksum:
-            raise SystemExit(f"Artifact checksum mismatch: {path}")
 
 def verify_contract_files(root, manifest):
     files = {
-        "maze.proto": "maze.proto",
-        "cpp/maze.pb.cc": "maze.pb.cc",
-        "cpp/maze.pb.h": "maze.pb.h",
-        "cpp/maze.grpc.pb.cc": "maze.grpc.pb.cc",
-        "cpp/maze.grpc.pb.h": "maze.grpc.pb.h",
+        "common.proto": "common.proto",
+        "training.proto": "training.proto",
+        "maze_task.proto": "maze_task.proto",
+        "cpp/common.pb.cc": "common.pb.cc",
+        "cpp/common.pb.h": "common.pb.h",
+        "cpp/training.pb.cc": "training.pb.cc",
+        "cpp/training.pb.h": "training.pb.h",
+        "cpp/training.grpc.pb.cc": "training.grpc.pb.cc",
+        "cpp/training.grpc.pb.h": "training.grpc.pb.h",
+        "cpp/maze_task.pb.cc": "maze_task.pb.cc",
+        "cpp/maze_task.pb.h": "maze_task.pb.h",
+        "cpp/maze_task.grpc.pb.cc": "maze_task.grpc.pb.cc",
+        "cpp/maze_task.grpc.pb.h": "maze_task.grpc.pb.h",
     }
     for artifact_name, local_name in files.items():
         path = root / local_name
@@ -80,57 +65,78 @@ def verify_contract_files(root, manifest):
         if actual_checksum != expected_checksum:
             raise SystemExit(f"Repository-local contract checksum mismatch: {path}")
 
-if contract.get("package") != "rl-contracts" or contract.get("version") != sys.argv[4]:
+if (
+    contract.get("schema_version") != 2
+    or contract.get("package") != "rl-contracts"
+    or contract.get("version") != sys.argv[2]
+    or contract.get("platform") != sys.argv[3]
+    or contract.get("source_tree_state") != "clean"
+):
     raise SystemExit("Contract artifact identity is invalid")
 verify_contract_files(contract_path.parent, contract)
-if sample.get("package") != "rl-sample-pool" or sample.get("version") != sys.argv[5]:
-    raise SystemExit("SampleDistributor artifact identity is invalid")
-if sample.get("platform") != sys.argv[7]:
-    raise SystemExit("SampleDistributor artifact platform is invalid")
-verify_files(sample_path.parent, sample)
-expected = (
-    contract["version"],
-    contract["source_id"],
-    contract["source_sha256"],
-)
-actual = (
-    sample["contract"]["version"],
-    sample["contract"]["source_id"],
-    sample["contract"]["source_sha256"],
-)
-if actual != expected:
-    raise SystemExit(
-        "SampleDistributor artifact was built against a different contract artifact"
-    )
-if smoke.get("package") != "rl-smoke-model" or smoke.get("version") != sys.argv[6]:
-    raise SystemExit("Smoke model artifact identity is invalid")
-if smoke.get("contract_version") != contract["version"]:
-    raise SystemExit("Smoke model artifact uses a different contract version")
-if smoke.get("run_id") != "inference-smoke-fixture" or not smoke.get("ready"):
-    raise SystemExit("Smoke model manifest identity is invalid")
-model_path = smoke_path.parent / smoke.get("model_file", "")
-if not model_path.is_file():
-    raise SystemExit("Smoke model file is missing")
-payload = model_path.read_bytes()
-if len(payload) != smoke.get("size_bytes"):
-    raise SystemExit("Smoke model size does not match its manifest")
-if hashlib.sha256(payload).hexdigest() != smoke.get("sha256"):
-    raise SystemExit("Smoke model checksum does not match its manifest")
 PY
+
+stack_identity_tool="${workspace_root}/rl-framework/tools/compute_stack_source_id.py"
+if [ ! -f "${stack_identity_tool}" ]; then
+    echo "stack source identity tool is missing: ${stack_identity_tool}" >&2
+    exit 1
+fi
+stack_identity_json="$(
+    python3 "${stack_identity_tool}" --workspace-root "${workspace_root}"
+)"
+identity_fields="$(
+    python3 -c '
+import json
+import sys
+
+document = json.loads(sys.argv[1])
+print("\t".join((
+    document["stack_source_id"],
+    document["repositories"]["rl-aiserver"],
+    document["artifacts"]["rl-contracts"]["artifact_digest"],
+    document["artifacts"]["rl-contracts"]["manifest_sha256"],
+    document["configs"]["aiserver"]["sha256"],
+)))
+' "${stack_identity_json}"
+)"
+IFS=$'\t' read -r \
+    stack_source_id component_commit contracts_artifact_digest \
+    contracts_manifest_digest component_config_digest \
+    <<< "${identity_fields}"
+canonical_image_tag="a3-${RL_CONTRACTS_VERSION}-${stack_source_id:0:12}"
+if [ -n "${requested_image_tag}" ] &&
+   [ "${requested_image_tag}" != "${canonical_image_tag}" ]; then
+    echo "AIServer image tag must match the canonical stack identity:" >&2
+    echo "  expected=${canonical_image_tag}" >&2
+    echo "  requested=${requested_image_tag}" >&2
+    exit 1
+fi
+image_ref="${AISERVER_IMAGE_NAME}:${canonical_image_tag}"
+
+if docker image inspect "${image_ref}" >/dev/null 2>&1; then
+    existing_identity="$(
+        docker image inspect --format \
+            '{{index .Config.Labels "org.rl-training.stack-source-id"}}|{{index .Config.Labels "org.rl-training.component"}}|{{index .Config.Labels "org.rl-training.component-commit"}}|{{index .Config.Labels "org.rl-training.contracts-version"}}|{{index .Config.Labels "org.rl-training.contracts-artifact-digest"}}|{{index .Config.Labels "org.rl-training.contracts-manifest-digest"}}|{{index .Config.Labels "org.rl-training.component-config-digest"}}' \
+            "${image_ref}"
+    )"
+    expected_identity="${stack_source_id}|aiserver|${component_commit}|${RL_CONTRACTS_VERSION}|${contracts_artifact_digest}|${contracts_manifest_digest}|${component_config_digest}"
+    if [ "${existing_identity}" != "${expected_identity}" ]; then
+        echo "refusing to overwrite an existing AIServer tag with another identity: ${image_ref}" >&2
+        exit 1
+    fi
+    printf '%s\n' "${image_ref}"
+    exit 0
+fi
 
 python3 - \
     "${repo_dir}" \
-    "${context_root}" \
-    "${sample_pool_dir}" \
-    "${smoke_model_dir}" <<'PY'
+    "${context_root}" <<'PY'
 import pathlib
 import shutil
 import sys
 
 source = pathlib.Path(sys.argv[1])
 target = pathlib.Path(sys.argv[2])
-sample_pool = pathlib.Path(sys.argv[3])
-smoke_model = pathlib.Path(sys.argv[4])
 
 def ignore_runtime_outputs(directory, names):
     ignored = {
@@ -154,26 +160,23 @@ shutil.copytree(
 )
 if not (target / "src/log/logger.h").is_file():
     raise SystemExit("Build context is missing src/log/logger.h")
-(target / "_deps/sample-distributor/bin").mkdir(parents=True)
-(target / "_deps/sample-distributor/config").mkdir(parents=True)
-shutil.copy2(
-    sample_pool / "bin/maze_sample_distributor",
-    target / "_deps/sample-distributor/bin/maze_sample_distributor",
-)
-shutil.copy2(
-    sample_pool / "config/distributor_config.yaml",
-    target / "_deps/sample-distributor/config/distributor_config.yaml",
-)
-shutil.copy2(
-    sample_pool / "manifest.json",
-    target / "_deps/sample-distributor/manifest.json",
-)
-shutil.copytree(smoke_model, target / "_deps/smoke-model")
 PY
+
+mkdir -p "${context_root}/_deps/identity"
+printf '%s\n' "${stack_identity_json}" \
+    > "${context_root}/_deps/identity/stack-source.json"
 
 trap 'rm -rf "${context_root}"' EXIT
 docker build \
-    --tag "${AISERVER_IMAGE_NAME}:${AISERVER_IMAGE_TAG}" \
+    --label "org.opencontainers.image.revision=${component_commit}" \
+    --label "org.rl-training.component=aiserver" \
+    --label "org.rl-training.component-commit=${component_commit}" \
+    --label "org.rl-training.stack-source-id=${stack_source_id}" \
+    --label "org.rl-training.contracts-version=${RL_CONTRACTS_VERSION}" \
+    --label "org.rl-training.contracts-artifact-digest=${contracts_artifact_digest}" \
+    --label "org.rl-training.contracts-manifest-digest=${contracts_manifest_digest}" \
+    --label "org.rl-training.component-config-digest=${component_config_digest}" \
+    --tag "${image_ref}" \
     "${context_root}"
 
-printf '%s\n' "${AISERVER_IMAGE_NAME}:${AISERVER_IMAGE_TAG}"
+printf '%s\n' "${image_ref}"

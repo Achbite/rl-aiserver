@@ -1,0 +1,341 @@
+syntax = "proto3";
+
+package rl.task.maze.v1;
+
+option cc_generic_services = false;
+
+import "common.proto";
+
+// Maze Client <-> Maze Task Adapter contract. The Client executes the
+// environment; the Adapter owns task assignment, observation, reward and
+// lifecycle policy.
+
+enum LifecycleResult {
+    LIFECYCLE_RESULT_UNSPECIFIED = 0;
+    LIFECYCLE_RESULT_APPLIED = 1;
+    LIFECYCLE_RESULT_ALREADY_APPLIED = 2;
+    LIFECYCLE_RESULT_REJECTED = 3;
+    // Flow-control response: the command was not applied and the Client must
+    // retry the identical command after retry_after_ms.
+    LIFECYCLE_RESULT_WAIT = 4;
+}
+
+enum LifecycleErrorCode {
+    LIFECYCLE_ERROR_CODE_UNSPECIFIED = 0;
+    LIFECYCLE_ERROR_CODE_INVALID_IDENTITY = 1;
+    LIFECYCLE_ERROR_CODE_INVALID_DIGEST = 2;
+    LIFECYCLE_ERROR_CODE_UNSUPPORTED_SCHEMA = 3;
+    LIFECYCLE_ERROR_CODE_STALE_EPOCH = 4;
+    LIFECYCLE_ERROR_CODE_OUT_OF_ORDER = 5;
+    LIFECYCLE_ERROR_CODE_IDEMPOTENCY_CONFLICT = 6;
+    LIFECYCLE_ERROR_CODE_STATE_CONFLICT = 7;
+    LIFECYCLE_ERROR_CODE_TASK_REVISION_MISMATCH = 8;
+    LIFECYCLE_ERROR_CODE_MAP_INVALID = 9;
+    LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH = 10;
+}
+
+enum TaskState {
+    TASK_STATE_UNSPECIFIED = 0;
+    TASK_STATE_CREATED = 1;
+    TASK_STATE_INITIALIZING = 2;
+    TASK_STATE_TRAINING = 3;
+    TASK_STATE_EVALUATING = 4;
+    TASK_STATE_STOPPING = 5;
+    TASK_STATE_STOPPED = 6;
+    TASK_STATE_COMPLETE = 7;
+    TASK_STATE_FAILED = 8;
+}
+
+enum SessionState {
+    SESSION_STATE_UNSPECIFIED = 0;
+    SESSION_STATE_OPENED = 1;
+    SESSION_STATE_MAP_VALIDATED = 2;
+    SESSION_STATE_IDLE = 3;
+    SESSION_STATE_EPISODE_ACTIVE = 4;
+    SESSION_STATE_CLOSING = 5;
+    SESSION_STATE_CLOSED = 6;
+}
+
+enum EpisodeState {
+    EPISODE_STATE_UNSPECIFIED = 0;
+    EPISODE_STATE_ASSIGNED = 1;
+    EPISODE_STATE_RUNNING = 2;
+    EPISODE_STATE_TERMINAL_REPORTED = 3;
+    EPISODE_STATE_COMMITTED = 4;
+    EPISODE_STATE_ABORTED = 5;
+}
+
+enum EpisodeMode {
+    EPISODE_MODE_UNSPECIFIED = 0;
+    EPISODE_MODE_TRAINING = 1;
+    // Evaluation is always deterministic Argmax inference. It never emits
+    // training samples or training metric facts.
+    EPISODE_MODE_EVALUATION = 2;
+    reserved 3;
+    reserved "EPISODE_MODE_EVALUATION_ARGMAX", "EPISODE_MODE_EVALUATION_STOCHASTIC";
+}
+
+enum WorkloadMode {
+    WORKLOAD_MODE_UNSPECIFIED = 0;
+    WORKLOAD_MODE_TRAINING = 1;
+    // Evaluation is the only non-training workload in the A3 contract.
+    WORKLOAD_MODE_EVALUATION = 2;
+    reserved 3, 4;
+    reserved "WORKLOAD_MODE_INFERENCE_SMOKE", "WORKLOAD_MODE_MODEL_EVALUATION", "WORKLOAD_MODE_MAP_VALIDATION";
+}
+
+enum ReplayPolicy {
+    REPLAY_POLICY_UNSPECIFIED = 0;
+    REPLAY_POLICY_DISABLED = 1;
+    REPLAY_POLICY_RECORD_AND_SERVE = 2;
+}
+
+enum MazeTerminationReason {
+    MAZE_TERMINATION_REASON_UNSPECIFIED = 0;
+    MAZE_TERMINATION_REASON_ACTIVE = 1;
+    MAZE_TERMINATION_REASON_GOAL_REACHED = 2;
+    MAZE_TERMINATION_REASON_TIME_LIMIT = 3;
+    MAZE_TERMINATION_REASON_CLIENT_ABORT = 4;
+    MAZE_TERMINATION_REASON_CHAIN_FAILURE = 5;
+    MAZE_TERMINATION_REASON_TASK_STOP = 6;
+}
+
+enum EnvironmentControl {
+    ENVIRONMENT_CONTROL_UNSPECIFIED = 0;
+    ENVIRONMENT_CONTROL_ADVANCE = 1;
+    ENVIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPACITY = 2;
+}
+
+message TaskIdentity {
+    string task_contract_id = 1;
+    reserved 2;
+    reserved "task_id";
+    uint64 task_revision = 3;
+    rl.common.v1.ContentDigest task_config_digest = 4;
+    string fixed_map_id = 5;
+    rl.common.v1.ContentDigest fixed_map_digest = 6;
+}
+
+message BehaviorPolicyBinding {
+    string model_lineage_id = 1;
+    reserved "model_version";
+    // Training bindings require explicit presence, including bootstrap step 0.
+    // Evaluation bindings omit this field and bind only the selected file
+    // digest plus the policy schema facts below.
+    optional uint64 model_step = 2;
+    rl.common.v1.ContentDigest model_artifact_digest = 3;
+    rl.common.v1.ContentDigest model_manifest_digest = 4;
+    string distribution_schema_id = 5;
+    rl.common.v1.ContentDigest policy_spec_digest = 6;
+}
+
+message MazeTaskSpec {
+    TaskIdentity identity = 1;
+    reserved 2;
+    reserved "agent_count";
+    string fixed_map_id = 3;
+    rl.common.v1.ContentDigest expected_map_digest = 4;
+    rl.common.v1.SchemaIdentity observation_schema = 5;
+    rl.common.v1.SchemaIdentity action_schema = 6;
+    string action_rule_id = 7;
+    // Fixed per-task episode horizon. It is not derived from a curriculum.
+    uint32 episode_max_steps = 8;
+}
+
+// Runtime facts assigned by AIServer to the connected Environment instance.
+// These values are not part of the task identity or task configuration digest.
+message EnvironmentRuntimeSpec {
+    uint32 agent_count = 1;
+}
+
+message MapDescriptor {
+    string map_id = 1;
+    uint32 format_version = 2;
+    uint32 grid_columns = 3;
+    uint32 grid_rows = 4;
+    uint32 grid_size_microunits = 5;
+    int32 start_grid_x = 6;
+    int32 start_grid_y = 7;
+    int32 goal_grid_x = 8;
+    int32 goal_grid_y = 9;
+    bytes blocked_bitmap = 10;
+    // Canonical v4 bytes are: magic "rl.task.maze.map.v4\\0", then big-endian
+    // format/grid/position integers, length-prefixed bitmap bytes, and the
+    // length-prefixed UTF-8 action_rule_id. shortest_action_steps is derived
+    // independently and is therefore not part of this digest.
+    rl.common.v1.ContentDigest canonical_digest = 11;
+    uint32 shortest_action_steps = 12;
+    string action_rule_id = 13;
+}
+
+message LifecycleCommand {
+    TaskIdentity task = 1;
+    string session_id = 2;
+    string episode_id = 3;
+    reserved 4;
+    reserved "evaluation_id";
+    uint64 lifecycle_epoch = 5;
+    uint64 command_sequence = 6;
+    // Same key and payload returns ALREADY_APPLIED. Same key with a different
+    // payload is IDEMPOTENCY_CONFLICT. Old epoch, non-monotonic sequence or
+    // expected-state mismatch is always rejected without changing state.
+    string idempotency_key = 7;
+    TaskState expected_task_state = 8;
+    SessionState expected_session_state = 9;
+    EpisodeState expected_episode_state = 10;
+    reserved 11;
+    reserved "expected_evaluation_state";
+}
+
+message LifecycleReply {
+    int32 ret_code = 1;
+    LifecycleResult result = 2;
+    LifecycleErrorCode error_code = 3;
+    string message = 4;
+    uint64 applied_sequence = 5;
+    TaskState task_state = 6;
+    SessionState session_state = 7;
+    EpisodeState episode_state = 8;
+    reserved 9;
+    reserved "evaluation_state";
+}
+
+message OpenSessionReq {
+    rl.common.v1.ServiceInstanceIdentity client = 1;
+    string environment_instance_id = 2;
+    repeated uint32 supported_session_protocol_versions = 3;
+    repeated rl.common.v1.SchemaIdentity supported_observation_schemas = 4;
+    repeated rl.common.v1.SchemaIdentity supported_action_schemas = 5;
+    string idempotency_key = 6;
+}
+
+message OpenSessionRsp {
+    LifecycleReply lifecycle = 1;
+    uint32 session_protocol_version = 2;
+    string session_id = 3;
+    uint64 lifecycle_epoch = 4;
+    rl.common.v1.ServiceInstanceIdentity aiserver = 5;
+    MazeTaskSpec task_spec = 6;
+    WorkloadMode workload_mode = 7;
+    ReplayPolicy replay_policy = 8;
+    EnvironmentRuntimeSpec environment_runtime = 9;
+}
+
+message InitReq {
+    LifecycleCommand command = 1;
+    MapDescriptor map = 2;
+}
+
+message InitRsp {
+    LifecycleReply lifecycle = 1;
+    rl.common.v1.ContentDigest accepted_map_digest = 2;
+    uint32 verified_shortest_action_steps = 3;
+}
+
+message EpisodeAssignment {
+    string episode_id = 1;
+    TaskIdentity task = 2;
+    EpisodeMode mode = 3;
+    reserved 4;
+    reserved "curriculum_stage";
+    uint32 max_steps = 5;
+    bool continue_task = 6;
+    BehaviorPolicyBinding behavior_policy = 7;
+    bool collect_training_samples = 8;
+    reserved 9;
+    reserved "evaluation";
+}
+
+message BeginEpisodeReq {
+    LifecycleCommand command = 1;
+}
+
+message BeginEpisodeRsp {
+    LifecycleReply lifecycle = 1;
+    EpisodeAssignment assignment = 2;
+}
+
+message Vec2 {
+    float x = 1;
+    float y = 2;
+}
+
+message AgentState {
+    uint32 agent_id = 1;
+    Vec2 position = 2;
+    bool is_done = 3;
+    MazeTerminationReason termination_reason = 4;
+    bool last_move_blocked = 5;
+    optional int32 executed_action_id = 6;
+}
+
+message UpdateReq {
+    LifecycleCommand command = 1;
+    uint64 frame_id = 2;
+    repeated AgentState agents = 3;
+}
+
+message AgentAction {
+    uint32 agent_id = 1;
+    int32 action_id = 2;
+}
+
+message UpdateRsp {
+    LifecycleReply lifecycle = 1;
+    repeated AgentAction actions = 2;
+    bool replayed = 3;
+    bool task_stop_requested = 4;
+    MazeTerminationReason task_stop_reason = 5;
+    EnvironmentControl environment_control = 6;
+    int32 retry_after_ms = 7;
+}
+
+message EndEpisodeReq {
+    LifecycleCommand command = 1;
+}
+
+message AgentEpisodeOutcome {
+    uint32 agent_id = 1;
+    MazeTerminationReason termination_reason = 2;
+    uint64 terminal_frame_id = 3;
+    Vec2 final_position = 4;
+    optional uint32 goal_rank_group = 5;
+}
+
+message EpisodeOutcome {
+    string episode_id = 1;
+    repeated AgentEpisodeOutcome agents = 2;
+}
+
+message EndEpisodeRsp {
+    LifecycleReply lifecycle = 1;
+    EpisodeOutcome outcome = 2;
+}
+
+message AbortEpisodeReq {
+    LifecycleCommand command = 1;
+    MazeTerminationReason reason = 2;
+    string message = 3;
+}
+
+message AbortEpisodeRsp {
+    LifecycleReply lifecycle = 1;
+}
+
+message CloseSessionReq {
+    LifecycleCommand command = 1;
+}
+
+message CloseSessionRsp {
+    LifecycleReply lifecycle = 1;
+}
+
+service MazeTaskService {
+    rpc OpenSession(OpenSessionReq) returns (OpenSessionRsp);
+    rpc Init(InitReq) returns (InitRsp);
+    rpc BeginEpisode(BeginEpisodeReq) returns (BeginEpisodeRsp);
+    rpc Update(UpdateReq) returns (UpdateRsp);
+    rpc EndEpisode(EndEpisodeReq) returns (EndEpisodeRsp);
+    rpc AbortEpisode(AbortEpisodeReq) returns (AbortEpisodeRsp);
+    rpc CloseSession(CloseSessionReq) returns (CloseSessionRsp);
+}

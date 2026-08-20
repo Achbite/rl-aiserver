@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package rl.common.v1;
+
+option cc_generic_services = false;
+
+// Common is intentionally limited to stable cross-domain value objects. It
+// must not contain services, samples, models, tasks, rewards or metrics.
+
+enum OperationResult {
+    OPERATION_RESULT_UNSPECIFIED = 0;
+    OPERATION_RESULT_APPLIED = 1;
+    OPERATION_RESULT_ALREADY_APPLIED = 2;
+    OPERATION_RESULT_REJECTED = 3;
+}
+
+enum DigestAlgorithm {
+    DIGEST_ALGORITHM_UNSPECIFIED = 0;
+    DIGEST_ALGORITHM_SHA256 = 1;
+}
+
+message ContentDigest {
+    DigestAlgorithm algorithm = 1;
+    // Lower-case hexadecimal. SHA-256 values therefore contain 64 chars.
+    string hex = 2;
+}
+
+message ContractIdentity {
+    string package_name = 1;
+    string package_version = 2;
+    ContentDigest source_digest = 3;
+    ContentDigest artifact_digest = 4;
+    string platform = 5;
+    string generator_identity = 6;
+}
+
+message SchemaIdentity {
+    string schema_id = 1;
+    uint32 schema_version = 2;
+    ContentDigest canonical_digest = 3;
+}
+
+message ServiceInstanceIdentity {
+    string component = 1;
+    string instance_id = 2;
+    uint64 lifecycle_epoch = 3;
+}

@@ -1,172 +1,197 @@
 #include "ai/maze_reward.h"
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <sstream>
 
-// --- 奖励常量 ---
-static constexpr float kGoalReward       = 10.0f;   // 通关奖励
-static constexpr float kTimeoutPenalty    = -2.0f;   // 超时惩罚
-static constexpr float kPotentialScale    = 1.0f;    // 势能引导缩放系数
-static constexpr float kExplorationBonus  = 0.05f;   // 首次访问新格子的探索奖励
-static constexpr float kLoiterPenalty     = -0.02f;  // 短期重复访问同一格子的徘徊惩罚
-static constexpr int   kLoiterWindow      = 8;       // 徘徊检测滑动窗口大小（步数）
-static constexpr float kGamma             = 0.99f;   // 折扣因子（与 PPO 训练配置一致）
+namespace {
 
-// ---- 通关奖励 ----
-static float GoalReward(const SessionManager::Session& session,
-                        int gx, int gy, bool is_done) {
-    if (is_done && gx == session.end_gx && gy == session.end_gy) {
-        return kGoalReward;
+constexpr MazeRewardV4Parameters kRewardV4{
+    10.0,
+    -2.0,
+    1.0,
+    0.75,
+    0.25,
+    0.0,
+    -0.002,
+};
+
+static_assert(kRewardV4.goal_reward > 0.0,
+              "Reward V4 Goal reward must be positive");
+static_assert(kRewardV4.timeout_penalty < 0.0,
+              "Reward V4 timeout penalty must be negative");
+static_assert(kRewardV4.progress_budget >= 0.0 &&
+                  kRewardV4.stage_8x_first_visit_budget >=
+                      kRewardV4.stage_4x_first_visit_budget &&
+                  kRewardV4.stage_4x_first_visit_budget >=
+                      kRewardV4.stage_2x_first_visit_budget &&
+                  kRewardV4.stage_2x_first_visit_budget == 0.0,
+              "Reward V4 shaping budgets are invalid");
+static_assert(kRewardV4.wasted_action_penalty < 0.0,
+              "Reward V4 wasted-action penalty must be negative");
+static_assert(kRewardV4.timeout_penalty + kRewardV4.progress_budget +
+                      kRewardV4.stage_8x_first_visit_budget <
+                  0.0,
+              "Reward V4 maximum failure budget must remain negative");
+
+std::string CanonicalDecimal(double value) {
+    std::ostringstream output;
+    output << std::fixed << std::setprecision(6) << value;
+    std::string result = output.str();
+    while (result.size() > 2 && result.back() == '0' &&
+           result[result.size() - 2] != '.') {
+        result.pop_back();
     }
-    return 0.0f;
+    return result;
 }
 
-// ---- 势能引导奖励（Potential-Based Reward Shaping, Ng 1999）----
-// F(s, s') = γ × Φ(s') - Φ(s)，其中 Φ(s) = -dist(s, goal) / max_dist
-// 数学保证：来回震荡时净奖励为负（因 γ < 1），从根本上杜绝刷奖励
-static float PotentialReward(const SessionManager::Session& session,
-                             int agent_id, int gx, int gy) {
-    auto it = session.agents.find(agent_id);
-    if (it == session.agents.end()) return 0.0f;
-
-    const auto& agent = it->second;
-    if (agent.prev_grid_x < 0 || agent.prev_grid_y < 0) return 0.0f;
-
-    // 计算网格对角线长度（归一化基准）
-    float max_dist = std::sqrt(static_cast<float>(
-        session.grid_cols * session.grid_cols + session.grid_rows * session.grid_rows));
-    if (max_dist <= 0.0f) return 0.0f;
-
-    // 前一状态势能 Φ(s)
-    float prev_dx = static_cast<float>(session.end_gx - agent.prev_grid_x);
-    float prev_dy = static_cast<float>(session.end_gy - agent.prev_grid_y);
-    float phi_prev = -std::sqrt(prev_dx * prev_dx + prev_dy * prev_dy) / max_dist;
-
-    // 当前状态势能 Φ(s')
-    float curr_dx = static_cast<float>(session.end_gx - gx);
-    float curr_dy = static_cast<float>(session.end_gy - gy);
-    float phi_curr = -std::sqrt(curr_dx * curr_dx + curr_dy * curr_dy) / max_dist;
-
-    // F(s, s') = γ × Φ(s') - Φ(s)
-    return kPotentialScale * (kGamma * phi_curr - phi_prev);
+bool IsTaskTerminal(maze::MazeTerminationReason reason) {
+    return reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED ||
+           reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
 }
 
-// ---- 探索奖励：首次访问新网格给奖励 ----
-static float ExplorationReward(const SessionManager::AgentRuntime& agent,
-                               int gx, int gy, int grid_cols) {
-    int key = gy * grid_cols + gx;
-    if (agent.visited.find(key) == agent.visited.end()) {
-        return kExplorationBonus;
+bool DistanceAt(const SessionManager::Session& session,
+                int gx, int gy, int& distance) {
+    if (gx < 0 || gx >= session.grid_cols ||
+        gy < 0 || gy >= session.grid_rows) {
+        return false;
     }
-    return 0.0f;
+    const std::size_t index =
+        static_cast<std::size_t>(gy * session.grid_cols + gx);
+    if (index >= session.geodesic_distance.size()) return false;
+    distance = session.geodesic_distance[index];
+    return distance >= 0;
 }
 
-// ---- 徘徊惩罚：短时间内重复访问同一网格 ----
-static float LoiterPenalty(const SessionManager::AgentRuntime& agent,
-                           int gx, int gy, int grid_cols) {
-    int key = gy * grid_cols + gx;
-    for (int pos : agent.recent_positions) {
-        if (pos == key) {
-            return kLoiterPenalty;
-        }
-    }
-    return 0.0f;
-}
-
-// ---- 超时惩罚（未通关且超时）----
-static float TimeoutPenalty(const SessionManager::Session& session,
-                            int gx, int gy, bool is_done) {
-    if (is_done && !(gx == session.end_gx && gy == session.end_gy)) {
-        return kTimeoutPenalty;
-    }
-    return 0.0f;
-}
-
-// ---- 排名奖励计算 ----
-float MazeReward::CalculateRankReward(const std::vector<int>& ranking_order,
-                                       int agent_num, int agent_id, bool reached_goal) {
-    if (ranking_order.empty() || agent_num <= 1) {
-        return 0.0f;
-    }
-
-    // 查找该 Agent 在排名中的位置（0-based）
-    int rank = -1;
-    for (int i = 0; i < static_cast<int>(ranking_order.size()); ++i) {
-        if (ranking_order[i] == agent_id) {
-            rank = i;
-            break;
-        }
-    }
-
-    float reward = 0.0f;
-
-    if (rank >= 0) {
-        // 在排名中（已完成的 Agent）
-        float rank_ratio = static_cast<float>(rank) / agent_num;
-        float half = 0.5f;
-
-        if (rank == 0) {
-            // 第 1 名：额外 +5.0 通关奖励
-            reward += 5.0f;
-        }
-
-        if (rank_ratio < half) {
-            // 前 50%：正奖励，按排名比例递减
-            reward += 3.0f * (1.0f - rank_ratio);
-        } else {
-            // 后 50%：负奖励，按落后程度递增
-            reward -= 3.0f * (rank_ratio - half) / half;
-        }
-    } else {
-        // 不在排名中（未完成的 Agent，被倒计时强制结束）
-        // 视为最后一名，给最大惩罚
-        reward -= 3.0f;
-    }
-
-    return reward;
-}
-
-// ---- 汇总计算所有奖励分项 ----
-RewardDetail MazeReward::Calculate(const SessionManager::Session& session,
-                                   int agent_id, int gx, int gy, bool is_done,
-                                   int agent_num) {
+RewardDetail Invalid(std::string error) {
     RewardDetail detail;
+    detail.valid = false;
+    detail.error = std::move(error);
+    return detail;
+}
 
-    // 通关奖励
-    float goal = GoalReward(session, gx, gy, is_done);
-    detail.items.emplace_back("goal_reward", goal);
+}  // namespace
 
-    // 势能引导（替代旧的 displacement_reward，防刷奖励）
-    float potential = PotentialReward(session, agent_id, gx, gy);
-    detail.items.emplace_back("potential_reward", potential);
+const MazeRewardV4Parameters& GetMazeRewardV4Parameters() {
+    return kRewardV4;
+}
 
-    // 探索奖励（首次访问新网格）
-    auto it = session.agents.find(agent_id);
-    float explore = 0.0f;
-    float loiter = 0.0f;
-    if (it != session.agents.end()) {
-        explore = ExplorationReward(it->second, gx, gy, session.grid_cols);
-        loiter = LoiterPenalty(it->second, gx, gy, session.grid_cols);
+std::string MazeRewardV4CanonicalParametersJson() {
+    std::ostringstream output;
+    output << "{\"goal_reward\":" << CanonicalDecimal(kRewardV4.goal_reward)
+           << ",\"progress_budget\":"
+           << CanonicalDecimal(kRewardV4.progress_budget)
+           << ",\"stage_2x_first_visit_budget\":"
+           << CanonicalDecimal(kRewardV4.stage_2x_first_visit_budget)
+           << ",\"stage_4x_first_visit_budget\":"
+           << CanonicalDecimal(kRewardV4.stage_4x_first_visit_budget)
+           << ",\"stage_8x_first_visit_budget\":"
+           << CanonicalDecimal(kRewardV4.stage_8x_first_visit_budget)
+           << ",\"timeout_penalty\":"
+           << CanonicalDecimal(kRewardV4.timeout_penalty)
+           << ",\"wasted_action_penalty\":"
+           << CanonicalDecimal(kRewardV4.wasted_action_penalty) << '}';
+    return output.str();
+}
+
+RewardDetail MazeReward::Calculate(
+    const SessionManager::Session& session,
+    int agent_id, int gx, int gy, bool is_done,
+    maze::MazeTerminationReason reason) {
+    const auto& config = GetMazeRewardV4Parameters();
+    const auto agent_it = session.agents.find(agent_id);
+    if (agent_it == session.agents.end()) {
+        return Invalid("reward agent identity is unknown");
     }
-    detail.items.emplace_back("exploration_reward", explore);
-
-    // 徘徊惩罚（短期重复访问）
-    detail.items.emplace_back("loiter_penalty", loiter);
-
-    // 超时惩罚
-    float timeout = TimeoutPenalty(session, gx, gy, is_done);
-    detail.items.emplace_back("timeout_penalty", timeout);
-
-    // 排名奖励（仅在终止帧且有 Agent 完成排名时计算）
-    float rank_reward = 0.0f;
-    if (is_done && !session.ranking_order.empty()) {
-        bool reached = (gx == session.end_gx && gy == session.end_gy);
-        rank_reward = CalculateRankReward(session.ranking_order, agent_num, agent_id, reached);
+    const auto& agent = agent_it->second;
+    if (agent.prev_grid_x < 0 || agent.prev_grid_y < 0) {
+        return Invalid("reward transition has no previous state");
     }
-    detail.items.emplace_back("rank_reward", rank_reward);
+    if (session.shortest_action_steps <= 0 ||
+        agent.episode_start_geodesic_distance <= 0) {
+        return Invalid("Reward V4 episode distance is invalid");
+    }
+    if (is_done != IsTaskTerminal(reason)) {
+        return Invalid("reward termination reason is inconsistent");
+    }
+    if (reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED &&
+        (gx != session.end_gx || gy != session.end_gy)) {
+        return Invalid("goal termination was reported outside the goal cell");
+    }
+    if (reason != maze::MAZE_TERMINATION_REASON_GOAL_REACHED &&
+        gx == session.end_gx && gy == session.end_gy) {
+        return Invalid("goal cell requires GOAL_REACHED termination");
+    }
+    if (reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT &&
+        gx == session.end_gx && gy == session.end_gy) {
+        return Invalid("goal cell cannot be reported as TIME_LIMIT");
+    }
 
-    // 汇总
-    detail.total = goal + potential + explore + loiter + timeout + rank_reward;
+    int previous_distance = -1;
+    int current_distance = -1;
+    if (!DistanceAt(session, agent.prev_grid_x, agent.prev_grid_y,
+                    previous_distance) ||
+        !DistanceAt(session, gx, gy, current_distance)) {
+        return Invalid("reward transition entered an unreachable map cell");
+    }
+    if (std::abs(previous_distance - current_distance) > 1) {
+        return Invalid("reward transition has an illegal geodesic distance delta");
+    }
 
+    RewardDetail detail;
+    const bool goal =
+        reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED;
+    const bool timeout =
+        reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
+    const float goal_reward =
+        goal ? static_cast<float>(config.goal_reward) : 0.0f;
+    const float timeout_penalty =
+        timeout ? static_cast<float>(config.timeout_penalty) : 0.0f;
+    const float distance_normalizer = static_cast<float>(
+        agent.episode_start_geodesic_distance);
+    const float geodesic_progress =
+        static_cast<float>(config.progress_budget) *
+        static_cast<float>(previous_distance - current_distance) /
+        distance_normalizer;
+
+    // Reward V4 fixes first-visit shaping to this budget. Changing the budget
+    // or adding curriculum behavior requires a new reward contract identity.
+    const float first_visit_budget =
+        static_cast<float>(config.stage_8x_first_visit_budget);
+    const float first_visit_scale =
+        first_visit_budget / distance_normalizer;
+    float first_visit_bonus = 0.0f;
+    const bool moved = gx != agent.prev_grid_x || gy != agent.prev_grid_y;
+    if (moved && agent.current_state_first_visit &&
+        first_visit_scale > 0.0f) {
+        first_visit_bonus = std::min(
+            first_visit_scale,
+            std::max(0.0f,
+                     first_visit_budget - agent.first_visit_bonus_total));
+    }
+    const float wasted_action_penalty =
+        moved ? 0.0f : static_cast<float>(config.wasted_action_penalty);
+
+    detail.items.emplace_back("goal_reward", goal_reward);
+    detail.items.emplace_back("timeout_penalty", timeout_penalty);
+    detail.items.emplace_back("geodesic_progress", geodesic_progress);
+    detail.items.emplace_back("first_visit_bonus", first_visit_bonus);
+    detail.items.emplace_back("wasted_action_penalty", wasted_action_penalty);
+    detail.task_total = goal_reward + timeout_penalty;
+    detail.shaping_total =
+        geodesic_progress + first_visit_bonus + wasted_action_penalty;
+    detail.total = detail.task_total + detail.shaping_total;
+
+    if (!std::isfinite(detail.total) ||
+        !std::isfinite(detail.task_total) ||
+        !std::isfinite(detail.shaping_total)) {
+        return Invalid("reward calculation produced a non-finite value");
+    }
+    for (const auto& item : detail.items) {
+        if (!std::isfinite(item.second)) {
+            return Invalid("reward component is non-finite: " + item.first);
+        }
+    }
     return detail;
 }

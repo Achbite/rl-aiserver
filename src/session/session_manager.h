@@ -1,13 +1,18 @@
 #pragma once
 
 #include "ai/astar_solver.h"
-#include "maze.pb.h"
+#include "ai/onnx_inferencer.h"
+#include "contracts/contract_namespaces.h"
+#include "model/behavior_policy_scope.h"
+#include "model/model_manifest.h"
+#include "model/model_step.h"
+#include "session/lifecycle_replay_window.h"
 
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <deque>
 #include <mutex>
+#include <optional>
 #include <cstdint>
 #include <cmath>
 #include <algorithm>
@@ -26,6 +31,20 @@ public:
         Aborted,
     };
 
+    // One complete, trusted Environment transition before the AIServer closes
+    // the Agent segment and computes GAE/value targets. Pending actions are not
+    // represented here because they have no trusted result or next state yet.
+    struct RawRolloutTransition {
+        std::vector<float> observation;
+        std::vector<float> next_observation;
+        int action = 0;
+        float reward = 0.0f;
+        float behavior_log_probability = 0.0f;
+        float behavior_value = 0.0f;
+        uint64_t action_step = 0;
+        int64_t created_at_unix_ms = 0;
+    };
+
     // ---- Agent 运行时状态（每个 session 内独立）----
     struct AgentRuntime {
         AStarSolver solver;             // 独立寻路器
@@ -33,7 +52,7 @@ public:
         bool        path_valid  = false;
 
         // 训练模式：帧样本缓存
-        int   prev_grid_x  = -1;       // 上一帧网格坐标（用于计算距离变化）
+        int   prev_grid_x  = -1;       // 待结算动作对应的前一环境状态
         int   prev_grid_y  = -1;
         bool  reached_goal = false;     // 本 Episode 是否到达终点
         bool  done_collected = false;   // 终止帧样本是否已收集（防止重复收集）
@@ -42,33 +61,68 @@ public:
         int64_t pending_action_frame_id = -1;
         float pending_log_prob = 0.0f;
         float pending_value = 0.0f;
-        int   pending_model_version = -1;
-        std::string pending_model_checksum;
         std::vector<float> pending_obs;
-        int   fragment_model_version = -1;
-        std::string fragment_model_checksum;
-        int64_t fragment_first_action_frame_id = -1;
 
-        // --- 奖励辅助状态 ---
-        std::unordered_set<int> visited;        // 已访问网格集合（key = gy * cols + gx），用于探索奖励
-        std::deque<int>         recent_positions; // 最近 N 步位置历史（滑动窗口），用于徘徊惩罚
+        // R-PIN segment state. The prepared ORT session is copied as a shared
+        // owner so model-cache pruning cannot invalidate in-flight inference.
+        bool segment_open = false;
+        std::string segment_id;
+        ModelManifest pinned_model;
+        OnnxInferencer::PreparedModel pinned_prepared_model;
+        std::vector<RawRolloutTransition> segment_transitions;
+        bool activated_model_seen = false;
+        ModelStep last_activated_model_step = 0;
+        std::string last_activated_model_lineage_id;
+        int64_t last_completed_transition_at_unix_ms = 0;
+
+        // --- 奖励与 observation 辅助状态 ---
+        std::unordered_set<int> visited;
+        bool current_state_first_visit = false;
+        float first_visit_bonus_total = 0.0f;
+        int episode_start_geodesic_distance = -1;
+        int observation_grid_x = -1;
+        int observation_grid_y = -1;
+        bool last_move_blocked = false;
+        int64_t blocked_move_count = 0;
+        bool observation_done = false;
+        int64_t last_observation_frame_id = -1;
+        int64_t terminal_frame_id = -1;
+        double episode_return = 0.0;
+        int64_t episode_transition_count = 0;
+        bool episode_behavior_model_seen = false;
+        uint64_t minimum_episode_behavior_model_step = 0;
+        uint64_t maximum_episode_behavior_model_step = 0;
+        std::string episode_behavior_model_lineage_id;
+        maze::MazeTerminationReason final_termination_reason =
+            maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
+        std::unordered_map<std::string, double> reward_component_sums;
     };
 
     // ---- 单个会话 ----
     struct Session {
-        int session_id = 0;
-        std::string run_id;
-        std::string client_id;
-        std::string env_id;
+        std::string session_id;
+        common::ServiceInstanceIdentity client;
+        std::string environment_instance_id;
+        int64_t last_valid_client_activity_unix_ms = 0;
+        maze::TaskIdentity task;
+        uint64_t lifecycle_epoch = 0;
+        uint64_t last_command_sequence = 0;
+        maze::TaskState task_state = maze::TASK_STATE_INITIALIZING;
+        maze::SessionState session_state = maze::SESSION_STATE_OPENED;
+        maze::EpisodeState protocol_episode_state =
+            maze::EPISODE_STATE_UNSPECIFIED;
+        LifecycleReplayWindow command_replay;
+        std::string map_id;
+        std::string map_checksum_sha256;
+        int shortest_action_steps = 0;
+        std::string action_rule_id;
+        maze::WorkloadMode workload_mode =
+            maze::WORKLOAD_MODE_UNSPECIFIED;
         std::unordered_map<int, AgentRuntime> agents;   // agent_id → 运行时状态
-        int current_episode_id = 0;                     // 当前 Episode ID
+        std::string current_episode_id;
         EpisodeState episode_state = EpisodeState::None;
-        std::unordered_map<int, EpisodeState> episode_history;
-        int last_frame_id = -1;
+        int64_t last_frame_id = -1;
         std::vector<maze::AgentAction> last_actions;
-        std::unordered_map<int, std::vector<maze::Sample>> agent_sample_caches;  // agent_id → 样本缓存（多 Agent 隔离）
-        std::unordered_map<int, maze::SampleBatch> pending_sample_batches;
-
         // 地图参数（每个 session 独立，支持不同地图配置）
         float map_width  = 0.0f;
         float map_height = 0.0f;
@@ -78,30 +132,27 @@ public:
         float end_y      = 0.0f;
 
         // 网格参数（Init 时计算）
+        int start_gx  = 0;
+        int start_gy  = 0;
         int end_gx    = 0;              // 终点网格坐标
         int end_gy    = 0;
         int grid_cols = 0;              // 网格列数
         int grid_rows = 0;              // 网格行数
-        float grid_size = 0.0f;
+        uint32_t grid_size_microunits = 0;
 
+        bool opened = false;
         bool initialized = false;       // 是否已初始化
 
-        // --- 网格障碍物（true=不可通行，仅 A* 测试模式使用）---
+        // --- AIServer 校验后的 authoritative 网格与 geodesic 距离 ---
         std::vector<bool> blocked;
-
-        // 初始化网格障碍物（仅 A* 测试模式调用，硬编码默认墙壁）
-        void InitBlocked(int grid_size) {
-            blocked.assign(grid_cols * grid_rows, false);
-            // 内部隔墙（与 TrainClient 端 LoadWalls 一致）
-            AddWallToGrid(5000, 0, 5000, 14000, 100, grid_size);
-            AddWallToGrid(10000, 6000, 10000, 20000, 100, grid_size);
-            AddWallToGrid(15000, 0, 15000, 14000, 100, grid_size);
-            // 确保起点和终点可通行
-            int start_gx = static_cast<int>(start_x / grid_size);
-            int start_gy = static_cast<int>(start_y / grid_size);
-            blocked[start_gy * grid_cols + start_gx] = false;
-            blocked[end_gy * grid_cols + end_gx] = false;
-        }
+        std::vector<int> geodesic_distance;
+        int max_finite_geodesic_distance = -1;
+        maze::EpisodeMode current_episode_mode =
+            maze::EPISODE_MODE_UNSPECIFIED;
+        BehaviorPolicyScope behavior_policy_scope =
+            BehaviorPolicyScope::Unspecified;
+        int current_max_steps = 0;
+        std::string evaluation_pinned_model_checksum;
 
         // 网格是否可通行（越界视为不可通行）
         bool IsWalkable(int gx, int gy) const {
@@ -109,54 +160,35 @@ public:
             return !blocked[gy * grid_cols + gx];
         }
 
-        // 竞争排名机制
-        int first_done_frame = -1;                  // 首个 Agent 完成时的帧号（-1 表示尚无 Agent 完成）
-        std::vector<int> ranking_order;              // Agent 完成排名顺序（先完成的在前）
+    };
 
-    private:
-        // 添加单面墙壁到网格（AABB 包围盒映射）
-        void AddWallToGrid(float x1, float y1, float x2, float y2,
-                           float thickness, int grid_size) {
-            float half_t = thickness * 0.5f;
-            float min_x = std::min(x1, x2) - half_t;
-            float max_x = std::max(x1, x2) + half_t;
-            float min_y = std::min(y1, y2) - half_t;
-            float max_y = std::max(y1, y2) + half_t;
-
-            int gx_min = std::max(0, static_cast<int>(std::floor(min_x / grid_size)));
-            int gx_max = std::min(grid_cols - 1, static_cast<int>(std::floor(max_x / grid_size)));
-            int gy_min = std::max(0, static_cast<int>(std::floor(min_y / grid_size)));
-            int gy_max = std::min(grid_rows - 1, static_cast<int>(std::floor(max_y / grid_size)));
-
-            for (int gy = gy_min; gy <= gy_max; ++gy) {
-                for (int gx = gx_min; gx <= gx_max; ++gx) {
-                    blocked[gy * grid_cols + gx] = true;
-                }
-            }
-        }
+    struct ClientActivitySnapshot {
+        int active_session_count = 0;
+        int recent_active_session_count = 0;
+        int64_t latest_active_activity_unix_ms = 0;
     };
 
     SessionManager() = default;
     ~SessionManager() = default;
 
-    // 创建新会话，返回分配的 session_id
-    int CreateSession();
+    // Session ID 只由 AIServer 分配。
+    std::string CreateSession();
 
     // 获取指定会话（不存在则返回 nullptr）
-    Session* GetSession(int session_id);
-
-    // 获取或创建会话（session_id=0 时使用默认会话）
-    Session* GetOrCreateSession(int session_id);
+    Session* GetSession(const std::string& session_id);
 
     // 销毁指定会话
-    void DestroySession(int session_id);
+    void DestroySession(const std::string& session_id);
 
     // 获取当前活跃会话数
     int GetActiveSessionCount() const;
+    ClientActivitySnapshot GetClientActivitySnapshot(
+        int64_t now_unix_ms, int64_t lease_ms) const;
     int GetActiveEpisodeCount() const;
+    std::vector<std::string> GetSessionIds() const;
 
 private:
-    std::unordered_map<int, Session> sessions_;
+    std::unordered_map<std::string, Session> sessions_;
     mutable std::mutex mutex_;
-    int next_session_id_ = 1;           // 从 1 开始分配，0 保留给默认会话
+    uint64_t next_session_id_ = 1;
 };

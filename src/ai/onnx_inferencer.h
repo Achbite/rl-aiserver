@@ -15,20 +15,39 @@
 
 class OnnxInferencer {
 public:
+    struct PreparedModel {
+        std::shared_ptr<Ort::Session> session;
+        std::string model_path;
+
+        bool valid() const { return session != nullptr; }
+    };
+
     OnnxInferencer();
     ~OnnxInferencer() = default;
 
     // 加载 ONNX 模型（线程安全，内部互斥）
     // 返回 true 表示加载成功，false 表示加载失败（保留旧模型）
     bool LoadModel(const std::string& model_path,
-                   int expected_obs_dim = 13,
+                   int expected_obs_dim = 17,
                    int expected_action_dim = 9,
                    std::string* error = nullptr);
+    bool PrepareModel(const std::string& model_path,
+                      int expected_obs_dim,
+                      int expected_action_dim,
+                      PreparedModel& prepared,
+                      std::string* error = nullptr);
+    bool InferPrepared(const PreparedModel& prepared,
+                       const std::vector<float>& obs,
+                       int obs_dim,
+                       std::vector<float>& action_logits,
+                       float& value);
+    void ActivatePreparedModel(PreparedModel prepared);
+    PreparedModel SnapshotPreparedModel() const;
 
-    // 推理：输入 obs 向量，输出动作概率和状态价值
+    // 推理：输入 observation，输出 categorical logits 和状态价值
     // 线程安全，多线程可同时调用
     bool Infer(const std::vector<float>& obs, int obs_dim,
-               std::vector<float>& action_probs, float& value);
+               std::vector<float>& action_logits, float& value);
 
     // 是否已加载模型
     bool IsLoaded() const;
@@ -37,6 +56,13 @@ public:
     std::string GetModelPath() const;
 
 private:
+    friend struct MazeServiceUpdateTestAccess;
+
+    static bool InferSession(const std::shared_ptr<Ort::Session>& session,
+                             const std::vector<float>& obs,
+                             int obs_dim,
+                             std::vector<float>& action_logits,
+                             float& value);
     Ort::Env env_;                                  // ONNX Runtime 环境（全局唯一）
     Ort::SessionOptions session_options_;            // 会话选项
 
@@ -46,7 +72,7 @@ private:
     std::string current_model_path_;                 // 当前模型路径
 
     // 输入输出名称（与 Learner 端 ONNX 导出对齐）
-    static constexpr const char* INPUT_NAME = "obs";
-    static constexpr const char* OUTPUT_ACTION_PROBS = "action_probs";
+    static constexpr const char* INPUT_NAME = "observation";
+    static constexpr const char* OUTPUT_ACTION_LOGITS = "action_logits";
     static constexpr const char* OUTPUT_VALUE = "value";
 };

@@ -1,0 +1,883 @@
+syntax = "proto3";
+
+package rl.training.v1;
+
+option cc_generic_services = false;
+
+import "common.proto";
+
+// Task-neutral sample, delivery, model and observability contracts.
+
+enum TransitionEndKind {
+    TRANSITION_END_KIND_UNSPECIFIED = 0;
+    TRANSITION_END_KIND_CONTINUING = 1;
+    TRANSITION_END_KIND_ENVIRONMENT_TERMINATED = 2;
+    TRANSITION_END_KIND_EXTERNAL_TRUNCATION = 3;
+    TRANSITION_END_KIND_PRODUCER_ABORT = 4;
+}
+
+enum SegmentCloseReason {
+    SEGMENT_CLOSE_REASON_UNSPECIFIED = 0;
+    SEGMENT_CLOSE_REASON_GOAL = 1;
+    SEGMENT_CLOSE_REASON_TIME_LIMIT = 2;
+    SEGMENT_CLOSE_REASON_TMAX = 3;
+    SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE = 4;
+    SEGMENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT = 5;
+    SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN = 6;
+}
+
+enum PushResult {
+    PUSH_RESULT_UNSPECIFIED = 0;
+    PUSH_RESULT_ACCEPTED = 1;
+    PUSH_RESULT_DUPLICATE = 2;
+    PUSH_RESULT_REJECTED_CAPACITY = 3;
+    PUSH_RESULT_REJECTED_INVALID = 4;
+    PUSH_RESULT_REJECTED_IDENTITY = 5;
+    PUSH_RESULT_REJECTED_CONFLICT = 6;
+    PUSH_RESULT_REJECTED_FINALIZED = 7;
+}
+
+enum PressureState {
+    PRESSURE_STATE_UNSPECIFIED = 0;
+    PRESSURE_STATE_NORMAL = 1;
+    PRESSURE_STATE_HIGH = 2;
+    PRESSURE_STATE_FULL = 3;
+}
+
+enum GetBatchResult {
+    GET_BATCH_RESULT_UNSPECIFIED = 0;
+    GET_BATCH_RESULT_LEASED = 1;
+    GET_BATCH_RESULT_TIMEOUT = 2;
+    GET_BATCH_RESULT_BUSY = 3;
+    GET_BATCH_RESULT_REJECTED = 4;
+}
+
+enum DeliveryResult {
+    DELIVERY_RESULT_UNSPECIFIED = 0;
+    DELIVERY_RESULT_APPLIED = 1;
+    DELIVERY_RESULT_ALREADY_APPLIED = 2;
+    DELIVERY_RESULT_EXPIRED = 3;
+    DELIVERY_RESULT_NOT_FOUND = 4;
+    DELIVERY_RESULT_REJECTED = 5;
+}
+
+enum AckDisposition {
+    ACK_DISPOSITION_UNSPECIFIED = 0;
+    ACK_DISPOSITION_TRAINED = 1;
+    reserved 2;
+    reserved "ACK_DISPOSITION_STALE";
+    ACK_DISPOSITION_INVALID = 3;
+    ACK_DISPOSITION_SHUTDOWN_UNTRAINED = 4;
+}
+
+enum AIServerState {
+    AISERVER_STATE_UNSPECIFIED = 0;
+    AISERVER_STATE_STARTING = 1;
+    AISERVER_STATE_READY = 2;
+    AISERVER_STATE_DEGRADED = 3;
+    AISERVER_STATE_DRAINING = 4;
+    AISERVER_STATE_STOPPED = 5;
+}
+
+enum ModelState {
+    MODEL_STATE_UNSPECIFIED = 0;
+    MODEL_STATE_WAITING = 1;
+    MODEL_STATE_READY = 2;
+    MODEL_STATE_FAILED = 3;
+}
+
+enum ModelRegisterResult {
+    MODEL_REGISTER_RESULT_UNSPECIFIED = 0;
+    MODEL_REGISTER_RESULT_REGISTERED = 1;
+    MODEL_REGISTER_RESULT_ALREADY_REGISTERED = 2;
+    MODEL_REGISTER_RESULT_REJECTED_INVALID = 3;
+    MODEL_REGISTER_RESULT_REJECTED_CONFLICT = 4;
+}
+
+enum ModelLoadStatus {
+    MODEL_LOAD_STATUS_UNSPECIFIED = 0;
+    MODEL_LOAD_STATUS_LOADED = 1;
+    MODEL_LOAD_STATUS_FAILED = 2;
+}
+
+enum ModelAckResult {
+    MODEL_ACK_RESULT_UNSPECIFIED = 0;
+    MODEL_ACK_RESULT_APPLIED = 1;
+    MODEL_ACK_RESULT_ALREADY_APPLIED = 2;
+    MODEL_ACK_RESULT_NOT_FOUND = 3;
+    MODEL_ACK_RESULT_REJECTED = 4;
+}
+
+enum SampleBackendType {
+    SAMPLE_BACKEND_TYPE_UNSPECIFIED = 0;
+    SAMPLE_BACKEND_TYPE_LOCAL_MEMORY = 1;
+}
+
+enum SamplePoolFinalizeResult {
+    SAMPLE_POOL_FINALIZE_RESULT_UNSPECIFIED = 0;
+    SAMPLE_POOL_FINALIZE_RESULT_FINALIZED = 1;
+    SAMPLE_POOL_FINALIZE_RESULT_ALREADY_FINALIZED = 2;
+    SAMPLE_POOL_FINALIZE_RESULT_REJECTED_ACTIVE_LEASE = 3;
+    SAMPLE_POOL_FINALIZE_RESULT_REJECTED_IDENTITY = 4;
+    SAMPLE_POOL_FINALIZE_RESULT_REJECTED_CONFLICT = 5;
+}
+
+enum MetricValueKind {
+    METRIC_VALUE_KIND_UNSPECIFIED = 0;
+    METRIC_VALUE_KIND_GAUGE = 1;
+    METRIC_VALUE_KIND_COUNTER = 2;
+    METRIC_VALUE_KIND_MEAN = 3;
+    METRIC_VALUE_KIND_RATE = 4;
+    METRIC_VALUE_KIND_QUANTILE = 5;
+}
+
+enum MetricAggregationKind {
+    METRIC_AGGREGATION_KIND_UNSPECIFIED = 0;
+    METRIC_AGGREGATION_KIND_NONE = 1;
+    METRIC_AGGREGATION_KIND_SUM = 2;
+    METRIC_AGGREGATION_KIND_WEIGHTED_MEAN = 3;
+    METRIC_AGGREGATION_KIND_LATEST = 4;
+    METRIC_AGGREGATION_KIND_NOT_MERGEABLE = 5;
+}
+
+enum MetricWindowKind {
+    METRIC_WINDOW_KIND_UNSPECIFIED = 0;
+    METRIC_WINDOW_KIND_INSTANT = 1;
+    METRIC_WINDOW_KIND_CUMULATIVE = 2;
+    METRIC_WINDOW_KIND_INTERVAL = 3;
+    METRIC_WINDOW_KIND_ROLLING = 4;
+}
+
+enum MetricBatchResult {
+    METRIC_BATCH_RESULT_UNSPECIFIED = 0;
+    METRIC_BATCH_RESULT_DELIVERED = 1;
+    METRIC_BATCH_RESULT_WAIT = 2;
+    METRIC_BATCH_RESULT_FINAL = 3;
+    METRIC_BATCH_RESULT_REJECTED_IDENTITY = 4;
+    METRIC_BATCH_RESULT_REJECTED_CURSOR = 5;
+    METRIC_BATCH_RESULT_REJECTED_INVALID = 6;
+}
+
+enum MetricBatchAckResult {
+    METRIC_BATCH_ACK_RESULT_UNSPECIFIED = 0;
+    METRIC_BATCH_ACK_RESULT_APPLIED = 1;
+    METRIC_BATCH_ACK_RESULT_ALREADY_APPLIED = 2;
+    METRIC_BATCH_ACK_RESULT_NOT_FOUND = 3;
+    METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY = 4;
+    METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR = 5;
+    METRIC_BATCH_ACK_RESULT_REJECTED_INVALID = 6;
+}
+
+message ModelIdentity {
+    string model_lineage_id = 1;
+    reserved "model_version";
+    // Explicit presence distinguishes bootstrap step 0 from a missing step.
+    optional uint64 model_step = 2;
+    rl.common.v1.ContentDigest artifact_digest = 3;
+    rl.common.v1.ContentDigest manifest_digest = 4;
+}
+
+// Exact behavior-policy provenance for one processed transition. The Sample
+// Pool records these facts for observability; it does not use model_step as a
+// freshness gate or routing bucket.
+message BehaviorPolicyReference {
+    string model_lineage_id = 1;
+    reserved "model_version";
+    optional uint64 model_step = 2;
+    string distribution_schema_id = 3;
+    rl.common.v1.ContentDigest policy_spec_digest = 4;
+    rl.common.v1.ContentDigest artifact_digest = 5;
+    rl.common.v1.ContentDigest manifest_digest = 6;
+}
+
+message RolloutEstimatorProfile {
+    uint32 profile_schema_version = 1;
+    double gamma = 2;
+    double gae_lambda = 3;
+    uint32 tmax = 4;
+    string gae_formula_id = 5;
+    string terminal_bootstrap_semantics_id = 6;
+    string value_target_formula_id = 7;
+    string value_head_abi_id = 8;
+    rl.common.v1.ContentDigest reward_semantics_digest = 9;
+    string numeric_dtype = 10;
+    string finite_rule_id = 11;
+    string model_pin_semantics_id = 12;
+    // SHA-256 over deterministic profile bytes with this field cleared.
+    rl.common.v1.ContentDigest profile_digest = 13;
+}
+
+message TrainingSemanticsIdentity {
+    string training_contract_id = 1;
+    rl.common.v1.SchemaIdentity observation_schema = 2;
+    rl.common.v1.SchemaIdentity action_schema = 3;
+    rl.common.v1.SchemaIdentity reward_schema = 4;
+    string policy_distribution_schema_id = 5;
+    string model_architecture_id = 6;
+    rl.common.v1.ContentDigest semantics_digest = 7;
+}
+
+// One immutable PPO training item after AIServer has closed a single-Agent,
+// single-pinned-model segment and computed unnormalised GAE/value targets.
+message ProcessedTransition {
+    string item_id = 1;
+    string environment_session_id = 2;
+    string episode_id = 3;
+    uint32 agent_id = 4;
+    string segment_id = 5;
+    uint32 transition_index = 6;
+    uint32 segment_transition_count = 7;
+    uint64 action_step = 8;
+    repeated float observation = 9;
+    repeated float next_observation = 10;
+    int32 action = 11;
+    float reward = 12;
+    float behavior_log_probability = 13;
+    float behavior_value = 14;
+    float advantage = 15;
+    float value_target = 16;
+    bool environment_terminal = 17;
+    TransitionEndKind end_kind = 18;
+    SegmentCloseReason segment_close_reason = 19;
+    bool segment_boundary = 20;
+    bool bootstrap_applied = 21;
+    // Present only on the final transition of a segment. Presence prevents a
+    // missing bootstrap fact from being projected as a measured zero.
+    optional float bootstrap_value = 22;
+    BehaviorPolicyReference behavior_policy = 23;
+    rl.common.v1.ContentDigest rollout_estimator_profile_digest = 24;
+    int64 created_at_unix_ms = 25;
+}
+
+// Transport envelope. It is not a Pool Item, GAE segment, Learner batch or
+// mini-batch. A retry must preserve envelope_id, item identities and digest.
+message ProcessedTransitionEnvelope {
+    string envelope_id = 1;
+    // SHA-256 over deterministic envelope bytes with this field cleared.
+    // A repeated envelope_id with a different digest is an identity conflict.
+    rl.common.v1.ContentDigest payload_digest = 2;
+    repeated ProcessedTransition transitions = 3;
+    TrainingSemanticsIdentity training_semantics = 13;
+    rl.common.v1.ServiceInstanceIdentity producer = 14;
+    rl.common.v1.ContractIdentity contract = 15;
+    int64 created_at_unix_ms = 16;
+    reserved 4 to 12, 17, 18;
+    reserved "actor_session_id", "trajectory_id", "actor_id", "fragment_id",
+             "fragment_sequence", "samples", "trajectory_end",
+             "bootstrap_value", "bootstrap_valid", "behavior_policy",
+             "first_action_step", "last_action_step";
+}
+
+// Pool-owned facts attached to a leased transition. insert_sequence and
+// inserted_at_unix_ms are raw storage facts; draw_count is never corrected or
+// inferred by the consumer.
+message SamplePoolItem {
+    ProcessedTransition transition = 1;
+    uint64 insert_sequence = 2;
+    int64 inserted_at_unix_ms = 3;
+    uint32 draw_count = 4;
+}
+
+message PushSamplesReq {
+    reserved 1;
+    reserved "credit_id";
+    ProcessedTransitionEnvelope envelope = 2;
+}
+
+message PushSamplesRsp {
+    int32 ret_code = 1;
+    string message = 2;
+    int64 accepted_transitions = 3;
+    int64 queue_size = 4;
+    PushResult result = 5;
+    string envelope_id = 6;
+    int64 accepted_unique_transitions = 7;
+    int64 resident_transitions = 8;
+    int64 resident_envelopes = 9;
+    int64 resident_estimated_bytes = 10;
+    PressureState pressure_state = 11;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 12;
+}
+
+message GetBatchReq {
+    int32 requested_transitions = 1;
+    int32 timeout_ms = 2;
+    rl.common.v1.ServiceInstanceIdentity consumer = 3;
+    int32 lease_timeout_ms = 4;
+    TrainingSemanticsIdentity required_semantics = 5;
+    rl.common.v1.ContentDigest required_rollout_estimator_profile_digest = 6;
+}
+
+message GetBatchRsp {
+    reserved "minimum_behavior_model_version", "maximum_behavior_model_version";
+    int32 ret_code = 1;
+    repeated SamplePoolItem items = 2;
+    int64 queue_size = 3;
+    int64 returned_transitions = 4;
+    string message = 5;
+    GetBatchResult result = 6;
+    string delivery_id = 7;
+    int64 lease_deadline_unix_ms = 8;
+    reserved 9;
+    reserved "returned_fragments";
+    int64 actual_transition_count = 10;
+    int64 wait_ms = 11;
+    int64 leased_transitions = 12;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 13;
+    optional uint64 minimum_behavior_model_step = 14;
+    optional uint64 maximum_behavior_model_step = 15;
+    optional int64 oldest_transition_created_at_unix_ms = 16;
+    optional int64 newest_transition_created_at_unix_ms = 17;
+}
+
+message AckBatchReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    string delivery_id = 2;
+    AckDisposition disposition = 3;
+    string train_update_id = 4;
+}
+
+message NackBatchReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    string delivery_id = 2;
+    string reason = 3;
+}
+
+message RenewLeaseReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    string delivery_id = 2;
+    int32 lease_timeout_ms = 3;
+}
+
+message DeliveryRsp {
+    int32 ret_code = 1;
+    DeliveryResult result = 2;
+    string message = 3;
+    string delivery_id = 4;
+    int64 affected_transitions = 5;
+    int64 queue_size = 6;
+    int64 lease_deadline_unix_ms = 7;
+    AckDisposition disposition = 8;
+    string train_update_id = 9;
+}
+
+message FinalizeSamplePoolReq {
+    rl.common.v1.ServiceInstanceIdentity consumer = 1;
+    rl.common.v1.ServiceInstanceIdentity expected_sample_pool = 2;
+    string finalization_id = 3;
+}
+
+message FinalizeSamplePoolRsp {
+    int32 ret_code = 1;
+    SamplePoolFinalizeResult result = 2;
+    string message = 3;
+    string finalization_id = 4;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 5;
+    int64 settled_transitions = 6;
+    reserved 7;
+    reserved "settled_fragments";
+    int64 ready_transitions = 8;
+    reserved 9;
+    reserved "ready_fragments";
+    int64 leased_transitions = 10;
+    reserved 11;
+    reserved "leased_fragments";
+    int64 resident_transitions = 12;
+    reserved 13;
+    reserved "resident_fragments";
+    optional int64 finalized_at_unix_ms = 14;
+}
+
+message SamplePoolStatusReq {}
+
+message SamplePoolStatusRsp {
+    reserved "behavior_versions", "minimum_ready_model_version", "maximum_ready_model_version";
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity sample_pool = 2;
+    bool ready = 3;
+    int64 push_attempt_count = 4;
+    int64 accepted_unique_transitions = 5;
+    int64 accepted_unique_envelopes = 6;
+    int64 duplicate_push_attempt_count = 7;
+    int64 duplicate_transition_attempts = 8;
+    int64 rejected_push_attempt_count = 9;
+    int64 rejected_transition_attempts = 10;
+    int64 acked_unique_transitions = 11;
+    int64 acked_unique_deliveries = 12;
+    int64 ready_transitions = 13;
+    reserved 14;
+    reserved "ready_queue_fragments";
+    int64 leased_transitions = 15;
+    reserved 16;
+    reserved "leased_fragments";
+    int64 resident_transitions = 17;
+    int64 resident_envelopes = 18;
+    int64 resident_estimated_bytes = 19;
+    int64 capacity_transitions = 20;
+    reserved 21;
+    reserved "capacity_fragments";
+    int64 capacity_bytes = 22;
+    PressureState pressure_state = 23;
+    int64 redelivery_count = 24;
+    int64 nack_count = 25;
+    int64 expired_lease_count = 26;
+    optional int64 latest_ack_at_unix_ms = 27;
+    int64 target_hit_count = 28;
+    int64 partial_get_count = 29;
+    int64 empty_timeout_count = 30;
+    string last_error = 31;
+    reserved 32, 34;
+    reserved "behavior_steps", "stale_sample_count";
+    int64 trained_transition_count = 33;
+    int64 invalid_transition_count = 35;
+    int64 shutdown_untrained_transition_count = 36;
+    int64 lease_renew_count = 37;
+    SampleBackendType backend_type = 38;
+    int32 max_concurrent_consumers = 39;
+    int32 active_consumer_count = 40;
+    int64 consumer_busy_count = 41;
+    bool ingress_ready = 42;
+    bool pool_ready = 43;
+    int64 timestamp_unix_ms = 44;
+    optional int64 oldest_ready_transition_age_ms = 45;
+    optional uint64 minimum_ready_model_step = 46;
+    optional uint64 maximum_ready_model_step = 47;
+    reserved 48 to 65;
+    reserved "active_demand_count", "active_demand_epoch",
+             "active_demand_age_ms", "reserved_samples",
+             "reserved_fragments", "reserved_estimated_bytes",
+             "credit_request_count", "credit_grant_count",
+             "credit_commit_count", "credit_release_count",
+             "credit_expire_count", "credit_revoke_count",
+             "credit_wait_no_demand_count",
+             "credit_wait_inflight_limit_count",
+             "credit_wait_capacity_count", "credit_wait_draining_count",
+             "demand_upsert_count", "demand_release_count";
+    int64 evicted_transition_count = 66;
+    int64 evicted_envelope_count = 67;
+    bool finalized = 68;
+    string finalization_id = 69;
+    optional int64 finalized_at_unix_ms = 70;
+    int64 finalized_transition_count = 71;
+    reserved 72;
+    reserved "finalized_fragment_count";
+    int64 draw_attempt_count = 73;
+    int64 drawn_transition_slot_count = 74;
+    int64 unsampled_evicted_transition_count = 75;
+    int64 previously_drawn_evicted_transition_count = 76;
+}
+
+message MetricDescriptor {
+    string field_id = 1;
+    string label = 2;
+    string group = 3;
+    string dimension = 4;
+    string unit = 5;
+    string scope = 6;
+    string statistic = 7;
+    MetricValueKind value_kind = 8;
+    string owner_component = 9;
+    MetricAggregationKind aggregation_kind = 10;
+    MetricWindowKind window_kind = 11;
+    rl.common.v1.SchemaIdentity schema_identity = 12;
+}
+
+message MetricValue {
+    string field_id = 1;
+    double value = 2;
+    double sum = 3;
+    uint64 count = 4;
+    double quantile = 5;
+    int64 window_start_unix_ms = 6;
+    int64 window_end_unix_ms = 7;
+}
+
+// Operational point-in-time status only. MetricSnapshot is not an immutable
+// event source and must not be used to reconstruct historical windows.
+message MetricSnapshot {
+    rl.common.v1.ServiceInstanceIdentity source = 1;
+    uint64 sequence = 2;
+    int64 timestamp_unix_ms = 3;
+    repeated MetricDescriptor descriptors = 4;
+    repeated MetricValue values = 5;
+}
+
+// RawMetricSumCount is a mergeable sufficient statistic. Producers must not
+// publish a precomputed mean; consumers derive it as sum / count when count is
+// non-zero. field_id is governed by the MetricEvent schema identity.
+message RawMetricSumCount {
+    string field_id = 1;
+    double sum = 2;
+    uint64 count = 3;
+}
+
+message AgentEpisodeMetricFact {
+    reserved "behavior_model_version_min", "behavior_model_version_max";
+    uint32 agent_id = 1;
+    double episode_return = 2;
+    uint64 transition_count = 3;
+    bool success = 4;
+    // Task-specific termination enums stay outside the task-neutral training
+    // contract. This value is the canonical enum name emitted by the owner.
+    string termination_reason = 5;
+    uint32 shortest_action_steps = 6;
+    uint64 unique_cell_count = 7;
+    uint64 blocked_move_count = 8;
+    uint64 attempted_move_count = 9;
+    repeated RawMetricSumCount reward_components = 10;
+    optional uint64 minimum_behavior_model_step = 11;
+    optional uint64 maximum_behavior_model_step = 12;
+    string behavior_model_lineage_id = 13;
+    optional uint64 terminal_frame_id = 14;
+    optional uint32 goal_rank_group = 15;
+}
+
+// One immutable fact is emitted after a successful Environment Episode commit.
+// The repeated Agent facts preserve raw per-Agent sufficient statistics and
+// intentionally contain no precomputed cross-Agent mean.
+message EpisodeMetricFact {
+    reserved 1;
+    reserved "task_id";
+    string environment_instance_id = 2;
+    string episode_id = 3;
+    TrainingSemanticsIdentity training_semantics = 4;
+    repeated AgentEpisodeMetricFact agents = 5;
+}
+
+// One immutable fact is emitted only after the Learner update transaction has
+// published its model and settled its input delivery.
+message TrainUpdateMetricFact {
+    reserved "behavior_model_version_min", "behavior_model_version_max";
+    string train_update_id = 1;
+    uint64 train_update_sequence = 2;
+    ModelIdentity published_model = 3;
+    string delivery_id = 4;
+    TrainingSemanticsIdentity training_semantics = 5;
+    int64 cumulative_trained_samples = 6;
+    int64 actual_batch_size = 7;
+    optional uint64 minimum_behavior_model_step = 8;
+    optional uint64 maximum_behavior_model_step = 9;
+    repeated RawMetricSumCount ppo_statistics = 10;
+    string behavior_model_lineage_id = 11;
+    int64 requested_train_batch_size = 12;
+    int64 pool_draw_slot_count = 13;
+    int64 unique_item_count = 14;
+    int64 duplicate_item_slot_count = 15;
+    int64 sample_evaluation_count = 16;
+    int64 optimizer_step_count = 17;
+    rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
+}
+
+message MetricEvent {
+    reserved "committed_at_unix_ms";
+    rl.common.v1.ContractIdentity contract = 1;
+    // A3 uses schema_id "maze.metrics.v4", schema_version 4 and the
+    // canonical digest published with schemas/maze.metrics.v4.json.
+    rl.common.v1.SchemaIdentity schema_identity = 2;
+    rl.common.v1.ServiceInstanceIdentity source = 3;
+    // Starts at 1 for each source lifecycle. Zero is never a valid event and
+    // is reserved for a consumer cursor that has acknowledged no event.
+    uint64 event_sequence = 4;
+    // Raw producer wall-clock observation. Presence is required, but this value
+    // is not an ordering key and may repeat or regress after clock adjustment.
+    optional int64 observed_at_unix_ms = 5;
+    oneof fact {
+        EpisodeMetricFact episode = 6;
+        TrainUpdateMetricFact train_update = 7;
+    }
+}
+
+message MetricSequenceGap {
+    // The inclusive unavailable interval. A valid gap satisfies
+    // first <= last < oldest_available. It is an explicit incomplete-history
+    // fact, not a heartbeat and not an empty event batch.
+    uint64 first_unavailable_event_sequence = 1;
+    uint64 last_unavailable_event_sequence = 2;
+    uint64 oldest_available_event_sequence = 3;
+    string reason = 4;
+}
+
+message MetricBatch {
+    reserved 13;
+    reserved "event_time_watermark_unix_ms";
+    // Starts at 1 for each source lifecycle. Zero is reserved for an initial
+    // consumer cursor. The contract, schema and source must exactly equal
+    // those of every contained event.
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.SchemaIdentity schema_identity = 2;
+    rl.common.v1.ServiceInstanceIdentity source = 3;
+    uint64 batch_sequence = 4;
+    // Computed over deterministic MetricBatch bytes with this field cleared.
+    rl.common.v1.ContentDigest batch_digest = 5;
+    int64 created_at_unix_ms = 6;
+    // For an event batch these equal the first and last strictly increasing,
+    // non-zero event sequences. For a gap batch they equal the unavailable
+    // interval. For a heartbeat they are both zero.
+    uint64 first_event_sequence = 7;
+    uint64 last_event_sequence = 8;
+    repeated MetricEvent events = 9;
+    // A heartbeat has no events and no gap. It still has a non-zero batch
+    // sequence and digest and must be acknowledged.
+    bool heartbeat = 10;
+    // May accompany the last event, gap or heartbeat batch. A source that
+    // committed no events terminates with a final heartbeat whose
+    // final_event_sequence is zero. Otherwise final_event_sequence equals the
+    // last committed event sequence. Once that exact batch is acknowledged,
+    // the producer emits no later batch in this source lifecycle and
+    // GetMetricBatch returns METRIC_BATCH_RESULT_FINAL without a batch payload.
+    bool source_final = 11;
+    uint64 final_event_sequence = 12;
+    MetricSequenceGap gap = 14;
+}
+
+message MetricBatchCursor {
+    rl.common.v1.ServiceInstanceIdentity source = 1;
+    // Both zero identify a new consumer. For events, acknowledged_event is the
+    // batch last event; for a gap it is the unavailable interval last event;
+    // for a heartbeat it remains the previous cursor event sequence.
+    uint64 acknowledged_batch_sequence = 2;
+    uint64 acknowledged_event_sequence = 3;
+    rl.common.v1.ContentDigest acknowledged_batch_digest = 4;
+}
+
+message GetMetricBatchReq {
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity consumer = 2;
+    MetricBatchCursor cursor = 3;
+    uint32 max_events = 4;
+    int64 max_bytes = 5;
+    int32 wait_timeout_ms = 6;
+}
+
+message GetMetricBatchRsp {
+    // DELIVERED always contains one batch that requires AckMetricBatch. WAIT
+    // and every rejection contain no batch. FINAL contains no batch and is
+    // returned only after the request cursor has acknowledged source_final.
+    int32 ret_code = 1;
+    MetricBatchResult result = 2;
+    string message = 3;
+    MetricBatch batch = 4;
+    rl.common.v1.ServiceInstanceIdentity producer = 5;
+    uint64 oldest_available_event_sequence = 6;
+    uint64 latest_available_event_sequence = 7;
+}
+
+message AckMetricBatchReq {
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity consumer = 2;
+    MetricBatchCursor cursor = 3;
+}
+
+message AckMetricBatchRsp {
+    int32 ret_code = 1;
+    MetricBatchAckResult result = 2;
+    string message = 3;
+    rl.common.v1.ServiceInstanceIdentity producer = 4;
+    uint64 oldest_available_event_sequence = 5;
+    uint64 latest_available_event_sequence = 6;
+    // The durable producer-side cursor after APPLIED or ALREADY_APPLIED.
+    MetricBatchCursor committed_cursor = 7;
+}
+
+message AIServerStatusReq {}
+
+message AIServerStatusRsp {
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity aiserver = 2;
+    AIServerState state = 3;
+    bool ready = 4;
+    bool distributor_ready = 5;
+    ModelState model_state = 6;
+    ModelIdentity loaded_model = 7;
+    ModelIdentity staged_model = 8;
+    int64 outbound_queue_envelopes = 9;
+    int64 outbound_queue_transitions = 10;
+    int64 outbound_queue_estimated_bytes = 11;
+    int64 outbound_queue_high_watermark = 12;
+    int64 produced_unique_transitions = 13;
+    int64 produced_unique_envelopes = 14;
+    int64 push_attempt_count = 15;
+    int64 accepted_unique_transitions = 16;
+    int64 duplicate_push_attempt_count = 17;
+    int64 rejected_push_attempt_count = 18;
+    int64 retry_attempt_count = 19;
+    int64 final_drop_unique_transitions = 20;
+    int64 active_actor_session_count = 21;
+    int64 active_segment_count = 22;
+    int64 inference_count = 23;
+    double inference_latency_sum_ms = 24;
+    double inference_latency_max_ms = 25;
+    int64 push_rpc_count = 26;
+    double push_rpc_latency_sum_ms = 27;
+    double push_rpc_latency_max_ms = 28;
+    int64 model_switch_count = 29;
+    int64 quarantined_transition_count = 30;
+    int64 quarantined_envelope_count = 31;
+    string last_error = 32;
+    int64 timestamp_unix_ms = 33;
+    MetricSnapshot metrics = 34;
+    rl.common.v1.ContentDigest rollout_estimator_profile_digest = 35;
+    int64 closed_segment_count = 36;
+    int64 pending_action_excluded_count = 37;
+    int64 rollout_estimator_failure_count = 38;
+    int64 per_agent_model_activation_count = 39;
+    int64 superseded_without_agent_activation_count = 40;
+    repeated SegmentCloseCount segment_close_counts = 41;
+    reserved "credit_request_count", "credit_grant_count",
+             "credit_wait_count", "credit_reacquire_count",
+             "producer_stale_count", "capacity_wait_ms",
+             "training_capacity_wait";
+}
+
+message SegmentCloseCount {
+    SegmentCloseReason reason = 1;
+    int64 count = 2;
+}
+
+message ModelArtifactManifest {
+    uint32 manifest_schema_version = 1;
+    rl.common.v1.ContractIdentity contract = 2;
+    // identity.manifest_digest is computed over deterministic manifest bytes
+    // with that nested digest cleared, avoiding a self-referential hash.
+    ModelIdentity identity = 3;
+    rl.common.v1.SchemaIdentity observation_schema = 4;
+    rl.common.v1.SchemaIdentity action_schema = 5;
+    string model_architecture_id = 6;
+    string tensor_dtype = 7;
+    repeated int64 input_shape = 8;
+    repeated int64 action_shape = 9;
+    repeated int64 value_shape = 10;
+    string artifact_uri = 11;
+    string model_file = 12;
+    int64 size_bytes = 13;
+    int64 seed = 14;
+    uint64 train_updates = 15;
+    uint64 trained_samples = 16;
+    rl.common.v1.ContentDigest training_config_digest = 17;
+    TrainingSemanticsIdentity training_semantics = 18;
+    int64 published_at_unix_ms = 19;
+    bool ready = 20;
+    RolloutEstimatorProfile rollout_estimator_profile = 21;
+}
+
+message RegisterModelReq {
+    ModelArtifactManifest manifest = 1;
+}
+
+message RegisterModelRsp {
+    int32 ret_code = 1;
+    ModelRegisterResult result = 2;
+    string message = 3;
+    ModelArtifactManifest manifest = 4;
+    rl.common.v1.ServiceInstanceIdentity distributor = 5;
+}
+
+message GetModelManifestReq {
+    ModelIdentity requested_model = 1;
+    rl.common.v1.ServiceInstanceIdentity requester = 2;
+    bool latest_in_lineage = 3;
+}
+
+message GetModelManifestRsp {
+    reserved "available_floor_model_version", "latest_available_model_version";
+    int32 ret_code = 1;
+    string message = 2;
+    ModelArtifactManifest manifest = 3;
+    rl.common.v1.ServiceInstanceIdentity distributor = 4;
+    // On a successful response with a manifest, both values are always valid
+    // for manifest.identity lineage. The inclusive range is contiguous and
+    // model step zero is valid; zero must not be interpreted as no-data.
+    optional uint64 available_floor_model_step = 5;
+    optional uint64 latest_available_model_step = 6;
+}
+
+message DownloadModelReq {
+    ModelIdentity requested_model = 1;
+    rl.common.v1.ServiceInstanceIdentity requester = 2;
+}
+
+message ModelChunk {
+    ModelIdentity model = 1;
+    int64 offset = 2;
+    bytes data = 3;
+}
+
+message AckModelReq {
+    rl.common.v1.ServiceInstanceIdentity aiserver = 1;
+    ModelIdentity model = 2;
+    string load_instance_id = 3;
+    ModelLoadStatus load_status = 4;
+    string message = 5;
+}
+
+message AckModelRsp {
+    int32 ret_code = 1;
+    ModelAckResult result = 2;
+    string message = 3;
+    rl.common.v1.ServiceInstanceIdentity distributor = 4;
+}
+
+message ModelDistributorStatusReq {}
+
+message ModelDistributorStatusRsp {
+    reserved "available_floor_model_version", "latest_available_model_version";
+    rl.common.v1.ContractIdentity contract = 1;
+    rl.common.v1.ServiceInstanceIdentity distributor = 2;
+    bool ready = 3;
+    int64 registered_model_count = 4;
+    ModelIdentity latest_model = 5;
+    int64 register_attempt_count = 6;
+    int64 duplicate_register_count = 7;
+    int64 rejected_register_count = 8;
+    int64 download_request_count = 9;
+    int64 download_success_count = 10;
+    int64 download_failure_count = 11;
+    int64 bytes_served = 12;
+    int64 loaded_ack_count = 13;
+    int64 failed_ack_count = 14;
+    rl.common.v1.ServiceInstanceIdentity latest_ack_aiserver = 15;
+    ModelIdentity latest_ack_model = 16;
+    ModelLoadStatus latest_ack_status = 17;
+    string last_error = 18;
+    int64 timestamp_unix_ms = 19;
+    // Valid only when latest_model has an identity. The inclusive range is for
+    // that lineage, and model step zero is a valid floor/latest value.
+    optional uint64 available_floor_model_step = 20;
+    optional uint64 latest_available_model_step = 21;
+}
+
+service AIServerTrainingStatusService {
+    rpc GetAIServerStatus(AIServerStatusReq) returns (AIServerStatusRsp);
+}
+
+// Implemented independently by each metric-event owner (AIServer and Learner).
+// A retry with the same cursor returns the same batch identity and digest until
+// it is acknowledged or an explicit gap proves the requested event unavailable.
+service MetricEventService {
+    rpc GetMetricBatch(GetMetricBatchReq) returns (GetMetricBatchRsp);
+    rpc AckMetricBatch(AckMetricBatchReq) returns (AckMetricBatchRsp);
+}
+
+service SamplePoolIngressService {
+    rpc PushSamples(PushSamplesReq) returns (PushSamplesRsp);
+    rpc GetStatus(SamplePoolStatusReq) returns (SamplePoolStatusRsp);
+}
+
+service SamplePoolConsumerService {
+    rpc GetBatch(GetBatchReq) returns (GetBatchRsp);
+    rpc AckBatch(AckBatchReq) returns (DeliveryRsp);
+    rpc NackBatch(NackBatchReq) returns (DeliveryRsp);
+    rpc RenewLease(RenewLeaseReq) returns (DeliveryRsp);
+    rpc FinalizeSamplePool(FinalizeSamplePoolReq)
+        returns (FinalizeSamplePoolRsp);
+    rpc GetStatus(SamplePoolStatusReq) returns (SamplePoolStatusRsp);
+}
+
+service ModelDistributorService {
+    rpc RegisterModel(RegisterModelReq) returns (RegisterModelRsp);
+    rpc GetModelManifest(GetModelManifestReq) returns (GetModelManifestRsp);
+    rpc DownloadModel(DownloadModelReq) returns (stream ModelChunk);
+    rpc AckModel(AckModelReq) returns (AckModelRsp);
+    rpc GetModelDistributorStatus(ModelDistributorStatusReq)
+        returns (ModelDistributorStatusRsp);
+}

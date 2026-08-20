@@ -17,14 +17,21 @@ pkg_check_modules(GRPC REQUIRED grpc++)
 set(SOURCES
     main/main.cpp
     src/grpc/maze_service.cpp
+    src/grpc/maze_service_rpc.cpp
     src/ai/maze_reward.cpp
+    src/ai/maze_observation.cpp
     src/ai/astar_solver.cpp
     src/config/config_loader.cpp
     src/session/session_manager.cpp
     src/ai/onnx_inferencer.cpp
     src/model/model_manifest.cpp
     src/model/model_distributor_client.cpp
+    src/metrics/episode_metrics.cpp
     src/sample/sample_sender.cpp
+    src/sample/training_transition_builder.cpp
+    src/task/maze_map_contract.cpp
+    src/task/episode_action_policy.cpp
+    src/task/single_map_task_controller.cpp
 )
 
 set(CONTRACT_CPP_DIR "" CACHE PATH "Generated C++ contract directory")
@@ -34,8 +41,11 @@ else()
     set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
 endif()
 set(PROTO_SOURCES
-    ${PROTO_GEN_DIR}/maze.pb.cc
-    ${PROTO_GEN_DIR}/maze.grpc.pb.cc
+    ${PROTO_GEN_DIR}/common.pb.cc
+    ${PROTO_GEN_DIR}/training.pb.cc
+    ${PROTO_GEN_DIR}/training.grpc.pb.cc
+    ${PROTO_GEN_DIR}/maze_task.pb.cc
+    ${PROTO_GEN_DIR}/maze_task.grpc.pb.cc
 )
 
 # --- 可执行文件 ---
@@ -61,61 +71,76 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 include(CTest)
 if(BUILD_TESTING)
-    add_executable(run_mode_test
-        tests/run_mode_test.cpp
-    )
-    target_include_directories(run_mode_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-    )
-    add_test(NAME run_mode_contract COMMAND run_mode_test)
-    add_test(
-        NAME run_launcher_mode_contract
-        COMMAND bash
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/run_sh_mode_test.sh
-            ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-    add_executable(model_manifest_test
-        tests/model_manifest_test.cpp
+    add_executable(aiserver_model_update_development_test
+        tests/model_update_development_test.cpp
+        src/ai/onnx_inferencer.cpp
         src/model/model_manifest.cpp
-    )
-    target_include_directories(model_manifest_test PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${Protobuf_INCLUDE_DIRS}
-    )
-    target_link_libraries(model_manifest_test PRIVATE
-        protobuf::libprotobuf
-        crypto
-    )
-    add_test(NAME model_manifest_contract COMMAND model_manifest_test)
-
-    add_executable(model_distributor_client_test
-        tests/model_distributor_client_test.cpp
         src/model/model_distributor_client.cpp
-        src/model/model_manifest.cpp
-        ${PROTO_SOURCES}
+        ${PROTO_GEN_DIR}/common.pb.cc
+        ${PROTO_GEN_DIR}/training.pb.cc
+        ${PROTO_GEN_DIR}/training.grpc.pb.cc
     )
-    target_include_directories(model_distributor_client_test PRIVATE
+    target_include_directories(aiserver_model_update_development_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
         ${GRPC_INCLUDE_DIRS}
+        /usr/local/include/onnxruntime
     )
-    target_link_libraries(model_distributor_client_test PRIVATE
+    target_link_libraries(aiserver_model_update_development_test PRIVATE
         protobuf::libprotobuf
         ${GRPC_LIBRARIES}
         pthread
+        onnxruntime
         crypto
     )
-    add_test(NAME model_distributor_client_contract
-             COMMAND model_distributor_client_test)
+    add_test(
+        NAME aiserver_model_update_development_contract
+        COMMAND aiserver_model_update_development_test
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx
+    )
 
-    add_executable(fragment_boundary_test
-        tests/fragment_boundary_test.cpp
+    add_executable(aiserver_gae_sample_delivery_development_test
+        tests/gae_sample_delivery_development_test.cpp
+        src/grpc/maze_service.cpp
+        src/grpc/maze_service_rpc.cpp
+        src/ai/maze_reward.cpp
+        src/ai/maze_observation.cpp
+        src/ai/astar_solver.cpp
+        src/config/config_loader.cpp
+        src/session/session_manager.cpp
+        src/ai/onnx_inferencer.cpp
+        src/model/model_manifest.cpp
+        src/model/model_distributor_client.cpp
+        src/metrics/episode_metrics.cpp
+        src/sample/sample_sender.cpp
+        src/sample/training_transition_builder.cpp
+        src/task/maze_map_contract.cpp
+        src/task/episode_action_policy.cpp
+        src/task/single_map_task_controller.cpp
+        ${PROTO_SOURCES}
     )
-    target_include_directories(fragment_boundary_test PRIVATE
+    target_include_directories(
+        aiserver_gae_sample_delivery_development_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROTO_GEN_DIR}
+        ${Protobuf_INCLUDE_DIRS}
+        ${GRPC_INCLUDE_DIRS}
+        /usr/local/include/onnxruntime
     )
-    add_test(NAME fragment_boundary_contract
-             COMMAND fragment_boundary_test)
+    target_link_libraries(
+        aiserver_gae_sample_delivery_development_test PRIVATE
+        protobuf::libprotobuf
+        ${GRPC_LIBRARIES}
+        pthread
+        onnxruntime
+        crypto
+    )
+    target_compile_options(
+        aiserver_gae_sample_delivery_development_test PRIVATE -UNDEBUG)
+    add_test(
+        NAME aiserver_gae_sample_delivery_development_contract
+        COMMAND aiserver_gae_sample_delivery_development_test
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/a3_arch_policy_wire_v1.onnx
+    )
 endif()

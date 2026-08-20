@@ -1,0 +1,3 @@
+# Generated contract snapshots preserve the exact rl-contracts artifact bytes.
+proto/*.pb.cc -whitespace
+proto/*.pb.h -whitespace

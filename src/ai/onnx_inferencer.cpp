@@ -2,8 +2,11 @@
 #include "log/logger.h"
 
 #include <algorithm>
+#include <cmath>
+#include <exception>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 namespace {
 
@@ -41,7 +44,22 @@ bool OnnxInferencer::LoadModel(const std::string& model_path,
                               int expected_obs_dim,
                               int expected_action_dim,
                               std::string* error) {
+    PreparedModel prepared;
+    if (!PrepareModel(model_path, expected_obs_dim, expected_action_dim,
+                      prepared, error)) {
+        return false;
+    }
+    ActivatePreparedModel(std::move(prepared));
+    return true;
+}
+
+bool OnnxInferencer::PrepareModel(const std::string& model_path,
+                                 int expected_obs_dim,
+                                 int expected_action_dim,
+                                 PreparedModel& prepared,
+                                 std::string* error) {
     std::lock_guard<std::mutex> lock(load_mutex_);
+    prepared = PreparedModel{};
 
     try {
         // 创建新 Session（加载失败会抛异常，旧 Session 不受影响）
@@ -58,7 +76,7 @@ bool OnnxInferencer::LoadModel(const std::string& model_path,
         auto action_name = new_session->GetOutputNameAllocated(0, allocator);
         auto value_name = new_session->GetOutputNameAllocated(1, allocator);
         if (std::string(input_name.get()) != INPUT_NAME ||
-            std::string(action_name.get()) != OUTPUT_ACTION_PROBS ||
+            std::string(action_name.get()) != OUTPUT_ACTION_LOGITS ||
             std::string(value_name.get()) != OUTPUT_VALUE) {
             throw std::runtime_error("ONNX tensor names do not match the inference contract");
         }
@@ -92,12 +110,31 @@ bool OnnxInferencer::LoadModel(const std::string& model_path,
             throw std::runtime_error(message.str());
         }
 
-        // 原子替换：使用 atomic_store 保证与 Infer() 端 atomic_load 的线程安全
-        std::atomic_store(&session_, new_session);
-        current_model_path_ = model_path;
-        loaded_.store(true);
+        for (const float probe_value : {0.0F, 1.0F, -1.0F}) {
+            std::vector<float> logits;
+            float value = 0.0F;
+            if (!InferSession(
+                    new_session,
+                    std::vector<float>(
+                        static_cast<std::size_t>(expected_obs_dim),
+                        probe_value),
+                    expected_obs_dim,
+                    logits,
+                    value) ||
+                logits.size() !=
+                    static_cast<std::size_t>(expected_action_dim) ||
+                !std::isfinite(value) ||
+                !std::all_of(logits.begin(), logits.end(), [](float item) {
+                    return std::isfinite(item);
+                })) {
+                throw std::runtime_error(
+                    "ONNX finite inference probe failed");
+            }
+        }
 
-        LOG_INFO("OnnxInferencer", "模型加载成功: %s", model_path.c_str());
+        prepared.session = std::move(new_session);
+        prepared.model_path = model_path;
+        LOG_INFO("OnnxInferencer", "模型预加载成功: %s", model_path.c_str());
         return true;
     } catch (const Ort::Exception& e) {
         if (error) *error = e.what();
@@ -112,14 +149,47 @@ bool OnnxInferencer::LoadModel(const std::string& model_path,
     }
 }
 
+void OnnxInferencer::ActivatePreparedModel(PreparedModel prepared) {
+    if (!prepared.valid()) std::terminate();
+    std::lock_guard<std::mutex> lock(load_mutex_);
+    std::atomic_store(&session_, std::move(prepared.session));
+    current_model_path_ = std::move(prepared.model_path);
+    loaded_.store(true);
+}
+
+OnnxInferencer::PreparedModel OnnxInferencer::SnapshotPreparedModel() const {
+    std::lock_guard<std::mutex> lock(load_mutex_);
+    PreparedModel snapshot;
+    snapshot.session = std::atomic_load(&session_);
+    snapshot.model_path = current_model_path_;
+    return snapshot;
+}
+
 // ---- 推理（线程安全，无锁读取）----
 bool OnnxInferencer::Infer(const std::vector<float>& obs, int obs_dim,
-                           std::vector<float>& action_probs, float& value) {
+                           std::vector<float>& action_logits, float& value) {
     // 原子读取 shared_ptr（与 LoadModel 端 atomic_store 配合，保证线程安全）
     auto session = std::atomic_load(&session_);
-    if (!session) {
-        return false;
-    }
+    return InferSession(session, obs, obs_dim, action_logits, value);
+}
+
+bool OnnxInferencer::InferPrepared(
+    const PreparedModel& prepared,
+    const std::vector<float>& obs,
+    int obs_dim,
+    std::vector<float>& action_logits,
+    float& value) {
+    return InferSession(
+        prepared.session, obs, obs_dim, action_logits, value);
+}
+
+bool OnnxInferencer::InferSession(
+    const std::shared_ptr<Ort::Session>& session,
+    const std::vector<float>& obs,
+    int obs_dim,
+    std::vector<float>& action_logits,
+    float& value) {
+    if (!session) return false;
 
     try {
         // ---- 构建输入 Tensor ----
@@ -136,19 +206,19 @@ bool OnnxInferencer::Infer(const std::vector<float>& obs, int obs_dim,
 
         // ---- 执行推理 ----
         const char* input_names[] = {INPUT_NAME};
-        const char* output_names[] = {OUTPUT_ACTION_PROBS, OUTPUT_VALUE};
+        const char* output_names[] = {OUTPUT_ACTION_LOGITS, OUTPUT_VALUE};
 
         auto outputs = session->Run(
             Ort::RunOptions{nullptr},
             input_names, &input_tensor, 1,
             output_names, 2);
 
-        // ---- 解析输出：action_probs [1, action_dim] ----
-        float* probs_data = outputs[0].GetTensorMutableData<float>();
-        auto probs_shape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
-        int action_dim = static_cast<int>(probs_shape[1]);
+        // ---- 解析输出：action_logits [1, action_dim] ----
+        float* logits_data = outputs[0].GetTensorMutableData<float>();
+        auto logits_shape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
+        int action_dim = static_cast<int>(logits_shape[1]);
 
-        action_probs.assign(probs_data, probs_data + action_dim);
+        action_logits.assign(logits_data, logits_data + action_dim);
 
         // ---- 解析输出：value [1, 1] ----
         float* value_data = outputs[1].GetTensorMutableData<float>();

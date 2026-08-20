@@ -1,4 +1,5 @@
 #include "grpc/maze_service.h"
+#include "ai/onnx_inferencer.h"
 #include "config/config_loader.h"
 #include "log/logger.h"
 
@@ -8,8 +9,13 @@
 #include <csignal>
 #include <atomic>
 #include <chrono>
+#include <cmath>
 #include <cstdlib>
+#include <iostream>
+#include <sstream>
 #include <thread>
+#include <filesystem>
+#include <vector>
 
 // --- 全局信号标志 ---
 static std::atomic<bool> g_running{true};
@@ -21,6 +27,110 @@ static void SignalHandler(int sig) {
 
 // --- 默认配置文件路径 ---
 static const char* kDefaultConfigPath = "configs/server_config.yaml";
+
+static void PrintUsage() {
+    std::fputs(
+        "Usage: maze_aiserver [options]\n"
+        "\n"
+        "Configuration is resolved once as CLI > allowlisted environment > "
+        "config.\n"
+        "--config and --inspect-model are diagnostic/meta options; every "
+        "business\n"
+        "override below replaces the named field in the selected config.\n"
+        "\n"
+        "  --config PATH                    select the YAML config file\n"
+        "  --workload training|evaluation   -> server.run_mode\n"
+        "  --listen-port PORT               -> server.listen_port\n"
+        "  --evaluation-model PATH          -> "
+        "model.evaluation_model_path\n"
+        "  --sample-distributor HOST:PORT   -> "
+        "sample_distributor.host/port\n"
+        "  --model-distributor HOST:PORT    -> "
+        "model_distribution.host/port\n"
+        "  --inspect-model PATH             validate one SaveModel.onnx and "
+        "exit\n"
+        "  --help, -h                       show this help and exit\n",
+        stdout);
+}
+
+static std::string ShapeJson(const std::vector<int64_t>& shape) {
+    std::ostringstream output;
+    output << "[";
+    for (std::size_t index = 0; index < shape.size(); ++index) {
+        if (index > 0) output << ",";
+        output << shape[index];
+    }
+    output << "]";
+    return output.str();
+}
+
+static int InspectModel(const std::filesystem::path& model_path) {
+    std::error_code filesystem_error;
+    if (model_path.filename() != "SaveModel.onnx" ||
+        std::filesystem::is_symlink(model_path, filesystem_error) ||
+        filesystem_error ||
+        !std::filesystem::is_regular_file(model_path, filesystem_error) ||
+        filesystem_error) {
+        std::fprintf(
+            stderr,
+            "--inspect-model must name an explicit regular SaveModel.onnx\n");
+        return 2;
+    }
+
+    Logger::Instance().SetConsoleLevel(LogLevel::ERROR);
+    OnnxInferencer inferencer;
+    OnnxInferencer::PreparedModel prepared;
+    std::string error;
+    if (!inferencer.PrepareModel(
+            model_path.string(), 17, 9, prepared, &error)) {
+        std::fprintf(stderr, "model inspection failed: %s\n", error.c_str());
+        return 2;
+    }
+
+    for (const float probe_value : {0.0F, 1.0F, -1.0F}) {
+        std::vector<float> logits;
+        float value = 0.0F;
+        if (!inferencer.InferPrepared(
+                prepared,
+                std::vector<float>(17, probe_value),
+                17,
+                logits,
+                value) ||
+            logits.size() != 9 || !std::isfinite(value)) {
+            std::fprintf(stderr, "model finite inference probe failed\n");
+            return 2;
+        }
+        for (float logit : logits) {
+            if (!std::isfinite(logit)) {
+                std::fprintf(stderr, "model finite inference probe failed\n");
+                return 2;
+            }
+        }
+    }
+
+    const auto& session = prepared.session;
+    const auto input_shape = session->GetInputTypeInfo(0)
+                                 .GetTensorTypeAndShapeInfo()
+                                 .GetShape();
+    const auto action_shape = session->GetOutputTypeInfo(0)
+                                  .GetTensorTypeAndShapeInfo()
+                                  .GetShape();
+    const auto value_shape = session->GetOutputTypeInfo(1)
+                                 .GetTensorTypeAndShapeInfo()
+                                 .GetShape();
+    std::cout
+        << "{\"schema_version\":1,\"contract\":\"maze-policy-v1\","
+        << "\"input\":{\"name\":\"observation\",\"dtype\":\"float32\","
+        << "\"shape\":" << ShapeJson(input_shape) << "},"
+        << "\"action_output\":{\"name\":\"action_logits\","
+        << "\"dtype\":\"float32\",\"shape\":"
+        << ShapeJson(action_shape) << "},"
+        << "\"value_output\":{\"name\":\"value\","
+        << "\"dtype\":\"float32\",\"shape\":"
+        << ShapeJson(value_shape) << "},\"finite_probe\":true}"
+        << std::endl;
+    return 0;
+}
 
 static bool ParsePort(const std::string& value, int& port) {
     try {
@@ -53,11 +163,29 @@ static bool ParseAddress(const std::string& value,
     return true;
 }
 
-static bool ApplyCommandLine(int argc,
+static bool ParseNonNegativeInt64(const std::string& value,
+                                  int64_t& result) {
+    try {
+        std::size_t consumed = 0;
+        const int64_t candidate = std::stoll(value, &consumed);
+        if (consumed != value.size() || candidate < 0) return false;
+        result = candidate;
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
+struct ParsedCommandLine {
+    std::string config_path = kDefaultConfigPath;
+    AIServerConfigOverrides overrides;
+};
+
+static bool ParseCommandLine(int argc,
                              char* argv[],
-                             AIServerConfig& config,
-                             std::string& config_path,
+                             ParsedCommandLine& parsed,
                              std::string& error) {
+    bool config_seen = false;
     for (int i = 1; i < argc; ++i) {
         const std::string argument = argv[i];
         auto value = [&](const char* name) -> const char* {
@@ -71,71 +199,88 @@ static bool ApplyCommandLine(int argc,
         if (argument == "--config") {
             const char* candidate = value("--config");
             if (!candidate) return false;
-            config_path = candidate;
+            if (config_seen) {
+                error = "--config may be specified only once";
+                return false;
+            }
+            config_seen = true;
+            parsed.config_path = candidate;
         } else if (argument == "--workload") {
             const char* candidate = value("--workload");
             if (!candidate) return false;
-            config.server.run_mode = aiserver_mode::Parse(candidate);
-            if (!aiserver_mode::IsValid(config.server.run_mode)) {
+            if (parsed.overrides.workload.has_value()) {
+                error = "--workload may be specified only once";
+                return false;
+            }
+            const int workload = aiserver_mode::Parse(candidate);
+            if (!aiserver_mode::IsValid(workload)) {
                 error = "unknown workload: " + std::string(candidate);
                 return false;
             }
+            parsed.overrides.workload = workload;
         } else if (argument == "--listen-port") {
             const char* candidate = value("--listen-port");
-            if (!candidate || !ParsePort(candidate, config.server.listen_port)) {
+            int port = 0;
+            if (!candidate || parsed.overrides.listen_port.has_value() ||
+                !ParsePort(candidate, port)) {
                 error = "--listen-port must be a valid TCP port";
                 return false;
             }
+            parsed.overrides.listen_port = port;
         } else if (argument == "--model-distributor") {
             const char* candidate = value("--model-distributor");
+            std::string host;
+            int port = 0;
             if (!candidate ||
-                !ParseAddress(candidate,
-                              config.model_distribution.host,
-                              config.model_distribution.port)) {
+                parsed.overrides.model_distributor_host.has_value() ||
+                !ParseAddress(candidate, host, port)) {
                 error = "--model-distributor must use host:port";
                 return false;
             }
+            parsed.overrides.model_distributor_host = host;
+            parsed.overrides.model_distributor_port = port;
         } else if (argument == "--sample-distributor") {
             const char* candidate = value("--sample-distributor");
+            std::string host;
+            int port = 0;
             if (!candidate ||
-                !ParseAddress(candidate,
-                              config.sample_output.host,
-                              config.sample_output.port)) {
+                parsed.overrides.sample_distributor_host.has_value() ||
+                !ParseAddress(candidate, host, port)) {
                 error = "--sample-distributor must use host:port";
                 return false;
             }
-        } else if (argument == "--run-id") {
-            const char* candidate = value("--run-id");
-            if (!candidate || std::string(candidate).empty()) {
-                error = "--run-id must not be empty";
+            parsed.overrides.sample_distributor_host = host;
+            parsed.overrides.sample_distributor_port = port;
+        } else if (argument == "--evaluation-model") {
+            const char* candidate = value("--evaluation-model");
+            if (!candidate ||
+                parsed.overrides.evaluation_model_path.has_value()) {
+                error = "--evaluation-model may be specified only once";
                 return false;
             }
-            config.sample_output.run_id = candidate;
-        } else if (argument == "--model-cache-dir") {
-            const char* candidate = value("--model-cache-dir");
-            if (!candidate) return false;
-            config.model.p2p_dir = candidate;
-        } else if (argument == "--smoke-model-dir") {
-            const char* candidate = value("--smoke-model-dir");
-            if (!candidate) return false;
-            config.model.smoke_dir = candidate;
-        } else if (argument == "--local-model-dir") {
-            const char* candidate = value("--local-model-dir");
-            if (!candidate) return false;
-            config.model.local_dir = candidate;
-        } else if (argument == "--train") {
-            config.server.run_mode = aiserver_mode::kTraining;
+            parsed.overrides.evaluation_model_path = candidate;
         } else if (argument.rfind("--", 0) == 0) {
             error = "unknown argument: " + argument;
             return false;
         } else {
-            config_path = argument;
+            error = "positional arguments are not supported: " + argument;
+            return false;
         }
     }
     return true;
 }
 
 int main(int argc, char* argv[]) {
+    if (argc == 2 &&
+        (std::string(argv[1]) == "--help" ||
+         std::string(argv[1]) == "-h")) {
+        PrintUsage();
+        return 0;
+    }
+    if (argc == 3 && std::string(argv[1]) == "--inspect-model") {
+        return InspectModel(argv[2]);
+    }
+
     std::printf("============================================\n");
     std::printf("  迷宫训练框架 - AIServer\n");
     std::printf("============================================\n\n");
@@ -149,50 +294,64 @@ int main(int argc, char* argv[]) {
     std::signal(SIGINT, SignalHandler);
     std::signal(SIGTERM, SignalHandler);
 
-    std::string config_path = kDefaultConfigPath;
-    for (int i = 1; i < argc; ++i) {
-        const std::string argument = argv[i];
-        if (argument == "--config" && i + 1 < argc) {
-            config_path = argv[++i];
-        } else if (argument == "--workload" ||
-                   argument == "--listen-port" ||
-                   argument == "--model-distributor" ||
-                   argument == "--sample-distributor" ||
-                   argument == "--run-id" ||
-                   argument == "--model-cache-dir" ||
-                   argument == "--smoke-model-dir" ||
-                   argument == "--local-model-dir") {
-            ++i;
-        } else if (argument.rfind("--", 0) != 0) {
-            config_path = argument;
-        }
-    }
-    AIServerConfig cfg;
-    LoadServerConfig(config_path, cfg);
-
+    ParsedCommandLine parsed;
     std::string argument_error;
-    if (!ApplyCommandLine(
-            argc, argv, cfg, config_path, argument_error)) {
+    if (!ParseCommandLine(argc, argv, parsed, argument_error)) {
         LOG_ERROR("Main", "命令参数无效: %s", argument_error.c_str());
         Logger::Instance().Close();
         return 2;
     }
+
+    AIServerConfig cfg;
+    AIServerConfigLoadReport load_report;
+    std::string config_error;
+    if (!LoadServerConfig(parsed.config_path, parsed.overrides, cfg,
+                          load_report, config_error)) {
+        LOG_ERROR("Main", "配置加载或 0.14.0 身份校验失败: %s (%s)",
+                  parsed.config_path.c_str(),
+                  config_error.empty() ? "see config diagnostics"
+                                       : config_error.c_str());
+        Logger::Instance().Close();
+        return 2;
+    }
+    LOG_INFO("Main", "config source: %s", load_report.config_path.c_str());
+    const auto log_overrides = [](const char* source,
+                                  const std::vector<std::string>& values) {
+        if (values.empty()) {
+            LOG_INFO("Main", "%s overrides: none", source);
+            return;
+        }
+        std::ostringstream fields;
+        for (std::size_t index = 0; index < values.size(); ++index) {
+            if (index > 0) fields << ",";
+            fields << values[index];
+        }
+        LOG_INFO("Main", "%s overrides: %s", source,
+                 fields.str().c_str());
+    };
+    log_overrides("environment", load_report.environment_overridden_fields);
+    log_overrides("CLI", load_report.cli_overridden_fields);
     LOG_INFO(
         "Main",
-        "最终配置: workload=%d, listen=0.0.0.0:%d, run_id=%s, "
-        "model_distributor=%s:%d, sample_distributor=%s:%d",
-        cfg.server.run_mode,
+        "最终配置: workload=%s, listen=0.0.0.0:%d, "
+        "evaluation_model=%s, local_train=%s, "
+        "model_distributor=%s:%d, sample_distributor=%s:%d, "
+        "max_agents=%d, agent_count=%d, map=%s, task_digest=%s",
+        aiserver_mode::Workload(cfg.server.run_mode),
         cfg.server.listen_port,
-        cfg.sample_output.run_id.c_str(),
+        cfg.model.evaluation_model_path.c_str(),
+        cfg.model.local_train_dir.c_str(),
         cfg.model_distribution.host.c_str(),
         cfg.model_distribution.port,
-        cfg.sample_output.host.c_str(),
-        cfg.sample_output.port);
+        cfg.sample_distributor.host.c_str(),
+        cfg.sample_distributor.port, cfg.server.max_agents,
+        cfg.environment.agent_count, cfg.task.fixed_map_id.c_str(),
+        cfg.task.task_config_digest.hex.c_str());
 
     // ---- 3. 创建 gRPC 服务 ----
     MazeServiceImpl service(cfg);
     if (!service.Start()) {
-        LOG_ERROR("Main", "AIServer 前置依赖未就绪");
+        LOG_ERROR("Main", "AIServer 启动失败，详见上方错误");
         Logger::Instance().Close();
         return 1;
     }
@@ -201,7 +360,15 @@ int main(int argc, char* argv[]) {
 
     grpc::ServerBuilder builder;
     builder.AddListeningPort(listen_addr, grpc::InsecureServerCredentials());
-    builder.RegisterService(&service);
+    builder.RegisterService(
+        static_cast<maze::MazeTaskService::Service*>(&service));
+    if (aiserver_mode::ExposesTrainingStatus(cfg.server.run_mode)) {
+        builder.RegisterService(
+            static_cast<training::AIServerTrainingStatusService::Service*>(
+                &service));
+        builder.RegisterService(
+            static_cast<training::MetricEventService::Service*>(&service));
+    }
 
     std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
 
@@ -220,12 +387,18 @@ int main(int argc, char* argv[]) {
     }
 
     LOG_INFO("Main", "收到停止信号，开始清理样本链路");
-    service.BeginShutdown();
+    const bool shutdown_clean = service.BeginShutdown();
     server->Shutdown(
         std::chrono::system_clock::now() + std::chrono::seconds(2));
     server->Wait();
 
-    LOG_INFO("Main", "AIServer 已停止");
+    if (shutdown_clean) {
+        LOG_INFO("Main", "AIServer 已停止");
+    } else {
+        LOG_ERROR(
+            "Main",
+            "AIServer 停止失败: 样本处置未收敛，详见 MazeService 错误日志");
+    }
     Logger::Instance().Close();
-    return 0;
+    return shutdown_clean ? 0 : 1;
 }
