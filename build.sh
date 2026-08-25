@@ -16,10 +16,16 @@ bash "${repo_dir}/scripts/verify_source_inventory.sh"
 
 contract_cpp_dir=""
 if [ -n "${RL_CONTRACT_DEV_ARTIFACT_DIR:-}" ]; then
+    # 开发产物由 build_dev_artifact.sh 按当前 Docker 服务端平台实时生成，
+    # 平台维度以产物自身 manifest 为准；沿用 artifact_versions.env 中固定的
+    # 平台值会让非 mac 开发环境误报身份不匹配。版本维度仍严格校验。
+    dev_contract_platform="$(python3 -c \
+        "import json, sys; print(json.load(open(sys.argv[1]))['platform'])" \
+        "${RL_CONTRACT_DEV_ARTIFACT_DIR}/manifest.json")"
     python3 "${repo_dir}/scripts/verify_contract_snapshot.py" \
         "${RL_CONTRACT_DEV_ARTIFACT_DIR}" \
         "${RL_CONTRACTS_VERSION}" \
-        "${RL_CONTRACTS_PLATFORM}" \
+        "${dev_contract_platform}" \
         --artifact-layout
     contract_cpp_dir="${RL_CONTRACT_DEV_ARTIFACT_DIR}/cpp"
 else
