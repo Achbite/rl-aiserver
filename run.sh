@@ -8,6 +8,15 @@ if [ -x "${repo_dir}/bin/maze_aiserver" ]; then
     default_aiserver_bin="${repo_dir}/bin/maze_aiserver"
 fi
 aiserver_bin="${AISERVER_BIN:-${default_aiserver_bin}}"
+managed=0
+if [ -n "${RL_CONFIG_PATH:-}" ]; then
+    managed=1
+    if [[ "${RL_CONFIG_PATH}" != /* ]]; then
+        echo "RL_CONFIG_PATH must be absolute" >&2
+        exit 2
+    fi
+    rm -f /run/rl/readiness.json /run/rl/aiserver-managed-ready
+fi
 
 aiserver_pid=""
 aiserver_child_status=""
@@ -59,6 +68,9 @@ shutdown() {
     stopping=1
     terminate_process "${aiserver_pid}" "${quiesce_timeout_seconds}" || true
     aiserver_pid=""
+    if [ "${managed}" -eq 1 ]; then
+        rm -f /run/rl/readiness.json /run/rl/aiserver-managed-ready
+    fi
 }
 
 quiesce() {
@@ -99,6 +111,58 @@ cd "${repo_dir}"
 
 "${aiserver_bin}" "$@" &
 aiserver_pid=$!
+
+if [ "${managed}" -eq 1 ]; then
+    managed_ready=0
+    for _ in $(seq 1 3000); do
+        if [ -s /run/rl/aiserver-managed-ready ]; then
+            managed_ready=1
+            break
+        fi
+        if ! kill -0 "${aiserver_pid}" 2>/dev/null; then
+            break
+        fi
+        sleep 0.1
+    done
+    if [ "${managed_ready}" -ne 1 ]; then
+        echo "AIServer managed readiness timeout" >&2
+        exit 1
+    fi
+    marker_value() {
+        awk -v key="$1" \
+            'index($0, key "=") == 1 { print substr($0, length(key) + 2); exit }' \
+            /run/rl/aiserver-managed-ready
+    }
+    metric_component="$(marker_value component)"
+    metric_instance_id="$(marker_value instance_id)"
+    metric_lifecycle_epoch="$(marker_value lifecycle_epoch)"
+    metric_container_port="$(marker_value container_port)"
+    metric_schema_id="$(marker_value schema_id)"
+    metric_schema_version="$(marker_value schema_version)"
+    metric_schema_digest="$(marker_value schema_digest)"
+    if [ "${metric_component}" != "rl-aiserver" ] ||
+       [ "${metric_container_port}" != "9002" ] ||
+       [ -z "${metric_instance_id}" ] ||
+       [[ ! "${metric_lifecycle_epoch}" =~ ^[1-9][0-9]*$ ]] ||
+       [ "${metric_schema_id}" != "maze.metrics.v4" ] ||
+       [ "${metric_schema_version}" != "4" ] ||
+       [[ ! "${metric_schema_digest}" =~ ^[0-9a-f]{64}$ ]]; then
+        echo "AIServer managed metric source identity is invalid" >&2
+        exit 1
+    fi
+    python3 scripts/publish_readiness.py \
+        --component aiserver \
+        --config "${RL_CONFIG_PATH}" \
+        --fact grpc=serving \
+        --fact metric_service=serving \
+        --fact metric_component="${metric_component}" \
+        --fact metric_instance_id="${metric_instance_id}" \
+        --fact metric_lifecycle_epoch="${metric_lifecycle_epoch}" \
+        --fact metric_container_port="${metric_container_port}" \
+        --fact metric_schema_id="${metric_schema_id}" \
+        --fact metric_schema_version="${metric_schema_version}" \
+        --fact metric_schema_digest="${metric_schema_digest}"
+fi
 
 while [ "${stopping}" -eq 0 ]; do
     if [ -n "${aiserver_pid}" ] &&

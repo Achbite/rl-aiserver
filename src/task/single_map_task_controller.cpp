@@ -59,10 +59,11 @@ bool SingleMapTaskController::ValidateTrainingProgress(
 
     trained_samples_delta =
         model.trained_samples - baseline_model_.trained_samples;
-    if (trained_samples_delta > produced_transitions) {
-        error = "single-map trained samples exceed produced transitions";
-        return false;
-    }
+    // model.trained_samples is Learner-global, while produced_transitions is
+    // local to this AIServer. With multiple ServerPods, the global counter can
+    // legitimately exceed any one producer's local counter. Keep both ledgers
+    // monotonic here; task-wide accounting belongs to the Learner/Infra
+    // aggregation boundary, where all producers are visible.
     return true;
 }
 

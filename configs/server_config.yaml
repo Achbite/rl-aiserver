@@ -5,7 +5,7 @@
 
 # --- 服务参数：启动模式在这里配置，CLI --workload 可显式覆盖 ---
 server:
-  run_mode: "evaluation"          # exact values: training | evaluation
+  run_mode: "training"          # exact values: training | evaluation
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
 

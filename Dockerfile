@@ -55,6 +55,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=build /usr/local/lib/libonnxruntime.so* /usr/local/lib/
 COPY --from=build /source/build/maze_aiserver /opt/rl/aiserver/bin/maze_aiserver
 COPY configs /opt/rl/aiserver/configs
+COPY component-contract /opt/rl/component-contract
 COPY run.sh /opt/rl/aiserver/run.sh
 COPY scripts /opt/rl/aiserver/scripts
 COPY proto/manifest.json /opt/rl/identity/contracts.json

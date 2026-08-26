@@ -12,10 +12,12 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <thread>
 #include <filesystem>
 #include <vector>
+#include <unistd.h>
 
 // --- 全局信号标志 ---
 static std::atomic<bool> g_running{true};
@@ -27,6 +29,62 @@ static void SignalHandler(int sig) {
 
 // --- 默认配置文件路径 ---
 static const char* kDefaultConfigPath = "configs/server_config.yaml";
+static const char* kManagedReadyMarker =
+    "/run/rl/aiserver-managed-ready";
+
+static bool PublishManagedReadyMarker(
+    const common::ServiceInstanceIdentity& source,
+    const common::SchemaIdentity& schema,
+    int container_port,
+    std::string& error) {
+    if (std::getenv("RL_CONFIG_PATH") == nullptr) return true;
+    namespace fs = std::filesystem;
+    std::error_code filesystem_error;
+    const fs::path destination(kManagedReadyMarker);
+    fs::create_directories(destination.parent_path(), filesystem_error);
+    if (filesystem_error) {
+        error = "cannot create managed readiness directory: " +
+                filesystem_error.message();
+        return false;
+    }
+    const fs::path temporary =
+        destination.string() + ".tmp." + std::to_string(getpid());
+    {
+        std::ofstream output(temporary, std::ios::trunc);
+        if (!output) {
+            error = "cannot open managed readiness marker";
+            return false;
+        }
+        output << "component=" << source.component() << "\n"
+               << "instance_id=" << source.instance_id() << "\n"
+               << "lifecycle_epoch=" << source.lifecycle_epoch() << "\n"
+               << "container_port=" << container_port << "\n"
+               << "schema_id=" << schema.schema_id() << "\n"
+               << "schema_version=" << schema.schema_version() << "\n"
+               << "schema_digest=" << schema.canonical_digest().hex()
+               << "\n";
+        output.flush();
+        if (!output) {
+            fs::remove(temporary, filesystem_error);
+            error = "cannot flush managed readiness marker";
+            return false;
+        }
+    }
+    fs::rename(temporary, destination, filesystem_error);
+    if (filesystem_error) {
+        fs::remove(temporary, filesystem_error);
+        error = "cannot publish managed readiness marker: " +
+                filesystem_error.message();
+        return false;
+    }
+    return true;
+}
+
+static void RemoveManagedReadyMarker() {
+    if (std::getenv("RL_CONFIG_PATH") == nullptr) return;
+    std::error_code ignored;
+    std::filesystem::remove(kManagedReadyMarker, ignored);
+}
 
 static void PrintUsage() {
     std::fputs(
@@ -377,6 +435,19 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::string readiness_error;
+    if (!PublishManagedReadyMarker(
+            service.MetricSourceIdentity(), service.MetricSchemaIdentity(),
+            cfg.server.listen_port, readiness_error)) {
+        LOG_ERROR("Main", "AIServer managed readiness 发布失败: %s",
+                  readiness_error.c_str());
+        service.BeginShutdown();
+        server->Shutdown();
+        server->Wait();
+        Logger::Instance().Close();
+        return 1;
+    }
+
     LOG_INFO("Main", "AIServer 已启动，监听: %s", listen_addr.c_str());
     LOG_INFO("Main", "运行模式: %d (%s)", cfg.server.run_mode,
              aiserver_mode::Workload(cfg.server.run_mode));
@@ -388,6 +459,7 @@ int main(int argc, char* argv[]) {
 
     LOG_INFO("Main", "收到停止信号，开始清理样本链路");
     const bool shutdown_clean = service.BeginShutdown();
+    RemoveManagedReadyMarker();
     server->Shutdown(
         std::chrono::system_clock::now() + std::chrono::seconds(2));
     server->Wait();

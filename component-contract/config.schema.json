@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rl-training.local/schemas/aiserver-config-p1a.json",
+  "type": "object",
+  "required": [
+    "server",
+    "contract",
+    "training_semantics",
+    "model",
+    "environment",
+    "task",
+    "model_distribution",
+    "sample_distributor",
+    "metrics"
+  ],
+  "additionalProperties": true
+}

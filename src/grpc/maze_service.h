@@ -78,6 +78,9 @@ public:
         const training::AckMetricBatchReq* req,
         training::AckMetricBatchRsp* rsp) override;
 
+    common::ServiceInstanceIdentity MetricSourceIdentity() const;
+    common::SchemaIdentity MetricSchemaIdentity() const;
+
 private:
     friend struct MazeServiceUpdateTestAccess;
     friend struct MazeServiceLifecycleTestAccess;
