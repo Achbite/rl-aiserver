@@ -281,6 +281,15 @@ MazeServiceImpl::~MazeServiceImpl() {
     BeginShutdown();
 }
 
+common::ServiceInstanceIdentity MazeServiceImpl::MetricSourceIdentity() const {
+    return MetricEventSource(producer_instance_id_,
+                             producer_lifecycle_epoch_);
+}
+
+common::SchemaIdentity MazeServiceImpl::MetricSchemaIdentity() const {
+    return MetricEventSchema(config_);
+}
+
 int64_t MazeServiceImpl::NowMs() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(
                std::chrono::system_clock::now().time_since_epoch())
