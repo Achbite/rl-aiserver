@@ -1,3 +1,12 @@
 # Generated contract snapshots preserve the exact rl-contracts artifact bytes.
 proto/*.pb.cc -whitespace
 proto/*.pb.h -whitespace
+
+# 换行策略：文本文件在 index 与工作区统一使用 LF。
+# 原因：构建与运行链路依赖 WSL / Docker 内的 bash 与 GNU make，
+# Windows 端检出若转为 CRLF，shebang 脚本与 Makefile recipe 会把行尾 \r
+# 当作命令内容而直接失败。
+# 本声明优先级高于各机器的 core.autocrlf 设置，协作者无需逐台修改 git 配置。
+* text=auto eol=lf
+*.sh text eol=lf
+Makefile text eol=lf
