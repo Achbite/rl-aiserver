@@ -1433,12 +1433,6 @@ grpc::Status MazeServiceImpl::EndEpisode(
         return grpc::Status::OK;
     }
 
-    if (config_.server.run_mode == aiserver_mode::kEvaluation) {
-        // Standalone evaluation is developer-triggered and never participates
-        // in the training TaskController or sample pipeline.
-        candidate_task_stop_requested = true;
-    }
-
     candidate.episode_state = SessionManager::EpisodeState::Ended;
     candidate.session_state = maze::SESSION_STATE_IDLE;
     candidate.protocol_episode_state = maze::EPISODE_STATE_COMMITTED;
