@@ -2,21 +2,19 @@
 
 set -euo pipefail
 
-requested_image_tag="${RL_AISERVER_IMAGE_TAG:-}"
-development_worktree="${RL_P1A_DEVELOPMENT_BUILD:-0}"
+image_tag="${RL_PROJECT_IMAGE_TAG:-maze-tag-001}"
 AISERVER_IMAGE_NAME="rl-training/aiserver"
+
+if [[ ! "${image_tag}" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
+    echo "RL_PROJECT_IMAGE_TAG is not a valid Docker tag" >&2
+    exit 2
+fi
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 workspace_root="${RL_TRAINING_WORKSPACE:-$(cd "${repo_dir}/.." && pwd)}"
 context_root="${workspace_root}/.workspace/build-contexts/rl-aiserver-$$"
 source "${repo_dir}/artifact_versions.env"
 contract_dir="${repo_dir}/proto"
-
-if test -n "$(git -C "${repo_dir}" status --porcelain --untracked-files=all)" &&
-   [ "${development_worktree}" != "1" ]; then
-    echo "refusing to build an AIServer runtime image from a dirty worktree" >&2
-    exit 1
-fi
 
 bash "${repo_dir}/scripts/verify_source_inventory.sh"
 
@@ -83,10 +81,9 @@ if [ ! -f "${stack_identity_tool}" ]; then
     echo "stack source identity tool is missing: ${stack_identity_tool}" >&2
     exit 1
 fi
-stack_identity_arguments=(--workspace-root "${workspace_root}")
-if [ "${development_worktree}" = "1" ]; then
-    stack_identity_arguments+=(--development-worktree)
-fi
+stack_identity_arguments=(
+    --workspace-root "${workspace_root}"
+)
 stack_identity_json="$(
     python3 "${stack_identity_tool}" "${stack_identity_arguments[@]}"
 )"
@@ -127,30 +124,7 @@ contract_manifest_digest="$(
         --contracts-artifact-digest "${contracts_artifact_digest}" \
         --supported-maps "${repo_dir}/component-contract/supported_maps.json"
 )"
-canonical_image_tag="p1a-${RL_CONTRACTS_VERSION}-${stack_source_id:0:12}"
-if [ -n "${requested_image_tag}" ] &&
-   [ "${requested_image_tag}" != "${canonical_image_tag}" ]; then
-    echo "AIServer image tag must match the canonical stack identity:" >&2
-    echo "  expected=${canonical_image_tag}" >&2
-    echo "  requested=${requested_image_tag}" >&2
-    exit 1
-fi
-image_ref="${AISERVER_IMAGE_NAME}:${canonical_image_tag}"
-
-if docker image inspect "${image_ref}" >/dev/null 2>&1; then
-    existing_identity="$(
-        docker image inspect --format \
-            '{{index .Config.Labels "org.rl-training.stack-source-id"}}|{{index .Config.Labels "org.rl-training.component"}}|{{index .Config.Labels "org.rl-training.component-commit"}}|{{index .Config.Labels "org.rl-training.contracts-version"}}|{{index .Config.Labels "org.rl-training.contracts-artifact-digest"}}|{{index .Config.Labels "org.rl-training.contracts-manifest-digest"}}|{{index .Config.Labels "org.rl-training.component-config-digest"}}|{{index .Config.Labels "org.rl-training.component-contract.sha256"}}' \
-            "${image_ref}"
-    )"
-    expected_identity="${stack_source_id}|aiserver|${component_commit}|${RL_CONTRACTS_VERSION}|${contracts_artifact_digest}|${contracts_manifest_digest}|${component_config_digest}|${contract_manifest_digest}"
-    if [ "${existing_identity}" != "${expected_identity}" ]; then
-        echo "refusing to overwrite an existing AIServer tag with another identity: ${image_ref}" >&2
-        exit 1
-    fi
-    printf '%s\n' "${image_ref}"
-    exit 0
-fi
+image_ref="${AISERVER_IMAGE_NAME}:${image_tag}"
 
 python3 - \
     "${repo_dir}" \
@@ -203,6 +177,7 @@ docker build \
     --label "org.rl-training.component-config-digest=${component_config_digest}" \
     --label "org.rl-training.component-contract.path=/opt/rl/component-contract/manifest.json" \
     --label "org.rl-training.component-contract.sha256=${contract_manifest_digest}" \
+    --label "org.rl-training.project-image-tag=${image_tag}" \
     --tag "${image_ref}" \
     "${context_root}"
 

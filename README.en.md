@@ -6,6 +6,25 @@ AIServer provides static model evaluation plus training inference, per-Agent
 R-PIN segments, GAE/value targets, and processed-transition delivery. For local
 training, start it after Learner is ready and connect Client afterwards.
 
+Local training runs only three containers: Learner, AIServer, and Client.
+`make shell` is a host command that prepares development artifacts from sibling
+source repositories; it does not download those repositories. A fresh workspace
+therefore needs at least these sibling directories:
+
+```text
+workspace/
+  rl-contracts/
+  rl-sample-pool/
+  rl-model-distributor/
+  rl-learner/
+  rl-aiserver/
+  maze-client/
+```
+
+The first three repositories supply development artifacts only and do not add
+runtime containers. See [rl-framework](https://github.com/Achbite/rl-framework)
+for the complete three-container startup order.
+
 ## 1. Development container, incremental build, and tests
 
 ```bash
@@ -28,9 +47,16 @@ other wrappers do not run them implicitly. Run `make shell` only on the host.
 
 ## 2. Run modes
 
-Inside the development container:
+After Learner is running, open a second host terminal:
 
 ```bash
+# Host
+cd /path/to/workspace/rl-aiserver
+make shell
+
+# Run the following commands inside the AIServer container
+./build.sh
+
 # Show the executable CLI-to-config mapping without starting the service
 bash ./run.sh --help
 
@@ -95,17 +121,20 @@ Models always come from the isolated training invocation's Learner Model Distrib
 
 ## 4. Build the runtime image
 
-The runtime image accepts only clean source and a synchronized formal Contracts
-artifact. Run from the host:
+The runtime image is built from the current worktree so development can follow
+edit, build, validate locally, and only then commit. Git clean/dirty state is
+diagnostic provenance, not a build admission gate. The Contracts artifact that is
+actually packaged must still be synchronized. Run from the host:
 
 ```bash
 bash scripts/sync_contract_snapshot.sh
-bash build_image.sh
+RL_PROJECT_IMAGE_TAG=maze-tag-001 bash build_image.sh
 ```
 
 The build never consumes development artifacts or a development-container build
-directory. It prints the image reference derived from the current stack source
-identity.
+directory. The full image reference is `rl-training/aiserver:maze-tag-001`, and a
+later tuning build may overwrite the same tag. Existing source-identity labels are
+diagnostic artifact facts and no longer determine the image tag.
 
 ## 5. Default addresses
 
