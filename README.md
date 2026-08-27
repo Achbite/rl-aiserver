@@ -5,6 +5,22 @@
 AIServer 提供静态模型评测，以及训练中的推理、per-Agent R-PIN segment、GAE/Value Target 和
 processed-transition 样本发送。本地训练在 Learner ready 后启动 AIServer，再连接 Client。
 
+本地训练只运行 Learner、AIServer 和 Client 三个容器。`make shell` 是宿主机命令，会从同一父目录的
+源码准备开发制品，但不会自动下载依赖仓库。冷启动工作区至少需要以下同级目录：
+
+```text
+workspace/
+  rl-contracts/
+  rl-sample-pool/
+  rl-model-distributor/
+  rl-learner/
+  rl-aiserver/
+  maze-client/
+```
+
+前三个依赖仓只提供开发制品，不会增加运行容器。完整的三容器启动顺序也可参阅
+[rl-framework](https://github.com/Achbite/rl-framework)。
+
 ## 1. 开发容器、增量构建与测试
 
 ```bash
@@ -25,9 +41,16 @@ make build
 
 ## 2. 运行模式
 
-进入开发容器后：
+确认 Learner 已启动后，打开第二个宿主终端：
 
 ```bash
+# 宿主机
+cd /path/to/workspace/rl-aiserver
+make shell
+
+# 以下命令在 AIServer 容器内执行
+./build.sh
+
 # 查看实际二进制接受的覆盖项及其 config 字段（不启动服务）
 bash ./run.sh --help
 
@@ -83,15 +106,18 @@ bash ./run.sh --config configs/server_config.yaml --workload training
 
 ## 4. 构建运行镜像
 
-运行镜像只接受 clean source 和已同步的正式 Contracts artifact。在宿主机执行：
+运行镜像直接构建当前工作树，以便按“修改、构建镜像、本地验证、确认后提交”的顺序开发；Git
+clean/dirty 状态只记录为诊断来源，不是构建放行条件。构建仍要求当前实际使用的 Contracts 制品已同步。
+在宿主机执行：
 
 ```bash
 bash scripts/sync_contract_snapshot.sh
-bash build_image.sh
+RL_PROJECT_IMAGE_TAG=maze-tag-001 bash build_image.sh
 ```
 
-正式构建不读取开发 artifact 或开发容器 build 目录，并输出按当前 stack source identity
-计算的镜像引用。
+正式构建不读取开发 artifact 或开发容器 build 目录。完整镜像引用为
+`rl-training/aiserver:maze-tag-001`；同名 tag 允许由后续微调构建直接覆盖。已有 source identity
+标签只保留为制品诊断信息，不再决定镜像 tag。
 
 ## 5. 默认地址
 
