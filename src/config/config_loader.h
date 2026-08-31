@@ -10,7 +10,7 @@
 #include "task/single_map_task_controller.h"
 
 inline constexpr char kModelArtifactFile[] = "SaveModel.onnx";
-inline constexpr char kModelManifestFile[] = "manifest.json";
+inline constexpr char kModelManifestFile[] = "manifest.pb";
 
 // ---- 服务参数 ----
 struct ServerConfig {
@@ -31,12 +31,12 @@ struct ModelConfig {
         "../models/eval/0000000/SaveModel.onnx";
     std::string local_train_dir = "../models/train";
     int         startup_timeout_ms = 30000;
-    int         expected_obs_dim = 17;
-    int         expected_action_dim = 9;
-    std::string observation_schema_id = "maze.observation.v3";
-    std::string action_schema_id = "maze.action.v1";
-    std::string model_architecture_id = "maze.mlp-17x64x64.v1";
-    std::string tensor_dtype = "float32";
+    int         expected_obs_dim = 0;
+    int         expected_action_dim = 0;
+    std::string observation_schema_id;
+    std::string action_schema_id;
+    std::string model_architecture_id;
+    std::string tensor_dtype;
 };
 
 struct DigestConfig {
@@ -52,28 +52,36 @@ struct SchemaConfig {
 
 struct ContractConfig {
     std::string package_name = "rl-contracts";
-    std::string package_version = "0.14.0";
+    std::string package_version = "0.15.0";
     DigestConfig source_digest;
     DigestConfig artifact_digest;
     std::string platform = "linux/arm64";
     std::string generator_identity;
+    std::string training_contract_path;
 };
 
-struct TrainingSemanticsConfig {
-    std::string training_contract_id = "maze.training.v3";
+struct TrainingContractConfig {
+    std::string training_contract_id;
     SchemaConfig observation_schema;
     SchemaConfig action_schema;
     SchemaConfig reward_schema;
-    std::string policy_distribution_schema_id =
-        "categorical.logits.v1";
-    std::string model_architecture_id = "maze.mlp-17x64x64.v1";
-    DigestConfig semantics_digest;
+    std::string model_architecture_id;
+    DigestConfig canonical_digest;
+    int observation_dimension = 0;
+    int action_count = 0;
+    int hidden_dimension = 0;
+    std::string tensor_dtype;
+    std::string gae_formula_id;
+    std::string terminal_bootstrap_semantics_id;
+    std::string value_target_formula_id;
+    std::string value_head_abi_id;
+    std::string numeric_dtype;
+    std::string finite_rule_id;
+    std::string model_pin_semantics_id;
 };
 
 struct PolicyConfig {
-    std::string distribution_schema_id = "categorical.logits.v1";
-    double training_temperature = 1.0;
-    DigestConfig policy_spec_digest;
+    double training_temperature = 0.0;
     uint32_t sampling_seed = 0;
 };
 
@@ -86,11 +94,10 @@ struct ModelDistributionConfig {
     int port = 9200;
     int poll_interval_ms = 200;
     int rpc_timeout_ms = 5000;
-    std::string contract_version = "0.14.0";
 };
 
 // Runtime Environment assignment owned only by AIServer. It is deliberately
-// excluded from MazeTaskSpec and the task configuration digest.
+// excluded from MazeTaskConfig and the task configuration digest.
 struct EnvironmentConfig {
     int agent_count = 4;
 };
@@ -98,16 +105,15 @@ struct EnvironmentConfig {
 // Maze task ownership belongs to AIServer. Client configuration cannot
 // override any value in this structure.
 struct MazeTaskConfig {
-    std::string task_contract_id = "maze.task.v3";
-    uint64_t task_revision = 3;
+    std::string task_contract_id = "maze.task";
     DigestConfig task_config_digest{
         "sha256",
         "2502369d3df20d5c02001e7481cacd6c5be32c263cb88bdb2a40db2aee4bb167"};
     std::string fixed_map_id = "maze_117436372";
     std::string fixed_map_checksum_sha256 =
-        "861e0bb22a8b9a2ed689527d080c65ec2c822367e985c49753e1be9cf3ca8ae9";
+        "da9198e61cbcf393fc9934fee0139c09645d3569c2ede1452984051f3b4168e3";
     std::string action_rule_id =
-        "maze.action.9-way.no-corner-cut.v1";
+        "maze.action.9-way.no-corner-cut";
     int shortest_action_steps = 188;
     int episode_max_steps = 1504;
 };
@@ -135,7 +141,6 @@ struct SampleDistributorConfig {
 };
 
 struct MetricsConfig {
-    std::size_t episode_window = 100;
     std::string event_schema_catalog_path;
     SchemaConfig event_schema;
 };
@@ -145,7 +150,7 @@ struct AIServerConfig {
     ServerConfig   server;
     StrategyConfig strategy;
     ContractConfig contract;
-    TrainingSemanticsConfig training_semantics;
+    TrainingContractConfig training_contract;
     PolicyConfig policy;
     ObservationConfig observation;
     ModelConfig    model;

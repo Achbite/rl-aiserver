@@ -82,13 +82,10 @@ public:
     common::SchemaIdentity MetricSchemaIdentity() const;
 
 private:
-    friend struct MazeServiceUpdateTestAccess;
-    friend struct MazeServiceLifecycleTestAccess;
-
     bool LoadInitialModel();
     bool AcquireTrainingWorkspaceLease(std::string& error);
     bool ReleaseTrainingWorkspaceLease(std::string& error);
-    bool LoadAndPrepareCachedModel(
+    bool PrepareModelArtifact(
         const ModelManifest& manifest,
         OnnxInferencer::PreparedModel& prepared,
         std::string& error);
@@ -96,10 +93,6 @@ private:
         ModelStep model_step,
         ModelManifest& manifest,
         OnnxInferencer::PreparedModel& prepared,
-        std::string& error,
-        bool force_exact_download = false);
-    bool BackfillOneCachedModel(
-        const ModelDistributorClient::AvailableRange& range,
         std::string& error);
     std::set<ModelStep> ProtectedCachedModelStepsLocked();
     bool IsCoreInferenceReady() const;
@@ -202,7 +195,6 @@ private:
     std::string producer_instance_id_;
     uint64_t producer_lifecycle_epoch_ = 0;
     SampleDistributor sample_distributor_;
-    EpisodeMetricsWindow episode_metrics_;
     OnnxInferencer onnx_inferencer_;
     ModelDistributorClient model_distributor_;
     ModelManifest model_manifest_;
@@ -221,7 +213,6 @@ private:
     std::atomic<uint64_t> next_segment_seq_{1};
     std::atomic<uint64_t> next_episode_id_{1};
     std::atomic<uint64_t> next_lifecycle_epoch_{1};
-    std::atomic<uint64_t> next_metric_sequence_{1};
     std::atomic<bool> model_watch_stop_{false};
     std::thread model_watch_thread_;
     std::mt19937 action_rng_;

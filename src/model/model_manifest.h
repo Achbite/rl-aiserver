@@ -8,39 +8,30 @@
 #include <cstdint>
 #include <optional>
 #include <string>
-#include <vector>
 
 struct ModelManifest {
     training::ModelArtifactManifest wire;
-    int schema_version = 0;
-    std::string contract_version;
-    std::string model_lineage_id;
-    ModelStep model_step = 0;
-    std::string manifest_digest;
-    std::string artifact_uri;
-    std::string model_file;
-    int64_t size_bytes = 0;
-    std::string sha256;
-    std::vector<int64_t> input_shape;
-    std::vector<int64_t> action_shape;
-    std::vector<int64_t> value_shape;
-    int64_t seed = 0;
-    int64_t published_ts_ms = 0;
-    std::string observation_schema_id;
-    std::string action_schema_id;
-    std::string model_architecture_id;
-    std::string tensor_dtype;
-    int64_t train_updates = 0;
-    int64_t trained_samples = 0;
-    bool ready = false;
     std::string model_path;
     std::string manifest_path;
 
     bool HasModelIdentity() const {
         return wire.has_identity() &&
                wire.identity().has_model_step() &&
-               wire.identity().model_step() == model_step;
+               !wire.identity().model_lineage_id().empty();
     }
+
+    ModelStep model_step() const { return wire.identity().model_step(); }
+    const std::string& model_lineage_id() const {
+        return wire.identity().model_lineage_id();
+    }
+    const std::string& artifact_digest() const {
+        return wire.identity().artifact_digest().hex();
+    }
+    const std::string& manifest_digest() const {
+        return wire.identity().manifest_digest().hex();
+    }
+    uint64_t train_updates() const { return model_step(); }
+    uint64_t trained_samples() const { return wire.trained_samples(); }
 };
 
 bool ValidateModelManifest(const AIServerConfig& config,

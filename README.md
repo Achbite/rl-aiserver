@@ -69,19 +69,20 @@ bash ./run.sh --config configs/server_config.yaml --workload training \
 config/CLI 层解释。
 
 默认 workload 明确配置在 `configs/server_config.yaml` 的 `server.run_mode`；
-`--workload` 只是覆盖它。Reward V4 的公式和数值由 `src/ai/maze_reward.cpp` 固定持有，
-YAML 中不提供 `reward:` 调参段；若出现 `reward.*`，配置加载会失败关闭。config 只保留
-`training_semantics.reward_schema_*` 身份以验证训练语义。
+`--workload` 只是覆盖它。Reward 公式和数值由 `src/ai/maze_reward.cpp` 固定持有，
+YAML 中不提供 `reward:` 调参段；若出现 `reward.*`，配置加载会失败关闭。训练合同及其
+observation/action/reward schema 身份只从 `contract.training_contract_path` 指向的制品读取。
 
 Training 使用模型 manifest 中的 `RolloutEstimatorProfile`。AIServer 为每个 Agent 独立 pin
 behavior model，默认最多累计 128 条 completed transition 后封口，计算未归一化 GAE/Value Target，
 再由进程内 SampleDistributor 批量提交。实际 Agent 数唯一来自
 `environment.agent_count/RL_AISERVER_AGENT_COUNT`；`server.max_agents` 只是容量上限。Client、
-MazeTaskSpec、Learner 和 SamplePool 不提供第二个 Agent 数权威入口。
+任务配置、Learner 和 SamplePool 不提供第二个 Agent 数权威入口。
 
-close reason 和 bootstrap 只在 segment 最后一条 transition 出现：
-terminal 显式记录 zero bootstrap，TMax/受控关闭使用 pinned model 的有限 Value；非末尾 Item 不
-携带这两项。已 Prepare/ACK 的新模型只在每个 Agent 自己的下一个 segment 激活。
+segment 连续性、close reason、终止语义和 bootstrap 由 AIServer 在封口时一次性校验；
+这些 producer 内部事实不会进入 `ProcessedTransition`。Learner 和 SamplePool 只接收已经计算好的
+PPO observation/action/log-probability/value/advantage/value-target。已 Prepare/ACK 的新模型只在
+每个 Agent 自己的下一个 segment 激活。
 
 同一运行镜像提供只读模型诊断，用于验证张量合约和有限值推理：
 
@@ -95,8 +96,10 @@ terminal 显式记录 zero bootstrap，TMax/受控关闭使用 pinned model 的�
 ## 3. Training 缓存
 
 AIServer 只使用 `model.local_train_dir` 下的私有 `cache`，不接收也不理解平台
-`task_id/run_id`。同一目录由 `.aiserver.lock` 防止两个 AIServer 并发使用；正常重启会校验并
-恢复既有合法 cache，不因目录非空而删除或拒绝它：
+`task_id/run_id`。同一目录由 `.aiserver.lock` 防止两个 AIServer 并发使用。启动时不扫描、恢复或
+回填历史 cache；只有当前进程从 Distributor 请求并成功校验的模型 step 才进入内存索引和淘汰范围。
+若该 step 的目标目录已经存在，只接受与本次 protobuf manifest 完全一致的内容；其他既有目录既不
+作为启动事实读取，也不由当前进程迁移或删除：
 
 ```bash
 bash ./run.sh --config configs/server_config.yaml --workload training

@@ -16,7 +16,7 @@ struct RewardDetail {
     std::vector<std::pair<std::string, float>> items;   // 分项明细：<奖励名, 值>
 };
 
-struct MazeRewardV4Parameters {
+struct MazeRewardParameters {
     double goal_reward;
     double timeout_penalty;
     double progress_budget;
@@ -26,10 +26,10 @@ struct MazeRewardV4Parameters {
     double wasted_action_penalty;
 };
 
-// Reward V4 is a compiled algorithm contract, not a runtime configuration.
+// Reward is a compiled algorithm contract, not a runtime configuration.
 // The canonical JSON is also used by the effective Maze task digest.
-const MazeRewardV4Parameters& GetMazeRewardV4Parameters();
-std::string MazeRewardV4CanonicalParametersJson();
+const MazeRewardParameters& GetMazeRewardParameters();
+std::string MazeRewardCanonicalParametersJson();
 
 // ---- 迷宫奖励计算器 ----
 // 独立模块，负责所有奖励函数的计算和分项记录。

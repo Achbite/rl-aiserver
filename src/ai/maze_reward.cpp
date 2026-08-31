@@ -7,7 +7,7 @@
 
 namespace {
 
-constexpr MazeRewardV4Parameters kRewardV4{
+constexpr MazeRewardParameters kReward{
     10.0,
     -2.0,
     1.0,
@@ -17,23 +17,23 @@ constexpr MazeRewardV4Parameters kRewardV4{
     -0.002,
 };
 
-static_assert(kRewardV4.goal_reward > 0.0,
-              "Reward V4 Goal reward must be positive");
-static_assert(kRewardV4.timeout_penalty < 0.0,
-              "Reward V4 timeout penalty must be negative");
-static_assert(kRewardV4.progress_budget >= 0.0 &&
-                  kRewardV4.stage_8x_first_visit_budget >=
-                      kRewardV4.stage_4x_first_visit_budget &&
-                  kRewardV4.stage_4x_first_visit_budget >=
-                      kRewardV4.stage_2x_first_visit_budget &&
-                  kRewardV4.stage_2x_first_visit_budget == 0.0,
-              "Reward V4 shaping budgets are invalid");
-static_assert(kRewardV4.wasted_action_penalty < 0.0,
-              "Reward V4 wasted-action penalty must be negative");
-static_assert(kRewardV4.timeout_penalty + kRewardV4.progress_budget +
-                      kRewardV4.stage_8x_first_visit_budget <
+static_assert(kReward.goal_reward > 0.0,
+              "Reward Goal reward must be positive");
+static_assert(kReward.timeout_penalty < 0.0,
+              "Reward timeout penalty must be negative");
+static_assert(kReward.progress_budget >= 0.0 &&
+                  kReward.stage_8x_first_visit_budget >=
+                      kReward.stage_4x_first_visit_budget &&
+                  kReward.stage_4x_first_visit_budget >=
+                      kReward.stage_2x_first_visit_budget &&
+                  kReward.stage_2x_first_visit_budget == 0.0,
+              "Reward shaping budgets are invalid");
+static_assert(kReward.wasted_action_penalty < 0.0,
+              "Reward wasted-action penalty must be negative");
+static_assert(kReward.timeout_penalty + kReward.progress_budget +
+                      kReward.stage_8x_first_visit_budget <
                   0.0,
-              "Reward V4 maximum failure budget must remain negative");
+              "Reward maximum failure budget must remain negative");
 
 std::string CanonicalDecimal(double value) {
     std::ostringstream output;
@@ -73,25 +73,25 @@ RewardDetail Invalid(std::string error) {
 
 }  // namespace
 
-const MazeRewardV4Parameters& GetMazeRewardV4Parameters() {
-    return kRewardV4;
+const MazeRewardParameters& GetMazeRewardParameters() {
+    return kReward;
 }
 
-std::string MazeRewardV4CanonicalParametersJson() {
+std::string MazeRewardCanonicalParametersJson() {
     std::ostringstream output;
-    output << "{\"goal_reward\":" << CanonicalDecimal(kRewardV4.goal_reward)
+    output << "{\"goal_reward\":" << CanonicalDecimal(kReward.goal_reward)
            << ",\"progress_budget\":"
-           << CanonicalDecimal(kRewardV4.progress_budget)
+           << CanonicalDecimal(kReward.progress_budget)
            << ",\"stage_2x_first_visit_budget\":"
-           << CanonicalDecimal(kRewardV4.stage_2x_first_visit_budget)
+           << CanonicalDecimal(kReward.stage_2x_first_visit_budget)
            << ",\"stage_4x_first_visit_budget\":"
-           << CanonicalDecimal(kRewardV4.stage_4x_first_visit_budget)
+           << CanonicalDecimal(kReward.stage_4x_first_visit_budget)
            << ",\"stage_8x_first_visit_budget\":"
-           << CanonicalDecimal(kRewardV4.stage_8x_first_visit_budget)
+           << CanonicalDecimal(kReward.stage_8x_first_visit_budget)
            << ",\"timeout_penalty\":"
-           << CanonicalDecimal(kRewardV4.timeout_penalty)
+           << CanonicalDecimal(kReward.timeout_penalty)
            << ",\"wasted_action_penalty\":"
-           << CanonicalDecimal(kRewardV4.wasted_action_penalty) << '}';
+           << CanonicalDecimal(kReward.wasted_action_penalty) << '}';
     return output.str();
 }
 
@@ -99,7 +99,7 @@ RewardDetail MazeReward::Calculate(
     const SessionManager::Session& session,
     int agent_id, int gx, int gy, bool is_done,
     maze::MazeTerminationReason reason) {
-    const auto& config = GetMazeRewardV4Parameters();
+    const auto& config = GetMazeRewardParameters();
     const auto agent_it = session.agents.find(agent_id);
     if (agent_it == session.agents.end()) {
         return Invalid("reward agent identity is unknown");
@@ -110,7 +110,7 @@ RewardDetail MazeReward::Calculate(
     }
     if (session.shortest_action_steps <= 0 ||
         agent.episode_start_geodesic_distance <= 0) {
-        return Invalid("Reward V4 episode distance is invalid");
+        return Invalid("Reward episode distance is invalid");
     }
     if (is_done != IsTaskTerminal(reason)) {
         return Invalid("reward termination reason is inconsistent");
@@ -155,7 +155,7 @@ RewardDetail MazeReward::Calculate(
         static_cast<float>(previous_distance - current_distance) /
         distance_normalizer;
 
-    // Reward V4 fixes first-visit shaping to this budget. Changing the budget
+    // The reward contract fixes first-visit shaping to this budget. Changing it
     // or adding curriculum behavior requires a new reward contract identity.
     const float first_visit_budget =
         static_cast<float>(config.stage_8x_first_visit_budget);

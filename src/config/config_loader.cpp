@@ -7,11 +7,13 @@
 #include <google/protobuf/util/json_util.h>
 #include <openssl/evp.h>
 
+#include <algorithm>
 #include <array>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
+#include <initializer_list>
 #include <regex>
 #include <set>
 #include <sstream>
@@ -20,8 +22,6 @@
 #include <cmath>
 #include <limits>
 #include <map>
-
-extern char** environ;
 
 namespace {
 
@@ -94,6 +94,60 @@ bool JsonNumberEquals(const google::protobuf::Struct& document,
     const auto* value = JsonField(document, name);
     return value && value->kind_case() == google::protobuf::Value::kNumberValue &&
            value->number_value() == expected;
+}
+
+bool JsonStringValue(const google::protobuf::Struct& document,
+                     const std::string& name,
+                     std::string& output) {
+    const auto* value = JsonField(document, name);
+    if (!value || value->kind_case() !=
+                      google::protobuf::Value::kStringValue ||
+        value->string_value().empty()) {
+        return false;
+    }
+    output = value->string_value();
+    return true;
+}
+
+bool JsonPositiveInteger(const google::protobuf::Struct& document,
+                         const std::string& name,
+                         int& output) {
+    const auto* value = JsonField(document, name);
+    if (!value || value->kind_case() !=
+                      google::protobuf::Value::kNumberValue ||
+        !std::isfinite(value->number_value()) ||
+        value->number_value() < 1.0 ||
+        value->number_value() >
+            static_cast<double>(std::numeric_limits<int>::max()) ||
+        std::floor(value->number_value()) != value->number_value()) {
+        return false;
+    }
+    output = static_cast<int>(value->number_value());
+    return true;
+}
+
+bool JsonHasExactFields(const google::protobuf::Struct& document,
+                        std::initializer_list<const char*> expected) {
+    if (document.fields_size() != static_cast<int>(expected.size())) {
+        return false;
+    }
+    for (const char* name : expected) {
+        if (document.fields().count(name) != 1) return false;
+    }
+    return true;
+}
+
+bool HasVersionSuffix(const std::string& value) {
+    static const std::regex suffix("\\.v[0-9]+$");
+    return std::regex_search(value, suffix);
+}
+
+bool IsSha256Hex(const std::string& value) {
+    if (value.size() != 64) return false;
+    return std::all_of(value.begin(), value.end(), [](char character) {
+        return (character >= '0' && character <= '9') ||
+               (character >= 'a' && character <= 'f');
+    });
 }
 
 std::string JsonQuote(const std::string& value) {
@@ -177,8 +231,8 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
             google::protobuf::Value::kStringValue ||
         schema_version->second.kind_case() !=
             google::protobuf::Value::kNumberValue ||
-        schema_id->second.string_value() != "maze.metrics.v4" ||
-        schema_version->second.number_value() != 4.0) {
+        schema_id->second.string_value() != "maze.metrics" ||
+        schema_version->second.number_value() != 1.0) {
         error = "metric schema catalog identity is invalid";
         return false;
     }
@@ -210,12 +264,12 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
     const auto* artifact_digest = JsonStruct(manifest, "artifact_digest");
     const auto* metric_schemas = JsonStruct(manifest, "metric_schemas");
     const auto* schema_metadata = metric_schemas
-        ? JsonStruct(*metric_schemas, "maze.metrics.v4") : nullptr;
+        ? JsonStruct(*metric_schemas, "maze.metrics") : nullptr;
     const auto* canonical_digest = schema_metadata
         ? JsonStruct(*schema_metadata, "canonical_digest") : nullptr;
     const auto* files = JsonStruct(manifest, "files");
-    const std::string catalog_relative = "schemas/maze.metrics.v4.json";
-    const std::string digest_relative = "schemas/maze.metrics.v4.sha256";
+    const std::string catalog_relative = "schemas/maze.metrics.json";
+    const std::string digest_relative = "schemas/maze.metrics.sha256";
     if (!JsonStringEquals(manifest, "package", contract.package_name) ||
         !JsonStringEquals(manifest, "version", contract.package_version) ||
         !JsonStringEquals(manifest, "platform", contract.platform) ||
@@ -233,7 +287,7 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
         CanonicalFileTableDigest(*files) !=
             contract.artifact_digest.hex ||
         !schema_metadata ||
-        !JsonNumberEquals(*schema_metadata, "schema_version", 4.0) ||
+        !JsonNumberEquals(*schema_metadata, "schema_version", 1.0) ||
         !JsonStringEquals(*schema_metadata, "path", catalog_relative) ||
         !JsonStringEquals(*schema_metadata, "digest_path", digest_relative) ||
         !canonical_digest ||
@@ -250,6 +304,207 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
     metrics.event_schema.schema_version = static_cast<uint32_t>(
         schema_version->second.number_value());
     metrics.event_schema.canonical_digest = {"sha256", catalog_digest};
+    return true;
+}
+
+bool ReadTrainingSchema(const google::protobuf::Struct& document,
+                        const std::string& expected_id,
+                        SchemaConfig& schema) {
+    int version = 0;
+    if (!JsonHasExactFields(
+            document, {"canonical_digest", "schema_id", "schema_version"}) ||
+        !JsonStringValue(document, "schema_id", schema.schema_id) ||
+        schema.schema_id != expected_id || HasVersionSuffix(schema.schema_id) ||
+        !JsonPositiveInteger(document, "schema_version", version) ||
+        !JsonStringValue(document, "canonical_digest",
+                         schema.canonical_digest.hex) ||
+        !IsSha256Hex(schema.canonical_digest.hex)) {
+        return false;
+    }
+    schema.schema_version = static_cast<uint32_t>(version);
+    schema.canonical_digest.algorithm = "sha256";
+    return true;
+}
+
+bool LoadTrainingContract(const std::string& yaml_path,
+                          const std::string& configured_path,
+                          ContractConfig& contract,
+                          TrainingContractConfig& training,
+                          PolicyConfig& policy,
+                          ModelConfig& model,
+                          std::string& error) {
+    namespace fs = std::filesystem;
+    fs::path descriptor_path(configured_path);
+    if (descriptor_path.is_relative()) {
+        descriptor_path = fs::path(yaml_path).parent_path() / descriptor_path;
+    }
+    std::error_code fs_error;
+    descriptor_path = fs::weakly_canonical(descriptor_path, fs_error);
+    if (fs_error || !fs::is_regular_file(descriptor_path, fs_error) ||
+        fs::is_symlink(fs::symlink_status(descriptor_path, fs_error)) ||
+        descriptor_path.filename() != "training-contract.json") {
+        error = "training contract descriptor is missing or invalid: " +
+                descriptor_path.string();
+        return false;
+    }
+    std::string bytes;
+    if (!ReadFile(descriptor_path, bytes, error)) return false;
+    const std::string descriptor_digest = Sha256Hex(bytes);
+    if (!IsSha256Hex(descriptor_digest)) {
+        error = "cannot calculate training contract digest";
+        return false;
+    }
+    fs::path digest_path = descriptor_path;
+    digest_path.replace_extension(".sha256");
+    std::string digest_bytes;
+    if (!ReadFile(digest_path, digest_bytes, error) ||
+        TrimAscii(digest_bytes) != descriptor_digest) {
+        error = "training contract digest file does not match the descriptor";
+        return false;
+    }
+
+    const fs::path manifest_path = descriptor_path.parent_path().parent_path() /
+                                   "manifest.json";
+    std::string manifest_bytes;
+    if (!ReadFile(manifest_path, manifest_bytes, error)) return false;
+    google::protobuf::Struct manifest;
+    if (!google::protobuf::util::JsonStringToMessage(
+             manifest_bytes, &manifest).ok()) {
+        error = "contract snapshot manifest is invalid";
+        return false;
+    }
+    const auto* source_digest = JsonStruct(manifest, "source_digest");
+    const auto* artifact_digest = JsonStruct(manifest, "artifact_digest");
+    const auto* descriptor_metadata = JsonStruct(manifest, "training_contract");
+    const auto* canonical_digest = descriptor_metadata
+        ? JsonStruct(*descriptor_metadata, "canonical_digest") : nullptr;
+    const auto* files = JsonStruct(manifest, "files");
+    constexpr const char* kDescriptorRelative =
+        "schemas/training-contract.json";
+    constexpr const char* kDigestRelative =
+        "schemas/training-contract.sha256";
+    if (!JsonStringEquals(manifest, "package", contract.package_name) ||
+        !JsonStringEquals(manifest, "version", contract.package_version) ||
+        !JsonStringEquals(manifest, "platform", contract.platform) ||
+        !JsonStringEquals(manifest, "generator_identity",
+                          contract.generator_identity) ||
+        !source_digest ||
+        !JsonStringEquals(*source_digest, "algorithm", "sha256") ||
+        !JsonStringEquals(*source_digest, "hex", contract.source_digest.hex) ||
+        !artifact_digest ||
+        !JsonStringEquals(*artifact_digest, "algorithm", "sha256") ||
+        !JsonStringEquals(*artifact_digest, "hex",
+                          contract.artifact_digest.hex) ||
+        !files || CanonicalFileTableDigest(*files) !=
+                      contract.artifact_digest.hex ||
+        !descriptor_metadata ||
+        !JsonStringEquals(*descriptor_metadata, "path", kDescriptorRelative) ||
+        !JsonStringEquals(*descriptor_metadata, "digest_path", kDigestRelative) ||
+        !canonical_digest ||
+        !JsonStringEquals(*canonical_digest, "algorithm", "sha256") ||
+        !JsonStringEquals(*canonical_digest, "hex", descriptor_digest) ||
+        !JsonStringEquals(*files, kDescriptorRelative, descriptor_digest) ||
+        !JsonStringEquals(*files, kDigestRelative, Sha256Hex(digest_bytes))) {
+        error = "training contract is not bound to the selected artifact";
+        return false;
+    }
+
+    google::protobuf::Struct document;
+    if (!google::protobuf::util::JsonStringToMessage(bytes, &document).ok() ||
+        !JsonHasExactFields(
+            document,
+            {"action_count", "action_schema", "hidden_dimension",
+             "model_architecture_id", "observation_dimension",
+             "observation_schema", "policy", "reward_schema", "rollout",
+             "tensor_dtype", "training_contract_id"})) {
+        error = "training contract JSON shape is invalid";
+        return false;
+    }
+    const auto* observation_schema = JsonStruct(document, "observation_schema");
+    const auto* action_schema = JsonStruct(document, "action_schema");
+    const auto* reward_schema = JsonStruct(document, "reward_schema");
+    const auto* policy_document = JsonStruct(document, "policy");
+    const auto* rollout = JsonStruct(document, "rollout");
+    std::string distribution_schema_id;
+    std::string sampling;
+    if (!observation_schema || !action_schema || !reward_schema ||
+        !policy_document || !rollout ||
+        !ReadTrainingSchema(*observation_schema, "maze.observation",
+                            training.observation_schema) ||
+        !ReadTrainingSchema(*action_schema, "maze.action",
+                            training.action_schema) ||
+        !ReadTrainingSchema(*reward_schema, "maze.reward",
+                            training.reward_schema) ||
+        !JsonStringValue(document, "training_contract_id",
+                         training.training_contract_id) ||
+        training.training_contract_id != "maze.training" ||
+        HasVersionSuffix(training.training_contract_id) ||
+        !JsonStringValue(document, "model_architecture_id",
+                         training.model_architecture_id) ||
+        training.model_architecture_id != "maze.mlp-17x64x64" ||
+        HasVersionSuffix(training.model_architecture_id) ||
+        !JsonStringValue(document, "tensor_dtype", training.tensor_dtype) ||
+        training.tensor_dtype != "float32" ||
+        !JsonPositiveInteger(document, "observation_dimension",
+                             training.observation_dimension) ||
+        training.observation_dimension != 17 ||
+        !JsonPositiveInteger(document, "action_count", training.action_count) ||
+        training.action_count != 9 ||
+        !JsonPositiveInteger(document, "hidden_dimension",
+                             training.hidden_dimension) ||
+        training.hidden_dimension != 64 ||
+        !JsonHasExactFields(
+            *policy_document,
+            {"distribution_schema_id", "sampling", "temperature"}) ||
+        !JsonStringValue(*policy_document, "distribution_schema_id",
+                         distribution_schema_id) ||
+        distribution_schema_id != "categorical.logits" ||
+        HasVersionSuffix(distribution_schema_id) ||
+        !JsonStringValue(*policy_document, "sampling", sampling) ||
+        sampling != "stochastic" ||
+        !JsonNumberEquals(*policy_document, "temperature", 1.0) ||
+        !JsonHasExactFields(
+            *rollout,
+            {"finite_rule_id", "gae_formula_id", "model_pin_semantics_id",
+             "numeric_dtype", "terminal_bootstrap_semantics_id",
+             "value_head_abi_id", "value_target_formula_id"}) ||
+        !JsonStringValue(*rollout, "finite_rule_id",
+                         training.finite_rule_id) ||
+        !JsonStringValue(*rollout, "gae_formula_id",
+                         training.gae_formula_id) ||
+        !JsonStringValue(*rollout, "model_pin_semantics_id",
+                         training.model_pin_semantics_id) ||
+        !JsonStringValue(*rollout, "numeric_dtype",
+                         training.numeric_dtype) ||
+        !JsonStringValue(*rollout, "terminal_bootstrap_semantics_id",
+                         training.terminal_bootstrap_semantics_id) ||
+        !JsonStringValue(*rollout, "value_head_abi_id",
+                         training.value_head_abi_id) ||
+        !JsonStringValue(*rollout, "value_target_formula_id",
+                         training.value_target_formula_id)) {
+        error = "training contract is unsupported by this AIServer";
+        return false;
+    }
+    for (const std::string* identifier : {
+             &training.finite_rule_id, &training.gae_formula_id,
+             &training.model_pin_semantics_id,
+             &training.terminal_bootstrap_semantics_id,
+             &training.value_head_abi_id,
+             &training.value_target_formula_id}) {
+        if (HasVersionSuffix(*identifier)) {
+            error = "training contract contains a versioned ID";
+            return false;
+        }
+    }
+    training.canonical_digest = {"sha256", descriptor_digest};
+    policy.training_temperature = 1.0;
+    model.expected_obs_dim = training.observation_dimension;
+    model.expected_action_dim = training.action_count;
+    model.observation_schema_id = training.observation_schema.schema_id;
+    model.action_schema_id = training.action_schema.schema_id;
+    model.model_architecture_id = training.model_architecture_id;
+    model.tensor_dtype = training.tensor_dtype;
+    contract.training_contract_path = descriptor_path.string();
     return true;
 }
 
@@ -425,41 +680,6 @@ static std::string FindValue(const std::vector<YamlEntry>& entries,
     return "";
 }
 
-static bool HasPrefix(const std::string& value, const char* prefix) {
-    return value.rfind(prefix, 0) == 0;
-}
-
-static bool ValidateComponentEnvironment(std::string& error) {
-    static const std::set<std::string> allowed = {
-        "RL_AISERVER_MAX_AGENTS",
-        "RL_AISERVER_AGENT_COUNT",
-        "RL_AISERVER_QUIESCE_FAILURE_MARKER",
-        "RL_AISERVER_QUIESCE_MARKER",
-        "RL_AISERVER_QUIESCE_TIMEOUT_SECONDS",
-        "RL_TASK_EPISODE_MAX_STEPS",
-        "RL_TASK_MAP_EXPECTED_SHA256",
-        "RL_TASK_MAP_ID",
-        "RL_TASK_SHORTEST_ACTION_STEPS",
-    };
-    for (char** item = environ; item && *item; ++item) {
-        const std::string entry(*item);
-        const auto separator = entry.find('=');
-        const std::string name = entry.substr(0, separator);
-        if (allowed.count(name) != 0) continue;
-        if (name == "RL_RUN_ID" || name == "RL_POD_ATTEMPT_ID" ||
-            name == "RL_TASK_ID") {
-            error = "unknown component configuration environment: " + name;
-            return false;
-        }
-        if (HasPrefix(name, "RL_AISERVER_") ||
-            HasPrefix(name, "RL_TASK_") || HasPrefix(name, "RL_PPO_")) {
-            LOG_WARN("Config", "ignoring unknown component environment: %s",
-                     name.c_str());
-        }
-    }
-    return true;
-}
-
 static bool ReadEnvironment(const char* name,
                             std::optional<std::string>& value,
                             std::string& error) {
@@ -503,17 +723,16 @@ static std::string ComputeTaskConfigDigest(const AIServerConfig& config) {
         << ",\"fixed_map_checksum_sha256\":"
         << JsonQuote(config.task.fixed_map_checksum_sha256)
         << ",\"fixed_map_id\":" << JsonQuote(config.task.fixed_map_id)
-        << ",\"reward\":" << MazeRewardV4CanonicalParametersJson()
+        << ",\"reward\":" << MazeRewardCanonicalParametersJson()
         << ",\"reward_schema_digest\":"
         << JsonQuote(
-               config.training_semantics.reward_schema.canonical_digest.hex)
+               config.training_contract.reward_schema.canonical_digest.hex)
         << ",\"reward_schema_id\":"
-        << JsonQuote(config.training_semantics.reward_schema.schema_id)
+        << JsonQuote(config.training_contract.reward_schema.schema_id)
         << ",\"shortest_action_steps\":"
         << config.task.shortest_action_steps
         << ",\"task_contract_id\":"
-        << JsonQuote(config.task.task_contract_id)
-        << ",\"task_revision\":" << config.task.task_revision << '}';
+        << JsonQuote(config.task.task_contract_id) << '}';
     return Sha256Hex(canonical.str());
 }
 
@@ -527,10 +746,6 @@ bool LoadServerConfig(const std::string& yaml_path,
     out_config = AIServerConfig{};
     report = AIServerConfigLoadReport{};
     error.clear();
-    if (!ValidateComponentEnvironment(error)) {
-        LOG_ERROR("Config", "%s", error.c_str());
-        return false;
-    }
 
     std::error_code fs_error;
     fs::path config_path = fs::absolute(fs::path(yaml_path), fs_error);
@@ -562,17 +777,41 @@ bool LoadServerConfig(const std::string& yaml_path,
     LOG_INFO("Config", "加载配置文件: %s", config_path.c_str());
 
     std::vector<YamlEntry> entries = ParseYaml(content);
+    static const std::set<std::string> allowed_entries = {
+        "server.run_mode", "server.listen_port", "server.max_agents",
+        "contract.package_name", "contract.package_version",
+        "contract.source_digest", "contract.artifact_digest",
+        "contract.platform", "contract.generator_identity",
+        "contract.training_contract_path", "policy.sampling_seed",
+        "observation.ray_max_range", "strategy.grid_size",
+        "strategy.replan_interval", "model.evaluation_model_path",
+        "model.local_train_dir", "model.startup_timeout_ms",
+        "environment.agent_count", "task.task_contract_id",
+        "task.fixed_map_id",
+        "task.fixed_map_checksum_sha256", "task.action_rule_id",
+        "task.shortest_action_steps", "task.episode_max_steps",
+        "model_distribution.host", "model_distribution.port",
+        "model_distribution.poll_interval_ms",
+        "model_distribution.rpc_timeout_ms", "sample_distributor.enabled",
+        "sample_distributor.host", "sample_distributor.port",
+        "sample_distributor.envelope_max_transitions",
+        "sample_distributor.envelope_max_bytes",
+        "sample_distributor.rpc_timeout_ms",
+        "sample_distributor.max_attempts",
+        "sample_distributor.enqueue_timeout_ms",
+        "sample_distributor.drain_timeout_ms",
+        "sample_distributor.health_timeout_ms",
+        "sample_distributor.status_poll_interval_ms",
+        "sample_distributor.recovery_timeout_ms",
+        "sample_distributor.outbound_max_envelopes",
+        "sample_distributor.outbound_max_estimated_bytes",
+        "sample_distributor.aiserver_id", "sample_distributor.env_id",
+        "metrics.event_schema_catalog",
+    };
     for (const auto& entry : entries) {
-        if (entry.key == "task_id" || entry.key == "run_id" ||
-            entry.key == "pod_attempt_id") {
-            error = "platform control identity is not an AIServer config field: " +
-                    entry.section + "." + entry.key;
-            LOG_ERROR("Config", "%s", error.c_str());
-            return false;
-        }
-        if (entry.section == "reward") {
-            error = "Reward V4 parameters are compiled C++ contract values, "
-                    "not AIServer config fields: reward." + entry.key;
+        const std::string qualified = entry.section + "." + entry.key;
+        if (allowed_entries.count(qualified) == 0) {
+            error = "unknown AIServer config field: " + qualified;
             LOG_ERROR("Config", "%s", error.c_str());
             return false;
         }
@@ -585,22 +824,7 @@ bool LoadServerConfig(const std::string& yaml_path,
         {"contract", "artifact_digest"},
         {"contract", "platform"},
         {"contract", "generator_identity"},
-        {"training_semantics", "training_contract_id"},
-        {"training_semantics", "observation_schema_id"},
-        {"training_semantics", "observation_schema_version"},
-        {"training_semantics", "observation_schema_digest"},
-        {"training_semantics", "action_schema_id"},
-        {"training_semantics", "action_schema_version"},
-        {"training_semantics", "action_schema_digest"},
-        {"training_semantics", "reward_schema_id"},
-        {"training_semantics", "reward_schema_version"},
-        {"training_semantics", "reward_schema_digest"},
-        {"training_semantics", "policy_distribution_schema_id"},
-        {"training_semantics", "model_architecture_id"},
-        {"training_semantics", "semantics_digest"},
-        {"policy", "distribution_schema_id"},
-        {"policy", "training_temperature"},
-        {"policy", "policy_spec_digest"},
+        {"contract", "training_contract_path"},
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
         {"server", "run_mode"},
@@ -609,18 +833,13 @@ bool LoadServerConfig(const std::string& yaml_path,
         {"environment", "agent_count"},
         {"metrics", "event_schema_catalog"},
         {"task", "task_contract_id"},
-        {"task", "task_revision"},
         {"task", "fixed_map_id"},
         {"task", "fixed_map_checksum_sha256"},
         {"task", "action_rule_id"},
         {"task", "shortest_action_steps"},
         {"task", "episode_max_steps"},
-        {"model", "expected_obs_dim"},
-        {"model", "expected_action_dim"},
         {"model", "evaluation_model_path"},
         {"model", "local_train_dir"},
-        {"model", "model_architecture_id"},
-        {"model", "tensor_dtype"},
         {"model_distribution", "host"},
         {"model_distribution", "port"},
         {"sample_distributor", "host"},
@@ -635,62 +854,7 @@ bool LoadServerConfig(const std::string& yaml_path,
         }
     }
 
-    const std::pair<const char*, const char*> forbidden_platform_or_legacy[] = {
-        {"task", "task_id"},
-        {"task", "run_id"},
-        {"task", "pod_attempt_id"},
-        {"server", "task_id"},
-        {"server", "run_id"},
-        {"server", "pod_attempt_id"},
-        {"model", "evaluation_dir"},
-        {"task", "agent_num"},
-        {"task", "task_config_digest"},
-    };
-    for (const auto& field : forbidden_platform_or_legacy) {
-        if (!FindValue(entries, field.first, field.second).empty()) {
-            error = std::string("forbidden config field: ") + field.first +
-                    "." + field.second;
-            LOG_ERROR("Config", "%s", error.c_str());
-            return false;
-        }
-    }
-
-    // Automatic model evaluation and quality gating are not part of either
-    // local or Infra-managed training. Reject stale configurations instead of
-    // silently reviving the retired in-training evaluation controller.
-    const char* retired_training_controller_fields[] = {
-        "stage_8x_sample_budget",
-        "stage_4x_sample_budget",
-        "stage_2x_sample_budget",
-        "evaluation_interval_samples",
-        "evaluation_episodes_per_round",
-        "stage_8x_success_threshold",
-        "stage_4x_success_threshold",
-        "stage_2x_success_threshold",
-        "final_path_ratio_median_limit",
-        "final_path_ratio_p95_limit",
-    };
-    for (const char* field : retired_training_controller_fields) {
-        if (!FindValue(entries, "curriculum", field).empty()) {
-            LOG_ERROR(
-                "Config",
-                "训练配置禁止已退役的课程/评测控制字段: curriculum.%s",
-                field);
-            return false;
-        }
-    }
-    if (!FindValue(entries, "task", "training_sample_budget").empty()) {
-        LOG_ERROR(
-            "Config",
-            "训练配置禁止样本硬上限: task.training_sample_budget");
-        return false;
-    }
-
-
     const std::pair<const char*, const char*> integer_fields[] = {
-        {"training_semantics", "observation_schema_version"},
-        {"training_semantics", "action_schema_version"},
-        {"training_semantics", "reward_schema_version"},
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
         {"server", "listen_port"},
@@ -699,9 +863,6 @@ bool LoadServerConfig(const std::string& yaml_path,
         {"strategy", "grid_size"},
         {"strategy", "replan_interval"},
         {"model", "startup_timeout_ms"},
-        {"model", "expected_obs_dim"},
-        {"model", "expected_action_dim"},
-        {"task", "task_revision"},
         {"task", "shortest_action_steps"},
         {"task", "episode_max_steps"},
         {"model_distribution", "port"},
@@ -719,7 +880,6 @@ bool LoadServerConfig(const std::string& yaml_path,
         {"sample_distributor", "recovery_timeout_ms"},
         {"sample_distributor", "outbound_max_envelopes"},
         {"sample_distributor", "outbound_max_estimated_bytes"},
-        {"metrics", "episode_window"},
     };
     for (const auto& field : integer_fields) {
         const std::string value = FindValue(entries, field.first, field.second);
@@ -727,17 +887,6 @@ bool LoadServerConfig(const std::string& yaml_path,
             (SafeInt64(value, 0) == std::numeric_limits<int64_t>::min() ||
              value.front() == '-')) {
             LOG_ERROR("Config", "整数配置无效: %s.%s",
-                      field.first, field.second);
-            return false;
-        }
-    }
-    const std::pair<const char*, const char*> finite_fields[] = {
-        {"policy", "training_temperature"},
-    };
-    for (const auto& field : finite_fields) {
-        const std::string value = FindValue(entries, field.first, field.second);
-        if (!value.empty() && !std::isfinite(SafeDouble(value, NAN))) {
-            LOG_ERROR("Config", "浮点配置无效: %s.%s",
                       field.first, field.second);
             return false;
         }
@@ -762,46 +911,8 @@ bool LoadServerConfig(const std::string& yaml_path,
         FindValue(entries, "contract", "platform");
     out_config.contract.generator_identity =
         FindValue(entries, "contract", "generator_identity");
-
-    auto& semantics = out_config.training_semantics;
-    semantics.training_contract_id =
-        FindValue(entries, "training_semantics", "training_contract_id");
-    semantics.observation_schema.schema_id =
-        FindValue(entries, "training_semantics", "observation_schema_id");
-    semantics.observation_schema.schema_version = static_cast<uint32_t>(
-        SafeSize(FindValue(entries, "training_semantics",
-                           "observation_schema_version"), 0));
-    semantics.observation_schema.canonical_digest.hex =
-        FindValue(entries, "training_semantics",
-                  "observation_schema_digest");
-    semantics.action_schema.schema_id =
-        FindValue(entries, "training_semantics", "action_schema_id");
-    semantics.action_schema.schema_version = static_cast<uint32_t>(
-        SafeSize(FindValue(entries, "training_semantics",
-                           "action_schema_version"), 0));
-    semantics.action_schema.canonical_digest.hex =
-        FindValue(entries, "training_semantics", "action_schema_digest");
-    semantics.reward_schema.schema_id =
-        FindValue(entries, "training_semantics", "reward_schema_id");
-    semantics.reward_schema.schema_version = static_cast<uint32_t>(
-        SafeSize(FindValue(entries, "training_semantics",
-                           "reward_schema_version"), 0));
-    semantics.reward_schema.canonical_digest.hex =
-        FindValue(entries, "training_semantics", "reward_schema_digest");
-    semantics.policy_distribution_schema_id =
-        FindValue(entries, "training_semantics",
-                  "policy_distribution_schema_id");
-    semantics.model_architecture_id =
-        FindValue(entries, "training_semantics", "model_architecture_id");
-    semantics.semantics_digest.hex =
-        FindValue(entries, "training_semantics", "semantics_digest");
-
-    out_config.policy.distribution_schema_id =
-        FindValue(entries, "policy", "distribution_schema_id");
-    out_config.policy.training_temperature = SafeDouble(
-        FindValue(entries, "policy", "training_temperature"), 0.0);
-    out_config.policy.policy_spec_digest.hex =
-        FindValue(entries, "policy", "policy_spec_digest");
+    out_config.contract.training_contract_path =
+        FindValue(entries, "contract", "training_contract_path");
     out_config.policy.sampling_seed = static_cast<uint32_t>(SafeSize(
         FindValue(entries, "policy", "sampling_seed"), 0));
     out_config.observation.ray_max_range = SafeInt(
@@ -837,23 +948,10 @@ bool LoadServerConfig(const std::string& yaml_path,
     }
     out_config.model.startup_timeout_ms =
         SafeInt(FindValue(entries, "model", "startup_timeout_ms"), 30000);
-    out_config.model.expected_obs_dim =
-        SafeInt(FindValue(entries, "model", "expected_obs_dim"), 17);
-    out_config.model.expected_action_dim =
-        SafeInt(FindValue(entries, "model", "expected_action_dim"), 9);
-    out_config.model.observation_schema_id =
-        semantics.observation_schema.schema_id;
-    out_config.model.action_schema_id = semantics.action_schema.schema_id;
-    out_config.model.model_architecture_id =
-        FindValue(entries, "model", "model_architecture_id");
-    out_config.model.tensor_dtype =
-        FindValue(entries, "model", "tensor_dtype");
 
     // --- task ---
     out_config.task.task_contract_id =
         FindValue(entries, "task", "task_contract_id");
-    out_config.task.task_revision = static_cast<uint64_t>(SafeSize(
-        FindValue(entries, "task", "task_revision"), 1));
     out_config.environment.agent_count = SafeInt(
         FindValue(entries, "environment", "agent_count"), 4);
     std::string fixed_map_id =
@@ -882,11 +980,6 @@ bool LoadServerConfig(const std::string& yaml_path,
         FindValue(entries, "model_distribution", "poll_interval_ms"), 200);
     out_config.model_distribution.rpc_timeout_ms = SafeInt(
         FindValue(entries, "model_distribution", "rpc_timeout_ms"), 5000);
-    std::string contract_version =
-        FindValue(entries, "model_distribution", "contract_version");
-    if (!contract_version.empty()) {
-        out_config.model_distribution.contract_version = contract_version;
-    }
 
     // --- AIServer-local asynchronous SampleDistributor ---
     out_config.sample_distributor.enabled = SafeBool(
@@ -935,9 +1028,6 @@ bool LoadServerConfig(const std::string& yaml_path,
     if (!env_id.empty()) {
         out_config.sample_distributor.env_id = env_id;
     }
-    out_config.metrics.episode_window = SafeSize(
-        FindValue(entries, "metrics", "episode_window"), 100);
-
     const auto record_environment_override = [&](const char* field) {
         report.environment_overridden_fields.emplace_back(field);
     };
@@ -1046,6 +1136,17 @@ bool LoadServerConfig(const std::string& yaml_path,
     resolve_config_path(out_config.model.evaluation_model_path);
     resolve_config_path(out_config.model.local_train_dir);
 
+    std::string training_contract_error;
+    if (!LoadTrainingContract(
+            config_path.string(), out_config.contract.training_contract_path,
+            out_config.contract, out_config.training_contract,
+            out_config.policy, out_config.model,
+            training_contract_error)) {
+        error = training_contract_error;
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+
     if (overrides.evaluation_model_path.has_value() &&
         out_config.server.run_mode == aiserver_mode::kTraining) {
         error = "--evaluation-model is invalid for the training workload";
@@ -1084,61 +1185,37 @@ bool LoadServerConfig(const std::string& yaml_path,
         ComputeTaskConfigDigest(out_config);
     const bool immutable_identity_valid =
         out_config.contract.package_name == "rl-contracts" &&
-        out_config.contract.package_version == "0.14.0" &&
-        out_config.contract.source_digest.hex ==
-            "61d633bde1ad4a8dccc2a5e8505d122bbabc8c8cd69eb1cfa97b253c4c2d4c0d" &&
-        out_config.contract.artifact_digest.hex ==
-            "4642b1a7e18150f9dfc0b7dba6e6ff3b5f0173cb10dee4c432c0155bfa596779" &&
-        out_config.contract.platform == "linux/arm64" &&
-        out_config.contract.generator_identity ==
-            "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8" &&
-        out_config.training_semantics.training_contract_id ==
-            "maze.training.v3" &&
-        out_config.training_semantics.observation_schema.schema_id ==
-            "maze.observation.v3" &&
-        out_config.training_semantics.observation_schema.schema_version == 1 &&
-        out_config.training_semantics.observation_schema.canonical_digest.hex ==
-            "7cee41136020f3ffc8c6ae799f630d55d0588c6a99ab7f717eac3b3d08aa18b4" &&
-        out_config.training_semantics.action_schema.schema_id ==
-            "maze.action.v1" &&
-        out_config.training_semantics.action_schema.schema_version == 1 &&
-        out_config.training_semantics.action_schema.canonical_digest.hex ==
-            "ce84c564e128f98adcc48fd420ac0df5acea61774a25de8705b602464009cfd8" &&
-        out_config.training_semantics.reward_schema.schema_id ==
-            "maze.reward.v4" &&
-        out_config.training_semantics.reward_schema.schema_version == 1 &&
-        out_config.training_semantics.reward_schema.canonical_digest.hex ==
-            "ed284084b79413473d5053b6d3f69320d2a4639c81451ba598ca45ac8ce15929" &&
-        out_config.training_semantics.policy_distribution_schema_id ==
-            "categorical.logits.v1" &&
-        out_config.training_semantics.model_architecture_id ==
-            "maze.mlp-17x64x64.v1" &&
-        out_config.training_semantics.semantics_digest.hex ==
-            "6cd834542f8263135b4bfd069f372ddfdb99334060d305f58b00ce56eea10b4c" &&
-        out_config.policy.distribution_schema_id ==
-            "categorical.logits.v1" &&
-        out_config.policy.policy_spec_digest.hex ==
-            "e1efb81040681fd13fdae439caab09778c8e0b0f6bba16b7808c30fbbb632617";
+        out_config.contract.package_version == "0.15.0" &&
+        !out_config.contract.platform.empty() &&
+        IsLowerSha256(out_config.contract.generator_identity) &&
+        out_config.training_contract.training_contract_id ==
+            "maze.training" &&
+        out_config.training_contract.observation_schema.schema_id ==
+            "maze.observation" &&
+        out_config.training_contract.action_schema.schema_id ==
+            "maze.action" &&
+        out_config.training_contract.reward_schema.schema_id ==
+            "maze.reward" &&
+        out_config.training_contract.model_architecture_id ==
+            "maze.mlp-17x64x64";
     if (!immutable_identity_valid ||
         !digest_valid(out_config.contract.source_digest) ||
         !digest_valid(out_config.contract.artifact_digest) ||
-        !digest_valid(out_config.training_semantics.observation_schema.canonical_digest) ||
-        !digest_valid(out_config.training_semantics.action_schema.canonical_digest) ||
-        !digest_valid(out_config.training_semantics.reward_schema.canonical_digest) ||
-        out_config.metrics.event_schema.schema_id != "maze.metrics.v4" ||
-        out_config.metrics.event_schema.schema_version != 4 ||
+        !digest_valid(out_config.training_contract.observation_schema.canonical_digest) ||
+        !digest_valid(out_config.training_contract.action_schema.canonical_digest) ||
+        !digest_valid(out_config.training_contract.reward_schema.canonical_digest) ||
+        out_config.metrics.event_schema.schema_id != "maze.metrics" ||
+        out_config.metrics.event_schema.schema_version != 1 ||
         !digest_valid(out_config.metrics.event_schema.canonical_digest) ||
-        !digest_valid(out_config.training_semantics.semantics_digest) ||
-        !digest_valid(out_config.policy.policy_spec_digest)) {
-        error = "0.14.0 contract/training identity mismatch";
+        !digest_valid(out_config.training_contract.canonical_digest)) {
+        error = "current contract/training identity mismatch";
         LOG_ERROR("Config", "%s", error.c_str());
         return false;
     }
-    if (out_config.task.task_contract_id != "maze.task.v3" ||
-        out_config.task.task_revision != 3 ||
+    if (out_config.task.task_contract_id != "maze.task" ||
         !digest_valid(out_config.task.task_config_digest) ||
         out_config.task.action_rule_id !=
-            "maze.action.9-way.no-corner-cut.v1") {
+            "maze.action.9-way.no-corner-cut") {
         LOG_ERROR("Config", "Maze task contract identity mismatch");
         return false;
     }
@@ -1154,7 +1231,7 @@ bool LoadServerConfig(const std::string& yaml_path,
     if (out_config.model.expected_obs_dim != 17 ||
         out_config.model.expected_action_dim != 9 ||
         out_config.model.model_architecture_id !=
-            out_config.training_semantics.model_architecture_id ||
+            out_config.training_contract.model_architecture_id ||
         out_config.model.tensor_dtype != "float32" ||
         out_config.policy.training_temperature != 1.0 ||
         out_config.observation.ray_max_range <= 0) {
@@ -1187,18 +1264,11 @@ bool LoadServerConfig(const std::string& yaml_path,
         out_config.sample_distributor.status_poll_interval_ms > 0 &&
         out_config.sample_distributor.recovery_timeout_ms > 0 &&
         out_config.sample_distributor.outbound_max_envelopes > 0 &&
-        out_config.sample_distributor.outbound_max_estimated_bytes > 0 &&
-        out_config.metrics.episode_window > 0 &&
-        out_config.metrics.episode_window <= 1000000;
+        out_config.sample_distributor.outbound_max_estimated_bytes > 0;
     if (!runtime_values_valid) {
         LOG_ERROR("Config", "运行时数值配置无效");
         return false;
     }
-    if (out_config.model_distribution.contract_version != "0.14.0") {
-        LOG_ERROR("Config", "runtime contract version mismatch");
-        return false;
-    }
-
     LOG_INFO("Config", "server: port=%d, max_agents=%d, run_mode=%d(%s)",
              out_config.server.listen_port, out_config.server.max_agents,
              out_config.server.run_mode,
@@ -1214,18 +1284,16 @@ bool LoadServerConfig(const std::string& yaml_path,
              out_config.model.expected_action_dim,
              out_config.model.observation_schema_id.c_str(),
              out_config.model.action_schema_id.c_str());
-    LOG_INFO("Config", "environment: agent_count=%d; task: contract=%s revision=%llu map=%s digest=%s",
+    LOG_INFO("Config", "environment: agent_count=%d; task: contract=%s map=%s digest=%s",
              out_config.environment.agent_count,
              out_config.task.task_contract_id.c_str(),
-             static_cast<unsigned long long>(out_config.task.task_revision),
              out_config.task.fixed_map_id.c_str(),
              out_config.task.task_config_digest.hex.c_str());
-    LOG_INFO("Config", "model_distribution: target=%s:%d, poll_interval_ms=%d, rpc_timeout_ms=%d, contract=%s",
+    LOG_INFO("Config", "model_distribution: target=%s:%d, poll_interval_ms=%d, rpc_timeout_ms=%d",
              out_config.model_distribution.host.c_str(),
              out_config.model_distribution.port,
              out_config.model_distribution.poll_interval_ms,
-             out_config.model_distribution.rpc_timeout_ms,
-             out_config.model_distribution.contract_version.c_str());
+             out_config.model_distribution.rpc_timeout_ms);
     const bool sample_distributor_active =
         out_config.server.run_mode == aiserver_mode::kTraining &&
         out_config.sample_distributor.enabled;
@@ -1244,8 +1312,6 @@ bool LoadServerConfig(const std::string& yaml_path,
              out_config.sample_distributor.outbound_max_estimated_bytes,
              out_config.sample_distributor.aiserver_id.c_str(),
              out_config.sample_distributor.env_id.c_str());
-    LOG_INFO("Config", "metrics: episode_window=%zu",
-             out_config.metrics.episode_window);
     error.clear();
     return true;
 }

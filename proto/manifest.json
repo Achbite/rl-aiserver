@@ -1,7 +1,7 @@
 {
   "artifact_digest": {
     "algorithm": "sha256",
-    "hex": "4642b1a7e18150f9dfc0b7dba6e6ff3b5f0173cb10dee4c432c0155bfa596779"
+    "hex": "0c278cfcf85ab4dbff72177eeeea165ebb113bb36867ae71975bf8c14da2be33"
   },
   "contract_packages": [
     "rl.common.v1",
@@ -10,52 +10,59 @@
   ],
   "files": {
     "common.proto": "6019ed0edfe5bb971869ab7bc47894345d6cdbe96fa19b25f2ba1354fd44f8de",
-    "cpp/common.grpc.pb.cc": "4f3b2a7675699d28f5bedd288561cebe540dc0776d6406cf4b45c6a9922dde86",
-    "cpp/common.grpc.pb.h": "f59710f940aa0816664e94e101a95331dcddc1b25358d0c8003a8eea6e14021e",
     "cpp/common.pb.cc": "f60748148a57c527511a3b2f19489e76a91aaed0f65ddb90f1719cdf6bbcc25a",
     "cpp/common.pb.h": "51f378e8c2f6669b130f4885ac00fc3ed52643fa631ae0e6523da52d2510cf5d",
     "cpp/maze_task.grpc.pb.cc": "0acc49d19afed5f790e35bd194410934dd83b15b82b0377680ff15cb9d085da0",
     "cpp/maze_task.grpc.pb.h": "662161d3efebbbec2cac43addec3ff0935e2704cc48004ace8a5916ea7ccf7fc",
-    "cpp/maze_task.pb.cc": "749362c0b2b7dc4c57c31706f74310478238ca00b2ad8b12289bac773c0b646e",
-    "cpp/maze_task.pb.h": "f022d9bd6862673fcf2da12ed8599152d19f0b15e3452f5f453476e3c4ddaee1",
+    "cpp/maze_task.pb.cc": "9f3272e687766756cfb20f89d4590c0b5f03c3e029ab426718dd4d94079047b2",
+    "cpp/maze_task.pb.h": "e505b3eaf41ea9d2593ed09476a64f496facd804ecb99aff5206bbaa8299136c",
     "cpp/training.grpc.pb.cc": "8969dd9e98704dcc38d4e3deb83315f44b1b64d95457a4c6436c2cef0ea9e4aa",
     "cpp/training.grpc.pb.h": "a38b3c131e470afbe3f0e71f41a64cc81a97d3a88422dfb3303e6cff77b7f8da",
-    "cpp/training.pb.cc": "ea41959ce2d02f2255162bcebbde208fa81b19b289a6096bb7e4dea5a9075caf",
-    "cpp/training.pb.h": "7c3b932c3da1792feec9d150c63a4e4d57873931564000fcf1d72984eac1639a",
+    "cpp/training.pb.cc": "e644b23d23e474b8cb7c5c0414397a425bb65a04309e3e13ed6df0ad3cde88fb",
+    "cpp/training.pb.h": "20ce543e2c49ea1df1b1135f1e8767bea84c4fe9b9a750af689d76e4735e6577",
     "generator-identity.json": "e0ff2ea349578e209b5b5d6f632c967ee8ea46c7999df5cf97502b24ca69532d",
-    "maze_task.proto": "bcc4c143454f594b4f39eeaec475bd9b85d3d9c32f9c160792745bf8d67d93d1",
+    "maze_task.proto": "cefd57ff15cdf70bf5b33e13d72c81f417c863e9ce01cf74153d657080055cab",
     "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "python/common_pb2.py": "823786a30eff49ac558f6030d14900471ac840119b0b32cffddb5641cd0d83f0",
-    "python/common_pb2_grpc.py": "75f2f40d6df8e11299b9f9c597e2aff0d602db92286b656fc6dd10eb9b3e4424",
-    "python/maze_task_pb2.py": "29ae8a347276f2812429c294e0fa8b9057956a4e98d696be21ad1a693543c240",
+    "python/maze_task_pb2.py": "fe36682a4fca679f68738fb51840a2d2757573c81104e6cc26058cc9305c8b7c",
     "python/maze_task_pb2_grpc.py": "bf929f4d04ed8068d6698f3741210d038f778a0a53687e997b83bef1178a0fad",
-    "python/training_pb2.py": "fcb98573d4b1c3652af74e4fb395c3aa88325857ba4d077d6878f4540b91969b",
+    "python/training_pb2.py": "688f0d3c95b120d1b321d97f0db45f4f7d57ca1e523a3c58496909a8dbbecac3",
     "python/training_pb2_grpc.py": "2327885bfd7e2d25f5d08f1121f80c628a0eab955dc8a7b84f4db4a05a934e3e",
-    "schemas/maze.metrics.v4.json": "2d4dea1ac145f130c7776ca07ff311fadb9840309829b8c34036ded98d52dc8a",
-    "schemas/maze.metrics.v4.sha256": "767da3e2d43b502caab08e0ad1f7818d74006dc3091f2e532187ce8b115ca893",
-    "training.proto": "cb022d0063e0e852160c206252ae85e8dd2df6644b3fb2cb1a6808f13236be0c"
+    "schemas/maze.metrics.json": "5088c184d439855d9eb241f471d88c818fe27ea245d6f9e31bb1d95f57883f5a",
+    "schemas/maze.metrics.sha256": "4c12e24844fe363c89a62b13cc3749c4acc7755b14852e35d0a2a4f1bfa3a0a4",
+    "schemas/training-contract.json": "d9d79cee44e50a26e24a9761a8075675c48dea66b2e7071d9f4235cade2ba4cc",
+    "schemas/training-contract.sha256": "c9fc1f4dd6f92b3e4026dcf3d0850dc6a6e96ce3aefbf23c3d15391a94c49329",
+    "training.proto": "41d77f7b8203bd386b1ef13c69b8921c1cfb85ef6c7b3319a6b9db34010490ce"
   },
   "generator_identity": "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8",
   "metric_schemas": {
-    "maze.metrics.v4": {
+    "maze.metrics": {
       "canonical_digest": {
         "algorithm": "sha256",
-        "hex": "2d4dea1ac145f130c7776ca07ff311fadb9840309829b8c34036ded98d52dc8a"
+        "hex": "5088c184d439855d9eb241f471d88c818fe27ea245d6f9e31bb1d95f57883f5a"
       },
-      "digest_path": "schemas/maze.metrics.v4.sha256",
-      "path": "schemas/maze.metrics.v4.json",
-      "schema_version": 4
+      "digest_path": "schemas/maze.metrics.sha256",
+      "path": "schemas/maze.metrics.json",
+      "schema_version": 1
     }
   },
   "package": "rl-contracts",
   "platform": "linux/arm64",
   "schema_version": 2,
-  "source_commit": "3f168e91f2a5",
+  "source_commit": "d5b8ee5dcb99",
   "source_digest": {
     "algorithm": "sha256",
-    "hex": "61d633bde1ad4a8dccc2a5e8505d122bbabc8c8cd69eb1cfa97b253c4c2d4c0d"
+    "hex": "ebcad0a4c652243ca16fc2c8c14d3f7b4b3b95f1bbd925c7063d22907374c026"
   },
-  "source_id": "contract-source-61d633bde1ad4a8d",
+  "source_id": "contract-source-ebcad0a4c652243c",
   "source_tree_state": "clean",
-  "version": "0.14.0"
+  "training_contract": {
+    "canonical_digest": {
+      "algorithm": "sha256",
+      "hex": "d9d79cee44e50a26e24a9761a8075675c48dea66b2e7071d9f4235cade2ba4cc"
+    },
+    "digest_path": "schemas/training-contract.sha256",
+    "path": "schemas/training-contract.json"
+  },
+  "version": "0.15.0"
 }

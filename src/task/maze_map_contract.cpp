@@ -14,7 +14,7 @@
 namespace {
 
 constexpr const char* kActionRuleId =
-    "maze.action.9-way.no-corner-cut.v1";
+    "maze.action.9-way.no-corner-cut";
 constexpr int kDirections[8][2] = {
     {0, 1}, {1, 1}, {1, 0}, {1, -1},
     {0, -1}, {-1, -1}, {-1, 0}, {-1, 1},
@@ -61,8 +61,7 @@ void AppendI32(std::string& payload, std::int32_t value) {
 
 bool BasicShapeValid(const maze::MapDescriptor& descriptor,
                      std::string& error) {
-    if (descriptor.format_version() != 4 ||
-        descriptor.grid_columns() == 0 || descriptor.grid_rows() == 0 ||
+    if (descriptor.grid_columns() == 0 || descriptor.grid_rows() == 0 ||
         descriptor.grid_size_microunits() == 0 ||
         descriptor.action_rule_id() != kActionRuleId) {
         error = "unsupported map format, dimensions, or action rule";
@@ -95,8 +94,7 @@ bool BasicShapeValid(const maze::MapDescriptor& descriptor,
 std::string CanonicalMazeMapChecksum(const maze::MapDescriptor& descriptor,
                                      std::string& error) {
     if (!BasicShapeValid(descriptor, error)) return "";
-    std::string payload("rl.task.maze.map.v4\0", 20);
-    AppendU32(payload, descriptor.format_version());
+    std::string payload("rl.task.maze.map\0", 17);
     AppendU32(payload, descriptor.grid_columns());
     AppendU32(payload, descriptor.grid_rows());
     AppendU32(payload, descriptor.grid_size_microunits());

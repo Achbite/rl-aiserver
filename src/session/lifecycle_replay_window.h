@@ -7,7 +7,7 @@
 enum class LifecycleReplayDecision {
     Proceed,
     Replay,
-    IdempotencyConflict,
+    PayloadConflict,
     OutOfOrder,
 };
 
@@ -21,15 +21,12 @@ public:
     LifecycleReplayDecision Classify(
         std::uint64_t command_sequence,
         std::uint64_t last_applied_sequence,
-        const std::string& idempotency_key,
         const std::string& payload) const {
-        if (present_ && idempotency_key == idempotency_key_) {
+        if (present_ && command_sequence == command_sequence_) {
             if (payload != payload_) {
-                return LifecycleReplayDecision::IdempotencyConflict;
+                return LifecycleReplayDecision::PayloadConflict;
             }
-            return command_sequence == command_sequence_
-                       ? LifecycleReplayDecision::Replay
-                       : LifecycleReplayDecision::OutOfOrder;
+            return LifecycleReplayDecision::Replay;
         }
         if (command_sequence != last_applied_sequence + 1) {
             return LifecycleReplayDecision::OutOfOrder;
@@ -38,11 +35,9 @@ public:
     }
 
     void Store(std::uint64_t command_sequence,
-               const std::string& idempotency_key,
                std::string payload,
                std::string response) {
         command_sequence_ = command_sequence;
-        std::string(idempotency_key).swap(idempotency_key_);
         payload.swap(payload_);
         response.swap(response_);
         present_ = true;
@@ -53,14 +48,12 @@ public:
     const std::string& response() const { return response_; }
 
     std::size_t RetainedCapacityBytes() const {
-        return idempotency_key_.capacity() + payload_.capacity() +
-               response_.capacity();
+        return payload_.capacity() + response_.capacity();
     }
 
 private:
     bool present_ = false;
     std::uint64_t command_sequence_ = 0;
-    std::string idempotency_key_;
     std::string payload_;
     std::string response_;
 };

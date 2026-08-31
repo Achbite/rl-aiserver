@@ -1,5 +1,7 @@
 #include "grpc/maze_service.h"
+#include "sample/sample_sender.h"
 #include "sample/training_transition_builder.h"
+#include "task/maze_map_contract.h"
 
 #include <chrono>
 #include <cmath>
@@ -10,44 +12,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <unordered_map>
 #include <vector>
-
-struct MazeServiceUpdateTestAccess {
-    static bool PrepareSegment(
-        MazeServiceImpl& service,
-        SessionManager::Session& session,
-        int agent_id,
-        training::SegmentCloseReason reason,
-        float bootstrap_value,
-        bool bootstrap_applied,
-        std::vector<training::ProcessedTransitionEnvelope>& envelopes,
-        std::string& error) {
-        int64_t produced_transitions = 0;
-        int64_t produced_envelopes = 0;
-        std::unordered_map<ModelStep, int64_t> produced_by_model;
-        std::unordered_map<training::SegmentCloseReason, int64_t>
-            close_counts;
-        return service.PrepareAgentSegmentClose(
-            session, agent_id, reason, bootstrap_value, bootstrap_applied,
-            produced_transitions, produced_envelopes, produced_by_model,
-            envelopes, close_counts, error);
-    }
-
-    static bool PrepareFixtureModel(
-        MazeServiceImpl& service,
-        const std::string& model_path,
-        OnnxInferencer::PreparedModel& prepared,
-        std::string& error) {
-        return service.onnx_inferencer_.PrepareModel(
-            model_path, service.config_.model.expected_obs_dim,
-            service.config_.model.expected_action_dim, prepared, &error);
-    }
-
-    static SampleDistributor& Distributor(MazeServiceImpl& service) {
-        return service.sample_distributor_;
-    }
-};
 
 namespace {
 
@@ -105,13 +70,10 @@ public:
             std::lock_guard<std::mutex> lock(mutex_);
             envelopes_.push_back(request->envelope());
         }
-        response->set_ret_code(0);
         response->set_result(training::PUSH_RESULT_ACCEPTED);
         response->set_envelope_id(request->envelope().envelope_id());
-        response->set_accepted_transitions(
-            request->envelope().transitions_size());
-        response->set_accepted_unique_transitions(
-            request->envelope().transitions_size());
+        response->mutable_payload_digest()->CopyFrom(
+            request->envelope().payload_digest());
         response->set_pressure_state(training::PRESSURE_STATE_NORMAL);
         FillAuthority(response->mutable_sample_pool());
         condition_.notify_all();
@@ -149,14 +111,37 @@ AIServerConfig MakeConfig(int sample_pool_port) {
     config.contract.source_digest.hex = std::string(64, '1');
     config.contract.artifact_digest.hex = std::string(64, '2');
     config.contract.generator_identity = std::string(64, '3');
-    config.training_semantics.observation_schema = {
-        "maze.observation.v3", 1, {"sha256", std::string(64, '4')}};
-    config.training_semantics.action_schema = {
-        "maze.action.v1", 1, {"sha256", std::string(64, '5')}};
-    config.training_semantics.reward_schema = {
-        "maze.reward.v4", 1, {"sha256", std::string(64, '6')}};
-    config.training_semantics.semantics_digest.hex = std::string(64, '7');
-    config.policy.policy_spec_digest.hex = std::string(64, '8');
+    config.training_contract.training_contract_id = "maze.training";
+    config.training_contract.observation_schema = {
+        "maze.observation", 1, {"sha256", std::string(64, '4')}};
+    config.training_contract.action_schema = {
+        "maze.action", 1, {"sha256", std::string(64, '5')}};
+    config.training_contract.reward_schema = {
+        "maze.reward", 1, {"sha256", std::string(64, '6')}};
+    config.training_contract.model_architecture_id =
+        "maze.mlp-17x64x64";
+    config.training_contract.canonical_digest.hex = std::string(64, '7');
+    config.training_contract.observation_dimension = 17;
+    config.training_contract.action_count = 9;
+    config.training_contract.hidden_dimension = 64;
+    config.training_contract.tensor_dtype = "float32";
+    config.training_contract.gae_formula_id = "gae.backward";
+    config.training_contract.terminal_bootstrap_semantics_id =
+        "maze.timeout-keep-and-cut-bootstrap";
+    config.training_contract.value_target_formula_id =
+        "advantage-plus-behavior-value";
+    config.training_contract.value_head_abi_id = "scalar-value.float32";
+    config.training_contract.numeric_dtype = "float32";
+    config.training_contract.finite_rule_id = "reject-nonfinite";
+    config.training_contract.model_pin_semantics_id =
+        "per-agent-segment-pin";
+    config.policy.training_temperature = 1.0;
+    config.model.expected_obs_dim = 17;
+    config.model.expected_action_dim = 9;
+    config.model.observation_schema_id = "maze.observation";
+    config.model.action_schema_id = "maze.action";
+    config.model.model_architecture_id = "maze.mlp-17x64x64";
+    config.model.tensor_dtype = "float32";
     config.sample_distributor.host = "127.0.0.1";
     config.sample_distributor.port = sample_pool_port;
     config.sample_distributor.envelope_max_transitions = 128;
@@ -176,25 +161,112 @@ AIServerConfig MakeConfig(int sample_pool_port) {
     return config;
 }
 
-ModelManifest MakePinnedModel(
-    const OnnxInferencer::PreparedModel& prepared) {
-    ModelManifest manifest;
-    manifest.model_lineage_id = "lineage-fixed";
-    manifest.model_step = 0;
-    manifest.model_path = prepared.model_path;
-    manifest.wire.mutable_identity()->set_model_lineage_id(
-        manifest.model_lineage_id);
-    manifest.wire.mutable_identity()->set_model_step(0);
-    SetDigest(std::string(64, '9'),
-              manifest.wire.mutable_identity()->mutable_artifact_digest());
-    SetDigest(std::string(64, 'a'),
-              manifest.wire.mutable_identity()->mutable_manifest_digest());
-    auto* profile = manifest.wire.mutable_rollout_estimator_profile();
-    profile->set_gamma(0.99);
-    profile->set_gae_lambda(0.95);
-    profile->set_tmax(128);
-    SetDigest(std::string(64, 'b'), profile->mutable_profile_digest());
-    return manifest;
+void TestModelOutputActionResponse(const std::string& fixture_path) {
+    maze::MapDescriptor map;
+    map.set_map_id("map-fixed");
+    map.set_grid_columns(3);
+    map.set_grid_rows(3);
+    map.set_grid_size_microunits(1'000'000);
+    map.set_start_grid_x(0);
+    map.set_start_grid_y(0);
+    map.set_goal_grid_x(2);
+    map.set_goal_grid_y(2);
+    map.set_blocked_bitmap(std::string(9, '\0'));
+    map.set_shortest_action_steps(2);
+    map.set_action_rule_id("maze.action.9-way.no-corner-cut");
+    std::string map_error;
+    const std::string map_checksum =
+        CanonicalMazeMapChecksum(map, map_error);
+    Require(!map_checksum.empty(),
+            "build the fixed public MapDescriptor: " + map_error);
+    SetDigest(map_checksum, map.mutable_canonical_digest());
+
+    AIServerConfig config = MakeConfig(1);
+    config.server.run_mode = aiserver_mode::kEvaluation;
+    config.environment.agent_count = 1;
+    config.observation.ray_max_range = 2;
+    config.model.evaluation_model_path = fixture_path;
+    config.task.fixed_map_id = map.map_id();
+    config.task.fixed_map_checksum_sha256 = map_checksum;
+    config.task.action_rule_id = map.action_rule_id();
+    config.task.shortest_action_steps =
+        static_cast<int>(map.shortest_action_steps());
+    config.task.episode_max_steps = 10;
+    MazeServiceImpl service(config);
+    Require(service.Start(),
+            "start the public evaluation inference service");
+
+    maze::OpenSessionReq open_request;
+    open_request.mutable_client()->set_component("maze-client");
+    open_request.mutable_client()->set_instance_id("client-fixed");
+    open_request.mutable_client()->set_lifecycle_epoch(1);
+    open_request.set_environment_instance_id("environment-fixed");
+    open_request.set_request_id("open-fixed");
+    maze::OpenSessionRsp open_response;
+    service.OpenSession(nullptr, &open_request, &open_response);
+    Require(open_response.reply().result() ==
+                maze::COMMAND_RESULT_APPLIED &&
+                !open_response.session_id().empty(),
+            "open the public evaluation Session");
+
+    maze::InitReq init_request;
+    init_request.mutable_command()->set_session_id(
+        open_response.session_id());
+    init_request.mutable_command()->set_session_epoch(
+        open_response.session_epoch());
+    init_request.mutable_command()->set_sequence(1);
+    init_request.mutable_map()->CopyFrom(map);
+    maze::InitRsp init_response;
+    service.Init(nullptr, &init_request, &init_response);
+    Require(init_response.reply().result() ==
+                maze::COMMAND_RESULT_APPLIED &&
+                init_response.verified_shortest_action_steps() == 2,
+            "initialize the public Session with the fixed map");
+
+    maze::BeginEpisodeReq begin_request;
+    begin_request.mutable_command()->set_session_id(
+        open_response.session_id());
+    begin_request.mutable_command()->set_session_epoch(
+        open_response.session_epoch());
+    begin_request.mutable_command()->set_sequence(2);
+    maze::BeginEpisodeRsp begin_response;
+    service.BeginEpisode(nullptr, &begin_request, &begin_response);
+    Require(begin_response.reply().result() ==
+                maze::COMMAND_RESULT_APPLIED &&
+                begin_response.has_assignment() &&
+                begin_response.assignment().mode() ==
+                    maze::EPISODE_MODE_EVALUATION,
+            "begin the public evaluation Episode");
+
+    maze::UpdateReq request;
+    request.mutable_command()->set_session_id(open_response.session_id());
+    request.mutable_command()->set_session_epoch(
+        open_response.session_epoch());
+    request.mutable_command()->set_sequence(3);
+    request.mutable_command()->set_episode_id(
+        begin_response.assignment().episode_id());
+    request.set_frame_id(0);
+    auto* state = request.add_agents();
+    state->set_agent_id(0);
+    state->mutable_position()->set_x(0.0f);
+    state->mutable_position()->set_y(0.0f);
+    state->set_is_done(false);
+    state->set_termination_reason(
+        maze::MAZE_TERMINATION_REASON_ACTIVE);
+
+    maze::UpdateRsp response;
+    service.Update(nullptr, &request, &response);
+
+    Require(response.reply().result() == maze::COMMAND_RESULT_APPLIED &&
+                response.reply().applied_sequence() == 3 &&
+                response.action_batch().actions_size() == 1 &&
+                response.action_batch().actions(0).agent_id() == 0 &&
+                response.action_batch().actions(0).action_id() >= 0 &&
+                response.action_batch().actions(0).action_id() <= 8,
+            "production Update returns one model-selected Client action");
+    Require(response.reply().phase() ==
+                maze::SESSION_PHASE_EPISODE_RUNNING,
+            "the model-selected action commits through the public Update");
 }
 
 SessionManager::RawRolloutTransition MakeRawTransition(
@@ -214,68 +286,62 @@ SessionManager::RawRolloutTransition MakeRawTransition(
 }
 
 training::ProcessedTransitionEnvelope BuildSegment(
-    MazeServiceImpl& service,
-    const OnnxInferencer::PreparedModel& prepared,
     const std::string& segment_id,
-    training::SegmentCloseReason close_reason,
-    float bootstrap_value,
-    bool bootstrap_applied) {
-    SessionManager::Session session;
-    session.session_id = "session-fixed";
-    session.environment_instance_id = "environment-fixed";
-    session.current_episode_id = "episode-fixed";
-    auto& agent = session.agents[1];
-    agent.segment_open = true;
-    agent.segment_id = segment_id;
-    agent.pinned_model = MakePinnedModel(prepared);
-    agent.pinned_prepared_model = prepared;
-    agent.segment_transitions.push_back(MakeRawTransition(0, 0.2f));
-    agent.segment_transitions.push_back(MakeRawTransition(1, 0.3f));
-
-    std::vector<training::ProcessedTransitionEnvelope> envelopes;
-    std::string error;
-    Require(MazeServiceUpdateTestAccess::PrepareSegment(
-                service, session, 1, close_reason, bootstrap_value,
-                bootstrap_applied, envelopes, error) &&
-                envelopes.size() == 1 &&
-                envelopes.front().transitions_size() == 2,
-            "build the fixed processed-transition envelope: " + error);
-    return envelopes.front();
-}
-
-void CheckBoundary(
-    const training::ProcessedTransitionEnvelope& envelope,
-    training::SegmentCloseReason close_reason,
-    bool terminal,
-    bool bootstrap_applied,
-    float bootstrap_value,
+    double final_next_value,
     double expected_advantage_0,
     double expected_advantage_1,
     double expected_target_0,
     double expected_target_1) {
-    const auto& first = envelope.transitions(0);
-    const auto& last = envelope.transitions(1);
-    Require(Near(first.advantage(), expected_advantage_0) &&
-                Near(last.advantage(), expected_advantage_1) &&
-                Near(first.value_target(), expected_target_0) &&
-                Near(last.value_target(), expected_target_1),
-            "production GAE and value targets match the fixed inputs");
-    Require(!first.segment_boundary() &&
-                first.segment_close_reason() ==
-                    training::SEGMENT_CLOSE_REASON_UNSPECIFIED &&
-                !first.has_bootstrap_value() &&
-                !first.bootstrap_applied(),
-            "only the final transition carries close/bootstrap facts");
-    Require(last.segment_boundary() &&
-                last.segment_close_reason() == close_reason &&
-                last.environment_terminal() == terminal &&
-                last.has_bootstrap_value() &&
-                last.bootstrap_applied() == bootstrap_applied &&
-                Near(last.bootstrap_value(), bootstrap_value),
-            "the final transition carries the explicit close/bootstrap facts");
+    std::vector<SessionManager::RawRolloutTransition> segment{
+        MakeRawTransition(0, 0.2f),
+        MakeRawTransition(1, 0.3f),
+    };
+    std::vector<float> advantages;
+    std::vector<float> value_targets;
+    std::string error;
+    Require(EstimateRolloutSegment(
+                segment, 0.99, 0.95, final_next_value,
+                advantages, value_targets, error) &&
+                advantages.size() == 2 && value_targets.size() == 2 &&
+                Near(advantages[0], expected_advantage_0) &&
+                Near(advantages[1], expected_advantage_1) &&
+                Near(value_targets[0], expected_target_0) &&
+                Near(value_targets[1], expected_target_1),
+            "production GAE and value targets match the deterministic inputs: " +
+                error);
+
+    training::ModelIdentity behavior_model;
+    behavior_model.set_model_lineage_id("lineage-test");
+    behavior_model.set_model_step(0);
+    SetDigest(std::string(64, '9'),
+              behavior_model.mutable_artifact_digest());
+    SetDigest(std::string(64, 'a'),
+              behavior_model.mutable_manifest_digest());
+    std::vector<training::ProcessedTransition> processed;
+    Require(ProjectProcessedSegment(
+                segment, advantages, value_targets, segment_id,
+                behavior_model, 17, 9, processed, error) &&
+                processed.size() == 2,
+            "project the GAE result into the production training payload: " +
+                error);
+
+    training::ProcessedTransitionEnvelope envelope;
+    envelope.set_envelope_id(segment_id + "/envelope-0");
+    envelope.mutable_producer()->set_component("rl-aiserver");
+    envelope.mutable_producer()->set_instance_id("aiserver-test");
+    envelope.mutable_producer()->set_lifecycle_epoch(1);
+    SetDigest(std::string(64, '7'),
+              envelope.mutable_training_contract_digest());
+    envelope.mutable_behavior_model()->CopyFrom(behavior_model);
+    for (const auto& item : processed) {
+        envelope.add_samples()->CopyFrom(item);
+    }
+    SetDigest(std::string(64, 'c'), envelope.mutable_payload_digest());
+    return envelope;
 }
 
 void TestGaeAndSampleDelivery(const std::string& fixture_path) {
+    TestModelOutputActionResponse(fixture_path);
     AIServerConfig seed = MakeConfig(1);
     CapturingSamplePool sample_pool(seed.contract);
     int port = 0;
@@ -288,28 +354,15 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
             "start the in-process SamplePool test sink");
 
     AIServerConfig config = MakeConfig(port);
-    MazeServiceImpl service(config);
-    OnnxInferencer::PreparedModel prepared;
-    std::string error;
-    Require(MazeServiceUpdateTestAccess::PrepareFixtureModel(
-                service, fixture_path, prepared, error) && prepared.valid(),
-            "prepare the fixed pinned model: " + error);
-
     auto terminal = BuildSegment(
-        service, prepared, "segment-terminal",
-        training::SEGMENT_CLOSE_REASON_GOAL, 0.0f, false);
-    CheckBoundary(terminal, training::SEGMENT_CLOSE_REASON_GOAL,
-                  true, false, 0.0f,
-                  -0.18515, -0.3, 0.01485, 0.0);
+        "segment-terminal", 0.0,
+        -0.18515, -0.3, 0.01485, 0.0);
 
     auto tmax = BuildSegment(
-        service, prepared, "segment-tmax",
-        training::SEGMENT_CLOSE_REASON_TMAX, 0.4f, true);
-    CheckBoundary(tmax, training::SEGMENT_CLOSE_REASON_TMAX,
-                  false, true, 0.4f,
-                  0.187288, 0.096, 0.387288, 0.396);
+        "segment-tmax", 0.4,
+        0.187288, 0.096, 0.387288, 0.396);
 
-    auto& distributor = MazeServiceUpdateTestAccess::Distributor(service);
+    SampleDistributor distributor(config);
     Require(distributor.Start(),
             "SampleDistributor connects to the in-process test sink");
     Require(distributor.Enqueue(terminal) && distributor.Enqueue(tmax),
@@ -323,8 +376,8 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
     Require(captured.size() == 2 &&
                 captured[0].SerializeAsString() == terminal.SerializeAsString() &&
                 captured[1].SerializeAsString() == tmax.SerializeAsString() &&
-                captured[0].transitions_size() == 2 &&
-                captured[1].transitions_size() == 2,
+                captured[0].samples_size() == 2 &&
+                captured[1].samples_size() == 2,
             "test sink captures the exact two-transition envelopes");
 
     server->Shutdown();

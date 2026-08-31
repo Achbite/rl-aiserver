@@ -76,9 +76,11 @@ directory entrypoint. `run.sh` only supervises the process and propagates its
 exit status; only the C++ config/CLI layer interprets business arguments.
 
 The default workload is `server.run_mode` in `configs/server_config.yaml`, and
-`--workload` only overrides that field. Reward V4 formulas and numeric values
-are compiled in `src/ai/maze_reward.cpp`; runtime YAML must not contain a
-`reward:` tuning section and retains only the reward schema identity.
+`--workload` only overrides that field. Reward formulas and numeric values are
+compiled in `src/ai/maze_reward.cpp`; runtime YAML must not contain a `reward:`
+tuning section. The training contract and its observation/action/reward schema
+identities come only from the artifact selected by
+`contract.training_contract_path`.
 
 Training uses the `RolloutEstimatorProfile` embedded in the model manifest.
 AIServer pins a behavior model independently for each Agent, closes the segment
@@ -86,12 +88,13 @@ after at most 128 completed transitions by default, computes unnormalised
 GAE/value targets, and submits the resulting items in batches through its
 in-process SampleDistributor. The only authority for the actual Agent count is
 `environment.agent_count/RL_AISERVER_AGENT_COUNT`; `server.max_agents` is only
-a capacity limit. Client, MazeTaskSpec, Learner, and SamplePool expose no second
-Agent-count authority.
+a capacity limit. Client, task configuration, Learner, and SamplePool expose no
+second Agent-count authority.
 
-The close reason and bootstrap appear only on the final
-transition. A terminal carries an explicit zero bootstrap; TMax and controlled
-close use the pinned model's finite value; non-final items carry neither fact.
+AIServer validates segment continuity, close reason, termination semantics, and
+bootstrap exactly once when it closes the segment. These producer-internal
+facts are absent from `ProcessedTransition`; Learner and SamplePool receive only
+the final PPO observation/action/log-probability/value/advantage/value-target.
 A prepared and acknowledged model activates only at each Agent's next segment.
 
 The same runtime image exposes a read-only model diagnostic for tensor-contract
@@ -109,9 +112,12 @@ opens no port.
 
 AIServer uses the private `cache` under `model.local_train_dir` and neither
 receives nor interprets platform `task_id/run_id`. A `.aiserver.lock` prevents
-two AIServers from concurrently using the same directory. A normal restart
-validates and recovers an existing valid cache instead of deleting or rejecting
-it merely because it is non-empty:
+two AIServers from concurrently using the same directory. Startup does not scan,
+recover, or backfill historical cache entries. Only model steps requested from
+the Distributor and validated by the current process enter its in-memory index
+and pruning scope. If a requested step's destination already exists, AIServer
+accepts it only when it exactly matches the current protobuf manifest; all other
+existing directories are neither startup facts nor migration/deletion targets:
 
 ```bash
 bash ./run.sh --config configs/server_config.yaml --workload training
