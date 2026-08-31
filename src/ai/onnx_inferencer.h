@@ -26,7 +26,7 @@ public:
     ~OnnxInferencer() = default;
 
     // 加载 ONNX 模型（线程安全，内部互斥）
-    // 返回 true 表示加载成功，false 表示加载失败（保留旧模型）
+    // 返回 true 表示候选模型已激活；失败时当前模型保持不变。
     bool LoadModel(const std::string& model_path,
                    int expected_obs_dim = 17,
                    int expected_action_dim = 9,
@@ -56,8 +56,6 @@ public:
     std::string GetModelPath() const;
 
 private:
-    friend struct MazeServiceUpdateTestAccess;
-
     static bool InferSession(const std::shared_ptr<Ort::Session>& session,
                              const std::vector<float>& obs,
                              int obs_dim,

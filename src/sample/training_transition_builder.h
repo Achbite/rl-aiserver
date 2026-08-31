@@ -28,3 +28,17 @@ bool EstimateRolloutSegment(
     std::vector<float>& advantages,
     std::vector<float>& value_targets,
     std::string& error);
+
+// Projects one estimator result into the ProcessedTransition wire payload
+// consumed by SamplePool and Learner. Segment lifecycle and envelope transport
+// remain owned by MazeService and SampleDistributor respectively.
+bool ProjectProcessedSegment(
+    const std::vector<SessionManager::RawRolloutTransition>& raw_segment,
+    const std::vector<float>& advantages,
+    const std::vector<float>& value_targets,
+    const std::string& segment_id,
+    const training::ModelIdentity& behavior_model,
+    int observation_dimension,
+    int action_count,
+    std::vector<training::ProcessedTransition>& processed,
+    std::string& error);

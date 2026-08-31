@@ -24,13 +24,6 @@
 
 class SessionManager {
 public:
-    enum class EpisodeState {
-        None,
-        Active,
-        Ended,
-        Aborted,
-    };
-
     // One complete, trusted Environment transition before the AIServer closes
     // the Agent segment and computes GAE/value targets. Pending actions are not
     // represented here because they have no trusted result or next state yet.
@@ -104,13 +97,9 @@ public:
         common::ServiceInstanceIdentity client;
         std::string environment_instance_id;
         int64_t last_valid_client_activity_unix_ms = 0;
-        maze::TaskIdentity task;
-        uint64_t lifecycle_epoch = 0;
+        uint64_t session_epoch = 0;
         uint64_t last_command_sequence = 0;
-        maze::TaskState task_state = maze::TASK_STATE_INITIALIZING;
-        maze::SessionState session_state = maze::SESSION_STATE_OPENED;
-        maze::EpisodeState protocol_episode_state =
-            maze::EPISODE_STATE_UNSPECIFIED;
+        maze::SessionPhase phase = maze::SESSION_PHASE_OPEN;
         LifecycleReplayWindow command_replay;
         std::string map_id;
         std::string map_checksum_sha256;
@@ -120,7 +109,6 @@ public:
             maze::WORKLOAD_MODE_UNSPECIFIED;
         std::unordered_map<int, AgentRuntime> agents;   // agent_id → 运行时状态
         std::string current_episode_id;
-        EpisodeState episode_state = EpisodeState::None;
         int64_t last_frame_id = -1;
         std::vector<maze::AgentAction> last_actions;
         // 地图参数（每个 session 独立，支持不同地图配置）
@@ -139,9 +127,6 @@ public:
         int grid_cols = 0;              // 网格列数
         int grid_rows = 0;              // 网格行数
         uint32_t grid_size_microunits = 0;
-
-        bool opened = false;
-        bool initialized = false;       // 是否已初始化
 
         // --- AIServer 校验后的 authoritative 网格与 geodesic 距离 ---
         std::vector<bool> blocked;

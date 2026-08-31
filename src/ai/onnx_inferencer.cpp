@@ -62,7 +62,7 @@ bool OnnxInferencer::PrepareModel(const std::string& model_path,
     prepared = PreparedModel{};
 
     try {
-        // 创建新 Session（加载失败会抛异常，旧 Session 不受影响）
+        // 创建候选 Session；只有完整加载成功后才替换当前 Session。
         auto new_session = std::make_shared<Ort::Session>(
             env_, model_path.c_str(), session_options_);
 

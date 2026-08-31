@@ -8,16 +8,13 @@
 #include <grpcpp/grpcpp.h>
 
 #include <memory>
-#include <cstddef>
 #include <mutex>
 #include <optional>
 #include <set>
 #include <string>
-#include <vector>
 
 class ModelDistributorClient {
 public:
-    static constexpr std::size_t kCacheRetentionSteps = 101;
     static constexpr const char* kCachedModelFile = "SaveModel.onnx";
 
     enum class AckDisposition {
@@ -39,12 +36,6 @@ public:
         std::string model_lineage_id;
         std::string latest_checksum;
         std::string latest_manifest_digest;
-    };
-
-    struct CacheRecoveryFacts {
-        std::string model_lineage_key;
-        std::size_t ignored_legacy_entries = 0;
-        std::size_t recovered_steps = 0;
     };
 
     ModelDistributorClient(const AIServerConfig& config,
@@ -87,21 +78,10 @@ public:
         std::string& error,
         common::ServiceInstanceIdentity* pinned_authority = nullptr);
 
-    bool RecoverCache(std::vector<ModelManifest>& models,
-                      CacheRecoveryFacts& facts,
-                      std::string& error);
-    bool LoadCachedStep(ModelStep model_step,
-                        ModelManifest& manifest,
-                        std::string& error) const;
     bool PublishPrepared(ModelManifest& manifest,
                          std::string& error);
     bool DiscardTemporary(const ModelManifest& manifest,
                           std::string& error) const;
-    bool GetFirstMissingCachedStep(
-        ModelStep floor_model_step,
-        ModelStep latest_model_step,
-        std::optional<ModelStep>& missing_model_step,
-        std::string& error) const;
     bool PruneCache(const std::set<ModelStep>& protected_steps,
                     std::string& error);
 
@@ -121,8 +101,9 @@ private:
                bool latest,
                ModelManifest& manifest,
                std::string& error);
-    bool ListCachedModels(std::vector<ModelManifest>& models,
-                          std::string& error) const;
+    bool LoadCachedStep(ModelStep model_step,
+                        ModelManifest& manifest,
+                        std::string& error) const;
     bool PinModelLineage(const std::string& lineage_id,
                          std::string& error);
     bool GetPinnedModelLineage(std::string& lineage_id,

@@ -177,7 +177,7 @@ static int InspectModel(const std::filesystem::path& model_path) {
                                  .GetTensorTypeAndShapeInfo()
                                  .GetShape();
     std::cout
-        << "{\"schema_version\":1,\"contract\":\"maze-policy-v1\","
+        << "{\"schema_version\":1,\"contract\":\"maze-policy\","
         << "\"input\":{\"name\":\"observation\",\"dtype\":\"float32\","
         << "\"shape\":" << ShapeJson(input_shape) << "},"
         << "\"action_output\":{\"name\":\"action_logits\","
@@ -365,7 +365,7 @@ int main(int argc, char* argv[]) {
     std::string config_error;
     if (!LoadServerConfig(parsed.config_path, parsed.overrides, cfg,
                           load_report, config_error)) {
-        LOG_ERROR("Main", "配置加载或 0.14.0 身份校验失败: %s (%s)",
+        LOG_ERROR("Main", "配置加载或当前合同身份校验失败: %s (%s)",
                   parsed.config_path.c_str(),
                   config_error.empty() ? "see config diagnostics"
                                        : config_error.c_str());

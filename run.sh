@@ -144,8 +144,8 @@ if [ "${managed}" -eq 1 ]; then
        [ "${metric_container_port}" != "9002" ] ||
        [ -z "${metric_instance_id}" ] ||
        [[ ! "${metric_lifecycle_epoch}" =~ ^[1-9][0-9]*$ ]] ||
-       [ "${metric_schema_id}" != "maze.metrics.v4" ] ||
-       [ "${metric_schema_version}" != "4" ] ||
+       [ "${metric_schema_id}" != "maze.metrics" ] ||
+       [ "${metric_schema_version}" != "1" ] ||
        [[ ! "${metric_schema_digest}" =~ ^[0-9a-f]{64}$ ]]; then
         echo "AIServer managed metric source identity is invalid" >&2
         exit 1

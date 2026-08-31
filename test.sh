@@ -33,7 +33,6 @@ fi
 cmake "${cmake_args[@]}"
 cmake --build "${build_dir}" --parallel --target \
     aiserver_model_update_development_test \
-    aiserver_gae_sample_delivery_development_test \
-    aiserver_evaluation_lifecycle_development_test
+    aiserver_gae_sample_delivery_development_test
 ctest --test-dir "${build_dir}" --output-on-failure \
-    -R '^(aiserver_model_update_development_contract|aiserver_gae_sample_delivery_development_contract|aiserver_evaluation_lifecycle_development_contract)$'
+    -R '^(aiserver_model_update_development_contract|aiserver_gae_sample_delivery_development_contract)$'

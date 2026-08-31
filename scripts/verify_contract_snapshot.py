@@ -20,8 +20,10 @@ SNAPSHOT_FILES = {
     "cpp/maze_task.pb.h": "maze_task.pb.h",
     "cpp/maze_task.grpc.pb.cc": "maze_task.grpc.pb.cc",
     "cpp/maze_task.grpc.pb.h": "maze_task.grpc.pb.h",
-    "schemas/maze.metrics.v4.json": "schemas/maze.metrics.v4.json",
-    "schemas/maze.metrics.v4.sha256": "schemas/maze.metrics.v4.sha256",
+    "schemas/maze.metrics.json": "schemas/maze.metrics.json",
+    "schemas/maze.metrics.sha256": "schemas/maze.metrics.sha256",
+    "schemas/training-contract.json": "schemas/training-contract.json",
+    "schemas/training-contract.sha256": "schemas/training-contract.sha256",
 }
 
 
@@ -76,10 +78,10 @@ def verify_snapshot(
         if actual != expected:
             fail(f"contract snapshot checksum mismatch: {path}")
     schema_metadata = manifest.get("metric_schemas", {}).get(
-        "maze.metrics.v4"
+        "maze.metrics"
     )
-    catalog = root / "schemas/maze.metrics.v4.json"
-    digest_file = root / "schemas/maze.metrics.v4.sha256"
+    catalog = root / "schemas/maze.metrics.json"
+    digest_file = root / "schemas/maze.metrics.sha256"
     catalog_digest = hashlib.sha256(catalog.read_bytes()).hexdigest()
     if (
         digest_file.read_text(encoding="utf-8").strip() != catalog_digest
@@ -89,12 +91,31 @@ def verify_snapshot(
                 "algorithm": "sha256",
                 "hex": catalog_digest,
             },
-            "digest_path": "schemas/maze.metrics.v4.sha256",
-            "path": "schemas/maze.metrics.v4.json",
-            "schema_version": 4,
+            "digest_path": "schemas/maze.metrics.sha256",
+            "path": "schemas/maze.metrics.json",
+            "schema_version": 1,
         }
     ):
-        fail("maze.metrics.v4 snapshot identity mismatch")
+        fail("maze.metrics snapshot identity mismatch")
+    training_contract = root / "schemas/training-contract.json"
+    training_contract_digest_file = root / "schemas/training-contract.sha256"
+    training_contract_digest = hashlib.sha256(
+        training_contract.read_bytes()
+    ).hexdigest()
+    if (
+        training_contract_digest_file.read_text(encoding="utf-8").strip()
+        != training_contract_digest
+        or manifest.get("training_contract")
+        != {
+            "canonical_digest": {
+                "algorithm": "sha256",
+                "hex": training_contract_digest,
+            },
+            "digest_path": "schemas/training-contract.sha256",
+            "path": "schemas/training-contract.json",
+        }
+    ):
+        fail("training contract snapshot identity mismatch")
     return manifest
 
 

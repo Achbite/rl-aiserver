@@ -65,30 +65,36 @@ bool ValidatePushResponse(
         error = "PushSamples response does not echo the exact envelope_id";
         return false;
     }
+    const bool acknowledged_exact_payload =
+        response.payload_digest().algorithm() ==
+            common::DIGEST_ALGORITHM_SHA256 &&
+        response.payload_digest().algorithm() ==
+            envelope.payload_digest().algorithm() &&
+        response.payload_digest().hex() == envelope.payload_digest().hex();
     if (response.result() == training::PUSH_RESULT_ACCEPTED) {
-        if (response.ret_code() != 0 ||
-            response.accepted_transitions() != transition_count ||
-            response.accepted_unique_transitions() != transition_count) {
-            error = "PushSamples ACCEPTED response has inconsistent counts";
+        if (transition_count <= 0 ||
+            transition_count != envelope.samples_size() ||
+            !acknowledged_exact_payload) {
+            error = "PushSamples ACCEPTED response does not acknowledge the "
+                    "exact immutable payload";
             return false;
         }
         return true;
     }
     if (response.result() == training::PUSH_RESULT_DUPLICATE) {
-        if (response.ret_code() != 0 ||
-            response.accepted_transitions() != 0 ||
-            response.accepted_unique_transitions() != 0) {
-            error = "PushSamples DUPLICATE response claims new acceptance";
+        if (transition_count <= 0 ||
+            transition_count != envelope.samples_size() ||
+            !acknowledged_exact_payload) {
+            error = "PushSamples DUPLICATE response does not identify the "
+                    "exact immutable payload";
             return false;
         }
         return true;
     }
     if (response.result() == training::PUSH_RESULT_REJECTED_CAPACITY ||
         IsTerminalPushRejection(response.result())) {
-        if (response.ret_code() == 0 ||
-            response.accepted_transitions() != 0 ||
-            response.accepted_unique_transitions() != 0) {
-            error = "PushSamples rejection has inconsistent status or counts";
+        if (response.has_payload_digest()) {
+            error = "PushSamples rejection must not acknowledge a payload";
             return false;
         }
         return true;
@@ -265,7 +271,7 @@ bool SampleDistributor::Enqueue(
     const training::ProcessedTransitionEnvelope& envelope) {
     QueueItem item;
     item.envelope = envelope;
-    item.transitions = envelope.transitions_size();
+    item.transitions = envelope.samples_size();
     item.estimated_bytes = static_cast<int64_t>(envelope.ByteSizeLong());
     if (item.transitions <= 0 || item.estimated_bytes <= 0) return false;
 
@@ -310,7 +316,7 @@ SampleDistributor::ReserveEnqueueEnvelopeSet(
     for (const auto& envelope : envelopes) {
         QueueItem item;
         item.envelope = envelope;
-        item.transitions = envelope.transitions_size();
+        item.transitions = envelope.samples_size();
         item.estimated_bytes =
             static_cast<int64_t>(envelope.ByteSizeLong());
         if (item.transitions <= 0 || item.estimated_bytes <= 0 ||

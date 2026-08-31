@@ -162,8 +162,7 @@ std::string SingleMapTaskController::ToJson() const {
     const auto snapshot = GetSnapshot();
     std::ostringstream output;
     output << std::setprecision(17)
-           << "{\"schema_version\":3"
-           << ",\"baseline\":{\"model_step\":"
+           << "{\"baseline\":{\"model_step\":"
            << snapshot.baseline_model_step
            << ",\"model_checksum\":\""
            << snapshot.baseline_model_checksum

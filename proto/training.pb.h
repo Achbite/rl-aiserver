@@ -74,9 +74,6 @@ extern AckModelRspDefaultTypeInternal _AckModelRsp_default_instance_;
 class AgentEpisodeMetricFact;
 struct AgentEpisodeMetricFactDefaultTypeInternal;
 extern AgentEpisodeMetricFactDefaultTypeInternal _AgentEpisodeMetricFact_default_instance_;
-class BehaviorPolicyReference;
-struct BehaviorPolicyReferenceDefaultTypeInternal;
-extern BehaviorPolicyReferenceDefaultTypeInternal _BehaviorPolicyReference_default_instance_;
 class DeliveryRsp;
 struct DeliveryRspDefaultTypeInternal;
 extern DeliveryRspDefaultTypeInternal _DeliveryRsp_default_instance_;
@@ -116,21 +113,12 @@ extern MetricBatchDefaultTypeInternal _MetricBatch_default_instance_;
 class MetricBatchCursor;
 struct MetricBatchCursorDefaultTypeInternal;
 extern MetricBatchCursorDefaultTypeInternal _MetricBatchCursor_default_instance_;
-class MetricDescriptor;
-struct MetricDescriptorDefaultTypeInternal;
-extern MetricDescriptorDefaultTypeInternal _MetricDescriptor_default_instance_;
 class MetricEvent;
 struct MetricEventDefaultTypeInternal;
 extern MetricEventDefaultTypeInternal _MetricEvent_default_instance_;
 class MetricSequenceGap;
 struct MetricSequenceGapDefaultTypeInternal;
 extern MetricSequenceGapDefaultTypeInternal _MetricSequenceGap_default_instance_;
-class MetricSnapshot;
-struct MetricSnapshotDefaultTypeInternal;
-extern MetricSnapshotDefaultTypeInternal _MetricSnapshot_default_instance_;
-class MetricValue;
-struct MetricValueDefaultTypeInternal;
-extern MetricValueDefaultTypeInternal _MetricValue_default_instance_;
 class ModelArtifactManifest;
 struct ModelArtifactManifestDefaultTypeInternal;
 extern ModelArtifactManifestDefaultTypeInternal _ModelArtifactManifest_default_instance_;
@@ -191,9 +179,6 @@ extern SegmentCloseCountDefaultTypeInternal _SegmentCloseCount_default_instance_
 class TrainUpdateMetricFact;
 struct TrainUpdateMetricFactDefaultTypeInternal;
 extern TrainUpdateMetricFactDefaultTypeInternal _TrainUpdateMetricFact_default_instance_;
-class TrainingSemanticsIdentity;
-struct TrainingSemanticsIdentityDefaultTypeInternal;
-extern TrainingSemanticsIdentityDefaultTypeInternal _TrainingSemanticsIdentity_default_instance_;
 }  // namespace v1
 }  // namespace training
 }  // namespace rl
@@ -206,7 +191,6 @@ template<> ::rl::training::v1::AckMetricBatchRsp* Arena::CreateMaybeMessage<::rl
 template<> ::rl::training::v1::AckModelReq* Arena::CreateMaybeMessage<::rl::training::v1::AckModelReq>(Arena*);
 template<> ::rl::training::v1::AckModelRsp* Arena::CreateMaybeMessage<::rl::training::v1::AckModelRsp>(Arena*);
 template<> ::rl::training::v1::AgentEpisodeMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::AgentEpisodeMetricFact>(Arena*);
-template<> ::rl::training::v1::BehaviorPolicyReference* Arena::CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(Arena*);
 template<> ::rl::training::v1::DeliveryRsp* Arena::CreateMaybeMessage<::rl::training::v1::DeliveryRsp>(Arena*);
 template<> ::rl::training::v1::DownloadModelReq* Arena::CreateMaybeMessage<::rl::training::v1::DownloadModelReq>(Arena*);
 template<> ::rl::training::v1::EpisodeMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::EpisodeMetricFact>(Arena*);
@@ -220,11 +204,8 @@ template<> ::rl::training::v1::GetModelManifestReq* Arena::CreateMaybeMessage<::
 template<> ::rl::training::v1::GetModelManifestRsp* Arena::CreateMaybeMessage<::rl::training::v1::GetModelManifestRsp>(Arena*);
 template<> ::rl::training::v1::MetricBatch* Arena::CreateMaybeMessage<::rl::training::v1::MetricBatch>(Arena*);
 template<> ::rl::training::v1::MetricBatchCursor* Arena::CreateMaybeMessage<::rl::training::v1::MetricBatchCursor>(Arena*);
-template<> ::rl::training::v1::MetricDescriptor* Arena::CreateMaybeMessage<::rl::training::v1::MetricDescriptor>(Arena*);
 template<> ::rl::training::v1::MetricEvent* Arena::CreateMaybeMessage<::rl::training::v1::MetricEvent>(Arena*);
 template<> ::rl::training::v1::MetricSequenceGap* Arena::CreateMaybeMessage<::rl::training::v1::MetricSequenceGap>(Arena*);
-template<> ::rl::training::v1::MetricSnapshot* Arena::CreateMaybeMessage<::rl::training::v1::MetricSnapshot>(Arena*);
-template<> ::rl::training::v1::MetricValue* Arena::CreateMaybeMessage<::rl::training::v1::MetricValue>(Arena*);
 template<> ::rl::training::v1::ModelArtifactManifest* Arena::CreateMaybeMessage<::rl::training::v1::ModelArtifactManifest>(Arena*);
 template<> ::rl::training::v1::ModelChunk* Arena::CreateMaybeMessage<::rl::training::v1::ModelChunk>(Arena*);
 template<> ::rl::training::v1::ModelDistributorStatusReq* Arena::CreateMaybeMessage<::rl::training::v1::ModelDistributorStatusReq>(Arena*);
@@ -245,40 +226,11 @@ template<> ::rl::training::v1::SamplePoolStatusReq* Arena::CreateMaybeMessage<::
 template<> ::rl::training::v1::SamplePoolStatusRsp* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolStatusRsp>(Arena*);
 template<> ::rl::training::v1::SegmentCloseCount* Arena::CreateMaybeMessage<::rl::training::v1::SegmentCloseCount>(Arena*);
 template<> ::rl::training::v1::TrainUpdateMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::TrainUpdateMetricFact>(Arena*);
-template<> ::rl::training::v1::TrainingSemanticsIdentity* Arena::CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace rl {
 namespace training {
 namespace v1 {
 
-enum TransitionEndKind : int {
-  TRANSITION_END_KIND_UNSPECIFIED = 0,
-  TRANSITION_END_KIND_CONTINUING = 1,
-  TRANSITION_END_KIND_ENVIRONMENT_TERMINATED = 2,
-  TRANSITION_END_KIND_EXTERNAL_TRUNCATION = 3,
-  TRANSITION_END_KIND_PRODUCER_ABORT = 4,
-  TransitionEndKind_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  TransitionEndKind_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool TransitionEndKind_IsValid(int value);
-constexpr TransitionEndKind TransitionEndKind_MIN = TRANSITION_END_KIND_UNSPECIFIED;
-constexpr TransitionEndKind TransitionEndKind_MAX = TRANSITION_END_KIND_PRODUCER_ABORT;
-constexpr int TransitionEndKind_ARRAYSIZE = TransitionEndKind_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* TransitionEndKind_descriptor();
-template<typename T>
-inline const std::string& TransitionEndKind_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, TransitionEndKind>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function TransitionEndKind_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    TransitionEndKind_descriptor(), enum_t_value);
-}
-inline bool TransitionEndKind_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, TransitionEndKind* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<TransitionEndKind>(
-    TransitionEndKind_descriptor(), name, value);
-}
 enum SegmentCloseReason : int {
   SEGMENT_CLOSE_REASON_UNSPECIFIED = 0,
   SEGMENT_CLOSE_REASON_GOAL = 1,
@@ -589,6 +541,33 @@ inline bool ModelAckResult_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ModelAckResult>(
     ModelAckResult_descriptor(), name, value);
 }
+enum ModelLookupResult : int {
+  MODEL_LOOKUP_RESULT_UNSPECIFIED = 0,
+  MODEL_LOOKUP_RESULT_FOUND = 1,
+  MODEL_LOOKUP_RESULT_NOT_FOUND = 2,
+  MODEL_LOOKUP_RESULT_REJECTED_IDENTITY = 3,
+  ModelLookupResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  ModelLookupResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool ModelLookupResult_IsValid(int value);
+constexpr ModelLookupResult ModelLookupResult_MIN = MODEL_LOOKUP_RESULT_UNSPECIFIED;
+constexpr ModelLookupResult ModelLookupResult_MAX = MODEL_LOOKUP_RESULT_REJECTED_IDENTITY;
+constexpr int ModelLookupResult_ARRAYSIZE = ModelLookupResult_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ModelLookupResult_descriptor();
+template<typename T>
+inline const std::string& ModelLookupResult_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ModelLookupResult>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ModelLookupResult_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ModelLookupResult_descriptor(), enum_t_value);
+}
+inline bool ModelLookupResult_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ModelLookupResult* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ModelLookupResult>(
+    ModelLookupResult_descriptor(), name, value);
+}
 enum SampleBackendType : int {
   SAMPLE_BACKEND_TYPE_UNSPECIFIED = 0,
   SAMPLE_BACKEND_TYPE_LOCAL_MEMORY = 1,
@@ -642,92 +621,6 @@ inline bool SamplePoolFinalizeResult_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SamplePoolFinalizeResult* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SamplePoolFinalizeResult>(
     SamplePoolFinalizeResult_descriptor(), name, value);
-}
-enum MetricValueKind : int {
-  METRIC_VALUE_KIND_UNSPECIFIED = 0,
-  METRIC_VALUE_KIND_GAUGE = 1,
-  METRIC_VALUE_KIND_COUNTER = 2,
-  METRIC_VALUE_KIND_MEAN = 3,
-  METRIC_VALUE_KIND_RATE = 4,
-  METRIC_VALUE_KIND_QUANTILE = 5,
-  MetricValueKind_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  MetricValueKind_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool MetricValueKind_IsValid(int value);
-constexpr MetricValueKind MetricValueKind_MIN = METRIC_VALUE_KIND_UNSPECIFIED;
-constexpr MetricValueKind MetricValueKind_MAX = METRIC_VALUE_KIND_QUANTILE;
-constexpr int MetricValueKind_ARRAYSIZE = MetricValueKind_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricValueKind_descriptor();
-template<typename T>
-inline const std::string& MetricValueKind_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, MetricValueKind>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function MetricValueKind_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    MetricValueKind_descriptor(), enum_t_value);
-}
-inline bool MetricValueKind_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MetricValueKind* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MetricValueKind>(
-    MetricValueKind_descriptor(), name, value);
-}
-enum MetricAggregationKind : int {
-  METRIC_AGGREGATION_KIND_UNSPECIFIED = 0,
-  METRIC_AGGREGATION_KIND_NONE = 1,
-  METRIC_AGGREGATION_KIND_SUM = 2,
-  METRIC_AGGREGATION_KIND_WEIGHTED_MEAN = 3,
-  METRIC_AGGREGATION_KIND_LATEST = 4,
-  METRIC_AGGREGATION_KIND_NOT_MERGEABLE = 5,
-  MetricAggregationKind_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  MetricAggregationKind_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool MetricAggregationKind_IsValid(int value);
-constexpr MetricAggregationKind MetricAggregationKind_MIN = METRIC_AGGREGATION_KIND_UNSPECIFIED;
-constexpr MetricAggregationKind MetricAggregationKind_MAX = METRIC_AGGREGATION_KIND_NOT_MERGEABLE;
-constexpr int MetricAggregationKind_ARRAYSIZE = MetricAggregationKind_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricAggregationKind_descriptor();
-template<typename T>
-inline const std::string& MetricAggregationKind_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, MetricAggregationKind>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function MetricAggregationKind_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    MetricAggregationKind_descriptor(), enum_t_value);
-}
-inline bool MetricAggregationKind_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MetricAggregationKind* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MetricAggregationKind>(
-    MetricAggregationKind_descriptor(), name, value);
-}
-enum MetricWindowKind : int {
-  METRIC_WINDOW_KIND_UNSPECIFIED = 0,
-  METRIC_WINDOW_KIND_INSTANT = 1,
-  METRIC_WINDOW_KIND_CUMULATIVE = 2,
-  METRIC_WINDOW_KIND_INTERVAL = 3,
-  METRIC_WINDOW_KIND_ROLLING = 4,
-  MetricWindowKind_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  MetricWindowKind_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool MetricWindowKind_IsValid(int value);
-constexpr MetricWindowKind MetricWindowKind_MIN = METRIC_WINDOW_KIND_UNSPECIFIED;
-constexpr MetricWindowKind MetricWindowKind_MAX = METRIC_WINDOW_KIND_ROLLING;
-constexpr int MetricWindowKind_ARRAYSIZE = MetricWindowKind_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricWindowKind_descriptor();
-template<typename T>
-inline const std::string& MetricWindowKind_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, MetricWindowKind>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function MetricWindowKind_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    MetricWindowKind_descriptor(), enum_t_value);
-}
-inline bool MetricWindowKind_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MetricWindowKind* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MetricWindowKind>(
-    MetricWindowKind_descriptor(), name, value);
 }
 enum MetricBatchResult : int {
   METRIC_BATCH_RESULT_UNSPECIFIED = 0,
@@ -1000,251 +893,6 @@ class ModelIdentity final :
 };
 // -------------------------------------------------------------------
 
-class BehaviorPolicyReference final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.BehaviorPolicyReference) */ {
- public:
-  inline BehaviorPolicyReference() : BehaviorPolicyReference(nullptr) {}
-  ~BehaviorPolicyReference() override;
-  explicit PROTOBUF_CONSTEXPR BehaviorPolicyReference(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  BehaviorPolicyReference(const BehaviorPolicyReference& from);
-  BehaviorPolicyReference(BehaviorPolicyReference&& from) noexcept
-    : BehaviorPolicyReference() {
-    *this = ::std::move(from);
-  }
-
-  inline BehaviorPolicyReference& operator=(const BehaviorPolicyReference& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline BehaviorPolicyReference& operator=(BehaviorPolicyReference&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const BehaviorPolicyReference& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const BehaviorPolicyReference* internal_default_instance() {
-    return reinterpret_cast<const BehaviorPolicyReference*>(
-               &_BehaviorPolicyReference_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    1;
-
-  friend void swap(BehaviorPolicyReference& a, BehaviorPolicyReference& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(BehaviorPolicyReference* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(BehaviorPolicyReference* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  BehaviorPolicyReference* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<BehaviorPolicyReference>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const BehaviorPolicyReference& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const BehaviorPolicyReference& from) {
-    BehaviorPolicyReference::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(BehaviorPolicyReference* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.BehaviorPolicyReference";
-  }
-  protected:
-  explicit BehaviorPolicyReference(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kModelLineageIdFieldNumber = 1,
-    kDistributionSchemaIdFieldNumber = 3,
-    kPolicySpecDigestFieldNumber = 4,
-    kArtifactDigestFieldNumber = 5,
-    kManifestDigestFieldNumber = 6,
-    kModelStepFieldNumber = 2,
-  };
-  // string model_lineage_id = 1;
-  void clear_model_lineage_id();
-  const std::string& model_lineage_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_model_lineage_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_model_lineage_id();
-  PROTOBUF_NODISCARD std::string* release_model_lineage_id();
-  void set_allocated_model_lineage_id(std::string* model_lineage_id);
-  private:
-  const std::string& _internal_model_lineage_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_lineage_id(const std::string& value);
-  std::string* _internal_mutable_model_lineage_id();
-  public:
-
-  // string distribution_schema_id = 3;
-  void clear_distribution_schema_id();
-  const std::string& distribution_schema_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_distribution_schema_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_distribution_schema_id();
-  PROTOBUF_NODISCARD std::string* release_distribution_schema_id();
-  void set_allocated_distribution_schema_id(std::string* distribution_schema_id);
-  private:
-  const std::string& _internal_distribution_schema_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_distribution_schema_id(const std::string& value);
-  std::string* _internal_mutable_distribution_schema_id();
-  public:
-
-  // .rl.common.v1.ContentDigest policy_spec_digest = 4;
-  bool has_policy_spec_digest() const;
-  private:
-  bool _internal_has_policy_spec_digest() const;
-  public:
-  void clear_policy_spec_digest();
-  const ::rl::common::v1::ContentDigest& policy_spec_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_policy_spec_digest();
-  ::rl::common::v1::ContentDigest* mutable_policy_spec_digest();
-  void set_allocated_policy_spec_digest(::rl::common::v1::ContentDigest* policy_spec_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_policy_spec_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_policy_spec_digest();
-  public:
-  void unsafe_arena_set_allocated_policy_spec_digest(
-      ::rl::common::v1::ContentDigest* policy_spec_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_policy_spec_digest();
-
-  // .rl.common.v1.ContentDigest artifact_digest = 5;
-  bool has_artifact_digest() const;
-  private:
-  bool _internal_has_artifact_digest() const;
-  public:
-  void clear_artifact_digest();
-  const ::rl::common::v1::ContentDigest& artifact_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_artifact_digest();
-  ::rl::common::v1::ContentDigest* mutable_artifact_digest();
-  void set_allocated_artifact_digest(::rl::common::v1::ContentDigest* artifact_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_artifact_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_artifact_digest();
-  public:
-  void unsafe_arena_set_allocated_artifact_digest(
-      ::rl::common::v1::ContentDigest* artifact_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_artifact_digest();
-
-  // .rl.common.v1.ContentDigest manifest_digest = 6;
-  bool has_manifest_digest() const;
-  private:
-  bool _internal_has_manifest_digest() const;
-  public:
-  void clear_manifest_digest();
-  const ::rl::common::v1::ContentDigest& manifest_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_manifest_digest();
-  ::rl::common::v1::ContentDigest* mutable_manifest_digest();
-  void set_allocated_manifest_digest(::rl::common::v1::ContentDigest* manifest_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_manifest_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_manifest_digest();
-  public:
-  void unsafe_arena_set_allocated_manifest_digest(
-      ::rl::common::v1::ContentDigest* manifest_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_manifest_digest();
-
-  // optional uint64 model_step = 2;
-  bool has_model_step() const;
-  private:
-  bool _internal_has_model_step() const;
-  public:
-  void clear_model_step();
-  uint64_t model_step() const;
-  void set_model_step(uint64_t value);
-  private:
-  uint64_t _internal_model_step() const;
-  void _internal_set_model_step(uint64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.BehaviorPolicyReference)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_lineage_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr distribution_schema_id_;
-    ::rl::common::v1::ContentDigest* policy_spec_digest_;
-    ::rl::common::v1::ContentDigest* artifact_digest_;
-    ::rl::common::v1::ContentDigest* manifest_digest_;
-    uint64_t model_step_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
 class RolloutEstimatorProfile final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.RolloutEstimatorProfile) */ {
  public:
@@ -1293,7 +941,7 @@ class RolloutEstimatorProfile final :
                &_RolloutEstimatorProfile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    1;
 
   friend void swap(RolloutEstimatorProfile& a, RolloutEstimatorProfile& b) {
     a.Swap(&b);
@@ -1366,136 +1014,11 @@ class RolloutEstimatorProfile final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kGaeFormulaIdFieldNumber = 5,
-    kTerminalBootstrapSemanticsIdFieldNumber = 6,
-    kValueTargetFormulaIdFieldNumber = 7,
-    kValueHeadAbiIdFieldNumber = 8,
-    kNumericDtypeFieldNumber = 10,
-    kFiniteRuleIdFieldNumber = 11,
-    kModelPinSemanticsIdFieldNumber = 12,
-    kRewardSemanticsDigestFieldNumber = 9,
     kProfileDigestFieldNumber = 13,
     kGammaFieldNumber = 2,
-    kProfileSchemaVersionFieldNumber = 1,
-    kTmaxFieldNumber = 4,
     kGaeLambdaFieldNumber = 3,
+    kTmaxFieldNumber = 4,
   };
-  // string gae_formula_id = 5;
-  void clear_gae_formula_id();
-  const std::string& gae_formula_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_gae_formula_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_gae_formula_id();
-  PROTOBUF_NODISCARD std::string* release_gae_formula_id();
-  void set_allocated_gae_formula_id(std::string* gae_formula_id);
-  private:
-  const std::string& _internal_gae_formula_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_gae_formula_id(const std::string& value);
-  std::string* _internal_mutable_gae_formula_id();
-  public:
-
-  // string terminal_bootstrap_semantics_id = 6;
-  void clear_terminal_bootstrap_semantics_id();
-  const std::string& terminal_bootstrap_semantics_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_terminal_bootstrap_semantics_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_terminal_bootstrap_semantics_id();
-  PROTOBUF_NODISCARD std::string* release_terminal_bootstrap_semantics_id();
-  void set_allocated_terminal_bootstrap_semantics_id(std::string* terminal_bootstrap_semantics_id);
-  private:
-  const std::string& _internal_terminal_bootstrap_semantics_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_terminal_bootstrap_semantics_id(const std::string& value);
-  std::string* _internal_mutable_terminal_bootstrap_semantics_id();
-  public:
-
-  // string value_target_formula_id = 7;
-  void clear_value_target_formula_id();
-  const std::string& value_target_formula_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_value_target_formula_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_value_target_formula_id();
-  PROTOBUF_NODISCARD std::string* release_value_target_formula_id();
-  void set_allocated_value_target_formula_id(std::string* value_target_formula_id);
-  private:
-  const std::string& _internal_value_target_formula_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_value_target_formula_id(const std::string& value);
-  std::string* _internal_mutable_value_target_formula_id();
-  public:
-
-  // string value_head_abi_id = 8;
-  void clear_value_head_abi_id();
-  const std::string& value_head_abi_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_value_head_abi_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_value_head_abi_id();
-  PROTOBUF_NODISCARD std::string* release_value_head_abi_id();
-  void set_allocated_value_head_abi_id(std::string* value_head_abi_id);
-  private:
-  const std::string& _internal_value_head_abi_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_value_head_abi_id(const std::string& value);
-  std::string* _internal_mutable_value_head_abi_id();
-  public:
-
-  // string numeric_dtype = 10;
-  void clear_numeric_dtype();
-  const std::string& numeric_dtype() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_numeric_dtype(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_numeric_dtype();
-  PROTOBUF_NODISCARD std::string* release_numeric_dtype();
-  void set_allocated_numeric_dtype(std::string* numeric_dtype);
-  private:
-  const std::string& _internal_numeric_dtype() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_numeric_dtype(const std::string& value);
-  std::string* _internal_mutable_numeric_dtype();
-  public:
-
-  // string finite_rule_id = 11;
-  void clear_finite_rule_id();
-  const std::string& finite_rule_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_finite_rule_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_finite_rule_id();
-  PROTOBUF_NODISCARD std::string* release_finite_rule_id();
-  void set_allocated_finite_rule_id(std::string* finite_rule_id);
-  private:
-  const std::string& _internal_finite_rule_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_finite_rule_id(const std::string& value);
-  std::string* _internal_mutable_finite_rule_id();
-  public:
-
-  // string model_pin_semantics_id = 12;
-  void clear_model_pin_semantics_id();
-  const std::string& model_pin_semantics_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_model_pin_semantics_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_model_pin_semantics_id();
-  PROTOBUF_NODISCARD std::string* release_model_pin_semantics_id();
-  void set_allocated_model_pin_semantics_id(std::string* model_pin_semantics_id);
-  private:
-  const std::string& _internal_model_pin_semantics_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_pin_semantics_id(const std::string& value);
-  std::string* _internal_mutable_model_pin_semantics_id();
-  public:
-
-  // .rl.common.v1.ContentDigest reward_semantics_digest = 9;
-  bool has_reward_semantics_digest() const;
-  private:
-  bool _internal_has_reward_semantics_digest() const;
-  public:
-  void clear_reward_semantics_digest();
-  const ::rl::common::v1::ContentDigest& reward_semantics_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_reward_semantics_digest();
-  ::rl::common::v1::ContentDigest* mutable_reward_semantics_digest();
-  void set_allocated_reward_semantics_digest(::rl::common::v1::ContentDigest* reward_semantics_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_reward_semantics_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_reward_semantics_digest();
-  public:
-  void unsafe_arena_set_allocated_reward_semantics_digest(
-      ::rl::common::v1::ContentDigest* reward_semantics_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_reward_semantics_digest();
-
   // .rl.common.v1.ContentDigest profile_digest = 13;
   bool has_profile_digest() const;
   private:
@@ -1523,13 +1046,13 @@ class RolloutEstimatorProfile final :
   void _internal_set_gamma(double value);
   public:
 
-  // uint32 profile_schema_version = 1;
-  void clear_profile_schema_version();
-  uint32_t profile_schema_version() const;
-  void set_profile_schema_version(uint32_t value);
+  // double gae_lambda = 3;
+  void clear_gae_lambda();
+  double gae_lambda() const;
+  void set_gae_lambda(double value);
   private:
-  uint32_t _internal_profile_schema_version() const;
-  void _internal_set_profile_schema_version(uint32_t value);
+  double _internal_gae_lambda() const;
+  void _internal_set_gae_lambda(double value);
   public:
 
   // uint32 tmax = 4;
@@ -1541,15 +1064,6 @@ class RolloutEstimatorProfile final :
   void _internal_set_tmax(uint32_t value);
   public:
 
-  // double gae_lambda = 3;
-  void clear_gae_lambda();
-  double gae_lambda() const;
-  void set_gae_lambda(double value);
-  private:
-  double _internal_gae_lambda() const;
-  void _internal_set_gae_lambda(double value);
-  public:
-
   // @@protoc_insertion_point(class_scope:rl.training.v1.RolloutEstimatorProfile)
  private:
   class _Internal;
@@ -1558,284 +1072,10 @@ class RolloutEstimatorProfile final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr gae_formula_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr terminal_bootstrap_semantics_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr value_target_formula_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr value_head_abi_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr numeric_dtype_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr finite_rule_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_pin_semantics_id_;
-    ::rl::common::v1::ContentDigest* reward_semantics_digest_;
     ::rl::common::v1::ContentDigest* profile_digest_;
     double gamma_;
-    uint32_t profile_schema_version_;
-    uint32_t tmax_;
     double gae_lambda_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
-class TrainingSemanticsIdentity final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.TrainingSemanticsIdentity) */ {
- public:
-  inline TrainingSemanticsIdentity() : TrainingSemanticsIdentity(nullptr) {}
-  ~TrainingSemanticsIdentity() override;
-  explicit PROTOBUF_CONSTEXPR TrainingSemanticsIdentity(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  TrainingSemanticsIdentity(const TrainingSemanticsIdentity& from);
-  TrainingSemanticsIdentity(TrainingSemanticsIdentity&& from) noexcept
-    : TrainingSemanticsIdentity() {
-    *this = ::std::move(from);
-  }
-
-  inline TrainingSemanticsIdentity& operator=(const TrainingSemanticsIdentity& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline TrainingSemanticsIdentity& operator=(TrainingSemanticsIdentity&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const TrainingSemanticsIdentity& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const TrainingSemanticsIdentity* internal_default_instance() {
-    return reinterpret_cast<const TrainingSemanticsIdentity*>(
-               &_TrainingSemanticsIdentity_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    3;
-
-  friend void swap(TrainingSemanticsIdentity& a, TrainingSemanticsIdentity& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(TrainingSemanticsIdentity* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(TrainingSemanticsIdentity* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  TrainingSemanticsIdentity* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TrainingSemanticsIdentity>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TrainingSemanticsIdentity& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const TrainingSemanticsIdentity& from) {
-    TrainingSemanticsIdentity::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(TrainingSemanticsIdentity* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.TrainingSemanticsIdentity";
-  }
-  protected:
-  explicit TrainingSemanticsIdentity(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kTrainingContractIdFieldNumber = 1,
-    kPolicyDistributionSchemaIdFieldNumber = 5,
-    kModelArchitectureIdFieldNumber = 6,
-    kObservationSchemaFieldNumber = 2,
-    kActionSchemaFieldNumber = 3,
-    kRewardSchemaFieldNumber = 4,
-    kSemanticsDigestFieldNumber = 7,
-  };
-  // string training_contract_id = 1;
-  void clear_training_contract_id();
-  const std::string& training_contract_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_training_contract_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_training_contract_id();
-  PROTOBUF_NODISCARD std::string* release_training_contract_id();
-  void set_allocated_training_contract_id(std::string* training_contract_id);
-  private:
-  const std::string& _internal_training_contract_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_training_contract_id(const std::string& value);
-  std::string* _internal_mutable_training_contract_id();
-  public:
-
-  // string policy_distribution_schema_id = 5;
-  void clear_policy_distribution_schema_id();
-  const std::string& policy_distribution_schema_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_policy_distribution_schema_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_policy_distribution_schema_id();
-  PROTOBUF_NODISCARD std::string* release_policy_distribution_schema_id();
-  void set_allocated_policy_distribution_schema_id(std::string* policy_distribution_schema_id);
-  private:
-  const std::string& _internal_policy_distribution_schema_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_policy_distribution_schema_id(const std::string& value);
-  std::string* _internal_mutable_policy_distribution_schema_id();
-  public:
-
-  // string model_architecture_id = 6;
-  void clear_model_architecture_id();
-  const std::string& model_architecture_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_model_architecture_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_model_architecture_id();
-  PROTOBUF_NODISCARD std::string* release_model_architecture_id();
-  void set_allocated_model_architecture_id(std::string* model_architecture_id);
-  private:
-  const std::string& _internal_model_architecture_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_architecture_id(const std::string& value);
-  std::string* _internal_mutable_model_architecture_id();
-  public:
-
-  // .rl.common.v1.SchemaIdentity observation_schema = 2;
-  bool has_observation_schema() const;
-  private:
-  bool _internal_has_observation_schema() const;
-  public:
-  void clear_observation_schema();
-  const ::rl::common::v1::SchemaIdentity& observation_schema() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_observation_schema();
-  ::rl::common::v1::SchemaIdentity* mutable_observation_schema();
-  void set_allocated_observation_schema(::rl::common::v1::SchemaIdentity* observation_schema);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_observation_schema() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_observation_schema();
-  public:
-  void unsafe_arena_set_allocated_observation_schema(
-      ::rl::common::v1::SchemaIdentity* observation_schema);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_observation_schema();
-
-  // .rl.common.v1.SchemaIdentity action_schema = 3;
-  bool has_action_schema() const;
-  private:
-  bool _internal_has_action_schema() const;
-  public:
-  void clear_action_schema();
-  const ::rl::common::v1::SchemaIdentity& action_schema() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_action_schema();
-  ::rl::common::v1::SchemaIdentity* mutable_action_schema();
-  void set_allocated_action_schema(::rl::common::v1::SchemaIdentity* action_schema);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_action_schema() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_action_schema();
-  public:
-  void unsafe_arena_set_allocated_action_schema(
-      ::rl::common::v1::SchemaIdentity* action_schema);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_action_schema();
-
-  // .rl.common.v1.SchemaIdentity reward_schema = 4;
-  bool has_reward_schema() const;
-  private:
-  bool _internal_has_reward_schema() const;
-  public:
-  void clear_reward_schema();
-  const ::rl::common::v1::SchemaIdentity& reward_schema() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_reward_schema();
-  ::rl::common::v1::SchemaIdentity* mutable_reward_schema();
-  void set_allocated_reward_schema(::rl::common::v1::SchemaIdentity* reward_schema);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_reward_schema() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_reward_schema();
-  public:
-  void unsafe_arena_set_allocated_reward_schema(
-      ::rl::common::v1::SchemaIdentity* reward_schema);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_reward_schema();
-
-  // .rl.common.v1.ContentDigest semantics_digest = 7;
-  bool has_semantics_digest() const;
-  private:
-  bool _internal_has_semantics_digest() const;
-  public:
-  void clear_semantics_digest();
-  const ::rl::common::v1::ContentDigest& semantics_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_semantics_digest();
-  ::rl::common::v1::ContentDigest* mutable_semantics_digest();
-  void set_allocated_semantics_digest(::rl::common::v1::ContentDigest* semantics_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_semantics_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_semantics_digest();
-  public:
-  void unsafe_arena_set_allocated_semantics_digest(
-      ::rl::common::v1::ContentDigest* semantics_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_semantics_digest();
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.TrainingSemanticsIdentity)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr training_contract_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr policy_distribution_schema_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_architecture_id_;
-    ::rl::common::v1::SchemaIdentity* observation_schema_;
-    ::rl::common::v1::SchemaIdentity* action_schema_;
-    ::rl::common::v1::SchemaIdentity* reward_schema_;
-    ::rl::common::v1::ContentDigest* semantics_digest_;
+    uint32_t tmax_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1891,7 +1131,7 @@ class ProcessedTransition final :
                &_ProcessedTransition_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    2;
 
   friend void swap(ProcessedTransition& a, ProcessedTransition& b) {
     a.Swap(&b);
@@ -1964,33 +1204,17 @@ class ProcessedTransition final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kObservationFieldNumber = 9,
-    kNextObservationFieldNumber = 10,
+    kObservationFieldNumber = 2,
     kItemIdFieldNumber = 1,
-    kEnvironmentSessionIdFieldNumber = 2,
-    kEpisodeIdFieldNumber = 3,
-    kSegmentIdFieldNumber = 5,
-    kBehaviorPolicyFieldNumber = 23,
-    kRolloutEstimatorProfileDigestFieldNumber = 24,
-    kAgentIdFieldNumber = 4,
-    kTransitionIndexFieldNumber = 6,
-    kActionStepFieldNumber = 8,
-    kSegmentTransitionCountFieldNumber = 7,
-    kActionFieldNumber = 11,
-    kRewardFieldNumber = 12,
-    kBehaviorLogProbabilityFieldNumber = 13,
-    kBehaviorValueFieldNumber = 14,
-    kAdvantageFieldNumber = 15,
-    kValueTargetFieldNumber = 16,
-    kEndKindFieldNumber = 18,
-    kSegmentCloseReasonFieldNumber = 19,
-    kEnvironmentTerminalFieldNumber = 17,
-    kSegmentBoundaryFieldNumber = 20,
-    kBootstrapAppliedFieldNumber = 21,
-    kCreatedAtUnixMsFieldNumber = 25,
-    kBootstrapValueFieldNumber = 22,
+    kActionFieldNumber = 3,
+    kBehaviorLogProbabilityFieldNumber = 4,
+    kBehaviorValueFieldNumber = 5,
+    kAdvantageFieldNumber = 6,
+    kBehaviorModelStepFieldNumber = 8,
+    kCreatedAtUnixMsFieldNumber = 9,
+    kValueTargetFieldNumber = 7,
   };
-  // repeated float observation = 9;
+  // repeated float observation = 2;
   int observation_size() const;
   private:
   int _internal_observation_size() const;
@@ -2012,28 +1236,6 @@ class ProcessedTransition final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_observation();
 
-  // repeated float next_observation = 10;
-  int next_observation_size() const;
-  private:
-  int _internal_next_observation_size() const;
-  public:
-  void clear_next_observation();
-  private:
-  float _internal_next_observation(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-      _internal_next_observation() const;
-  void _internal_add_next_observation(float value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-      _internal_mutable_next_observation();
-  public:
-  float next_observation(int index) const;
-  void set_next_observation(int index, float value);
-  void add_next_observation(float value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-      next_observation() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-      mutable_next_observation();
-
   // string item_id = 1;
   void clear_item_id();
   const std::string& item_id() const;
@@ -2048,121 +1250,7 @@ class ProcessedTransition final :
   std::string* _internal_mutable_item_id();
   public:
 
-  // string environment_session_id = 2;
-  void clear_environment_session_id();
-  const std::string& environment_session_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_environment_session_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_environment_session_id();
-  PROTOBUF_NODISCARD std::string* release_environment_session_id();
-  void set_allocated_environment_session_id(std::string* environment_session_id);
-  private:
-  const std::string& _internal_environment_session_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_environment_session_id(const std::string& value);
-  std::string* _internal_mutable_environment_session_id();
-  public:
-
-  // string episode_id = 3;
-  void clear_episode_id();
-  const std::string& episode_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_episode_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_episode_id();
-  PROTOBUF_NODISCARD std::string* release_episode_id();
-  void set_allocated_episode_id(std::string* episode_id);
-  private:
-  const std::string& _internal_episode_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_episode_id(const std::string& value);
-  std::string* _internal_mutable_episode_id();
-  public:
-
-  // string segment_id = 5;
-  void clear_segment_id();
-  const std::string& segment_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_segment_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_segment_id();
-  PROTOBUF_NODISCARD std::string* release_segment_id();
-  void set_allocated_segment_id(std::string* segment_id);
-  private:
-  const std::string& _internal_segment_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_segment_id(const std::string& value);
-  std::string* _internal_mutable_segment_id();
-  public:
-
-  // .rl.training.v1.BehaviorPolicyReference behavior_policy = 23;
-  bool has_behavior_policy() const;
-  private:
-  bool _internal_has_behavior_policy() const;
-  public:
-  void clear_behavior_policy();
-  const ::rl::training::v1::BehaviorPolicyReference& behavior_policy() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::BehaviorPolicyReference* release_behavior_policy();
-  ::rl::training::v1::BehaviorPolicyReference* mutable_behavior_policy();
-  void set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy);
-  private:
-  const ::rl::training::v1::BehaviorPolicyReference& _internal_behavior_policy() const;
-  ::rl::training::v1::BehaviorPolicyReference* _internal_mutable_behavior_policy();
-  public:
-  void unsafe_arena_set_allocated_behavior_policy(
-      ::rl::training::v1::BehaviorPolicyReference* behavior_policy);
-  ::rl::training::v1::BehaviorPolicyReference* unsafe_arena_release_behavior_policy();
-
-  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 24;
-  bool has_rollout_estimator_profile_digest() const;
-  private:
-  bool _internal_has_rollout_estimator_profile_digest() const;
-  public:
-  void clear_rollout_estimator_profile_digest();
-  const ::rl::common::v1::ContentDigest& rollout_estimator_profile_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_rollout_estimator_profile_digest();
-  ::rl::common::v1::ContentDigest* mutable_rollout_estimator_profile_digest();
-  void set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_rollout_estimator_profile_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_rollout_estimator_profile_digest();
-  public:
-  void unsafe_arena_set_allocated_rollout_estimator_profile_digest(
-      ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_rollout_estimator_profile_digest();
-
-  // uint32 agent_id = 4;
-  void clear_agent_id();
-  uint32_t agent_id() const;
-  void set_agent_id(uint32_t value);
-  private:
-  uint32_t _internal_agent_id() const;
-  void _internal_set_agent_id(uint32_t value);
-  public:
-
-  // uint32 transition_index = 6;
-  void clear_transition_index();
-  uint32_t transition_index() const;
-  void set_transition_index(uint32_t value);
-  private:
-  uint32_t _internal_transition_index() const;
-  void _internal_set_transition_index(uint32_t value);
-  public:
-
-  // uint64 action_step = 8;
-  void clear_action_step();
-  uint64_t action_step() const;
-  void set_action_step(uint64_t value);
-  private:
-  uint64_t _internal_action_step() const;
-  void _internal_set_action_step(uint64_t value);
-  public:
-
-  // uint32 segment_transition_count = 7;
-  void clear_segment_transition_count();
-  uint32_t segment_transition_count() const;
-  void set_segment_transition_count(uint32_t value);
-  private:
-  uint32_t _internal_segment_transition_count() const;
-  void _internal_set_segment_transition_count(uint32_t value);
-  public:
-
-  // int32 action = 11;
+  // int32 action = 3;
   void clear_action();
   int32_t action() const;
   void set_action(int32_t value);
@@ -2171,16 +1259,7 @@ class ProcessedTransition final :
   void _internal_set_action(int32_t value);
   public:
 
-  // float reward = 12;
-  void clear_reward();
-  float reward() const;
-  void set_reward(float value);
-  private:
-  float _internal_reward() const;
-  void _internal_set_reward(float value);
-  public:
-
-  // float behavior_log_probability = 13;
+  // float behavior_log_probability = 4;
   void clear_behavior_log_probability();
   float behavior_log_probability() const;
   void set_behavior_log_probability(float value);
@@ -2189,7 +1268,7 @@ class ProcessedTransition final :
   void _internal_set_behavior_log_probability(float value);
   public:
 
-  // float behavior_value = 14;
+  // float behavior_value = 5;
   void clear_behavior_value();
   float behavior_value() const;
   void set_behavior_value(float value);
@@ -2198,7 +1277,7 @@ class ProcessedTransition final :
   void _internal_set_behavior_value(float value);
   public:
 
-  // float advantage = 15;
+  // float advantage = 6;
   void clear_advantage();
   float advantage() const;
   void set_advantage(float value);
@@ -2207,61 +1286,20 @@ class ProcessedTransition final :
   void _internal_set_advantage(float value);
   public:
 
-  // float value_target = 16;
-  void clear_value_target();
-  float value_target() const;
-  void set_value_target(float value);
+  // optional uint64 behavior_model_step = 8;
+  bool has_behavior_model_step() const;
   private:
-  float _internal_value_target() const;
-  void _internal_set_value_target(float value);
+  bool _internal_has_behavior_model_step() const;
+  public:
+  void clear_behavior_model_step();
+  uint64_t behavior_model_step() const;
+  void set_behavior_model_step(uint64_t value);
+  private:
+  uint64_t _internal_behavior_model_step() const;
+  void _internal_set_behavior_model_step(uint64_t value);
   public:
 
-  // .rl.training.v1.TransitionEndKind end_kind = 18;
-  void clear_end_kind();
-  ::rl::training::v1::TransitionEndKind end_kind() const;
-  void set_end_kind(::rl::training::v1::TransitionEndKind value);
-  private:
-  ::rl::training::v1::TransitionEndKind _internal_end_kind() const;
-  void _internal_set_end_kind(::rl::training::v1::TransitionEndKind value);
-  public:
-
-  // .rl.training.v1.SegmentCloseReason segment_close_reason = 19;
-  void clear_segment_close_reason();
-  ::rl::training::v1::SegmentCloseReason segment_close_reason() const;
-  void set_segment_close_reason(::rl::training::v1::SegmentCloseReason value);
-  private:
-  ::rl::training::v1::SegmentCloseReason _internal_segment_close_reason() const;
-  void _internal_set_segment_close_reason(::rl::training::v1::SegmentCloseReason value);
-  public:
-
-  // bool environment_terminal = 17;
-  void clear_environment_terminal();
-  bool environment_terminal() const;
-  void set_environment_terminal(bool value);
-  private:
-  bool _internal_environment_terminal() const;
-  void _internal_set_environment_terminal(bool value);
-  public:
-
-  // bool segment_boundary = 20;
-  void clear_segment_boundary();
-  bool segment_boundary() const;
-  void set_segment_boundary(bool value);
-  private:
-  bool _internal_segment_boundary() const;
-  void _internal_set_segment_boundary(bool value);
-  public:
-
-  // bool bootstrap_applied = 21;
-  void clear_bootstrap_applied();
-  bool bootstrap_applied() const;
-  void set_bootstrap_applied(bool value);
-  private:
-  bool _internal_bootstrap_applied() const;
-  void _internal_set_bootstrap_applied(bool value);
-  public:
-
-  // int64 created_at_unix_ms = 25;
+  // int64 created_at_unix_ms = 9;
   void clear_created_at_unix_ms();
   int64_t created_at_unix_ms() const;
   void set_created_at_unix_ms(int64_t value);
@@ -2270,17 +1308,13 @@ class ProcessedTransition final :
   void _internal_set_created_at_unix_ms(int64_t value);
   public:
 
-  // optional float bootstrap_value = 22;
-  bool has_bootstrap_value() const;
+  // float value_target = 7;
+  void clear_value_target();
+  float value_target() const;
+  void set_value_target(float value);
   private:
-  bool _internal_has_bootstrap_value() const;
-  public:
-  void clear_bootstrap_value();
-  float bootstrap_value() const;
-  void set_bootstrap_value(float value);
-  private:
-  float _internal_bootstrap_value() const;
-  void _internal_set_bootstrap_value(float value);
+  float _internal_value_target() const;
+  void _internal_set_value_target(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.ProcessedTransition)
@@ -2294,30 +1328,14 @@ class ProcessedTransition final :
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > observation_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > next_observation_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr item_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_session_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr segment_id_;
-    ::rl::training::v1::BehaviorPolicyReference* behavior_policy_;
-    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
-    uint32_t agent_id_;
-    uint32_t transition_index_;
-    uint64_t action_step_;
-    uint32_t segment_transition_count_;
     int32_t action_;
-    float reward_;
     float behavior_log_probability_;
     float behavior_value_;
     float advantage_;
-    float value_target_;
-    int end_kind_;
-    int segment_close_reason_;
-    bool environment_terminal_;
-    bool segment_boundary_;
-    bool bootstrap_applied_;
+    uint64_t behavior_model_step_;
     int64_t created_at_unix_ms_;
-    float bootstrap_value_;
+    float value_target_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -2372,7 +1390,7 @@ class ProcessedTransitionEnvelope final :
                &_ProcessedTransitionEnvelope_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    3;
 
   friend void swap(ProcessedTransitionEnvelope& a, ProcessedTransitionEnvelope& b) {
     a.Swap(&b);
@@ -2445,31 +1463,30 @@ class ProcessedTransitionEnvelope final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTransitionsFieldNumber = 3,
+    kSamplesFieldNumber = 6,
     kEnvelopeIdFieldNumber = 1,
     kPayloadDigestFieldNumber = 2,
-    kTrainingSemanticsFieldNumber = 13,
-    kProducerFieldNumber = 14,
-    kContractFieldNumber = 15,
-    kCreatedAtUnixMsFieldNumber = 16,
+    kProducerFieldNumber = 3,
+    kTrainingContractDigestFieldNumber = 4,
+    kBehaviorModelFieldNumber = 5,
   };
-  // repeated .rl.training.v1.ProcessedTransition transitions = 3;
-  int transitions_size() const;
+  // repeated .rl.training.v1.ProcessedTransition samples = 6;
+  int samples_size() const;
   private:
-  int _internal_transitions_size() const;
+  int _internal_samples_size() const;
   public:
-  void clear_transitions();
-  ::rl::training::v1::ProcessedTransition* mutable_transitions(int index);
+  void clear_samples();
+  ::rl::training::v1::ProcessedTransition* mutable_samples(int index);
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >*
-      mutable_transitions();
+      mutable_samples();
   private:
-  const ::rl::training::v1::ProcessedTransition& _internal_transitions(int index) const;
-  ::rl::training::v1::ProcessedTransition* _internal_add_transitions();
+  const ::rl::training::v1::ProcessedTransition& _internal_samples(int index) const;
+  ::rl::training::v1::ProcessedTransition* _internal_add_samples();
   public:
-  const ::rl::training::v1::ProcessedTransition& transitions(int index) const;
-  ::rl::training::v1::ProcessedTransition* add_transitions();
+  const ::rl::training::v1::ProcessedTransition& samples(int index) const;
+  ::rl::training::v1::ProcessedTransition* add_samples();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >&
-      transitions() const;
+      samples() const;
 
   // string envelope_id = 1;
   void clear_envelope_id();
@@ -2503,25 +1520,7 @@ class ProcessedTransitionEnvelope final :
       ::rl::common::v1::ContentDigest* payload_digest);
   ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
 
-  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 13;
-  bool has_training_semantics() const;
-  private:
-  bool _internal_has_training_semantics() const;
-  public:
-  void clear_training_semantics();
-  const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::TrainingSemanticsIdentity* release_training_semantics();
-  ::rl::training::v1::TrainingSemanticsIdentity* mutable_training_semantics();
-  void set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
-  private:
-  const ::rl::training::v1::TrainingSemanticsIdentity& _internal_training_semantics() const;
-  ::rl::training::v1::TrainingSemanticsIdentity* _internal_mutable_training_semantics();
-  public:
-  void unsafe_arena_set_allocated_training_semantics(
-      ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
-  ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
-
-  // .rl.common.v1.ServiceInstanceIdentity producer = 14;
+  // .rl.common.v1.ServiceInstanceIdentity producer = 3;
   bool has_producer() const;
   private:
   bool _internal_has_producer() const;
@@ -2539,32 +1538,41 @@ class ProcessedTransitionEnvelope final :
       ::rl::common::v1::ServiceInstanceIdentity* producer);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_producer();
 
-  // .rl.common.v1.ContractIdentity contract = 15;
-  bool has_contract() const;
+  // .rl.common.v1.ContentDigest training_contract_digest = 4;
+  bool has_training_contract_digest() const;
   private:
-  bool _internal_has_contract() const;
+  bool _internal_has_training_contract_digest() const;
   public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
+  void clear_training_contract_digest();
+  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
+  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
+  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
   private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
+  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
   public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
+  void unsafe_arena_set_allocated_training_contract_digest(
+      ::rl::common::v1::ContentDigest* training_contract_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
 
-  // int64 created_at_unix_ms = 16;
-  void clear_created_at_unix_ms();
-  int64_t created_at_unix_ms() const;
-  void set_created_at_unix_ms(int64_t value);
+  // .rl.training.v1.ModelIdentity behavior_model = 5;
+  bool has_behavior_model() const;
   private:
-  int64_t _internal_created_at_unix_ms() const;
-  void _internal_set_created_at_unix_ms(int64_t value);
+  bool _internal_has_behavior_model() const;
   public:
+  void clear_behavior_model();
+  const ::rl::training::v1::ModelIdentity& behavior_model() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::ModelIdentity* release_behavior_model();
+  ::rl::training::v1::ModelIdentity* mutable_behavior_model();
+  void set_allocated_behavior_model(::rl::training::v1::ModelIdentity* behavior_model);
+  private:
+  const ::rl::training::v1::ModelIdentity& _internal_behavior_model() const;
+  ::rl::training::v1::ModelIdentity* _internal_mutable_behavior_model();
+  public:
+  void unsafe_arena_set_allocated_behavior_model(
+      ::rl::training::v1::ModelIdentity* behavior_model);
+  ::rl::training::v1::ModelIdentity* unsafe_arena_release_behavior_model();
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.ProcessedTransitionEnvelope)
  private:
@@ -2574,13 +1582,12 @@ class ProcessedTransitionEnvelope final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition > transitions_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition > samples_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr envelope_id_;
     ::rl::common::v1::ContentDigest* payload_digest_;
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
     ::rl::common::v1::ServiceInstanceIdentity* producer_;
-    ::rl::common::v1::ContractIdentity* contract_;
-    int64_t created_at_unix_ms_;
+    ::rl::common::v1::ContentDigest* training_contract_digest_;
+    ::rl::training::v1::ModelIdentity* behavior_model_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2636,7 +1643,7 @@ class SamplePoolItem final :
                &_SamplePoolItem_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    4;
 
   friend void swap(SamplePoolItem& a, SamplePoolItem& b) {
     a.Swap(&b);
@@ -2826,7 +1833,7 @@ class PushSamplesReq final :
                &_PushSamplesReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    5;
 
   friend void swap(PushSamplesReq& a, PushSamplesReq& b) {
     a.Swap(&b);
@@ -2983,7 +1990,7 @@ class PushSamplesRsp final :
                &_PushSamplesRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    6;
 
   friend void swap(PushSamplesRsp& a, PushSamplesRsp& b) {
     a.Swap(&b);
@@ -3057,17 +2064,11 @@ class PushSamplesRsp final :
 
   enum : int {
     kMessageFieldNumber = 2,
-    kEnvelopeIdFieldNumber = 6,
-    kSamplePoolFieldNumber = 12,
-    kAcceptedTransitionsFieldNumber = 3,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 5,
-    kQueueSizeFieldNumber = 4,
-    kAcceptedUniqueTransitionsFieldNumber = 7,
-    kResidentTransitionsFieldNumber = 8,
-    kResidentEnvelopesFieldNumber = 9,
-    kResidentEstimatedBytesFieldNumber = 10,
-    kPressureStateFieldNumber = 11,
+    kEnvelopeIdFieldNumber = 3,
+    kSamplePoolFieldNumber = 5,
+    kPayloadDigestFieldNumber = 6,
+    kResultFieldNumber = 1,
+    kPressureStateFieldNumber = 4,
   };
   // string message = 2;
   void clear_message();
@@ -3083,7 +2084,7 @@ class PushSamplesRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // string envelope_id = 6;
+  // string envelope_id = 3;
   void clear_envelope_id();
   const std::string& envelope_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3097,7 +2098,7 @@ class PushSamplesRsp final :
   std::string* _internal_mutable_envelope_id();
   public:
 
-  // .rl.common.v1.ServiceInstanceIdentity sample_pool = 12;
+  // .rl.common.v1.ServiceInstanceIdentity sample_pool = 5;
   bool has_sample_pool() const;
   private:
   bool _internal_has_sample_pool() const;
@@ -3115,25 +2116,25 @@ class PushSamplesRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* sample_pool);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_sample_pool();
 
-  // int64 accepted_transitions = 3;
-  void clear_accepted_transitions();
-  int64_t accepted_transitions() const;
-  void set_accepted_transitions(int64_t value);
+  // .rl.common.v1.ContentDigest payload_digest = 6;
+  bool has_payload_digest() const;
   private:
-  int64_t _internal_accepted_transitions() const;
-  void _internal_set_accepted_transitions(int64_t value);
+  bool _internal_has_payload_digest() const;
   public:
-
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
+  void clear_payload_digest();
+  const ::rl::common::v1::ContentDigest& payload_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_payload_digest();
+  ::rl::common::v1::ContentDigest* mutable_payload_digest();
+  void set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest);
   private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
+  const ::rl::common::v1::ContentDigest& _internal_payload_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_payload_digest();
   public:
+  void unsafe_arena_set_allocated_payload_digest(
+      ::rl::common::v1::ContentDigest* payload_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
 
-  // .rl.training.v1.PushResult result = 5;
+  // .rl.training.v1.PushResult result = 1;
   void clear_result();
   ::rl::training::v1::PushResult result() const;
   void set_result(::rl::training::v1::PushResult value);
@@ -3142,52 +2143,7 @@ class PushSamplesRsp final :
   void _internal_set_result(::rl::training::v1::PushResult value);
   public:
 
-  // int64 queue_size = 4;
-  void clear_queue_size();
-  int64_t queue_size() const;
-  void set_queue_size(int64_t value);
-  private:
-  int64_t _internal_queue_size() const;
-  void _internal_set_queue_size(int64_t value);
-  public:
-
-  // int64 accepted_unique_transitions = 7;
-  void clear_accepted_unique_transitions();
-  int64_t accepted_unique_transitions() const;
-  void set_accepted_unique_transitions(int64_t value);
-  private:
-  int64_t _internal_accepted_unique_transitions() const;
-  void _internal_set_accepted_unique_transitions(int64_t value);
-  public:
-
-  // int64 resident_transitions = 8;
-  void clear_resident_transitions();
-  int64_t resident_transitions() const;
-  void set_resident_transitions(int64_t value);
-  private:
-  int64_t _internal_resident_transitions() const;
-  void _internal_set_resident_transitions(int64_t value);
-  public:
-
-  // int64 resident_envelopes = 9;
-  void clear_resident_envelopes();
-  int64_t resident_envelopes() const;
-  void set_resident_envelopes(int64_t value);
-  private:
-  int64_t _internal_resident_envelopes() const;
-  void _internal_set_resident_envelopes(int64_t value);
-  public:
-
-  // int64 resident_estimated_bytes = 10;
-  void clear_resident_estimated_bytes();
-  int64_t resident_estimated_bytes() const;
-  void set_resident_estimated_bytes(int64_t value);
-  private:
-  int64_t _internal_resident_estimated_bytes() const;
-  void _internal_set_resident_estimated_bytes(int64_t value);
-  public:
-
-  // .rl.training.v1.PressureState pressure_state = 11;
+  // .rl.training.v1.PressureState pressure_state = 4;
   void clear_pressure_state();
   ::rl::training::v1::PressureState pressure_state() const;
   void set_pressure_state(::rl::training::v1::PressureState value);
@@ -3207,14 +2163,8 @@ class PushSamplesRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr envelope_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
-    int64_t accepted_transitions_;
-    int32_t ret_code_;
+    ::rl::common::v1::ContentDigest* payload_digest_;
     int result_;
-    int64_t queue_size_;
-    int64_t accepted_unique_transitions_;
-    int64_t resident_transitions_;
-    int64_t resident_envelopes_;
-    int64_t resident_estimated_bytes_;
     int pressure_state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -3271,7 +2221,7 @@ class GetBatchReq final :
                &_GetBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    7;
 
   friend void swap(GetBatchReq& a, GetBatchReq& b) {
     a.Swap(&b);
@@ -3345,8 +2295,7 @@ class GetBatchReq final :
 
   enum : int {
     kConsumerFieldNumber = 3,
-    kRequiredSemanticsFieldNumber = 5,
-    kRequiredRolloutEstimatorProfileDigestFieldNumber = 6,
+    kRequiredTrainingContractDigestFieldNumber = 5,
     kRequestedTransitionsFieldNumber = 1,
     kTimeoutMsFieldNumber = 2,
     kLeaseTimeoutMsFieldNumber = 4,
@@ -3369,41 +2318,23 @@ class GetBatchReq final :
       ::rl::common::v1::ServiceInstanceIdentity* consumer);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_consumer();
 
-  // .rl.training.v1.TrainingSemanticsIdentity required_semantics = 5;
-  bool has_required_semantics() const;
+  // .rl.common.v1.ContentDigest required_training_contract_digest = 5;
+  bool has_required_training_contract_digest() const;
   private:
-  bool _internal_has_required_semantics() const;
+  bool _internal_has_required_training_contract_digest() const;
   public:
-  void clear_required_semantics();
-  const ::rl::training::v1::TrainingSemanticsIdentity& required_semantics() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::TrainingSemanticsIdentity* release_required_semantics();
-  ::rl::training::v1::TrainingSemanticsIdentity* mutable_required_semantics();
-  void set_allocated_required_semantics(::rl::training::v1::TrainingSemanticsIdentity* required_semantics);
+  void clear_required_training_contract_digest();
+  const ::rl::common::v1::ContentDigest& required_training_contract_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_required_training_contract_digest();
+  ::rl::common::v1::ContentDigest* mutable_required_training_contract_digest();
+  void set_allocated_required_training_contract_digest(::rl::common::v1::ContentDigest* required_training_contract_digest);
   private:
-  const ::rl::training::v1::TrainingSemanticsIdentity& _internal_required_semantics() const;
-  ::rl::training::v1::TrainingSemanticsIdentity* _internal_mutable_required_semantics();
+  const ::rl::common::v1::ContentDigest& _internal_required_training_contract_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_required_training_contract_digest();
   public:
-  void unsafe_arena_set_allocated_required_semantics(
-      ::rl::training::v1::TrainingSemanticsIdentity* required_semantics);
-  ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_required_semantics();
-
-  // .rl.common.v1.ContentDigest required_rollout_estimator_profile_digest = 6;
-  bool has_required_rollout_estimator_profile_digest() const;
-  private:
-  bool _internal_has_required_rollout_estimator_profile_digest() const;
-  public:
-  void clear_required_rollout_estimator_profile_digest();
-  const ::rl::common::v1::ContentDigest& required_rollout_estimator_profile_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_required_rollout_estimator_profile_digest();
-  ::rl::common::v1::ContentDigest* mutable_required_rollout_estimator_profile_digest();
-  void set_allocated_required_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_required_rollout_estimator_profile_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_required_rollout_estimator_profile_digest();
-  public:
-  void unsafe_arena_set_allocated_required_rollout_estimator_profile_digest(
-      ::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_required_rollout_estimator_profile_digest();
+  void unsafe_arena_set_allocated_required_training_contract_digest(
+      ::rl::common::v1::ContentDigest* required_training_contract_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_required_training_contract_digest();
 
   // int32 requested_transitions = 1;
   void clear_requested_transitions();
@@ -3441,8 +2372,7 @@ class GetBatchReq final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::rl::common::v1::ServiceInstanceIdentity* consumer_;
-    ::rl::training::v1::TrainingSemanticsIdentity* required_semantics_;
-    ::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest_;
+    ::rl::common::v1::ContentDigest* required_training_contract_digest_;
     int32_t requested_transitions_;
     int32_t timeout_ms_;
     int32_t lease_timeout_ms_;
@@ -3501,7 +2431,7 @@ class GetBatchRsp final :
                &_GetBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    8;
 
   friend void swap(GetBatchRsp& a, GetBatchRsp& b) {
     a.Swap(&b);
@@ -3574,24 +2504,14 @@ class GetBatchRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kItemsFieldNumber = 2,
-    kMessageFieldNumber = 5,
-    kDeliveryIdFieldNumber = 7,
-    kSamplePoolFieldNumber = 13,
-    kQueueSizeFieldNumber = 3,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 6,
-    kReturnedTransitionsFieldNumber = 4,
-    kLeaseDeadlineUnixMsFieldNumber = 8,
-    kActualTransitionCountFieldNumber = 10,
-    kWaitMsFieldNumber = 11,
-    kLeasedTransitionsFieldNumber = 12,
-    kMinimumBehaviorModelStepFieldNumber = 14,
-    kMaximumBehaviorModelStepFieldNumber = 15,
-    kOldestTransitionCreatedAtUnixMsFieldNumber = 16,
-    kNewestTransitionCreatedAtUnixMsFieldNumber = 17,
+    kItemsFieldNumber = 5,
+    kMessageFieldNumber = 2,
+    kDeliveryIdFieldNumber = 3,
+    kSamplePoolFieldNumber = 6,
+    kLeaseDeadlineUnixMsFieldNumber = 4,
+    kResultFieldNumber = 1,
   };
-  // repeated .rl.training.v1.SamplePoolItem items = 2;
+  // repeated .rl.training.v1.SamplePoolItem items = 5;
   int items_size() const;
   private:
   int _internal_items_size() const;
@@ -3609,7 +2529,7 @@ class GetBatchRsp final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >&
       items() const;
 
-  // string message = 5;
+  // string message = 2;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3623,7 +2543,7 @@ class GetBatchRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // string delivery_id = 7;
+  // string delivery_id = 3;
   void clear_delivery_id();
   const std::string& delivery_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3637,7 +2557,7 @@ class GetBatchRsp final :
   std::string* _internal_mutable_delivery_id();
   public:
 
-  // .rl.common.v1.ServiceInstanceIdentity sample_pool = 13;
+  // .rl.common.v1.ServiceInstanceIdentity sample_pool = 6;
   bool has_sample_pool() const;
   private:
   bool _internal_has_sample_pool() const;
@@ -3655,43 +2575,7 @@ class GetBatchRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* sample_pool);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_sample_pool();
 
-  // int64 queue_size = 3;
-  void clear_queue_size();
-  int64_t queue_size() const;
-  void set_queue_size(int64_t value);
-  private:
-  int64_t _internal_queue_size() const;
-  void _internal_set_queue_size(int64_t value);
-  public:
-
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.training.v1.GetBatchResult result = 6;
-  void clear_result();
-  ::rl::training::v1::GetBatchResult result() const;
-  void set_result(::rl::training::v1::GetBatchResult value);
-  private:
-  ::rl::training::v1::GetBatchResult _internal_result() const;
-  void _internal_set_result(::rl::training::v1::GetBatchResult value);
-  public:
-
-  // int64 returned_transitions = 4;
-  void clear_returned_transitions();
-  int64_t returned_transitions() const;
-  void set_returned_transitions(int64_t value);
-  private:
-  int64_t _internal_returned_transitions() const;
-  void _internal_set_returned_transitions(int64_t value);
-  public:
-
-  // int64 lease_deadline_unix_ms = 8;
+  // int64 lease_deadline_unix_ms = 4;
   void clear_lease_deadline_unix_ms();
   int64_t lease_deadline_unix_ms() const;
   void set_lease_deadline_unix_ms(int64_t value);
@@ -3700,83 +2584,13 @@ class GetBatchRsp final :
   void _internal_set_lease_deadline_unix_ms(int64_t value);
   public:
 
-  // int64 actual_transition_count = 10;
-  void clear_actual_transition_count();
-  int64_t actual_transition_count() const;
-  void set_actual_transition_count(int64_t value);
+  // .rl.training.v1.GetBatchResult result = 1;
+  void clear_result();
+  ::rl::training::v1::GetBatchResult result() const;
+  void set_result(::rl::training::v1::GetBatchResult value);
   private:
-  int64_t _internal_actual_transition_count() const;
-  void _internal_set_actual_transition_count(int64_t value);
-  public:
-
-  // int64 wait_ms = 11;
-  void clear_wait_ms();
-  int64_t wait_ms() const;
-  void set_wait_ms(int64_t value);
-  private:
-  int64_t _internal_wait_ms() const;
-  void _internal_set_wait_ms(int64_t value);
-  public:
-
-  // int64 leased_transitions = 12;
-  void clear_leased_transitions();
-  int64_t leased_transitions() const;
-  void set_leased_transitions(int64_t value);
-  private:
-  int64_t _internal_leased_transitions() const;
-  void _internal_set_leased_transitions(int64_t value);
-  public:
-
-  // optional uint64 minimum_behavior_model_step = 14;
-  bool has_minimum_behavior_model_step() const;
-  private:
-  bool _internal_has_minimum_behavior_model_step() const;
-  public:
-  void clear_minimum_behavior_model_step();
-  uint64_t minimum_behavior_model_step() const;
-  void set_minimum_behavior_model_step(uint64_t value);
-  private:
-  uint64_t _internal_minimum_behavior_model_step() const;
-  void _internal_set_minimum_behavior_model_step(uint64_t value);
-  public:
-
-  // optional uint64 maximum_behavior_model_step = 15;
-  bool has_maximum_behavior_model_step() const;
-  private:
-  bool _internal_has_maximum_behavior_model_step() const;
-  public:
-  void clear_maximum_behavior_model_step();
-  uint64_t maximum_behavior_model_step() const;
-  void set_maximum_behavior_model_step(uint64_t value);
-  private:
-  uint64_t _internal_maximum_behavior_model_step() const;
-  void _internal_set_maximum_behavior_model_step(uint64_t value);
-  public:
-
-  // optional int64 oldest_transition_created_at_unix_ms = 16;
-  bool has_oldest_transition_created_at_unix_ms() const;
-  private:
-  bool _internal_has_oldest_transition_created_at_unix_ms() const;
-  public:
-  void clear_oldest_transition_created_at_unix_ms();
-  int64_t oldest_transition_created_at_unix_ms() const;
-  void set_oldest_transition_created_at_unix_ms(int64_t value);
-  private:
-  int64_t _internal_oldest_transition_created_at_unix_ms() const;
-  void _internal_set_oldest_transition_created_at_unix_ms(int64_t value);
-  public:
-
-  // optional int64 newest_transition_created_at_unix_ms = 17;
-  bool has_newest_transition_created_at_unix_ms() const;
-  private:
-  bool _internal_has_newest_transition_created_at_unix_ms() const;
-  public:
-  void clear_newest_transition_created_at_unix_ms();
-  int64_t newest_transition_created_at_unix_ms() const;
-  void set_newest_transition_created_at_unix_ms(int64_t value);
-  private:
-  int64_t _internal_newest_transition_created_at_unix_ms() const;
-  void _internal_set_newest_transition_created_at_unix_ms(int64_t value);
+  ::rl::training::v1::GetBatchResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::GetBatchResult value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.GetBatchRsp)
@@ -3787,24 +2601,13 @@ class GetBatchRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem > items_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
-    int64_t queue_size_;
-    int32_t ret_code_;
-    int result_;
-    int64_t returned_transitions_;
     int64_t lease_deadline_unix_ms_;
-    int64_t actual_transition_count_;
-    int64_t wait_ms_;
-    int64_t leased_transitions_;
-    uint64_t minimum_behavior_model_step_;
-    uint64_t maximum_behavior_model_step_;
-    int64_t oldest_transition_created_at_unix_ms_;
-    int64_t newest_transition_created_at_unix_ms_;
+    int result_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -3859,7 +2662,7 @@ class AckBatchReq final :
                &_AckBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    9;
 
   friend void swap(AckBatchReq& a, AckBatchReq& b) {
     a.Swap(&b);
@@ -4059,7 +2862,7 @@ class NackBatchReq final :
                &_NackBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    10;
 
   friend void swap(NackBatchReq& a, NackBatchReq& b) {
     a.Swap(&b);
@@ -4248,7 +3051,7 @@ class RenewLeaseReq final :
                &_RenewLeaseReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    11;
 
   friend void swap(RenewLeaseReq& a, RenewLeaseReq& b) {
     a.Swap(&b);
@@ -4432,7 +3235,7 @@ class DeliveryRsp final :
                &_DeliveryRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    12;
 
   friend void swap(DeliveryRsp& a, DeliveryRsp& b) {
     a.Swap(&b);
@@ -4505,17 +3308,14 @@ class DeliveryRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 3,
-    kDeliveryIdFieldNumber = 4,
-    kTrainUpdateIdFieldNumber = 9,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 2,
-    kAffectedTransitionsFieldNumber = 5,
-    kQueueSizeFieldNumber = 6,
-    kLeaseDeadlineUnixMsFieldNumber = 7,
-    kDispositionFieldNumber = 8,
+    kMessageFieldNumber = 2,
+    kDeliveryIdFieldNumber = 3,
+    kTrainUpdateIdFieldNumber = 6,
+    kResultFieldNumber = 1,
+    kDispositionFieldNumber = 5,
+    kLeaseDeadlineUnixMsFieldNumber = 4,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -4529,7 +3329,7 @@ class DeliveryRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // string delivery_id = 4;
+  // string delivery_id = 3;
   void clear_delivery_id();
   const std::string& delivery_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -4543,7 +3343,7 @@ class DeliveryRsp final :
   std::string* _internal_mutable_delivery_id();
   public:
 
-  // string train_update_id = 9;
+  // string train_update_id = 6;
   void clear_train_update_id();
   const std::string& train_update_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -4557,16 +3357,7 @@ class DeliveryRsp final :
   std::string* _internal_mutable_train_update_id();
   public:
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.training.v1.DeliveryResult result = 2;
+  // .rl.training.v1.DeliveryResult result = 1;
   void clear_result();
   ::rl::training::v1::DeliveryResult result() const;
   void set_result(::rl::training::v1::DeliveryResult value);
@@ -4575,40 +3366,22 @@ class DeliveryRsp final :
   void _internal_set_result(::rl::training::v1::DeliveryResult value);
   public:
 
-  // int64 affected_transitions = 5;
-  void clear_affected_transitions();
-  int64_t affected_transitions() const;
-  void set_affected_transitions(int64_t value);
-  private:
-  int64_t _internal_affected_transitions() const;
-  void _internal_set_affected_transitions(int64_t value);
-  public:
-
-  // int64 queue_size = 6;
-  void clear_queue_size();
-  int64_t queue_size() const;
-  void set_queue_size(int64_t value);
-  private:
-  int64_t _internal_queue_size() const;
-  void _internal_set_queue_size(int64_t value);
-  public:
-
-  // int64 lease_deadline_unix_ms = 7;
-  void clear_lease_deadline_unix_ms();
-  int64_t lease_deadline_unix_ms() const;
-  void set_lease_deadline_unix_ms(int64_t value);
-  private:
-  int64_t _internal_lease_deadline_unix_ms() const;
-  void _internal_set_lease_deadline_unix_ms(int64_t value);
-  public:
-
-  // .rl.training.v1.AckDisposition disposition = 8;
+  // .rl.training.v1.AckDisposition disposition = 5;
   void clear_disposition();
   ::rl::training::v1::AckDisposition disposition() const;
   void set_disposition(::rl::training::v1::AckDisposition value);
   private:
   ::rl::training::v1::AckDisposition _internal_disposition() const;
   void _internal_set_disposition(::rl::training::v1::AckDisposition value);
+  public:
+
+  // int64 lease_deadline_unix_ms = 4;
+  void clear_lease_deadline_unix_ms();
+  int64_t lease_deadline_unix_ms() const;
+  void set_lease_deadline_unix_ms(int64_t value);
+  private:
+  int64_t _internal_lease_deadline_unix_ms() const;
+  void _internal_set_lease_deadline_unix_ms(int64_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.DeliveryRsp)
@@ -4622,12 +3395,9 @@ class DeliveryRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr train_update_id_;
-    int32_t ret_code_;
     int result_;
-    int64_t affected_transitions_;
-    int64_t queue_size_;
-    int64_t lease_deadline_unix_ms_;
     int disposition_;
+    int64_t lease_deadline_unix_ms_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4683,7 +3453,7 @@ class FinalizeSamplePoolReq final :
                &_FinalizeSamplePoolReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    13;
 
   friend void swap(FinalizeSamplePoolReq& a, FinalizeSamplePoolReq& b) {
     a.Swap(&b);
@@ -4876,7 +3646,7 @@ class FinalizeSamplePoolRsp final :
                &_FinalizeSamplePoolRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    14;
 
   friend void swap(FinalizeSamplePoolRsp& a, FinalizeSamplePoolRsp& b) {
     a.Swap(&b);
@@ -4949,18 +3719,13 @@ class FinalizeSamplePoolRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 3,
-    kFinalizationIdFieldNumber = 4,
-    kSamplePoolFieldNumber = 5,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 2,
-    kSettledTransitionsFieldNumber = 6,
-    kReadyTransitionsFieldNumber = 8,
-    kLeasedTransitionsFieldNumber = 10,
-    kResidentTransitionsFieldNumber = 12,
-    kFinalizedAtUnixMsFieldNumber = 14,
+    kMessageFieldNumber = 2,
+    kFinalizationIdFieldNumber = 3,
+    kSamplePoolFieldNumber = 4,
+    kFinalizedAtUnixMsFieldNumber = 5,
+    kResultFieldNumber = 1,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -4974,7 +3739,7 @@ class FinalizeSamplePoolRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // string finalization_id = 4;
+  // string finalization_id = 3;
   void clear_finalization_id();
   const std::string& finalization_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -4988,7 +3753,7 @@ class FinalizeSamplePoolRsp final :
   std::string* _internal_mutable_finalization_id();
   public:
 
-  // .rl.common.v1.ServiceInstanceIdentity sample_pool = 5;
+  // .rl.common.v1.ServiceInstanceIdentity sample_pool = 4;
   bool has_sample_pool() const;
   private:
   bool _internal_has_sample_pool() const;
@@ -5006,61 +3771,7 @@ class FinalizeSamplePoolRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* sample_pool);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_sample_pool();
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.training.v1.SamplePoolFinalizeResult result = 2;
-  void clear_result();
-  ::rl::training::v1::SamplePoolFinalizeResult result() const;
-  void set_result(::rl::training::v1::SamplePoolFinalizeResult value);
-  private:
-  ::rl::training::v1::SamplePoolFinalizeResult _internal_result() const;
-  void _internal_set_result(::rl::training::v1::SamplePoolFinalizeResult value);
-  public:
-
-  // int64 settled_transitions = 6;
-  void clear_settled_transitions();
-  int64_t settled_transitions() const;
-  void set_settled_transitions(int64_t value);
-  private:
-  int64_t _internal_settled_transitions() const;
-  void _internal_set_settled_transitions(int64_t value);
-  public:
-
-  // int64 ready_transitions = 8;
-  void clear_ready_transitions();
-  int64_t ready_transitions() const;
-  void set_ready_transitions(int64_t value);
-  private:
-  int64_t _internal_ready_transitions() const;
-  void _internal_set_ready_transitions(int64_t value);
-  public:
-
-  // int64 leased_transitions = 10;
-  void clear_leased_transitions();
-  int64_t leased_transitions() const;
-  void set_leased_transitions(int64_t value);
-  private:
-  int64_t _internal_leased_transitions() const;
-  void _internal_set_leased_transitions(int64_t value);
-  public:
-
-  // int64 resident_transitions = 12;
-  void clear_resident_transitions();
-  int64_t resident_transitions() const;
-  void set_resident_transitions(int64_t value);
-  private:
-  int64_t _internal_resident_transitions() const;
-  void _internal_set_resident_transitions(int64_t value);
-  public:
-
-  // optional int64 finalized_at_unix_ms = 14;
+  // optional int64 finalized_at_unix_ms = 5;
   bool has_finalized_at_unix_ms() const;
   private:
   bool _internal_has_finalized_at_unix_ms() const;
@@ -5071,6 +3782,15 @@ class FinalizeSamplePoolRsp final :
   private:
   int64_t _internal_finalized_at_unix_ms() const;
   void _internal_set_finalized_at_unix_ms(int64_t value);
+  public:
+
+  // .rl.training.v1.SamplePoolFinalizeResult result = 1;
+  void clear_result();
+  ::rl::training::v1::SamplePoolFinalizeResult result() const;
+  void set_result(::rl::training::v1::SamplePoolFinalizeResult value);
+  private:
+  ::rl::training::v1::SamplePoolFinalizeResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::SamplePoolFinalizeResult value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.FinalizeSamplePoolRsp)
@@ -5086,13 +3806,8 @@ class FinalizeSamplePoolRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr finalization_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
-    int32_t ret_code_;
-    int result_;
-    int64_t settled_transitions_;
-    int64_t ready_transitions_;
-    int64_t leased_transitions_;
-    int64_t resident_transitions_;
     int64_t finalized_at_unix_ms_;
+    int result_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -5146,7 +3861,7 @@ class SamplePoolStatusReq final :
                &_SamplePoolStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    15;
 
   friend void swap(SamplePoolStatusReq& a, SamplePoolStatusReq& b) {
     a.Swap(&b);
@@ -5265,7 +3980,7 @@ class SamplePoolStatusRsp final :
                &_SamplePoolStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    16;
 
   friend void swap(SamplePoolStatusRsp& a, SamplePoolStatusRsp& b) {
     a.Swap(&b);
@@ -5975,762 +4690,6 @@ class SamplePoolStatusRsp final :
 };
 // -------------------------------------------------------------------
 
-class MetricDescriptor final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.MetricDescriptor) */ {
- public:
-  inline MetricDescriptor() : MetricDescriptor(nullptr) {}
-  ~MetricDescriptor() override;
-  explicit PROTOBUF_CONSTEXPR MetricDescriptor(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  MetricDescriptor(const MetricDescriptor& from);
-  MetricDescriptor(MetricDescriptor&& from) noexcept
-    : MetricDescriptor() {
-    *this = ::std::move(from);
-  }
-
-  inline MetricDescriptor& operator=(const MetricDescriptor& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline MetricDescriptor& operator=(MetricDescriptor&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const MetricDescriptor& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const MetricDescriptor* internal_default_instance() {
-    return reinterpret_cast<const MetricDescriptor*>(
-               &_MetricDescriptor_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    19;
-
-  friend void swap(MetricDescriptor& a, MetricDescriptor& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(MetricDescriptor* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(MetricDescriptor* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  MetricDescriptor* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<MetricDescriptor>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const MetricDescriptor& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const MetricDescriptor& from) {
-    MetricDescriptor::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(MetricDescriptor* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.MetricDescriptor";
-  }
-  protected:
-  explicit MetricDescriptor(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kFieldIdFieldNumber = 1,
-    kLabelFieldNumber = 2,
-    kGroupFieldNumber = 3,
-    kDimensionFieldNumber = 4,
-    kUnitFieldNumber = 5,
-    kScopeFieldNumber = 6,
-    kStatisticFieldNumber = 7,
-    kOwnerComponentFieldNumber = 9,
-    kSchemaIdentityFieldNumber = 12,
-    kValueKindFieldNumber = 8,
-    kAggregationKindFieldNumber = 10,
-    kWindowKindFieldNumber = 11,
-  };
-  // string field_id = 1;
-  void clear_field_id();
-  const std::string& field_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_field_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_field_id();
-  PROTOBUF_NODISCARD std::string* release_field_id();
-  void set_allocated_field_id(std::string* field_id);
-  private:
-  const std::string& _internal_field_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_field_id(const std::string& value);
-  std::string* _internal_mutable_field_id();
-  public:
-
-  // string label = 2;
-  void clear_label();
-  const std::string& label() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_label(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_label();
-  PROTOBUF_NODISCARD std::string* release_label();
-  void set_allocated_label(std::string* label);
-  private:
-  const std::string& _internal_label() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_label(const std::string& value);
-  std::string* _internal_mutable_label();
-  public:
-
-  // string group = 3;
-  void clear_group();
-  const std::string& group() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_group(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_group();
-  PROTOBUF_NODISCARD std::string* release_group();
-  void set_allocated_group(std::string* group);
-  private:
-  const std::string& _internal_group() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_group(const std::string& value);
-  std::string* _internal_mutable_group();
-  public:
-
-  // string dimension = 4;
-  void clear_dimension();
-  const std::string& dimension() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_dimension(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_dimension();
-  PROTOBUF_NODISCARD std::string* release_dimension();
-  void set_allocated_dimension(std::string* dimension);
-  private:
-  const std::string& _internal_dimension() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_dimension(const std::string& value);
-  std::string* _internal_mutable_dimension();
-  public:
-
-  // string unit = 5;
-  void clear_unit();
-  const std::string& unit() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_unit(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_unit();
-  PROTOBUF_NODISCARD std::string* release_unit();
-  void set_allocated_unit(std::string* unit);
-  private:
-  const std::string& _internal_unit() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_unit(const std::string& value);
-  std::string* _internal_mutable_unit();
-  public:
-
-  // string scope = 6;
-  void clear_scope();
-  const std::string& scope() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_scope(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_scope();
-  PROTOBUF_NODISCARD std::string* release_scope();
-  void set_allocated_scope(std::string* scope);
-  private:
-  const std::string& _internal_scope() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_scope(const std::string& value);
-  std::string* _internal_mutable_scope();
-  public:
-
-  // string statistic = 7;
-  void clear_statistic();
-  const std::string& statistic() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_statistic(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_statistic();
-  PROTOBUF_NODISCARD std::string* release_statistic();
-  void set_allocated_statistic(std::string* statistic);
-  private:
-  const std::string& _internal_statistic() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_statistic(const std::string& value);
-  std::string* _internal_mutable_statistic();
-  public:
-
-  // string owner_component = 9;
-  void clear_owner_component();
-  const std::string& owner_component() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_owner_component(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_owner_component();
-  PROTOBUF_NODISCARD std::string* release_owner_component();
-  void set_allocated_owner_component(std::string* owner_component);
-  private:
-  const std::string& _internal_owner_component() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_owner_component(const std::string& value);
-  std::string* _internal_mutable_owner_component();
-  public:
-
-  // .rl.common.v1.SchemaIdentity schema_identity = 12;
-  bool has_schema_identity() const;
-  private:
-  bool _internal_has_schema_identity() const;
-  public:
-  void clear_schema_identity();
-  const ::rl::common::v1::SchemaIdentity& schema_identity() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_schema_identity();
-  ::rl::common::v1::SchemaIdentity* mutable_schema_identity();
-  void set_allocated_schema_identity(::rl::common::v1::SchemaIdentity* schema_identity);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_schema_identity() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_schema_identity();
-  public:
-  void unsafe_arena_set_allocated_schema_identity(
-      ::rl::common::v1::SchemaIdentity* schema_identity);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_schema_identity();
-
-  // .rl.training.v1.MetricValueKind value_kind = 8;
-  void clear_value_kind();
-  ::rl::training::v1::MetricValueKind value_kind() const;
-  void set_value_kind(::rl::training::v1::MetricValueKind value);
-  private:
-  ::rl::training::v1::MetricValueKind _internal_value_kind() const;
-  void _internal_set_value_kind(::rl::training::v1::MetricValueKind value);
-  public:
-
-  // .rl.training.v1.MetricAggregationKind aggregation_kind = 10;
-  void clear_aggregation_kind();
-  ::rl::training::v1::MetricAggregationKind aggregation_kind() const;
-  void set_aggregation_kind(::rl::training::v1::MetricAggregationKind value);
-  private:
-  ::rl::training::v1::MetricAggregationKind _internal_aggregation_kind() const;
-  void _internal_set_aggregation_kind(::rl::training::v1::MetricAggregationKind value);
-  public:
-
-  // .rl.training.v1.MetricWindowKind window_kind = 11;
-  void clear_window_kind();
-  ::rl::training::v1::MetricWindowKind window_kind() const;
-  void set_window_kind(::rl::training::v1::MetricWindowKind value);
-  private:
-  ::rl::training::v1::MetricWindowKind _internal_window_kind() const;
-  void _internal_set_window_kind(::rl::training::v1::MetricWindowKind value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.MetricDescriptor)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr field_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr label_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr group_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr dimension_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr unit_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr scope_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr statistic_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr owner_component_;
-    ::rl::common::v1::SchemaIdentity* schema_identity_;
-    int value_kind_;
-    int aggregation_kind_;
-    int window_kind_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
-class MetricValue final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.MetricValue) */ {
- public:
-  inline MetricValue() : MetricValue(nullptr) {}
-  ~MetricValue() override;
-  explicit PROTOBUF_CONSTEXPR MetricValue(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  MetricValue(const MetricValue& from);
-  MetricValue(MetricValue&& from) noexcept
-    : MetricValue() {
-    *this = ::std::move(from);
-  }
-
-  inline MetricValue& operator=(const MetricValue& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline MetricValue& operator=(MetricValue&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const MetricValue& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const MetricValue* internal_default_instance() {
-    return reinterpret_cast<const MetricValue*>(
-               &_MetricValue_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    20;
-
-  friend void swap(MetricValue& a, MetricValue& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(MetricValue* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(MetricValue* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  MetricValue* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<MetricValue>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const MetricValue& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const MetricValue& from) {
-    MetricValue::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(MetricValue* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.MetricValue";
-  }
-  protected:
-  explicit MetricValue(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kFieldIdFieldNumber = 1,
-    kValueFieldNumber = 2,
-    kSumFieldNumber = 3,
-    kCountFieldNumber = 4,
-    kQuantileFieldNumber = 5,
-    kWindowStartUnixMsFieldNumber = 6,
-    kWindowEndUnixMsFieldNumber = 7,
-  };
-  // string field_id = 1;
-  void clear_field_id();
-  const std::string& field_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_field_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_field_id();
-  PROTOBUF_NODISCARD std::string* release_field_id();
-  void set_allocated_field_id(std::string* field_id);
-  private:
-  const std::string& _internal_field_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_field_id(const std::string& value);
-  std::string* _internal_mutable_field_id();
-  public:
-
-  // double value = 2;
-  void clear_value();
-  double value() const;
-  void set_value(double value);
-  private:
-  double _internal_value() const;
-  void _internal_set_value(double value);
-  public:
-
-  // double sum = 3;
-  void clear_sum();
-  double sum() const;
-  void set_sum(double value);
-  private:
-  double _internal_sum() const;
-  void _internal_set_sum(double value);
-  public:
-
-  // uint64 count = 4;
-  void clear_count();
-  uint64_t count() const;
-  void set_count(uint64_t value);
-  private:
-  uint64_t _internal_count() const;
-  void _internal_set_count(uint64_t value);
-  public:
-
-  // double quantile = 5;
-  void clear_quantile();
-  double quantile() const;
-  void set_quantile(double value);
-  private:
-  double _internal_quantile() const;
-  void _internal_set_quantile(double value);
-  public:
-
-  // int64 window_start_unix_ms = 6;
-  void clear_window_start_unix_ms();
-  int64_t window_start_unix_ms() const;
-  void set_window_start_unix_ms(int64_t value);
-  private:
-  int64_t _internal_window_start_unix_ms() const;
-  void _internal_set_window_start_unix_ms(int64_t value);
-  public:
-
-  // int64 window_end_unix_ms = 7;
-  void clear_window_end_unix_ms();
-  int64_t window_end_unix_ms() const;
-  void set_window_end_unix_ms(int64_t value);
-  private:
-  int64_t _internal_window_end_unix_ms() const;
-  void _internal_set_window_end_unix_ms(int64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.MetricValue)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr field_id_;
-    double value_;
-    double sum_;
-    uint64_t count_;
-    double quantile_;
-    int64_t window_start_unix_ms_;
-    int64_t window_end_unix_ms_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
-class MetricSnapshot final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.MetricSnapshot) */ {
- public:
-  inline MetricSnapshot() : MetricSnapshot(nullptr) {}
-  ~MetricSnapshot() override;
-  explicit PROTOBUF_CONSTEXPR MetricSnapshot(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  MetricSnapshot(const MetricSnapshot& from);
-  MetricSnapshot(MetricSnapshot&& from) noexcept
-    : MetricSnapshot() {
-    *this = ::std::move(from);
-  }
-
-  inline MetricSnapshot& operator=(const MetricSnapshot& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline MetricSnapshot& operator=(MetricSnapshot&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const MetricSnapshot& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const MetricSnapshot* internal_default_instance() {
-    return reinterpret_cast<const MetricSnapshot*>(
-               &_MetricSnapshot_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    21;
-
-  friend void swap(MetricSnapshot& a, MetricSnapshot& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(MetricSnapshot* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(MetricSnapshot* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  MetricSnapshot* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<MetricSnapshot>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const MetricSnapshot& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const MetricSnapshot& from) {
-    MetricSnapshot::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(MetricSnapshot* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.MetricSnapshot";
-  }
-  protected:
-  explicit MetricSnapshot(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kDescriptorsFieldNumber = 4,
-    kValuesFieldNumber = 5,
-    kSourceFieldNumber = 1,
-    kSequenceFieldNumber = 2,
-    kTimestampUnixMsFieldNumber = 3,
-  };
-  // repeated .rl.training.v1.MetricDescriptor descriptors = 4;
-  int descriptors_size() const;
-  private:
-  int _internal_descriptors_size() const;
-  public:
-  void clear_descriptors();
-  ::rl::training::v1::MetricDescriptor* mutable_descriptors(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricDescriptor >*
-      mutable_descriptors();
-  private:
-  const ::rl::training::v1::MetricDescriptor& _internal_descriptors(int index) const;
-  ::rl::training::v1::MetricDescriptor* _internal_add_descriptors();
-  public:
-  const ::rl::training::v1::MetricDescriptor& descriptors(int index) const;
-  ::rl::training::v1::MetricDescriptor* add_descriptors();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricDescriptor >&
-      descriptors() const;
-
-  // repeated .rl.training.v1.MetricValue values = 5;
-  int values_size() const;
-  private:
-  int _internal_values_size() const;
-  public:
-  void clear_values();
-  ::rl::training::v1::MetricValue* mutable_values(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricValue >*
-      mutable_values();
-  private:
-  const ::rl::training::v1::MetricValue& _internal_values(int index) const;
-  ::rl::training::v1::MetricValue* _internal_add_values();
-  public:
-  const ::rl::training::v1::MetricValue& values(int index) const;
-  ::rl::training::v1::MetricValue* add_values();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricValue >&
-      values() const;
-
-  // .rl.common.v1.ServiceInstanceIdentity source = 1;
-  bool has_source() const;
-  private:
-  bool _internal_has_source() const;
-  public:
-  void clear_source();
-  const ::rl::common::v1::ServiceInstanceIdentity& source() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_source();
-  ::rl::common::v1::ServiceInstanceIdentity* mutable_source();
-  void set_allocated_source(::rl::common::v1::ServiceInstanceIdentity* source);
-  private:
-  const ::rl::common::v1::ServiceInstanceIdentity& _internal_source() const;
-  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_source();
-  public:
-  void unsafe_arena_set_allocated_source(
-      ::rl::common::v1::ServiceInstanceIdentity* source);
-  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_source();
-
-  // uint64 sequence = 2;
-  void clear_sequence();
-  uint64_t sequence() const;
-  void set_sequence(uint64_t value);
-  private:
-  uint64_t _internal_sequence() const;
-  void _internal_set_sequence(uint64_t value);
-  public:
-
-  // int64 timestamp_unix_ms = 3;
-  void clear_timestamp_unix_ms();
-  int64_t timestamp_unix_ms() const;
-  void set_timestamp_unix_ms(int64_t value);
-  private:
-  int64_t _internal_timestamp_unix_ms() const;
-  void _internal_set_timestamp_unix_ms(int64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.MetricSnapshot)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricDescriptor > descriptors_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricValue > values_;
-    ::rl::common::v1::ServiceInstanceIdentity* source_;
-    uint64_t sequence_;
-    int64_t timestamp_unix_ms_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
 class RawMetricSumCount final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.RawMetricSumCount) */ {
  public:
@@ -6779,7 +4738,7 @@ class RawMetricSumCount final :
                &_RawMetricSumCount_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    17;
 
   friend void swap(RawMetricSumCount& a, RawMetricSumCount& b) {
     a.Swap(&b);
@@ -6954,7 +4913,7 @@ class AgentEpisodeMetricFact final :
                &_AgentEpisodeMetricFact_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    18;
 
   friend void swap(AgentEpisodeMetricFact& a, AgentEpisodeMetricFact& b) {
     a.Swap(&b);
@@ -7292,7 +5251,7 @@ class EpisodeMetricFact final :
                &_EpisodeMetricFact_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    19;
 
   friend void swap(EpisodeMetricFact& a, EpisodeMetricFact& b) {
     a.Swap(&b);
@@ -7368,7 +5327,7 @@ class EpisodeMetricFact final :
     kAgentsFieldNumber = 5,
     kEnvironmentInstanceIdFieldNumber = 2,
     kEpisodeIdFieldNumber = 3,
-    kTrainingSemanticsFieldNumber = 4,
+    kTrainingContractDigestFieldNumber = 4,
   };
   // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
   int agents_size() const;
@@ -7416,23 +5375,23 @@ class EpisodeMetricFact final :
   std::string* _internal_mutable_episode_id();
   public:
 
-  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 4;
-  bool has_training_semantics() const;
+  // .rl.common.v1.ContentDigest training_contract_digest = 4;
+  bool has_training_contract_digest() const;
   private:
-  bool _internal_has_training_semantics() const;
+  bool _internal_has_training_contract_digest() const;
   public:
-  void clear_training_semantics();
-  const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::TrainingSemanticsIdentity* release_training_semantics();
-  ::rl::training::v1::TrainingSemanticsIdentity* mutable_training_semantics();
-  void set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
+  void clear_training_contract_digest();
+  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
+  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
+  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
   private:
-  const ::rl::training::v1::TrainingSemanticsIdentity& _internal_training_semantics() const;
-  ::rl::training::v1::TrainingSemanticsIdentity* _internal_mutable_training_semantics();
+  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
   public:
-  void unsafe_arena_set_allocated_training_semantics(
-      ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
-  ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
+  void unsafe_arena_set_allocated_training_contract_digest(
+      ::rl::common::v1::ContentDigest* training_contract_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.EpisodeMetricFact)
  private:
@@ -7445,7 +5404,7 @@ class EpisodeMetricFact final :
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::AgentEpisodeMetricFact > agents_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
+    ::rl::common::v1::ContentDigest* training_contract_digest_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -7501,7 +5460,7 @@ class TrainUpdateMetricFact final :
                &_TrainUpdateMetricFact_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    20;
 
   friend void swap(TrainUpdateMetricFact& a, TrainUpdateMetricFact& b) {
     a.Swap(&b);
@@ -7579,7 +5538,7 @@ class TrainUpdateMetricFact final :
     kDeliveryIdFieldNumber = 4,
     kBehaviorModelLineageIdFieldNumber = 11,
     kPublishedModelFieldNumber = 3,
-    kTrainingSemanticsFieldNumber = 5,
+    kTrainingContractDigestFieldNumber = 5,
     kRolloutEstimatorProfileDigestFieldNumber = 18,
     kTrainUpdateSequenceFieldNumber = 2,
     kCumulativeTrainedSamplesFieldNumber = 6,
@@ -7671,23 +5630,23 @@ class TrainUpdateMetricFact final :
       ::rl::training::v1::ModelIdentity* published_model);
   ::rl::training::v1::ModelIdentity* unsafe_arena_release_published_model();
 
-  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 5;
-  bool has_training_semantics() const;
+  // .rl.common.v1.ContentDigest training_contract_digest = 5;
+  bool has_training_contract_digest() const;
   private:
-  bool _internal_has_training_semantics() const;
+  bool _internal_has_training_contract_digest() const;
   public:
-  void clear_training_semantics();
-  const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::TrainingSemanticsIdentity* release_training_semantics();
-  ::rl::training::v1::TrainingSemanticsIdentity* mutable_training_semantics();
-  void set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
+  void clear_training_contract_digest();
+  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
+  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
+  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
   private:
-  const ::rl::training::v1::TrainingSemanticsIdentity& _internal_training_semantics() const;
-  ::rl::training::v1::TrainingSemanticsIdentity* _internal_mutable_training_semantics();
+  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
   public:
-  void unsafe_arena_set_allocated_training_semantics(
-      ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
-  ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
+  void unsafe_arena_set_allocated_training_contract_digest(
+      ::rl::common::v1::ContentDigest* training_contract_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
 
   // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
   bool has_rollout_estimator_profile_digest() const;
@@ -7829,7 +5788,7 @@ class TrainUpdateMetricFact final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr behavior_model_lineage_id_;
     ::rl::training::v1::ModelIdentity* published_model_;
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
+    ::rl::common::v1::ContentDigest* training_contract_digest_;
     ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
     uint64_t train_update_sequence_;
     int64_t cumulative_trained_samples_;
@@ -7902,7 +5861,7 @@ class MetricEvent final :
                &_MetricEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    21;
 
   friend void swap(MetricEvent& a, MetricEvent& b) {
     a.Swap(&b);
@@ -7975,68 +5934,11 @@ class MetricEvent final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kContractFieldNumber = 1,
-    kSchemaIdentityFieldNumber = 2,
-    kSourceFieldNumber = 3,
     kEventSequenceFieldNumber = 4,
     kObservedAtUnixMsFieldNumber = 5,
     kEpisodeFieldNumber = 6,
     kTrainUpdateFieldNumber = 7,
   };
-  // .rl.common.v1.ContractIdentity contract = 1;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
-
-  // .rl.common.v1.SchemaIdentity schema_identity = 2;
-  bool has_schema_identity() const;
-  private:
-  bool _internal_has_schema_identity() const;
-  public:
-  void clear_schema_identity();
-  const ::rl::common::v1::SchemaIdentity& schema_identity() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_schema_identity();
-  ::rl::common::v1::SchemaIdentity* mutable_schema_identity();
-  void set_allocated_schema_identity(::rl::common::v1::SchemaIdentity* schema_identity);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_schema_identity() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_schema_identity();
-  public:
-  void unsafe_arena_set_allocated_schema_identity(
-      ::rl::common::v1::SchemaIdentity* schema_identity);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_schema_identity();
-
-  // .rl.common.v1.ServiceInstanceIdentity source = 3;
-  bool has_source() const;
-  private:
-  bool _internal_has_source() const;
-  public:
-  void clear_source();
-  const ::rl::common::v1::ServiceInstanceIdentity& source() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_source();
-  ::rl::common::v1::ServiceInstanceIdentity* mutable_source();
-  void set_allocated_source(::rl::common::v1::ServiceInstanceIdentity* source);
-  private:
-  const ::rl::common::v1::ServiceInstanceIdentity& _internal_source() const;
-  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_source();
-  public:
-  void unsafe_arena_set_allocated_source(
-      ::rl::common::v1::ServiceInstanceIdentity* source);
-  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_source();
-
   // uint64 event_sequence = 4;
   void clear_event_sequence();
   uint64_t event_sequence() const;
@@ -8112,9 +6014,6 @@ class MetricEvent final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::rl::common::v1::ContractIdentity* contract_;
-    ::rl::common::v1::SchemaIdentity* schema_identity_;
-    ::rl::common::v1::ServiceInstanceIdentity* source_;
     uint64_t event_sequence_;
     int64_t observed_at_unix_ms_;
     union FactUnion {
@@ -8179,7 +6078,7 @@ class MetricSequenceGap final :
                &_MetricSequenceGap_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    22;
 
   friend void swap(MetricSequenceGap& a, MetricSequenceGap& b) {
     a.Swap(&b);
@@ -8365,7 +6264,7 @@ class MetricBatch final :
                &_MetricBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    23;
 
   friend void swap(MetricBatch& a, MetricBatch& b) {
     a.Swap(&b);
@@ -8699,7 +6598,7 @@ class MetricBatchCursor final :
                &_MetricBatchCursor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    24;
 
   friend void swap(MetricBatchCursor& a, MetricBatchCursor& b) {
     a.Swap(&b);
@@ -8898,7 +6797,7 @@ class GetMetricBatchReq final :
                &_GetMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    25;
 
   friend void swap(GetMetricBatchReq& a, GetMetricBatchReq& b) {
     a.Swap(&b);
@@ -9128,7 +7027,7 @@ class GetMetricBatchRsp final :
                &_GetMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    26;
 
   friend void swap(GetMetricBatchRsp& a, GetMetricBatchRsp& b) {
     a.Swap(&b);
@@ -9201,15 +7100,14 @@ class GetMetricBatchRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 3,
-    kBatchFieldNumber = 4,
-    kProducerFieldNumber = 5,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 2,
-    kOldestAvailableEventSequenceFieldNumber = 6,
-    kLatestAvailableEventSequenceFieldNumber = 7,
+    kMessageFieldNumber = 2,
+    kBatchFieldNumber = 3,
+    kProducerFieldNumber = 4,
+    kOldestAvailableEventSequenceFieldNumber = 5,
+    kLatestAvailableEventSequenceFieldNumber = 6,
+    kResultFieldNumber = 1,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -9223,7 +7121,7 @@ class GetMetricBatchRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // .rl.training.v1.MetricBatch batch = 4;
+  // .rl.training.v1.MetricBatch batch = 3;
   bool has_batch() const;
   private:
   bool _internal_has_batch() const;
@@ -9241,7 +7139,7 @@ class GetMetricBatchRsp final :
       ::rl::training::v1::MetricBatch* batch);
   ::rl::training::v1::MetricBatch* unsafe_arena_release_batch();
 
-  // .rl.common.v1.ServiceInstanceIdentity producer = 5;
+  // .rl.common.v1.ServiceInstanceIdentity producer = 4;
   bool has_producer() const;
   private:
   bool _internal_has_producer() const;
@@ -9259,25 +7157,7 @@ class GetMetricBatchRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* producer);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_producer();
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.training.v1.MetricBatchResult result = 2;
-  void clear_result();
-  ::rl::training::v1::MetricBatchResult result() const;
-  void set_result(::rl::training::v1::MetricBatchResult value);
-  private:
-  ::rl::training::v1::MetricBatchResult _internal_result() const;
-  void _internal_set_result(::rl::training::v1::MetricBatchResult value);
-  public:
-
-  // uint64 oldest_available_event_sequence = 6;
+  // uint64 oldest_available_event_sequence = 5;
   void clear_oldest_available_event_sequence();
   uint64_t oldest_available_event_sequence() const;
   void set_oldest_available_event_sequence(uint64_t value);
@@ -9286,13 +7166,22 @@ class GetMetricBatchRsp final :
   void _internal_set_oldest_available_event_sequence(uint64_t value);
   public:
 
-  // uint64 latest_available_event_sequence = 7;
+  // uint64 latest_available_event_sequence = 6;
   void clear_latest_available_event_sequence();
   uint64_t latest_available_event_sequence() const;
   void set_latest_available_event_sequence(uint64_t value);
   private:
   uint64_t _internal_latest_available_event_sequence() const;
   void _internal_set_latest_available_event_sequence(uint64_t value);
+  public:
+
+  // .rl.training.v1.MetricBatchResult result = 1;
+  void clear_result();
+  ::rl::training::v1::MetricBatchResult result() const;
+  void set_result(::rl::training::v1::MetricBatchResult value);
+  private:
+  ::rl::training::v1::MetricBatchResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::MetricBatchResult value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.GetMetricBatchRsp)
@@ -9306,10 +7195,9 @@ class GetMetricBatchRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::rl::training::v1::MetricBatch* batch_;
     ::rl::common::v1::ServiceInstanceIdentity* producer_;
-    int32_t ret_code_;
-    int result_;
     uint64_t oldest_available_event_sequence_;
     uint64_t latest_available_event_sequence_;
+    int result_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -9365,7 +7253,7 @@ class AckMetricBatchReq final :
                &_AckMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    27;
 
   friend void swap(AckMetricBatchReq& a, AckMetricBatchReq& b) {
     a.Swap(&b);
@@ -9562,7 +7450,7 @@ class AckMetricBatchRsp final :
                &_AckMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    28;
 
   friend void swap(AckMetricBatchRsp& a, AckMetricBatchRsp& b) {
     a.Swap(&b);
@@ -9635,15 +7523,14 @@ class AckMetricBatchRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 3,
-    kProducerFieldNumber = 4,
-    kCommittedCursorFieldNumber = 7,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 2,
-    kOldestAvailableEventSequenceFieldNumber = 5,
-    kLatestAvailableEventSequenceFieldNumber = 6,
+    kMessageFieldNumber = 2,
+    kProducerFieldNumber = 3,
+    kCommittedCursorFieldNumber = 6,
+    kOldestAvailableEventSequenceFieldNumber = 4,
+    kLatestAvailableEventSequenceFieldNumber = 5,
+    kResultFieldNumber = 1,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -9657,7 +7544,7 @@ class AckMetricBatchRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // .rl.common.v1.ServiceInstanceIdentity producer = 4;
+  // .rl.common.v1.ServiceInstanceIdentity producer = 3;
   bool has_producer() const;
   private:
   bool _internal_has_producer() const;
@@ -9675,7 +7562,7 @@ class AckMetricBatchRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* producer);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_producer();
 
-  // .rl.training.v1.MetricBatchCursor committed_cursor = 7;
+  // .rl.training.v1.MetricBatchCursor committed_cursor = 6;
   bool has_committed_cursor() const;
   private:
   bool _internal_has_committed_cursor() const;
@@ -9693,25 +7580,7 @@ class AckMetricBatchRsp final :
       ::rl::training::v1::MetricBatchCursor* committed_cursor);
   ::rl::training::v1::MetricBatchCursor* unsafe_arena_release_committed_cursor();
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.training.v1.MetricBatchAckResult result = 2;
-  void clear_result();
-  ::rl::training::v1::MetricBatchAckResult result() const;
-  void set_result(::rl::training::v1::MetricBatchAckResult value);
-  private:
-  ::rl::training::v1::MetricBatchAckResult _internal_result() const;
-  void _internal_set_result(::rl::training::v1::MetricBatchAckResult value);
-  public:
-
-  // uint64 oldest_available_event_sequence = 5;
+  // uint64 oldest_available_event_sequence = 4;
   void clear_oldest_available_event_sequence();
   uint64_t oldest_available_event_sequence() const;
   void set_oldest_available_event_sequence(uint64_t value);
@@ -9720,13 +7589,22 @@ class AckMetricBatchRsp final :
   void _internal_set_oldest_available_event_sequence(uint64_t value);
   public:
 
-  // uint64 latest_available_event_sequence = 6;
+  // uint64 latest_available_event_sequence = 5;
   void clear_latest_available_event_sequence();
   uint64_t latest_available_event_sequence() const;
   void set_latest_available_event_sequence(uint64_t value);
   private:
   uint64_t _internal_latest_available_event_sequence() const;
   void _internal_set_latest_available_event_sequence(uint64_t value);
+  public:
+
+  // .rl.training.v1.MetricBatchAckResult result = 1;
+  void clear_result();
+  ::rl::training::v1::MetricBatchAckResult result() const;
+  void set_result(::rl::training::v1::MetricBatchAckResult value);
+  private:
+  ::rl::training::v1::MetricBatchAckResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::MetricBatchAckResult value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.AckMetricBatchRsp)
@@ -9740,10 +7618,9 @@ class AckMetricBatchRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::rl::common::v1::ServiceInstanceIdentity* producer_;
     ::rl::training::v1::MetricBatchCursor* committed_cursor_;
-    int32_t ret_code_;
-    int result_;
     uint64_t oldest_available_event_sequence_;
     uint64_t latest_available_event_sequence_;
+    int result_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -9798,7 +7675,7 @@ class AIServerStatusReq final :
                &_AIServerStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    29;
 
   friend void swap(AIServerStatusReq& a, AIServerStatusReq& b) {
     a.Swap(&b);
@@ -9917,7 +7794,7 @@ class AIServerStatusRsp final :
                &_AIServerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    30;
 
   friend void swap(AIServerStatusRsp& a, AIServerStatusRsp& b) {
     a.Swap(&b);
@@ -9990,14 +7867,13 @@ class AIServerStatusRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kSegmentCloseCountsFieldNumber = 41,
+    kSegmentCloseCountsFieldNumber = 40,
     kLastErrorFieldNumber = 32,
     kContractFieldNumber = 1,
     kAiserverFieldNumber = 2,
     kLoadedModelFieldNumber = 7,
     kStagedModelFieldNumber = 8,
-    kMetricsFieldNumber = 34,
-    kRolloutEstimatorProfileDigestFieldNumber = 35,
+    kRolloutEstimatorProfileDigestFieldNumber = 34,
     kStateFieldNumber = 3,
     kReadyFieldNumber = 4,
     kDistributorReadyFieldNumber = 5,
@@ -10025,14 +7901,14 @@ class AIServerStatusRsp final :
     kQuarantinedTransitionCountFieldNumber = 30,
     kQuarantinedEnvelopeCountFieldNumber = 31,
     kTimestampUnixMsFieldNumber = 33,
-    kClosedSegmentCountFieldNumber = 36,
-    kPendingActionExcludedCountFieldNumber = 37,
-    kRolloutEstimatorFailureCountFieldNumber = 38,
-    kPerAgentModelActivationCountFieldNumber = 39,
-    kSupersededWithoutAgentActivationCountFieldNumber = 40,
+    kClosedSegmentCountFieldNumber = 35,
+    kPendingActionExcludedCountFieldNumber = 36,
+    kRolloutEstimatorFailureCountFieldNumber = 37,
+    kPerAgentModelActivationCountFieldNumber = 38,
+    kSupersededWithoutAgentActivationCountFieldNumber = 39,
     kModelStateFieldNumber = 6,
   };
-  // repeated .rl.training.v1.SegmentCloseCount segment_close_counts = 41;
+  // repeated .rl.training.v1.SegmentCloseCount segment_close_counts = 40;
   int segment_close_counts_size() const;
   private:
   int _internal_segment_close_counts_size() const;
@@ -10136,25 +8012,7 @@ class AIServerStatusRsp final :
       ::rl::training::v1::ModelIdentity* staged_model);
   ::rl::training::v1::ModelIdentity* unsafe_arena_release_staged_model();
 
-  // .rl.training.v1.MetricSnapshot metrics = 34;
-  bool has_metrics() const;
-  private:
-  bool _internal_has_metrics() const;
-  public:
-  void clear_metrics();
-  const ::rl::training::v1::MetricSnapshot& metrics() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::MetricSnapshot* release_metrics();
-  ::rl::training::v1::MetricSnapshot* mutable_metrics();
-  void set_allocated_metrics(::rl::training::v1::MetricSnapshot* metrics);
-  private:
-  const ::rl::training::v1::MetricSnapshot& _internal_metrics() const;
-  ::rl::training::v1::MetricSnapshot* _internal_mutable_metrics();
-  public:
-  void unsafe_arena_set_allocated_metrics(
-      ::rl::training::v1::MetricSnapshot* metrics);
-  ::rl::training::v1::MetricSnapshot* unsafe_arena_release_metrics();
-
-  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 35;
+  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 34;
   bool has_rollout_estimator_profile_digest() const;
   private:
   bool _internal_has_rollout_estimator_profile_digest() const;
@@ -10415,7 +8273,7 @@ class AIServerStatusRsp final :
   void _internal_set_timestamp_unix_ms(int64_t value);
   public:
 
-  // int64 closed_segment_count = 36;
+  // int64 closed_segment_count = 35;
   void clear_closed_segment_count();
   int64_t closed_segment_count() const;
   void set_closed_segment_count(int64_t value);
@@ -10424,7 +8282,7 @@ class AIServerStatusRsp final :
   void _internal_set_closed_segment_count(int64_t value);
   public:
 
-  // int64 pending_action_excluded_count = 37;
+  // int64 pending_action_excluded_count = 36;
   void clear_pending_action_excluded_count();
   int64_t pending_action_excluded_count() const;
   void set_pending_action_excluded_count(int64_t value);
@@ -10433,7 +8291,7 @@ class AIServerStatusRsp final :
   void _internal_set_pending_action_excluded_count(int64_t value);
   public:
 
-  // int64 rollout_estimator_failure_count = 38;
+  // int64 rollout_estimator_failure_count = 37;
   void clear_rollout_estimator_failure_count();
   int64_t rollout_estimator_failure_count() const;
   void set_rollout_estimator_failure_count(int64_t value);
@@ -10442,7 +8300,7 @@ class AIServerStatusRsp final :
   void _internal_set_rollout_estimator_failure_count(int64_t value);
   public:
 
-  // int64 per_agent_model_activation_count = 39;
+  // int64 per_agent_model_activation_count = 38;
   void clear_per_agent_model_activation_count();
   int64_t per_agent_model_activation_count() const;
   void set_per_agent_model_activation_count(int64_t value);
@@ -10451,7 +8309,7 @@ class AIServerStatusRsp final :
   void _internal_set_per_agent_model_activation_count(int64_t value);
   public:
 
-  // int64 superseded_without_agent_activation_count = 40;
+  // int64 superseded_without_agent_activation_count = 39;
   void clear_superseded_without_agent_activation_count();
   int64_t superseded_without_agent_activation_count() const;
   void set_superseded_without_agent_activation_count(int64_t value);
@@ -10483,7 +8341,6 @@ class AIServerStatusRsp final :
     ::rl::common::v1::ServiceInstanceIdentity* aiserver_;
     ::rl::training::v1::ModelIdentity* loaded_model_;
     ::rl::training::v1::ModelIdentity* staged_model_;
-    ::rl::training::v1::MetricSnapshot* metrics_;
     ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
     int state_;
     bool ready_;
@@ -10573,7 +8430,7 @@ class SegmentCloseCount final :
                &_SegmentCloseCount_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    31;
 
   friend void swap(SegmentCloseCount& a, SegmentCloseCount& b) {
     a.Swap(&b);
@@ -10732,7 +8589,7 @@ class ModelArtifactManifest final :
                &_ModelArtifactManifest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    32;
 
   friend void swap(ModelArtifactManifest& a, ModelArtifactManifest& b) {
     a.Swap(&b);
@@ -10805,168 +8662,14 @@ class ModelArtifactManifest final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kInputShapeFieldNumber = 8,
-    kActionShapeFieldNumber = 9,
-    kValueShapeFieldNumber = 10,
-    kModelArchitectureIdFieldNumber = 6,
-    kTensorDtypeFieldNumber = 7,
-    kArtifactUriFieldNumber = 11,
-    kModelFileFieldNumber = 12,
-    kContractFieldNumber = 2,
     kIdentityFieldNumber = 3,
-    kObservationSchemaFieldNumber = 4,
-    kActionSchemaFieldNumber = 5,
     kTrainingConfigDigestFieldNumber = 17,
-    kTrainingSemanticsFieldNumber = 18,
+    kTrainingContractDigestFieldNumber = 18,
     kRolloutEstimatorProfileFieldNumber = 21,
-    kManifestSchemaVersionFieldNumber = 1,
-    kReadyFieldNumber = 20,
     kSizeBytesFieldNumber = 13,
-    kSeedFieldNumber = 14,
-    kTrainUpdatesFieldNumber = 15,
     kTrainedSamplesFieldNumber = 16,
     kPublishedAtUnixMsFieldNumber = 19,
   };
-  // repeated int64 input_shape = 8;
-  int input_shape_size() const;
-  private:
-  int _internal_input_shape_size() const;
-  public:
-  void clear_input_shape();
-  private:
-  int64_t _internal_input_shape(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-      _internal_input_shape() const;
-  void _internal_add_input_shape(int64_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-      _internal_mutable_input_shape();
-  public:
-  int64_t input_shape(int index) const;
-  void set_input_shape(int index, int64_t value);
-  void add_input_shape(int64_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-      input_shape() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-      mutable_input_shape();
-
-  // repeated int64 action_shape = 9;
-  int action_shape_size() const;
-  private:
-  int _internal_action_shape_size() const;
-  public:
-  void clear_action_shape();
-  private:
-  int64_t _internal_action_shape(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-      _internal_action_shape() const;
-  void _internal_add_action_shape(int64_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-      _internal_mutable_action_shape();
-  public:
-  int64_t action_shape(int index) const;
-  void set_action_shape(int index, int64_t value);
-  void add_action_shape(int64_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-      action_shape() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-      mutable_action_shape();
-
-  // repeated int64 value_shape = 10;
-  int value_shape_size() const;
-  private:
-  int _internal_value_shape_size() const;
-  public:
-  void clear_value_shape();
-  private:
-  int64_t _internal_value_shape(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-      _internal_value_shape() const;
-  void _internal_add_value_shape(int64_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-      _internal_mutable_value_shape();
-  public:
-  int64_t value_shape(int index) const;
-  void set_value_shape(int index, int64_t value);
-  void add_value_shape(int64_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-      value_shape() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-      mutable_value_shape();
-
-  // string model_architecture_id = 6;
-  void clear_model_architecture_id();
-  const std::string& model_architecture_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_model_architecture_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_model_architecture_id();
-  PROTOBUF_NODISCARD std::string* release_model_architecture_id();
-  void set_allocated_model_architecture_id(std::string* model_architecture_id);
-  private:
-  const std::string& _internal_model_architecture_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_architecture_id(const std::string& value);
-  std::string* _internal_mutable_model_architecture_id();
-  public:
-
-  // string tensor_dtype = 7;
-  void clear_tensor_dtype();
-  const std::string& tensor_dtype() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_tensor_dtype(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_tensor_dtype();
-  PROTOBUF_NODISCARD std::string* release_tensor_dtype();
-  void set_allocated_tensor_dtype(std::string* tensor_dtype);
-  private:
-  const std::string& _internal_tensor_dtype() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_tensor_dtype(const std::string& value);
-  std::string* _internal_mutable_tensor_dtype();
-  public:
-
-  // string artifact_uri = 11;
-  void clear_artifact_uri();
-  const std::string& artifact_uri() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_artifact_uri(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_artifact_uri();
-  PROTOBUF_NODISCARD std::string* release_artifact_uri();
-  void set_allocated_artifact_uri(std::string* artifact_uri);
-  private:
-  const std::string& _internal_artifact_uri() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_artifact_uri(const std::string& value);
-  std::string* _internal_mutable_artifact_uri();
-  public:
-
-  // string model_file = 12;
-  void clear_model_file();
-  const std::string& model_file() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_model_file(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_model_file();
-  PROTOBUF_NODISCARD std::string* release_model_file();
-  void set_allocated_model_file(std::string* model_file);
-  private:
-  const std::string& _internal_model_file() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_file(const std::string& value);
-  std::string* _internal_mutable_model_file();
-  public:
-
-  // .rl.common.v1.ContractIdentity contract = 2;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
-
   // .rl.training.v1.ModelIdentity identity = 3;
   bool has_identity() const;
   private:
@@ -10984,42 +8687,6 @@ class ModelArtifactManifest final :
   void unsafe_arena_set_allocated_identity(
       ::rl::training::v1::ModelIdentity* identity);
   ::rl::training::v1::ModelIdentity* unsafe_arena_release_identity();
-
-  // .rl.common.v1.SchemaIdentity observation_schema = 4;
-  bool has_observation_schema() const;
-  private:
-  bool _internal_has_observation_schema() const;
-  public:
-  void clear_observation_schema();
-  const ::rl::common::v1::SchemaIdentity& observation_schema() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_observation_schema();
-  ::rl::common::v1::SchemaIdentity* mutable_observation_schema();
-  void set_allocated_observation_schema(::rl::common::v1::SchemaIdentity* observation_schema);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_observation_schema() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_observation_schema();
-  public:
-  void unsafe_arena_set_allocated_observation_schema(
-      ::rl::common::v1::SchemaIdentity* observation_schema);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_observation_schema();
-
-  // .rl.common.v1.SchemaIdentity action_schema = 5;
-  bool has_action_schema() const;
-  private:
-  bool _internal_has_action_schema() const;
-  public:
-  void clear_action_schema();
-  const ::rl::common::v1::SchemaIdentity& action_schema() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_action_schema();
-  ::rl::common::v1::SchemaIdentity* mutable_action_schema();
-  void set_allocated_action_schema(::rl::common::v1::SchemaIdentity* action_schema);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_action_schema() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_action_schema();
-  public:
-  void unsafe_arena_set_allocated_action_schema(
-      ::rl::common::v1::SchemaIdentity* action_schema);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_action_schema();
 
   // .rl.common.v1.ContentDigest training_config_digest = 17;
   bool has_training_config_digest() const;
@@ -11039,23 +8706,23 @@ class ModelArtifactManifest final :
       ::rl::common::v1::ContentDigest* training_config_digest);
   ::rl::common::v1::ContentDigest* unsafe_arena_release_training_config_digest();
 
-  // .rl.training.v1.TrainingSemanticsIdentity training_semantics = 18;
-  bool has_training_semantics() const;
+  // .rl.common.v1.ContentDigest training_contract_digest = 18;
+  bool has_training_contract_digest() const;
   private:
-  bool _internal_has_training_semantics() const;
+  bool _internal_has_training_contract_digest() const;
   public:
-  void clear_training_semantics();
-  const ::rl::training::v1::TrainingSemanticsIdentity& training_semantics() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::TrainingSemanticsIdentity* release_training_semantics();
-  ::rl::training::v1::TrainingSemanticsIdentity* mutable_training_semantics();
-  void set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
+  void clear_training_contract_digest();
+  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
+  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
+  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
   private:
-  const ::rl::training::v1::TrainingSemanticsIdentity& _internal_training_semantics() const;
-  ::rl::training::v1::TrainingSemanticsIdentity* _internal_mutable_training_semantics();
+  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
   public:
-  void unsafe_arena_set_allocated_training_semantics(
-      ::rl::training::v1::TrainingSemanticsIdentity* training_semantics);
-  ::rl::training::v1::TrainingSemanticsIdentity* unsafe_arena_release_training_semantics();
+  void unsafe_arena_set_allocated_training_contract_digest(
+      ::rl::common::v1::ContentDigest* training_contract_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
 
   // .rl.training.v1.RolloutEstimatorProfile rollout_estimator_profile = 21;
   bool has_rollout_estimator_profile() const;
@@ -11075,24 +8742,6 @@ class ModelArtifactManifest final :
       ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile);
   ::rl::training::v1::RolloutEstimatorProfile* unsafe_arena_release_rollout_estimator_profile();
 
-  // uint32 manifest_schema_version = 1;
-  void clear_manifest_schema_version();
-  uint32_t manifest_schema_version() const;
-  void set_manifest_schema_version(uint32_t value);
-  private:
-  uint32_t _internal_manifest_schema_version() const;
-  void _internal_set_manifest_schema_version(uint32_t value);
-  public:
-
-  // bool ready = 20;
-  void clear_ready();
-  bool ready() const;
-  void set_ready(bool value);
-  private:
-  bool _internal_ready() const;
-  void _internal_set_ready(bool value);
-  public:
-
   // int64 size_bytes = 13;
   void clear_size_bytes();
   int64_t size_bytes() const;
@@ -11100,24 +8749,6 @@ class ModelArtifactManifest final :
   private:
   int64_t _internal_size_bytes() const;
   void _internal_set_size_bytes(int64_t value);
-  public:
-
-  // int64 seed = 14;
-  void clear_seed();
-  int64_t seed() const;
-  void set_seed(int64_t value);
-  private:
-  int64_t _internal_seed() const;
-  void _internal_set_seed(int64_t value);
-  public:
-
-  // uint64 train_updates = 15;
-  void clear_train_updates();
-  uint64_t train_updates() const;
-  void set_train_updates(uint64_t value);
-  private:
-  uint64_t _internal_train_updates() const;
-  void _internal_set_train_updates(uint64_t value);
   public:
 
   // uint64 trained_samples = 16;
@@ -11146,28 +8777,11 @@ class ModelArtifactManifest final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t > input_shape_;
-    mutable std::atomic<int> _input_shape_cached_byte_size_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t > action_shape_;
-    mutable std::atomic<int> _action_shape_cached_byte_size_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t > value_shape_;
-    mutable std::atomic<int> _value_shape_cached_byte_size_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_architecture_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr tensor_dtype_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr artifact_uri_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_file_;
-    ::rl::common::v1::ContractIdentity* contract_;
     ::rl::training::v1::ModelIdentity* identity_;
-    ::rl::common::v1::SchemaIdentity* observation_schema_;
-    ::rl::common::v1::SchemaIdentity* action_schema_;
     ::rl::common::v1::ContentDigest* training_config_digest_;
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics_;
+    ::rl::common::v1::ContentDigest* training_contract_digest_;
     ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile_;
-    uint32_t manifest_schema_version_;
-    bool ready_;
     int64_t size_bytes_;
-    int64_t seed_;
-    uint64_t train_updates_;
     uint64_t trained_samples_;
     int64_t published_at_unix_ms_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -11225,7 +8839,7 @@ class RegisterModelReq final :
                &_RegisterModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    33;
 
   friend void swap(RegisterModelReq& a, RegisterModelReq& b) {
     a.Swap(&b);
@@ -11298,8 +8912,24 @@ class RegisterModelReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kLocalArtifactPathFieldNumber = 3,
     kManifestFieldNumber = 1,
+    kContractFieldNumber = 2,
   };
+  // string local_artifact_path = 3;
+  void clear_local_artifact_path();
+  const std::string& local_artifact_path() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_local_artifact_path(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_local_artifact_path();
+  PROTOBUF_NODISCARD std::string* release_local_artifact_path();
+  void set_allocated_local_artifact_path(std::string* local_artifact_path);
+  private:
+  const std::string& _internal_local_artifact_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_local_artifact_path(const std::string& value);
+  std::string* _internal_mutable_local_artifact_path();
+  public:
+
   // .rl.training.v1.ModelArtifactManifest manifest = 1;
   bool has_manifest() const;
   private:
@@ -11318,6 +8948,24 @@ class RegisterModelReq final :
       ::rl::training::v1::ModelArtifactManifest* manifest);
   ::rl::training::v1::ModelArtifactManifest* unsafe_arena_release_manifest();
 
+  // .rl.common.v1.ContractIdentity contract = 2;
+  bool has_contract() const;
+  private:
+  bool _internal_has_contract() const;
+  public:
+  void clear_contract();
+  const ::rl::common::v1::ContractIdentity& contract() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
+  ::rl::common::v1::ContractIdentity* mutable_contract();
+  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
+  private:
+  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
+  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
+  public:
+  void unsafe_arena_set_allocated_contract(
+      ::rl::common::v1::ContractIdentity* contract);
+  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
+
   // @@protoc_insertion_point(class_scope:rl.training.v1.RegisterModelReq)
  private:
   class _Internal;
@@ -11326,7 +8974,9 @@ class RegisterModelReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr local_artifact_path_;
     ::rl::training::v1::ModelArtifactManifest* manifest_;
+    ::rl::common::v1::ContractIdentity* contract_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -11382,7 +9032,7 @@ class RegisterModelRsp final :
                &_RegisterModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    34;
 
   friend void swap(RegisterModelRsp& a, RegisterModelRsp& b) {
     a.Swap(&b);
@@ -11455,13 +9105,12 @@ class RegisterModelRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 3,
-    kManifestFieldNumber = 4,
-    kDistributorFieldNumber = 5,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 2,
+    kMessageFieldNumber = 2,
+    kManifestFieldNumber = 3,
+    kDistributorFieldNumber = 4,
+    kResultFieldNumber = 1,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -11475,7 +9124,7 @@ class RegisterModelRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // .rl.training.v1.ModelArtifactManifest manifest = 4;
+  // .rl.training.v1.ModelArtifactManifest manifest = 3;
   bool has_manifest() const;
   private:
   bool _internal_has_manifest() const;
@@ -11493,7 +9142,7 @@ class RegisterModelRsp final :
       ::rl::training::v1::ModelArtifactManifest* manifest);
   ::rl::training::v1::ModelArtifactManifest* unsafe_arena_release_manifest();
 
-  // .rl.common.v1.ServiceInstanceIdentity distributor = 5;
+  // .rl.common.v1.ServiceInstanceIdentity distributor = 4;
   bool has_distributor() const;
   private:
   bool _internal_has_distributor() const;
@@ -11511,16 +9160,7 @@ class RegisterModelRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* distributor);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_distributor();
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.training.v1.ModelRegisterResult result = 2;
+  // .rl.training.v1.ModelRegisterResult result = 1;
   void clear_result();
   ::rl::training::v1::ModelRegisterResult result() const;
   void set_result(::rl::training::v1::ModelRegisterResult value);
@@ -11540,7 +9180,6 @@ class RegisterModelRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::rl::training::v1::ModelArtifactManifest* manifest_;
     ::rl::common::v1::ServiceInstanceIdentity* distributor_;
-    int32_t ret_code_;
     int result_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -11597,7 +9236,7 @@ class GetModelManifestReq final :
                &_GetModelManifestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    35;
 
   friend void swap(GetModelManifestReq& a, GetModelManifestReq& b) {
     a.Swap(&b);
@@ -11785,7 +9424,7 @@ class GetModelManifestRsp final :
                &_GetModelManifestRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    36;
 
   friend void swap(GetModelManifestRsp& a, GetModelManifestRsp& b) {
     a.Swap(&b);
@@ -11863,7 +9502,7 @@ class GetModelManifestRsp final :
     kDistributorFieldNumber = 4,
     kAvailableFloorModelStepFieldNumber = 5,
     kLatestAvailableModelStepFieldNumber = 6,
-    kRetCodeFieldNumber = 1,
+    kResultFieldNumber = 1,
   };
   // string message = 2;
   void clear_message();
@@ -11941,13 +9580,13 @@ class GetModelManifestRsp final :
   void _internal_set_latest_available_model_step(uint64_t value);
   public:
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
+  // .rl.training.v1.ModelLookupResult result = 1;
+  void clear_result();
+  ::rl::training::v1::ModelLookupResult result() const;
+  void set_result(::rl::training::v1::ModelLookupResult value);
   private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
+  ::rl::training::v1::ModelLookupResult _internal_result() const;
+  void _internal_set_result(::rl::training::v1::ModelLookupResult value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.GetModelManifestRsp)
@@ -11965,7 +9604,7 @@ class GetModelManifestRsp final :
     ::rl::common::v1::ServiceInstanceIdentity* distributor_;
     uint64_t available_floor_model_step_;
     uint64_t latest_available_model_step_;
-    int32_t ret_code_;
+    int result_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -12020,7 +9659,7 @@ class DownloadModelReq final :
                &_DownloadModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    37;
 
   friend void swap(DownloadModelReq& a, DownloadModelReq& b) {
     a.Swap(&b);
@@ -12197,7 +9836,7 @@ class ModelChunk final :
                &_ModelChunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    38;
 
   friend void swap(ModelChunk& a, ModelChunk& b) {
     a.Swap(&b);
@@ -12381,7 +10020,7 @@ class AckModelReq final :
                &_AckModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    39;
 
   friend void swap(AckModelReq& a, AckModelReq& b) {
     a.Swap(&b);
@@ -12601,7 +10240,7 @@ class AckModelRsp final :
                &_AckModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    40;
 
   friend void swap(AckModelRsp& a, AckModelRsp& b) {
     a.Swap(&b);
@@ -12674,12 +10313,11 @@ class AckModelRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 3,
-    kDistributorFieldNumber = 4,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 2,
+    kMessageFieldNumber = 2,
+    kDistributorFieldNumber = 3,
+    kResultFieldNumber = 1,
   };
-  // string message = 3;
+  // string message = 2;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -12693,7 +10331,7 @@ class AckModelRsp final :
   std::string* _internal_mutable_message();
   public:
 
-  // .rl.common.v1.ServiceInstanceIdentity distributor = 4;
+  // .rl.common.v1.ServiceInstanceIdentity distributor = 3;
   bool has_distributor() const;
   private:
   bool _internal_has_distributor() const;
@@ -12711,16 +10349,7 @@ class AckModelRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* distributor);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_distributor();
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.training.v1.ModelAckResult result = 2;
+  // .rl.training.v1.ModelAckResult result = 1;
   void clear_result();
   ::rl::training::v1::ModelAckResult result() const;
   void set_result(::rl::training::v1::ModelAckResult value);
@@ -12739,7 +10368,6 @@ class AckModelRsp final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::rl::common::v1::ServiceInstanceIdentity* distributor_;
-    int32_t ret_code_;
     int result_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -12795,7 +10423,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    41;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -12914,7 +10542,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    42;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -13552,414 +11180,7 @@ inline void ModelIdentity::set_allocated_manifest_digest(::rl::common::v1::Conte
 
 // -------------------------------------------------------------------
 
-// BehaviorPolicyReference
-
-// string model_lineage_id = 1;
-inline void BehaviorPolicyReference::clear_model_lineage_id() {
-  _impl_.model_lineage_id_.ClearToEmpty();
-}
-inline const std::string& BehaviorPolicyReference::model_lineage_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.model_lineage_id)
-  return _internal_model_lineage_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void BehaviorPolicyReference::set_model_lineage_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.model_lineage_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorPolicyReference.model_lineage_id)
-}
-inline std::string* BehaviorPolicyReference::mutable_model_lineage_id() {
-  std::string* _s = _internal_mutable_model_lineage_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorPolicyReference.model_lineage_id)
-  return _s;
-}
-inline const std::string& BehaviorPolicyReference::_internal_model_lineage_id() const {
-  return _impl_.model_lineage_id_.Get();
-}
-inline void BehaviorPolicyReference::_internal_set_model_lineage_id(const std::string& value) {
-  
-  _impl_.model_lineage_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyReference::_internal_mutable_model_lineage_id() {
-  
-  return _impl_.model_lineage_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyReference::release_model_lineage_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorPolicyReference.model_lineage_id)
-  return _impl_.model_lineage_id_.Release();
-}
-inline void BehaviorPolicyReference::set_allocated_model_lineage_id(std::string* model_lineage_id) {
-  if (model_lineage_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.model_lineage_id_.SetAllocated(model_lineage_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.model_lineage_id_.IsDefault()) {
-    _impl_.model_lineage_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.model_lineage_id)
-}
-
-// optional uint64 model_step = 2;
-inline bool BehaviorPolicyReference::_internal_has_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline bool BehaviorPolicyReference::has_model_step() const {
-  return _internal_has_model_step();
-}
-inline void BehaviorPolicyReference::clear_model_step() {
-  _impl_.model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline uint64_t BehaviorPolicyReference::_internal_model_step() const {
-  return _impl_.model_step_;
-}
-inline uint64_t BehaviorPolicyReference::model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.model_step)
-  return _internal_model_step();
-}
-inline void BehaviorPolicyReference::_internal_set_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.model_step_ = value;
-}
-inline void BehaviorPolicyReference::set_model_step(uint64_t value) {
-  _internal_set_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorPolicyReference.model_step)
-}
-
-// string distribution_schema_id = 3;
-inline void BehaviorPolicyReference::clear_distribution_schema_id() {
-  _impl_.distribution_schema_id_.ClearToEmpty();
-}
-inline const std::string& BehaviorPolicyReference::distribution_schema_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.distribution_schema_id)
-  return _internal_distribution_schema_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void BehaviorPolicyReference::set_distribution_schema_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.distribution_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.BehaviorPolicyReference.distribution_schema_id)
-}
-inline std::string* BehaviorPolicyReference::mutable_distribution_schema_id() {
-  std::string* _s = _internal_mutable_distribution_schema_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorPolicyReference.distribution_schema_id)
-  return _s;
-}
-inline const std::string& BehaviorPolicyReference::_internal_distribution_schema_id() const {
-  return _impl_.distribution_schema_id_.Get();
-}
-inline void BehaviorPolicyReference::_internal_set_distribution_schema_id(const std::string& value) {
-  
-  _impl_.distribution_schema_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyReference::_internal_mutable_distribution_schema_id() {
-  
-  return _impl_.distribution_schema_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyReference::release_distribution_schema_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorPolicyReference.distribution_schema_id)
-  return _impl_.distribution_schema_id_.Release();
-}
-inline void BehaviorPolicyReference::set_allocated_distribution_schema_id(std::string* distribution_schema_id) {
-  if (distribution_schema_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.distribution_schema_id_.SetAllocated(distribution_schema_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.distribution_schema_id_.IsDefault()) {
-    _impl_.distribution_schema_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.distribution_schema_id)
-}
-
-// .rl.common.v1.ContentDigest policy_spec_digest = 4;
-inline bool BehaviorPolicyReference::_internal_has_policy_spec_digest() const {
-  return this != internal_default_instance() && _impl_.policy_spec_digest_ != nullptr;
-}
-inline bool BehaviorPolicyReference::has_policy_spec_digest() const {
-  return _internal_has_policy_spec_digest();
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::_internal_policy_spec_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.policy_spec_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::policy_spec_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.policy_spec_digest)
-  return _internal_policy_spec_digest();
-}
-inline void BehaviorPolicyReference::unsafe_arena_set_allocated_policy_spec_digest(
-    ::rl::common::v1::ContentDigest* policy_spec_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.policy_spec_digest_);
-  }
-  _impl_.policy_spec_digest_ = policy_spec_digest;
-  if (policy_spec_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.BehaviorPolicyReference.policy_spec_digest)
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::release_policy_spec_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
-  _impl_.policy_spec_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::unsafe_arena_release_policy_spec_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorPolicyReference.policy_spec_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
-  _impl_.policy_spec_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::_internal_mutable_policy_spec_digest() {
-  
-  if (_impl_.policy_spec_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.policy_spec_digest_ = p;
-  }
-  return _impl_.policy_spec_digest_;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::mutable_policy_spec_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_policy_spec_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorPolicyReference.policy_spec_digest)
-  return _msg;
-}
-inline void BehaviorPolicyReference::set_allocated_policy_spec_digest(::rl::common::v1::ContentDigest* policy_spec_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.policy_spec_digest_);
-  }
-  if (policy_spec_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(policy_spec_digest));
-    if (message_arena != submessage_arena) {
-      policy_spec_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, policy_spec_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.policy_spec_digest_ = policy_spec_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.policy_spec_digest)
-}
-
-// .rl.common.v1.ContentDigest artifact_digest = 5;
-inline bool BehaviorPolicyReference::_internal_has_artifact_digest() const {
-  return this != internal_default_instance() && _impl_.artifact_digest_ != nullptr;
-}
-inline bool BehaviorPolicyReference::has_artifact_digest() const {
-  return _internal_has_artifact_digest();
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::_internal_artifact_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.artifact_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::artifact_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.artifact_digest)
-  return _internal_artifact_digest();
-}
-inline void BehaviorPolicyReference::unsafe_arena_set_allocated_artifact_digest(
-    ::rl::common::v1::ContentDigest* artifact_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.artifact_digest_);
-  }
-  _impl_.artifact_digest_ = artifact_digest;
-  if (artifact_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.BehaviorPolicyReference.artifact_digest)
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::release_artifact_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.artifact_digest_;
-  _impl_.artifact_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::unsafe_arena_release_artifact_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorPolicyReference.artifact_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.artifact_digest_;
-  _impl_.artifact_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::_internal_mutable_artifact_digest() {
-  
-  if (_impl_.artifact_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.artifact_digest_ = p;
-  }
-  return _impl_.artifact_digest_;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::mutable_artifact_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_artifact_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorPolicyReference.artifact_digest)
-  return _msg;
-}
-inline void BehaviorPolicyReference::set_allocated_artifact_digest(::rl::common::v1::ContentDigest* artifact_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.artifact_digest_);
-  }
-  if (artifact_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(artifact_digest));
-    if (message_arena != submessage_arena) {
-      artifact_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, artifact_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.artifact_digest_ = artifact_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.artifact_digest)
-}
-
-// .rl.common.v1.ContentDigest manifest_digest = 6;
-inline bool BehaviorPolicyReference::_internal_has_manifest_digest() const {
-  return this != internal_default_instance() && _impl_.manifest_digest_ != nullptr;
-}
-inline bool BehaviorPolicyReference::has_manifest_digest() const {
-  return _internal_has_manifest_digest();
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::_internal_manifest_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.manifest_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyReference::manifest_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.BehaviorPolicyReference.manifest_digest)
-  return _internal_manifest_digest();
-}
-inline void BehaviorPolicyReference::unsafe_arena_set_allocated_manifest_digest(
-    ::rl::common::v1::ContentDigest* manifest_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.manifest_digest_);
-  }
-  _impl_.manifest_digest_ = manifest_digest;
-  if (manifest_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.BehaviorPolicyReference.manifest_digest)
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::release_manifest_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.manifest_digest_;
-  _impl_.manifest_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::unsafe_arena_release_manifest_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.BehaviorPolicyReference.manifest_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.manifest_digest_;
-  _impl_.manifest_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::_internal_mutable_manifest_digest() {
-  
-  if (_impl_.manifest_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.manifest_digest_ = p;
-  }
-  return _impl_.manifest_digest_;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyReference::mutable_manifest_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_manifest_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.BehaviorPolicyReference.manifest_digest)
-  return _msg;
-}
-inline void BehaviorPolicyReference::set_allocated_manifest_digest(::rl::common::v1::ContentDigest* manifest_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.manifest_digest_);
-  }
-  if (manifest_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(manifest_digest));
-    if (message_arena != submessage_arena) {
-      manifest_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, manifest_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.manifest_digest_ = manifest_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.BehaviorPolicyReference.manifest_digest)
-}
-
-// -------------------------------------------------------------------
-
 // RolloutEstimatorProfile
-
-// uint32 profile_schema_version = 1;
-inline void RolloutEstimatorProfile::clear_profile_schema_version() {
-  _impl_.profile_schema_version_ = 0u;
-}
-inline uint32_t RolloutEstimatorProfile::_internal_profile_schema_version() const {
-  return _impl_.profile_schema_version_;
-}
-inline uint32_t RolloutEstimatorProfile::profile_schema_version() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.profile_schema_version)
-  return _internal_profile_schema_version();
-}
-inline void RolloutEstimatorProfile::_internal_set_profile_schema_version(uint32_t value) {
-  
-  _impl_.profile_schema_version_ = value;
-}
-inline void RolloutEstimatorProfile::set_profile_schema_version(uint32_t value) {
-  _internal_set_profile_schema_version(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.profile_schema_version)
-}
 
 // double gamma = 2;
 inline void RolloutEstimatorProfile::clear_gamma() {
@@ -14019,441 +11240,6 @@ inline void RolloutEstimatorProfile::_internal_set_tmax(uint32_t value) {
 inline void RolloutEstimatorProfile::set_tmax(uint32_t value) {
   _internal_set_tmax(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.tmax)
-}
-
-// string gae_formula_id = 5;
-inline void RolloutEstimatorProfile::clear_gae_formula_id() {
-  _impl_.gae_formula_id_.ClearToEmpty();
-}
-inline const std::string& RolloutEstimatorProfile::gae_formula_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
-  return _internal_gae_formula_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RolloutEstimatorProfile::set_gae_formula_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.gae_formula_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
-}
-inline std::string* RolloutEstimatorProfile::mutable_gae_formula_id() {
-  std::string* _s = _internal_mutable_gae_formula_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
-  return _s;
-}
-inline const std::string& RolloutEstimatorProfile::_internal_gae_formula_id() const {
-  return _impl_.gae_formula_id_.Get();
-}
-inline void RolloutEstimatorProfile::_internal_set_gae_formula_id(const std::string& value) {
-  
-  _impl_.gae_formula_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::_internal_mutable_gae_formula_id() {
-  
-  return _impl_.gae_formula_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::release_gae_formula_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
-  return _impl_.gae_formula_id_.Release();
-}
-inline void RolloutEstimatorProfile::set_allocated_gae_formula_id(std::string* gae_formula_id) {
-  if (gae_formula_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.gae_formula_id_.SetAllocated(gae_formula_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.gae_formula_id_.IsDefault()) {
-    _impl_.gae_formula_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.gae_formula_id)
-}
-
-// string terminal_bootstrap_semantics_id = 6;
-inline void RolloutEstimatorProfile::clear_terminal_bootstrap_semantics_id() {
-  _impl_.terminal_bootstrap_semantics_id_.ClearToEmpty();
-}
-inline const std::string& RolloutEstimatorProfile::terminal_bootstrap_semantics_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
-  return _internal_terminal_bootstrap_semantics_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RolloutEstimatorProfile::set_terminal_bootstrap_semantics_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.terminal_bootstrap_semantics_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
-}
-inline std::string* RolloutEstimatorProfile::mutable_terminal_bootstrap_semantics_id() {
-  std::string* _s = _internal_mutable_terminal_bootstrap_semantics_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
-  return _s;
-}
-inline const std::string& RolloutEstimatorProfile::_internal_terminal_bootstrap_semantics_id() const {
-  return _impl_.terminal_bootstrap_semantics_id_.Get();
-}
-inline void RolloutEstimatorProfile::_internal_set_terminal_bootstrap_semantics_id(const std::string& value) {
-  
-  _impl_.terminal_bootstrap_semantics_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::_internal_mutable_terminal_bootstrap_semantics_id() {
-  
-  return _impl_.terminal_bootstrap_semantics_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::release_terminal_bootstrap_semantics_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
-  return _impl_.terminal_bootstrap_semantics_id_.Release();
-}
-inline void RolloutEstimatorProfile::set_allocated_terminal_bootstrap_semantics_id(std::string* terminal_bootstrap_semantics_id) {
-  if (terminal_bootstrap_semantics_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.terminal_bootstrap_semantics_id_.SetAllocated(terminal_bootstrap_semantics_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.terminal_bootstrap_semantics_id_.IsDefault()) {
-    _impl_.terminal_bootstrap_semantics_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.terminal_bootstrap_semantics_id)
-}
-
-// string value_target_formula_id = 7;
-inline void RolloutEstimatorProfile::clear_value_target_formula_id() {
-  _impl_.value_target_formula_id_.ClearToEmpty();
-}
-inline const std::string& RolloutEstimatorProfile::value_target_formula_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
-  return _internal_value_target_formula_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RolloutEstimatorProfile::set_value_target_formula_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.value_target_formula_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
-}
-inline std::string* RolloutEstimatorProfile::mutable_value_target_formula_id() {
-  std::string* _s = _internal_mutable_value_target_formula_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
-  return _s;
-}
-inline const std::string& RolloutEstimatorProfile::_internal_value_target_formula_id() const {
-  return _impl_.value_target_formula_id_.Get();
-}
-inline void RolloutEstimatorProfile::_internal_set_value_target_formula_id(const std::string& value) {
-  
-  _impl_.value_target_formula_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::_internal_mutable_value_target_formula_id() {
-  
-  return _impl_.value_target_formula_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::release_value_target_formula_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
-  return _impl_.value_target_formula_id_.Release();
-}
-inline void RolloutEstimatorProfile::set_allocated_value_target_formula_id(std::string* value_target_formula_id) {
-  if (value_target_formula_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.value_target_formula_id_.SetAllocated(value_target_formula_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.value_target_formula_id_.IsDefault()) {
-    _impl_.value_target_formula_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.value_target_formula_id)
-}
-
-// string value_head_abi_id = 8;
-inline void RolloutEstimatorProfile::clear_value_head_abi_id() {
-  _impl_.value_head_abi_id_.ClearToEmpty();
-}
-inline const std::string& RolloutEstimatorProfile::value_head_abi_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
-  return _internal_value_head_abi_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RolloutEstimatorProfile::set_value_head_abi_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.value_head_abi_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
-}
-inline std::string* RolloutEstimatorProfile::mutable_value_head_abi_id() {
-  std::string* _s = _internal_mutable_value_head_abi_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
-  return _s;
-}
-inline const std::string& RolloutEstimatorProfile::_internal_value_head_abi_id() const {
-  return _impl_.value_head_abi_id_.Get();
-}
-inline void RolloutEstimatorProfile::_internal_set_value_head_abi_id(const std::string& value) {
-  
-  _impl_.value_head_abi_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::_internal_mutable_value_head_abi_id() {
-  
-  return _impl_.value_head_abi_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::release_value_head_abi_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
-  return _impl_.value_head_abi_id_.Release();
-}
-inline void RolloutEstimatorProfile::set_allocated_value_head_abi_id(std::string* value_head_abi_id) {
-  if (value_head_abi_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.value_head_abi_id_.SetAllocated(value_head_abi_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.value_head_abi_id_.IsDefault()) {
-    _impl_.value_head_abi_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.value_head_abi_id)
-}
-
-// .rl.common.v1.ContentDigest reward_semantics_digest = 9;
-inline bool RolloutEstimatorProfile::_internal_has_reward_semantics_digest() const {
-  return this != internal_default_instance() && _impl_.reward_semantics_digest_ != nullptr;
-}
-inline bool RolloutEstimatorProfile::has_reward_semantics_digest() const {
-  return _internal_has_reward_semantics_digest();
-}
-inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::_internal_reward_semantics_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.reward_semantics_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::reward_semantics_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
-  return _internal_reward_semantics_digest();
-}
-inline void RolloutEstimatorProfile::unsafe_arena_set_allocated_reward_semantics_digest(
-    ::rl::common::v1::ContentDigest* reward_semantics_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reward_semantics_digest_);
-  }
-  _impl_.reward_semantics_digest_ = reward_semantics_digest;
-  if (reward_semantics_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::release_reward_semantics_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.reward_semantics_digest_;
-  _impl_.reward_semantics_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::unsafe_arena_release_reward_semantics_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.reward_semantics_digest_;
-  _impl_.reward_semantics_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::_internal_mutable_reward_semantics_digest() {
-  
-  if (_impl_.reward_semantics_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.reward_semantics_digest_ = p;
-  }
-  return _impl_.reward_semantics_digest_;
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::mutable_reward_semantics_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_reward_semantics_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
-  return _msg;
-}
-inline void RolloutEstimatorProfile::set_allocated_reward_semantics_digest(::rl::common::v1::ContentDigest* reward_semantics_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reward_semantics_digest_);
-  }
-  if (reward_semantics_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(reward_semantics_digest));
-    if (message_arena != submessage_arena) {
-      reward_semantics_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, reward_semantics_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.reward_semantics_digest_ = reward_semantics_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.reward_semantics_digest)
-}
-
-// string numeric_dtype = 10;
-inline void RolloutEstimatorProfile::clear_numeric_dtype() {
-  _impl_.numeric_dtype_.ClearToEmpty();
-}
-inline const std::string& RolloutEstimatorProfile::numeric_dtype() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
-  return _internal_numeric_dtype();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RolloutEstimatorProfile::set_numeric_dtype(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.numeric_dtype_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
-}
-inline std::string* RolloutEstimatorProfile::mutable_numeric_dtype() {
-  std::string* _s = _internal_mutable_numeric_dtype();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
-  return _s;
-}
-inline const std::string& RolloutEstimatorProfile::_internal_numeric_dtype() const {
-  return _impl_.numeric_dtype_.Get();
-}
-inline void RolloutEstimatorProfile::_internal_set_numeric_dtype(const std::string& value) {
-  
-  _impl_.numeric_dtype_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::_internal_mutable_numeric_dtype() {
-  
-  return _impl_.numeric_dtype_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::release_numeric_dtype() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
-  return _impl_.numeric_dtype_.Release();
-}
-inline void RolloutEstimatorProfile::set_allocated_numeric_dtype(std::string* numeric_dtype) {
-  if (numeric_dtype != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.numeric_dtype_.SetAllocated(numeric_dtype, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.numeric_dtype_.IsDefault()) {
-    _impl_.numeric_dtype_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.numeric_dtype)
-}
-
-// string finite_rule_id = 11;
-inline void RolloutEstimatorProfile::clear_finite_rule_id() {
-  _impl_.finite_rule_id_.ClearToEmpty();
-}
-inline const std::string& RolloutEstimatorProfile::finite_rule_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
-  return _internal_finite_rule_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RolloutEstimatorProfile::set_finite_rule_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.finite_rule_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
-}
-inline std::string* RolloutEstimatorProfile::mutable_finite_rule_id() {
-  std::string* _s = _internal_mutable_finite_rule_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
-  return _s;
-}
-inline const std::string& RolloutEstimatorProfile::_internal_finite_rule_id() const {
-  return _impl_.finite_rule_id_.Get();
-}
-inline void RolloutEstimatorProfile::_internal_set_finite_rule_id(const std::string& value) {
-  
-  _impl_.finite_rule_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::_internal_mutable_finite_rule_id() {
-  
-  return _impl_.finite_rule_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::release_finite_rule_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
-  return _impl_.finite_rule_id_.Release();
-}
-inline void RolloutEstimatorProfile::set_allocated_finite_rule_id(std::string* finite_rule_id) {
-  if (finite_rule_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.finite_rule_id_.SetAllocated(finite_rule_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.finite_rule_id_.IsDefault()) {
-    _impl_.finite_rule_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.finite_rule_id)
-}
-
-// string model_pin_semantics_id = 12;
-inline void RolloutEstimatorProfile::clear_model_pin_semantics_id() {
-  _impl_.model_pin_semantics_id_.ClearToEmpty();
-}
-inline const std::string& RolloutEstimatorProfile::model_pin_semantics_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
-  return _internal_model_pin_semantics_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RolloutEstimatorProfile::set_model_pin_semantics_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.model_pin_semantics_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
-}
-inline std::string* RolloutEstimatorProfile::mutable_model_pin_semantics_id() {
-  std::string* _s = _internal_mutable_model_pin_semantics_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
-  return _s;
-}
-inline const std::string& RolloutEstimatorProfile::_internal_model_pin_semantics_id() const {
-  return _impl_.model_pin_semantics_id_.Get();
-}
-inline void RolloutEstimatorProfile::_internal_set_model_pin_semantics_id(const std::string& value) {
-  
-  _impl_.model_pin_semantics_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::_internal_mutable_model_pin_semantics_id() {
-  
-  return _impl_.model_pin_semantics_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* RolloutEstimatorProfile::release_model_pin_semantics_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
-  return _impl_.model_pin_semantics_id_.Release();
-}
-inline void RolloutEstimatorProfile::set_allocated_model_pin_semantics_id(std::string* model_pin_semantics_id) {
-  if (model_pin_semantics_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.model_pin_semantics_id_.SetAllocated(model_pin_semantics_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.model_pin_semantics_id_.IsDefault()) {
-    _impl_.model_pin_semantics_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.model_pin_semantics_id)
 }
 
 // .rl.common.v1.ContentDigest profile_digest = 13;
@@ -14543,500 +11329,6 @@ inline void RolloutEstimatorProfile::set_allocated_profile_digest(::rl::common::
 
 // -------------------------------------------------------------------
 
-// TrainingSemanticsIdentity
-
-// string training_contract_id = 1;
-inline void TrainingSemanticsIdentity::clear_training_contract_id() {
-  _impl_.training_contract_id_.ClearToEmpty();
-}
-inline const std::string& TrainingSemanticsIdentity::training_contract_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainingSemanticsIdentity.training_contract_id)
-  return _internal_training_contract_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TrainingSemanticsIdentity::set_training_contract_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.training_contract_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainingSemanticsIdentity.training_contract_id)
-}
-inline std::string* TrainingSemanticsIdentity::mutable_training_contract_id() {
-  std::string* _s = _internal_mutable_training_contract_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainingSemanticsIdentity.training_contract_id)
-  return _s;
-}
-inline const std::string& TrainingSemanticsIdentity::_internal_training_contract_id() const {
-  return _impl_.training_contract_id_.Get();
-}
-inline void TrainingSemanticsIdentity::_internal_set_training_contract_id(const std::string& value) {
-  
-  _impl_.training_contract_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TrainingSemanticsIdentity::_internal_mutable_training_contract_id() {
-  
-  return _impl_.training_contract_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TrainingSemanticsIdentity::release_training_contract_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainingSemanticsIdentity.training_contract_id)
-  return _impl_.training_contract_id_.Release();
-}
-inline void TrainingSemanticsIdentity::set_allocated_training_contract_id(std::string* training_contract_id) {
-  if (training_contract_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.training_contract_id_.SetAllocated(training_contract_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.training_contract_id_.IsDefault()) {
-    _impl_.training_contract_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainingSemanticsIdentity.training_contract_id)
-}
-
-// .rl.common.v1.SchemaIdentity observation_schema = 2;
-inline bool TrainingSemanticsIdentity::_internal_has_observation_schema() const {
-  return this != internal_default_instance() && _impl_.observation_schema_ != nullptr;
-}
-inline bool TrainingSemanticsIdentity::has_observation_schema() const {
-  return _internal_has_observation_schema();
-}
-inline const ::rl::common::v1::SchemaIdentity& TrainingSemanticsIdentity::_internal_observation_schema() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.observation_schema_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& TrainingSemanticsIdentity::observation_schema() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainingSemanticsIdentity.observation_schema)
-  return _internal_observation_schema();
-}
-inline void TrainingSemanticsIdentity::unsafe_arena_set_allocated_observation_schema(
-    ::rl::common::v1::SchemaIdentity* observation_schema) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.observation_schema_);
-  }
-  _impl_.observation_schema_ = observation_schema;
-  if (observation_schema) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainingSemanticsIdentity.observation_schema)
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::release_observation_schema() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
-  _impl_.observation_schema_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::unsafe_arena_release_observation_schema() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainingSemanticsIdentity.observation_schema)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
-  _impl_.observation_schema_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::_internal_mutable_observation_schema() {
-  
-  if (_impl_.observation_schema_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.observation_schema_ = p;
-  }
-  return _impl_.observation_schema_;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::mutable_observation_schema() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_observation_schema();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainingSemanticsIdentity.observation_schema)
-  return _msg;
-}
-inline void TrainingSemanticsIdentity::set_allocated_observation_schema(::rl::common::v1::SchemaIdentity* observation_schema) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.observation_schema_);
-  }
-  if (observation_schema) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(observation_schema));
-    if (message_arena != submessage_arena) {
-      observation_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, observation_schema, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.observation_schema_ = observation_schema;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainingSemanticsIdentity.observation_schema)
-}
-
-// .rl.common.v1.SchemaIdentity action_schema = 3;
-inline bool TrainingSemanticsIdentity::_internal_has_action_schema() const {
-  return this != internal_default_instance() && _impl_.action_schema_ != nullptr;
-}
-inline bool TrainingSemanticsIdentity::has_action_schema() const {
-  return _internal_has_action_schema();
-}
-inline const ::rl::common::v1::SchemaIdentity& TrainingSemanticsIdentity::_internal_action_schema() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.action_schema_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& TrainingSemanticsIdentity::action_schema() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainingSemanticsIdentity.action_schema)
-  return _internal_action_schema();
-}
-inline void TrainingSemanticsIdentity::unsafe_arena_set_allocated_action_schema(
-    ::rl::common::v1::SchemaIdentity* action_schema) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.action_schema_);
-  }
-  _impl_.action_schema_ = action_schema;
-  if (action_schema) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainingSemanticsIdentity.action_schema)
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::release_action_schema() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
-  _impl_.action_schema_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::unsafe_arena_release_action_schema() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainingSemanticsIdentity.action_schema)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
-  _impl_.action_schema_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::_internal_mutable_action_schema() {
-  
-  if (_impl_.action_schema_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.action_schema_ = p;
-  }
-  return _impl_.action_schema_;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::mutable_action_schema() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_action_schema();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainingSemanticsIdentity.action_schema)
-  return _msg;
-}
-inline void TrainingSemanticsIdentity::set_allocated_action_schema(::rl::common::v1::SchemaIdentity* action_schema) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.action_schema_);
-  }
-  if (action_schema) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(action_schema));
-    if (message_arena != submessage_arena) {
-      action_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, action_schema, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.action_schema_ = action_schema;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainingSemanticsIdentity.action_schema)
-}
-
-// .rl.common.v1.SchemaIdentity reward_schema = 4;
-inline bool TrainingSemanticsIdentity::_internal_has_reward_schema() const {
-  return this != internal_default_instance() && _impl_.reward_schema_ != nullptr;
-}
-inline bool TrainingSemanticsIdentity::has_reward_schema() const {
-  return _internal_has_reward_schema();
-}
-inline const ::rl::common::v1::SchemaIdentity& TrainingSemanticsIdentity::_internal_reward_schema() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.reward_schema_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& TrainingSemanticsIdentity::reward_schema() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainingSemanticsIdentity.reward_schema)
-  return _internal_reward_schema();
-}
-inline void TrainingSemanticsIdentity::unsafe_arena_set_allocated_reward_schema(
-    ::rl::common::v1::SchemaIdentity* reward_schema) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reward_schema_);
-  }
-  _impl_.reward_schema_ = reward_schema;
-  if (reward_schema) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainingSemanticsIdentity.reward_schema)
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::release_reward_schema() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.reward_schema_;
-  _impl_.reward_schema_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::unsafe_arena_release_reward_schema() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainingSemanticsIdentity.reward_schema)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.reward_schema_;
-  _impl_.reward_schema_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::_internal_mutable_reward_schema() {
-  
-  if (_impl_.reward_schema_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.reward_schema_ = p;
-  }
-  return _impl_.reward_schema_;
-}
-inline ::rl::common::v1::SchemaIdentity* TrainingSemanticsIdentity::mutable_reward_schema() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_reward_schema();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainingSemanticsIdentity.reward_schema)
-  return _msg;
-}
-inline void TrainingSemanticsIdentity::set_allocated_reward_schema(::rl::common::v1::SchemaIdentity* reward_schema) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reward_schema_);
-  }
-  if (reward_schema) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(reward_schema));
-    if (message_arena != submessage_arena) {
-      reward_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, reward_schema, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.reward_schema_ = reward_schema;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainingSemanticsIdentity.reward_schema)
-}
-
-// string policy_distribution_schema_id = 5;
-inline void TrainingSemanticsIdentity::clear_policy_distribution_schema_id() {
-  _impl_.policy_distribution_schema_id_.ClearToEmpty();
-}
-inline const std::string& TrainingSemanticsIdentity::policy_distribution_schema_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainingSemanticsIdentity.policy_distribution_schema_id)
-  return _internal_policy_distribution_schema_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TrainingSemanticsIdentity::set_policy_distribution_schema_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.policy_distribution_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainingSemanticsIdentity.policy_distribution_schema_id)
-}
-inline std::string* TrainingSemanticsIdentity::mutable_policy_distribution_schema_id() {
-  std::string* _s = _internal_mutable_policy_distribution_schema_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainingSemanticsIdentity.policy_distribution_schema_id)
-  return _s;
-}
-inline const std::string& TrainingSemanticsIdentity::_internal_policy_distribution_schema_id() const {
-  return _impl_.policy_distribution_schema_id_.Get();
-}
-inline void TrainingSemanticsIdentity::_internal_set_policy_distribution_schema_id(const std::string& value) {
-  
-  _impl_.policy_distribution_schema_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TrainingSemanticsIdentity::_internal_mutable_policy_distribution_schema_id() {
-  
-  return _impl_.policy_distribution_schema_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TrainingSemanticsIdentity::release_policy_distribution_schema_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainingSemanticsIdentity.policy_distribution_schema_id)
-  return _impl_.policy_distribution_schema_id_.Release();
-}
-inline void TrainingSemanticsIdentity::set_allocated_policy_distribution_schema_id(std::string* policy_distribution_schema_id) {
-  if (policy_distribution_schema_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.policy_distribution_schema_id_.SetAllocated(policy_distribution_schema_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.policy_distribution_schema_id_.IsDefault()) {
-    _impl_.policy_distribution_schema_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainingSemanticsIdentity.policy_distribution_schema_id)
-}
-
-// string model_architecture_id = 6;
-inline void TrainingSemanticsIdentity::clear_model_architecture_id() {
-  _impl_.model_architecture_id_.ClearToEmpty();
-}
-inline const std::string& TrainingSemanticsIdentity::model_architecture_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainingSemanticsIdentity.model_architecture_id)
-  return _internal_model_architecture_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TrainingSemanticsIdentity::set_model_architecture_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.model_architecture_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainingSemanticsIdentity.model_architecture_id)
-}
-inline std::string* TrainingSemanticsIdentity::mutable_model_architecture_id() {
-  std::string* _s = _internal_mutable_model_architecture_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainingSemanticsIdentity.model_architecture_id)
-  return _s;
-}
-inline const std::string& TrainingSemanticsIdentity::_internal_model_architecture_id() const {
-  return _impl_.model_architecture_id_.Get();
-}
-inline void TrainingSemanticsIdentity::_internal_set_model_architecture_id(const std::string& value) {
-  
-  _impl_.model_architecture_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TrainingSemanticsIdentity::_internal_mutable_model_architecture_id() {
-  
-  return _impl_.model_architecture_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TrainingSemanticsIdentity::release_model_architecture_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainingSemanticsIdentity.model_architecture_id)
-  return _impl_.model_architecture_id_.Release();
-}
-inline void TrainingSemanticsIdentity::set_allocated_model_architecture_id(std::string* model_architecture_id) {
-  if (model_architecture_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.model_architecture_id_.SetAllocated(model_architecture_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.model_architecture_id_.IsDefault()) {
-    _impl_.model_architecture_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainingSemanticsIdentity.model_architecture_id)
-}
-
-// .rl.common.v1.ContentDigest semantics_digest = 7;
-inline bool TrainingSemanticsIdentity::_internal_has_semantics_digest() const {
-  return this != internal_default_instance() && _impl_.semantics_digest_ != nullptr;
-}
-inline bool TrainingSemanticsIdentity::has_semantics_digest() const {
-  return _internal_has_semantics_digest();
-}
-inline const ::rl::common::v1::ContentDigest& TrainingSemanticsIdentity::_internal_semantics_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.semantics_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& TrainingSemanticsIdentity::semantics_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainingSemanticsIdentity.semantics_digest)
-  return _internal_semantics_digest();
-}
-inline void TrainingSemanticsIdentity::unsafe_arena_set_allocated_semantics_digest(
-    ::rl::common::v1::ContentDigest* semantics_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.semantics_digest_);
-  }
-  _impl_.semantics_digest_ = semantics_digest;
-  if (semantics_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainingSemanticsIdentity.semantics_digest)
-}
-inline ::rl::common::v1::ContentDigest* TrainingSemanticsIdentity::release_semantics_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.semantics_digest_;
-  _impl_.semantics_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TrainingSemanticsIdentity::unsafe_arena_release_semantics_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainingSemanticsIdentity.semantics_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.semantics_digest_;
-  _impl_.semantics_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TrainingSemanticsIdentity::_internal_mutable_semantics_digest() {
-  
-  if (_impl_.semantics_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.semantics_digest_ = p;
-  }
-  return _impl_.semantics_digest_;
-}
-inline ::rl::common::v1::ContentDigest* TrainingSemanticsIdentity::mutable_semantics_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_semantics_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainingSemanticsIdentity.semantics_digest)
-  return _msg;
-}
-inline void TrainingSemanticsIdentity::set_allocated_semantics_digest(::rl::common::v1::ContentDigest* semantics_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.semantics_digest_);
-  }
-  if (semantics_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(semantics_digest));
-    if (message_arena != submessage_arena) {
-      semantics_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, semantics_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.semantics_digest_ = semantics_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainingSemanticsIdentity.semantics_digest)
-}
-
-// -------------------------------------------------------------------
-
 // ProcessedTransition
 
 // string item_id = 1;
@@ -15089,237 +11381,7 @@ inline void ProcessedTransition::set_allocated_item_id(std::string* item_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.item_id)
 }
 
-// string environment_session_id = 2;
-inline void ProcessedTransition::clear_environment_session_id() {
-  _impl_.environment_session_id_.ClearToEmpty();
-}
-inline const std::string& ProcessedTransition::environment_session_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.environment_session_id)
-  return _internal_environment_session_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ProcessedTransition::set_environment_session_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.environment_session_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.environment_session_id)
-}
-inline std::string* ProcessedTransition::mutable_environment_session_id() {
-  std::string* _s = _internal_mutable_environment_session_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.environment_session_id)
-  return _s;
-}
-inline const std::string& ProcessedTransition::_internal_environment_session_id() const {
-  return _impl_.environment_session_id_.Get();
-}
-inline void ProcessedTransition::_internal_set_environment_session_id(const std::string& value) {
-  
-  _impl_.environment_session_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ProcessedTransition::_internal_mutable_environment_session_id() {
-  
-  return _impl_.environment_session_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ProcessedTransition::release_environment_session_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.environment_session_id)
-  return _impl_.environment_session_id_.Release();
-}
-inline void ProcessedTransition::set_allocated_environment_session_id(std::string* environment_session_id) {
-  if (environment_session_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.environment_session_id_.SetAllocated(environment_session_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.environment_session_id_.IsDefault()) {
-    _impl_.environment_session_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.environment_session_id)
-}
-
-// string episode_id = 3;
-inline void ProcessedTransition::clear_episode_id() {
-  _impl_.episode_id_.ClearToEmpty();
-}
-inline const std::string& ProcessedTransition::episode_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.episode_id)
-  return _internal_episode_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ProcessedTransition::set_episode_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.episode_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.episode_id)
-}
-inline std::string* ProcessedTransition::mutable_episode_id() {
-  std::string* _s = _internal_mutable_episode_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.episode_id)
-  return _s;
-}
-inline const std::string& ProcessedTransition::_internal_episode_id() const {
-  return _impl_.episode_id_.Get();
-}
-inline void ProcessedTransition::_internal_set_episode_id(const std::string& value) {
-  
-  _impl_.episode_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ProcessedTransition::_internal_mutable_episode_id() {
-  
-  return _impl_.episode_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ProcessedTransition::release_episode_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.episode_id)
-  return _impl_.episode_id_.Release();
-}
-inline void ProcessedTransition::set_allocated_episode_id(std::string* episode_id) {
-  if (episode_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.episode_id_.SetAllocated(episode_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.episode_id_.IsDefault()) {
-    _impl_.episode_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.episode_id)
-}
-
-// uint32 agent_id = 4;
-inline void ProcessedTransition::clear_agent_id() {
-  _impl_.agent_id_ = 0u;
-}
-inline uint32_t ProcessedTransition::_internal_agent_id() const {
-  return _impl_.agent_id_;
-}
-inline uint32_t ProcessedTransition::agent_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.agent_id)
-  return _internal_agent_id();
-}
-inline void ProcessedTransition::_internal_set_agent_id(uint32_t value) {
-  
-  _impl_.agent_id_ = value;
-}
-inline void ProcessedTransition::set_agent_id(uint32_t value) {
-  _internal_set_agent_id(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.agent_id)
-}
-
-// string segment_id = 5;
-inline void ProcessedTransition::clear_segment_id() {
-  _impl_.segment_id_.ClearToEmpty();
-}
-inline const std::string& ProcessedTransition::segment_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_id)
-  return _internal_segment_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ProcessedTransition::set_segment_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.segment_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_id)
-}
-inline std::string* ProcessedTransition::mutable_segment_id() {
-  std::string* _s = _internal_mutable_segment_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.segment_id)
-  return _s;
-}
-inline const std::string& ProcessedTransition::_internal_segment_id() const {
-  return _impl_.segment_id_.Get();
-}
-inline void ProcessedTransition::_internal_set_segment_id(const std::string& value) {
-  
-  _impl_.segment_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ProcessedTransition::_internal_mutable_segment_id() {
-  
-  return _impl_.segment_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ProcessedTransition::release_segment_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.segment_id)
-  return _impl_.segment_id_.Release();
-}
-inline void ProcessedTransition::set_allocated_segment_id(std::string* segment_id) {
-  if (segment_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.segment_id_.SetAllocated(segment_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.segment_id_.IsDefault()) {
-    _impl_.segment_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.segment_id)
-}
-
-// uint32 transition_index = 6;
-inline void ProcessedTransition::clear_transition_index() {
-  _impl_.transition_index_ = 0u;
-}
-inline uint32_t ProcessedTransition::_internal_transition_index() const {
-  return _impl_.transition_index_;
-}
-inline uint32_t ProcessedTransition::transition_index() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.transition_index)
-  return _internal_transition_index();
-}
-inline void ProcessedTransition::_internal_set_transition_index(uint32_t value) {
-  
-  _impl_.transition_index_ = value;
-}
-inline void ProcessedTransition::set_transition_index(uint32_t value) {
-  _internal_set_transition_index(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.transition_index)
-}
-
-// uint32 segment_transition_count = 7;
-inline void ProcessedTransition::clear_segment_transition_count() {
-  _impl_.segment_transition_count_ = 0u;
-}
-inline uint32_t ProcessedTransition::_internal_segment_transition_count() const {
-  return _impl_.segment_transition_count_;
-}
-inline uint32_t ProcessedTransition::segment_transition_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_transition_count)
-  return _internal_segment_transition_count();
-}
-inline void ProcessedTransition::_internal_set_segment_transition_count(uint32_t value) {
-  
-  _impl_.segment_transition_count_ = value;
-}
-inline void ProcessedTransition::set_segment_transition_count(uint32_t value) {
-  _internal_set_segment_transition_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_transition_count)
-}
-
-// uint64 action_step = 8;
-inline void ProcessedTransition::clear_action_step() {
-  _impl_.action_step_ = uint64_t{0u};
-}
-inline uint64_t ProcessedTransition::_internal_action_step() const {
-  return _impl_.action_step_;
-}
-inline uint64_t ProcessedTransition::action_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.action_step)
-  return _internal_action_step();
-}
-inline void ProcessedTransition::_internal_set_action_step(uint64_t value) {
-  
-  _impl_.action_step_ = value;
-}
-inline void ProcessedTransition::set_action_step(uint64_t value) {
-  _internal_set_action_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.action_step)
-}
-
-// repeated float observation = 9;
+// repeated float observation = 2;
 inline int ProcessedTransition::_internal_observation_size() const {
   return _impl_.observation_.size();
 }
@@ -15366,54 +11428,7 @@ ProcessedTransition::mutable_observation() {
   return _internal_mutable_observation();
 }
 
-// repeated float next_observation = 10;
-inline int ProcessedTransition::_internal_next_observation_size() const {
-  return _impl_.next_observation_.size();
-}
-inline int ProcessedTransition::next_observation_size() const {
-  return _internal_next_observation_size();
-}
-inline void ProcessedTransition::clear_next_observation() {
-  _impl_.next_observation_.Clear();
-}
-inline float ProcessedTransition::_internal_next_observation(int index) const {
-  return _impl_.next_observation_.Get(index);
-}
-inline float ProcessedTransition::next_observation(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.next_observation)
-  return _internal_next_observation(index);
-}
-inline void ProcessedTransition::set_next_observation(int index, float value) {
-  _impl_.next_observation_.Set(index, value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.next_observation)
-}
-inline void ProcessedTransition::_internal_add_next_observation(float value) {
-  _impl_.next_observation_.Add(value);
-}
-inline void ProcessedTransition::add_next_observation(float value) {
-  _internal_add_next_observation(value);
-  // @@protoc_insertion_point(field_add:rl.training.v1.ProcessedTransition.next_observation)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-ProcessedTransition::_internal_next_observation() const {
-  return _impl_.next_observation_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >&
-ProcessedTransition::next_observation() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.ProcessedTransition.next_observation)
-  return _internal_next_observation();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-ProcessedTransition::_internal_mutable_next_observation() {
-  return &_impl_.next_observation_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
-ProcessedTransition::mutable_next_observation() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ProcessedTransition.next_observation)
-  return _internal_mutable_next_observation();
-}
-
-// int32 action = 11;
+// int32 action = 3;
 inline void ProcessedTransition::clear_action() {
   _impl_.action_ = 0;
 }
@@ -15433,27 +11448,7 @@ inline void ProcessedTransition::set_action(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.action)
 }
 
-// float reward = 12;
-inline void ProcessedTransition::clear_reward() {
-  _impl_.reward_ = 0;
-}
-inline float ProcessedTransition::_internal_reward() const {
-  return _impl_.reward_;
-}
-inline float ProcessedTransition::reward() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.reward)
-  return _internal_reward();
-}
-inline void ProcessedTransition::_internal_set_reward(float value) {
-  
-  _impl_.reward_ = value;
-}
-inline void ProcessedTransition::set_reward(float value) {
-  _internal_set_reward(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.reward)
-}
-
-// float behavior_log_probability = 13;
+// float behavior_log_probability = 4;
 inline void ProcessedTransition::clear_behavior_log_probability() {
   _impl_.behavior_log_probability_ = 0;
 }
@@ -15473,7 +11468,7 @@ inline void ProcessedTransition::set_behavior_log_probability(float value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.behavior_log_probability)
 }
 
-// float behavior_value = 14;
+// float behavior_value = 5;
 inline void ProcessedTransition::clear_behavior_value() {
   _impl_.behavior_value_ = 0;
 }
@@ -15493,7 +11488,7 @@ inline void ProcessedTransition::set_behavior_value(float value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.behavior_value)
 }
 
-// float advantage = 15;
+// float advantage = 6;
 inline void ProcessedTransition::clear_advantage() {
   _impl_.advantage_ = 0;
 }
@@ -15513,7 +11508,7 @@ inline void ProcessedTransition::set_advantage(float value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.advantage)
 }
 
-// float value_target = 16;
+// float value_target = 7;
 inline void ProcessedTransition::clear_value_target() {
   _impl_.value_target_ = 0;
 }
@@ -15533,310 +11528,35 @@ inline void ProcessedTransition::set_value_target(float value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.value_target)
 }
 
-// bool environment_terminal = 17;
-inline void ProcessedTransition::clear_environment_terminal() {
-  _impl_.environment_terminal_ = false;
-}
-inline bool ProcessedTransition::_internal_environment_terminal() const {
-  return _impl_.environment_terminal_;
-}
-inline bool ProcessedTransition::environment_terminal() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.environment_terminal)
-  return _internal_environment_terminal();
-}
-inline void ProcessedTransition::_internal_set_environment_terminal(bool value) {
-  
-  _impl_.environment_terminal_ = value;
-}
-inline void ProcessedTransition::set_environment_terminal(bool value) {
-  _internal_set_environment_terminal(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.environment_terminal)
-}
-
-// .rl.training.v1.TransitionEndKind end_kind = 18;
-inline void ProcessedTransition::clear_end_kind() {
-  _impl_.end_kind_ = 0;
-}
-inline ::rl::training::v1::TransitionEndKind ProcessedTransition::_internal_end_kind() const {
-  return static_cast< ::rl::training::v1::TransitionEndKind >(_impl_.end_kind_);
-}
-inline ::rl::training::v1::TransitionEndKind ProcessedTransition::end_kind() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.end_kind)
-  return _internal_end_kind();
-}
-inline void ProcessedTransition::_internal_set_end_kind(::rl::training::v1::TransitionEndKind value) {
-  
-  _impl_.end_kind_ = value;
-}
-inline void ProcessedTransition::set_end_kind(::rl::training::v1::TransitionEndKind value) {
-  _internal_set_end_kind(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.end_kind)
-}
-
-// .rl.training.v1.SegmentCloseReason segment_close_reason = 19;
-inline void ProcessedTransition::clear_segment_close_reason() {
-  _impl_.segment_close_reason_ = 0;
-}
-inline ::rl::training::v1::SegmentCloseReason ProcessedTransition::_internal_segment_close_reason() const {
-  return static_cast< ::rl::training::v1::SegmentCloseReason >(_impl_.segment_close_reason_);
-}
-inline ::rl::training::v1::SegmentCloseReason ProcessedTransition::segment_close_reason() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_close_reason)
-  return _internal_segment_close_reason();
-}
-inline void ProcessedTransition::_internal_set_segment_close_reason(::rl::training::v1::SegmentCloseReason value) {
-  
-  _impl_.segment_close_reason_ = value;
-}
-inline void ProcessedTransition::set_segment_close_reason(::rl::training::v1::SegmentCloseReason value) {
-  _internal_set_segment_close_reason(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_close_reason)
-}
-
-// bool segment_boundary = 20;
-inline void ProcessedTransition::clear_segment_boundary() {
-  _impl_.segment_boundary_ = false;
-}
-inline bool ProcessedTransition::_internal_segment_boundary() const {
-  return _impl_.segment_boundary_;
-}
-inline bool ProcessedTransition::segment_boundary() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.segment_boundary)
-  return _internal_segment_boundary();
-}
-inline void ProcessedTransition::_internal_set_segment_boundary(bool value) {
-  
-  _impl_.segment_boundary_ = value;
-}
-inline void ProcessedTransition::set_segment_boundary(bool value) {
-  _internal_set_segment_boundary(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.segment_boundary)
-}
-
-// bool bootstrap_applied = 21;
-inline void ProcessedTransition::clear_bootstrap_applied() {
-  _impl_.bootstrap_applied_ = false;
-}
-inline bool ProcessedTransition::_internal_bootstrap_applied() const {
-  return _impl_.bootstrap_applied_;
-}
-inline bool ProcessedTransition::bootstrap_applied() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.bootstrap_applied)
-  return _internal_bootstrap_applied();
-}
-inline void ProcessedTransition::_internal_set_bootstrap_applied(bool value) {
-  
-  _impl_.bootstrap_applied_ = value;
-}
-inline void ProcessedTransition::set_bootstrap_applied(bool value) {
-  _internal_set_bootstrap_applied(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.bootstrap_applied)
-}
-
-// optional float bootstrap_value = 22;
-inline bool ProcessedTransition::_internal_has_bootstrap_value() const {
+// optional uint64 behavior_model_step = 8;
+inline bool ProcessedTransition::_internal_has_behavior_model_step() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
 }
-inline bool ProcessedTransition::has_bootstrap_value() const {
-  return _internal_has_bootstrap_value();
+inline bool ProcessedTransition::has_behavior_model_step() const {
+  return _internal_has_behavior_model_step();
 }
-inline void ProcessedTransition::clear_bootstrap_value() {
-  _impl_.bootstrap_value_ = 0;
+inline void ProcessedTransition::clear_behavior_model_step() {
+  _impl_.behavior_model_step_ = uint64_t{0u};
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline float ProcessedTransition::_internal_bootstrap_value() const {
-  return _impl_.bootstrap_value_;
+inline uint64_t ProcessedTransition::_internal_behavior_model_step() const {
+  return _impl_.behavior_model_step_;
 }
-inline float ProcessedTransition::bootstrap_value() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.bootstrap_value)
-  return _internal_bootstrap_value();
+inline uint64_t ProcessedTransition::behavior_model_step() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.behavior_model_step)
+  return _internal_behavior_model_step();
 }
-inline void ProcessedTransition::_internal_set_bootstrap_value(float value) {
+inline void ProcessedTransition::_internal_set_behavior_model_step(uint64_t value) {
   _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.bootstrap_value_ = value;
+  _impl_.behavior_model_step_ = value;
 }
-inline void ProcessedTransition::set_bootstrap_value(float value) {
-  _internal_set_bootstrap_value(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.bootstrap_value)
-}
-
-// .rl.training.v1.BehaviorPolicyReference behavior_policy = 23;
-inline bool ProcessedTransition::_internal_has_behavior_policy() const {
-  return this != internal_default_instance() && _impl_.behavior_policy_ != nullptr;
-}
-inline bool ProcessedTransition::has_behavior_policy() const {
-  return _internal_has_behavior_policy();
-}
-inline void ProcessedTransition::clear_behavior_policy() {
-  if (GetArenaForAllocation() == nullptr && _impl_.behavior_policy_ != nullptr) {
-    delete _impl_.behavior_policy_;
-  }
-  _impl_.behavior_policy_ = nullptr;
-}
-inline const ::rl::training::v1::BehaviorPolicyReference& ProcessedTransition::_internal_behavior_policy() const {
-  const ::rl::training::v1::BehaviorPolicyReference* p = _impl_.behavior_policy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::BehaviorPolicyReference&>(
-      ::rl::training::v1::_BehaviorPolicyReference_default_instance_);
-}
-inline const ::rl::training::v1::BehaviorPolicyReference& ProcessedTransition::behavior_policy() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.behavior_policy)
-  return _internal_behavior_policy();
-}
-inline void ProcessedTransition::unsafe_arena_set_allocated_behavior_policy(
-    ::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_policy_);
-  }
-  _impl_.behavior_policy_ = behavior_policy;
-  if (behavior_policy) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransition.behavior_policy)
-}
-inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::release_behavior_policy() {
-  
-  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::unsafe_arena_release_behavior_policy() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.behavior_policy)
-  
-  ::rl::training::v1::BehaviorPolicyReference* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::_internal_mutable_behavior_policy() {
-  
-  if (_impl_.behavior_policy_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::BehaviorPolicyReference>(GetArenaForAllocation());
-    _impl_.behavior_policy_ = p;
-  }
-  return _impl_.behavior_policy_;
-}
-inline ::rl::training::v1::BehaviorPolicyReference* ProcessedTransition::mutable_behavior_policy() {
-  ::rl::training::v1::BehaviorPolicyReference* _msg = _internal_mutable_behavior_policy();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.behavior_policy)
-  return _msg;
-}
-inline void ProcessedTransition::set_allocated_behavior_policy(::rl::training::v1::BehaviorPolicyReference* behavior_policy) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.behavior_policy_;
-  }
-  if (behavior_policy) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(behavior_policy);
-    if (message_arena != submessage_arena) {
-      behavior_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, behavior_policy, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.behavior_policy_ = behavior_policy;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.behavior_policy)
+inline void ProcessedTransition::set_behavior_model_step(uint64_t value) {
+  _internal_set_behavior_model_step(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.behavior_model_step)
 }
 
-// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 24;
-inline bool ProcessedTransition::_internal_has_rollout_estimator_profile_digest() const {
-  return this != internal_default_instance() && _impl_.rollout_estimator_profile_digest_ != nullptr;
-}
-inline bool ProcessedTransition::has_rollout_estimator_profile_digest() const {
-  return _internal_has_rollout_estimator_profile_digest();
-}
-inline const ::rl::common::v1::ContentDigest& ProcessedTransition::_internal_rollout_estimator_profile_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.rollout_estimator_profile_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& ProcessedTransition::rollout_estimator_profile_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
-  return _internal_rollout_estimator_profile_digest();
-}
-inline void ProcessedTransition::unsafe_arena_set_allocated_rollout_estimator_profile_digest(
-    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
-  }
-  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
-  if (rollout_estimator_profile_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransition::release_rollout_estimator_profile_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransition::unsafe_arena_release_rollout_estimator_profile_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransition::_internal_mutable_rollout_estimator_profile_digest() {
-  
-  if (_impl_.rollout_estimator_profile_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.rollout_estimator_profile_digest_ = p;
-  }
-  return _impl_.rollout_estimator_profile_digest_;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransition::mutable_rollout_estimator_profile_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_rollout_estimator_profile_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
-  return _msg;
-}
-inline void ProcessedTransition::set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
-  }
-  if (rollout_estimator_profile_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(rollout_estimator_profile_digest));
-    if (message_arena != submessage_arena) {
-      rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, rollout_estimator_profile_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransition.rollout_estimator_profile_digest)
-}
-
-// int64 created_at_unix_ms = 25;
+// int64 created_at_unix_ms = 9;
 inline void ProcessedTransition::clear_created_at_unix_ms() {
   _impl_.created_at_unix_ms_ = int64_t{0};
 }
@@ -15995,137 +11715,7 @@ inline void ProcessedTransitionEnvelope::set_allocated_payload_digest(::rl::comm
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
 }
 
-// repeated .rl.training.v1.ProcessedTransition transitions = 3;
-inline int ProcessedTransitionEnvelope::_internal_transitions_size() const {
-  return _impl_.transitions_.size();
-}
-inline int ProcessedTransitionEnvelope::transitions_size() const {
-  return _internal_transitions_size();
-}
-inline void ProcessedTransitionEnvelope::clear_transitions() {
-  _impl_.transitions_.Clear();
-}
-inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::mutable_transitions(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.transitions)
-  return _impl_.transitions_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >*
-ProcessedTransitionEnvelope::mutable_transitions() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ProcessedTransitionEnvelope.transitions)
-  return &_impl_.transitions_;
-}
-inline const ::rl::training::v1::ProcessedTransition& ProcessedTransitionEnvelope::_internal_transitions(int index) const {
-  return _impl_.transitions_.Get(index);
-}
-inline const ::rl::training::v1::ProcessedTransition& ProcessedTransitionEnvelope::transitions(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.transitions)
-  return _internal_transitions(index);
-}
-inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::_internal_add_transitions() {
-  return _impl_.transitions_.Add();
-}
-inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::add_transitions() {
-  ::rl::training::v1::ProcessedTransition* _add = _internal_add_transitions();
-  // @@protoc_insertion_point(field_add:rl.training.v1.ProcessedTransitionEnvelope.transitions)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >&
-ProcessedTransitionEnvelope::transitions() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.ProcessedTransitionEnvelope.transitions)
-  return _impl_.transitions_;
-}
-
-// .rl.training.v1.TrainingSemanticsIdentity training_semantics = 13;
-inline bool ProcessedTransitionEnvelope::_internal_has_training_semantics() const {
-  return this != internal_default_instance() && _impl_.training_semantics_ != nullptr;
-}
-inline bool ProcessedTransitionEnvelope::has_training_semantics() const {
-  return _internal_has_training_semantics();
-}
-inline void ProcessedTransitionEnvelope::clear_training_semantics() {
-  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
-    delete _impl_.training_semantics_;
-  }
-  _impl_.training_semantics_ = nullptr;
-}
-inline const ::rl::training::v1::TrainingSemanticsIdentity& ProcessedTransitionEnvelope::_internal_training_semantics() const {
-  const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.training_semantics_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
-      ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
-}
-inline const ::rl::training::v1::TrainingSemanticsIdentity& ProcessedTransitionEnvelope::training_semantics() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
-  return _internal_training_semantics();
-}
-inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_training_semantics(
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_semantics_);
-  }
-  _impl_.training_semantics_ = training_semantics;
-  if (training_semantics) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::release_training_semantics() {
-  
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::unsafe_arena_release_training_semantics() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
-  
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::_internal_mutable_training_semantics() {
-  
-  if (_impl_.training_semantics_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
-    _impl_.training_semantics_ = p;
-  }
-  return _impl_.training_semantics_;
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* ProcessedTransitionEnvelope::mutable_training_semantics() {
-  ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_training_semantics();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
-  return _msg;
-}
-inline void ProcessedTransitionEnvelope::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.training_semantics_;
-  }
-  if (training_semantics) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(training_semantics);
-    if (message_arena != submessage_arena) {
-      training_semantics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_semantics, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.training_semantics_ = training_semantics;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_semantics)
-}
-
-// .rl.common.v1.ServiceInstanceIdentity producer = 14;
+// .rl.common.v1.ServiceInstanceIdentity producer = 3;
 inline bool ProcessedTransitionEnvelope::_internal_has_producer() const {
   return this != internal_default_instance() && _impl_.producer_ != nullptr;
 }
@@ -16210,39 +11800,39 @@ inline void ProcessedTransitionEnvelope::set_allocated_producer(::rl::common::v1
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.producer)
 }
 
-// .rl.common.v1.ContractIdentity contract = 15;
-inline bool ProcessedTransitionEnvelope::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
+// .rl.common.v1.ContentDigest training_contract_digest = 4;
+inline bool ProcessedTransitionEnvelope::_internal_has_training_contract_digest() const {
+  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
 }
-inline bool ProcessedTransitionEnvelope::has_contract() const {
-  return _internal_has_contract();
+inline bool ProcessedTransitionEnvelope::has_training_contract_digest() const {
+  return _internal_has_training_contract_digest();
 }
-inline const ::rl::common::v1::ContractIdentity& ProcessedTransitionEnvelope::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
+inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::_internal_training_contract_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::common::v1::ContractIdentity& ProcessedTransitionEnvelope::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.contract)
-  return _internal_contract();
+inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::training_contract_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
+  return _internal_training_contract_digest();
 }
-inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
+inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_training_contract_digest(
+    ::rl::common::v1::ContentDigest* training_contract_digest) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  _impl_.contract_ = contract;
-  if (contract) {
+  _impl_.training_contract_digest_ = training_contract_digest;
+  if (training_contract_digest) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.contract)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
 }
-inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::release_contract() {
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::release_training_contract_digest() {
   
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -16254,65 +11844,175 @@ inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::release_
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.contract)
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::unsafe_arena_release_training_contract_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
   
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
   return temp;
 }
-inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::_internal_mutable_contract() {
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::_internal_mutable_training_contract_digest() {
   
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
+  if (_impl_.training_contract_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.training_contract_digest_ = p;
   }
-  return _impl_.contract_;
+  return _impl_.training_contract_digest_;
 }
-inline ::rl::common::v1::ContractIdentity* ProcessedTransitionEnvelope::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.contract)
+inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::mutable_training_contract_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
   return _msg;
 }
-inline void ProcessedTransitionEnvelope::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
+inline void ProcessedTransitionEnvelope::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  if (contract) {
+  if (training_contract_digest) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
         ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
     if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
+      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, training_contract_digest, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.contract)
+  _impl_.training_contract_digest_ = training_contract_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
 }
 
-// int64 created_at_unix_ms = 16;
-inline void ProcessedTransitionEnvelope::clear_created_at_unix_ms() {
-  _impl_.created_at_unix_ms_ = int64_t{0};
+// .rl.training.v1.ModelIdentity behavior_model = 5;
+inline bool ProcessedTransitionEnvelope::_internal_has_behavior_model() const {
+  return this != internal_default_instance() && _impl_.behavior_model_ != nullptr;
 }
-inline int64_t ProcessedTransitionEnvelope::_internal_created_at_unix_ms() const {
-  return _impl_.created_at_unix_ms_;
+inline bool ProcessedTransitionEnvelope::has_behavior_model() const {
+  return _internal_has_behavior_model();
 }
-inline int64_t ProcessedTransitionEnvelope::created_at_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.created_at_unix_ms)
-  return _internal_created_at_unix_ms();
+inline void ProcessedTransitionEnvelope::clear_behavior_model() {
+  if (GetArenaForAllocation() == nullptr && _impl_.behavior_model_ != nullptr) {
+    delete _impl_.behavior_model_;
+  }
+  _impl_.behavior_model_ = nullptr;
 }
-inline void ProcessedTransitionEnvelope::_internal_set_created_at_unix_ms(int64_t value) {
+inline const ::rl::training::v1::ModelIdentity& ProcessedTransitionEnvelope::_internal_behavior_model() const {
+  const ::rl::training::v1::ModelIdentity* p = _impl_.behavior_model_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::ModelIdentity&>(
+      ::rl::training::v1::_ModelIdentity_default_instance_);
+}
+inline const ::rl::training::v1::ModelIdentity& ProcessedTransitionEnvelope::behavior_model() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.behavior_model)
+  return _internal_behavior_model();
+}
+inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_behavior_model(
+    ::rl::training::v1::ModelIdentity* behavior_model) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_model_);
+  }
+  _impl_.behavior_model_ = behavior_model;
+  if (behavior_model) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.behavior_model)
+}
+inline ::rl::training::v1::ModelIdentity* ProcessedTransitionEnvelope::release_behavior_model() {
   
-  _impl_.created_at_unix_ms_ = value;
+  ::rl::training::v1::ModelIdentity* temp = _impl_.behavior_model_;
+  _impl_.behavior_model_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
 }
-inline void ProcessedTransitionEnvelope::set_created_at_unix_ms(int64_t value) {
-  _internal_set_created_at_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransitionEnvelope.created_at_unix_ms)
+inline ::rl::training::v1::ModelIdentity* ProcessedTransitionEnvelope::unsafe_arena_release_behavior_model() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.behavior_model)
+  
+  ::rl::training::v1::ModelIdentity* temp = _impl_.behavior_model_;
+  _impl_.behavior_model_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::ModelIdentity* ProcessedTransitionEnvelope::_internal_mutable_behavior_model() {
+  
+  if (_impl_.behavior_model_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::ModelIdentity>(GetArenaForAllocation());
+    _impl_.behavior_model_ = p;
+  }
+  return _impl_.behavior_model_;
+}
+inline ::rl::training::v1::ModelIdentity* ProcessedTransitionEnvelope::mutable_behavior_model() {
+  ::rl::training::v1::ModelIdentity* _msg = _internal_mutable_behavior_model();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.behavior_model)
+  return _msg;
+}
+inline void ProcessedTransitionEnvelope::set_allocated_behavior_model(::rl::training::v1::ModelIdentity* behavior_model) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.behavior_model_;
+  }
+  if (behavior_model) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(behavior_model);
+    if (message_arena != submessage_arena) {
+      behavior_model = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, behavior_model, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.behavior_model_ = behavior_model;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.behavior_model)
+}
+
+// repeated .rl.training.v1.ProcessedTransition samples = 6;
+inline int ProcessedTransitionEnvelope::_internal_samples_size() const {
+  return _impl_.samples_.size();
+}
+inline int ProcessedTransitionEnvelope::samples_size() const {
+  return _internal_samples_size();
+}
+inline void ProcessedTransitionEnvelope::clear_samples() {
+  _impl_.samples_.Clear();
+}
+inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::mutable_samples(int index) {
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.samples)
+  return _impl_.samples_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >*
+ProcessedTransitionEnvelope::mutable_samples() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ProcessedTransitionEnvelope.samples)
+  return &_impl_.samples_;
+}
+inline const ::rl::training::v1::ProcessedTransition& ProcessedTransitionEnvelope::_internal_samples(int index) const {
+  return _impl_.samples_.Get(index);
+}
+inline const ::rl::training::v1::ProcessedTransition& ProcessedTransitionEnvelope::samples(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.samples)
+  return _internal_samples(index);
+}
+inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::_internal_add_samples() {
+  return _impl_.samples_.Add();
+}
+inline ::rl::training::v1::ProcessedTransition* ProcessedTransitionEnvelope::add_samples() {
+  ::rl::training::v1::ProcessedTransition* _add = _internal_add_samples();
+  // @@protoc_insertion_point(field_add:rl.training.v1.ProcessedTransitionEnvelope.samples)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition >&
+ProcessedTransitionEnvelope::samples() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.ProcessedTransitionEnvelope.samples)
+  return _impl_.samples_;
 }
 
 // -------------------------------------------------------------------
@@ -16567,24 +12267,24 @@ inline void PushSamplesReq::set_allocated_envelope(::rl::training::v1::Processed
 
 // PushSamplesRsp
 
-// int32 ret_code = 1;
-inline void PushSamplesRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
+// .rl.training.v1.PushResult result = 1;
+inline void PushSamplesRsp::clear_result() {
+  _impl_.result_ = 0;
 }
-inline int32_t PushSamplesRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
+inline ::rl::training::v1::PushResult PushSamplesRsp::_internal_result() const {
+  return static_cast< ::rl::training::v1::PushResult >(_impl_.result_);
 }
-inline int32_t PushSamplesRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.ret_code)
-  return _internal_ret_code();
+inline ::rl::training::v1::PushResult PushSamplesRsp::result() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.result)
+  return _internal_result();
 }
-inline void PushSamplesRsp::_internal_set_ret_code(int32_t value) {
+inline void PushSamplesRsp::_internal_set_result(::rl::training::v1::PushResult value) {
   
-  _impl_.ret_code_ = value;
+  _impl_.result_ = value;
 }
-inline void PushSamplesRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.ret_code)
+inline void PushSamplesRsp::set_result(::rl::training::v1::PushResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.result)
 }
 
 // string message = 2;
@@ -16637,67 +12337,7 @@ inline void PushSamplesRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.message)
 }
 
-// int64 accepted_transitions = 3;
-inline void PushSamplesRsp::clear_accepted_transitions() {
-  _impl_.accepted_transitions_ = int64_t{0};
-}
-inline int64_t PushSamplesRsp::_internal_accepted_transitions() const {
-  return _impl_.accepted_transitions_;
-}
-inline int64_t PushSamplesRsp::accepted_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.accepted_transitions)
-  return _internal_accepted_transitions();
-}
-inline void PushSamplesRsp::_internal_set_accepted_transitions(int64_t value) {
-  
-  _impl_.accepted_transitions_ = value;
-}
-inline void PushSamplesRsp::set_accepted_transitions(int64_t value) {
-  _internal_set_accepted_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.accepted_transitions)
-}
-
-// int64 queue_size = 4;
-inline void PushSamplesRsp::clear_queue_size() {
-  _impl_.queue_size_ = int64_t{0};
-}
-inline int64_t PushSamplesRsp::_internal_queue_size() const {
-  return _impl_.queue_size_;
-}
-inline int64_t PushSamplesRsp::queue_size() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.queue_size)
-  return _internal_queue_size();
-}
-inline void PushSamplesRsp::_internal_set_queue_size(int64_t value) {
-  
-  _impl_.queue_size_ = value;
-}
-inline void PushSamplesRsp::set_queue_size(int64_t value) {
-  _internal_set_queue_size(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.queue_size)
-}
-
-// .rl.training.v1.PushResult result = 5;
-inline void PushSamplesRsp::clear_result() {
-  _impl_.result_ = 0;
-}
-inline ::rl::training::v1::PushResult PushSamplesRsp::_internal_result() const {
-  return static_cast< ::rl::training::v1::PushResult >(_impl_.result_);
-}
-inline ::rl::training::v1::PushResult PushSamplesRsp::result() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.result)
-  return _internal_result();
-}
-inline void PushSamplesRsp::_internal_set_result(::rl::training::v1::PushResult value) {
-  
-  _impl_.result_ = value;
-}
-inline void PushSamplesRsp::set_result(::rl::training::v1::PushResult value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.result)
-}
-
-// string envelope_id = 6;
+// string envelope_id = 3;
 inline void PushSamplesRsp::clear_envelope_id() {
   _impl_.envelope_id_.ClearToEmpty();
 }
@@ -16747,87 +12387,7 @@ inline void PushSamplesRsp::set_allocated_envelope_id(std::string* envelope_id) 
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.envelope_id)
 }
 
-// int64 accepted_unique_transitions = 7;
-inline void PushSamplesRsp::clear_accepted_unique_transitions() {
-  _impl_.accepted_unique_transitions_ = int64_t{0};
-}
-inline int64_t PushSamplesRsp::_internal_accepted_unique_transitions() const {
-  return _impl_.accepted_unique_transitions_;
-}
-inline int64_t PushSamplesRsp::accepted_unique_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.accepted_unique_transitions)
-  return _internal_accepted_unique_transitions();
-}
-inline void PushSamplesRsp::_internal_set_accepted_unique_transitions(int64_t value) {
-  
-  _impl_.accepted_unique_transitions_ = value;
-}
-inline void PushSamplesRsp::set_accepted_unique_transitions(int64_t value) {
-  _internal_set_accepted_unique_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.accepted_unique_transitions)
-}
-
-// int64 resident_transitions = 8;
-inline void PushSamplesRsp::clear_resident_transitions() {
-  _impl_.resident_transitions_ = int64_t{0};
-}
-inline int64_t PushSamplesRsp::_internal_resident_transitions() const {
-  return _impl_.resident_transitions_;
-}
-inline int64_t PushSamplesRsp::resident_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.resident_transitions)
-  return _internal_resident_transitions();
-}
-inline void PushSamplesRsp::_internal_set_resident_transitions(int64_t value) {
-  
-  _impl_.resident_transitions_ = value;
-}
-inline void PushSamplesRsp::set_resident_transitions(int64_t value) {
-  _internal_set_resident_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.resident_transitions)
-}
-
-// int64 resident_envelopes = 9;
-inline void PushSamplesRsp::clear_resident_envelopes() {
-  _impl_.resident_envelopes_ = int64_t{0};
-}
-inline int64_t PushSamplesRsp::_internal_resident_envelopes() const {
-  return _impl_.resident_envelopes_;
-}
-inline int64_t PushSamplesRsp::resident_envelopes() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.resident_envelopes)
-  return _internal_resident_envelopes();
-}
-inline void PushSamplesRsp::_internal_set_resident_envelopes(int64_t value) {
-  
-  _impl_.resident_envelopes_ = value;
-}
-inline void PushSamplesRsp::set_resident_envelopes(int64_t value) {
-  _internal_set_resident_envelopes(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.resident_envelopes)
-}
-
-// int64 resident_estimated_bytes = 10;
-inline void PushSamplesRsp::clear_resident_estimated_bytes() {
-  _impl_.resident_estimated_bytes_ = int64_t{0};
-}
-inline int64_t PushSamplesRsp::_internal_resident_estimated_bytes() const {
-  return _impl_.resident_estimated_bytes_;
-}
-inline int64_t PushSamplesRsp::resident_estimated_bytes() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.resident_estimated_bytes)
-  return _internal_resident_estimated_bytes();
-}
-inline void PushSamplesRsp::_internal_set_resident_estimated_bytes(int64_t value) {
-  
-  _impl_.resident_estimated_bytes_ = value;
-}
-inline void PushSamplesRsp::set_resident_estimated_bytes(int64_t value) {
-  _internal_set_resident_estimated_bytes(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.resident_estimated_bytes)
-}
-
-// .rl.training.v1.PressureState pressure_state = 11;
+// .rl.training.v1.PressureState pressure_state = 4;
 inline void PushSamplesRsp::clear_pressure_state() {
   _impl_.pressure_state_ = 0;
 }
@@ -16847,7 +12407,7 @@ inline void PushSamplesRsp::set_pressure_state(::rl::training::v1::PressureState
   // @@protoc_insertion_point(field_set:rl.training.v1.PushSamplesRsp.pressure_state)
 }
 
-// .rl.common.v1.ServiceInstanceIdentity sample_pool = 12;
+// .rl.common.v1.ServiceInstanceIdentity sample_pool = 5;
 inline bool PushSamplesRsp::_internal_has_sample_pool() const {
   return this != internal_default_instance() && _impl_.sample_pool_ != nullptr;
 }
@@ -16930,6 +12490,91 @@ inline void PushSamplesRsp::set_allocated_sample_pool(::rl::common::v1::ServiceI
   }
   _impl_.sample_pool_ = sample_pool;
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.sample_pool)
+}
+
+// .rl.common.v1.ContentDigest payload_digest = 6;
+inline bool PushSamplesRsp::_internal_has_payload_digest() const {
+  return this != internal_default_instance() && _impl_.payload_digest_ != nullptr;
+}
+inline bool PushSamplesRsp::has_payload_digest() const {
+  return _internal_has_payload_digest();
+}
+inline const ::rl::common::v1::ContentDigest& PushSamplesRsp::_internal_payload_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.payload_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
+}
+inline const ::rl::common::v1::ContentDigest& PushSamplesRsp::payload_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.payload_digest)
+  return _internal_payload_digest();
+}
+inline void PushSamplesRsp::unsafe_arena_set_allocated_payload_digest(
+    ::rl::common::v1::ContentDigest* payload_digest) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  _impl_.payload_digest_ = payload_digest;
+  if (payload_digest) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.PushSamplesRsp.payload_digest)
+}
+inline ::rl::common::v1::ContentDigest* PushSamplesRsp::release_payload_digest() {
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* PushSamplesRsp::unsafe_arena_release_payload_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesRsp.payload_digest)
+  
+  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
+  _impl_.payload_digest_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContentDigest* PushSamplesRsp::_internal_mutable_payload_digest() {
+  
+  if (_impl_.payload_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.payload_digest_ = p;
+  }
+  return _impl_.payload_digest_;
+}
+inline ::rl::common::v1::ContentDigest* PushSamplesRsp::mutable_payload_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_payload_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesRsp.payload_digest)
+  return _msg;
+}
+inline void PushSamplesRsp::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
+  }
+  if (payload_digest) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(payload_digest));
+    if (message_arena != submessage_arena) {
+      payload_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, payload_digest, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.payload_digest_ = payload_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.payload_digest)
 }
 
 // -------------------------------------------------------------------
@@ -17081,129 +12726,39 @@ inline void GetBatchReq::set_lease_timeout_ms(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchReq.lease_timeout_ms)
 }
 
-// .rl.training.v1.TrainingSemanticsIdentity required_semantics = 5;
-inline bool GetBatchReq::_internal_has_required_semantics() const {
-  return this != internal_default_instance() && _impl_.required_semantics_ != nullptr;
+// .rl.common.v1.ContentDigest required_training_contract_digest = 5;
+inline bool GetBatchReq::_internal_has_required_training_contract_digest() const {
+  return this != internal_default_instance() && _impl_.required_training_contract_digest_ != nullptr;
 }
-inline bool GetBatchReq::has_required_semantics() const {
-  return _internal_has_required_semantics();
+inline bool GetBatchReq::has_required_training_contract_digest() const {
+  return _internal_has_required_training_contract_digest();
 }
-inline void GetBatchReq::clear_required_semantics() {
-  if (GetArenaForAllocation() == nullptr && _impl_.required_semantics_ != nullptr) {
-    delete _impl_.required_semantics_;
-  }
-  _impl_.required_semantics_ = nullptr;
-}
-inline const ::rl::training::v1::TrainingSemanticsIdentity& GetBatchReq::_internal_required_semantics() const {
-  const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.required_semantics_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
-      ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
-}
-inline const ::rl::training::v1::TrainingSemanticsIdentity& GetBatchReq::required_semantics() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.required_semantics)
-  return _internal_required_semantics();
-}
-inline void GetBatchReq::unsafe_arena_set_allocated_required_semantics(
-    ::rl::training::v1::TrainingSemanticsIdentity* required_semantics) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_semantics_);
-  }
-  _impl_.required_semantics_ = required_semantics;
-  if (required_semantics) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetBatchReq.required_semantics)
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* GetBatchReq::release_required_semantics() {
-  
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.required_semantics_;
-  _impl_.required_semantics_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* GetBatchReq::unsafe_arena_release_required_semantics() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.GetBatchReq.required_semantics)
-  
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.required_semantics_;
-  _impl_.required_semantics_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* GetBatchReq::_internal_mutable_required_semantics() {
-  
-  if (_impl_.required_semantics_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
-    _impl_.required_semantics_ = p;
-  }
-  return _impl_.required_semantics_;
-}
-inline ::rl::training::v1::TrainingSemanticsIdentity* GetBatchReq::mutable_required_semantics() {
-  ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_required_semantics();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchReq.required_semantics)
-  return _msg;
-}
-inline void GetBatchReq::set_allocated_required_semantics(::rl::training::v1::TrainingSemanticsIdentity* required_semantics) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.required_semantics_;
-  }
-  if (required_semantics) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(required_semantics);
-    if (message_arena != submessage_arena) {
-      required_semantics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, required_semantics, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.required_semantics_ = required_semantics;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.required_semantics)
-}
-
-// .rl.common.v1.ContentDigest required_rollout_estimator_profile_digest = 6;
-inline bool GetBatchReq::_internal_has_required_rollout_estimator_profile_digest() const {
-  return this != internal_default_instance() && _impl_.required_rollout_estimator_profile_digest_ != nullptr;
-}
-inline bool GetBatchReq::has_required_rollout_estimator_profile_digest() const {
-  return _internal_has_required_rollout_estimator_profile_digest();
-}
-inline const ::rl::common::v1::ContentDigest& GetBatchReq::_internal_required_rollout_estimator_profile_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.required_rollout_estimator_profile_digest_;
+inline const ::rl::common::v1::ContentDigest& GetBatchReq::_internal_required_training_contract_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.required_training_contract_digest_;
   return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
       ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::common::v1::ContentDigest& GetBatchReq::required_rollout_estimator_profile_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
-  return _internal_required_rollout_estimator_profile_digest();
+inline const ::rl::common::v1::ContentDigest& GetBatchReq::required_training_contract_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.required_training_contract_digest)
+  return _internal_required_training_contract_digest();
 }
-inline void GetBatchReq::unsafe_arena_set_allocated_required_rollout_estimator_profile_digest(
-    ::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest) {
+inline void GetBatchReq::unsafe_arena_set_allocated_required_training_contract_digest(
+    ::rl::common::v1::ContentDigest* required_training_contract_digest) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_rollout_estimator_profile_digest_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_training_contract_digest_);
   }
-  _impl_.required_rollout_estimator_profile_digest_ = required_rollout_estimator_profile_digest;
-  if (required_rollout_estimator_profile_digest) {
+  _impl_.required_training_contract_digest_ = required_training_contract_digest;
+  if (required_training_contract_digest) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetBatchReq.required_training_contract_digest)
 }
-inline ::rl::common::v1::ContentDigest* GetBatchReq::release_required_rollout_estimator_profile_digest() {
+inline ::rl::common::v1::ContentDigest* GetBatchReq::release_required_training_contract_digest() {
   
-  ::rl::common::v1::ContentDigest* temp = _impl_.required_rollout_estimator_profile_digest_;
-  _impl_.required_rollout_estimator_profile_digest_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.required_training_contract_digest_;
+  _impl_.required_training_contract_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -17215,152 +12770,72 @@ inline ::rl::common::v1::ContentDigest* GetBatchReq::release_required_rollout_es
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* GetBatchReq::unsafe_arena_release_required_rollout_estimator_profile_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+inline ::rl::common::v1::ContentDigest* GetBatchReq::unsafe_arena_release_required_training_contract_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetBatchReq.required_training_contract_digest)
   
-  ::rl::common::v1::ContentDigest* temp = _impl_.required_rollout_estimator_profile_digest_;
-  _impl_.required_rollout_estimator_profile_digest_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.required_training_contract_digest_;
+  _impl_.required_training_contract_digest_ = nullptr;
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* GetBatchReq::_internal_mutable_required_rollout_estimator_profile_digest() {
+inline ::rl::common::v1::ContentDigest* GetBatchReq::_internal_mutable_required_training_contract_digest() {
   
-  if (_impl_.required_rollout_estimator_profile_digest_ == nullptr) {
+  if (_impl_.required_training_contract_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.required_rollout_estimator_profile_digest_ = p;
+    _impl_.required_training_contract_digest_ = p;
   }
-  return _impl_.required_rollout_estimator_profile_digest_;
+  return _impl_.required_training_contract_digest_;
 }
-inline ::rl::common::v1::ContentDigest* GetBatchReq::mutable_required_rollout_estimator_profile_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_required_rollout_estimator_profile_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+inline ::rl::common::v1::ContentDigest* GetBatchReq::mutable_required_training_contract_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_required_training_contract_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchReq.required_training_contract_digest)
   return _msg;
 }
-inline void GetBatchReq::set_allocated_required_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* required_rollout_estimator_profile_digest) {
+inline void GetBatchReq::set_allocated_required_training_contract_digest(::rl::common::v1::ContentDigest* required_training_contract_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_rollout_estimator_profile_digest_);
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_training_contract_digest_);
   }
-  if (required_rollout_estimator_profile_digest) {
+  if (required_training_contract_digest) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
         ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(required_rollout_estimator_profile_digest));
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(required_training_contract_digest));
     if (message_arena != submessage_arena) {
-      required_rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, required_rollout_estimator_profile_digest, submessage_arena);
+      required_training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, required_training_contract_digest, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.required_rollout_estimator_profile_digest_ = required_rollout_estimator_profile_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.required_rollout_estimator_profile_digest)
+  _impl_.required_training_contract_digest_ = required_training_contract_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.required_training_contract_digest)
 }
 
 // -------------------------------------------------------------------
 
 // GetBatchRsp
 
-// int32 ret_code = 1;
-inline void GetBatchRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
+// .rl.training.v1.GetBatchResult result = 1;
+inline void GetBatchRsp::clear_result() {
+  _impl_.result_ = 0;
 }
-inline int32_t GetBatchRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
+inline ::rl::training::v1::GetBatchResult GetBatchRsp::_internal_result() const {
+  return static_cast< ::rl::training::v1::GetBatchResult >(_impl_.result_);
 }
-inline int32_t GetBatchRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.ret_code)
-  return _internal_ret_code();
+inline ::rl::training::v1::GetBatchResult GetBatchRsp::result() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.result)
+  return _internal_result();
 }
-inline void GetBatchRsp::_internal_set_ret_code(int32_t value) {
+inline void GetBatchRsp::_internal_set_result(::rl::training::v1::GetBatchResult value) {
   
-  _impl_.ret_code_ = value;
+  _impl_.result_ = value;
 }
-inline void GetBatchRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.ret_code)
-}
-
-// repeated .rl.training.v1.SamplePoolItem items = 2;
-inline int GetBatchRsp::_internal_items_size() const {
-  return _impl_.items_.size();
-}
-inline int GetBatchRsp::items_size() const {
-  return _internal_items_size();
-}
-inline void GetBatchRsp::clear_items() {
-  _impl_.items_.Clear();
-}
-inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::mutable_items(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchRsp.items)
-  return _impl_.items_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >*
-GetBatchRsp::mutable_items() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.GetBatchRsp.items)
-  return &_impl_.items_;
-}
-inline const ::rl::training::v1::SamplePoolItem& GetBatchRsp::_internal_items(int index) const {
-  return _impl_.items_.Get(index);
-}
-inline const ::rl::training::v1::SamplePoolItem& GetBatchRsp::items(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.items)
-  return _internal_items(index);
-}
-inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::_internal_add_items() {
-  return _impl_.items_.Add();
-}
-inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::add_items() {
-  ::rl::training::v1::SamplePoolItem* _add = _internal_add_items();
-  // @@protoc_insertion_point(field_add:rl.training.v1.GetBatchRsp.items)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >&
-GetBatchRsp::items() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.GetBatchRsp.items)
-  return _impl_.items_;
+inline void GetBatchRsp::set_result(::rl::training::v1::GetBatchResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.result)
 }
 
-// int64 queue_size = 3;
-inline void GetBatchRsp::clear_queue_size() {
-  _impl_.queue_size_ = int64_t{0};
-}
-inline int64_t GetBatchRsp::_internal_queue_size() const {
-  return _impl_.queue_size_;
-}
-inline int64_t GetBatchRsp::queue_size() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.queue_size)
-  return _internal_queue_size();
-}
-inline void GetBatchRsp::_internal_set_queue_size(int64_t value) {
-  
-  _impl_.queue_size_ = value;
-}
-inline void GetBatchRsp::set_queue_size(int64_t value) {
-  _internal_set_queue_size(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.queue_size)
-}
-
-// int64 returned_transitions = 4;
-inline void GetBatchRsp::clear_returned_transitions() {
-  _impl_.returned_transitions_ = int64_t{0};
-}
-inline int64_t GetBatchRsp::_internal_returned_transitions() const {
-  return _impl_.returned_transitions_;
-}
-inline int64_t GetBatchRsp::returned_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.returned_transitions)
-  return _internal_returned_transitions();
-}
-inline void GetBatchRsp::_internal_set_returned_transitions(int64_t value) {
-  
-  _impl_.returned_transitions_ = value;
-}
-inline void GetBatchRsp::set_returned_transitions(int64_t value) {
-  _internal_set_returned_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.returned_transitions)
-}
-
-// string message = 5;
+// string message = 2;
 inline void GetBatchRsp::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
@@ -17410,27 +12885,7 @@ inline void GetBatchRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchRsp.message)
 }
 
-// .rl.training.v1.GetBatchResult result = 6;
-inline void GetBatchRsp::clear_result() {
-  _impl_.result_ = 0;
-}
-inline ::rl::training::v1::GetBatchResult GetBatchRsp::_internal_result() const {
-  return static_cast< ::rl::training::v1::GetBatchResult >(_impl_.result_);
-}
-inline ::rl::training::v1::GetBatchResult GetBatchRsp::result() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.result)
-  return _internal_result();
-}
-inline void GetBatchRsp::_internal_set_result(::rl::training::v1::GetBatchResult value) {
-  
-  _impl_.result_ = value;
-}
-inline void GetBatchRsp::set_result(::rl::training::v1::GetBatchResult value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.result)
-}
-
-// string delivery_id = 7;
+// string delivery_id = 3;
 inline void GetBatchRsp::clear_delivery_id() {
   _impl_.delivery_id_.ClearToEmpty();
 }
@@ -17480,7 +12935,7 @@ inline void GetBatchRsp::set_allocated_delivery_id(std::string* delivery_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchRsp.delivery_id)
 }
 
-// int64 lease_deadline_unix_ms = 8;
+// int64 lease_deadline_unix_ms = 4;
 inline void GetBatchRsp::clear_lease_deadline_unix_ms() {
   _impl_.lease_deadline_unix_ms_ = int64_t{0};
 }
@@ -17500,67 +12955,47 @@ inline void GetBatchRsp::set_lease_deadline_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.lease_deadline_unix_ms)
 }
 
-// int64 actual_transition_count = 10;
-inline void GetBatchRsp::clear_actual_transition_count() {
-  _impl_.actual_transition_count_ = int64_t{0};
+// repeated .rl.training.v1.SamplePoolItem items = 5;
+inline int GetBatchRsp::_internal_items_size() const {
+  return _impl_.items_.size();
 }
-inline int64_t GetBatchRsp::_internal_actual_transition_count() const {
-  return _impl_.actual_transition_count_;
+inline int GetBatchRsp::items_size() const {
+  return _internal_items_size();
 }
-inline int64_t GetBatchRsp::actual_transition_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.actual_transition_count)
-  return _internal_actual_transition_count();
+inline void GetBatchRsp::clear_items() {
+  _impl_.items_.Clear();
 }
-inline void GetBatchRsp::_internal_set_actual_transition_count(int64_t value) {
-  
-  _impl_.actual_transition_count_ = value;
+inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchRsp.items)
+  return _impl_.items_.Mutable(index);
 }
-inline void GetBatchRsp::set_actual_transition_count(int64_t value) {
-  _internal_set_actual_transition_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.actual_transition_count)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >*
+GetBatchRsp::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.GetBatchRsp.items)
+  return &_impl_.items_;
 }
-
-// int64 wait_ms = 11;
-inline void GetBatchRsp::clear_wait_ms() {
-  _impl_.wait_ms_ = int64_t{0};
+inline const ::rl::training::v1::SamplePoolItem& GetBatchRsp::_internal_items(int index) const {
+  return _impl_.items_.Get(index);
 }
-inline int64_t GetBatchRsp::_internal_wait_ms() const {
-  return _impl_.wait_ms_;
+inline const ::rl::training::v1::SamplePoolItem& GetBatchRsp::items(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.items)
+  return _internal_items(index);
 }
-inline int64_t GetBatchRsp::wait_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.wait_ms)
-  return _internal_wait_ms();
+inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::_internal_add_items() {
+  return _impl_.items_.Add();
 }
-inline void GetBatchRsp::_internal_set_wait_ms(int64_t value) {
-  
-  _impl_.wait_ms_ = value;
+inline ::rl::training::v1::SamplePoolItem* GetBatchRsp::add_items() {
+  ::rl::training::v1::SamplePoolItem* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:rl.training.v1.GetBatchRsp.items)
+  return _add;
 }
-inline void GetBatchRsp::set_wait_ms(int64_t value) {
-  _internal_set_wait_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.wait_ms)
-}
-
-// int64 leased_transitions = 12;
-inline void GetBatchRsp::clear_leased_transitions() {
-  _impl_.leased_transitions_ = int64_t{0};
-}
-inline int64_t GetBatchRsp::_internal_leased_transitions() const {
-  return _impl_.leased_transitions_;
-}
-inline int64_t GetBatchRsp::leased_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.leased_transitions)
-  return _internal_leased_transitions();
-}
-inline void GetBatchRsp::_internal_set_leased_transitions(int64_t value) {
-  
-  _impl_.leased_transitions_ = value;
-}
-inline void GetBatchRsp::set_leased_transitions(int64_t value) {
-  _internal_set_leased_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.leased_transitions)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SamplePoolItem >&
+GetBatchRsp::items() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.GetBatchRsp.items)
+  return _impl_.items_;
 }
 
-// .rl.common.v1.ServiceInstanceIdentity sample_pool = 13;
+// .rl.common.v1.ServiceInstanceIdentity sample_pool = 6;
 inline bool GetBatchRsp::_internal_has_sample_pool() const {
   return this != internal_default_instance() && _impl_.sample_pool_ != nullptr;
 }
@@ -17643,118 +13078,6 @@ inline void GetBatchRsp::set_allocated_sample_pool(::rl::common::v1::ServiceInst
   }
   _impl_.sample_pool_ = sample_pool;
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchRsp.sample_pool)
-}
-
-// optional uint64 minimum_behavior_model_step = 14;
-inline bool GetBatchRsp::_internal_has_minimum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline bool GetBatchRsp::has_minimum_behavior_model_step() const {
-  return _internal_has_minimum_behavior_model_step();
-}
-inline void GetBatchRsp::clear_minimum_behavior_model_step() {
-  _impl_.minimum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline uint64_t GetBatchRsp::_internal_minimum_behavior_model_step() const {
-  return _impl_.minimum_behavior_model_step_;
-}
-inline uint64_t GetBatchRsp::minimum_behavior_model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.minimum_behavior_model_step)
-  return _internal_minimum_behavior_model_step();
-}
-inline void GetBatchRsp::_internal_set_minimum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.minimum_behavior_model_step_ = value;
-}
-inline void GetBatchRsp::set_minimum_behavior_model_step(uint64_t value) {
-  _internal_set_minimum_behavior_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.minimum_behavior_model_step)
-}
-
-// optional uint64 maximum_behavior_model_step = 15;
-inline bool GetBatchRsp::_internal_has_maximum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline bool GetBatchRsp::has_maximum_behavior_model_step() const {
-  return _internal_has_maximum_behavior_model_step();
-}
-inline void GetBatchRsp::clear_maximum_behavior_model_step() {
-  _impl_.maximum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline uint64_t GetBatchRsp::_internal_maximum_behavior_model_step() const {
-  return _impl_.maximum_behavior_model_step_;
-}
-inline uint64_t GetBatchRsp::maximum_behavior_model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.maximum_behavior_model_step)
-  return _internal_maximum_behavior_model_step();
-}
-inline void GetBatchRsp::_internal_set_maximum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000002u;
-  _impl_.maximum_behavior_model_step_ = value;
-}
-inline void GetBatchRsp::set_maximum_behavior_model_step(uint64_t value) {
-  _internal_set_maximum_behavior_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.maximum_behavior_model_step)
-}
-
-// optional int64 oldest_transition_created_at_unix_ms = 16;
-inline bool GetBatchRsp::_internal_has_oldest_transition_created_at_unix_ms() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline bool GetBatchRsp::has_oldest_transition_created_at_unix_ms() const {
-  return _internal_has_oldest_transition_created_at_unix_ms();
-}
-inline void GetBatchRsp::clear_oldest_transition_created_at_unix_ms() {
-  _impl_.oldest_transition_created_at_unix_ms_ = int64_t{0};
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline int64_t GetBatchRsp::_internal_oldest_transition_created_at_unix_ms() const {
-  return _impl_.oldest_transition_created_at_unix_ms_;
-}
-inline int64_t GetBatchRsp::oldest_transition_created_at_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.oldest_transition_created_at_unix_ms)
-  return _internal_oldest_transition_created_at_unix_ms();
-}
-inline void GetBatchRsp::_internal_set_oldest_transition_created_at_unix_ms(int64_t value) {
-  _impl_._has_bits_[0] |= 0x00000004u;
-  _impl_.oldest_transition_created_at_unix_ms_ = value;
-}
-inline void GetBatchRsp::set_oldest_transition_created_at_unix_ms(int64_t value) {
-  _internal_set_oldest_transition_created_at_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.oldest_transition_created_at_unix_ms)
-}
-
-// optional int64 newest_transition_created_at_unix_ms = 17;
-inline bool GetBatchRsp::_internal_has_newest_transition_created_at_unix_ms() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
-  return value;
-}
-inline bool GetBatchRsp::has_newest_transition_created_at_unix_ms() const {
-  return _internal_has_newest_transition_created_at_unix_ms();
-}
-inline void GetBatchRsp::clear_newest_transition_created_at_unix_ms() {
-  _impl_.newest_transition_created_at_unix_ms_ = int64_t{0};
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-inline int64_t GetBatchRsp::_internal_newest_transition_created_at_unix_ms() const {
-  return _impl_.newest_transition_created_at_unix_ms_;
-}
-inline int64_t GetBatchRsp::newest_transition_created_at_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.newest_transition_created_at_unix_ms)
-  return _internal_newest_transition_created_at_unix_ms();
-}
-inline void GetBatchRsp::_internal_set_newest_transition_created_at_unix_ms(int64_t value) {
-  _impl_._has_bits_[0] |= 0x00000008u;
-  _impl_.newest_transition_created_at_unix_ms_ = value;
-}
-inline void GetBatchRsp::set_newest_transition_created_at_unix_ms(int64_t value) {
-  _internal_set_newest_transition_created_at_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.newest_transition_created_at_unix_ms)
 }
 
 // -------------------------------------------------------------------
@@ -18318,27 +13641,7 @@ inline void RenewLeaseReq::set_lease_timeout_ms(int32_t value) {
 
 // DeliveryRsp
 
-// int32 ret_code = 1;
-inline void DeliveryRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
-}
-inline int32_t DeliveryRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
-}
-inline int32_t DeliveryRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.DeliveryRsp.ret_code)
-  return _internal_ret_code();
-}
-inline void DeliveryRsp::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void DeliveryRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.ret_code)
-}
-
-// .rl.training.v1.DeliveryResult result = 2;
+// .rl.training.v1.DeliveryResult result = 1;
 inline void DeliveryRsp::clear_result() {
   _impl_.result_ = 0;
 }
@@ -18358,7 +13661,7 @@ inline void DeliveryRsp::set_result(::rl::training::v1::DeliveryResult value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.result)
 }
 
-// string message = 3;
+// string message = 2;
 inline void DeliveryRsp::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
@@ -18408,7 +13711,7 @@ inline void DeliveryRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.DeliveryRsp.message)
 }
 
-// string delivery_id = 4;
+// string delivery_id = 3;
 inline void DeliveryRsp::clear_delivery_id() {
   _impl_.delivery_id_.ClearToEmpty();
 }
@@ -18458,47 +13761,7 @@ inline void DeliveryRsp::set_allocated_delivery_id(std::string* delivery_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.DeliveryRsp.delivery_id)
 }
 
-// int64 affected_transitions = 5;
-inline void DeliveryRsp::clear_affected_transitions() {
-  _impl_.affected_transitions_ = int64_t{0};
-}
-inline int64_t DeliveryRsp::_internal_affected_transitions() const {
-  return _impl_.affected_transitions_;
-}
-inline int64_t DeliveryRsp::affected_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.DeliveryRsp.affected_transitions)
-  return _internal_affected_transitions();
-}
-inline void DeliveryRsp::_internal_set_affected_transitions(int64_t value) {
-  
-  _impl_.affected_transitions_ = value;
-}
-inline void DeliveryRsp::set_affected_transitions(int64_t value) {
-  _internal_set_affected_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.affected_transitions)
-}
-
-// int64 queue_size = 6;
-inline void DeliveryRsp::clear_queue_size() {
-  _impl_.queue_size_ = int64_t{0};
-}
-inline int64_t DeliveryRsp::_internal_queue_size() const {
-  return _impl_.queue_size_;
-}
-inline int64_t DeliveryRsp::queue_size() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.DeliveryRsp.queue_size)
-  return _internal_queue_size();
-}
-inline void DeliveryRsp::_internal_set_queue_size(int64_t value) {
-  
-  _impl_.queue_size_ = value;
-}
-inline void DeliveryRsp::set_queue_size(int64_t value) {
-  _internal_set_queue_size(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.queue_size)
-}
-
-// int64 lease_deadline_unix_ms = 7;
+// int64 lease_deadline_unix_ms = 4;
 inline void DeliveryRsp::clear_lease_deadline_unix_ms() {
   _impl_.lease_deadline_unix_ms_ = int64_t{0};
 }
@@ -18518,7 +13781,7 @@ inline void DeliveryRsp::set_lease_deadline_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.lease_deadline_unix_ms)
 }
 
-// .rl.training.v1.AckDisposition disposition = 8;
+// .rl.training.v1.AckDisposition disposition = 5;
 inline void DeliveryRsp::clear_disposition() {
   _impl_.disposition_ = 0;
 }
@@ -18538,7 +13801,7 @@ inline void DeliveryRsp::set_disposition(::rl::training::v1::AckDisposition valu
   // @@protoc_insertion_point(field_set:rl.training.v1.DeliveryRsp.disposition)
 }
 
-// string train_update_id = 9;
+// string train_update_id = 6;
 inline void DeliveryRsp::clear_train_update_id() {
   _impl_.train_update_id_.ClearToEmpty();
 }
@@ -18816,27 +14079,7 @@ inline void FinalizeSamplePoolReq::set_allocated_finalization_id(std::string* fi
 
 // FinalizeSamplePoolRsp
 
-// int32 ret_code = 1;
-inline void FinalizeSamplePoolRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
-}
-inline int32_t FinalizeSamplePoolRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
-}
-inline int32_t FinalizeSamplePoolRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.ret_code)
-  return _internal_ret_code();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.ret_code)
-}
-
-// .rl.training.v1.SamplePoolFinalizeResult result = 2;
+// .rl.training.v1.SamplePoolFinalizeResult result = 1;
 inline void FinalizeSamplePoolRsp::clear_result() {
   _impl_.result_ = 0;
 }
@@ -18856,7 +14099,7 @@ inline void FinalizeSamplePoolRsp::set_result(::rl::training::v1::SamplePoolFina
   // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.result)
 }
 
-// string message = 3;
+// string message = 2;
 inline void FinalizeSamplePoolRsp::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
@@ -18906,7 +14149,7 @@ inline void FinalizeSamplePoolRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.FinalizeSamplePoolRsp.message)
 }
 
-// string finalization_id = 4;
+// string finalization_id = 3;
 inline void FinalizeSamplePoolRsp::clear_finalization_id() {
   _impl_.finalization_id_.ClearToEmpty();
 }
@@ -18956,7 +14199,7 @@ inline void FinalizeSamplePoolRsp::set_allocated_finalization_id(std::string* fi
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.FinalizeSamplePoolRsp.finalization_id)
 }
 
-// .rl.common.v1.ServiceInstanceIdentity sample_pool = 5;
+// .rl.common.v1.ServiceInstanceIdentity sample_pool = 4;
 inline bool FinalizeSamplePoolRsp::_internal_has_sample_pool() const {
   return this != internal_default_instance() && _impl_.sample_pool_ != nullptr;
 }
@@ -19041,87 +14284,7 @@ inline void FinalizeSamplePoolRsp::set_allocated_sample_pool(::rl::common::v1::S
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.FinalizeSamplePoolRsp.sample_pool)
 }
 
-// int64 settled_transitions = 6;
-inline void FinalizeSamplePoolRsp::clear_settled_transitions() {
-  _impl_.settled_transitions_ = int64_t{0};
-}
-inline int64_t FinalizeSamplePoolRsp::_internal_settled_transitions() const {
-  return _impl_.settled_transitions_;
-}
-inline int64_t FinalizeSamplePoolRsp::settled_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.settled_transitions)
-  return _internal_settled_transitions();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_settled_transitions(int64_t value) {
-  
-  _impl_.settled_transitions_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_settled_transitions(int64_t value) {
-  _internal_set_settled_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.settled_transitions)
-}
-
-// int64 ready_transitions = 8;
-inline void FinalizeSamplePoolRsp::clear_ready_transitions() {
-  _impl_.ready_transitions_ = int64_t{0};
-}
-inline int64_t FinalizeSamplePoolRsp::_internal_ready_transitions() const {
-  return _impl_.ready_transitions_;
-}
-inline int64_t FinalizeSamplePoolRsp::ready_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.ready_transitions)
-  return _internal_ready_transitions();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_ready_transitions(int64_t value) {
-  
-  _impl_.ready_transitions_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_ready_transitions(int64_t value) {
-  _internal_set_ready_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.ready_transitions)
-}
-
-// int64 leased_transitions = 10;
-inline void FinalizeSamplePoolRsp::clear_leased_transitions() {
-  _impl_.leased_transitions_ = int64_t{0};
-}
-inline int64_t FinalizeSamplePoolRsp::_internal_leased_transitions() const {
-  return _impl_.leased_transitions_;
-}
-inline int64_t FinalizeSamplePoolRsp::leased_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.leased_transitions)
-  return _internal_leased_transitions();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_leased_transitions(int64_t value) {
-  
-  _impl_.leased_transitions_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_leased_transitions(int64_t value) {
-  _internal_set_leased_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.leased_transitions)
-}
-
-// int64 resident_transitions = 12;
-inline void FinalizeSamplePoolRsp::clear_resident_transitions() {
-  _impl_.resident_transitions_ = int64_t{0};
-}
-inline int64_t FinalizeSamplePoolRsp::_internal_resident_transitions() const {
-  return _impl_.resident_transitions_;
-}
-inline int64_t FinalizeSamplePoolRsp::resident_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.FinalizeSamplePoolRsp.resident_transitions)
-  return _internal_resident_transitions();
-}
-inline void FinalizeSamplePoolRsp::_internal_set_resident_transitions(int64_t value) {
-  
-  _impl_.resident_transitions_ = value;
-}
-inline void FinalizeSamplePoolRsp::set_resident_transitions(int64_t value) {
-  _internal_set_resident_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.FinalizeSamplePoolRsp.resident_transitions)
-}
-
-// optional int64 finalized_at_unix_ms = 14;
+// optional int64 finalized_at_unix_ms = 5;
 inline bool FinalizeSamplePoolRsp::_internal_has_finalized_at_unix_ms() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
@@ -20429,938 +15592,6 @@ inline void SamplePoolStatusRsp::set_previously_drawn_evicted_transition_count(i
 
 // -------------------------------------------------------------------
 
-// MetricDescriptor
-
-// string field_id = 1;
-inline void MetricDescriptor::clear_field_id() {
-  _impl_.field_id_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::field_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.field_id)
-  return _internal_field_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_field_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.field_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.field_id)
-}
-inline std::string* MetricDescriptor::mutable_field_id() {
-  std::string* _s = _internal_mutable_field_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.field_id)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_field_id() const {
-  return _impl_.field_id_.Get();
-}
-inline void MetricDescriptor::_internal_set_field_id(const std::string& value) {
-  
-  _impl_.field_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_field_id() {
-  
-  return _impl_.field_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_field_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.field_id)
-  return _impl_.field_id_.Release();
-}
-inline void MetricDescriptor::set_allocated_field_id(std::string* field_id) {
-  if (field_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.field_id_.SetAllocated(field_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.field_id_.IsDefault()) {
-    _impl_.field_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.field_id)
-}
-
-// string label = 2;
-inline void MetricDescriptor::clear_label() {
-  _impl_.label_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::label() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.label)
-  return _internal_label();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_label(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.label_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.label)
-}
-inline std::string* MetricDescriptor::mutable_label() {
-  std::string* _s = _internal_mutable_label();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.label)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_label() const {
-  return _impl_.label_.Get();
-}
-inline void MetricDescriptor::_internal_set_label(const std::string& value) {
-  
-  _impl_.label_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_label() {
-  
-  return _impl_.label_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_label() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.label)
-  return _impl_.label_.Release();
-}
-inline void MetricDescriptor::set_allocated_label(std::string* label) {
-  if (label != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.label_.SetAllocated(label, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.label_.IsDefault()) {
-    _impl_.label_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.label)
-}
-
-// string group = 3;
-inline void MetricDescriptor::clear_group() {
-  _impl_.group_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::group() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.group)
-  return _internal_group();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_group(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.group_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.group)
-}
-inline std::string* MetricDescriptor::mutable_group() {
-  std::string* _s = _internal_mutable_group();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.group)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_group() const {
-  return _impl_.group_.Get();
-}
-inline void MetricDescriptor::_internal_set_group(const std::string& value) {
-  
-  _impl_.group_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_group() {
-  
-  return _impl_.group_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_group() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.group)
-  return _impl_.group_.Release();
-}
-inline void MetricDescriptor::set_allocated_group(std::string* group) {
-  if (group != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.group_.SetAllocated(group, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.group_.IsDefault()) {
-    _impl_.group_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.group)
-}
-
-// string dimension = 4;
-inline void MetricDescriptor::clear_dimension() {
-  _impl_.dimension_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::dimension() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.dimension)
-  return _internal_dimension();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_dimension(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.dimension_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.dimension)
-}
-inline std::string* MetricDescriptor::mutable_dimension() {
-  std::string* _s = _internal_mutable_dimension();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.dimension)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_dimension() const {
-  return _impl_.dimension_.Get();
-}
-inline void MetricDescriptor::_internal_set_dimension(const std::string& value) {
-  
-  _impl_.dimension_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_dimension() {
-  
-  return _impl_.dimension_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_dimension() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.dimension)
-  return _impl_.dimension_.Release();
-}
-inline void MetricDescriptor::set_allocated_dimension(std::string* dimension) {
-  if (dimension != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.dimension_.SetAllocated(dimension, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.dimension_.IsDefault()) {
-    _impl_.dimension_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.dimension)
-}
-
-// string unit = 5;
-inline void MetricDescriptor::clear_unit() {
-  _impl_.unit_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::unit() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.unit)
-  return _internal_unit();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_unit(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.unit_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.unit)
-}
-inline std::string* MetricDescriptor::mutable_unit() {
-  std::string* _s = _internal_mutable_unit();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.unit)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_unit() const {
-  return _impl_.unit_.Get();
-}
-inline void MetricDescriptor::_internal_set_unit(const std::string& value) {
-  
-  _impl_.unit_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_unit() {
-  
-  return _impl_.unit_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_unit() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.unit)
-  return _impl_.unit_.Release();
-}
-inline void MetricDescriptor::set_allocated_unit(std::string* unit) {
-  if (unit != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.unit_.SetAllocated(unit, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.unit_.IsDefault()) {
-    _impl_.unit_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.unit)
-}
-
-// string scope = 6;
-inline void MetricDescriptor::clear_scope() {
-  _impl_.scope_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::scope() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.scope)
-  return _internal_scope();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_scope(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.scope_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.scope)
-}
-inline std::string* MetricDescriptor::mutable_scope() {
-  std::string* _s = _internal_mutable_scope();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.scope)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_scope() const {
-  return _impl_.scope_.Get();
-}
-inline void MetricDescriptor::_internal_set_scope(const std::string& value) {
-  
-  _impl_.scope_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_scope() {
-  
-  return _impl_.scope_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_scope() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.scope)
-  return _impl_.scope_.Release();
-}
-inline void MetricDescriptor::set_allocated_scope(std::string* scope) {
-  if (scope != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.scope_.SetAllocated(scope, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.scope_.IsDefault()) {
-    _impl_.scope_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.scope)
-}
-
-// string statistic = 7;
-inline void MetricDescriptor::clear_statistic() {
-  _impl_.statistic_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::statistic() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.statistic)
-  return _internal_statistic();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_statistic(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.statistic_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.statistic)
-}
-inline std::string* MetricDescriptor::mutable_statistic() {
-  std::string* _s = _internal_mutable_statistic();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.statistic)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_statistic() const {
-  return _impl_.statistic_.Get();
-}
-inline void MetricDescriptor::_internal_set_statistic(const std::string& value) {
-  
-  _impl_.statistic_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_statistic() {
-  
-  return _impl_.statistic_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_statistic() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.statistic)
-  return _impl_.statistic_.Release();
-}
-inline void MetricDescriptor::set_allocated_statistic(std::string* statistic) {
-  if (statistic != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.statistic_.SetAllocated(statistic, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.statistic_.IsDefault()) {
-    _impl_.statistic_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.statistic)
-}
-
-// .rl.training.v1.MetricValueKind value_kind = 8;
-inline void MetricDescriptor::clear_value_kind() {
-  _impl_.value_kind_ = 0;
-}
-inline ::rl::training::v1::MetricValueKind MetricDescriptor::_internal_value_kind() const {
-  return static_cast< ::rl::training::v1::MetricValueKind >(_impl_.value_kind_);
-}
-inline ::rl::training::v1::MetricValueKind MetricDescriptor::value_kind() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.value_kind)
-  return _internal_value_kind();
-}
-inline void MetricDescriptor::_internal_set_value_kind(::rl::training::v1::MetricValueKind value) {
-  
-  _impl_.value_kind_ = value;
-}
-inline void MetricDescriptor::set_value_kind(::rl::training::v1::MetricValueKind value) {
-  _internal_set_value_kind(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.value_kind)
-}
-
-// string owner_component = 9;
-inline void MetricDescriptor::clear_owner_component() {
-  _impl_.owner_component_.ClearToEmpty();
-}
-inline const std::string& MetricDescriptor::owner_component() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.owner_component)
-  return _internal_owner_component();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricDescriptor::set_owner_component(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.owner_component_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.owner_component)
-}
-inline std::string* MetricDescriptor::mutable_owner_component() {
-  std::string* _s = _internal_mutable_owner_component();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.owner_component)
-  return _s;
-}
-inline const std::string& MetricDescriptor::_internal_owner_component() const {
-  return _impl_.owner_component_.Get();
-}
-inline void MetricDescriptor::_internal_set_owner_component(const std::string& value) {
-  
-  _impl_.owner_component_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::_internal_mutable_owner_component() {
-  
-  return _impl_.owner_component_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricDescriptor::release_owner_component() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.owner_component)
-  return _impl_.owner_component_.Release();
-}
-inline void MetricDescriptor::set_allocated_owner_component(std::string* owner_component) {
-  if (owner_component != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.owner_component_.SetAllocated(owner_component, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.owner_component_.IsDefault()) {
-    _impl_.owner_component_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.owner_component)
-}
-
-// .rl.training.v1.MetricAggregationKind aggregation_kind = 10;
-inline void MetricDescriptor::clear_aggregation_kind() {
-  _impl_.aggregation_kind_ = 0;
-}
-inline ::rl::training::v1::MetricAggregationKind MetricDescriptor::_internal_aggregation_kind() const {
-  return static_cast< ::rl::training::v1::MetricAggregationKind >(_impl_.aggregation_kind_);
-}
-inline ::rl::training::v1::MetricAggregationKind MetricDescriptor::aggregation_kind() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.aggregation_kind)
-  return _internal_aggregation_kind();
-}
-inline void MetricDescriptor::_internal_set_aggregation_kind(::rl::training::v1::MetricAggregationKind value) {
-  
-  _impl_.aggregation_kind_ = value;
-}
-inline void MetricDescriptor::set_aggregation_kind(::rl::training::v1::MetricAggregationKind value) {
-  _internal_set_aggregation_kind(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.aggregation_kind)
-}
-
-// .rl.training.v1.MetricWindowKind window_kind = 11;
-inline void MetricDescriptor::clear_window_kind() {
-  _impl_.window_kind_ = 0;
-}
-inline ::rl::training::v1::MetricWindowKind MetricDescriptor::_internal_window_kind() const {
-  return static_cast< ::rl::training::v1::MetricWindowKind >(_impl_.window_kind_);
-}
-inline ::rl::training::v1::MetricWindowKind MetricDescriptor::window_kind() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.window_kind)
-  return _internal_window_kind();
-}
-inline void MetricDescriptor::_internal_set_window_kind(::rl::training::v1::MetricWindowKind value) {
-  
-  _impl_.window_kind_ = value;
-}
-inline void MetricDescriptor::set_window_kind(::rl::training::v1::MetricWindowKind value) {
-  _internal_set_window_kind(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricDescriptor.window_kind)
-}
-
-// .rl.common.v1.SchemaIdentity schema_identity = 12;
-inline bool MetricDescriptor::_internal_has_schema_identity() const {
-  return this != internal_default_instance() && _impl_.schema_identity_ != nullptr;
-}
-inline bool MetricDescriptor::has_schema_identity() const {
-  return _internal_has_schema_identity();
-}
-inline const ::rl::common::v1::SchemaIdentity& MetricDescriptor::_internal_schema_identity() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.schema_identity_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& MetricDescriptor::schema_identity() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricDescriptor.schema_identity)
-  return _internal_schema_identity();
-}
-inline void MetricDescriptor::unsafe_arena_set_allocated_schema_identity(
-    ::rl::common::v1::SchemaIdentity* schema_identity) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.schema_identity_);
-  }
-  _impl_.schema_identity_ = schema_identity;
-  if (schema_identity) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricDescriptor.schema_identity)
-}
-inline ::rl::common::v1::SchemaIdentity* MetricDescriptor::release_schema_identity() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.schema_identity_;
-  _impl_.schema_identity_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricDescriptor::unsafe_arena_release_schema_identity() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricDescriptor.schema_identity)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.schema_identity_;
-  _impl_.schema_identity_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricDescriptor::_internal_mutable_schema_identity() {
-  
-  if (_impl_.schema_identity_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.schema_identity_ = p;
-  }
-  return _impl_.schema_identity_;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricDescriptor::mutable_schema_identity() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_schema_identity();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricDescriptor.schema_identity)
-  return _msg;
-}
-inline void MetricDescriptor::set_allocated_schema_identity(::rl::common::v1::SchemaIdentity* schema_identity) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.schema_identity_);
-  }
-  if (schema_identity) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(schema_identity));
-    if (message_arena != submessage_arena) {
-      schema_identity = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, schema_identity, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.schema_identity_ = schema_identity;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricDescriptor.schema_identity)
-}
-
-// -------------------------------------------------------------------
-
-// MetricValue
-
-// string field_id = 1;
-inline void MetricValue::clear_field_id() {
-  _impl_.field_id_.ClearToEmpty();
-}
-inline const std::string& MetricValue::field_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricValue.field_id)
-  return _internal_field_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MetricValue::set_field_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.field_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricValue.field_id)
-}
-inline std::string* MetricValue::mutable_field_id() {
-  std::string* _s = _internal_mutable_field_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricValue.field_id)
-  return _s;
-}
-inline const std::string& MetricValue::_internal_field_id() const {
-  return _impl_.field_id_.Get();
-}
-inline void MetricValue::_internal_set_field_id(const std::string& value) {
-  
-  _impl_.field_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MetricValue::_internal_mutable_field_id() {
-  
-  return _impl_.field_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MetricValue::release_field_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricValue.field_id)
-  return _impl_.field_id_.Release();
-}
-inline void MetricValue::set_allocated_field_id(std::string* field_id) {
-  if (field_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.field_id_.SetAllocated(field_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.field_id_.IsDefault()) {
-    _impl_.field_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricValue.field_id)
-}
-
-// double value = 2;
-inline void MetricValue::clear_value() {
-  _impl_.value_ = 0;
-}
-inline double MetricValue::_internal_value() const {
-  return _impl_.value_;
-}
-inline double MetricValue::value() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricValue.value)
-  return _internal_value();
-}
-inline void MetricValue::_internal_set_value(double value) {
-  
-  _impl_.value_ = value;
-}
-inline void MetricValue::set_value(double value) {
-  _internal_set_value(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricValue.value)
-}
-
-// double sum = 3;
-inline void MetricValue::clear_sum() {
-  _impl_.sum_ = 0;
-}
-inline double MetricValue::_internal_sum() const {
-  return _impl_.sum_;
-}
-inline double MetricValue::sum() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricValue.sum)
-  return _internal_sum();
-}
-inline void MetricValue::_internal_set_sum(double value) {
-  
-  _impl_.sum_ = value;
-}
-inline void MetricValue::set_sum(double value) {
-  _internal_set_sum(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricValue.sum)
-}
-
-// uint64 count = 4;
-inline void MetricValue::clear_count() {
-  _impl_.count_ = uint64_t{0u};
-}
-inline uint64_t MetricValue::_internal_count() const {
-  return _impl_.count_;
-}
-inline uint64_t MetricValue::count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricValue.count)
-  return _internal_count();
-}
-inline void MetricValue::_internal_set_count(uint64_t value) {
-  
-  _impl_.count_ = value;
-}
-inline void MetricValue::set_count(uint64_t value) {
-  _internal_set_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricValue.count)
-}
-
-// double quantile = 5;
-inline void MetricValue::clear_quantile() {
-  _impl_.quantile_ = 0;
-}
-inline double MetricValue::_internal_quantile() const {
-  return _impl_.quantile_;
-}
-inline double MetricValue::quantile() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricValue.quantile)
-  return _internal_quantile();
-}
-inline void MetricValue::_internal_set_quantile(double value) {
-  
-  _impl_.quantile_ = value;
-}
-inline void MetricValue::set_quantile(double value) {
-  _internal_set_quantile(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricValue.quantile)
-}
-
-// int64 window_start_unix_ms = 6;
-inline void MetricValue::clear_window_start_unix_ms() {
-  _impl_.window_start_unix_ms_ = int64_t{0};
-}
-inline int64_t MetricValue::_internal_window_start_unix_ms() const {
-  return _impl_.window_start_unix_ms_;
-}
-inline int64_t MetricValue::window_start_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricValue.window_start_unix_ms)
-  return _internal_window_start_unix_ms();
-}
-inline void MetricValue::_internal_set_window_start_unix_ms(int64_t value) {
-  
-  _impl_.window_start_unix_ms_ = value;
-}
-inline void MetricValue::set_window_start_unix_ms(int64_t value) {
-  _internal_set_window_start_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricValue.window_start_unix_ms)
-}
-
-// int64 window_end_unix_ms = 7;
-inline void MetricValue::clear_window_end_unix_ms() {
-  _impl_.window_end_unix_ms_ = int64_t{0};
-}
-inline int64_t MetricValue::_internal_window_end_unix_ms() const {
-  return _impl_.window_end_unix_ms_;
-}
-inline int64_t MetricValue::window_end_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricValue.window_end_unix_ms)
-  return _internal_window_end_unix_ms();
-}
-inline void MetricValue::_internal_set_window_end_unix_ms(int64_t value) {
-  
-  _impl_.window_end_unix_ms_ = value;
-}
-inline void MetricValue::set_window_end_unix_ms(int64_t value) {
-  _internal_set_window_end_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricValue.window_end_unix_ms)
-}
-
-// -------------------------------------------------------------------
-
-// MetricSnapshot
-
-// .rl.common.v1.ServiceInstanceIdentity source = 1;
-inline bool MetricSnapshot::_internal_has_source() const {
-  return this != internal_default_instance() && _impl_.source_ != nullptr;
-}
-inline bool MetricSnapshot::has_source() const {
-  return _internal_has_source();
-}
-inline const ::rl::common::v1::ServiceInstanceIdentity& MetricSnapshot::_internal_source() const {
-  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.source_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
-      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ServiceInstanceIdentity& MetricSnapshot::source() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricSnapshot.source)
-  return _internal_source();
-}
-inline void MetricSnapshot::unsafe_arena_set_allocated_source(
-    ::rl::common::v1::ServiceInstanceIdentity* source) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.source_);
-  }
-  _impl_.source_ = source;
-  if (source) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricSnapshot.source)
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricSnapshot::release_source() {
-  
-  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.source_;
-  _impl_.source_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricSnapshot::unsafe_arena_release_source() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricSnapshot.source)
-  
-  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.source_;
-  _impl_.source_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricSnapshot::_internal_mutable_source() {
-  
-  if (_impl_.source_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
-    _impl_.source_ = p;
-  }
-  return _impl_.source_;
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricSnapshot::mutable_source() {
-  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_source();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricSnapshot.source)
-  return _msg;
-}
-inline void MetricSnapshot::set_allocated_source(::rl::common::v1::ServiceInstanceIdentity* source) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.source_);
-  }
-  if (source) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(source));
-    if (message_arena != submessage_arena) {
-      source = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, source, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.source_ = source;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricSnapshot.source)
-}
-
-// uint64 sequence = 2;
-inline void MetricSnapshot::clear_sequence() {
-  _impl_.sequence_ = uint64_t{0u};
-}
-inline uint64_t MetricSnapshot::_internal_sequence() const {
-  return _impl_.sequence_;
-}
-inline uint64_t MetricSnapshot::sequence() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricSnapshot.sequence)
-  return _internal_sequence();
-}
-inline void MetricSnapshot::_internal_set_sequence(uint64_t value) {
-  
-  _impl_.sequence_ = value;
-}
-inline void MetricSnapshot::set_sequence(uint64_t value) {
-  _internal_set_sequence(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricSnapshot.sequence)
-}
-
-// int64 timestamp_unix_ms = 3;
-inline void MetricSnapshot::clear_timestamp_unix_ms() {
-  _impl_.timestamp_unix_ms_ = int64_t{0};
-}
-inline int64_t MetricSnapshot::_internal_timestamp_unix_ms() const {
-  return _impl_.timestamp_unix_ms_;
-}
-inline int64_t MetricSnapshot::timestamp_unix_ms() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricSnapshot.timestamp_unix_ms)
-  return _internal_timestamp_unix_ms();
-}
-inline void MetricSnapshot::_internal_set_timestamp_unix_ms(int64_t value) {
-  
-  _impl_.timestamp_unix_ms_ = value;
-}
-inline void MetricSnapshot::set_timestamp_unix_ms(int64_t value) {
-  _internal_set_timestamp_unix_ms(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.MetricSnapshot.timestamp_unix_ms)
-}
-
-// repeated .rl.training.v1.MetricDescriptor descriptors = 4;
-inline int MetricSnapshot::_internal_descriptors_size() const {
-  return _impl_.descriptors_.size();
-}
-inline int MetricSnapshot::descriptors_size() const {
-  return _internal_descriptors_size();
-}
-inline void MetricSnapshot::clear_descriptors() {
-  _impl_.descriptors_.Clear();
-}
-inline ::rl::training::v1::MetricDescriptor* MetricSnapshot::mutable_descriptors(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricSnapshot.descriptors)
-  return _impl_.descriptors_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricDescriptor >*
-MetricSnapshot::mutable_descriptors() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.MetricSnapshot.descriptors)
-  return &_impl_.descriptors_;
-}
-inline const ::rl::training::v1::MetricDescriptor& MetricSnapshot::_internal_descriptors(int index) const {
-  return _impl_.descriptors_.Get(index);
-}
-inline const ::rl::training::v1::MetricDescriptor& MetricSnapshot::descriptors(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricSnapshot.descriptors)
-  return _internal_descriptors(index);
-}
-inline ::rl::training::v1::MetricDescriptor* MetricSnapshot::_internal_add_descriptors() {
-  return _impl_.descriptors_.Add();
-}
-inline ::rl::training::v1::MetricDescriptor* MetricSnapshot::add_descriptors() {
-  ::rl::training::v1::MetricDescriptor* _add = _internal_add_descriptors();
-  // @@protoc_insertion_point(field_add:rl.training.v1.MetricSnapshot.descriptors)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricDescriptor >&
-MetricSnapshot::descriptors() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.MetricSnapshot.descriptors)
-  return _impl_.descriptors_;
-}
-
-// repeated .rl.training.v1.MetricValue values = 5;
-inline int MetricSnapshot::_internal_values_size() const {
-  return _impl_.values_.size();
-}
-inline int MetricSnapshot::values_size() const {
-  return _internal_values_size();
-}
-inline void MetricSnapshot::clear_values() {
-  _impl_.values_.Clear();
-}
-inline ::rl::training::v1::MetricValue* MetricSnapshot::mutable_values(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricSnapshot.values)
-  return _impl_.values_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricValue >*
-MetricSnapshot::mutable_values() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.MetricSnapshot.values)
-  return &_impl_.values_;
-}
-inline const ::rl::training::v1::MetricValue& MetricSnapshot::_internal_values(int index) const {
-  return _impl_.values_.Get(index);
-}
-inline const ::rl::training::v1::MetricValue& MetricSnapshot::values(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricSnapshot.values)
-  return _internal_values(index);
-}
-inline ::rl::training::v1::MetricValue* MetricSnapshot::_internal_add_values() {
-  return _impl_.values_.Add();
-}
-inline ::rl::training::v1::MetricValue* MetricSnapshot::add_values() {
-  ::rl::training::v1::MetricValue* _add = _internal_add_values();
-  // @@protoc_insertion_point(field_add:rl.training.v1.MetricSnapshot.values)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricValue >&
-MetricSnapshot::values() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.MetricSnapshot.values)
-  return _impl_.values_;
-}
-
-// -------------------------------------------------------------------
-
 // RawMetricSumCount
 
 // string field_id = 1;
@@ -21973,45 +16204,39 @@ inline void EpisodeMetricFact::set_allocated_episode_id(std::string* episode_id)
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.EpisodeMetricFact.episode_id)
 }
 
-// .rl.training.v1.TrainingSemanticsIdentity training_semantics = 4;
-inline bool EpisodeMetricFact::_internal_has_training_semantics() const {
-  return this != internal_default_instance() && _impl_.training_semantics_ != nullptr;
+// .rl.common.v1.ContentDigest training_contract_digest = 4;
+inline bool EpisodeMetricFact::_internal_has_training_contract_digest() const {
+  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
 }
-inline bool EpisodeMetricFact::has_training_semantics() const {
-  return _internal_has_training_semantics();
+inline bool EpisodeMetricFact::has_training_contract_digest() const {
+  return _internal_has_training_contract_digest();
 }
-inline void EpisodeMetricFact::clear_training_semantics() {
-  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
-    delete _impl_.training_semantics_;
-  }
-  _impl_.training_semantics_ = nullptr;
+inline const ::rl::common::v1::ContentDigest& EpisodeMetricFact::_internal_training_contract_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& EpisodeMetricFact::_internal_training_semantics() const {
-  const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.training_semantics_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
-      ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
+inline const ::rl::common::v1::ContentDigest& EpisodeMetricFact::training_contract_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.EpisodeMetricFact.training_contract_digest)
+  return _internal_training_contract_digest();
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& EpisodeMetricFact::training_semantics() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.EpisodeMetricFact.training_semantics)
-  return _internal_training_semantics();
-}
-inline void EpisodeMetricFact::unsafe_arena_set_allocated_training_semantics(
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+inline void EpisodeMetricFact::unsafe_arena_set_allocated_training_contract_digest(
+    ::rl::common::v1::ContentDigest* training_contract_digest) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_semantics_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  _impl_.training_semantics_ = training_semantics;
-  if (training_semantics) {
+  _impl_.training_contract_digest_ = training_contract_digest;
+  if (training_contract_digest) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.EpisodeMetricFact.training_semantics)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.EpisodeMetricFact.training_contract_digest)
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* EpisodeMetricFact::release_training_semantics() {
+inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::release_training_contract_digest() {
   
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -22023,44 +16248,45 @@ inline ::rl::training::v1::TrainingSemanticsIdentity* EpisodeMetricFact::release
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* EpisodeMetricFact::unsafe_arena_release_training_semantics() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.EpisodeMetricFact.training_semantics)
+inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::unsafe_arena_release_training_contract_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.EpisodeMetricFact.training_contract_digest)
   
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* EpisodeMetricFact::_internal_mutable_training_semantics() {
+inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::_internal_mutable_training_contract_digest() {
   
-  if (_impl_.training_semantics_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
-    _impl_.training_semantics_ = p;
+  if (_impl_.training_contract_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.training_contract_digest_ = p;
   }
-  return _impl_.training_semantics_;
+  return _impl_.training_contract_digest_;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* EpisodeMetricFact::mutable_training_semantics() {
-  ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_training_semantics();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.EpisodeMetricFact.training_semantics)
+inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::mutable_training_contract_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.EpisodeMetricFact.training_contract_digest)
   return _msg;
 }
-inline void EpisodeMetricFact::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+inline void EpisodeMetricFact::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.training_semantics_;
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  if (training_semantics) {
+  if (training_contract_digest) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(training_semantics);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
     if (message_arena != submessage_arena) {
-      training_semantics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_semantics, submessage_arena);
+      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, training_contract_digest, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.training_semantics_ = training_semantics;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.EpisodeMetricFact.training_semantics)
+  _impl_.training_contract_digest_ = training_contract_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.EpisodeMetricFact.training_contract_digest)
 }
 
 // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
@@ -22317,45 +16543,39 @@ inline void TrainUpdateMetricFact::set_allocated_delivery_id(std::string* delive
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.delivery_id)
 }
 
-// .rl.training.v1.TrainingSemanticsIdentity training_semantics = 5;
-inline bool TrainUpdateMetricFact::_internal_has_training_semantics() const {
-  return this != internal_default_instance() && _impl_.training_semantics_ != nullptr;
+// .rl.common.v1.ContentDigest training_contract_digest = 5;
+inline bool TrainUpdateMetricFact::_internal_has_training_contract_digest() const {
+  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
 }
-inline bool TrainUpdateMetricFact::has_training_semantics() const {
-  return _internal_has_training_semantics();
+inline bool TrainUpdateMetricFact::has_training_contract_digest() const {
+  return _internal_has_training_contract_digest();
 }
-inline void TrainUpdateMetricFact::clear_training_semantics() {
-  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
-    delete _impl_.training_semantics_;
-  }
-  _impl_.training_semantics_ = nullptr;
+inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::_internal_training_contract_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& TrainUpdateMetricFact::_internal_training_semantics() const {
-  const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.training_semantics_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
-      ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
+inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::training_contract_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
+  return _internal_training_contract_digest();
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& TrainUpdateMetricFact::training_semantics() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.training_semantics)
-  return _internal_training_semantics();
-}
-inline void TrainUpdateMetricFact::unsafe_arena_set_allocated_training_semantics(
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+inline void TrainUpdateMetricFact::unsafe_arena_set_allocated_training_contract_digest(
+    ::rl::common::v1::ContentDigest* training_contract_digest) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_semantics_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  _impl_.training_semantics_ = training_semantics;
-  if (training_semantics) {
+  _impl_.training_contract_digest_ = training_contract_digest;
+  if (training_contract_digest) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainUpdateMetricFact.training_semantics)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* TrainUpdateMetricFact::release_training_semantics() {
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::release_training_contract_digest() {
   
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -22367,44 +16587,45 @@ inline ::rl::training::v1::TrainingSemanticsIdentity* TrainUpdateMetricFact::rel
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* TrainUpdateMetricFact::unsafe_arena_release_training_semantics() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.training_semantics)
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::unsafe_arena_release_training_contract_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
   
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* TrainUpdateMetricFact::_internal_mutable_training_semantics() {
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::_internal_mutable_training_contract_digest() {
   
-  if (_impl_.training_semantics_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
-    _impl_.training_semantics_ = p;
+  if (_impl_.training_contract_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.training_contract_digest_ = p;
   }
-  return _impl_.training_semantics_;
+  return _impl_.training_contract_digest_;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* TrainUpdateMetricFact::mutable_training_semantics() {
-  ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_training_semantics();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.training_semantics)
+inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::mutable_training_contract_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
   return _msg;
 }
-inline void TrainUpdateMetricFact::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+inline void TrainUpdateMetricFact::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.training_semantics_;
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  if (training_semantics) {
+  if (training_contract_digest) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(training_semantics);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
     if (message_arena != submessage_arena) {
-      training_semantics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_semantics, submessage_arena);
+      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, training_contract_digest, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.training_semantics_ = training_semantics;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.training_semantics)
+  _impl_.training_contract_digest_ = training_contract_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
 }
 
 // int64 cumulative_trained_samples = 6;
@@ -22801,261 +17022,6 @@ inline void TrainUpdateMetricFact::set_allocated_rollout_estimator_profile_diges
 // -------------------------------------------------------------------
 
 // MetricEvent
-
-// .rl.common.v1.ContractIdentity contract = 1;
-inline bool MetricEvent::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool MetricEvent::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& MetricEvent::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& MetricEvent::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.contract)
-  return _internal_contract();
-}
-inline void MetricEvent::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricEvent.contract)
-}
-inline ::rl::common::v1::ContractIdentity* MetricEvent::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* MetricEvent::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricEvent.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* MetricEvent::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* MetricEvent::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricEvent.contract)
-  return _msg;
-}
-inline void MetricEvent::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.contract)
-}
-
-// .rl.common.v1.SchemaIdentity schema_identity = 2;
-inline bool MetricEvent::_internal_has_schema_identity() const {
-  return this != internal_default_instance() && _impl_.schema_identity_ != nullptr;
-}
-inline bool MetricEvent::has_schema_identity() const {
-  return _internal_has_schema_identity();
-}
-inline const ::rl::common::v1::SchemaIdentity& MetricEvent::_internal_schema_identity() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.schema_identity_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& MetricEvent::schema_identity() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.schema_identity)
-  return _internal_schema_identity();
-}
-inline void MetricEvent::unsafe_arena_set_allocated_schema_identity(
-    ::rl::common::v1::SchemaIdentity* schema_identity) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.schema_identity_);
-  }
-  _impl_.schema_identity_ = schema_identity;
-  if (schema_identity) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricEvent.schema_identity)
-}
-inline ::rl::common::v1::SchemaIdentity* MetricEvent::release_schema_identity() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.schema_identity_;
-  _impl_.schema_identity_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricEvent::unsafe_arena_release_schema_identity() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricEvent.schema_identity)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.schema_identity_;
-  _impl_.schema_identity_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricEvent::_internal_mutable_schema_identity() {
-  
-  if (_impl_.schema_identity_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.schema_identity_ = p;
-  }
-  return _impl_.schema_identity_;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricEvent::mutable_schema_identity() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_schema_identity();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricEvent.schema_identity)
-  return _msg;
-}
-inline void MetricEvent::set_allocated_schema_identity(::rl::common::v1::SchemaIdentity* schema_identity) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.schema_identity_);
-  }
-  if (schema_identity) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(schema_identity));
-    if (message_arena != submessage_arena) {
-      schema_identity = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, schema_identity, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.schema_identity_ = schema_identity;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.schema_identity)
-}
-
-// .rl.common.v1.ServiceInstanceIdentity source = 3;
-inline bool MetricEvent::_internal_has_source() const {
-  return this != internal_default_instance() && _impl_.source_ != nullptr;
-}
-inline bool MetricEvent::has_source() const {
-  return _internal_has_source();
-}
-inline const ::rl::common::v1::ServiceInstanceIdentity& MetricEvent::_internal_source() const {
-  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.source_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
-      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ServiceInstanceIdentity& MetricEvent::source() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.source)
-  return _internal_source();
-}
-inline void MetricEvent::unsafe_arena_set_allocated_source(
-    ::rl::common::v1::ServiceInstanceIdentity* source) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.source_);
-  }
-  _impl_.source_ = source;
-  if (source) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricEvent.source)
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricEvent::release_source() {
-  
-  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.source_;
-  _impl_.source_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricEvent::unsafe_arena_release_source() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricEvent.source)
-  
-  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.source_;
-  _impl_.source_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricEvent::_internal_mutable_source() {
-  
-  if (_impl_.source_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
-    _impl_.source_ = p;
-  }
-  return _impl_.source_;
-}
-inline ::rl::common::v1::ServiceInstanceIdentity* MetricEvent::mutable_source() {
-  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_source();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricEvent.source)
-  return _msg;
-}
-inline void MetricEvent::set_allocated_source(::rl::common::v1::ServiceInstanceIdentity* source) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.source_);
-  }
-  if (source) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(source));
-    if (message_arena != submessage_arena) {
-      source = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, source, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.source_ = source;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.source)
-}
 
 // uint64 event_sequence = 4;
 inline void MetricEvent::clear_event_sequence() {
@@ -24532,27 +18498,7 @@ inline void GetMetricBatchReq::set_wait_timeout_ms(int32_t value) {
 
 // GetMetricBatchRsp
 
-// int32 ret_code = 1;
-inline void GetMetricBatchRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
-}
-inline int32_t GetMetricBatchRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
-}
-inline int32_t GetMetricBatchRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetMetricBatchRsp.ret_code)
-  return _internal_ret_code();
-}
-inline void GetMetricBatchRsp::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void GetMetricBatchRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetMetricBatchRsp.ret_code)
-}
-
-// .rl.training.v1.MetricBatchResult result = 2;
+// .rl.training.v1.MetricBatchResult result = 1;
 inline void GetMetricBatchRsp::clear_result() {
   _impl_.result_ = 0;
 }
@@ -24572,7 +18518,7 @@ inline void GetMetricBatchRsp::set_result(::rl::training::v1::MetricBatchResult 
   // @@protoc_insertion_point(field_set:rl.training.v1.GetMetricBatchRsp.result)
 }
 
-// string message = 3;
+// string message = 2;
 inline void GetMetricBatchRsp::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
@@ -24622,7 +18568,7 @@ inline void GetMetricBatchRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetMetricBatchRsp.message)
 }
 
-// .rl.training.v1.MetricBatch batch = 4;
+// .rl.training.v1.MetricBatch batch = 3;
 inline bool GetMetricBatchRsp::_internal_has_batch() const {
   return this != internal_default_instance() && _impl_.batch_ != nullptr;
 }
@@ -24712,7 +18658,7 @@ inline void GetMetricBatchRsp::set_allocated_batch(::rl::training::v1::MetricBat
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetMetricBatchRsp.batch)
 }
 
-// .rl.common.v1.ServiceInstanceIdentity producer = 5;
+// .rl.common.v1.ServiceInstanceIdentity producer = 4;
 inline bool GetMetricBatchRsp::_internal_has_producer() const {
   return this != internal_default_instance() && _impl_.producer_ != nullptr;
 }
@@ -24797,7 +18743,7 @@ inline void GetMetricBatchRsp::set_allocated_producer(::rl::common::v1::ServiceI
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetMetricBatchRsp.producer)
 }
 
-// uint64 oldest_available_event_sequence = 6;
+// uint64 oldest_available_event_sequence = 5;
 inline void GetMetricBatchRsp::clear_oldest_available_event_sequence() {
   _impl_.oldest_available_event_sequence_ = uint64_t{0u};
 }
@@ -24817,7 +18763,7 @@ inline void GetMetricBatchRsp::set_oldest_available_event_sequence(uint64_t valu
   // @@protoc_insertion_point(field_set:rl.training.v1.GetMetricBatchRsp.oldest_available_event_sequence)
 }
 
-// uint64 latest_available_event_sequence = 7;
+// uint64 latest_available_event_sequence = 6;
 inline void GetMetricBatchRsp::clear_latest_available_event_sequence() {
   _impl_.latest_available_event_sequence_ = uint64_t{0u};
 }
@@ -25105,27 +19051,7 @@ inline void AckMetricBatchReq::set_allocated_cursor(::rl::training::v1::MetricBa
 
 // AckMetricBatchRsp
 
-// int32 ret_code = 1;
-inline void AckMetricBatchRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
-}
-inline int32_t AckMetricBatchRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
-}
-inline int32_t AckMetricBatchRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AckMetricBatchRsp.ret_code)
-  return _internal_ret_code();
-}
-inline void AckMetricBatchRsp::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void AckMetricBatchRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AckMetricBatchRsp.ret_code)
-}
-
-// .rl.training.v1.MetricBatchAckResult result = 2;
+// .rl.training.v1.MetricBatchAckResult result = 1;
 inline void AckMetricBatchRsp::clear_result() {
   _impl_.result_ = 0;
 }
@@ -25145,7 +19071,7 @@ inline void AckMetricBatchRsp::set_result(::rl::training::v1::MetricBatchAckResu
   // @@protoc_insertion_point(field_set:rl.training.v1.AckMetricBatchRsp.result)
 }
 
-// string message = 3;
+// string message = 2;
 inline void AckMetricBatchRsp::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
@@ -25195,7 +19121,7 @@ inline void AckMetricBatchRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AckMetricBatchRsp.message)
 }
 
-// .rl.common.v1.ServiceInstanceIdentity producer = 4;
+// .rl.common.v1.ServiceInstanceIdentity producer = 3;
 inline bool AckMetricBatchRsp::_internal_has_producer() const {
   return this != internal_default_instance() && _impl_.producer_ != nullptr;
 }
@@ -25280,7 +19206,7 @@ inline void AckMetricBatchRsp::set_allocated_producer(::rl::common::v1::ServiceI
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AckMetricBatchRsp.producer)
 }
 
-// uint64 oldest_available_event_sequence = 5;
+// uint64 oldest_available_event_sequence = 4;
 inline void AckMetricBatchRsp::clear_oldest_available_event_sequence() {
   _impl_.oldest_available_event_sequence_ = uint64_t{0u};
 }
@@ -25300,7 +19226,7 @@ inline void AckMetricBatchRsp::set_oldest_available_event_sequence(uint64_t valu
   // @@protoc_insertion_point(field_set:rl.training.v1.AckMetricBatchRsp.oldest_available_event_sequence)
 }
 
-// uint64 latest_available_event_sequence = 6;
+// uint64 latest_available_event_sequence = 5;
 inline void AckMetricBatchRsp::clear_latest_available_event_sequence() {
   _impl_.latest_available_event_sequence_ = uint64_t{0u};
 }
@@ -25320,7 +19246,7 @@ inline void AckMetricBatchRsp::set_latest_available_event_sequence(uint64_t valu
   // @@protoc_insertion_point(field_set:rl.training.v1.AckMetricBatchRsp.latest_available_event_sequence)
 }
 
-// .rl.training.v1.MetricBatchCursor committed_cursor = 7;
+// .rl.training.v1.MetricBatchCursor committed_cursor = 6;
 inline bool AckMetricBatchRsp::_internal_has_committed_cursor() const {
   return this != internal_default_instance() && _impl_.committed_cursor_ != nullptr;
 }
@@ -26378,97 +20304,7 @@ inline void AIServerStatusRsp::set_timestamp_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.timestamp_unix_ms)
 }
 
-// .rl.training.v1.MetricSnapshot metrics = 34;
-inline bool AIServerStatusRsp::_internal_has_metrics() const {
-  return this != internal_default_instance() && _impl_.metrics_ != nullptr;
-}
-inline bool AIServerStatusRsp::has_metrics() const {
-  return _internal_has_metrics();
-}
-inline void AIServerStatusRsp::clear_metrics() {
-  if (GetArenaForAllocation() == nullptr && _impl_.metrics_ != nullptr) {
-    delete _impl_.metrics_;
-  }
-  _impl_.metrics_ = nullptr;
-}
-inline const ::rl::training::v1::MetricSnapshot& AIServerStatusRsp::_internal_metrics() const {
-  const ::rl::training::v1::MetricSnapshot* p = _impl_.metrics_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::MetricSnapshot&>(
-      ::rl::training::v1::_MetricSnapshot_default_instance_);
-}
-inline const ::rl::training::v1::MetricSnapshot& AIServerStatusRsp::metrics() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.metrics)
-  return _internal_metrics();
-}
-inline void AIServerStatusRsp::unsafe_arena_set_allocated_metrics(
-    ::rl::training::v1::MetricSnapshot* metrics) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.metrics_);
-  }
-  _impl_.metrics_ = metrics;
-  if (metrics) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AIServerStatusRsp.metrics)
-}
-inline ::rl::training::v1::MetricSnapshot* AIServerStatusRsp::release_metrics() {
-  
-  ::rl::training::v1::MetricSnapshot* temp = _impl_.metrics_;
-  _impl_.metrics_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::MetricSnapshot* AIServerStatusRsp::unsafe_arena_release_metrics() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.AIServerStatusRsp.metrics)
-  
-  ::rl::training::v1::MetricSnapshot* temp = _impl_.metrics_;
-  _impl_.metrics_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::MetricSnapshot* AIServerStatusRsp::_internal_mutable_metrics() {
-  
-  if (_impl_.metrics_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::MetricSnapshot>(GetArenaForAllocation());
-    _impl_.metrics_ = p;
-  }
-  return _impl_.metrics_;
-}
-inline ::rl::training::v1::MetricSnapshot* AIServerStatusRsp::mutable_metrics() {
-  ::rl::training::v1::MetricSnapshot* _msg = _internal_mutable_metrics();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.AIServerStatusRsp.metrics)
-  return _msg;
-}
-inline void AIServerStatusRsp::set_allocated_metrics(::rl::training::v1::MetricSnapshot* metrics) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.metrics_;
-  }
-  if (metrics) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(metrics);
-    if (message_arena != submessage_arena) {
-      metrics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, metrics, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.metrics_ = metrics;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.metrics)
-}
-
-// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 35;
+// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 34;
 inline bool AIServerStatusRsp::_internal_has_rollout_estimator_profile_digest() const {
   return this != internal_default_instance() && _impl_.rollout_estimator_profile_digest_ != nullptr;
 }
@@ -26553,7 +20389,7 @@ inline void AIServerStatusRsp::set_allocated_rollout_estimator_profile_digest(::
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
 }
 
-// int64 closed_segment_count = 36;
+// int64 closed_segment_count = 35;
 inline void AIServerStatusRsp::clear_closed_segment_count() {
   _impl_.closed_segment_count_ = int64_t{0};
 }
@@ -26573,7 +20409,7 @@ inline void AIServerStatusRsp::set_closed_segment_count(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.closed_segment_count)
 }
 
-// int64 pending_action_excluded_count = 37;
+// int64 pending_action_excluded_count = 36;
 inline void AIServerStatusRsp::clear_pending_action_excluded_count() {
   _impl_.pending_action_excluded_count_ = int64_t{0};
 }
@@ -26593,7 +20429,7 @@ inline void AIServerStatusRsp::set_pending_action_excluded_count(int64_t value) 
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.pending_action_excluded_count)
 }
 
-// int64 rollout_estimator_failure_count = 38;
+// int64 rollout_estimator_failure_count = 37;
 inline void AIServerStatusRsp::clear_rollout_estimator_failure_count() {
   _impl_.rollout_estimator_failure_count_ = int64_t{0};
 }
@@ -26613,7 +20449,7 @@ inline void AIServerStatusRsp::set_rollout_estimator_failure_count(int64_t value
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.rollout_estimator_failure_count)
 }
 
-// int64 per_agent_model_activation_count = 39;
+// int64 per_agent_model_activation_count = 38;
 inline void AIServerStatusRsp::clear_per_agent_model_activation_count() {
   _impl_.per_agent_model_activation_count_ = int64_t{0};
 }
@@ -26633,7 +20469,7 @@ inline void AIServerStatusRsp::set_per_agent_model_activation_count(int64_t valu
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.per_agent_model_activation_count)
 }
 
-// int64 superseded_without_agent_activation_count = 40;
+// int64 superseded_without_agent_activation_count = 39;
 inline void AIServerStatusRsp::clear_superseded_without_agent_activation_count() {
   _impl_.superseded_without_agent_activation_count_ = int64_t{0};
 }
@@ -26653,7 +20489,7 @@ inline void AIServerStatusRsp::set_superseded_without_agent_activation_count(int
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.superseded_without_agent_activation_count)
 }
 
-// repeated .rl.training.v1.SegmentCloseCount segment_close_counts = 41;
+// repeated .rl.training.v1.SegmentCloseCount segment_close_counts = 40;
 inline int AIServerStatusRsp::_internal_segment_close_counts_size() const {
   return _impl_.segment_close_counts_.size();
 }
@@ -26740,111 +20576,6 @@ inline void SegmentCloseCount::set_count(int64_t value) {
 // -------------------------------------------------------------------
 
 // ModelArtifactManifest
-
-// uint32 manifest_schema_version = 1;
-inline void ModelArtifactManifest::clear_manifest_schema_version() {
-  _impl_.manifest_schema_version_ = 0u;
-}
-inline uint32_t ModelArtifactManifest::_internal_manifest_schema_version() const {
-  return _impl_.manifest_schema_version_;
-}
-inline uint32_t ModelArtifactManifest::manifest_schema_version() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.manifest_schema_version)
-  return _internal_manifest_schema_version();
-}
-inline void ModelArtifactManifest::_internal_set_manifest_schema_version(uint32_t value) {
-  
-  _impl_.manifest_schema_version_ = value;
-}
-inline void ModelArtifactManifest::set_manifest_schema_version(uint32_t value) {
-  _internal_set_manifest_schema_version(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.manifest_schema_version)
-}
-
-// .rl.common.v1.ContractIdentity contract = 2;
-inline bool ModelArtifactManifest::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool ModelArtifactManifest::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& ModelArtifactManifest::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& ModelArtifactManifest::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.contract)
-  return _internal_contract();
-}
-inline void ModelArtifactManifest::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.contract)
-}
-inline ::rl::common::v1::ContractIdentity* ModelArtifactManifest::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* ModelArtifactManifest::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* ModelArtifactManifest::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* ModelArtifactManifest::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.contract)
-  return _msg;
-}
-inline void ModelArtifactManifest::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.contract)
-}
 
 // .rl.training.v1.ModelIdentity identity = 3;
 inline bool ModelArtifactManifest::_internal_has_identity() const {
@@ -26936,517 +20667,6 @@ inline void ModelArtifactManifest::set_allocated_identity(::rl::training::v1::Mo
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.identity)
 }
 
-// .rl.common.v1.SchemaIdentity observation_schema = 4;
-inline bool ModelArtifactManifest::_internal_has_observation_schema() const {
-  return this != internal_default_instance() && _impl_.observation_schema_ != nullptr;
-}
-inline bool ModelArtifactManifest::has_observation_schema() const {
-  return _internal_has_observation_schema();
-}
-inline const ::rl::common::v1::SchemaIdentity& ModelArtifactManifest::_internal_observation_schema() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.observation_schema_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& ModelArtifactManifest::observation_schema() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.observation_schema)
-  return _internal_observation_schema();
-}
-inline void ModelArtifactManifest::unsafe_arena_set_allocated_observation_schema(
-    ::rl::common::v1::SchemaIdentity* observation_schema) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.observation_schema_);
-  }
-  _impl_.observation_schema_ = observation_schema;
-  if (observation_schema) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.observation_schema)
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::release_observation_schema() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
-  _impl_.observation_schema_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::unsafe_arena_release_observation_schema() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.observation_schema)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
-  _impl_.observation_schema_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::_internal_mutable_observation_schema() {
-  
-  if (_impl_.observation_schema_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.observation_schema_ = p;
-  }
-  return _impl_.observation_schema_;
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::mutable_observation_schema() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_observation_schema();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.observation_schema)
-  return _msg;
-}
-inline void ModelArtifactManifest::set_allocated_observation_schema(::rl::common::v1::SchemaIdentity* observation_schema) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.observation_schema_);
-  }
-  if (observation_schema) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(observation_schema));
-    if (message_arena != submessage_arena) {
-      observation_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, observation_schema, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.observation_schema_ = observation_schema;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.observation_schema)
-}
-
-// .rl.common.v1.SchemaIdentity action_schema = 5;
-inline bool ModelArtifactManifest::_internal_has_action_schema() const {
-  return this != internal_default_instance() && _impl_.action_schema_ != nullptr;
-}
-inline bool ModelArtifactManifest::has_action_schema() const {
-  return _internal_has_action_schema();
-}
-inline const ::rl::common::v1::SchemaIdentity& ModelArtifactManifest::_internal_action_schema() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.action_schema_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& ModelArtifactManifest::action_schema() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.action_schema)
-  return _internal_action_schema();
-}
-inline void ModelArtifactManifest::unsafe_arena_set_allocated_action_schema(
-    ::rl::common::v1::SchemaIdentity* action_schema) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.action_schema_);
-  }
-  _impl_.action_schema_ = action_schema;
-  if (action_schema) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.action_schema)
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::release_action_schema() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
-  _impl_.action_schema_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::unsafe_arena_release_action_schema() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.action_schema)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
-  _impl_.action_schema_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::_internal_mutable_action_schema() {
-  
-  if (_impl_.action_schema_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.action_schema_ = p;
-  }
-  return _impl_.action_schema_;
-}
-inline ::rl::common::v1::SchemaIdentity* ModelArtifactManifest::mutable_action_schema() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_action_schema();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.action_schema)
-  return _msg;
-}
-inline void ModelArtifactManifest::set_allocated_action_schema(::rl::common::v1::SchemaIdentity* action_schema) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.action_schema_);
-  }
-  if (action_schema) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(action_schema));
-    if (message_arena != submessage_arena) {
-      action_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, action_schema, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.action_schema_ = action_schema;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.action_schema)
-}
-
-// string model_architecture_id = 6;
-inline void ModelArtifactManifest::clear_model_architecture_id() {
-  _impl_.model_architecture_id_.ClearToEmpty();
-}
-inline const std::string& ModelArtifactManifest::model_architecture_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.model_architecture_id)
-  return _internal_model_architecture_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelArtifactManifest::set_model_architecture_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.model_architecture_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.model_architecture_id)
-}
-inline std::string* ModelArtifactManifest::mutable_model_architecture_id() {
-  std::string* _s = _internal_mutable_model_architecture_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.model_architecture_id)
-  return _s;
-}
-inline const std::string& ModelArtifactManifest::_internal_model_architecture_id() const {
-  return _impl_.model_architecture_id_.Get();
-}
-inline void ModelArtifactManifest::_internal_set_model_architecture_id(const std::string& value) {
-  
-  _impl_.model_architecture_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::_internal_mutable_model_architecture_id() {
-  
-  return _impl_.model_architecture_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::release_model_architecture_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.model_architecture_id)
-  return _impl_.model_architecture_id_.Release();
-}
-inline void ModelArtifactManifest::set_allocated_model_architecture_id(std::string* model_architecture_id) {
-  if (model_architecture_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.model_architecture_id_.SetAllocated(model_architecture_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.model_architecture_id_.IsDefault()) {
-    _impl_.model_architecture_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.model_architecture_id)
-}
-
-// string tensor_dtype = 7;
-inline void ModelArtifactManifest::clear_tensor_dtype() {
-  _impl_.tensor_dtype_.ClearToEmpty();
-}
-inline const std::string& ModelArtifactManifest::tensor_dtype() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.tensor_dtype)
-  return _internal_tensor_dtype();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelArtifactManifest::set_tensor_dtype(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.tensor_dtype_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.tensor_dtype)
-}
-inline std::string* ModelArtifactManifest::mutable_tensor_dtype() {
-  std::string* _s = _internal_mutable_tensor_dtype();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.tensor_dtype)
-  return _s;
-}
-inline const std::string& ModelArtifactManifest::_internal_tensor_dtype() const {
-  return _impl_.tensor_dtype_.Get();
-}
-inline void ModelArtifactManifest::_internal_set_tensor_dtype(const std::string& value) {
-  
-  _impl_.tensor_dtype_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::_internal_mutable_tensor_dtype() {
-  
-  return _impl_.tensor_dtype_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::release_tensor_dtype() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.tensor_dtype)
-  return _impl_.tensor_dtype_.Release();
-}
-inline void ModelArtifactManifest::set_allocated_tensor_dtype(std::string* tensor_dtype) {
-  if (tensor_dtype != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.tensor_dtype_.SetAllocated(tensor_dtype, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.tensor_dtype_.IsDefault()) {
-    _impl_.tensor_dtype_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.tensor_dtype)
-}
-
-// repeated int64 input_shape = 8;
-inline int ModelArtifactManifest::_internal_input_shape_size() const {
-  return _impl_.input_shape_.size();
-}
-inline int ModelArtifactManifest::input_shape_size() const {
-  return _internal_input_shape_size();
-}
-inline void ModelArtifactManifest::clear_input_shape() {
-  _impl_.input_shape_.Clear();
-}
-inline int64_t ModelArtifactManifest::_internal_input_shape(int index) const {
-  return _impl_.input_shape_.Get(index);
-}
-inline int64_t ModelArtifactManifest::input_shape(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.input_shape)
-  return _internal_input_shape(index);
-}
-inline void ModelArtifactManifest::set_input_shape(int index, int64_t value) {
-  _impl_.input_shape_.Set(index, value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.input_shape)
-}
-inline void ModelArtifactManifest::_internal_add_input_shape(int64_t value) {
-  _impl_.input_shape_.Add(value);
-}
-inline void ModelArtifactManifest::add_input_shape(int64_t value) {
-  _internal_add_input_shape(value);
-  // @@protoc_insertion_point(field_add:rl.training.v1.ModelArtifactManifest.input_shape)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-ModelArtifactManifest::_internal_input_shape() const {
-  return _impl_.input_shape_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-ModelArtifactManifest::input_shape() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.ModelArtifactManifest.input_shape)
-  return _internal_input_shape();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-ModelArtifactManifest::_internal_mutable_input_shape() {
-  return &_impl_.input_shape_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-ModelArtifactManifest::mutable_input_shape() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ModelArtifactManifest.input_shape)
-  return _internal_mutable_input_shape();
-}
-
-// repeated int64 action_shape = 9;
-inline int ModelArtifactManifest::_internal_action_shape_size() const {
-  return _impl_.action_shape_.size();
-}
-inline int ModelArtifactManifest::action_shape_size() const {
-  return _internal_action_shape_size();
-}
-inline void ModelArtifactManifest::clear_action_shape() {
-  _impl_.action_shape_.Clear();
-}
-inline int64_t ModelArtifactManifest::_internal_action_shape(int index) const {
-  return _impl_.action_shape_.Get(index);
-}
-inline int64_t ModelArtifactManifest::action_shape(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.action_shape)
-  return _internal_action_shape(index);
-}
-inline void ModelArtifactManifest::set_action_shape(int index, int64_t value) {
-  _impl_.action_shape_.Set(index, value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.action_shape)
-}
-inline void ModelArtifactManifest::_internal_add_action_shape(int64_t value) {
-  _impl_.action_shape_.Add(value);
-}
-inline void ModelArtifactManifest::add_action_shape(int64_t value) {
-  _internal_add_action_shape(value);
-  // @@protoc_insertion_point(field_add:rl.training.v1.ModelArtifactManifest.action_shape)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-ModelArtifactManifest::_internal_action_shape() const {
-  return _impl_.action_shape_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-ModelArtifactManifest::action_shape() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.ModelArtifactManifest.action_shape)
-  return _internal_action_shape();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-ModelArtifactManifest::_internal_mutable_action_shape() {
-  return &_impl_.action_shape_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-ModelArtifactManifest::mutable_action_shape() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ModelArtifactManifest.action_shape)
-  return _internal_mutable_action_shape();
-}
-
-// repeated int64 value_shape = 10;
-inline int ModelArtifactManifest::_internal_value_shape_size() const {
-  return _impl_.value_shape_.size();
-}
-inline int ModelArtifactManifest::value_shape_size() const {
-  return _internal_value_shape_size();
-}
-inline void ModelArtifactManifest::clear_value_shape() {
-  _impl_.value_shape_.Clear();
-}
-inline int64_t ModelArtifactManifest::_internal_value_shape(int index) const {
-  return _impl_.value_shape_.Get(index);
-}
-inline int64_t ModelArtifactManifest::value_shape(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.value_shape)
-  return _internal_value_shape(index);
-}
-inline void ModelArtifactManifest::set_value_shape(int index, int64_t value) {
-  _impl_.value_shape_.Set(index, value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.value_shape)
-}
-inline void ModelArtifactManifest::_internal_add_value_shape(int64_t value) {
-  _impl_.value_shape_.Add(value);
-}
-inline void ModelArtifactManifest::add_value_shape(int64_t value) {
-  _internal_add_value_shape(value);
-  // @@protoc_insertion_point(field_add:rl.training.v1.ModelArtifactManifest.value_shape)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-ModelArtifactManifest::_internal_value_shape() const {
-  return _impl_.value_shape_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
-ModelArtifactManifest::value_shape() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.ModelArtifactManifest.value_shape)
-  return _internal_value_shape();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-ModelArtifactManifest::_internal_mutable_value_shape() {
-  return &_impl_.value_shape_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
-ModelArtifactManifest::mutable_value_shape() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ModelArtifactManifest.value_shape)
-  return _internal_mutable_value_shape();
-}
-
-// string artifact_uri = 11;
-inline void ModelArtifactManifest::clear_artifact_uri() {
-  _impl_.artifact_uri_.ClearToEmpty();
-}
-inline const std::string& ModelArtifactManifest::artifact_uri() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.artifact_uri)
-  return _internal_artifact_uri();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelArtifactManifest::set_artifact_uri(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.artifact_uri_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.artifact_uri)
-}
-inline std::string* ModelArtifactManifest::mutable_artifact_uri() {
-  std::string* _s = _internal_mutable_artifact_uri();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.artifact_uri)
-  return _s;
-}
-inline const std::string& ModelArtifactManifest::_internal_artifact_uri() const {
-  return _impl_.artifact_uri_.Get();
-}
-inline void ModelArtifactManifest::_internal_set_artifact_uri(const std::string& value) {
-  
-  _impl_.artifact_uri_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::_internal_mutable_artifact_uri() {
-  
-  return _impl_.artifact_uri_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::release_artifact_uri() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.artifact_uri)
-  return _impl_.artifact_uri_.Release();
-}
-inline void ModelArtifactManifest::set_allocated_artifact_uri(std::string* artifact_uri) {
-  if (artifact_uri != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.artifact_uri_.SetAllocated(artifact_uri, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.artifact_uri_.IsDefault()) {
-    _impl_.artifact_uri_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.artifact_uri)
-}
-
-// string model_file = 12;
-inline void ModelArtifactManifest::clear_model_file() {
-  _impl_.model_file_.ClearToEmpty();
-}
-inline const std::string& ModelArtifactManifest::model_file() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.model_file)
-  return _internal_model_file();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ModelArtifactManifest::set_model_file(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.model_file_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.model_file)
-}
-inline std::string* ModelArtifactManifest::mutable_model_file() {
-  std::string* _s = _internal_mutable_model_file();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.model_file)
-  return _s;
-}
-inline const std::string& ModelArtifactManifest::_internal_model_file() const {
-  return _impl_.model_file_.Get();
-}
-inline void ModelArtifactManifest::_internal_set_model_file(const std::string& value) {
-  
-  _impl_.model_file_.Set(value, GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::_internal_mutable_model_file() {
-  
-  return _impl_.model_file_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ModelArtifactManifest::release_model_file() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.model_file)
-  return _impl_.model_file_.Release();
-}
-inline void ModelArtifactManifest::set_allocated_model_file(std::string* model_file) {
-  if (model_file != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.model_file_.SetAllocated(model_file, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.model_file_.IsDefault()) {
-    _impl_.model_file_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.model_file)
-}
-
 // int64 size_bytes = 13;
 inline void ModelArtifactManifest::clear_size_bytes() {
   _impl_.size_bytes_ = int64_t{0};
@@ -27465,46 +20685,6 @@ inline void ModelArtifactManifest::_internal_set_size_bytes(int64_t value) {
 inline void ModelArtifactManifest::set_size_bytes(int64_t value) {
   _internal_set_size_bytes(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.size_bytes)
-}
-
-// int64 seed = 14;
-inline void ModelArtifactManifest::clear_seed() {
-  _impl_.seed_ = int64_t{0};
-}
-inline int64_t ModelArtifactManifest::_internal_seed() const {
-  return _impl_.seed_;
-}
-inline int64_t ModelArtifactManifest::seed() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.seed)
-  return _internal_seed();
-}
-inline void ModelArtifactManifest::_internal_set_seed(int64_t value) {
-  
-  _impl_.seed_ = value;
-}
-inline void ModelArtifactManifest::set_seed(int64_t value) {
-  _internal_set_seed(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.seed)
-}
-
-// uint64 train_updates = 15;
-inline void ModelArtifactManifest::clear_train_updates() {
-  _impl_.train_updates_ = uint64_t{0u};
-}
-inline uint64_t ModelArtifactManifest::_internal_train_updates() const {
-  return _impl_.train_updates_;
-}
-inline uint64_t ModelArtifactManifest::train_updates() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.train_updates)
-  return _internal_train_updates();
-}
-inline void ModelArtifactManifest::_internal_set_train_updates(uint64_t value) {
-  
-  _impl_.train_updates_ = value;
-}
-inline void ModelArtifactManifest::set_train_updates(uint64_t value) {
-  _internal_set_train_updates(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.train_updates)
 }
 
 // uint64 trained_samples = 16;
@@ -27612,45 +20792,39 @@ inline void ModelArtifactManifest::set_allocated_training_config_digest(::rl::co
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.training_config_digest)
 }
 
-// .rl.training.v1.TrainingSemanticsIdentity training_semantics = 18;
-inline bool ModelArtifactManifest::_internal_has_training_semantics() const {
-  return this != internal_default_instance() && _impl_.training_semantics_ != nullptr;
+// .rl.common.v1.ContentDigest training_contract_digest = 18;
+inline bool ModelArtifactManifest::_internal_has_training_contract_digest() const {
+  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
 }
-inline bool ModelArtifactManifest::has_training_semantics() const {
-  return _internal_has_training_semantics();
+inline bool ModelArtifactManifest::has_training_contract_digest() const {
+  return _internal_has_training_contract_digest();
 }
-inline void ModelArtifactManifest::clear_training_semantics() {
-  if (GetArenaForAllocation() == nullptr && _impl_.training_semantics_ != nullptr) {
-    delete _impl_.training_semantics_;
-  }
-  _impl_.training_semantics_ = nullptr;
+inline const ::rl::common::v1::ContentDigest& ModelArtifactManifest::_internal_training_contract_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& ModelArtifactManifest::_internal_training_semantics() const {
-  const ::rl::training::v1::TrainingSemanticsIdentity* p = _impl_.training_semantics_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::TrainingSemanticsIdentity&>(
-      ::rl::training::v1::_TrainingSemanticsIdentity_default_instance_);
+inline const ::rl::common::v1::ContentDigest& ModelArtifactManifest::training_contract_digest() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.training_contract_digest)
+  return _internal_training_contract_digest();
 }
-inline const ::rl::training::v1::TrainingSemanticsIdentity& ModelArtifactManifest::training_semantics() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.training_semantics)
-  return _internal_training_semantics();
-}
-inline void ModelArtifactManifest::unsafe_arena_set_allocated_training_semantics(
-    ::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+inline void ModelArtifactManifest::unsafe_arena_set_allocated_training_contract_digest(
+    ::rl::common::v1::ContentDigest* training_contract_digest) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_semantics_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  _impl_.training_semantics_ = training_semantics;
-  if (training_semantics) {
+  _impl_.training_contract_digest_ = training_contract_digest;
+  if (training_contract_digest) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.training_semantics)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.training_contract_digest)
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* ModelArtifactManifest::release_training_semantics() {
+inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::release_training_contract_digest() {
   
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -27662,44 +20836,45 @@ inline ::rl::training::v1::TrainingSemanticsIdentity* ModelArtifactManifest::rel
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* ModelArtifactManifest::unsafe_arena_release_training_semantics() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.training_semantics)
+inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::unsafe_arena_release_training_contract_digest() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.training_contract_digest)
   
-  ::rl::training::v1::TrainingSemanticsIdentity* temp = _impl_.training_semantics_;
-  _impl_.training_semantics_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
+  _impl_.training_contract_digest_ = nullptr;
   return temp;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* ModelArtifactManifest::_internal_mutable_training_semantics() {
+inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::_internal_mutable_training_contract_digest() {
   
-  if (_impl_.training_semantics_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::TrainingSemanticsIdentity>(GetArenaForAllocation());
-    _impl_.training_semantics_ = p;
+  if (_impl_.training_contract_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.training_contract_digest_ = p;
   }
-  return _impl_.training_semantics_;
+  return _impl_.training_contract_digest_;
 }
-inline ::rl::training::v1::TrainingSemanticsIdentity* ModelArtifactManifest::mutable_training_semantics() {
-  ::rl::training::v1::TrainingSemanticsIdentity* _msg = _internal_mutable_training_semantics();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.training_semantics)
+inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::mutable_training_contract_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.training_contract_digest)
   return _msg;
 }
-inline void ModelArtifactManifest::set_allocated_training_semantics(::rl::training::v1::TrainingSemanticsIdentity* training_semantics) {
+inline void ModelArtifactManifest::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.training_semantics_;
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
   }
-  if (training_semantics) {
+  if (training_contract_digest) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(training_semantics);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
     if (message_arena != submessage_arena) {
-      training_semantics = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_semantics, submessage_arena);
+      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, training_contract_digest, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.training_semantics_ = training_semantics;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.training_semantics)
+  _impl_.training_contract_digest_ = training_contract_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.training_contract_digest)
 }
 
 // int64 published_at_unix_ms = 19;
@@ -27720,26 +20895,6 @@ inline void ModelArtifactManifest::_internal_set_published_at_unix_ms(int64_t va
 inline void ModelArtifactManifest::set_published_at_unix_ms(int64_t value) {
   _internal_set_published_at_unix_ms(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.published_at_unix_ms)
-}
-
-// bool ready = 20;
-inline void ModelArtifactManifest::clear_ready() {
-  _impl_.ready_ = false;
-}
-inline bool ModelArtifactManifest::_internal_ready() const {
-  return _impl_.ready_;
-}
-inline bool ModelArtifactManifest::ready() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.ready)
-  return _internal_ready();
-}
-inline void ModelArtifactManifest::_internal_set_ready(bool value) {
-  
-  _impl_.ready_ = value;
-}
-inline void ModelArtifactManifest::set_ready(bool value) {
-  _internal_set_ready(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.ready)
 }
 
 // .rl.training.v1.RolloutEstimatorProfile rollout_estimator_profile = 21;
@@ -27926,31 +21081,146 @@ inline void RegisterModelReq::set_allocated_manifest(::rl::training::v1::ModelAr
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RegisterModelReq.manifest)
 }
 
+// .rl.common.v1.ContractIdentity contract = 2;
+inline bool RegisterModelReq::_internal_has_contract() const {
+  return this != internal_default_instance() && _impl_.contract_ != nullptr;
+}
+inline bool RegisterModelReq::has_contract() const {
+  return _internal_has_contract();
+}
+inline const ::rl::common::v1::ContractIdentity& RegisterModelReq::_internal_contract() const {
+  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
+      ::rl::common::v1::_ContractIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ContractIdentity& RegisterModelReq::contract() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RegisterModelReq.contract)
+  return _internal_contract();
+}
+inline void RegisterModelReq::unsafe_arena_set_allocated_contract(
+    ::rl::common::v1::ContractIdentity* contract) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  _impl_.contract_ = contract;
+  if (contract) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.RegisterModelReq.contract)
+}
+inline ::rl::common::v1::ContractIdentity* RegisterModelReq::release_contract() {
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* RegisterModelReq::unsafe_arena_release_contract() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RegisterModelReq.contract)
+  
+  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
+  _impl_.contract_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ContractIdentity* RegisterModelReq::_internal_mutable_contract() {
+  
+  if (_impl_.contract_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
+    _impl_.contract_ = p;
+  }
+  return _impl_.contract_;
+}
+inline ::rl::common::v1::ContractIdentity* RegisterModelReq::mutable_contract() {
+  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RegisterModelReq.contract)
+  return _msg;
+}
+inline void RegisterModelReq::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
+  }
+  if (contract) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
+    if (message_arena != submessage_arena) {
+      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, contract, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.contract_ = contract;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RegisterModelReq.contract)
+}
+
+// string local_artifact_path = 3;
+inline void RegisterModelReq::clear_local_artifact_path() {
+  _impl_.local_artifact_path_.ClearToEmpty();
+}
+inline const std::string& RegisterModelReq::local_artifact_path() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.RegisterModelReq.local_artifact_path)
+  return _internal_local_artifact_path();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RegisterModelReq::set_local_artifact_path(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.local_artifact_path_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.RegisterModelReq.local_artifact_path)
+}
+inline std::string* RegisterModelReq::mutable_local_artifact_path() {
+  std::string* _s = _internal_mutable_local_artifact_path();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.RegisterModelReq.local_artifact_path)
+  return _s;
+}
+inline const std::string& RegisterModelReq::_internal_local_artifact_path() const {
+  return _impl_.local_artifact_path_.Get();
+}
+inline void RegisterModelReq::_internal_set_local_artifact_path(const std::string& value) {
+  
+  _impl_.local_artifact_path_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RegisterModelReq::_internal_mutable_local_artifact_path() {
+  
+  return _impl_.local_artifact_path_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RegisterModelReq::release_local_artifact_path() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.RegisterModelReq.local_artifact_path)
+  return _impl_.local_artifact_path_.Release();
+}
+inline void RegisterModelReq::set_allocated_local_artifact_path(std::string* local_artifact_path) {
+  if (local_artifact_path != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.local_artifact_path_.SetAllocated(local_artifact_path, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.local_artifact_path_.IsDefault()) {
+    _impl_.local_artifact_path_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RegisterModelReq.local_artifact_path)
+}
+
 // -------------------------------------------------------------------
 
 // RegisterModelRsp
 
-// int32 ret_code = 1;
-inline void RegisterModelRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
-}
-inline int32_t RegisterModelRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
-}
-inline int32_t RegisterModelRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RegisterModelRsp.ret_code)
-  return _internal_ret_code();
-}
-inline void RegisterModelRsp::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void RegisterModelRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.RegisterModelRsp.ret_code)
-}
-
-// .rl.training.v1.ModelRegisterResult result = 2;
+// .rl.training.v1.ModelRegisterResult result = 1;
 inline void RegisterModelRsp::clear_result() {
   _impl_.result_ = 0;
 }
@@ -27970,7 +21240,7 @@ inline void RegisterModelRsp::set_result(::rl::training::v1::ModelRegisterResult
   // @@protoc_insertion_point(field_set:rl.training.v1.RegisterModelRsp.result)
 }
 
-// string message = 3;
+// string message = 2;
 inline void RegisterModelRsp::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
@@ -28020,7 +21290,7 @@ inline void RegisterModelRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RegisterModelRsp.message)
 }
 
-// .rl.training.v1.ModelArtifactManifest manifest = 4;
+// .rl.training.v1.ModelArtifactManifest manifest = 3;
 inline bool RegisterModelRsp::_internal_has_manifest() const {
   return this != internal_default_instance() && _impl_.manifest_ != nullptr;
 }
@@ -28110,7 +21380,7 @@ inline void RegisterModelRsp::set_allocated_manifest(::rl::training::v1::ModelAr
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RegisterModelRsp.manifest)
 }
 
-// .rl.common.v1.ServiceInstanceIdentity distributor = 5;
+// .rl.common.v1.ServiceInstanceIdentity distributor = 4;
 inline bool RegisterModelRsp::_internal_has_distributor() const {
   return this != internal_default_instance() && _impl_.distributor_ != nullptr;
 }
@@ -28398,24 +21668,24 @@ inline void GetModelManifestReq::set_latest_in_lineage(bool value) {
 
 // GetModelManifestRsp
 
-// int32 ret_code = 1;
-inline void GetModelManifestRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
+// .rl.training.v1.ModelLookupResult result = 1;
+inline void GetModelManifestRsp::clear_result() {
+  _impl_.result_ = 0;
 }
-inline int32_t GetModelManifestRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
+inline ::rl::training::v1::ModelLookupResult GetModelManifestRsp::_internal_result() const {
+  return static_cast< ::rl::training::v1::ModelLookupResult >(_impl_.result_);
 }
-inline int32_t GetModelManifestRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetModelManifestRsp.ret_code)
-  return _internal_ret_code();
+inline ::rl::training::v1::ModelLookupResult GetModelManifestRsp::result() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetModelManifestRsp.result)
+  return _internal_result();
 }
-inline void GetModelManifestRsp::_internal_set_ret_code(int32_t value) {
+inline void GetModelManifestRsp::_internal_set_result(::rl::training::v1::ModelLookupResult value) {
   
-  _impl_.ret_code_ = value;
+  _impl_.result_ = value;
 }
-inline void GetModelManifestRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.GetModelManifestRsp.ret_code)
+inline void GetModelManifestRsp::set_result(::rl::training::v1::ModelLookupResult value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetModelManifestRsp.result)
 }
 
 // string message = 2;
@@ -29345,27 +22615,7 @@ inline void AckModelReq::set_allocated_message(std::string* message) {
 
 // AckModelRsp
 
-// int32 ret_code = 1;
-inline void AckModelRsp::clear_ret_code() {
-  _impl_.ret_code_ = 0;
-}
-inline int32_t AckModelRsp::_internal_ret_code() const {
-  return _impl_.ret_code_;
-}
-inline int32_t AckModelRsp::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AckModelRsp.ret_code)
-  return _internal_ret_code();
-}
-inline void AckModelRsp::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void AckModelRsp::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AckModelRsp.ret_code)
-}
-
-// .rl.training.v1.ModelAckResult result = 2;
+// .rl.training.v1.ModelAckResult result = 1;
 inline void AckModelRsp::clear_result() {
   _impl_.result_ = 0;
 }
@@ -29385,7 +22635,7 @@ inline void AckModelRsp::set_result(::rl::training::v1::ModelAckResult value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AckModelRsp.result)
 }
 
-// string message = 3;
+// string message = 2;
 inline void AckModelRsp::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
@@ -29435,7 +22685,7 @@ inline void AckModelRsp::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AckModelRsp.message)
 }
 
-// .rl.common.v1.ServiceInstanceIdentity distributor = 4;
+// .rl.common.v1.ServiceInstanceIdentity distributor = 3;
 inline bool AckModelRsp::_internal_has_distributor() const {
   return this != internal_default_instance() && _impl_.distributor_ != nullptr;
 }
@@ -30416,16 +23666,6 @@ inline void ModelDistributorStatusRsp::set_latest_available_model_step(uint64_t 
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -30435,11 +23675,6 @@ inline void ModelDistributorStatusRsp::set_latest_available_model_step(uint64_t 
 
 PROTOBUF_NAMESPACE_OPEN
 
-template <> struct is_proto_enum< ::rl::training::v1::TransitionEndKind> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::TransitionEndKind>() {
-  return ::rl::training::v1::TransitionEndKind_descriptor();
-}
 template <> struct is_proto_enum< ::rl::training::v1::SegmentCloseReason> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SegmentCloseReason>() {
@@ -30495,6 +23730,11 @@ template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::ModelAckResult>() {
   return ::rl::training::v1::ModelAckResult_descriptor();
 }
+template <> struct is_proto_enum< ::rl::training::v1::ModelLookupResult> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::ModelLookupResult>() {
+  return ::rl::training::v1::ModelLookupResult_descriptor();
+}
 template <> struct is_proto_enum< ::rl::training::v1::SampleBackendType> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SampleBackendType>() {
@@ -30504,21 +23744,6 @@ template <> struct is_proto_enum< ::rl::training::v1::SamplePoolFinalizeResult> 
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SamplePoolFinalizeResult>() {
   return ::rl::training::v1::SamplePoolFinalizeResult_descriptor();
-}
-template <> struct is_proto_enum< ::rl::training::v1::MetricValueKind> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::MetricValueKind>() {
-  return ::rl::training::v1::MetricValueKind_descriptor();
-}
-template <> struct is_proto_enum< ::rl::training::v1::MetricAggregationKind> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::MetricAggregationKind>() {
-  return ::rl::training::v1::MetricAggregationKind_descriptor();
-}
-template <> struct is_proto_enum< ::rl::training::v1::MetricWindowKind> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::MetricWindowKind>() {
-  return ::rl::training::v1::MetricWindowKind_descriptor();
 }
 template <> struct is_proto_enum< ::rl::training::v1::MetricBatchResult> : ::std::true_type {};
 template <>

@@ -56,6 +56,9 @@ extern AbortEpisodeReqDefaultTypeInternal _AbortEpisodeReq_default_instance_;
 class AbortEpisodeRsp;
 struct AbortEpisodeRspDefaultTypeInternal;
 extern AbortEpisodeRspDefaultTypeInternal _AbortEpisodeRsp_default_instance_;
+class ActionBatch;
+struct ActionBatchDefaultTypeInternal;
+extern ActionBatchDefaultTypeInternal _ActionBatch_default_instance_;
 class AgentAction;
 struct AgentActionDefaultTypeInternal;
 extern AgentActionDefaultTypeInternal _AgentAction_default_instance_;
@@ -71,24 +74,27 @@ extern BeginEpisodeReqDefaultTypeInternal _BeginEpisodeReq_default_instance_;
 class BeginEpisodeRsp;
 struct BeginEpisodeRspDefaultTypeInternal;
 extern BeginEpisodeRspDefaultTypeInternal _BeginEpisodeRsp_default_instance_;
-class BehaviorPolicyBinding;
-struct BehaviorPolicyBindingDefaultTypeInternal;
-extern BehaviorPolicyBindingDefaultTypeInternal _BehaviorPolicyBinding_default_instance_;
 class CloseSessionReq;
 struct CloseSessionReqDefaultTypeInternal;
 extern CloseSessionReqDefaultTypeInternal _CloseSessionReq_default_instance_;
 class CloseSessionRsp;
 struct CloseSessionRspDefaultTypeInternal;
 extern CloseSessionRspDefaultTypeInternal _CloseSessionRsp_default_instance_;
+class CommandIdentity;
+struct CommandIdentityDefaultTypeInternal;
+extern CommandIdentityDefaultTypeInternal _CommandIdentity_default_instance_;
+class CommandReply;
+struct CommandReplyDefaultTypeInternal;
+extern CommandReplyDefaultTypeInternal _CommandReply_default_instance_;
 class EndEpisodeReq;
 struct EndEpisodeReqDefaultTypeInternal;
 extern EndEpisodeReqDefaultTypeInternal _EndEpisodeReq_default_instance_;
 class EndEpisodeRsp;
 struct EndEpisodeRspDefaultTypeInternal;
 extern EndEpisodeRspDefaultTypeInternal _EndEpisodeRsp_default_instance_;
-class EnvironmentRuntimeSpec;
-struct EnvironmentRuntimeSpecDefaultTypeInternal;
-extern EnvironmentRuntimeSpecDefaultTypeInternal _EnvironmentRuntimeSpec_default_instance_;
+class EnvironmentSpec;
+struct EnvironmentSpecDefaultTypeInternal;
+extern EnvironmentSpecDefaultTypeInternal _EnvironmentSpec_default_instance_;
 class EpisodeAssignment;
 struct EpisodeAssignmentDefaultTypeInternal;
 extern EpisodeAssignmentDefaultTypeInternal _EpisodeAssignment_default_instance_;
@@ -101,27 +107,21 @@ extern InitReqDefaultTypeInternal _InitReq_default_instance_;
 class InitRsp;
 struct InitRspDefaultTypeInternal;
 extern InitRspDefaultTypeInternal _InitRsp_default_instance_;
-class LifecycleCommand;
-struct LifecycleCommandDefaultTypeInternal;
-extern LifecycleCommandDefaultTypeInternal _LifecycleCommand_default_instance_;
-class LifecycleReply;
-struct LifecycleReplyDefaultTypeInternal;
-extern LifecycleReplyDefaultTypeInternal _LifecycleReply_default_instance_;
 class MapDescriptor;
 struct MapDescriptorDefaultTypeInternal;
 extern MapDescriptorDefaultTypeInternal _MapDescriptor_default_instance_;
-class MazeTaskSpec;
-struct MazeTaskSpecDefaultTypeInternal;
-extern MazeTaskSpecDefaultTypeInternal _MazeTaskSpec_default_instance_;
 class OpenSessionReq;
 struct OpenSessionReqDefaultTypeInternal;
 extern OpenSessionReqDefaultTypeInternal _OpenSessionReq_default_instance_;
 class OpenSessionRsp;
 struct OpenSessionRspDefaultTypeInternal;
 extern OpenSessionRspDefaultTypeInternal _OpenSessionRsp_default_instance_;
-class TaskIdentity;
-struct TaskIdentityDefaultTypeInternal;
-extern TaskIdentityDefaultTypeInternal _TaskIdentity_default_instance_;
+class StopControl;
+struct StopControlDefaultTypeInternal;
+extern StopControlDefaultTypeInternal _StopControl_default_instance_;
+class TaskComplete;
+struct TaskCompleteDefaultTypeInternal;
+extern TaskCompleteDefaultTypeInternal _TaskComplete_default_instance_;
 class UpdateReq;
 struct UpdateReqDefaultTypeInternal;
 extern UpdateReqDefaultTypeInternal _UpdateReq_default_instance_;
@@ -131,6 +131,9 @@ extern UpdateRspDefaultTypeInternal _UpdateRsp_default_instance_;
 class Vec2;
 struct Vec2DefaultTypeInternal;
 extern Vec2DefaultTypeInternal _Vec2_default_instance_;
+class WaitControl;
+struct WaitControlDefaultTypeInternal;
+extern WaitControlDefaultTypeInternal _WaitControl_default_instance_;
 }  // namespace v1
 }  // namespace maze
 }  // namespace task
@@ -138,189 +141,127 @@ extern Vec2DefaultTypeInternal _Vec2_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::rl::task::maze::v1::AbortEpisodeReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::AbortEpisodeReq>(Arena*);
 template<> ::rl::task::maze::v1::AbortEpisodeRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::AbortEpisodeRsp>(Arena*);
+template<> ::rl::task::maze::v1::ActionBatch* Arena::CreateMaybeMessage<::rl::task::maze::v1::ActionBatch>(Arena*);
 template<> ::rl::task::maze::v1::AgentAction* Arena::CreateMaybeMessage<::rl::task::maze::v1::AgentAction>(Arena*);
 template<> ::rl::task::maze::v1::AgentEpisodeOutcome* Arena::CreateMaybeMessage<::rl::task::maze::v1::AgentEpisodeOutcome>(Arena*);
 template<> ::rl::task::maze::v1::AgentState* Arena::CreateMaybeMessage<::rl::task::maze::v1::AgentState>(Arena*);
 template<> ::rl::task::maze::v1::BeginEpisodeReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::BeginEpisodeReq>(Arena*);
 template<> ::rl::task::maze::v1::BeginEpisodeRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::BeginEpisodeRsp>(Arena*);
-template<> ::rl::task::maze::v1::BehaviorPolicyBinding* Arena::CreateMaybeMessage<::rl::task::maze::v1::BehaviorPolicyBinding>(Arena*);
 template<> ::rl::task::maze::v1::CloseSessionReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::CloseSessionReq>(Arena*);
 template<> ::rl::task::maze::v1::CloseSessionRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::CloseSessionRsp>(Arena*);
+template<> ::rl::task::maze::v1::CommandIdentity* Arena::CreateMaybeMessage<::rl::task::maze::v1::CommandIdentity>(Arena*);
+template<> ::rl::task::maze::v1::CommandReply* Arena::CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(Arena*);
 template<> ::rl::task::maze::v1::EndEpisodeReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::EndEpisodeReq>(Arena*);
 template<> ::rl::task::maze::v1::EndEpisodeRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::EndEpisodeRsp>(Arena*);
-template<> ::rl::task::maze::v1::EnvironmentRuntimeSpec* Arena::CreateMaybeMessage<::rl::task::maze::v1::EnvironmentRuntimeSpec>(Arena*);
+template<> ::rl::task::maze::v1::EnvironmentSpec* Arena::CreateMaybeMessage<::rl::task::maze::v1::EnvironmentSpec>(Arena*);
 template<> ::rl::task::maze::v1::EpisodeAssignment* Arena::CreateMaybeMessage<::rl::task::maze::v1::EpisodeAssignment>(Arena*);
 template<> ::rl::task::maze::v1::EpisodeOutcome* Arena::CreateMaybeMessage<::rl::task::maze::v1::EpisodeOutcome>(Arena*);
 template<> ::rl::task::maze::v1::InitReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::InitReq>(Arena*);
 template<> ::rl::task::maze::v1::InitRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::InitRsp>(Arena*);
-template<> ::rl::task::maze::v1::LifecycleCommand* Arena::CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(Arena*);
-template<> ::rl::task::maze::v1::LifecycleReply* Arena::CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(Arena*);
 template<> ::rl::task::maze::v1::MapDescriptor* Arena::CreateMaybeMessage<::rl::task::maze::v1::MapDescriptor>(Arena*);
-template<> ::rl::task::maze::v1::MazeTaskSpec* Arena::CreateMaybeMessage<::rl::task::maze::v1::MazeTaskSpec>(Arena*);
 template<> ::rl::task::maze::v1::OpenSessionReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::OpenSessionReq>(Arena*);
 template<> ::rl::task::maze::v1::OpenSessionRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::OpenSessionRsp>(Arena*);
-template<> ::rl::task::maze::v1::TaskIdentity* Arena::CreateMaybeMessage<::rl::task::maze::v1::TaskIdentity>(Arena*);
+template<> ::rl::task::maze::v1::StopControl* Arena::CreateMaybeMessage<::rl::task::maze::v1::StopControl>(Arena*);
+template<> ::rl::task::maze::v1::TaskComplete* Arena::CreateMaybeMessage<::rl::task::maze::v1::TaskComplete>(Arena*);
 template<> ::rl::task::maze::v1::UpdateReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::UpdateReq>(Arena*);
 template<> ::rl::task::maze::v1::UpdateRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::UpdateRsp>(Arena*);
 template<> ::rl::task::maze::v1::Vec2* Arena::CreateMaybeMessage<::rl::task::maze::v1::Vec2>(Arena*);
+template<> ::rl::task::maze::v1::WaitControl* Arena::CreateMaybeMessage<::rl::task::maze::v1::WaitControl>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace rl {
 namespace task {
 namespace maze {
 namespace v1 {
 
-enum LifecycleResult : int {
-  LIFECYCLE_RESULT_UNSPECIFIED = 0,
-  LIFECYCLE_RESULT_APPLIED = 1,
-  LIFECYCLE_RESULT_ALREADY_APPLIED = 2,
-  LIFECYCLE_RESULT_REJECTED = 3,
-  LIFECYCLE_RESULT_WAIT = 4,
-  LifecycleResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  LifecycleResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+enum CommandResult : int {
+  COMMAND_RESULT_UNSPECIFIED = 0,
+  COMMAND_RESULT_APPLIED = 1,
+  COMMAND_RESULT_ALREADY_APPLIED = 2,
+  COMMAND_RESULT_WAIT = 3,
+  COMMAND_RESULT_REJECTED = 4,
+  CommandResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  CommandResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
-bool LifecycleResult_IsValid(int value);
-constexpr LifecycleResult LifecycleResult_MIN = LIFECYCLE_RESULT_UNSPECIFIED;
-constexpr LifecycleResult LifecycleResult_MAX = LIFECYCLE_RESULT_WAIT;
-constexpr int LifecycleResult_ARRAYSIZE = LifecycleResult_MAX + 1;
+bool CommandResult_IsValid(int value);
+constexpr CommandResult CommandResult_MIN = COMMAND_RESULT_UNSPECIFIED;
+constexpr CommandResult CommandResult_MAX = COMMAND_RESULT_REJECTED;
+constexpr int CommandResult_ARRAYSIZE = CommandResult_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LifecycleResult_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CommandResult_descriptor();
 template<typename T>
-inline const std::string& LifecycleResult_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, LifecycleResult>::value ||
+inline const std::string& CommandResult_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, CommandResult>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function LifecycleResult_Name.");
+    "Incorrect type passed to function CommandResult_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    LifecycleResult_descriptor(), enum_t_value);
+    CommandResult_descriptor(), enum_t_value);
 }
-inline bool LifecycleResult_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LifecycleResult* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LifecycleResult>(
-    LifecycleResult_descriptor(), name, value);
+inline bool CommandResult_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, CommandResult* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<CommandResult>(
+    CommandResult_descriptor(), name, value);
 }
-enum LifecycleErrorCode : int {
-  LIFECYCLE_ERROR_CODE_UNSPECIFIED = 0,
-  LIFECYCLE_ERROR_CODE_INVALID_IDENTITY = 1,
-  LIFECYCLE_ERROR_CODE_INVALID_DIGEST = 2,
-  LIFECYCLE_ERROR_CODE_UNSUPPORTED_SCHEMA = 3,
-  LIFECYCLE_ERROR_CODE_STALE_EPOCH = 4,
-  LIFECYCLE_ERROR_CODE_OUT_OF_ORDER = 5,
-  LIFECYCLE_ERROR_CODE_IDEMPOTENCY_CONFLICT = 6,
-  LIFECYCLE_ERROR_CODE_STATE_CONFLICT = 7,
-  LIFECYCLE_ERROR_CODE_TASK_REVISION_MISMATCH = 8,
-  LIFECYCLE_ERROR_CODE_MAP_INVALID = 9,
-  LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH = 10,
-  LifecycleErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  LifecycleErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+enum CommandErrorCode : int {
+  COMMAND_ERROR_CODE_UNSPECIFIED = 0,
+  COMMAND_ERROR_CODE_INVALID_IDENTITY = 1,
+  COMMAND_ERROR_CODE_STALE_EPOCH = 2,
+  COMMAND_ERROR_CODE_OUT_OF_ORDER = 3,
+  COMMAND_ERROR_CODE_PAYLOAD_CONFLICT = 4,
+  COMMAND_ERROR_CODE_STATE_CONFLICT = 5,
+  COMMAND_ERROR_CODE_MAP_INVALID = 6,
+  COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH = 7,
+  CommandErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  CommandErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
-bool LifecycleErrorCode_IsValid(int value);
-constexpr LifecycleErrorCode LifecycleErrorCode_MIN = LIFECYCLE_ERROR_CODE_UNSPECIFIED;
-constexpr LifecycleErrorCode LifecycleErrorCode_MAX = LIFECYCLE_ERROR_CODE_MODEL_IDENTITY_MISMATCH;
-constexpr int LifecycleErrorCode_ARRAYSIZE = LifecycleErrorCode_MAX + 1;
+bool CommandErrorCode_IsValid(int value);
+constexpr CommandErrorCode CommandErrorCode_MIN = COMMAND_ERROR_CODE_UNSPECIFIED;
+constexpr CommandErrorCode CommandErrorCode_MAX = COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH;
+constexpr int CommandErrorCode_ARRAYSIZE = CommandErrorCode_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LifecycleErrorCode_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CommandErrorCode_descriptor();
 template<typename T>
-inline const std::string& LifecycleErrorCode_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, LifecycleErrorCode>::value ||
+inline const std::string& CommandErrorCode_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, CommandErrorCode>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function LifecycleErrorCode_Name.");
+    "Incorrect type passed to function CommandErrorCode_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    LifecycleErrorCode_descriptor(), enum_t_value);
+    CommandErrorCode_descriptor(), enum_t_value);
 }
-inline bool LifecycleErrorCode_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LifecycleErrorCode* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LifecycleErrorCode>(
-    LifecycleErrorCode_descriptor(), name, value);
+inline bool CommandErrorCode_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, CommandErrorCode* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<CommandErrorCode>(
+    CommandErrorCode_descriptor(), name, value);
 }
-enum TaskState : int {
-  TASK_STATE_UNSPECIFIED = 0,
-  TASK_STATE_CREATED = 1,
-  TASK_STATE_INITIALIZING = 2,
-  TASK_STATE_TRAINING = 3,
-  TASK_STATE_EVALUATING = 4,
-  TASK_STATE_STOPPING = 5,
-  TASK_STATE_STOPPED = 6,
-  TASK_STATE_COMPLETE = 7,
-  TASK_STATE_FAILED = 8,
-  TaskState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  TaskState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+enum SessionPhase : int {
+  SESSION_PHASE_UNSPECIFIED = 0,
+  SESSION_PHASE_OPEN = 1,
+  SESSION_PHASE_READY = 2,
+  SESSION_PHASE_EPISODE_RUNNING = 3,
+  SESSION_PHASE_EPISODE_TERMINAL = 4,
+  SESSION_PHASE_TASK_COMPLETE = 5,
+  SESSION_PHASE_CLOSED = 6,
+  SESSION_PHASE_ABORTED = 7,
+  SessionPhase_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SessionPhase_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
-bool TaskState_IsValid(int value);
-constexpr TaskState TaskState_MIN = TASK_STATE_UNSPECIFIED;
-constexpr TaskState TaskState_MAX = TASK_STATE_FAILED;
-constexpr int TaskState_ARRAYSIZE = TaskState_MAX + 1;
+bool SessionPhase_IsValid(int value);
+constexpr SessionPhase SessionPhase_MIN = SESSION_PHASE_UNSPECIFIED;
+constexpr SessionPhase SessionPhase_MAX = SESSION_PHASE_ABORTED;
+constexpr int SessionPhase_ARRAYSIZE = SessionPhase_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* TaskState_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SessionPhase_descriptor();
 template<typename T>
-inline const std::string& TaskState_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, TaskState>::value ||
+inline const std::string& SessionPhase_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SessionPhase>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function TaskState_Name.");
+    "Incorrect type passed to function SessionPhase_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    TaskState_descriptor(), enum_t_value);
+    SessionPhase_descriptor(), enum_t_value);
 }
-inline bool TaskState_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, TaskState* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<TaskState>(
-    TaskState_descriptor(), name, value);
-}
-enum SessionState : int {
-  SESSION_STATE_UNSPECIFIED = 0,
-  SESSION_STATE_OPENED = 1,
-  SESSION_STATE_MAP_VALIDATED = 2,
-  SESSION_STATE_IDLE = 3,
-  SESSION_STATE_EPISODE_ACTIVE = 4,
-  SESSION_STATE_CLOSING = 5,
-  SESSION_STATE_CLOSED = 6,
-  SessionState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  SessionState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool SessionState_IsValid(int value);
-constexpr SessionState SessionState_MIN = SESSION_STATE_UNSPECIFIED;
-constexpr SessionState SessionState_MAX = SESSION_STATE_CLOSED;
-constexpr int SessionState_ARRAYSIZE = SessionState_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SessionState_descriptor();
-template<typename T>
-inline const std::string& SessionState_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, SessionState>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function SessionState_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    SessionState_descriptor(), enum_t_value);
-}
-inline bool SessionState_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SessionState* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SessionState>(
-    SessionState_descriptor(), name, value);
-}
-enum EpisodeState : int {
-  EPISODE_STATE_UNSPECIFIED = 0,
-  EPISODE_STATE_ASSIGNED = 1,
-  EPISODE_STATE_RUNNING = 2,
-  EPISODE_STATE_TERMINAL_REPORTED = 3,
-  EPISODE_STATE_COMMITTED = 4,
-  EPISODE_STATE_ABORTED = 5,
-  EpisodeState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  EpisodeState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool EpisodeState_IsValid(int value);
-constexpr EpisodeState EpisodeState_MIN = EPISODE_STATE_UNSPECIFIED;
-constexpr EpisodeState EpisodeState_MAX = EPISODE_STATE_ABORTED;
-constexpr int EpisodeState_ARRAYSIZE = EpisodeState_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EpisodeState_descriptor();
-template<typename T>
-inline const std::string& EpisodeState_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, EpisodeState>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function EpisodeState_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    EpisodeState_descriptor(), enum_t_value);
-}
-inline bool EpisodeState_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, EpisodeState* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EpisodeState>(
-    EpisodeState_descriptor(), name, value);
+inline bool SessionPhase_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SessionPhase* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SessionPhase>(
+    SessionPhase_descriptor(), name, value);
 }
 enum EpisodeMode : int {
   EPISODE_MODE_UNSPECIFIED = 0,
@@ -374,32 +315,6 @@ inline bool WorkloadMode_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<WorkloadMode>(
     WorkloadMode_descriptor(), name, value);
 }
-enum ReplayPolicy : int {
-  REPLAY_POLICY_UNSPECIFIED = 0,
-  REPLAY_POLICY_DISABLED = 1,
-  REPLAY_POLICY_RECORD_AND_SERVE = 2,
-  ReplayPolicy_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  ReplayPolicy_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool ReplayPolicy_IsValid(int value);
-constexpr ReplayPolicy ReplayPolicy_MIN = REPLAY_POLICY_UNSPECIFIED;
-constexpr ReplayPolicy ReplayPolicy_MAX = REPLAY_POLICY_RECORD_AND_SERVE;
-constexpr int ReplayPolicy_ARRAYSIZE = ReplayPolicy_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ReplayPolicy_descriptor();
-template<typename T>
-inline const std::string& ReplayPolicy_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, ReplayPolicy>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function ReplayPolicy_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    ReplayPolicy_descriptor(), enum_t_value);
-}
-inline bool ReplayPolicy_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ReplayPolicy* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ReplayPolicy>(
-    ReplayPolicy_descriptor(), name, value);
-}
 enum MazeTerminationReason : int {
   MAZE_TERMINATION_REASON_UNSPECIFIED = 0,
   MAZE_TERMINATION_REASON_ACTIVE = 1,
@@ -430,52 +345,26 @@ inline bool MazeTerminationReason_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MazeTerminationReason>(
     MazeTerminationReason_descriptor(), name, value);
 }
-enum EnvironmentControl : int {
-  ENVIRONMENT_CONTROL_UNSPECIFIED = 0,
-  ENVIRONMENT_CONTROL_ADVANCE = 1,
-  ENVIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPACITY = 2,
-  EnvironmentControl_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  EnvironmentControl_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool EnvironmentControl_IsValid(int value);
-constexpr EnvironmentControl EnvironmentControl_MIN = ENVIRONMENT_CONTROL_UNSPECIFIED;
-constexpr EnvironmentControl EnvironmentControl_MAX = ENVIRONMENT_CONTROL_WAIT_FOR_TRAINING_CAPACITY;
-constexpr int EnvironmentControl_ARRAYSIZE = EnvironmentControl_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* EnvironmentControl_descriptor();
-template<typename T>
-inline const std::string& EnvironmentControl_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, EnvironmentControl>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function EnvironmentControl_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    EnvironmentControl_descriptor(), enum_t_value);
-}
-inline bool EnvironmentControl_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, EnvironmentControl* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<EnvironmentControl>(
-    EnvironmentControl_descriptor(), name, value);
-}
 // ===================================================================
 
-class TaskIdentity final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.TaskIdentity) */ {
+class EnvironmentSpec final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.EnvironmentSpec) */ {
  public:
-  inline TaskIdentity() : TaskIdentity(nullptr) {}
-  ~TaskIdentity() override;
-  explicit PROTOBUF_CONSTEXPR TaskIdentity(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline EnvironmentSpec() : EnvironmentSpec(nullptr) {}
+  ~EnvironmentSpec() override;
+  explicit PROTOBUF_CONSTEXPR EnvironmentSpec(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  TaskIdentity(const TaskIdentity& from);
-  TaskIdentity(TaskIdentity&& from) noexcept
-    : TaskIdentity() {
+  EnvironmentSpec(const EnvironmentSpec& from);
+  EnvironmentSpec(EnvironmentSpec&& from) noexcept
+    : EnvironmentSpec() {
     *this = ::std::move(from);
   }
 
-  inline TaskIdentity& operator=(const TaskIdentity& from) {
+  inline EnvironmentSpec& operator=(const EnvironmentSpec& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TaskIdentity& operator=(TaskIdentity&& from) noexcept {
+  inline EnvironmentSpec& operator=(EnvironmentSpec&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -498,20 +387,20 @@ class TaskIdentity final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TaskIdentity& default_instance() {
+  static const EnvironmentSpec& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TaskIdentity* internal_default_instance() {
-    return reinterpret_cast<const TaskIdentity*>(
-               &_TaskIdentity_default_instance_);
+  static inline const EnvironmentSpec* internal_default_instance() {
+    return reinterpret_cast<const EnvironmentSpec*>(
+               &_EnvironmentSpec_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(TaskIdentity& a, TaskIdentity& b) {
+  friend void swap(EnvironmentSpec& a, EnvironmentSpec& b) {
     a.Swap(&b);
   }
-  inline void Swap(TaskIdentity* other) {
+  inline void Swap(EnvironmentSpec* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -524,7 +413,7 @@ class TaskIdentity final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TaskIdentity* other) {
+  void UnsafeArenaSwap(EnvironmentSpec* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -532,14 +421,14 @@ class TaskIdentity final :
 
   // implements Message ----------------------------------------------
 
-  TaskIdentity* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TaskIdentity>(arena);
+  EnvironmentSpec* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<EnvironmentSpec>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TaskIdentity& from);
+  void CopyFrom(const EnvironmentSpec& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const TaskIdentity& from) {
-    TaskIdentity::MergeImpl(*this, from);
+  void MergeFrom( const EnvironmentSpec& from) {
+    EnvironmentSpec::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -557,15 +446,15 @@ class TaskIdentity final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(TaskIdentity* other);
+  void InternalSwap(EnvironmentSpec* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.TaskIdentity";
+    return "rl.task.maze.v1.EnvironmentSpec";
   }
   protected:
-  explicit TaskIdentity(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit EnvironmentSpec(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -579,494 +468,27 @@ class TaskIdentity final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTaskContractIdFieldNumber = 1,
-    kFixedMapIdFieldNumber = 5,
-    kTaskConfigDigestFieldNumber = 4,
-    kFixedMapDigestFieldNumber = 6,
-    kTaskRevisionFieldNumber = 3,
+    kMapIdFieldNumber = 2,
+    kActionRuleIdFieldNumber = 4,
+    kExpectedMapDigestFieldNumber = 3,
+    kAgentCountFieldNumber = 1,
+    kEpisodeMaxStepsFieldNumber = 5,
   };
-  // string task_contract_id = 1;
-  void clear_task_contract_id();
-  const std::string& task_contract_id() const;
+  // string map_id = 2;
+  void clear_map_id();
+  const std::string& map_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_task_contract_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_task_contract_id();
-  PROTOBUF_NODISCARD std::string* release_task_contract_id();
-  void set_allocated_task_contract_id(std::string* task_contract_id);
+  void set_map_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_map_id();
+  PROTOBUF_NODISCARD std::string* release_map_id();
+  void set_allocated_map_id(std::string* map_id);
   private:
-  const std::string& _internal_task_contract_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_contract_id(const std::string& value);
-  std::string* _internal_mutable_task_contract_id();
+  const std::string& _internal_map_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_map_id(const std::string& value);
+  std::string* _internal_mutable_map_id();
   public:
 
-  // string fixed_map_id = 5;
-  void clear_fixed_map_id();
-  const std::string& fixed_map_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_fixed_map_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_fixed_map_id();
-  PROTOBUF_NODISCARD std::string* release_fixed_map_id();
-  void set_allocated_fixed_map_id(std::string* fixed_map_id);
-  private:
-  const std::string& _internal_fixed_map_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_fixed_map_id(const std::string& value);
-  std::string* _internal_mutable_fixed_map_id();
-  public:
-
-  // .rl.common.v1.ContentDigest task_config_digest = 4;
-  bool has_task_config_digest() const;
-  private:
-  bool _internal_has_task_config_digest() const;
-  public:
-  void clear_task_config_digest();
-  const ::rl::common::v1::ContentDigest& task_config_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_task_config_digest();
-  ::rl::common::v1::ContentDigest* mutable_task_config_digest();
-  void set_allocated_task_config_digest(::rl::common::v1::ContentDigest* task_config_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_task_config_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_task_config_digest();
-  public:
-  void unsafe_arena_set_allocated_task_config_digest(
-      ::rl::common::v1::ContentDigest* task_config_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_task_config_digest();
-
-  // .rl.common.v1.ContentDigest fixed_map_digest = 6;
-  bool has_fixed_map_digest() const;
-  private:
-  bool _internal_has_fixed_map_digest() const;
-  public:
-  void clear_fixed_map_digest();
-  const ::rl::common::v1::ContentDigest& fixed_map_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_fixed_map_digest();
-  ::rl::common::v1::ContentDigest* mutable_fixed_map_digest();
-  void set_allocated_fixed_map_digest(::rl::common::v1::ContentDigest* fixed_map_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_fixed_map_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_fixed_map_digest();
-  public:
-  void unsafe_arena_set_allocated_fixed_map_digest(
-      ::rl::common::v1::ContentDigest* fixed_map_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_fixed_map_digest();
-
-  // uint64 task_revision = 3;
-  void clear_task_revision();
-  uint64_t task_revision() const;
-  void set_task_revision(uint64_t value);
-  private:
-  uint64_t _internal_task_revision() const;
-  void _internal_set_task_revision(uint64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.TaskIdentity)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_contract_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fixed_map_id_;
-    ::rl::common::v1::ContentDigest* task_config_digest_;
-    ::rl::common::v1::ContentDigest* fixed_map_digest_;
-    uint64_t task_revision_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_maze_5ftask_2eproto;
-};
-// -------------------------------------------------------------------
-
-class BehaviorPolicyBinding final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.BehaviorPolicyBinding) */ {
- public:
-  inline BehaviorPolicyBinding() : BehaviorPolicyBinding(nullptr) {}
-  ~BehaviorPolicyBinding() override;
-  explicit PROTOBUF_CONSTEXPR BehaviorPolicyBinding(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  BehaviorPolicyBinding(const BehaviorPolicyBinding& from);
-  BehaviorPolicyBinding(BehaviorPolicyBinding&& from) noexcept
-    : BehaviorPolicyBinding() {
-    *this = ::std::move(from);
-  }
-
-  inline BehaviorPolicyBinding& operator=(const BehaviorPolicyBinding& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline BehaviorPolicyBinding& operator=(BehaviorPolicyBinding&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const BehaviorPolicyBinding& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const BehaviorPolicyBinding* internal_default_instance() {
-    return reinterpret_cast<const BehaviorPolicyBinding*>(
-               &_BehaviorPolicyBinding_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    1;
-
-  friend void swap(BehaviorPolicyBinding& a, BehaviorPolicyBinding& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(BehaviorPolicyBinding* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(BehaviorPolicyBinding* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  BehaviorPolicyBinding* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<BehaviorPolicyBinding>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const BehaviorPolicyBinding& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const BehaviorPolicyBinding& from) {
-    BehaviorPolicyBinding::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(BehaviorPolicyBinding* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.BehaviorPolicyBinding";
-  }
-  protected:
-  explicit BehaviorPolicyBinding(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kModelLineageIdFieldNumber = 1,
-    kDistributionSchemaIdFieldNumber = 5,
-    kModelArtifactDigestFieldNumber = 3,
-    kModelManifestDigestFieldNumber = 4,
-    kPolicySpecDigestFieldNumber = 6,
-    kModelStepFieldNumber = 2,
-  };
-  // string model_lineage_id = 1;
-  void clear_model_lineage_id();
-  const std::string& model_lineage_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_model_lineage_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_model_lineage_id();
-  PROTOBUF_NODISCARD std::string* release_model_lineage_id();
-  void set_allocated_model_lineage_id(std::string* model_lineage_id);
-  private:
-  const std::string& _internal_model_lineage_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_lineage_id(const std::string& value);
-  std::string* _internal_mutable_model_lineage_id();
-  public:
-
-  // string distribution_schema_id = 5;
-  void clear_distribution_schema_id();
-  const std::string& distribution_schema_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_distribution_schema_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_distribution_schema_id();
-  PROTOBUF_NODISCARD std::string* release_distribution_schema_id();
-  void set_allocated_distribution_schema_id(std::string* distribution_schema_id);
-  private:
-  const std::string& _internal_distribution_schema_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_distribution_schema_id(const std::string& value);
-  std::string* _internal_mutable_distribution_schema_id();
-  public:
-
-  // .rl.common.v1.ContentDigest model_artifact_digest = 3;
-  bool has_model_artifact_digest() const;
-  private:
-  bool _internal_has_model_artifact_digest() const;
-  public:
-  void clear_model_artifact_digest();
-  const ::rl::common::v1::ContentDigest& model_artifact_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_model_artifact_digest();
-  ::rl::common::v1::ContentDigest* mutable_model_artifact_digest();
-  void set_allocated_model_artifact_digest(::rl::common::v1::ContentDigest* model_artifact_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_model_artifact_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_model_artifact_digest();
-  public:
-  void unsafe_arena_set_allocated_model_artifact_digest(
-      ::rl::common::v1::ContentDigest* model_artifact_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_model_artifact_digest();
-
-  // .rl.common.v1.ContentDigest model_manifest_digest = 4;
-  bool has_model_manifest_digest() const;
-  private:
-  bool _internal_has_model_manifest_digest() const;
-  public:
-  void clear_model_manifest_digest();
-  const ::rl::common::v1::ContentDigest& model_manifest_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_model_manifest_digest();
-  ::rl::common::v1::ContentDigest* mutable_model_manifest_digest();
-  void set_allocated_model_manifest_digest(::rl::common::v1::ContentDigest* model_manifest_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_model_manifest_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_model_manifest_digest();
-  public:
-  void unsafe_arena_set_allocated_model_manifest_digest(
-      ::rl::common::v1::ContentDigest* model_manifest_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_model_manifest_digest();
-
-  // .rl.common.v1.ContentDigest policy_spec_digest = 6;
-  bool has_policy_spec_digest() const;
-  private:
-  bool _internal_has_policy_spec_digest() const;
-  public:
-  void clear_policy_spec_digest();
-  const ::rl::common::v1::ContentDigest& policy_spec_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_policy_spec_digest();
-  ::rl::common::v1::ContentDigest* mutable_policy_spec_digest();
-  void set_allocated_policy_spec_digest(::rl::common::v1::ContentDigest* policy_spec_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_policy_spec_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_policy_spec_digest();
-  public:
-  void unsafe_arena_set_allocated_policy_spec_digest(
-      ::rl::common::v1::ContentDigest* policy_spec_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_policy_spec_digest();
-
-  // optional uint64 model_step = 2;
-  bool has_model_step() const;
-  private:
-  bool _internal_has_model_step() const;
-  public:
-  void clear_model_step();
-  uint64_t model_step() const;
-  void set_model_step(uint64_t value);
-  private:
-  uint64_t _internal_model_step() const;
-  void _internal_set_model_step(uint64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.BehaviorPolicyBinding)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_lineage_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr distribution_schema_id_;
-    ::rl::common::v1::ContentDigest* model_artifact_digest_;
-    ::rl::common::v1::ContentDigest* model_manifest_digest_;
-    ::rl::common::v1::ContentDigest* policy_spec_digest_;
-    uint64_t model_step_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_maze_5ftask_2eproto;
-};
-// -------------------------------------------------------------------
-
-class MazeTaskSpec final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.MazeTaskSpec) */ {
- public:
-  inline MazeTaskSpec() : MazeTaskSpec(nullptr) {}
-  ~MazeTaskSpec() override;
-  explicit PROTOBUF_CONSTEXPR MazeTaskSpec(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  MazeTaskSpec(const MazeTaskSpec& from);
-  MazeTaskSpec(MazeTaskSpec&& from) noexcept
-    : MazeTaskSpec() {
-    *this = ::std::move(from);
-  }
-
-  inline MazeTaskSpec& operator=(const MazeTaskSpec& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline MazeTaskSpec& operator=(MazeTaskSpec&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const MazeTaskSpec& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const MazeTaskSpec* internal_default_instance() {
-    return reinterpret_cast<const MazeTaskSpec*>(
-               &_MazeTaskSpec_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    2;
-
-  friend void swap(MazeTaskSpec& a, MazeTaskSpec& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(MazeTaskSpec* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(MazeTaskSpec* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  MazeTaskSpec* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<MazeTaskSpec>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const MazeTaskSpec& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const MazeTaskSpec& from) {
-    MazeTaskSpec::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(MazeTaskSpec* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.MazeTaskSpec";
-  }
-  protected:
-  explicit MazeTaskSpec(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kFixedMapIdFieldNumber = 3,
-    kActionRuleIdFieldNumber = 7,
-    kIdentityFieldNumber = 1,
-    kExpectedMapDigestFieldNumber = 4,
-    kObservationSchemaFieldNumber = 5,
-    kActionSchemaFieldNumber = 6,
-    kEpisodeMaxStepsFieldNumber = 8,
-  };
-  // string fixed_map_id = 3;
-  void clear_fixed_map_id();
-  const std::string& fixed_map_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_fixed_map_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_fixed_map_id();
-  PROTOBUF_NODISCARD std::string* release_fixed_map_id();
-  void set_allocated_fixed_map_id(std::string* fixed_map_id);
-  private:
-  const std::string& _internal_fixed_map_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_fixed_map_id(const std::string& value);
-  std::string* _internal_mutable_fixed_map_id();
-  public:
-
-  // string action_rule_id = 7;
+  // string action_rule_id = 4;
   void clear_action_rule_id();
   const std::string& action_rule_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1080,25 +502,7 @@ class MazeTaskSpec final :
   std::string* _internal_mutable_action_rule_id();
   public:
 
-  // .rl.task.maze.v1.TaskIdentity identity = 1;
-  bool has_identity() const;
-  private:
-  bool _internal_has_identity() const;
-  public:
-  void clear_identity();
-  const ::rl::task::maze::v1::TaskIdentity& identity() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::TaskIdentity* release_identity();
-  ::rl::task::maze::v1::TaskIdentity* mutable_identity();
-  void set_allocated_identity(::rl::task::maze::v1::TaskIdentity* identity);
-  private:
-  const ::rl::task::maze::v1::TaskIdentity& _internal_identity() const;
-  ::rl::task::maze::v1::TaskIdentity* _internal_mutable_identity();
-  public:
-  void unsafe_arena_set_allocated_identity(
-      ::rl::task::maze::v1::TaskIdentity* identity);
-  ::rl::task::maze::v1::TaskIdentity* unsafe_arena_release_identity();
-
-  // .rl.common.v1.ContentDigest expected_map_digest = 4;
+  // .rl.common.v1.ContentDigest expected_map_digest = 3;
   bool has_expected_map_digest() const;
   private:
   bool _internal_has_expected_map_digest() const;
@@ -1116,196 +520,6 @@ class MazeTaskSpec final :
       ::rl::common::v1::ContentDigest* expected_map_digest);
   ::rl::common::v1::ContentDigest* unsafe_arena_release_expected_map_digest();
 
-  // .rl.common.v1.SchemaIdentity observation_schema = 5;
-  bool has_observation_schema() const;
-  private:
-  bool _internal_has_observation_schema() const;
-  public:
-  void clear_observation_schema();
-  const ::rl::common::v1::SchemaIdentity& observation_schema() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_observation_schema();
-  ::rl::common::v1::SchemaIdentity* mutable_observation_schema();
-  void set_allocated_observation_schema(::rl::common::v1::SchemaIdentity* observation_schema);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_observation_schema() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_observation_schema();
-  public:
-  void unsafe_arena_set_allocated_observation_schema(
-      ::rl::common::v1::SchemaIdentity* observation_schema);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_observation_schema();
-
-  // .rl.common.v1.SchemaIdentity action_schema = 6;
-  bool has_action_schema() const;
-  private:
-  bool _internal_has_action_schema() const;
-  public:
-  void clear_action_schema();
-  const ::rl::common::v1::SchemaIdentity& action_schema() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_action_schema();
-  ::rl::common::v1::SchemaIdentity* mutable_action_schema();
-  void set_allocated_action_schema(::rl::common::v1::SchemaIdentity* action_schema);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_action_schema() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_action_schema();
-  public:
-  void unsafe_arena_set_allocated_action_schema(
-      ::rl::common::v1::SchemaIdentity* action_schema);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_action_schema();
-
-  // uint32 episode_max_steps = 8;
-  void clear_episode_max_steps();
-  uint32_t episode_max_steps() const;
-  void set_episode_max_steps(uint32_t value);
-  private:
-  uint32_t _internal_episode_max_steps() const;
-  void _internal_set_episode_max_steps(uint32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.MazeTaskSpec)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fixed_map_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr action_rule_id_;
-    ::rl::task::maze::v1::TaskIdentity* identity_;
-    ::rl::common::v1::ContentDigest* expected_map_digest_;
-    ::rl::common::v1::SchemaIdentity* observation_schema_;
-    ::rl::common::v1::SchemaIdentity* action_schema_;
-    uint32_t episode_max_steps_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_maze_5ftask_2eproto;
-};
-// -------------------------------------------------------------------
-
-class EnvironmentRuntimeSpec final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.EnvironmentRuntimeSpec) */ {
- public:
-  inline EnvironmentRuntimeSpec() : EnvironmentRuntimeSpec(nullptr) {}
-  ~EnvironmentRuntimeSpec() override;
-  explicit PROTOBUF_CONSTEXPR EnvironmentRuntimeSpec(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  EnvironmentRuntimeSpec(const EnvironmentRuntimeSpec& from);
-  EnvironmentRuntimeSpec(EnvironmentRuntimeSpec&& from) noexcept
-    : EnvironmentRuntimeSpec() {
-    *this = ::std::move(from);
-  }
-
-  inline EnvironmentRuntimeSpec& operator=(const EnvironmentRuntimeSpec& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline EnvironmentRuntimeSpec& operator=(EnvironmentRuntimeSpec&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const EnvironmentRuntimeSpec& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const EnvironmentRuntimeSpec* internal_default_instance() {
-    return reinterpret_cast<const EnvironmentRuntimeSpec*>(
-               &_EnvironmentRuntimeSpec_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    3;
-
-  friend void swap(EnvironmentRuntimeSpec& a, EnvironmentRuntimeSpec& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(EnvironmentRuntimeSpec* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(EnvironmentRuntimeSpec* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  EnvironmentRuntimeSpec* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<EnvironmentRuntimeSpec>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const EnvironmentRuntimeSpec& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const EnvironmentRuntimeSpec& from) {
-    EnvironmentRuntimeSpec::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(EnvironmentRuntimeSpec* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.EnvironmentRuntimeSpec";
-  }
-  protected:
-  explicit EnvironmentRuntimeSpec(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kAgentCountFieldNumber = 1,
-  };
   // uint32 agent_count = 1;
   void clear_agent_count();
   uint32_t agent_count() const;
@@ -1315,7 +529,16 @@ class EnvironmentRuntimeSpec final :
   void _internal_set_agent_count(uint32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.EnvironmentRuntimeSpec)
+  // uint32 episode_max_steps = 5;
+  void clear_episode_max_steps();
+  uint32_t episode_max_steps() const;
+  void set_episode_max_steps(uint32_t value);
+  private:
+  uint32_t _internal_episode_max_steps() const;
+  void _internal_set_episode_max_steps(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.EnvironmentSpec)
  private:
   class _Internal;
 
@@ -1323,7 +546,11 @@ class EnvironmentRuntimeSpec final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr map_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr action_rule_id_;
+    ::rl::common::v1::ContentDigest* expected_map_digest_;
     uint32_t agent_count_;
+    uint32_t episode_max_steps_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1379,7 +606,7 @@ class MapDescriptor final :
                &_MapDescriptor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    1;
 
   friend void swap(MapDescriptor& a, MapDescriptor& b) {
     a.Swap(&b);
@@ -1453,18 +680,17 @@ class MapDescriptor final :
 
   enum : int {
     kMapIdFieldNumber = 1,
-    kBlockedBitmapFieldNumber = 10,
-    kActionRuleIdFieldNumber = 13,
-    kCanonicalDigestFieldNumber = 11,
-    kFormatVersionFieldNumber = 2,
-    kGridColumnsFieldNumber = 3,
-    kGridRowsFieldNumber = 4,
-    kGridSizeMicrounitsFieldNumber = 5,
-    kStartGridXFieldNumber = 6,
-    kStartGridYFieldNumber = 7,
-    kGoalGridXFieldNumber = 8,
-    kGoalGridYFieldNumber = 9,
-    kShortestActionStepsFieldNumber = 12,
+    kBlockedBitmapFieldNumber = 9,
+    kActionRuleIdFieldNumber = 12,
+    kCanonicalDigestFieldNumber = 10,
+    kGridColumnsFieldNumber = 2,
+    kGridRowsFieldNumber = 3,
+    kGridSizeMicrounitsFieldNumber = 4,
+    kStartGridXFieldNumber = 5,
+    kStartGridYFieldNumber = 6,
+    kGoalGridXFieldNumber = 7,
+    kGoalGridYFieldNumber = 8,
+    kShortestActionStepsFieldNumber = 11,
   };
   // string map_id = 1;
   void clear_map_id();
@@ -1480,7 +706,7 @@ class MapDescriptor final :
   std::string* _internal_mutable_map_id();
   public:
 
-  // bytes blocked_bitmap = 10;
+  // bytes blocked_bitmap = 9;
   void clear_blocked_bitmap();
   const std::string& blocked_bitmap() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1494,7 +720,7 @@ class MapDescriptor final :
   std::string* _internal_mutable_blocked_bitmap();
   public:
 
-  // string action_rule_id = 13;
+  // string action_rule_id = 12;
   void clear_action_rule_id();
   const std::string& action_rule_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1508,7 +734,7 @@ class MapDescriptor final :
   std::string* _internal_mutable_action_rule_id();
   public:
 
-  // .rl.common.v1.ContentDigest canonical_digest = 11;
+  // .rl.common.v1.ContentDigest canonical_digest = 10;
   bool has_canonical_digest() const;
   private:
   bool _internal_has_canonical_digest() const;
@@ -1526,16 +752,7 @@ class MapDescriptor final :
       ::rl::common::v1::ContentDigest* canonical_digest);
   ::rl::common::v1::ContentDigest* unsafe_arena_release_canonical_digest();
 
-  // uint32 format_version = 2;
-  void clear_format_version();
-  uint32_t format_version() const;
-  void set_format_version(uint32_t value);
-  private:
-  uint32_t _internal_format_version() const;
-  void _internal_set_format_version(uint32_t value);
-  public:
-
-  // uint32 grid_columns = 3;
+  // uint32 grid_columns = 2;
   void clear_grid_columns();
   uint32_t grid_columns() const;
   void set_grid_columns(uint32_t value);
@@ -1544,7 +761,7 @@ class MapDescriptor final :
   void _internal_set_grid_columns(uint32_t value);
   public:
 
-  // uint32 grid_rows = 4;
+  // uint32 grid_rows = 3;
   void clear_grid_rows();
   uint32_t grid_rows() const;
   void set_grid_rows(uint32_t value);
@@ -1553,7 +770,7 @@ class MapDescriptor final :
   void _internal_set_grid_rows(uint32_t value);
   public:
 
-  // uint32 grid_size_microunits = 5;
+  // uint32 grid_size_microunits = 4;
   void clear_grid_size_microunits();
   uint32_t grid_size_microunits() const;
   void set_grid_size_microunits(uint32_t value);
@@ -1562,7 +779,7 @@ class MapDescriptor final :
   void _internal_set_grid_size_microunits(uint32_t value);
   public:
 
-  // int32 start_grid_x = 6;
+  // int32 start_grid_x = 5;
   void clear_start_grid_x();
   int32_t start_grid_x() const;
   void set_start_grid_x(int32_t value);
@@ -1571,7 +788,7 @@ class MapDescriptor final :
   void _internal_set_start_grid_x(int32_t value);
   public:
 
-  // int32 start_grid_y = 7;
+  // int32 start_grid_y = 6;
   void clear_start_grid_y();
   int32_t start_grid_y() const;
   void set_start_grid_y(int32_t value);
@@ -1580,7 +797,7 @@ class MapDescriptor final :
   void _internal_set_start_grid_y(int32_t value);
   public:
 
-  // int32 goal_grid_x = 8;
+  // int32 goal_grid_x = 7;
   void clear_goal_grid_x();
   int32_t goal_grid_x() const;
   void set_goal_grid_x(int32_t value);
@@ -1589,7 +806,7 @@ class MapDescriptor final :
   void _internal_set_goal_grid_x(int32_t value);
   public:
 
-  // int32 goal_grid_y = 9;
+  // int32 goal_grid_y = 8;
   void clear_goal_grid_y();
   int32_t goal_grid_y() const;
   void set_goal_grid_y(int32_t value);
@@ -1598,7 +815,7 @@ class MapDescriptor final :
   void _internal_set_goal_grid_y(int32_t value);
   public:
 
-  // uint32 shortest_action_steps = 12;
+  // uint32 shortest_action_steps = 11;
   void clear_shortest_action_steps();
   uint32_t shortest_action_steps() const;
   void set_shortest_action_steps(uint32_t value);
@@ -1619,7 +836,6 @@ class MapDescriptor final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr blocked_bitmap_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr action_rule_id_;
     ::rl::common::v1::ContentDigest* canonical_digest_;
-    uint32_t format_version_;
     uint32_t grid_columns_;
     uint32_t grid_rows_;
     uint32_t grid_size_microunits_;
@@ -1635,24 +851,24 @@ class MapDescriptor final :
 };
 // -------------------------------------------------------------------
 
-class LifecycleCommand final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.LifecycleCommand) */ {
+class CommandIdentity final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.CommandIdentity) */ {
  public:
-  inline LifecycleCommand() : LifecycleCommand(nullptr) {}
-  ~LifecycleCommand() override;
-  explicit PROTOBUF_CONSTEXPR LifecycleCommand(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline CommandIdentity() : CommandIdentity(nullptr) {}
+  ~CommandIdentity() override;
+  explicit PROTOBUF_CONSTEXPR CommandIdentity(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  LifecycleCommand(const LifecycleCommand& from);
-  LifecycleCommand(LifecycleCommand&& from) noexcept
-    : LifecycleCommand() {
+  CommandIdentity(const CommandIdentity& from);
+  CommandIdentity(CommandIdentity&& from) noexcept
+    : CommandIdentity() {
     *this = ::std::move(from);
   }
 
-  inline LifecycleCommand& operator=(const LifecycleCommand& from) {
+  inline CommandIdentity& operator=(const CommandIdentity& from) {
     CopyFrom(from);
     return *this;
   }
-  inline LifecycleCommand& operator=(LifecycleCommand&& from) noexcept {
+  inline CommandIdentity& operator=(CommandIdentity&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1675,20 +891,20 @@ class LifecycleCommand final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const LifecycleCommand& default_instance() {
+  static const CommandIdentity& default_instance() {
     return *internal_default_instance();
   }
-  static inline const LifecycleCommand* internal_default_instance() {
-    return reinterpret_cast<const LifecycleCommand*>(
-               &_LifecycleCommand_default_instance_);
+  static inline const CommandIdentity* internal_default_instance() {
+    return reinterpret_cast<const CommandIdentity*>(
+               &_CommandIdentity_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    2;
 
-  friend void swap(LifecycleCommand& a, LifecycleCommand& b) {
+  friend void swap(CommandIdentity& a, CommandIdentity& b) {
     a.Swap(&b);
   }
-  inline void Swap(LifecycleCommand* other) {
+  inline void Swap(CommandIdentity* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1701,7 +917,7 @@ class LifecycleCommand final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(LifecycleCommand* other) {
+  void UnsafeArenaSwap(CommandIdentity* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1709,14 +925,14 @@ class LifecycleCommand final :
 
   // implements Message ----------------------------------------------
 
-  LifecycleCommand* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LifecycleCommand>(arena);
+  CommandIdentity* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CommandIdentity>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LifecycleCommand& from);
+  void CopyFrom(const CommandIdentity& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const LifecycleCommand& from) {
-    LifecycleCommand::MergeImpl(*this, from);
+  void MergeFrom( const CommandIdentity& from) {
+    CommandIdentity::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1734,15 +950,15 @@ class LifecycleCommand final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LifecycleCommand* other);
+  void InternalSwap(CommandIdentity* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.LifecycleCommand";
+    return "rl.task.maze.v1.CommandIdentity";
   }
   protected:
-  explicit LifecycleCommand(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit CommandIdentity(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -1756,17 +972,12 @@ class LifecycleCommand final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kSessionIdFieldNumber = 2,
-    kEpisodeIdFieldNumber = 3,
-    kIdempotencyKeyFieldNumber = 7,
-    kTaskFieldNumber = 1,
-    kLifecycleEpochFieldNumber = 5,
-    kCommandSequenceFieldNumber = 6,
-    kExpectedTaskStateFieldNumber = 8,
-    kExpectedSessionStateFieldNumber = 9,
-    kExpectedEpisodeStateFieldNumber = 10,
+    kSessionIdFieldNumber = 1,
+    kEpisodeIdFieldNumber = 4,
+    kSessionEpochFieldNumber = 2,
+    kSequenceFieldNumber = 3,
   };
-  // string session_id = 2;
+  // string session_id = 1;
   void clear_session_id();
   const std::string& session_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1780,7 +991,7 @@ class LifecycleCommand final :
   std::string* _internal_mutable_session_id();
   public:
 
-  // string episode_id = 3;
+  // string episode_id = 4;
   void clear_episode_id();
   const std::string& episode_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1794,84 +1005,25 @@ class LifecycleCommand final :
   std::string* _internal_mutable_episode_id();
   public:
 
-  // string idempotency_key = 7;
-  void clear_idempotency_key();
-  const std::string& idempotency_key() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_idempotency_key(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_idempotency_key();
-  PROTOBUF_NODISCARD std::string* release_idempotency_key();
-  void set_allocated_idempotency_key(std::string* idempotency_key);
+  // uint64 session_epoch = 2;
+  void clear_session_epoch();
+  uint64_t session_epoch() const;
+  void set_session_epoch(uint64_t value);
   private:
-  const std::string& _internal_idempotency_key() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_idempotency_key(const std::string& value);
-  std::string* _internal_mutable_idempotency_key();
+  uint64_t _internal_session_epoch() const;
+  void _internal_set_session_epoch(uint64_t value);
   public:
 
-  // .rl.task.maze.v1.TaskIdentity task = 1;
-  bool has_task() const;
+  // uint64 sequence = 3;
+  void clear_sequence();
+  uint64_t sequence() const;
+  void set_sequence(uint64_t value);
   private:
-  bool _internal_has_task() const;
-  public:
-  void clear_task();
-  const ::rl::task::maze::v1::TaskIdentity& task() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::TaskIdentity* release_task();
-  ::rl::task::maze::v1::TaskIdentity* mutable_task();
-  void set_allocated_task(::rl::task::maze::v1::TaskIdentity* task);
-  private:
-  const ::rl::task::maze::v1::TaskIdentity& _internal_task() const;
-  ::rl::task::maze::v1::TaskIdentity* _internal_mutable_task();
-  public:
-  void unsafe_arena_set_allocated_task(
-      ::rl::task::maze::v1::TaskIdentity* task);
-  ::rl::task::maze::v1::TaskIdentity* unsafe_arena_release_task();
-
-  // uint64 lifecycle_epoch = 5;
-  void clear_lifecycle_epoch();
-  uint64_t lifecycle_epoch() const;
-  void set_lifecycle_epoch(uint64_t value);
-  private:
-  uint64_t _internal_lifecycle_epoch() const;
-  void _internal_set_lifecycle_epoch(uint64_t value);
+  uint64_t _internal_sequence() const;
+  void _internal_set_sequence(uint64_t value);
   public:
 
-  // uint64 command_sequence = 6;
-  void clear_command_sequence();
-  uint64_t command_sequence() const;
-  void set_command_sequence(uint64_t value);
-  private:
-  uint64_t _internal_command_sequence() const;
-  void _internal_set_command_sequence(uint64_t value);
-  public:
-
-  // .rl.task.maze.v1.TaskState expected_task_state = 8;
-  void clear_expected_task_state();
-  ::rl::task::maze::v1::TaskState expected_task_state() const;
-  void set_expected_task_state(::rl::task::maze::v1::TaskState value);
-  private:
-  ::rl::task::maze::v1::TaskState _internal_expected_task_state() const;
-  void _internal_set_expected_task_state(::rl::task::maze::v1::TaskState value);
-  public:
-
-  // .rl.task.maze.v1.SessionState expected_session_state = 9;
-  void clear_expected_session_state();
-  ::rl::task::maze::v1::SessionState expected_session_state() const;
-  void set_expected_session_state(::rl::task::maze::v1::SessionState value);
-  private:
-  ::rl::task::maze::v1::SessionState _internal_expected_session_state() const;
-  void _internal_set_expected_session_state(::rl::task::maze::v1::SessionState value);
-  public:
-
-  // .rl.task.maze.v1.EpisodeState expected_episode_state = 10;
-  void clear_expected_episode_state();
-  ::rl::task::maze::v1::EpisodeState expected_episode_state() const;
-  void set_expected_episode_state(::rl::task::maze::v1::EpisodeState value);
-  private:
-  ::rl::task::maze::v1::EpisodeState _internal_expected_episode_state() const;
-  void _internal_set_expected_episode_state(::rl::task::maze::v1::EpisodeState value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.LifecycleCommand)
+  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.CommandIdentity)
  private:
   class _Internal;
 
@@ -1881,13 +1033,8 @@ class LifecycleCommand final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr session_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr idempotency_key_;
-    ::rl::task::maze::v1::TaskIdentity* task_;
-    uint64_t lifecycle_epoch_;
-    uint64_t command_sequence_;
-    int expected_task_state_;
-    int expected_session_state_;
-    int expected_episode_state_;
+    uint64_t session_epoch_;
+    uint64_t sequence_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1895,24 +1042,24 @@ class LifecycleCommand final :
 };
 // -------------------------------------------------------------------
 
-class LifecycleReply final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.LifecycleReply) */ {
+class CommandReply final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.CommandReply) */ {
  public:
-  inline LifecycleReply() : LifecycleReply(nullptr) {}
-  ~LifecycleReply() override;
-  explicit PROTOBUF_CONSTEXPR LifecycleReply(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline CommandReply() : CommandReply(nullptr) {}
+  ~CommandReply() override;
+  explicit PROTOBUF_CONSTEXPR CommandReply(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  LifecycleReply(const LifecycleReply& from);
-  LifecycleReply(LifecycleReply&& from) noexcept
-    : LifecycleReply() {
+  CommandReply(const CommandReply& from);
+  CommandReply(CommandReply&& from) noexcept
+    : CommandReply() {
     *this = ::std::move(from);
   }
 
-  inline LifecycleReply& operator=(const LifecycleReply& from) {
+  inline CommandReply& operator=(const CommandReply& from) {
     CopyFrom(from);
     return *this;
   }
-  inline LifecycleReply& operator=(LifecycleReply&& from) noexcept {
+  inline CommandReply& operator=(CommandReply&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1935,20 +1082,20 @@ class LifecycleReply final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const LifecycleReply& default_instance() {
+  static const CommandReply& default_instance() {
     return *internal_default_instance();
   }
-  static inline const LifecycleReply* internal_default_instance() {
-    return reinterpret_cast<const LifecycleReply*>(
-               &_LifecycleReply_default_instance_);
+  static inline const CommandReply* internal_default_instance() {
+    return reinterpret_cast<const CommandReply*>(
+               &_CommandReply_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    3;
 
-  friend void swap(LifecycleReply& a, LifecycleReply& b) {
+  friend void swap(CommandReply& a, CommandReply& b) {
     a.Swap(&b);
   }
-  inline void Swap(LifecycleReply* other) {
+  inline void Swap(CommandReply* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1961,7 +1108,7 @@ class LifecycleReply final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(LifecycleReply* other) {
+  void UnsafeArenaSwap(CommandReply* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1969,14 +1116,14 @@ class LifecycleReply final :
 
   // implements Message ----------------------------------------------
 
-  LifecycleReply* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LifecycleReply>(arena);
+  CommandReply* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CommandReply>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LifecycleReply& from);
+  void CopyFrom(const CommandReply& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const LifecycleReply& from) {
-    LifecycleReply::MergeImpl(*this, from);
+  void MergeFrom( const CommandReply& from) {
+    CommandReply::MergeImpl(*this, from);
   }
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
@@ -1994,15 +1141,15 @@ class LifecycleReply final :
   void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LifecycleReply* other);
+  void InternalSwap(CommandReply* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.LifecycleReply";
+    return "rl.task.maze.v1.CommandReply";
   }
   protected:
-  explicit LifecycleReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit CommandReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   public:
 
@@ -2016,16 +1163,13 @@ class LifecycleReply final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMessageFieldNumber = 4,
-    kRetCodeFieldNumber = 1,
-    kResultFieldNumber = 2,
-    kErrorCodeFieldNumber = 3,
-    kTaskStateFieldNumber = 6,
-    kAppliedSequenceFieldNumber = 5,
-    kSessionStateFieldNumber = 7,
-    kEpisodeStateFieldNumber = 8,
+    kMessageFieldNumber = 3,
+    kResultFieldNumber = 1,
+    kErrorCodeFieldNumber = 2,
+    kAppliedSequenceFieldNumber = 4,
+    kPhaseFieldNumber = 5,
   };
-  // string message = 4;
+  // string message = 3;
   void clear_message();
   const std::string& message() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2039,43 +1183,25 @@ class LifecycleReply final :
   std::string* _internal_mutable_message();
   public:
 
-  // int32 ret_code = 1;
-  void clear_ret_code();
-  int32_t ret_code() const;
-  void set_ret_code(int32_t value);
-  private:
-  int32_t _internal_ret_code() const;
-  void _internal_set_ret_code(int32_t value);
-  public:
-
-  // .rl.task.maze.v1.LifecycleResult result = 2;
+  // .rl.task.maze.v1.CommandResult result = 1;
   void clear_result();
-  ::rl::task::maze::v1::LifecycleResult result() const;
-  void set_result(::rl::task::maze::v1::LifecycleResult value);
+  ::rl::task::maze::v1::CommandResult result() const;
+  void set_result(::rl::task::maze::v1::CommandResult value);
   private:
-  ::rl::task::maze::v1::LifecycleResult _internal_result() const;
-  void _internal_set_result(::rl::task::maze::v1::LifecycleResult value);
+  ::rl::task::maze::v1::CommandResult _internal_result() const;
+  void _internal_set_result(::rl::task::maze::v1::CommandResult value);
   public:
 
-  // .rl.task.maze.v1.LifecycleErrorCode error_code = 3;
+  // .rl.task.maze.v1.CommandErrorCode error_code = 2;
   void clear_error_code();
-  ::rl::task::maze::v1::LifecycleErrorCode error_code() const;
-  void set_error_code(::rl::task::maze::v1::LifecycleErrorCode value);
+  ::rl::task::maze::v1::CommandErrorCode error_code() const;
+  void set_error_code(::rl::task::maze::v1::CommandErrorCode value);
   private:
-  ::rl::task::maze::v1::LifecycleErrorCode _internal_error_code() const;
-  void _internal_set_error_code(::rl::task::maze::v1::LifecycleErrorCode value);
+  ::rl::task::maze::v1::CommandErrorCode _internal_error_code() const;
+  void _internal_set_error_code(::rl::task::maze::v1::CommandErrorCode value);
   public:
 
-  // .rl.task.maze.v1.TaskState task_state = 6;
-  void clear_task_state();
-  ::rl::task::maze::v1::TaskState task_state() const;
-  void set_task_state(::rl::task::maze::v1::TaskState value);
-  private:
-  ::rl::task::maze::v1::TaskState _internal_task_state() const;
-  void _internal_set_task_state(::rl::task::maze::v1::TaskState value);
-  public:
-
-  // uint64 applied_sequence = 5;
+  // uint64 applied_sequence = 4;
   void clear_applied_sequence();
   uint64_t applied_sequence() const;
   void set_applied_sequence(uint64_t value);
@@ -2084,25 +1210,16 @@ class LifecycleReply final :
   void _internal_set_applied_sequence(uint64_t value);
   public:
 
-  // .rl.task.maze.v1.SessionState session_state = 7;
-  void clear_session_state();
-  ::rl::task::maze::v1::SessionState session_state() const;
-  void set_session_state(::rl::task::maze::v1::SessionState value);
+  // .rl.task.maze.v1.SessionPhase phase = 5;
+  void clear_phase();
+  ::rl::task::maze::v1::SessionPhase phase() const;
+  void set_phase(::rl::task::maze::v1::SessionPhase value);
   private:
-  ::rl::task::maze::v1::SessionState _internal_session_state() const;
-  void _internal_set_session_state(::rl::task::maze::v1::SessionState value);
+  ::rl::task::maze::v1::SessionPhase _internal_phase() const;
+  void _internal_set_phase(::rl::task::maze::v1::SessionPhase value);
   public:
 
-  // .rl.task.maze.v1.EpisodeState episode_state = 8;
-  void clear_episode_state();
-  ::rl::task::maze::v1::EpisodeState episode_state() const;
-  void set_episode_state(::rl::task::maze::v1::EpisodeState value);
-  private:
-  ::rl::task::maze::v1::EpisodeState _internal_episode_state() const;
-  void _internal_set_episode_state(::rl::task::maze::v1::EpisodeState value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.LifecycleReply)
+  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.CommandReply)
  private:
   class _Internal;
 
@@ -2111,13 +1228,10 @@ class LifecycleReply final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
-    int32_t ret_code_;
     int result_;
     int error_code_;
-    int task_state_;
     uint64_t applied_sequence_;
-    int session_state_;
-    int episode_state_;
+    int phase_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2173,7 +1287,7 @@ class OpenSessionReq final :
                &_OpenSessionReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    4;
 
   friend void swap(OpenSessionReq& a, OpenSessionReq& b) {
     a.Swap(&b);
@@ -2246,71 +1360,10 @@ class OpenSessionReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kSupportedSessionProtocolVersionsFieldNumber = 3,
-    kSupportedObservationSchemasFieldNumber = 4,
-    kSupportedActionSchemasFieldNumber = 5,
     kEnvironmentInstanceIdFieldNumber = 2,
-    kIdempotencyKeyFieldNumber = 6,
+    kRequestIdFieldNumber = 3,
     kClientFieldNumber = 1,
   };
-  // repeated uint32 supported_session_protocol_versions = 3;
-  int supported_session_protocol_versions_size() const;
-  private:
-  int _internal_supported_session_protocol_versions_size() const;
-  public:
-  void clear_supported_session_protocol_versions();
-  private:
-  uint32_t _internal_supported_session_protocol_versions(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
-      _internal_supported_session_protocol_versions() const;
-  void _internal_add_supported_session_protocol_versions(uint32_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
-      _internal_mutable_supported_session_protocol_versions();
-  public:
-  uint32_t supported_session_protocol_versions(int index) const;
-  void set_supported_session_protocol_versions(int index, uint32_t value);
-  void add_supported_session_protocol_versions(uint32_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
-      supported_session_protocol_versions() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
-      mutable_supported_session_protocol_versions();
-
-  // repeated .rl.common.v1.SchemaIdentity supported_observation_schemas = 4;
-  int supported_observation_schemas_size() const;
-  private:
-  int _internal_supported_observation_schemas_size() const;
-  public:
-  void clear_supported_observation_schemas();
-  ::rl::common::v1::SchemaIdentity* mutable_supported_observation_schemas(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >*
-      mutable_supported_observation_schemas();
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_supported_observation_schemas(int index) const;
-  ::rl::common::v1::SchemaIdentity* _internal_add_supported_observation_schemas();
-  public:
-  const ::rl::common::v1::SchemaIdentity& supported_observation_schemas(int index) const;
-  ::rl::common::v1::SchemaIdentity* add_supported_observation_schemas();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >&
-      supported_observation_schemas() const;
-
-  // repeated .rl.common.v1.SchemaIdentity supported_action_schemas = 5;
-  int supported_action_schemas_size() const;
-  private:
-  int _internal_supported_action_schemas_size() const;
-  public:
-  void clear_supported_action_schemas();
-  ::rl::common::v1::SchemaIdentity* mutable_supported_action_schemas(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >*
-      mutable_supported_action_schemas();
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_supported_action_schemas(int index) const;
-  ::rl::common::v1::SchemaIdentity* _internal_add_supported_action_schemas();
-  public:
-  const ::rl::common::v1::SchemaIdentity& supported_action_schemas(int index) const;
-  ::rl::common::v1::SchemaIdentity* add_supported_action_schemas();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >&
-      supported_action_schemas() const;
-
   // string environment_instance_id = 2;
   void clear_environment_instance_id();
   const std::string& environment_instance_id() const;
@@ -2325,18 +1378,18 @@ class OpenSessionReq final :
   std::string* _internal_mutable_environment_instance_id();
   public:
 
-  // string idempotency_key = 6;
-  void clear_idempotency_key();
-  const std::string& idempotency_key() const;
+  // string request_id = 3;
+  void clear_request_id();
+  const std::string& request_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_idempotency_key(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_idempotency_key();
-  PROTOBUF_NODISCARD std::string* release_idempotency_key();
-  void set_allocated_idempotency_key(std::string* idempotency_key);
+  void set_request_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_request_id();
+  PROTOBUF_NODISCARD std::string* release_request_id();
+  void set_allocated_request_id(std::string* request_id);
   private:
-  const std::string& _internal_idempotency_key() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_idempotency_key(const std::string& value);
-  std::string* _internal_mutable_idempotency_key();
+  const std::string& _internal_request_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_request_id(const std::string& value);
+  std::string* _internal_mutable_request_id();
   public:
 
   // .rl.common.v1.ServiceInstanceIdentity client = 1;
@@ -2365,12 +1418,8 @@ class OpenSessionReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t > supported_session_protocol_versions_;
-    mutable std::atomic<int> _supported_session_protocol_versions_cached_byte_size_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity > supported_observation_schemas_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity > supported_action_schemas_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_instance_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr idempotency_key_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr request_id_;
     ::rl::common::v1::ServiceInstanceIdentity* client_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2427,7 +1476,7 @@ class OpenSessionRsp final :
                &_OpenSessionRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    5;
 
   friend void swap(OpenSessionRsp& a, OpenSessionRsp& b) {
     a.Swap(&b);
@@ -2500,17 +1549,14 @@ class OpenSessionRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kSessionIdFieldNumber = 3,
-    kLifecycleFieldNumber = 1,
-    kAiserverFieldNumber = 5,
-    kTaskSpecFieldNumber = 6,
-    kEnvironmentRuntimeFieldNumber = 9,
-    kLifecycleEpochFieldNumber = 4,
-    kSessionProtocolVersionFieldNumber = 2,
-    kWorkloadModeFieldNumber = 7,
-    kReplayPolicyFieldNumber = 8,
+    kSessionIdFieldNumber = 2,
+    kReplyFieldNumber = 1,
+    kAiserverFieldNumber = 4,
+    kEnvironmentFieldNumber = 6,
+    kSessionEpochFieldNumber = 3,
+    kWorkloadModeFieldNumber = 5,
   };
-  // string session_id = 3;
+  // string session_id = 2;
   void clear_session_id();
   const std::string& session_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2524,25 +1570,25 @@ class OpenSessionRsp final :
   std::string* _internal_mutable_session_id();
   public:
 
-  // .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-  bool has_lifecycle() const;
+  // .rl.task.maze.v1.CommandReply reply = 1;
+  bool has_reply() const;
   private:
-  bool _internal_has_lifecycle() const;
+  bool _internal_has_reply() const;
   public:
-  void clear_lifecycle();
-  const ::rl::task::maze::v1::LifecycleReply& lifecycle() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleReply* release_lifecycle();
-  ::rl::task::maze::v1::LifecycleReply* mutable_lifecycle();
-  void set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle);
+  void clear_reply();
+  const ::rl::task::maze::v1::CommandReply& reply() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandReply* release_reply();
+  ::rl::task::maze::v1::CommandReply* mutable_reply();
+  void set_allocated_reply(::rl::task::maze::v1::CommandReply* reply);
   private:
-  const ::rl::task::maze::v1::LifecycleReply& _internal_lifecycle() const;
-  ::rl::task::maze::v1::LifecycleReply* _internal_mutable_lifecycle();
+  const ::rl::task::maze::v1::CommandReply& _internal_reply() const;
+  ::rl::task::maze::v1::CommandReply* _internal_mutable_reply();
   public:
-  void unsafe_arena_set_allocated_lifecycle(
-      ::rl::task::maze::v1::LifecycleReply* lifecycle);
-  ::rl::task::maze::v1::LifecycleReply* unsafe_arena_release_lifecycle();
+  void unsafe_arena_set_allocated_reply(
+      ::rl::task::maze::v1::CommandReply* reply);
+  ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
-  // .rl.common.v1.ServiceInstanceIdentity aiserver = 5;
+  // .rl.common.v1.ServiceInstanceIdentity aiserver = 4;
   bool has_aiserver() const;
   private:
   bool _internal_has_aiserver() const;
@@ -2560,76 +1606,40 @@ class OpenSessionRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* aiserver);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_aiserver();
 
-  // .rl.task.maze.v1.MazeTaskSpec task_spec = 6;
-  bool has_task_spec() const;
+  // .rl.task.maze.v1.EnvironmentSpec environment = 6;
+  bool has_environment() const;
   private:
-  bool _internal_has_task_spec() const;
+  bool _internal_has_environment() const;
   public:
-  void clear_task_spec();
-  const ::rl::task::maze::v1::MazeTaskSpec& task_spec() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::MazeTaskSpec* release_task_spec();
-  ::rl::task::maze::v1::MazeTaskSpec* mutable_task_spec();
-  void set_allocated_task_spec(::rl::task::maze::v1::MazeTaskSpec* task_spec);
+  void clear_environment();
+  const ::rl::task::maze::v1::EnvironmentSpec& environment() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::EnvironmentSpec* release_environment();
+  ::rl::task::maze::v1::EnvironmentSpec* mutable_environment();
+  void set_allocated_environment(::rl::task::maze::v1::EnvironmentSpec* environment);
   private:
-  const ::rl::task::maze::v1::MazeTaskSpec& _internal_task_spec() const;
-  ::rl::task::maze::v1::MazeTaskSpec* _internal_mutable_task_spec();
+  const ::rl::task::maze::v1::EnvironmentSpec& _internal_environment() const;
+  ::rl::task::maze::v1::EnvironmentSpec* _internal_mutable_environment();
   public:
-  void unsafe_arena_set_allocated_task_spec(
-      ::rl::task::maze::v1::MazeTaskSpec* task_spec);
-  ::rl::task::maze::v1::MazeTaskSpec* unsafe_arena_release_task_spec();
+  void unsafe_arena_set_allocated_environment(
+      ::rl::task::maze::v1::EnvironmentSpec* environment);
+  ::rl::task::maze::v1::EnvironmentSpec* unsafe_arena_release_environment();
 
-  // .rl.task.maze.v1.EnvironmentRuntimeSpec environment_runtime = 9;
-  bool has_environment_runtime() const;
+  // uint64 session_epoch = 3;
+  void clear_session_epoch();
+  uint64_t session_epoch() const;
+  void set_session_epoch(uint64_t value);
   private:
-  bool _internal_has_environment_runtime() const;
-  public:
-  void clear_environment_runtime();
-  const ::rl::task::maze::v1::EnvironmentRuntimeSpec& environment_runtime() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::EnvironmentRuntimeSpec* release_environment_runtime();
-  ::rl::task::maze::v1::EnvironmentRuntimeSpec* mutable_environment_runtime();
-  void set_allocated_environment_runtime(::rl::task::maze::v1::EnvironmentRuntimeSpec* environment_runtime);
-  private:
-  const ::rl::task::maze::v1::EnvironmentRuntimeSpec& _internal_environment_runtime() const;
-  ::rl::task::maze::v1::EnvironmentRuntimeSpec* _internal_mutable_environment_runtime();
-  public:
-  void unsafe_arena_set_allocated_environment_runtime(
-      ::rl::task::maze::v1::EnvironmentRuntimeSpec* environment_runtime);
-  ::rl::task::maze::v1::EnvironmentRuntimeSpec* unsafe_arena_release_environment_runtime();
-
-  // uint64 lifecycle_epoch = 4;
-  void clear_lifecycle_epoch();
-  uint64_t lifecycle_epoch() const;
-  void set_lifecycle_epoch(uint64_t value);
-  private:
-  uint64_t _internal_lifecycle_epoch() const;
-  void _internal_set_lifecycle_epoch(uint64_t value);
+  uint64_t _internal_session_epoch() const;
+  void _internal_set_session_epoch(uint64_t value);
   public:
 
-  // uint32 session_protocol_version = 2;
-  void clear_session_protocol_version();
-  uint32_t session_protocol_version() const;
-  void set_session_protocol_version(uint32_t value);
-  private:
-  uint32_t _internal_session_protocol_version() const;
-  void _internal_set_session_protocol_version(uint32_t value);
-  public:
-
-  // .rl.task.maze.v1.WorkloadMode workload_mode = 7;
+  // .rl.task.maze.v1.WorkloadMode workload_mode = 5;
   void clear_workload_mode();
   ::rl::task::maze::v1::WorkloadMode workload_mode() const;
   void set_workload_mode(::rl::task::maze::v1::WorkloadMode value);
   private:
   ::rl::task::maze::v1::WorkloadMode _internal_workload_mode() const;
   void _internal_set_workload_mode(::rl::task::maze::v1::WorkloadMode value);
-  public:
-
-  // .rl.task.maze.v1.ReplayPolicy replay_policy = 8;
-  void clear_replay_policy();
-  ::rl::task::maze::v1::ReplayPolicy replay_policy() const;
-  void set_replay_policy(::rl::task::maze::v1::ReplayPolicy value);
-  private:
-  ::rl::task::maze::v1::ReplayPolicy _internal_replay_policy() const;
-  void _internal_set_replay_policy(::rl::task::maze::v1::ReplayPolicy value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.OpenSessionRsp)
@@ -2641,14 +1651,11 @@ class OpenSessionRsp final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr session_id_;
-    ::rl::task::maze::v1::LifecycleReply* lifecycle_;
+    ::rl::task::maze::v1::CommandReply* reply_;
     ::rl::common::v1::ServiceInstanceIdentity* aiserver_;
-    ::rl::task::maze::v1::MazeTaskSpec* task_spec_;
-    ::rl::task::maze::v1::EnvironmentRuntimeSpec* environment_runtime_;
-    uint64_t lifecycle_epoch_;
-    uint32_t session_protocol_version_;
+    ::rl::task::maze::v1::EnvironmentSpec* environment_;
+    uint64_t session_epoch_;
     int workload_mode_;
-    int replay_policy_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2704,7 +1711,7 @@ class InitReq final :
                &_InitReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    6;
 
   friend void swap(InitReq& a, InitReq& b) {
     a.Swap(&b);
@@ -2780,23 +1787,23 @@ class InitReq final :
     kCommandFieldNumber = 1,
     kMapFieldNumber = 2,
   };
-  // .rl.task.maze.v1.LifecycleCommand command = 1;
+  // .rl.task.maze.v1.CommandIdentity command = 1;
   bool has_command() const;
   private:
   bool _internal_has_command() const;
   public:
   void clear_command();
-  const ::rl::task::maze::v1::LifecycleCommand& command() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleCommand* release_command();
-  ::rl::task::maze::v1::LifecycleCommand* mutable_command();
-  void set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command);
+  const ::rl::task::maze::v1::CommandIdentity& command() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandIdentity* release_command();
+  ::rl::task::maze::v1::CommandIdentity* mutable_command();
+  void set_allocated_command(::rl::task::maze::v1::CommandIdentity* command);
   private:
-  const ::rl::task::maze::v1::LifecycleCommand& _internal_command() const;
-  ::rl::task::maze::v1::LifecycleCommand* _internal_mutable_command();
+  const ::rl::task::maze::v1::CommandIdentity& _internal_command() const;
+  ::rl::task::maze::v1::CommandIdentity* _internal_mutable_command();
   public:
   void unsafe_arena_set_allocated_command(
-      ::rl::task::maze::v1::LifecycleCommand* command);
-  ::rl::task::maze::v1::LifecycleCommand* unsafe_arena_release_command();
+      ::rl::task::maze::v1::CommandIdentity* command);
+  ::rl::task::maze::v1::CommandIdentity* unsafe_arena_release_command();
 
   // .rl.task.maze.v1.MapDescriptor map = 2;
   bool has_map() const;
@@ -2824,7 +1831,7 @@ class InitReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleCommand* command_;
+    ::rl::task::maze::v1::CommandIdentity* command_;
     ::rl::task::maze::v1::MapDescriptor* map_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2881,7 +1888,7 @@ class InitRsp final :
                &_InitRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    7;
 
   friend void swap(InitRsp& a, InitRsp& b) {
     a.Swap(&b);
@@ -2954,27 +1961,27 @@ class InitRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kLifecycleFieldNumber = 1,
+    kReplyFieldNumber = 1,
     kAcceptedMapDigestFieldNumber = 2,
     kVerifiedShortestActionStepsFieldNumber = 3,
   };
-  // .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-  bool has_lifecycle() const;
+  // .rl.task.maze.v1.CommandReply reply = 1;
+  bool has_reply() const;
   private:
-  bool _internal_has_lifecycle() const;
+  bool _internal_has_reply() const;
   public:
-  void clear_lifecycle();
-  const ::rl::task::maze::v1::LifecycleReply& lifecycle() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleReply* release_lifecycle();
-  ::rl::task::maze::v1::LifecycleReply* mutable_lifecycle();
-  void set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle);
+  void clear_reply();
+  const ::rl::task::maze::v1::CommandReply& reply() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandReply* release_reply();
+  ::rl::task::maze::v1::CommandReply* mutable_reply();
+  void set_allocated_reply(::rl::task::maze::v1::CommandReply* reply);
   private:
-  const ::rl::task::maze::v1::LifecycleReply& _internal_lifecycle() const;
-  ::rl::task::maze::v1::LifecycleReply* _internal_mutable_lifecycle();
+  const ::rl::task::maze::v1::CommandReply& _internal_reply() const;
+  ::rl::task::maze::v1::CommandReply* _internal_mutable_reply();
   public:
-  void unsafe_arena_set_allocated_lifecycle(
-      ::rl::task::maze::v1::LifecycleReply* lifecycle);
-  ::rl::task::maze::v1::LifecycleReply* unsafe_arena_release_lifecycle();
+  void unsafe_arena_set_allocated_reply(
+      ::rl::task::maze::v1::CommandReply* reply);
+  ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
   // .rl.common.v1.ContentDigest accepted_map_digest = 2;
   bool has_accepted_map_digest() const;
@@ -3011,7 +2018,7 @@ class InitRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleReply* lifecycle_;
+    ::rl::task::maze::v1::CommandReply* reply_;
     ::rl::common::v1::ContentDigest* accepted_map_digest_;
     uint32_t verified_shortest_action_steps_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3069,7 +2076,7 @@ class EpisodeAssignment final :
                &_EpisodeAssignment_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    8;
 
   friend void swap(EpisodeAssignment& a, EpisodeAssignment& b) {
     a.Swap(&b);
@@ -3143,12 +2150,9 @@ class EpisodeAssignment final :
 
   enum : int {
     kEpisodeIdFieldNumber = 1,
-    kTaskFieldNumber = 2,
-    kBehaviorPolicyFieldNumber = 7,
-    kModeFieldNumber = 3,
-    kMaxStepsFieldNumber = 5,
-    kContinueTaskFieldNumber = 6,
-    kCollectTrainingSamplesFieldNumber = 8,
+    kEvaluationModelArtifactDigestFieldNumber = 4,
+    kModeFieldNumber = 2,
+    kMaxStepsFieldNumber = 3,
   };
   // string episode_id = 1;
   void clear_episode_id();
@@ -3164,43 +2168,25 @@ class EpisodeAssignment final :
   std::string* _internal_mutable_episode_id();
   public:
 
-  // .rl.task.maze.v1.TaskIdentity task = 2;
-  bool has_task() const;
+  // .rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
+  bool has_evaluation_model_artifact_digest() const;
   private:
-  bool _internal_has_task() const;
+  bool _internal_has_evaluation_model_artifact_digest() const;
   public:
-  void clear_task();
-  const ::rl::task::maze::v1::TaskIdentity& task() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::TaskIdentity* release_task();
-  ::rl::task::maze::v1::TaskIdentity* mutable_task();
-  void set_allocated_task(::rl::task::maze::v1::TaskIdentity* task);
+  void clear_evaluation_model_artifact_digest();
+  const ::rl::common::v1::ContentDigest& evaluation_model_artifact_digest() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_evaluation_model_artifact_digest();
+  ::rl::common::v1::ContentDigest* mutable_evaluation_model_artifact_digest();
+  void set_allocated_evaluation_model_artifact_digest(::rl::common::v1::ContentDigest* evaluation_model_artifact_digest);
   private:
-  const ::rl::task::maze::v1::TaskIdentity& _internal_task() const;
-  ::rl::task::maze::v1::TaskIdentity* _internal_mutable_task();
+  const ::rl::common::v1::ContentDigest& _internal_evaluation_model_artifact_digest() const;
+  ::rl::common::v1::ContentDigest* _internal_mutable_evaluation_model_artifact_digest();
   public:
-  void unsafe_arena_set_allocated_task(
-      ::rl::task::maze::v1::TaskIdentity* task);
-  ::rl::task::maze::v1::TaskIdentity* unsafe_arena_release_task();
+  void unsafe_arena_set_allocated_evaluation_model_artifact_digest(
+      ::rl::common::v1::ContentDigest* evaluation_model_artifact_digest);
+  ::rl::common::v1::ContentDigest* unsafe_arena_release_evaluation_model_artifact_digest();
 
-  // .rl.task.maze.v1.BehaviorPolicyBinding behavior_policy = 7;
-  bool has_behavior_policy() const;
-  private:
-  bool _internal_has_behavior_policy() const;
-  public:
-  void clear_behavior_policy();
-  const ::rl::task::maze::v1::BehaviorPolicyBinding& behavior_policy() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::BehaviorPolicyBinding* release_behavior_policy();
-  ::rl::task::maze::v1::BehaviorPolicyBinding* mutable_behavior_policy();
-  void set_allocated_behavior_policy(::rl::task::maze::v1::BehaviorPolicyBinding* behavior_policy);
-  private:
-  const ::rl::task::maze::v1::BehaviorPolicyBinding& _internal_behavior_policy() const;
-  ::rl::task::maze::v1::BehaviorPolicyBinding* _internal_mutable_behavior_policy();
-  public:
-  void unsafe_arena_set_allocated_behavior_policy(
-      ::rl::task::maze::v1::BehaviorPolicyBinding* behavior_policy);
-  ::rl::task::maze::v1::BehaviorPolicyBinding* unsafe_arena_release_behavior_policy();
-
-  // .rl.task.maze.v1.EpisodeMode mode = 3;
+  // .rl.task.maze.v1.EpisodeMode mode = 2;
   void clear_mode();
   ::rl::task::maze::v1::EpisodeMode mode() const;
   void set_mode(::rl::task::maze::v1::EpisodeMode value);
@@ -3209,31 +2195,13 @@ class EpisodeAssignment final :
   void _internal_set_mode(::rl::task::maze::v1::EpisodeMode value);
   public:
 
-  // uint32 max_steps = 5;
+  // uint32 max_steps = 3;
   void clear_max_steps();
   uint32_t max_steps() const;
   void set_max_steps(uint32_t value);
   private:
   uint32_t _internal_max_steps() const;
   void _internal_set_max_steps(uint32_t value);
-  public:
-
-  // bool continue_task = 6;
-  void clear_continue_task();
-  bool continue_task() const;
-  void set_continue_task(bool value);
-  private:
-  bool _internal_continue_task() const;
-  void _internal_set_continue_task(bool value);
-  public:
-
-  // bool collect_training_samples = 8;
-  void clear_collect_training_samples();
-  bool collect_training_samples() const;
-  void set_collect_training_samples(bool value);
-  private:
-  bool _internal_collect_training_samples() const;
-  void _internal_set_collect_training_samples(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.EpisodeAssignment)
@@ -3245,12 +2213,162 @@ class EpisodeAssignment final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::rl::task::maze::v1::TaskIdentity* task_;
-    ::rl::task::maze::v1::BehaviorPolicyBinding* behavior_policy_;
+    ::rl::common::v1::ContentDigest* evaluation_model_artifact_digest_;
     int mode_;
     uint32_t max_steps_;
-    bool continue_task_;
-    bool collect_training_samples_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_maze_5ftask_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TaskComplete final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.TaskComplete) */ {
+ public:
+  inline TaskComplete() : TaskComplete(nullptr) {}
+  ~TaskComplete() override;
+  explicit PROTOBUF_CONSTEXPR TaskComplete(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TaskComplete(const TaskComplete& from);
+  TaskComplete(TaskComplete&& from) noexcept
+    : TaskComplete() {
+    *this = ::std::move(from);
+  }
+
+  inline TaskComplete& operator=(const TaskComplete& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TaskComplete& operator=(TaskComplete&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TaskComplete& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TaskComplete* internal_default_instance() {
+    return reinterpret_cast<const TaskComplete*>(
+               &_TaskComplete_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(TaskComplete& a, TaskComplete& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TaskComplete* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TaskComplete* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TaskComplete* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TaskComplete>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TaskComplete& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const TaskComplete& from) {
+    TaskComplete::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TaskComplete* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.task.maze.v1.TaskComplete";
+  }
+  protected:
+  explicit TaskComplete(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 1,
+  };
+  // string message = 1;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.TaskComplete)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3306,7 +2424,7 @@ class BeginEpisodeReq final :
                &_BeginEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    10;
 
   friend void swap(BeginEpisodeReq& a, BeginEpisodeReq& b) {
     a.Swap(&b);
@@ -3381,23 +2499,23 @@ class BeginEpisodeReq final :
   enum : int {
     kCommandFieldNumber = 1,
   };
-  // .rl.task.maze.v1.LifecycleCommand command = 1;
+  // .rl.task.maze.v1.CommandIdentity command = 1;
   bool has_command() const;
   private:
   bool _internal_has_command() const;
   public:
   void clear_command();
-  const ::rl::task::maze::v1::LifecycleCommand& command() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleCommand* release_command();
-  ::rl::task::maze::v1::LifecycleCommand* mutable_command();
-  void set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command);
+  const ::rl::task::maze::v1::CommandIdentity& command() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandIdentity* release_command();
+  ::rl::task::maze::v1::CommandIdentity* mutable_command();
+  void set_allocated_command(::rl::task::maze::v1::CommandIdentity* command);
   private:
-  const ::rl::task::maze::v1::LifecycleCommand& _internal_command() const;
-  ::rl::task::maze::v1::LifecycleCommand* _internal_mutable_command();
+  const ::rl::task::maze::v1::CommandIdentity& _internal_command() const;
+  ::rl::task::maze::v1::CommandIdentity* _internal_mutable_command();
   public:
   void unsafe_arena_set_allocated_command(
-      ::rl::task::maze::v1::LifecycleCommand* command);
-  ::rl::task::maze::v1::LifecycleCommand* unsafe_arena_release_command();
+      ::rl::task::maze::v1::CommandIdentity* command);
+  ::rl::task::maze::v1::CommandIdentity* unsafe_arena_release_command();
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.BeginEpisodeReq)
  private:
@@ -3407,7 +2525,7 @@ class BeginEpisodeReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleCommand* command_;
+    ::rl::task::maze::v1::CommandIdentity* command_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3458,12 +2576,18 @@ class BeginEpisodeRsp final :
   static const BeginEpisodeRsp& default_instance() {
     return *internal_default_instance();
   }
+  enum OutcomeCase {
+    kAssignment = 2,
+    kTaskComplete = 3,
+    OUTCOME_NOT_SET = 0,
+  };
+
   static inline const BeginEpisodeRsp* internal_default_instance() {
     return reinterpret_cast<const BeginEpisodeRsp*>(
                &_BeginEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    11;
 
   friend void swap(BeginEpisodeRsp& a, BeginEpisodeRsp& b) {
     a.Swap(&b);
@@ -3536,26 +2660,27 @@ class BeginEpisodeRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kLifecycleFieldNumber = 1,
+    kReplyFieldNumber = 1,
     kAssignmentFieldNumber = 2,
+    kTaskCompleteFieldNumber = 3,
   };
-  // .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-  bool has_lifecycle() const;
+  // .rl.task.maze.v1.CommandReply reply = 1;
+  bool has_reply() const;
   private:
-  bool _internal_has_lifecycle() const;
+  bool _internal_has_reply() const;
   public:
-  void clear_lifecycle();
-  const ::rl::task::maze::v1::LifecycleReply& lifecycle() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleReply* release_lifecycle();
-  ::rl::task::maze::v1::LifecycleReply* mutable_lifecycle();
-  void set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle);
+  void clear_reply();
+  const ::rl::task::maze::v1::CommandReply& reply() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandReply* release_reply();
+  ::rl::task::maze::v1::CommandReply* mutable_reply();
+  void set_allocated_reply(::rl::task::maze::v1::CommandReply* reply);
   private:
-  const ::rl::task::maze::v1::LifecycleReply& _internal_lifecycle() const;
-  ::rl::task::maze::v1::LifecycleReply* _internal_mutable_lifecycle();
+  const ::rl::task::maze::v1::CommandReply& _internal_reply() const;
+  ::rl::task::maze::v1::CommandReply* _internal_mutable_reply();
   public:
-  void unsafe_arena_set_allocated_lifecycle(
-      ::rl::task::maze::v1::LifecycleReply* lifecycle);
-  ::rl::task::maze::v1::LifecycleReply* unsafe_arena_release_lifecycle();
+  void unsafe_arena_set_allocated_reply(
+      ::rl::task::maze::v1::CommandReply* reply);
+  ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
   // .rl.task.maze.v1.EpisodeAssignment assignment = 2;
   bool has_assignment() const;
@@ -3575,17 +2700,49 @@ class BeginEpisodeRsp final :
       ::rl::task::maze::v1::EpisodeAssignment* assignment);
   ::rl::task::maze::v1::EpisodeAssignment* unsafe_arena_release_assignment();
 
+  // .rl.task.maze.v1.TaskComplete task_complete = 3;
+  bool has_task_complete() const;
+  private:
+  bool _internal_has_task_complete() const;
+  public:
+  void clear_task_complete();
+  const ::rl::task::maze::v1::TaskComplete& task_complete() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::TaskComplete* release_task_complete();
+  ::rl::task::maze::v1::TaskComplete* mutable_task_complete();
+  void set_allocated_task_complete(::rl::task::maze::v1::TaskComplete* task_complete);
+  private:
+  const ::rl::task::maze::v1::TaskComplete& _internal_task_complete() const;
+  ::rl::task::maze::v1::TaskComplete* _internal_mutable_task_complete();
+  public:
+  void unsafe_arena_set_allocated_task_complete(
+      ::rl::task::maze::v1::TaskComplete* task_complete);
+  ::rl::task::maze::v1::TaskComplete* unsafe_arena_release_task_complete();
+
+  void clear_outcome();
+  OutcomeCase outcome_case() const;
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.BeginEpisodeRsp)
  private:
   class _Internal;
+  void set_has_assignment();
+  void set_has_task_complete();
+
+  inline bool has_outcome() const;
+  inline void clear_has_outcome();
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleReply* lifecycle_;
-    ::rl::task::maze::v1::EpisodeAssignment* assignment_;
+    ::rl::task::maze::v1::CommandReply* reply_;
+    union OutcomeUnion {
+      constexpr OutcomeUnion() : _constinit_{} {}
+        ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
+      ::rl::task::maze::v1::EpisodeAssignment* assignment_;
+      ::rl::task::maze::v1::TaskComplete* task_complete_;
+    } outcome_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    uint32_t _oneof_case_[1];
+
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_maze_5ftask_2eproto;
@@ -3640,7 +2797,7 @@ class Vec2 final :
                &_Vec2_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    12;
 
   friend void swap(Vec2& a, Vec2& b) {
     a.Swap(&b);
@@ -3799,7 +2956,7 @@ class AgentState final :
                &_AgentState_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    13;
 
   friend void swap(AgentState& a, AgentState& b) {
     a.Swap(&b);
@@ -4016,7 +3173,7 @@ class UpdateReq final :
                &_UpdateReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    14;
 
   friend void swap(UpdateReq& a, UpdateReq& b) {
     a.Swap(&b);
@@ -4111,23 +3268,23 @@ class UpdateReq final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentState >&
       agents() const;
 
-  // .rl.task.maze.v1.LifecycleCommand command = 1;
+  // .rl.task.maze.v1.CommandIdentity command = 1;
   bool has_command() const;
   private:
   bool _internal_has_command() const;
   public:
   void clear_command();
-  const ::rl::task::maze::v1::LifecycleCommand& command() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleCommand* release_command();
-  ::rl::task::maze::v1::LifecycleCommand* mutable_command();
-  void set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command);
+  const ::rl::task::maze::v1::CommandIdentity& command() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandIdentity* release_command();
+  ::rl::task::maze::v1::CommandIdentity* mutable_command();
+  void set_allocated_command(::rl::task::maze::v1::CommandIdentity* command);
   private:
-  const ::rl::task::maze::v1::LifecycleCommand& _internal_command() const;
-  ::rl::task::maze::v1::LifecycleCommand* _internal_mutable_command();
+  const ::rl::task::maze::v1::CommandIdentity& _internal_command() const;
+  ::rl::task::maze::v1::CommandIdentity* _internal_mutable_command();
   public:
   void unsafe_arena_set_allocated_command(
-      ::rl::task::maze::v1::LifecycleCommand* command);
-  ::rl::task::maze::v1::LifecycleCommand* unsafe_arena_release_command();
+      ::rl::task::maze::v1::CommandIdentity* command);
+  ::rl::task::maze::v1::CommandIdentity* unsafe_arena_release_command();
 
   // uint64 frame_id = 2;
   void clear_frame_id();
@@ -4147,7 +3304,7 @@ class UpdateReq final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentState > agents_;
-    ::rl::task::maze::v1::LifecycleCommand* command_;
+    ::rl::task::maze::v1::CommandIdentity* command_;
     uint64_t frame_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -4204,7 +3361,7 @@ class AgentAction final :
                &_AgentAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    15;
 
   friend void swap(AgentAction& a, AgentAction& b) {
     a.Swap(&b);
@@ -4315,6 +3472,475 @@ class AgentAction final :
 };
 // -------------------------------------------------------------------
 
+class ActionBatch final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.ActionBatch) */ {
+ public:
+  inline ActionBatch() : ActionBatch(nullptr) {}
+  ~ActionBatch() override;
+  explicit PROTOBUF_CONSTEXPR ActionBatch(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ActionBatch(const ActionBatch& from);
+  ActionBatch(ActionBatch&& from) noexcept
+    : ActionBatch() {
+    *this = ::std::move(from);
+  }
+
+  inline ActionBatch& operator=(const ActionBatch& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ActionBatch& operator=(ActionBatch&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ActionBatch& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ActionBatch* internal_default_instance() {
+    return reinterpret_cast<const ActionBatch*>(
+               &_ActionBatch_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(ActionBatch& a, ActionBatch& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ActionBatch* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ActionBatch* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ActionBatch* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ActionBatch>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ActionBatch& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ActionBatch& from) {
+    ActionBatch::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ActionBatch* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.task.maze.v1.ActionBatch";
+  }
+  protected:
+  explicit ActionBatch(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kActionsFieldNumber = 1,
+  };
+  // repeated .rl.task.maze.v1.AgentAction actions = 1;
+  int actions_size() const;
+  private:
+  int _internal_actions_size() const;
+  public:
+  void clear_actions();
+  ::rl::task::maze::v1::AgentAction* mutable_actions(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >*
+      mutable_actions();
+  private:
+  const ::rl::task::maze::v1::AgentAction& _internal_actions(int index) const;
+  ::rl::task::maze::v1::AgentAction* _internal_add_actions();
+  public:
+  const ::rl::task::maze::v1::AgentAction& actions(int index) const;
+  ::rl::task::maze::v1::AgentAction* add_actions();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >&
+      actions() const;
+
+  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.ActionBatch)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction > actions_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_maze_5ftask_2eproto;
+};
+// -------------------------------------------------------------------
+
+class WaitControl final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.WaitControl) */ {
+ public:
+  inline WaitControl() : WaitControl(nullptr) {}
+  ~WaitControl() override;
+  explicit PROTOBUF_CONSTEXPR WaitControl(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  WaitControl(const WaitControl& from);
+  WaitControl(WaitControl&& from) noexcept
+    : WaitControl() {
+    *this = ::std::move(from);
+  }
+
+  inline WaitControl& operator=(const WaitControl& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline WaitControl& operator=(WaitControl&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const WaitControl& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const WaitControl* internal_default_instance() {
+    return reinterpret_cast<const WaitControl*>(
+               &_WaitControl_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  friend void swap(WaitControl& a, WaitControl& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(WaitControl* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(WaitControl* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  WaitControl* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<WaitControl>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const WaitControl& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const WaitControl& from) {
+    WaitControl::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(WaitControl* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.task.maze.v1.WaitControl";
+  }
+  protected:
+  explicit WaitControl(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kRetryAfterMsFieldNumber = 1,
+  };
+  // int32 retry_after_ms = 1;
+  void clear_retry_after_ms();
+  int32_t retry_after_ms() const;
+  void set_retry_after_ms(int32_t value);
+  private:
+  int32_t _internal_retry_after_ms() const;
+  void _internal_set_retry_after_ms(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.WaitControl)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    int32_t retry_after_ms_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_maze_5ftask_2eproto;
+};
+// -------------------------------------------------------------------
+
+class StopControl final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.StopControl) */ {
+ public:
+  inline StopControl() : StopControl(nullptr) {}
+  ~StopControl() override;
+  explicit PROTOBUF_CONSTEXPR StopControl(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  StopControl(const StopControl& from);
+  StopControl(StopControl&& from) noexcept
+    : StopControl() {
+    *this = ::std::move(from);
+  }
+
+  inline StopControl& operator=(const StopControl& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline StopControl& operator=(StopControl&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const StopControl& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const StopControl* internal_default_instance() {
+    return reinterpret_cast<const StopControl*>(
+               &_StopControl_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    18;
+
+  friend void swap(StopControl& a, StopControl& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(StopControl* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(StopControl* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  StopControl* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<StopControl>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const StopControl& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const StopControl& from) {
+    StopControl::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(StopControl* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.task.maze.v1.StopControl";
+  }
+  protected:
+  explicit StopControl(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kReasonFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // .rl.task.maze.v1.MazeTerminationReason reason = 1;
+  void clear_reason();
+  ::rl::task::maze::v1::MazeTerminationReason reason() const;
+  void set_reason(::rl::task::maze::v1::MazeTerminationReason value);
+  private:
+  ::rl::task::maze::v1::MazeTerminationReason _internal_reason() const;
+  void _internal_set_reason(::rl::task::maze::v1::MazeTerminationReason value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.StopControl)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    int reason_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_maze_5ftask_2eproto;
+};
+// -------------------------------------------------------------------
+
 class UpdateRsp final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.UpdateRsp) */ {
  public:
@@ -4358,12 +3984,19 @@ class UpdateRsp final :
   static const UpdateRsp& default_instance() {
     return *internal_default_instance();
   }
+  enum ControlCase {
+    kActionBatch = 2,
+    kWait = 3,
+    kStop = 4,
+    CONTROL_NOT_SET = 0,
+  };
+
   static inline const UpdateRsp* internal_default_instance() {
     return reinterpret_cast<const UpdateRsp*>(
                &_UpdateRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    19;
 
   friend void swap(UpdateRsp& a, UpdateRsp& b) {
     a.Swap(&b);
@@ -4436,111 +4069,110 @@ class UpdateRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kActionsFieldNumber = 2,
-    kLifecycleFieldNumber = 1,
-    kReplayedFieldNumber = 3,
-    kTaskStopRequestedFieldNumber = 4,
-    kTaskStopReasonFieldNumber = 5,
-    kEnvironmentControlFieldNumber = 6,
-    kRetryAfterMsFieldNumber = 7,
+    kReplyFieldNumber = 1,
+    kActionBatchFieldNumber = 2,
+    kWaitFieldNumber = 3,
+    kStopFieldNumber = 4,
   };
-  // repeated .rl.task.maze.v1.AgentAction actions = 2;
-  int actions_size() const;
+  // .rl.task.maze.v1.CommandReply reply = 1;
+  bool has_reply() const;
   private:
-  int _internal_actions_size() const;
+  bool _internal_has_reply() const;
   public:
-  void clear_actions();
-  ::rl::task::maze::v1::AgentAction* mutable_actions(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >*
-      mutable_actions();
+  void clear_reply();
+  const ::rl::task::maze::v1::CommandReply& reply() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandReply* release_reply();
+  ::rl::task::maze::v1::CommandReply* mutable_reply();
+  void set_allocated_reply(::rl::task::maze::v1::CommandReply* reply);
   private:
-  const ::rl::task::maze::v1::AgentAction& _internal_actions(int index) const;
-  ::rl::task::maze::v1::AgentAction* _internal_add_actions();
+  const ::rl::task::maze::v1::CommandReply& _internal_reply() const;
+  ::rl::task::maze::v1::CommandReply* _internal_mutable_reply();
   public:
-  const ::rl::task::maze::v1::AgentAction& actions(int index) const;
-  ::rl::task::maze::v1::AgentAction* add_actions();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >&
-      actions() const;
+  void unsafe_arena_set_allocated_reply(
+      ::rl::task::maze::v1::CommandReply* reply);
+  ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
-  // .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-  bool has_lifecycle() const;
+  // .rl.task.maze.v1.ActionBatch action_batch = 2;
+  bool has_action_batch() const;
   private:
-  bool _internal_has_lifecycle() const;
+  bool _internal_has_action_batch() const;
   public:
-  void clear_lifecycle();
-  const ::rl::task::maze::v1::LifecycleReply& lifecycle() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleReply* release_lifecycle();
-  ::rl::task::maze::v1::LifecycleReply* mutable_lifecycle();
-  void set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle);
+  void clear_action_batch();
+  const ::rl::task::maze::v1::ActionBatch& action_batch() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::ActionBatch* release_action_batch();
+  ::rl::task::maze::v1::ActionBatch* mutable_action_batch();
+  void set_allocated_action_batch(::rl::task::maze::v1::ActionBatch* action_batch);
   private:
-  const ::rl::task::maze::v1::LifecycleReply& _internal_lifecycle() const;
-  ::rl::task::maze::v1::LifecycleReply* _internal_mutable_lifecycle();
+  const ::rl::task::maze::v1::ActionBatch& _internal_action_batch() const;
+  ::rl::task::maze::v1::ActionBatch* _internal_mutable_action_batch();
   public:
-  void unsafe_arena_set_allocated_lifecycle(
-      ::rl::task::maze::v1::LifecycleReply* lifecycle);
-  ::rl::task::maze::v1::LifecycleReply* unsafe_arena_release_lifecycle();
+  void unsafe_arena_set_allocated_action_batch(
+      ::rl::task::maze::v1::ActionBatch* action_batch);
+  ::rl::task::maze::v1::ActionBatch* unsafe_arena_release_action_batch();
 
-  // bool replayed = 3;
-  void clear_replayed();
-  bool replayed() const;
-  void set_replayed(bool value);
+  // .rl.task.maze.v1.WaitControl wait = 3;
+  bool has_wait() const;
   private:
-  bool _internal_replayed() const;
-  void _internal_set_replayed(bool value);
+  bool _internal_has_wait() const;
   public:
-
-  // bool task_stop_requested = 4;
-  void clear_task_stop_requested();
-  bool task_stop_requested() const;
-  void set_task_stop_requested(bool value);
+  void clear_wait();
+  const ::rl::task::maze::v1::WaitControl& wait() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::WaitControl* release_wait();
+  ::rl::task::maze::v1::WaitControl* mutable_wait();
+  void set_allocated_wait(::rl::task::maze::v1::WaitControl* wait);
   private:
-  bool _internal_task_stop_requested() const;
-  void _internal_set_task_stop_requested(bool value);
+  const ::rl::task::maze::v1::WaitControl& _internal_wait() const;
+  ::rl::task::maze::v1::WaitControl* _internal_mutable_wait();
   public:
+  void unsafe_arena_set_allocated_wait(
+      ::rl::task::maze::v1::WaitControl* wait);
+  ::rl::task::maze::v1::WaitControl* unsafe_arena_release_wait();
 
-  // .rl.task.maze.v1.MazeTerminationReason task_stop_reason = 5;
-  void clear_task_stop_reason();
-  ::rl::task::maze::v1::MazeTerminationReason task_stop_reason() const;
-  void set_task_stop_reason(::rl::task::maze::v1::MazeTerminationReason value);
+  // .rl.task.maze.v1.StopControl stop = 4;
+  bool has_stop() const;
   private:
-  ::rl::task::maze::v1::MazeTerminationReason _internal_task_stop_reason() const;
-  void _internal_set_task_stop_reason(::rl::task::maze::v1::MazeTerminationReason value);
+  bool _internal_has_stop() const;
   public:
-
-  // .rl.task.maze.v1.EnvironmentControl environment_control = 6;
-  void clear_environment_control();
-  ::rl::task::maze::v1::EnvironmentControl environment_control() const;
-  void set_environment_control(::rl::task::maze::v1::EnvironmentControl value);
+  void clear_stop();
+  const ::rl::task::maze::v1::StopControl& stop() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::StopControl* release_stop();
+  ::rl::task::maze::v1::StopControl* mutable_stop();
+  void set_allocated_stop(::rl::task::maze::v1::StopControl* stop);
   private:
-  ::rl::task::maze::v1::EnvironmentControl _internal_environment_control() const;
-  void _internal_set_environment_control(::rl::task::maze::v1::EnvironmentControl value);
+  const ::rl::task::maze::v1::StopControl& _internal_stop() const;
+  ::rl::task::maze::v1::StopControl* _internal_mutable_stop();
   public:
+  void unsafe_arena_set_allocated_stop(
+      ::rl::task::maze::v1::StopControl* stop);
+  ::rl::task::maze::v1::StopControl* unsafe_arena_release_stop();
 
-  // int32 retry_after_ms = 7;
-  void clear_retry_after_ms();
-  int32_t retry_after_ms() const;
-  void set_retry_after_ms(int32_t value);
-  private:
-  int32_t _internal_retry_after_ms() const;
-  void _internal_set_retry_after_ms(int32_t value);
-  public:
-
+  void clear_control();
+  ControlCase control_case() const;
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.UpdateRsp)
  private:
   class _Internal;
+  void set_has_action_batch();
+  void set_has_wait();
+  void set_has_stop();
+
+  inline bool has_control() const;
+  inline void clear_has_control();
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction > actions_;
-    ::rl::task::maze::v1::LifecycleReply* lifecycle_;
-    bool replayed_;
-    bool task_stop_requested_;
-    int task_stop_reason_;
-    int environment_control_;
-    int32_t retry_after_ms_;
+    ::rl::task::maze::v1::CommandReply* reply_;
+    union ControlUnion {
+      constexpr ControlUnion() : _constinit_{} {}
+        ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
+      ::rl::task::maze::v1::ActionBatch* action_batch_;
+      ::rl::task::maze::v1::WaitControl* wait_;
+      ::rl::task::maze::v1::StopControl* stop_;
+    } control_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    uint32_t _oneof_case_[1];
+
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_maze_5ftask_2eproto;
@@ -4595,7 +4227,7 @@ class EndEpisodeReq final :
                &_EndEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    20;
 
   friend void swap(EndEpisodeReq& a, EndEpisodeReq& b) {
     a.Swap(&b);
@@ -4670,23 +4302,23 @@ class EndEpisodeReq final :
   enum : int {
     kCommandFieldNumber = 1,
   };
-  // .rl.task.maze.v1.LifecycleCommand command = 1;
+  // .rl.task.maze.v1.CommandIdentity command = 1;
   bool has_command() const;
   private:
   bool _internal_has_command() const;
   public:
   void clear_command();
-  const ::rl::task::maze::v1::LifecycleCommand& command() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleCommand* release_command();
-  ::rl::task::maze::v1::LifecycleCommand* mutable_command();
-  void set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command);
+  const ::rl::task::maze::v1::CommandIdentity& command() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandIdentity* release_command();
+  ::rl::task::maze::v1::CommandIdentity* mutable_command();
+  void set_allocated_command(::rl::task::maze::v1::CommandIdentity* command);
   private:
-  const ::rl::task::maze::v1::LifecycleCommand& _internal_command() const;
-  ::rl::task::maze::v1::LifecycleCommand* _internal_mutable_command();
+  const ::rl::task::maze::v1::CommandIdentity& _internal_command() const;
+  ::rl::task::maze::v1::CommandIdentity* _internal_mutable_command();
   public:
   void unsafe_arena_set_allocated_command(
-      ::rl::task::maze::v1::LifecycleCommand* command);
-  ::rl::task::maze::v1::LifecycleCommand* unsafe_arena_release_command();
+      ::rl::task::maze::v1::CommandIdentity* command);
+  ::rl::task::maze::v1::CommandIdentity* unsafe_arena_release_command();
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.EndEpisodeReq)
  private:
@@ -4696,7 +4328,7 @@ class EndEpisodeReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleCommand* command_;
+    ::rl::task::maze::v1::CommandIdentity* command_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4752,7 +4384,7 @@ class AgentEpisodeOutcome final :
                &_AgentEpisodeOutcome_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(AgentEpisodeOutcome& a, AgentEpisodeOutcome& b) {
     a.Swap(&b);
@@ -4958,7 +4590,7 @@ class EpisodeOutcome final :
                &_EpisodeOutcome_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(EpisodeOutcome& a, EpisodeOutcome& b) {
     a.Swap(&b);
@@ -5131,7 +4763,7 @@ class EndEpisodeRsp final :
                &_EndEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(EndEpisodeRsp& a, EndEpisodeRsp& b) {
     a.Swap(&b);
@@ -5204,26 +4836,26 @@ class EndEpisodeRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kLifecycleFieldNumber = 1,
+    kReplyFieldNumber = 1,
     kOutcomeFieldNumber = 2,
   };
-  // .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-  bool has_lifecycle() const;
+  // .rl.task.maze.v1.CommandReply reply = 1;
+  bool has_reply() const;
   private:
-  bool _internal_has_lifecycle() const;
+  bool _internal_has_reply() const;
   public:
-  void clear_lifecycle();
-  const ::rl::task::maze::v1::LifecycleReply& lifecycle() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleReply* release_lifecycle();
-  ::rl::task::maze::v1::LifecycleReply* mutable_lifecycle();
-  void set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle);
+  void clear_reply();
+  const ::rl::task::maze::v1::CommandReply& reply() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandReply* release_reply();
+  ::rl::task::maze::v1::CommandReply* mutable_reply();
+  void set_allocated_reply(::rl::task::maze::v1::CommandReply* reply);
   private:
-  const ::rl::task::maze::v1::LifecycleReply& _internal_lifecycle() const;
-  ::rl::task::maze::v1::LifecycleReply* _internal_mutable_lifecycle();
+  const ::rl::task::maze::v1::CommandReply& _internal_reply() const;
+  ::rl::task::maze::v1::CommandReply* _internal_mutable_reply();
   public:
-  void unsafe_arena_set_allocated_lifecycle(
-      ::rl::task::maze::v1::LifecycleReply* lifecycle);
-  ::rl::task::maze::v1::LifecycleReply* unsafe_arena_release_lifecycle();
+  void unsafe_arena_set_allocated_reply(
+      ::rl::task::maze::v1::CommandReply* reply);
+  ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
   // .rl.task.maze.v1.EpisodeOutcome outcome = 2;
   bool has_outcome() const;
@@ -5251,7 +4883,7 @@ class EndEpisodeRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleReply* lifecycle_;
+    ::rl::task::maze::v1::CommandReply* reply_;
     ::rl::task::maze::v1::EpisodeOutcome* outcome_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -5308,7 +4940,7 @@ class AbortEpisodeReq final :
                &_AbortEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(AbortEpisodeReq& a, AbortEpisodeReq& b) {
     a.Swap(&b);
@@ -5399,23 +5031,23 @@ class AbortEpisodeReq final :
   std::string* _internal_mutable_message();
   public:
 
-  // .rl.task.maze.v1.LifecycleCommand command = 1;
+  // .rl.task.maze.v1.CommandIdentity command = 1;
   bool has_command() const;
   private:
   bool _internal_has_command() const;
   public:
   void clear_command();
-  const ::rl::task::maze::v1::LifecycleCommand& command() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleCommand* release_command();
-  ::rl::task::maze::v1::LifecycleCommand* mutable_command();
-  void set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command);
+  const ::rl::task::maze::v1::CommandIdentity& command() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandIdentity* release_command();
+  ::rl::task::maze::v1::CommandIdentity* mutable_command();
+  void set_allocated_command(::rl::task::maze::v1::CommandIdentity* command);
   private:
-  const ::rl::task::maze::v1::LifecycleCommand& _internal_command() const;
-  ::rl::task::maze::v1::LifecycleCommand* _internal_mutable_command();
+  const ::rl::task::maze::v1::CommandIdentity& _internal_command() const;
+  ::rl::task::maze::v1::CommandIdentity* _internal_mutable_command();
   public:
   void unsafe_arena_set_allocated_command(
-      ::rl::task::maze::v1::LifecycleCommand* command);
-  ::rl::task::maze::v1::LifecycleCommand* unsafe_arena_release_command();
+      ::rl::task::maze::v1::CommandIdentity* command);
+  ::rl::task::maze::v1::CommandIdentity* unsafe_arena_release_command();
 
   // .rl.task.maze.v1.MazeTerminationReason reason = 2;
   void clear_reason();
@@ -5435,7 +5067,7 @@ class AbortEpisodeReq final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
-    ::rl::task::maze::v1::LifecycleCommand* command_;
+    ::rl::task::maze::v1::CommandIdentity* command_;
     int reason_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -5492,7 +5124,7 @@ class AbortEpisodeRsp final :
                &_AbortEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(AbortEpisodeRsp& a, AbortEpisodeRsp& b) {
     a.Swap(&b);
@@ -5565,25 +5197,25 @@ class AbortEpisodeRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kLifecycleFieldNumber = 1,
+    kReplyFieldNumber = 1,
   };
-  // .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-  bool has_lifecycle() const;
+  // .rl.task.maze.v1.CommandReply reply = 1;
+  bool has_reply() const;
   private:
-  bool _internal_has_lifecycle() const;
+  bool _internal_has_reply() const;
   public:
-  void clear_lifecycle();
-  const ::rl::task::maze::v1::LifecycleReply& lifecycle() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleReply* release_lifecycle();
-  ::rl::task::maze::v1::LifecycleReply* mutable_lifecycle();
-  void set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle);
+  void clear_reply();
+  const ::rl::task::maze::v1::CommandReply& reply() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandReply* release_reply();
+  ::rl::task::maze::v1::CommandReply* mutable_reply();
+  void set_allocated_reply(::rl::task::maze::v1::CommandReply* reply);
   private:
-  const ::rl::task::maze::v1::LifecycleReply& _internal_lifecycle() const;
-  ::rl::task::maze::v1::LifecycleReply* _internal_mutable_lifecycle();
+  const ::rl::task::maze::v1::CommandReply& _internal_reply() const;
+  ::rl::task::maze::v1::CommandReply* _internal_mutable_reply();
   public:
-  void unsafe_arena_set_allocated_lifecycle(
-      ::rl::task::maze::v1::LifecycleReply* lifecycle);
-  ::rl::task::maze::v1::LifecycleReply* unsafe_arena_release_lifecycle();
+  void unsafe_arena_set_allocated_reply(
+      ::rl::task::maze::v1::CommandReply* reply);
+  ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.AbortEpisodeRsp)
  private:
@@ -5593,7 +5225,7 @@ class AbortEpisodeRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleReply* lifecycle_;
+    ::rl::task::maze::v1::CommandReply* reply_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5649,7 +5281,7 @@ class CloseSessionReq final :
                &_CloseSessionReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(CloseSessionReq& a, CloseSessionReq& b) {
     a.Swap(&b);
@@ -5724,23 +5356,23 @@ class CloseSessionReq final :
   enum : int {
     kCommandFieldNumber = 1,
   };
-  // .rl.task.maze.v1.LifecycleCommand command = 1;
+  // .rl.task.maze.v1.CommandIdentity command = 1;
   bool has_command() const;
   private:
   bool _internal_has_command() const;
   public:
   void clear_command();
-  const ::rl::task::maze::v1::LifecycleCommand& command() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleCommand* release_command();
-  ::rl::task::maze::v1::LifecycleCommand* mutable_command();
-  void set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command);
+  const ::rl::task::maze::v1::CommandIdentity& command() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandIdentity* release_command();
+  ::rl::task::maze::v1::CommandIdentity* mutable_command();
+  void set_allocated_command(::rl::task::maze::v1::CommandIdentity* command);
   private:
-  const ::rl::task::maze::v1::LifecycleCommand& _internal_command() const;
-  ::rl::task::maze::v1::LifecycleCommand* _internal_mutable_command();
+  const ::rl::task::maze::v1::CommandIdentity& _internal_command() const;
+  ::rl::task::maze::v1::CommandIdentity* _internal_mutable_command();
   public:
   void unsafe_arena_set_allocated_command(
-      ::rl::task::maze::v1::LifecycleCommand* command);
-  ::rl::task::maze::v1::LifecycleCommand* unsafe_arena_release_command();
+      ::rl::task::maze::v1::CommandIdentity* command);
+  ::rl::task::maze::v1::CommandIdentity* unsafe_arena_release_command();
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.CloseSessionReq)
  private:
@@ -5750,7 +5382,7 @@ class CloseSessionReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleCommand* command_;
+    ::rl::task::maze::v1::CommandIdentity* command_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5806,7 +5438,7 @@ class CloseSessionRsp final :
                &_CloseSessionRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(CloseSessionRsp& a, CloseSessionRsp& b) {
     a.Swap(&b);
@@ -5879,25 +5511,25 @@ class CloseSessionRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kLifecycleFieldNumber = 1,
+    kReplyFieldNumber = 1,
   };
-  // .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-  bool has_lifecycle() const;
+  // .rl.task.maze.v1.CommandReply reply = 1;
+  bool has_reply() const;
   private:
-  bool _internal_has_lifecycle() const;
+  bool _internal_has_reply() const;
   public:
-  void clear_lifecycle();
-  const ::rl::task::maze::v1::LifecycleReply& lifecycle() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::LifecycleReply* release_lifecycle();
-  ::rl::task::maze::v1::LifecycleReply* mutable_lifecycle();
-  void set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle);
+  void clear_reply();
+  const ::rl::task::maze::v1::CommandReply& reply() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::CommandReply* release_reply();
+  ::rl::task::maze::v1::CommandReply* mutable_reply();
+  void set_allocated_reply(::rl::task::maze::v1::CommandReply* reply);
   private:
-  const ::rl::task::maze::v1::LifecycleReply& _internal_lifecycle() const;
-  ::rl::task::maze::v1::LifecycleReply* _internal_mutable_lifecycle();
+  const ::rl::task::maze::v1::CommandReply& _internal_reply() const;
+  ::rl::task::maze::v1::CommandReply* _internal_mutable_reply();
   public:
-  void unsafe_arena_set_allocated_lifecycle(
-      ::rl::task::maze::v1::LifecycleReply* lifecycle);
-  ::rl::task::maze::v1::LifecycleReply* unsafe_arena_release_lifecycle();
+  void unsafe_arena_set_allocated_reply(
+      ::rl::task::maze::v1::CommandReply* reply);
+  ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.CloseSessionRsp)
  private:
@@ -5907,7 +5539,7 @@ class CloseSessionRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::task::maze::v1::LifecycleReply* lifecycle_;
+    ::rl::task::maze::v1::CommandReply* reply_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5922,846 +5554,95 @@ class CloseSessionRsp final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// TaskIdentity
+// EnvironmentSpec
 
-// string task_contract_id = 1;
-inline void TaskIdentity::clear_task_contract_id() {
-  _impl_.task_contract_id_.ClearToEmpty();
+// uint32 agent_count = 1;
+inline void EnvironmentSpec::clear_agent_count() {
+  _impl_.agent_count_ = 0u;
 }
-inline const std::string& TaskIdentity::task_contract_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.TaskIdentity.task_contract_id)
-  return _internal_task_contract_id();
+inline uint32_t EnvironmentSpec::_internal_agent_count() const {
+  return _impl_.agent_count_;
+}
+inline uint32_t EnvironmentSpec::agent_count() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.agent_count)
+  return _internal_agent_count();
+}
+inline void EnvironmentSpec::_internal_set_agent_count(uint32_t value) {
+  
+  _impl_.agent_count_ = value;
+}
+inline void EnvironmentSpec::set_agent_count(uint32_t value) {
+  _internal_set_agent_count(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentSpec.agent_count)
+}
+
+// string map_id = 2;
+inline void EnvironmentSpec::clear_map_id() {
+  _impl_.map_id_.ClearToEmpty();
+}
+inline const std::string& EnvironmentSpec::map_id() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.map_id)
+  return _internal_map_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void TaskIdentity::set_task_contract_id(ArgT0&& arg0, ArgT... args) {
+void EnvironmentSpec::set_map_id(ArgT0&& arg0, ArgT... args) {
  
- _impl_.task_contract_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskIdentity.task_contract_id)
+ _impl_.map_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentSpec.map_id)
 }
-inline std::string* TaskIdentity::mutable_task_contract_id() {
-  std::string* _s = _internal_mutable_task_contract_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.TaskIdentity.task_contract_id)
+inline std::string* EnvironmentSpec::mutable_map_id() {
+  std::string* _s = _internal_mutable_map_id();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EnvironmentSpec.map_id)
   return _s;
 }
-inline const std::string& TaskIdentity::_internal_task_contract_id() const {
-  return _impl_.task_contract_id_.Get();
+inline const std::string& EnvironmentSpec::_internal_map_id() const {
+  return _impl_.map_id_.Get();
 }
-inline void TaskIdentity::_internal_set_task_contract_id(const std::string& value) {
+inline void EnvironmentSpec::_internal_set_map_id(const std::string& value) {
   
-  _impl_.task_contract_id_.Set(value, GetArenaForAllocation());
+  _impl_.map_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* TaskIdentity::_internal_mutable_task_contract_id() {
+inline std::string* EnvironmentSpec::_internal_mutable_map_id() {
   
-  return _impl_.task_contract_id_.Mutable(GetArenaForAllocation());
+  return _impl_.map_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* TaskIdentity::release_task_contract_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskIdentity.task_contract_id)
-  return _impl_.task_contract_id_.Release();
+inline std::string* EnvironmentSpec::release_map_id() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EnvironmentSpec.map_id)
+  return _impl_.map_id_.Release();
 }
-inline void TaskIdentity::set_allocated_task_contract_id(std::string* task_contract_id) {
-  if (task_contract_id != nullptr) {
+inline void EnvironmentSpec::set_allocated_map_id(std::string* map_id) {
+  if (map_id != nullptr) {
     
   } else {
     
   }
-  _impl_.task_contract_id_.SetAllocated(task_contract_id, GetArenaForAllocation());
+  _impl_.map_id_.SetAllocated(map_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.task_contract_id_.IsDefault()) {
-    _impl_.task_contract_id_.Set("", GetArenaForAllocation());
+  if (_impl_.map_id_.IsDefault()) {
+    _impl_.map_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.task_contract_id)
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EnvironmentSpec.map_id)
 }
 
-// uint64 task_revision = 3;
-inline void TaskIdentity::clear_task_revision() {
-  _impl_.task_revision_ = uint64_t{0u};
-}
-inline uint64_t TaskIdentity::_internal_task_revision() const {
-  return _impl_.task_revision_;
-}
-inline uint64_t TaskIdentity::task_revision() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.TaskIdentity.task_revision)
-  return _internal_task_revision();
-}
-inline void TaskIdentity::_internal_set_task_revision(uint64_t value) {
-  
-  _impl_.task_revision_ = value;
-}
-inline void TaskIdentity::set_task_revision(uint64_t value) {
-  _internal_set_task_revision(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskIdentity.task_revision)
-}
-
-// .rl.common.v1.ContentDigest task_config_digest = 4;
-inline bool TaskIdentity::_internal_has_task_config_digest() const {
-  return this != internal_default_instance() && _impl_.task_config_digest_ != nullptr;
-}
-inline bool TaskIdentity::has_task_config_digest() const {
-  return _internal_has_task_config_digest();
-}
-inline const ::rl::common::v1::ContentDigest& TaskIdentity::_internal_task_config_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.task_config_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& TaskIdentity::task_config_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.TaskIdentity.task_config_digest)
-  return _internal_task_config_digest();
-}
-inline void TaskIdentity::unsafe_arena_set_allocated_task_config_digest(
-    ::rl::common::v1::ContentDigest* task_config_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_config_digest_);
-  }
-  _impl_.task_config_digest_ = task_config_digest;
-  if (task_config_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.TaskIdentity.task_config_digest)
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::release_task_config_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.task_config_digest_;
-  _impl_.task_config_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::unsafe_arena_release_task_config_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskIdentity.task_config_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.task_config_digest_;
-  _impl_.task_config_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::_internal_mutable_task_config_digest() {
-  
-  if (_impl_.task_config_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.task_config_digest_ = p;
-  }
-  return _impl_.task_config_digest_;
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::mutable_task_config_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_task_config_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.TaskIdentity.task_config_digest)
-  return _msg;
-}
-inline void TaskIdentity::set_allocated_task_config_digest(::rl::common::v1::ContentDigest* task_config_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_config_digest_);
-  }
-  if (task_config_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(task_config_digest));
-    if (message_arena != submessage_arena) {
-      task_config_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, task_config_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.task_config_digest_ = task_config_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.task_config_digest)
-}
-
-// string fixed_map_id = 5;
-inline void TaskIdentity::clear_fixed_map_id() {
-  _impl_.fixed_map_id_.ClearToEmpty();
-}
-inline const std::string& TaskIdentity::fixed_map_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.TaskIdentity.fixed_map_id)
-  return _internal_fixed_map_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TaskIdentity::set_fixed_map_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.fixed_map_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskIdentity.fixed_map_id)
-}
-inline std::string* TaskIdentity::mutable_fixed_map_id() {
-  std::string* _s = _internal_mutable_fixed_map_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.TaskIdentity.fixed_map_id)
-  return _s;
-}
-inline const std::string& TaskIdentity::_internal_fixed_map_id() const {
-  return _impl_.fixed_map_id_.Get();
-}
-inline void TaskIdentity::_internal_set_fixed_map_id(const std::string& value) {
-  
-  _impl_.fixed_map_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TaskIdentity::_internal_mutable_fixed_map_id() {
-  
-  return _impl_.fixed_map_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TaskIdentity::release_fixed_map_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskIdentity.fixed_map_id)
-  return _impl_.fixed_map_id_.Release();
-}
-inline void TaskIdentity::set_allocated_fixed_map_id(std::string* fixed_map_id) {
-  if (fixed_map_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.fixed_map_id_.SetAllocated(fixed_map_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.fixed_map_id_.IsDefault()) {
-    _impl_.fixed_map_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.fixed_map_id)
-}
-
-// .rl.common.v1.ContentDigest fixed_map_digest = 6;
-inline bool TaskIdentity::_internal_has_fixed_map_digest() const {
-  return this != internal_default_instance() && _impl_.fixed_map_digest_ != nullptr;
-}
-inline bool TaskIdentity::has_fixed_map_digest() const {
-  return _internal_has_fixed_map_digest();
-}
-inline const ::rl::common::v1::ContentDigest& TaskIdentity::_internal_fixed_map_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.fixed_map_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& TaskIdentity::fixed_map_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
-  return _internal_fixed_map_digest();
-}
-inline void TaskIdentity::unsafe_arena_set_allocated_fixed_map_digest(
-    ::rl::common::v1::ContentDigest* fixed_map_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.fixed_map_digest_);
-  }
-  _impl_.fixed_map_digest_ = fixed_map_digest;
-  if (fixed_map_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::release_fixed_map_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.fixed_map_digest_;
-  _impl_.fixed_map_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::unsafe_arena_release_fixed_map_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.fixed_map_digest_;
-  _impl_.fixed_map_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::_internal_mutable_fixed_map_digest() {
-  
-  if (_impl_.fixed_map_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.fixed_map_digest_ = p;
-  }
-  return _impl_.fixed_map_digest_;
-}
-inline ::rl::common::v1::ContentDigest* TaskIdentity::mutable_fixed_map_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_fixed_map_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
-  return _msg;
-}
-inline void TaskIdentity::set_allocated_fixed_map_digest(::rl::common::v1::ContentDigest* fixed_map_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.fixed_map_digest_);
-  }
-  if (fixed_map_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(fixed_map_digest));
-    if (message_arena != submessage_arena) {
-      fixed_map_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, fixed_map_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.fixed_map_digest_ = fixed_map_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskIdentity.fixed_map_digest)
-}
-
-// -------------------------------------------------------------------
-
-// BehaviorPolicyBinding
-
-// string model_lineage_id = 1;
-inline void BehaviorPolicyBinding::clear_model_lineage_id() {
-  _impl_.model_lineage_id_.ClearToEmpty();
-}
-inline const std::string& BehaviorPolicyBinding::model_lineage_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.model_lineage_id)
-  return _internal_model_lineage_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void BehaviorPolicyBinding::set_model_lineage_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.model_lineage_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.BehaviorPolicyBinding.model_lineage_id)
-}
-inline std::string* BehaviorPolicyBinding::mutable_model_lineage_id() {
-  std::string* _s = _internal_mutable_model_lineage_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BehaviorPolicyBinding.model_lineage_id)
-  return _s;
-}
-inline const std::string& BehaviorPolicyBinding::_internal_model_lineage_id() const {
-  return _impl_.model_lineage_id_.Get();
-}
-inline void BehaviorPolicyBinding::_internal_set_model_lineage_id(const std::string& value) {
-  
-  _impl_.model_lineage_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyBinding::_internal_mutable_model_lineage_id() {
-  
-  return _impl_.model_lineage_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyBinding::release_model_lineage_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.model_lineage_id)
-  return _impl_.model_lineage_id_.Release();
-}
-inline void BehaviorPolicyBinding::set_allocated_model_lineage_id(std::string* model_lineage_id) {
-  if (model_lineage_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.model_lineage_id_.SetAllocated(model_lineage_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.model_lineage_id_.IsDefault()) {
-    _impl_.model_lineage_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_lineage_id)
-}
-
-// optional uint64 model_step = 2;
-inline bool BehaviorPolicyBinding::_internal_has_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline bool BehaviorPolicyBinding::has_model_step() const {
-  return _internal_has_model_step();
-}
-inline void BehaviorPolicyBinding::clear_model_step() {
-  _impl_.model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline uint64_t BehaviorPolicyBinding::_internal_model_step() const {
-  return _impl_.model_step_;
-}
-inline uint64_t BehaviorPolicyBinding::model_step() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.model_step)
-  return _internal_model_step();
-}
-inline void BehaviorPolicyBinding::_internal_set_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.model_step_ = value;
-}
-inline void BehaviorPolicyBinding::set_model_step(uint64_t value) {
-  _internal_set_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.BehaviorPolicyBinding.model_step)
-}
-
-// .rl.common.v1.ContentDigest model_artifact_digest = 3;
-inline bool BehaviorPolicyBinding::_internal_has_model_artifact_digest() const {
-  return this != internal_default_instance() && _impl_.model_artifact_digest_ != nullptr;
-}
-inline bool BehaviorPolicyBinding::has_model_artifact_digest() const {
-  return _internal_has_model_artifact_digest();
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyBinding::_internal_model_artifact_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.model_artifact_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyBinding::model_artifact_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
-  return _internal_model_artifact_digest();
-}
-inline void BehaviorPolicyBinding::unsafe_arena_set_allocated_model_artifact_digest(
-    ::rl::common::v1::ContentDigest* model_artifact_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.model_artifact_digest_);
-  }
-  _impl_.model_artifact_digest_ = model_artifact_digest;
-  if (model_artifact_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_model_artifact_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.model_artifact_digest_;
-  _impl_.model_artifact_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::unsafe_arena_release_model_artifact_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.model_artifact_digest_;
-  _impl_.model_artifact_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::_internal_mutable_model_artifact_digest() {
-  
-  if (_impl_.model_artifact_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.model_artifact_digest_ = p;
-  }
-  return _impl_.model_artifact_digest_;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::mutable_model_artifact_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_model_artifact_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
-  return _msg;
-}
-inline void BehaviorPolicyBinding::set_allocated_model_artifact_digest(::rl::common::v1::ContentDigest* model_artifact_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.model_artifact_digest_);
-  }
-  if (model_artifact_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(model_artifact_digest));
-    if (message_arena != submessage_arena) {
-      model_artifact_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, model_artifact_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.model_artifact_digest_ = model_artifact_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_artifact_digest)
-}
-
-// .rl.common.v1.ContentDigest model_manifest_digest = 4;
-inline bool BehaviorPolicyBinding::_internal_has_model_manifest_digest() const {
-  return this != internal_default_instance() && _impl_.model_manifest_digest_ != nullptr;
-}
-inline bool BehaviorPolicyBinding::has_model_manifest_digest() const {
-  return _internal_has_model_manifest_digest();
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyBinding::_internal_model_manifest_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.model_manifest_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyBinding::model_manifest_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
-  return _internal_model_manifest_digest();
-}
-inline void BehaviorPolicyBinding::unsafe_arena_set_allocated_model_manifest_digest(
-    ::rl::common::v1::ContentDigest* model_manifest_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.model_manifest_digest_);
-  }
-  _impl_.model_manifest_digest_ = model_manifest_digest;
-  if (model_manifest_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_model_manifest_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.model_manifest_digest_;
-  _impl_.model_manifest_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::unsafe_arena_release_model_manifest_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.model_manifest_digest_;
-  _impl_.model_manifest_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::_internal_mutable_model_manifest_digest() {
-  
-  if (_impl_.model_manifest_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.model_manifest_digest_ = p;
-  }
-  return _impl_.model_manifest_digest_;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::mutable_model_manifest_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_model_manifest_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
-  return _msg;
-}
-inline void BehaviorPolicyBinding::set_allocated_model_manifest_digest(::rl::common::v1::ContentDigest* model_manifest_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.model_manifest_digest_);
-  }
-  if (model_manifest_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(model_manifest_digest));
-    if (message_arena != submessage_arena) {
-      model_manifest_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, model_manifest_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.model_manifest_digest_ = model_manifest_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.model_manifest_digest)
-}
-
-// string distribution_schema_id = 5;
-inline void BehaviorPolicyBinding::clear_distribution_schema_id() {
-  _impl_.distribution_schema_id_.ClearToEmpty();
-}
-inline const std::string& BehaviorPolicyBinding::distribution_schema_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.distribution_schema_id)
-  return _internal_distribution_schema_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void BehaviorPolicyBinding::set_distribution_schema_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.distribution_schema_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.BehaviorPolicyBinding.distribution_schema_id)
-}
-inline std::string* BehaviorPolicyBinding::mutable_distribution_schema_id() {
-  std::string* _s = _internal_mutable_distribution_schema_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BehaviorPolicyBinding.distribution_schema_id)
-  return _s;
-}
-inline const std::string& BehaviorPolicyBinding::_internal_distribution_schema_id() const {
-  return _impl_.distribution_schema_id_.Get();
-}
-inline void BehaviorPolicyBinding::_internal_set_distribution_schema_id(const std::string& value) {
-  
-  _impl_.distribution_schema_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyBinding::_internal_mutable_distribution_schema_id() {
-  
-  return _impl_.distribution_schema_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* BehaviorPolicyBinding::release_distribution_schema_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.distribution_schema_id)
-  return _impl_.distribution_schema_id_.Release();
-}
-inline void BehaviorPolicyBinding::set_allocated_distribution_schema_id(std::string* distribution_schema_id) {
-  if (distribution_schema_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.distribution_schema_id_.SetAllocated(distribution_schema_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.distribution_schema_id_.IsDefault()) {
-    _impl_.distribution_schema_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.distribution_schema_id)
-}
-
-// .rl.common.v1.ContentDigest policy_spec_digest = 6;
-inline bool BehaviorPolicyBinding::_internal_has_policy_spec_digest() const {
-  return this != internal_default_instance() && _impl_.policy_spec_digest_ != nullptr;
-}
-inline bool BehaviorPolicyBinding::has_policy_spec_digest() const {
-  return _internal_has_policy_spec_digest();
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyBinding::_internal_policy_spec_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.policy_spec_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& BehaviorPolicyBinding::policy_spec_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
-  return _internal_policy_spec_digest();
-}
-inline void BehaviorPolicyBinding::unsafe_arena_set_allocated_policy_spec_digest(
-    ::rl::common::v1::ContentDigest* policy_spec_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.policy_spec_digest_);
-  }
-  _impl_.policy_spec_digest_ = policy_spec_digest;
-  if (policy_spec_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::release_policy_spec_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
-  _impl_.policy_spec_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::unsafe_arena_release_policy_spec_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.policy_spec_digest_;
-  _impl_.policy_spec_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::_internal_mutable_policy_spec_digest() {
-  
-  if (_impl_.policy_spec_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.policy_spec_digest_ = p;
-  }
-  return _impl_.policy_spec_digest_;
-}
-inline ::rl::common::v1::ContentDigest* BehaviorPolicyBinding::mutable_policy_spec_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_policy_spec_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
-  return _msg;
-}
-inline void BehaviorPolicyBinding::set_allocated_policy_spec_digest(::rl::common::v1::ContentDigest* policy_spec_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.policy_spec_digest_);
-  }
-  if (policy_spec_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(policy_spec_digest));
-    if (message_arena != submessage_arena) {
-      policy_spec_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, policy_spec_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.policy_spec_digest_ = policy_spec_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BehaviorPolicyBinding.policy_spec_digest)
-}
-
-// -------------------------------------------------------------------
-
-// MazeTaskSpec
-
-// .rl.task.maze.v1.TaskIdentity identity = 1;
-inline bool MazeTaskSpec::_internal_has_identity() const {
-  return this != internal_default_instance() && _impl_.identity_ != nullptr;
-}
-inline bool MazeTaskSpec::has_identity() const {
-  return _internal_has_identity();
-}
-inline void MazeTaskSpec::clear_identity() {
-  if (GetArenaForAllocation() == nullptr && _impl_.identity_ != nullptr) {
-    delete _impl_.identity_;
-  }
-  _impl_.identity_ = nullptr;
-}
-inline const ::rl::task::maze::v1::TaskIdentity& MazeTaskSpec::_internal_identity() const {
-  const ::rl::task::maze::v1::TaskIdentity* p = _impl_.identity_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::TaskIdentity&>(
-      ::rl::task::maze::v1::_TaskIdentity_default_instance_);
-}
-inline const ::rl::task::maze::v1::TaskIdentity& MazeTaskSpec::identity() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.identity)
-  return _internal_identity();
-}
-inline void MazeTaskSpec::unsafe_arena_set_allocated_identity(
-    ::rl::task::maze::v1::TaskIdentity* identity) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.identity_);
-  }
-  _impl_.identity_ = identity;
-  if (identity) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.identity)
-}
-inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::release_identity() {
-  
-  ::rl::task::maze::v1::TaskIdentity* temp = _impl_.identity_;
-  _impl_.identity_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::unsafe_arena_release_identity() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.identity)
-  
-  ::rl::task::maze::v1::TaskIdentity* temp = _impl_.identity_;
-  _impl_.identity_ = nullptr;
-  return temp;
-}
-inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::_internal_mutable_identity() {
-  
-  if (_impl_.identity_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::TaskIdentity>(GetArenaForAllocation());
-    _impl_.identity_ = p;
-  }
-  return _impl_.identity_;
-}
-inline ::rl::task::maze::v1::TaskIdentity* MazeTaskSpec::mutable_identity() {
-  ::rl::task::maze::v1::TaskIdentity* _msg = _internal_mutable_identity();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MazeTaskSpec.identity)
-  return _msg;
-}
-inline void MazeTaskSpec::set_allocated_identity(::rl::task::maze::v1::TaskIdentity* identity) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.identity_;
-  }
-  if (identity) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(identity);
-    if (message_arena != submessage_arena) {
-      identity = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, identity, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.identity_ = identity;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.identity)
-}
-
-// string fixed_map_id = 3;
-inline void MazeTaskSpec::clear_fixed_map_id() {
-  _impl_.fixed_map_id_.ClearToEmpty();
-}
-inline const std::string& MazeTaskSpec::fixed_map_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.fixed_map_id)
-  return _internal_fixed_map_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MazeTaskSpec::set_fixed_map_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.fixed_map_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.MazeTaskSpec.fixed_map_id)
-}
-inline std::string* MazeTaskSpec::mutable_fixed_map_id() {
-  std::string* _s = _internal_mutable_fixed_map_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MazeTaskSpec.fixed_map_id)
-  return _s;
-}
-inline const std::string& MazeTaskSpec::_internal_fixed_map_id() const {
-  return _impl_.fixed_map_id_.Get();
-}
-inline void MazeTaskSpec::_internal_set_fixed_map_id(const std::string& value) {
-  
-  _impl_.fixed_map_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MazeTaskSpec::_internal_mutable_fixed_map_id() {
-  
-  return _impl_.fixed_map_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MazeTaskSpec::release_fixed_map_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.fixed_map_id)
-  return _impl_.fixed_map_id_.Release();
-}
-inline void MazeTaskSpec::set_allocated_fixed_map_id(std::string* fixed_map_id) {
-  if (fixed_map_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.fixed_map_id_.SetAllocated(fixed_map_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.fixed_map_id_.IsDefault()) {
-    _impl_.fixed_map_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.fixed_map_id)
-}
-
-// .rl.common.v1.ContentDigest expected_map_digest = 4;
-inline bool MazeTaskSpec::_internal_has_expected_map_digest() const {
+// .rl.common.v1.ContentDigest expected_map_digest = 3;
+inline bool EnvironmentSpec::_internal_has_expected_map_digest() const {
   return this != internal_default_instance() && _impl_.expected_map_digest_ != nullptr;
 }
-inline bool MazeTaskSpec::has_expected_map_digest() const {
+inline bool EnvironmentSpec::has_expected_map_digest() const {
   return _internal_has_expected_map_digest();
 }
-inline const ::rl::common::v1::ContentDigest& MazeTaskSpec::_internal_expected_map_digest() const {
+inline const ::rl::common::v1::ContentDigest& EnvironmentSpec::_internal_expected_map_digest() const {
   const ::rl::common::v1::ContentDigest* p = _impl_.expected_map_digest_;
   return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
       ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline const ::rl::common::v1::ContentDigest& MazeTaskSpec::expected_map_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
+inline const ::rl::common::v1::ContentDigest& EnvironmentSpec::expected_map_digest() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
   return _internal_expected_map_digest();
 }
-inline void MazeTaskSpec::unsafe_arena_set_allocated_expected_map_digest(
+inline void EnvironmentSpec::unsafe_arena_set_allocated_expected_map_digest(
     ::rl::common::v1::ContentDigest* expected_map_digest) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.expected_map_digest_);
@@ -6772,9 +5653,9 @@ inline void MazeTaskSpec::unsafe_arena_set_allocated_expected_map_digest(
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
 }
-inline ::rl::common::v1::ContentDigest* MazeTaskSpec::release_expected_map_digest() {
+inline ::rl::common::v1::ContentDigest* EnvironmentSpec::release_expected_map_digest() {
   
   ::rl::common::v1::ContentDigest* temp = _impl_.expected_map_digest_;
   _impl_.expected_map_digest_ = nullptr;
@@ -6789,14 +5670,14 @@ inline ::rl::common::v1::ContentDigest* MazeTaskSpec::release_expected_map_diges
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* MazeTaskSpec::unsafe_arena_release_expected_map_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
+inline ::rl::common::v1::ContentDigest* EnvironmentSpec::unsafe_arena_release_expected_map_digest() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
   
   ::rl::common::v1::ContentDigest* temp = _impl_.expected_map_digest_;
   _impl_.expected_map_digest_ = nullptr;
   return temp;
 }
-inline ::rl::common::v1::ContentDigest* MazeTaskSpec::_internal_mutable_expected_map_digest() {
+inline ::rl::common::v1::ContentDigest* EnvironmentSpec::_internal_mutable_expected_map_digest() {
   
   if (_impl_.expected_map_digest_ == nullptr) {
     auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
@@ -6804,12 +5685,12 @@ inline ::rl::common::v1::ContentDigest* MazeTaskSpec::_internal_mutable_expected
   }
   return _impl_.expected_map_digest_;
 }
-inline ::rl::common::v1::ContentDigest* MazeTaskSpec::mutable_expected_map_digest() {
+inline ::rl::common::v1::ContentDigest* EnvironmentSpec::mutable_expected_map_digest() {
   ::rl::common::v1::ContentDigest* _msg = _internal_mutable_expected_map_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
   return _msg;
 }
-inline void MazeTaskSpec::set_allocated_expected_map_digest(::rl::common::v1::ContentDigest* expected_map_digest) {
+inline void EnvironmentSpec::set_allocated_expected_map_digest(::rl::common::v1::ContentDigest* expected_map_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.expected_map_digest_);
@@ -6827,215 +5708,45 @@ inline void MazeTaskSpec::set_allocated_expected_map_digest(::rl::common::v1::Co
     
   }
   _impl_.expected_map_digest_ = expected_map_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.expected_map_digest)
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
 }
 
-// .rl.common.v1.SchemaIdentity observation_schema = 5;
-inline bool MazeTaskSpec::_internal_has_observation_schema() const {
-  return this != internal_default_instance() && _impl_.observation_schema_ != nullptr;
-}
-inline bool MazeTaskSpec::has_observation_schema() const {
-  return _internal_has_observation_schema();
-}
-inline const ::rl::common::v1::SchemaIdentity& MazeTaskSpec::_internal_observation_schema() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.observation_schema_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& MazeTaskSpec::observation_schema() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.observation_schema)
-  return _internal_observation_schema();
-}
-inline void MazeTaskSpec::unsafe_arena_set_allocated_observation_schema(
-    ::rl::common::v1::SchemaIdentity* observation_schema) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.observation_schema_);
-  }
-  _impl_.observation_schema_ = observation_schema;
-  if (observation_schema) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.observation_schema)
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::release_observation_schema() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
-  _impl_.observation_schema_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::unsafe_arena_release_observation_schema() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.observation_schema)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.observation_schema_;
-  _impl_.observation_schema_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::_internal_mutable_observation_schema() {
-  
-  if (_impl_.observation_schema_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.observation_schema_ = p;
-  }
-  return _impl_.observation_schema_;
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::mutable_observation_schema() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_observation_schema();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MazeTaskSpec.observation_schema)
-  return _msg;
-}
-inline void MazeTaskSpec::set_allocated_observation_schema(::rl::common::v1::SchemaIdentity* observation_schema) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.observation_schema_);
-  }
-  if (observation_schema) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(observation_schema));
-    if (message_arena != submessage_arena) {
-      observation_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, observation_schema, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.observation_schema_ = observation_schema;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.observation_schema)
-}
-
-// .rl.common.v1.SchemaIdentity action_schema = 6;
-inline bool MazeTaskSpec::_internal_has_action_schema() const {
-  return this != internal_default_instance() && _impl_.action_schema_ != nullptr;
-}
-inline bool MazeTaskSpec::has_action_schema() const {
-  return _internal_has_action_schema();
-}
-inline const ::rl::common::v1::SchemaIdentity& MazeTaskSpec::_internal_action_schema() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.action_schema_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& MazeTaskSpec::action_schema() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.action_schema)
-  return _internal_action_schema();
-}
-inline void MazeTaskSpec::unsafe_arena_set_allocated_action_schema(
-    ::rl::common::v1::SchemaIdentity* action_schema) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.action_schema_);
-  }
-  _impl_.action_schema_ = action_schema;
-  if (action_schema) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MazeTaskSpec.action_schema)
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::release_action_schema() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
-  _impl_.action_schema_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::unsafe_arena_release_action_schema() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.action_schema)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.action_schema_;
-  _impl_.action_schema_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::_internal_mutable_action_schema() {
-  
-  if (_impl_.action_schema_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.action_schema_ = p;
-  }
-  return _impl_.action_schema_;
-}
-inline ::rl::common::v1::SchemaIdentity* MazeTaskSpec::mutable_action_schema() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_action_schema();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MazeTaskSpec.action_schema)
-  return _msg;
-}
-inline void MazeTaskSpec::set_allocated_action_schema(::rl::common::v1::SchemaIdentity* action_schema) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.action_schema_);
-  }
-  if (action_schema) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(action_schema));
-    if (message_arena != submessage_arena) {
-      action_schema = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, action_schema, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.action_schema_ = action_schema;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.action_schema)
-}
-
-// string action_rule_id = 7;
-inline void MazeTaskSpec::clear_action_rule_id() {
+// string action_rule_id = 4;
+inline void EnvironmentSpec::clear_action_rule_id() {
   _impl_.action_rule_id_.ClearToEmpty();
 }
-inline const std::string& MazeTaskSpec::action_rule_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.action_rule_id)
+inline const std::string& EnvironmentSpec::action_rule_id() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
   return _internal_action_rule_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void MazeTaskSpec::set_action_rule_id(ArgT0&& arg0, ArgT... args) {
+void EnvironmentSpec::set_action_rule_id(ArgT0&& arg0, ArgT... args) {
  
  _impl_.action_rule_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.MazeTaskSpec.action_rule_id)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
 }
-inline std::string* MazeTaskSpec::mutable_action_rule_id() {
+inline std::string* EnvironmentSpec::mutable_action_rule_id() {
   std::string* _s = _internal_mutable_action_rule_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MazeTaskSpec.action_rule_id)
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
   return _s;
 }
-inline const std::string& MazeTaskSpec::_internal_action_rule_id() const {
+inline const std::string& EnvironmentSpec::_internal_action_rule_id() const {
   return _impl_.action_rule_id_.Get();
 }
-inline void MazeTaskSpec::_internal_set_action_rule_id(const std::string& value) {
+inline void EnvironmentSpec::_internal_set_action_rule_id(const std::string& value) {
   
   _impl_.action_rule_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* MazeTaskSpec::_internal_mutable_action_rule_id() {
+inline std::string* EnvironmentSpec::_internal_mutable_action_rule_id() {
   
   return _impl_.action_rule_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* MazeTaskSpec::release_action_rule_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MazeTaskSpec.action_rule_id)
+inline std::string* EnvironmentSpec::release_action_rule_id() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
   return _impl_.action_rule_id_.Release();
 }
-inline void MazeTaskSpec::set_allocated_action_rule_id(std::string* action_rule_id) {
+inline void EnvironmentSpec::set_allocated_action_rule_id(std::string* action_rule_id) {
   if (action_rule_id != nullptr) {
     
   } else {
@@ -7047,51 +5758,27 @@ inline void MazeTaskSpec::set_allocated_action_rule_id(std::string* action_rule_
     _impl_.action_rule_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MazeTaskSpec.action_rule_id)
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
 }
 
-// uint32 episode_max_steps = 8;
-inline void MazeTaskSpec::clear_episode_max_steps() {
+// uint32 episode_max_steps = 5;
+inline void EnvironmentSpec::clear_episode_max_steps() {
   _impl_.episode_max_steps_ = 0u;
 }
-inline uint32_t MazeTaskSpec::_internal_episode_max_steps() const {
+inline uint32_t EnvironmentSpec::_internal_episode_max_steps() const {
   return _impl_.episode_max_steps_;
 }
-inline uint32_t MazeTaskSpec::episode_max_steps() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MazeTaskSpec.episode_max_steps)
+inline uint32_t EnvironmentSpec::episode_max_steps() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.episode_max_steps)
   return _internal_episode_max_steps();
 }
-inline void MazeTaskSpec::_internal_set_episode_max_steps(uint32_t value) {
+inline void EnvironmentSpec::_internal_set_episode_max_steps(uint32_t value) {
   
   _impl_.episode_max_steps_ = value;
 }
-inline void MazeTaskSpec::set_episode_max_steps(uint32_t value) {
+inline void EnvironmentSpec::set_episode_max_steps(uint32_t value) {
   _internal_set_episode_max_steps(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.MazeTaskSpec.episode_max_steps)
-}
-
-// -------------------------------------------------------------------
-
-// EnvironmentRuntimeSpec
-
-// uint32 agent_count = 1;
-inline void EnvironmentRuntimeSpec::clear_agent_count() {
-  _impl_.agent_count_ = 0u;
-}
-inline uint32_t EnvironmentRuntimeSpec::_internal_agent_count() const {
-  return _impl_.agent_count_;
-}
-inline uint32_t EnvironmentRuntimeSpec::agent_count() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentRuntimeSpec.agent_count)
-  return _internal_agent_count();
-}
-inline void EnvironmentRuntimeSpec::_internal_set_agent_count(uint32_t value) {
-  
-  _impl_.agent_count_ = value;
-}
-inline void EnvironmentRuntimeSpec::set_agent_count(uint32_t value) {
-  _internal_set_agent_count(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentRuntimeSpec.agent_count)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentSpec.episode_max_steps)
 }
 
 // -------------------------------------------------------------------
@@ -7148,27 +5835,7 @@ inline void MapDescriptor::set_allocated_map_id(std::string* map_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MapDescriptor.map_id)
 }
 
-// uint32 format_version = 2;
-inline void MapDescriptor::clear_format_version() {
-  _impl_.format_version_ = 0u;
-}
-inline uint32_t MapDescriptor::_internal_format_version() const {
-  return _impl_.format_version_;
-}
-inline uint32_t MapDescriptor::format_version() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MapDescriptor.format_version)
-  return _internal_format_version();
-}
-inline void MapDescriptor::_internal_set_format_version(uint32_t value) {
-  
-  _impl_.format_version_ = value;
-}
-inline void MapDescriptor::set_format_version(uint32_t value) {
-  _internal_set_format_version(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.format_version)
-}
-
-// uint32 grid_columns = 3;
+// uint32 grid_columns = 2;
 inline void MapDescriptor::clear_grid_columns() {
   _impl_.grid_columns_ = 0u;
 }
@@ -7188,7 +5855,7 @@ inline void MapDescriptor::set_grid_columns(uint32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.grid_columns)
 }
 
-// uint32 grid_rows = 4;
+// uint32 grid_rows = 3;
 inline void MapDescriptor::clear_grid_rows() {
   _impl_.grid_rows_ = 0u;
 }
@@ -7208,7 +5875,7 @@ inline void MapDescriptor::set_grid_rows(uint32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.grid_rows)
 }
 
-// uint32 grid_size_microunits = 5;
+// uint32 grid_size_microunits = 4;
 inline void MapDescriptor::clear_grid_size_microunits() {
   _impl_.grid_size_microunits_ = 0u;
 }
@@ -7228,7 +5895,7 @@ inline void MapDescriptor::set_grid_size_microunits(uint32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.grid_size_microunits)
 }
 
-// int32 start_grid_x = 6;
+// int32 start_grid_x = 5;
 inline void MapDescriptor::clear_start_grid_x() {
   _impl_.start_grid_x_ = 0;
 }
@@ -7248,7 +5915,7 @@ inline void MapDescriptor::set_start_grid_x(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.start_grid_x)
 }
 
-// int32 start_grid_y = 7;
+// int32 start_grid_y = 6;
 inline void MapDescriptor::clear_start_grid_y() {
   _impl_.start_grid_y_ = 0;
 }
@@ -7268,7 +5935,7 @@ inline void MapDescriptor::set_start_grid_y(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.start_grid_y)
 }
 
-// int32 goal_grid_x = 8;
+// int32 goal_grid_x = 7;
 inline void MapDescriptor::clear_goal_grid_x() {
   _impl_.goal_grid_x_ = 0;
 }
@@ -7288,7 +5955,7 @@ inline void MapDescriptor::set_goal_grid_x(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.goal_grid_x)
 }
 
-// int32 goal_grid_y = 9;
+// int32 goal_grid_y = 8;
 inline void MapDescriptor::clear_goal_grid_y() {
   _impl_.goal_grid_y_ = 0;
 }
@@ -7308,7 +5975,7 @@ inline void MapDescriptor::set_goal_grid_y(int32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.goal_grid_y)
 }
 
-// bytes blocked_bitmap = 10;
+// bytes blocked_bitmap = 9;
 inline void MapDescriptor::clear_blocked_bitmap() {
   _impl_.blocked_bitmap_.ClearToEmpty();
 }
@@ -7358,7 +6025,7 @@ inline void MapDescriptor::set_allocated_blocked_bitmap(std::string* blocked_bit
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MapDescriptor.blocked_bitmap)
 }
 
-// .rl.common.v1.ContentDigest canonical_digest = 11;
+// .rl.common.v1.ContentDigest canonical_digest = 10;
 inline bool MapDescriptor::_internal_has_canonical_digest() const {
   return this != internal_default_instance() && _impl_.canonical_digest_ != nullptr;
 }
@@ -7443,7 +6110,7 @@ inline void MapDescriptor::set_allocated_canonical_digest(::rl::common::v1::Cont
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MapDescriptor.canonical_digest)
 }
 
-// uint32 shortest_action_steps = 12;
+// uint32 shortest_action_steps = 11;
 inline void MapDescriptor::clear_shortest_action_steps() {
   _impl_.shortest_action_steps_ = 0u;
 }
@@ -7463,7 +6130,7 @@ inline void MapDescriptor::set_shortest_action_steps(uint32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.shortest_action_steps)
 }
 
-// string action_rule_id = 13;
+// string action_rule_id = 12;
 inline void MapDescriptor::clear_action_rule_id() {
   _impl_.action_rule_id_.ClearToEmpty();
 }
@@ -7515,134 +6182,44 @@ inline void MapDescriptor::set_allocated_action_rule_id(std::string* action_rule
 
 // -------------------------------------------------------------------
 
-// LifecycleCommand
+// CommandIdentity
 
-// .rl.task.maze.v1.TaskIdentity task = 1;
-inline bool LifecycleCommand::_internal_has_task() const {
-  return this != internal_default_instance() && _impl_.task_ != nullptr;
-}
-inline bool LifecycleCommand::has_task() const {
-  return _internal_has_task();
-}
-inline void LifecycleCommand::clear_task() {
-  if (GetArenaForAllocation() == nullptr && _impl_.task_ != nullptr) {
-    delete _impl_.task_;
-  }
-  _impl_.task_ = nullptr;
-}
-inline const ::rl::task::maze::v1::TaskIdentity& LifecycleCommand::_internal_task() const {
-  const ::rl::task::maze::v1::TaskIdentity* p = _impl_.task_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::TaskIdentity&>(
-      ::rl::task::maze::v1::_TaskIdentity_default_instance_);
-}
-inline const ::rl::task::maze::v1::TaskIdentity& LifecycleCommand::task() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.task)
-  return _internal_task();
-}
-inline void LifecycleCommand::unsafe_arena_set_allocated_task(
-    ::rl::task::maze::v1::TaskIdentity* task) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_);
-  }
-  _impl_.task_ = task;
-  if (task) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.LifecycleCommand.task)
-}
-inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::release_task() {
-  
-  ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
-  _impl_.task_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::unsafe_arena_release_task() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.LifecycleCommand.task)
-  
-  ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
-  _impl_.task_ = nullptr;
-  return temp;
-}
-inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::_internal_mutable_task() {
-  
-  if (_impl_.task_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::TaskIdentity>(GetArenaForAllocation());
-    _impl_.task_ = p;
-  }
-  return _impl_.task_;
-}
-inline ::rl::task::maze::v1::TaskIdentity* LifecycleCommand::mutable_task() {
-  ::rl::task::maze::v1::TaskIdentity* _msg = _internal_mutable_task();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.LifecycleCommand.task)
-  return _msg;
-}
-inline void LifecycleCommand::set_allocated_task(::rl::task::maze::v1::TaskIdentity* task) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.task_;
-  }
-  if (task) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(task);
-    if (message_arena != submessage_arena) {
-      task = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, task, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.task_ = task;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleCommand.task)
-}
-
-// string session_id = 2;
-inline void LifecycleCommand::clear_session_id() {
+// string session_id = 1;
+inline void CommandIdentity::clear_session_id() {
   _impl_.session_id_.ClearToEmpty();
 }
-inline const std::string& LifecycleCommand::session_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.session_id)
+inline const std::string& CommandIdentity::session_id() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandIdentity.session_id)
   return _internal_session_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void LifecycleCommand::set_session_id(ArgT0&& arg0, ArgT... args) {
+void CommandIdentity::set_session_id(ArgT0&& arg0, ArgT... args) {
  
  _impl_.session_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.session_id)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandIdentity.session_id)
 }
-inline std::string* LifecycleCommand::mutable_session_id() {
+inline std::string* CommandIdentity::mutable_session_id() {
   std::string* _s = _internal_mutable_session_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.LifecycleCommand.session_id)
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.CommandIdentity.session_id)
   return _s;
 }
-inline const std::string& LifecycleCommand::_internal_session_id() const {
+inline const std::string& CommandIdentity::_internal_session_id() const {
   return _impl_.session_id_.Get();
 }
-inline void LifecycleCommand::_internal_set_session_id(const std::string& value) {
+inline void CommandIdentity::_internal_set_session_id(const std::string& value) {
   
   _impl_.session_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* LifecycleCommand::_internal_mutable_session_id() {
+inline std::string* CommandIdentity::_internal_mutable_session_id() {
   
   return _impl_.session_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* LifecycleCommand::release_session_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.LifecycleCommand.session_id)
+inline std::string* CommandIdentity::release_session_id() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.CommandIdentity.session_id)
   return _impl_.session_id_.Release();
 }
-inline void LifecycleCommand::set_allocated_session_id(std::string* session_id) {
+inline void CommandIdentity::set_allocated_session_id(std::string* session_id) {
   if (session_id != nullptr) {
     
   } else {
@@ -7654,45 +6231,85 @@ inline void LifecycleCommand::set_allocated_session_id(std::string* session_id) 
     _impl_.session_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleCommand.session_id)
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.CommandIdentity.session_id)
 }
 
-// string episode_id = 3;
-inline void LifecycleCommand::clear_episode_id() {
+// uint64 session_epoch = 2;
+inline void CommandIdentity::clear_session_epoch() {
+  _impl_.session_epoch_ = uint64_t{0u};
+}
+inline uint64_t CommandIdentity::_internal_session_epoch() const {
+  return _impl_.session_epoch_;
+}
+inline uint64_t CommandIdentity::session_epoch() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandIdentity.session_epoch)
+  return _internal_session_epoch();
+}
+inline void CommandIdentity::_internal_set_session_epoch(uint64_t value) {
+  
+  _impl_.session_epoch_ = value;
+}
+inline void CommandIdentity::set_session_epoch(uint64_t value) {
+  _internal_set_session_epoch(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandIdentity.session_epoch)
+}
+
+// uint64 sequence = 3;
+inline void CommandIdentity::clear_sequence() {
+  _impl_.sequence_ = uint64_t{0u};
+}
+inline uint64_t CommandIdentity::_internal_sequence() const {
+  return _impl_.sequence_;
+}
+inline uint64_t CommandIdentity::sequence() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandIdentity.sequence)
+  return _internal_sequence();
+}
+inline void CommandIdentity::_internal_set_sequence(uint64_t value) {
+  
+  _impl_.sequence_ = value;
+}
+inline void CommandIdentity::set_sequence(uint64_t value) {
+  _internal_set_sequence(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandIdentity.sequence)
+}
+
+// string episode_id = 4;
+inline void CommandIdentity::clear_episode_id() {
   _impl_.episode_id_.ClearToEmpty();
 }
-inline const std::string& LifecycleCommand::episode_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.episode_id)
+inline const std::string& CommandIdentity::episode_id() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandIdentity.episode_id)
   return _internal_episode_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void LifecycleCommand::set_episode_id(ArgT0&& arg0, ArgT... args) {
+void CommandIdentity::set_episode_id(ArgT0&& arg0, ArgT... args) {
  
  _impl_.episode_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.episode_id)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandIdentity.episode_id)
 }
-inline std::string* LifecycleCommand::mutable_episode_id() {
+inline std::string* CommandIdentity::mutable_episode_id() {
   std::string* _s = _internal_mutable_episode_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.LifecycleCommand.episode_id)
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.CommandIdentity.episode_id)
   return _s;
 }
-inline const std::string& LifecycleCommand::_internal_episode_id() const {
+inline const std::string& CommandIdentity::_internal_episode_id() const {
   return _impl_.episode_id_.Get();
 }
-inline void LifecycleCommand::_internal_set_episode_id(const std::string& value) {
+inline void CommandIdentity::_internal_set_episode_id(const std::string& value) {
   
   _impl_.episode_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* LifecycleCommand::_internal_mutable_episode_id() {
+inline std::string* CommandIdentity::_internal_mutable_episode_id() {
   
   return _impl_.episode_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* LifecycleCommand::release_episode_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.LifecycleCommand.episode_id)
+inline std::string* CommandIdentity::release_episode_id() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.CommandIdentity.episode_id)
   return _impl_.episode_id_.Release();
 }
-inline void LifecycleCommand::set_allocated_episode_id(std::string* episode_id) {
+inline void CommandIdentity::set_allocated_episode_id(std::string* episode_id) {
   if (episode_id != nullptr) {
     
   } else {
@@ -7704,259 +6321,89 @@ inline void LifecycleCommand::set_allocated_episode_id(std::string* episode_id) 
     _impl_.episode_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleCommand.episode_id)
-}
-
-// uint64 lifecycle_epoch = 5;
-inline void LifecycleCommand::clear_lifecycle_epoch() {
-  _impl_.lifecycle_epoch_ = uint64_t{0u};
-}
-inline uint64_t LifecycleCommand::_internal_lifecycle_epoch() const {
-  return _impl_.lifecycle_epoch_;
-}
-inline uint64_t LifecycleCommand::lifecycle_epoch() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.lifecycle_epoch)
-  return _internal_lifecycle_epoch();
-}
-inline void LifecycleCommand::_internal_set_lifecycle_epoch(uint64_t value) {
-  
-  _impl_.lifecycle_epoch_ = value;
-}
-inline void LifecycleCommand::set_lifecycle_epoch(uint64_t value) {
-  _internal_set_lifecycle_epoch(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.lifecycle_epoch)
-}
-
-// uint64 command_sequence = 6;
-inline void LifecycleCommand::clear_command_sequence() {
-  _impl_.command_sequence_ = uint64_t{0u};
-}
-inline uint64_t LifecycleCommand::_internal_command_sequence() const {
-  return _impl_.command_sequence_;
-}
-inline uint64_t LifecycleCommand::command_sequence() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.command_sequence)
-  return _internal_command_sequence();
-}
-inline void LifecycleCommand::_internal_set_command_sequence(uint64_t value) {
-  
-  _impl_.command_sequence_ = value;
-}
-inline void LifecycleCommand::set_command_sequence(uint64_t value) {
-  _internal_set_command_sequence(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.command_sequence)
-}
-
-// string idempotency_key = 7;
-inline void LifecycleCommand::clear_idempotency_key() {
-  _impl_.idempotency_key_.ClearToEmpty();
-}
-inline const std::string& LifecycleCommand::idempotency_key() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.idempotency_key)
-  return _internal_idempotency_key();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LifecycleCommand::set_idempotency_key(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.idempotency_key_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.idempotency_key)
-}
-inline std::string* LifecycleCommand::mutable_idempotency_key() {
-  std::string* _s = _internal_mutable_idempotency_key();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.LifecycleCommand.idempotency_key)
-  return _s;
-}
-inline const std::string& LifecycleCommand::_internal_idempotency_key() const {
-  return _impl_.idempotency_key_.Get();
-}
-inline void LifecycleCommand::_internal_set_idempotency_key(const std::string& value) {
-  
-  _impl_.idempotency_key_.Set(value, GetArenaForAllocation());
-}
-inline std::string* LifecycleCommand::_internal_mutable_idempotency_key() {
-  
-  return _impl_.idempotency_key_.Mutable(GetArenaForAllocation());
-}
-inline std::string* LifecycleCommand::release_idempotency_key() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.LifecycleCommand.idempotency_key)
-  return _impl_.idempotency_key_.Release();
-}
-inline void LifecycleCommand::set_allocated_idempotency_key(std::string* idempotency_key) {
-  if (idempotency_key != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.idempotency_key_.SetAllocated(idempotency_key, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.idempotency_key_.IsDefault()) {
-    _impl_.idempotency_key_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleCommand.idempotency_key)
-}
-
-// .rl.task.maze.v1.TaskState expected_task_state = 8;
-inline void LifecycleCommand::clear_expected_task_state() {
-  _impl_.expected_task_state_ = 0;
-}
-inline ::rl::task::maze::v1::TaskState LifecycleCommand::_internal_expected_task_state() const {
-  return static_cast< ::rl::task::maze::v1::TaskState >(_impl_.expected_task_state_);
-}
-inline ::rl::task::maze::v1::TaskState LifecycleCommand::expected_task_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.expected_task_state)
-  return _internal_expected_task_state();
-}
-inline void LifecycleCommand::_internal_set_expected_task_state(::rl::task::maze::v1::TaskState value) {
-  
-  _impl_.expected_task_state_ = value;
-}
-inline void LifecycleCommand::set_expected_task_state(::rl::task::maze::v1::TaskState value) {
-  _internal_set_expected_task_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.expected_task_state)
-}
-
-// .rl.task.maze.v1.SessionState expected_session_state = 9;
-inline void LifecycleCommand::clear_expected_session_state() {
-  _impl_.expected_session_state_ = 0;
-}
-inline ::rl::task::maze::v1::SessionState LifecycleCommand::_internal_expected_session_state() const {
-  return static_cast< ::rl::task::maze::v1::SessionState >(_impl_.expected_session_state_);
-}
-inline ::rl::task::maze::v1::SessionState LifecycleCommand::expected_session_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.expected_session_state)
-  return _internal_expected_session_state();
-}
-inline void LifecycleCommand::_internal_set_expected_session_state(::rl::task::maze::v1::SessionState value) {
-  
-  _impl_.expected_session_state_ = value;
-}
-inline void LifecycleCommand::set_expected_session_state(::rl::task::maze::v1::SessionState value) {
-  _internal_set_expected_session_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.expected_session_state)
-}
-
-// .rl.task.maze.v1.EpisodeState expected_episode_state = 10;
-inline void LifecycleCommand::clear_expected_episode_state() {
-  _impl_.expected_episode_state_ = 0;
-}
-inline ::rl::task::maze::v1::EpisodeState LifecycleCommand::_internal_expected_episode_state() const {
-  return static_cast< ::rl::task::maze::v1::EpisodeState >(_impl_.expected_episode_state_);
-}
-inline ::rl::task::maze::v1::EpisodeState LifecycleCommand::expected_episode_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleCommand.expected_episode_state)
-  return _internal_expected_episode_state();
-}
-inline void LifecycleCommand::_internal_set_expected_episode_state(::rl::task::maze::v1::EpisodeState value) {
-  
-  _impl_.expected_episode_state_ = value;
-}
-inline void LifecycleCommand::set_expected_episode_state(::rl::task::maze::v1::EpisodeState value) {
-  _internal_set_expected_episode_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleCommand.expected_episode_state)
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.CommandIdentity.episode_id)
 }
 
 // -------------------------------------------------------------------
 
-// LifecycleReply
+// CommandReply
 
-// int32 ret_code = 1;
-inline void LifecycleReply::clear_ret_code() {
-  _impl_.ret_code_ = 0;
-}
-inline int32_t LifecycleReply::_internal_ret_code() const {
-  return _impl_.ret_code_;
-}
-inline int32_t LifecycleReply::ret_code() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.ret_code)
-  return _internal_ret_code();
-}
-inline void LifecycleReply::_internal_set_ret_code(int32_t value) {
-  
-  _impl_.ret_code_ = value;
-}
-inline void LifecycleReply::set_ret_code(int32_t value) {
-  _internal_set_ret_code(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.ret_code)
-}
-
-// .rl.task.maze.v1.LifecycleResult result = 2;
-inline void LifecycleReply::clear_result() {
+// .rl.task.maze.v1.CommandResult result = 1;
+inline void CommandReply::clear_result() {
   _impl_.result_ = 0;
 }
-inline ::rl::task::maze::v1::LifecycleResult LifecycleReply::_internal_result() const {
-  return static_cast< ::rl::task::maze::v1::LifecycleResult >(_impl_.result_);
+inline ::rl::task::maze::v1::CommandResult CommandReply::_internal_result() const {
+  return static_cast< ::rl::task::maze::v1::CommandResult >(_impl_.result_);
 }
-inline ::rl::task::maze::v1::LifecycleResult LifecycleReply::result() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.result)
+inline ::rl::task::maze::v1::CommandResult CommandReply::result() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandReply.result)
   return _internal_result();
 }
-inline void LifecycleReply::_internal_set_result(::rl::task::maze::v1::LifecycleResult value) {
+inline void CommandReply::_internal_set_result(::rl::task::maze::v1::CommandResult value) {
   
   _impl_.result_ = value;
 }
-inline void LifecycleReply::set_result(::rl::task::maze::v1::LifecycleResult value) {
+inline void CommandReply::set_result(::rl::task::maze::v1::CommandResult value) {
   _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.result)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandReply.result)
 }
 
-// .rl.task.maze.v1.LifecycleErrorCode error_code = 3;
-inline void LifecycleReply::clear_error_code() {
+// .rl.task.maze.v1.CommandErrorCode error_code = 2;
+inline void CommandReply::clear_error_code() {
   _impl_.error_code_ = 0;
 }
-inline ::rl::task::maze::v1::LifecycleErrorCode LifecycleReply::_internal_error_code() const {
-  return static_cast< ::rl::task::maze::v1::LifecycleErrorCode >(_impl_.error_code_);
+inline ::rl::task::maze::v1::CommandErrorCode CommandReply::_internal_error_code() const {
+  return static_cast< ::rl::task::maze::v1::CommandErrorCode >(_impl_.error_code_);
 }
-inline ::rl::task::maze::v1::LifecycleErrorCode LifecycleReply::error_code() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.error_code)
+inline ::rl::task::maze::v1::CommandErrorCode CommandReply::error_code() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandReply.error_code)
   return _internal_error_code();
 }
-inline void LifecycleReply::_internal_set_error_code(::rl::task::maze::v1::LifecycleErrorCode value) {
+inline void CommandReply::_internal_set_error_code(::rl::task::maze::v1::CommandErrorCode value) {
   
   _impl_.error_code_ = value;
 }
-inline void LifecycleReply::set_error_code(::rl::task::maze::v1::LifecycleErrorCode value) {
+inline void CommandReply::set_error_code(::rl::task::maze::v1::CommandErrorCode value) {
   _internal_set_error_code(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.error_code)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandReply.error_code)
 }
 
-// string message = 4;
-inline void LifecycleReply::clear_message() {
+// string message = 3;
+inline void CommandReply::clear_message() {
   _impl_.message_.ClearToEmpty();
 }
-inline const std::string& LifecycleReply::message() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.message)
+inline const std::string& CommandReply::message() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandReply.message)
   return _internal_message();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void LifecycleReply::set_message(ArgT0&& arg0, ArgT... args) {
+void CommandReply::set_message(ArgT0&& arg0, ArgT... args) {
  
  _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.message)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandReply.message)
 }
-inline std::string* LifecycleReply::mutable_message() {
+inline std::string* CommandReply::mutable_message() {
   std::string* _s = _internal_mutable_message();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.LifecycleReply.message)
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.CommandReply.message)
   return _s;
 }
-inline const std::string& LifecycleReply::_internal_message() const {
+inline const std::string& CommandReply::_internal_message() const {
   return _impl_.message_.Get();
 }
-inline void LifecycleReply::_internal_set_message(const std::string& value) {
+inline void CommandReply::_internal_set_message(const std::string& value) {
   
   _impl_.message_.Set(value, GetArenaForAllocation());
 }
-inline std::string* LifecycleReply::_internal_mutable_message() {
+inline std::string* CommandReply::_internal_mutable_message() {
   
   return _impl_.message_.Mutable(GetArenaForAllocation());
 }
-inline std::string* LifecycleReply::release_message() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.LifecycleReply.message)
+inline std::string* CommandReply::release_message() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.CommandReply.message)
   return _impl_.message_.Release();
 }
-inline void LifecycleReply::set_allocated_message(std::string* message) {
+inline void CommandReply::set_allocated_message(std::string* message) {
   if (message != nullptr) {
     
   } else {
@@ -7968,87 +6415,47 @@ inline void LifecycleReply::set_allocated_message(std::string* message) {
     _impl_.message_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.LifecycleReply.message)
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.CommandReply.message)
 }
 
-// uint64 applied_sequence = 5;
-inline void LifecycleReply::clear_applied_sequence() {
+// uint64 applied_sequence = 4;
+inline void CommandReply::clear_applied_sequence() {
   _impl_.applied_sequence_ = uint64_t{0u};
 }
-inline uint64_t LifecycleReply::_internal_applied_sequence() const {
+inline uint64_t CommandReply::_internal_applied_sequence() const {
   return _impl_.applied_sequence_;
 }
-inline uint64_t LifecycleReply::applied_sequence() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.applied_sequence)
+inline uint64_t CommandReply::applied_sequence() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandReply.applied_sequence)
   return _internal_applied_sequence();
 }
-inline void LifecycleReply::_internal_set_applied_sequence(uint64_t value) {
+inline void CommandReply::_internal_set_applied_sequence(uint64_t value) {
   
   _impl_.applied_sequence_ = value;
 }
-inline void LifecycleReply::set_applied_sequence(uint64_t value) {
+inline void CommandReply::set_applied_sequence(uint64_t value) {
   _internal_set_applied_sequence(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.applied_sequence)
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandReply.applied_sequence)
 }
 
-// .rl.task.maze.v1.TaskState task_state = 6;
-inline void LifecycleReply::clear_task_state() {
-  _impl_.task_state_ = 0;
+// .rl.task.maze.v1.SessionPhase phase = 5;
+inline void CommandReply::clear_phase() {
+  _impl_.phase_ = 0;
 }
-inline ::rl::task::maze::v1::TaskState LifecycleReply::_internal_task_state() const {
-  return static_cast< ::rl::task::maze::v1::TaskState >(_impl_.task_state_);
+inline ::rl::task::maze::v1::SessionPhase CommandReply::_internal_phase() const {
+  return static_cast< ::rl::task::maze::v1::SessionPhase >(_impl_.phase_);
 }
-inline ::rl::task::maze::v1::TaskState LifecycleReply::task_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.task_state)
-  return _internal_task_state();
+inline ::rl::task::maze::v1::SessionPhase CommandReply::phase() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CommandReply.phase)
+  return _internal_phase();
 }
-inline void LifecycleReply::_internal_set_task_state(::rl::task::maze::v1::TaskState value) {
+inline void CommandReply::_internal_set_phase(::rl::task::maze::v1::SessionPhase value) {
   
-  _impl_.task_state_ = value;
+  _impl_.phase_ = value;
 }
-inline void LifecycleReply::set_task_state(::rl::task::maze::v1::TaskState value) {
-  _internal_set_task_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.task_state)
-}
-
-// .rl.task.maze.v1.SessionState session_state = 7;
-inline void LifecycleReply::clear_session_state() {
-  _impl_.session_state_ = 0;
-}
-inline ::rl::task::maze::v1::SessionState LifecycleReply::_internal_session_state() const {
-  return static_cast< ::rl::task::maze::v1::SessionState >(_impl_.session_state_);
-}
-inline ::rl::task::maze::v1::SessionState LifecycleReply::session_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.session_state)
-  return _internal_session_state();
-}
-inline void LifecycleReply::_internal_set_session_state(::rl::task::maze::v1::SessionState value) {
-  
-  _impl_.session_state_ = value;
-}
-inline void LifecycleReply::set_session_state(::rl::task::maze::v1::SessionState value) {
-  _internal_set_session_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.session_state)
-}
-
-// .rl.task.maze.v1.EpisodeState episode_state = 8;
-inline void LifecycleReply::clear_episode_state() {
-  _impl_.episode_state_ = 0;
-}
-inline ::rl::task::maze::v1::EpisodeState LifecycleReply::_internal_episode_state() const {
-  return static_cast< ::rl::task::maze::v1::EpisodeState >(_impl_.episode_state_);
-}
-inline ::rl::task::maze::v1::EpisodeState LifecycleReply::episode_state() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.LifecycleReply.episode_state)
-  return _internal_episode_state();
-}
-inline void LifecycleReply::_internal_set_episode_state(::rl::task::maze::v1::EpisodeState value) {
-  
-  _impl_.episode_state_ = value;
-}
-inline void LifecycleReply::set_episode_state(::rl::task::maze::v1::EpisodeState value) {
-  _internal_set_episode_state(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.LifecycleReply.episode_state)
+inline void CommandReply::set_phase(::rl::task::maze::v1::SessionPhase value) {
+  _internal_set_phase(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.CommandReply.phase)
 }
 
 // -------------------------------------------------------------------
@@ -8190,220 +6597,99 @@ inline void OpenSessionReq::set_allocated_environment_instance_id(std::string* e
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.environment_instance_id)
 }
 
-// repeated uint32 supported_session_protocol_versions = 3;
-inline int OpenSessionReq::_internal_supported_session_protocol_versions_size() const {
-  return _impl_.supported_session_protocol_versions_.size();
+// string request_id = 3;
+inline void OpenSessionReq::clear_request_id() {
+  _impl_.request_id_.ClearToEmpty();
 }
-inline int OpenSessionReq::supported_session_protocol_versions_size() const {
-  return _internal_supported_session_protocol_versions_size();
-}
-inline void OpenSessionReq::clear_supported_session_protocol_versions() {
-  _impl_.supported_session_protocol_versions_.Clear();
-}
-inline uint32_t OpenSessionReq::_internal_supported_session_protocol_versions(int index) const {
-  return _impl_.supported_session_protocol_versions_.Get(index);
-}
-inline uint32_t OpenSessionReq::supported_session_protocol_versions(int index) const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionReq.supported_session_protocol_versions)
-  return _internal_supported_session_protocol_versions(index);
-}
-inline void OpenSessionReq::set_supported_session_protocol_versions(int index, uint32_t value) {
-  _impl_.supported_session_protocol_versions_.Set(index, value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionReq.supported_session_protocol_versions)
-}
-inline void OpenSessionReq::_internal_add_supported_session_protocol_versions(uint32_t value) {
-  _impl_.supported_session_protocol_versions_.Add(value);
-}
-inline void OpenSessionReq::add_supported_session_protocol_versions(uint32_t value) {
-  _internal_add_supported_session_protocol_versions(value);
-  // @@protoc_insertion_point(field_add:rl.task.maze.v1.OpenSessionReq.supported_session_protocol_versions)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
-OpenSessionReq::_internal_supported_session_protocol_versions() const {
-  return _impl_.supported_session_protocol_versions_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >&
-OpenSessionReq::supported_session_protocol_versions() const {
-  // @@protoc_insertion_point(field_list:rl.task.maze.v1.OpenSessionReq.supported_session_protocol_versions)
-  return _internal_supported_session_protocol_versions();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
-OpenSessionReq::_internal_mutable_supported_session_protocol_versions() {
-  return &_impl_.supported_session_protocol_versions_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< uint32_t >*
-OpenSessionReq::mutable_supported_session_protocol_versions() {
-  // @@protoc_insertion_point(field_mutable_list:rl.task.maze.v1.OpenSessionReq.supported_session_protocol_versions)
-  return _internal_mutable_supported_session_protocol_versions();
-}
-
-// repeated .rl.common.v1.SchemaIdentity supported_observation_schemas = 4;
-inline int OpenSessionReq::_internal_supported_observation_schemas_size() const {
-  return _impl_.supported_observation_schemas_.size();
-}
-inline int OpenSessionReq::supported_observation_schemas_size() const {
-  return _internal_supported_observation_schemas_size();
-}
-inline ::rl::common::v1::SchemaIdentity* OpenSessionReq::mutable_supported_observation_schemas(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionReq.supported_observation_schemas)
-  return _impl_.supported_observation_schemas_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >*
-OpenSessionReq::mutable_supported_observation_schemas() {
-  // @@protoc_insertion_point(field_mutable_list:rl.task.maze.v1.OpenSessionReq.supported_observation_schemas)
-  return &_impl_.supported_observation_schemas_;
-}
-inline const ::rl::common::v1::SchemaIdentity& OpenSessionReq::_internal_supported_observation_schemas(int index) const {
-  return _impl_.supported_observation_schemas_.Get(index);
-}
-inline const ::rl::common::v1::SchemaIdentity& OpenSessionReq::supported_observation_schemas(int index) const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionReq.supported_observation_schemas)
-  return _internal_supported_observation_schemas(index);
-}
-inline ::rl::common::v1::SchemaIdentity* OpenSessionReq::_internal_add_supported_observation_schemas() {
-  return _impl_.supported_observation_schemas_.Add();
-}
-inline ::rl::common::v1::SchemaIdentity* OpenSessionReq::add_supported_observation_schemas() {
-  ::rl::common::v1::SchemaIdentity* _add = _internal_add_supported_observation_schemas();
-  // @@protoc_insertion_point(field_add:rl.task.maze.v1.OpenSessionReq.supported_observation_schemas)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >&
-OpenSessionReq::supported_observation_schemas() const {
-  // @@protoc_insertion_point(field_list:rl.task.maze.v1.OpenSessionReq.supported_observation_schemas)
-  return _impl_.supported_observation_schemas_;
-}
-
-// repeated .rl.common.v1.SchemaIdentity supported_action_schemas = 5;
-inline int OpenSessionReq::_internal_supported_action_schemas_size() const {
-  return _impl_.supported_action_schemas_.size();
-}
-inline int OpenSessionReq::supported_action_schemas_size() const {
-  return _internal_supported_action_schemas_size();
-}
-inline ::rl::common::v1::SchemaIdentity* OpenSessionReq::mutable_supported_action_schemas(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionReq.supported_action_schemas)
-  return _impl_.supported_action_schemas_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >*
-OpenSessionReq::mutable_supported_action_schemas() {
-  // @@protoc_insertion_point(field_mutable_list:rl.task.maze.v1.OpenSessionReq.supported_action_schemas)
-  return &_impl_.supported_action_schemas_;
-}
-inline const ::rl::common::v1::SchemaIdentity& OpenSessionReq::_internal_supported_action_schemas(int index) const {
-  return _impl_.supported_action_schemas_.Get(index);
-}
-inline const ::rl::common::v1::SchemaIdentity& OpenSessionReq::supported_action_schemas(int index) const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionReq.supported_action_schemas)
-  return _internal_supported_action_schemas(index);
-}
-inline ::rl::common::v1::SchemaIdentity* OpenSessionReq::_internal_add_supported_action_schemas() {
-  return _impl_.supported_action_schemas_.Add();
-}
-inline ::rl::common::v1::SchemaIdentity* OpenSessionReq::add_supported_action_schemas() {
-  ::rl::common::v1::SchemaIdentity* _add = _internal_add_supported_action_schemas();
-  // @@protoc_insertion_point(field_add:rl.task.maze.v1.OpenSessionReq.supported_action_schemas)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::common::v1::SchemaIdentity >&
-OpenSessionReq::supported_action_schemas() const {
-  // @@protoc_insertion_point(field_list:rl.task.maze.v1.OpenSessionReq.supported_action_schemas)
-  return _impl_.supported_action_schemas_;
-}
-
-// string idempotency_key = 6;
-inline void OpenSessionReq::clear_idempotency_key() {
-  _impl_.idempotency_key_.ClearToEmpty();
-}
-inline const std::string& OpenSessionReq::idempotency_key() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionReq.idempotency_key)
-  return _internal_idempotency_key();
+inline const std::string& OpenSessionReq::request_id() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionReq.request_id)
+  return _internal_request_id();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void OpenSessionReq::set_idempotency_key(ArgT0&& arg0, ArgT... args) {
+void OpenSessionReq::set_request_id(ArgT0&& arg0, ArgT... args) {
  
- _impl_.idempotency_key_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionReq.idempotency_key)
+ _impl_.request_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionReq.request_id)
 }
-inline std::string* OpenSessionReq::mutable_idempotency_key() {
-  std::string* _s = _internal_mutable_idempotency_key();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionReq.idempotency_key)
+inline std::string* OpenSessionReq::mutable_request_id() {
+  std::string* _s = _internal_mutable_request_id();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionReq.request_id)
   return _s;
 }
-inline const std::string& OpenSessionReq::_internal_idempotency_key() const {
-  return _impl_.idempotency_key_.Get();
+inline const std::string& OpenSessionReq::_internal_request_id() const {
+  return _impl_.request_id_.Get();
 }
-inline void OpenSessionReq::_internal_set_idempotency_key(const std::string& value) {
+inline void OpenSessionReq::_internal_set_request_id(const std::string& value) {
   
-  _impl_.idempotency_key_.Set(value, GetArenaForAllocation());
+  _impl_.request_id_.Set(value, GetArenaForAllocation());
 }
-inline std::string* OpenSessionReq::_internal_mutable_idempotency_key() {
+inline std::string* OpenSessionReq::_internal_mutable_request_id() {
   
-  return _impl_.idempotency_key_.Mutable(GetArenaForAllocation());
+  return _impl_.request_id_.Mutable(GetArenaForAllocation());
 }
-inline std::string* OpenSessionReq::release_idempotency_key() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionReq.idempotency_key)
-  return _impl_.idempotency_key_.Release();
+inline std::string* OpenSessionReq::release_request_id() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionReq.request_id)
+  return _impl_.request_id_.Release();
 }
-inline void OpenSessionReq::set_allocated_idempotency_key(std::string* idempotency_key) {
-  if (idempotency_key != nullptr) {
+inline void OpenSessionReq::set_allocated_request_id(std::string* request_id) {
+  if (request_id != nullptr) {
     
   } else {
     
   }
-  _impl_.idempotency_key_.SetAllocated(idempotency_key, GetArenaForAllocation());
+  _impl_.request_id_.SetAllocated(request_id, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.idempotency_key_.IsDefault()) {
-    _impl_.idempotency_key_.Set("", GetArenaForAllocation());
+  if (_impl_.request_id_.IsDefault()) {
+    _impl_.request_id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.idempotency_key)
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.request_id)
 }
 
 // -------------------------------------------------------------------
 
 // OpenSessionRsp
 
-// .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-inline bool OpenSessionRsp::_internal_has_lifecycle() const {
-  return this != internal_default_instance() && _impl_.lifecycle_ != nullptr;
+// .rl.task.maze.v1.CommandReply reply = 1;
+inline bool OpenSessionRsp::_internal_has_reply() const {
+  return this != internal_default_instance() && _impl_.reply_ != nullptr;
 }
-inline bool OpenSessionRsp::has_lifecycle() const {
-  return _internal_has_lifecycle();
+inline bool OpenSessionRsp::has_reply() const {
+  return _internal_has_reply();
 }
-inline void OpenSessionRsp::clear_lifecycle() {
-  if (GetArenaForAllocation() == nullptr && _impl_.lifecycle_ != nullptr) {
-    delete _impl_.lifecycle_;
+inline void OpenSessionRsp::clear_reply() {
+  if (GetArenaForAllocation() == nullptr && _impl_.reply_ != nullptr) {
+    delete _impl_.reply_;
   }
-  _impl_.lifecycle_ = nullptr;
+  _impl_.reply_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleReply& OpenSessionRsp::_internal_lifecycle() const {
-  const ::rl::task::maze::v1::LifecycleReply* p = _impl_.lifecycle_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleReply&>(
-      ::rl::task::maze::v1::_LifecycleReply_default_instance_);
+inline const ::rl::task::maze::v1::CommandReply& OpenSessionRsp::_internal_reply() const {
+  const ::rl::task::maze::v1::CommandReply* p = _impl_.reply_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandReply&>(
+      ::rl::task::maze::v1::_CommandReply_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleReply& OpenSessionRsp::lifecycle() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.lifecycle)
-  return _internal_lifecycle();
+inline const ::rl::task::maze::v1::CommandReply& OpenSessionRsp::reply() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.reply)
+  return _internal_reply();
 }
-inline void OpenSessionRsp::unsafe_arena_set_allocated_lifecycle(
-    ::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void OpenSessionRsp::unsafe_arena_set_allocated_reply(
+    ::rl::task::maze::v1::CommandReply* reply) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.lifecycle_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reply_);
   }
-  _impl_.lifecycle_ = lifecycle;
-  if (lifecycle) {
+  _impl_.reply_ = reply;
+  if (reply) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.lifecycle)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.reply)
 }
-inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::release_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* OpenSessionRsp::release_reply() {
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -8415,67 +6701,47 @@ inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::release_lifecycle()
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::unsafe_arena_release_lifecycle() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* OpenSessionRsp::unsafe_arena_release_reply() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.reply)
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::_internal_mutable_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* OpenSessionRsp::_internal_mutable_reply() {
   
-  if (_impl_.lifecycle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
-    _impl_.lifecycle_ = p;
+  if (_impl_.reply_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(GetArenaForAllocation());
+    _impl_.reply_ = p;
   }
-  return _impl_.lifecycle_;
+  return _impl_.reply_;
 }
-inline ::rl::task::maze::v1::LifecycleReply* OpenSessionRsp::mutable_lifecycle() {
-  ::rl::task::maze::v1::LifecycleReply* _msg = _internal_mutable_lifecycle();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* OpenSessionRsp::mutable_reply() {
+  ::rl::task::maze::v1::CommandReply* _msg = _internal_mutable_reply();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionRsp.reply)
   return _msg;
 }
-inline void OpenSessionRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void OpenSessionRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* reply) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.lifecycle_;
+    delete _impl_.reply_;
   }
-  if (lifecycle) {
+  if (reply) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(lifecycle);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(reply);
     if (message_arena != submessage_arena) {
-      lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, lifecycle, submessage_arena);
+      reply = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reply, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.lifecycle_ = lifecycle;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.lifecycle)
+  _impl_.reply_ = reply;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.reply)
 }
 
-// uint32 session_protocol_version = 2;
-inline void OpenSessionRsp::clear_session_protocol_version() {
-  _impl_.session_protocol_version_ = 0u;
-}
-inline uint32_t OpenSessionRsp::_internal_session_protocol_version() const {
-  return _impl_.session_protocol_version_;
-}
-inline uint32_t OpenSessionRsp::session_protocol_version() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.session_protocol_version)
-  return _internal_session_protocol_version();
-}
-inline void OpenSessionRsp::_internal_set_session_protocol_version(uint32_t value) {
-  
-  _impl_.session_protocol_version_ = value;
-}
-inline void OpenSessionRsp::set_session_protocol_version(uint32_t value) {
-  _internal_set_session_protocol_version(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionRsp.session_protocol_version)
-}
-
-// string session_id = 3;
+// string session_id = 2;
 inline void OpenSessionRsp::clear_session_id() {
   _impl_.session_id_.ClearToEmpty();
 }
@@ -8525,27 +6791,27 @@ inline void OpenSessionRsp::set_allocated_session_id(std::string* session_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.session_id)
 }
 
-// uint64 lifecycle_epoch = 4;
-inline void OpenSessionRsp::clear_lifecycle_epoch() {
-  _impl_.lifecycle_epoch_ = uint64_t{0u};
+// uint64 session_epoch = 3;
+inline void OpenSessionRsp::clear_session_epoch() {
+  _impl_.session_epoch_ = uint64_t{0u};
 }
-inline uint64_t OpenSessionRsp::_internal_lifecycle_epoch() const {
-  return _impl_.lifecycle_epoch_;
+inline uint64_t OpenSessionRsp::_internal_session_epoch() const {
+  return _impl_.session_epoch_;
 }
-inline uint64_t OpenSessionRsp::lifecycle_epoch() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.lifecycle_epoch)
-  return _internal_lifecycle_epoch();
+inline uint64_t OpenSessionRsp::session_epoch() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.session_epoch)
+  return _internal_session_epoch();
 }
-inline void OpenSessionRsp::_internal_set_lifecycle_epoch(uint64_t value) {
+inline void OpenSessionRsp::_internal_set_session_epoch(uint64_t value) {
   
-  _impl_.lifecycle_epoch_ = value;
+  _impl_.session_epoch_ = value;
 }
-inline void OpenSessionRsp::set_lifecycle_epoch(uint64_t value) {
-  _internal_set_lifecycle_epoch(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionRsp.lifecycle_epoch)
+inline void OpenSessionRsp::set_session_epoch(uint64_t value) {
+  _internal_set_session_epoch(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionRsp.session_epoch)
 }
 
-// .rl.common.v1.ServiceInstanceIdentity aiserver = 5;
+// .rl.common.v1.ServiceInstanceIdentity aiserver = 4;
 inline bool OpenSessionRsp::_internal_has_aiserver() const {
   return this != internal_default_instance() && _impl_.aiserver_ != nullptr;
 }
@@ -8630,97 +6896,7 @@ inline void OpenSessionRsp::set_allocated_aiserver(::rl::common::v1::ServiceInst
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.aiserver)
 }
 
-// .rl.task.maze.v1.MazeTaskSpec task_spec = 6;
-inline bool OpenSessionRsp::_internal_has_task_spec() const {
-  return this != internal_default_instance() && _impl_.task_spec_ != nullptr;
-}
-inline bool OpenSessionRsp::has_task_spec() const {
-  return _internal_has_task_spec();
-}
-inline void OpenSessionRsp::clear_task_spec() {
-  if (GetArenaForAllocation() == nullptr && _impl_.task_spec_ != nullptr) {
-    delete _impl_.task_spec_;
-  }
-  _impl_.task_spec_ = nullptr;
-}
-inline const ::rl::task::maze::v1::MazeTaskSpec& OpenSessionRsp::_internal_task_spec() const {
-  const ::rl::task::maze::v1::MazeTaskSpec* p = _impl_.task_spec_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::MazeTaskSpec&>(
-      ::rl::task::maze::v1::_MazeTaskSpec_default_instance_);
-}
-inline const ::rl::task::maze::v1::MazeTaskSpec& OpenSessionRsp::task_spec() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.task_spec)
-  return _internal_task_spec();
-}
-inline void OpenSessionRsp::unsafe_arena_set_allocated_task_spec(
-    ::rl::task::maze::v1::MazeTaskSpec* task_spec) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_spec_);
-  }
-  _impl_.task_spec_ = task_spec;
-  if (task_spec) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_spec)
-}
-inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::release_task_spec() {
-  
-  ::rl::task::maze::v1::MazeTaskSpec* temp = _impl_.task_spec_;
-  _impl_.task_spec_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::unsafe_arena_release_task_spec() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.task_spec)
-  
-  ::rl::task::maze::v1::MazeTaskSpec* temp = _impl_.task_spec_;
-  _impl_.task_spec_ = nullptr;
-  return temp;
-}
-inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::_internal_mutable_task_spec() {
-  
-  if (_impl_.task_spec_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::MazeTaskSpec>(GetArenaForAllocation());
-    _impl_.task_spec_ = p;
-  }
-  return _impl_.task_spec_;
-}
-inline ::rl::task::maze::v1::MazeTaskSpec* OpenSessionRsp::mutable_task_spec() {
-  ::rl::task::maze::v1::MazeTaskSpec* _msg = _internal_mutable_task_spec();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionRsp.task_spec)
-  return _msg;
-}
-inline void OpenSessionRsp::set_allocated_task_spec(::rl::task::maze::v1::MazeTaskSpec* task_spec) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.task_spec_;
-  }
-  if (task_spec) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(task_spec);
-    if (message_arena != submessage_arena) {
-      task_spec = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, task_spec, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.task_spec_ = task_spec;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_spec)
-}
-
-// .rl.task.maze.v1.WorkloadMode workload_mode = 7;
+// .rl.task.maze.v1.WorkloadMode workload_mode = 5;
 inline void OpenSessionRsp::clear_workload_mode() {
   _impl_.workload_mode_ = 0;
 }
@@ -8740,65 +6916,45 @@ inline void OpenSessionRsp::set_workload_mode(::rl::task::maze::v1::WorkloadMode
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionRsp.workload_mode)
 }
 
-// .rl.task.maze.v1.ReplayPolicy replay_policy = 8;
-inline void OpenSessionRsp::clear_replay_policy() {
-  _impl_.replay_policy_ = 0;
+// .rl.task.maze.v1.EnvironmentSpec environment = 6;
+inline bool OpenSessionRsp::_internal_has_environment() const {
+  return this != internal_default_instance() && _impl_.environment_ != nullptr;
 }
-inline ::rl::task::maze::v1::ReplayPolicy OpenSessionRsp::_internal_replay_policy() const {
-  return static_cast< ::rl::task::maze::v1::ReplayPolicy >(_impl_.replay_policy_);
+inline bool OpenSessionRsp::has_environment() const {
+  return _internal_has_environment();
 }
-inline ::rl::task::maze::v1::ReplayPolicy OpenSessionRsp::replay_policy() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.replay_policy)
-  return _internal_replay_policy();
-}
-inline void OpenSessionRsp::_internal_set_replay_policy(::rl::task::maze::v1::ReplayPolicy value) {
-  
-  _impl_.replay_policy_ = value;
-}
-inline void OpenSessionRsp::set_replay_policy(::rl::task::maze::v1::ReplayPolicy value) {
-  _internal_set_replay_policy(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.OpenSessionRsp.replay_policy)
-}
-
-// .rl.task.maze.v1.EnvironmentRuntimeSpec environment_runtime = 9;
-inline bool OpenSessionRsp::_internal_has_environment_runtime() const {
-  return this != internal_default_instance() && _impl_.environment_runtime_ != nullptr;
-}
-inline bool OpenSessionRsp::has_environment_runtime() const {
-  return _internal_has_environment_runtime();
-}
-inline void OpenSessionRsp::clear_environment_runtime() {
-  if (GetArenaForAllocation() == nullptr && _impl_.environment_runtime_ != nullptr) {
-    delete _impl_.environment_runtime_;
+inline void OpenSessionRsp::clear_environment() {
+  if (GetArenaForAllocation() == nullptr && _impl_.environment_ != nullptr) {
+    delete _impl_.environment_;
   }
-  _impl_.environment_runtime_ = nullptr;
+  _impl_.environment_ = nullptr;
 }
-inline const ::rl::task::maze::v1::EnvironmentRuntimeSpec& OpenSessionRsp::_internal_environment_runtime() const {
-  const ::rl::task::maze::v1::EnvironmentRuntimeSpec* p = _impl_.environment_runtime_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::EnvironmentRuntimeSpec&>(
-      ::rl::task::maze::v1::_EnvironmentRuntimeSpec_default_instance_);
+inline const ::rl::task::maze::v1::EnvironmentSpec& OpenSessionRsp::_internal_environment() const {
+  const ::rl::task::maze::v1::EnvironmentSpec* p = _impl_.environment_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::EnvironmentSpec&>(
+      ::rl::task::maze::v1::_EnvironmentSpec_default_instance_);
 }
-inline const ::rl::task::maze::v1::EnvironmentRuntimeSpec& OpenSessionRsp::environment_runtime() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.environment_runtime)
-  return _internal_environment_runtime();
+inline const ::rl::task::maze::v1::EnvironmentSpec& OpenSessionRsp::environment() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.environment)
+  return _internal_environment();
 }
-inline void OpenSessionRsp::unsafe_arena_set_allocated_environment_runtime(
-    ::rl::task::maze::v1::EnvironmentRuntimeSpec* environment_runtime) {
+inline void OpenSessionRsp::unsafe_arena_set_allocated_environment(
+    ::rl::task::maze::v1::EnvironmentSpec* environment) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.environment_runtime_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.environment_);
   }
-  _impl_.environment_runtime_ = environment_runtime;
-  if (environment_runtime) {
+  _impl_.environment_ = environment;
+  if (environment) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.environment_runtime)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.environment)
 }
-inline ::rl::task::maze::v1::EnvironmentRuntimeSpec* OpenSessionRsp::release_environment_runtime() {
+inline ::rl::task::maze::v1::EnvironmentSpec* OpenSessionRsp::release_environment() {
   
-  ::rl::task::maze::v1::EnvironmentRuntimeSpec* temp = _impl_.environment_runtime_;
-  _impl_.environment_runtime_ = nullptr;
+  ::rl::task::maze::v1::EnvironmentSpec* temp = _impl_.environment_;
+  _impl_.environment_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -8810,51 +6966,51 @@ inline ::rl::task::maze::v1::EnvironmentRuntimeSpec* OpenSessionRsp::release_env
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::EnvironmentRuntimeSpec* OpenSessionRsp::unsafe_arena_release_environment_runtime() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.environment_runtime)
+inline ::rl::task::maze::v1::EnvironmentSpec* OpenSessionRsp::unsafe_arena_release_environment() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.environment)
   
-  ::rl::task::maze::v1::EnvironmentRuntimeSpec* temp = _impl_.environment_runtime_;
-  _impl_.environment_runtime_ = nullptr;
+  ::rl::task::maze::v1::EnvironmentSpec* temp = _impl_.environment_;
+  _impl_.environment_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::EnvironmentRuntimeSpec* OpenSessionRsp::_internal_mutable_environment_runtime() {
+inline ::rl::task::maze::v1::EnvironmentSpec* OpenSessionRsp::_internal_mutable_environment() {
   
-  if (_impl_.environment_runtime_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::EnvironmentRuntimeSpec>(GetArenaForAllocation());
-    _impl_.environment_runtime_ = p;
+  if (_impl_.environment_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::EnvironmentSpec>(GetArenaForAllocation());
+    _impl_.environment_ = p;
   }
-  return _impl_.environment_runtime_;
+  return _impl_.environment_;
 }
-inline ::rl::task::maze::v1::EnvironmentRuntimeSpec* OpenSessionRsp::mutable_environment_runtime() {
-  ::rl::task::maze::v1::EnvironmentRuntimeSpec* _msg = _internal_mutable_environment_runtime();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionRsp.environment_runtime)
+inline ::rl::task::maze::v1::EnvironmentSpec* OpenSessionRsp::mutable_environment() {
+  ::rl::task::maze::v1::EnvironmentSpec* _msg = _internal_mutable_environment();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionRsp.environment)
   return _msg;
 }
-inline void OpenSessionRsp::set_allocated_environment_runtime(::rl::task::maze::v1::EnvironmentRuntimeSpec* environment_runtime) {
+inline void OpenSessionRsp::set_allocated_environment(::rl::task::maze::v1::EnvironmentSpec* environment) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.environment_runtime_;
+    delete _impl_.environment_;
   }
-  if (environment_runtime) {
+  if (environment) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(environment_runtime);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(environment);
     if (message_arena != submessage_arena) {
-      environment_runtime = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, environment_runtime, submessage_arena);
+      environment = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, environment, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.environment_runtime_ = environment_runtime;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.environment_runtime)
+  _impl_.environment_ = environment;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.environment)
 }
 
 // -------------------------------------------------------------------
 
 // InitReq
 
-// .rl.task.maze.v1.LifecycleCommand command = 1;
+// .rl.task.maze.v1.CommandIdentity command = 1;
 inline bool InitReq::_internal_has_command() const {
   return this != internal_default_instance() && _impl_.command_ != nullptr;
 }
@@ -8867,17 +7023,17 @@ inline void InitReq::clear_command() {
   }
   _impl_.command_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& InitReq::_internal_command() const {
-  const ::rl::task::maze::v1::LifecycleCommand* p = _impl_.command_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleCommand&>(
-      ::rl::task::maze::v1::_LifecycleCommand_default_instance_);
+inline const ::rl::task::maze::v1::CommandIdentity& InitReq::_internal_command() const {
+  const ::rl::task::maze::v1::CommandIdentity* p = _impl_.command_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandIdentity&>(
+      ::rl::task::maze::v1::_CommandIdentity_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& InitReq::command() const {
+inline const ::rl::task::maze::v1::CommandIdentity& InitReq::command() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.InitReq.command)
   return _internal_command();
 }
 inline void InitReq::unsafe_arena_set_allocated_command(
-    ::rl::task::maze::v1::LifecycleCommand* command) {
+    ::rl::task::maze::v1::CommandIdentity* command) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.command_);
   }
@@ -8889,9 +7045,9 @@ inline void InitReq::unsafe_arena_set_allocated_command(
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitReq.command)
 }
-inline ::rl::task::maze::v1::LifecycleCommand* InitReq::release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* InitReq::release_command() {
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
@@ -8904,27 +7060,27 @@ inline ::rl::task::maze::v1::LifecycleCommand* InitReq::release_command() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* InitReq::unsafe_arena_release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* InitReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitReq.command)
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* InitReq::_internal_mutable_command() {
+inline ::rl::task::maze::v1::CommandIdentity* InitReq::_internal_mutable_command() {
   
   if (_impl_.command_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandIdentity>(GetArenaForAllocation());
     _impl_.command_ = p;
   }
   return _impl_.command_;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* InitReq::mutable_command() {
-  ::rl::task::maze::v1::LifecycleCommand* _msg = _internal_mutable_command();
+inline ::rl::task::maze::v1::CommandIdentity* InitReq::mutable_command() {
+  ::rl::task::maze::v1::CommandIdentity* _msg = _internal_mutable_command();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.InitReq.command)
   return _msg;
 }
-inline void InitReq::set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command) {
+inline void InitReq::set_allocated_command(::rl::task::maze::v1::CommandIdentity* command) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete _impl_.command_;
@@ -9038,45 +7194,45 @@ inline void InitReq::set_allocated_map(::rl::task::maze::v1::MapDescriptor* map)
 
 // InitRsp
 
-// .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-inline bool InitRsp::_internal_has_lifecycle() const {
-  return this != internal_default_instance() && _impl_.lifecycle_ != nullptr;
+// .rl.task.maze.v1.CommandReply reply = 1;
+inline bool InitRsp::_internal_has_reply() const {
+  return this != internal_default_instance() && _impl_.reply_ != nullptr;
 }
-inline bool InitRsp::has_lifecycle() const {
-  return _internal_has_lifecycle();
+inline bool InitRsp::has_reply() const {
+  return _internal_has_reply();
 }
-inline void InitRsp::clear_lifecycle() {
-  if (GetArenaForAllocation() == nullptr && _impl_.lifecycle_ != nullptr) {
-    delete _impl_.lifecycle_;
+inline void InitRsp::clear_reply() {
+  if (GetArenaForAllocation() == nullptr && _impl_.reply_ != nullptr) {
+    delete _impl_.reply_;
   }
-  _impl_.lifecycle_ = nullptr;
+  _impl_.reply_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleReply& InitRsp::_internal_lifecycle() const {
-  const ::rl::task::maze::v1::LifecycleReply* p = _impl_.lifecycle_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleReply&>(
-      ::rl::task::maze::v1::_LifecycleReply_default_instance_);
+inline const ::rl::task::maze::v1::CommandReply& InitRsp::_internal_reply() const {
+  const ::rl::task::maze::v1::CommandReply* p = _impl_.reply_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandReply&>(
+      ::rl::task::maze::v1::_CommandReply_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleReply& InitRsp::lifecycle() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.InitRsp.lifecycle)
-  return _internal_lifecycle();
+inline const ::rl::task::maze::v1::CommandReply& InitRsp::reply() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.InitRsp.reply)
+  return _internal_reply();
 }
-inline void InitRsp::unsafe_arena_set_allocated_lifecycle(
-    ::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void InitRsp::unsafe_arena_set_allocated_reply(
+    ::rl::task::maze::v1::CommandReply* reply) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.lifecycle_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reply_);
   }
-  _impl_.lifecycle_ = lifecycle;
-  if (lifecycle) {
+  _impl_.reply_ = reply;
+  if (reply) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitRsp.lifecycle)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitRsp.reply)
 }
-inline ::rl::task::maze::v1::LifecycleReply* InitRsp::release_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* InitRsp::release_reply() {
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -9088,44 +7244,44 @@ inline ::rl::task::maze::v1::LifecycleReply* InitRsp::release_lifecycle() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* InitRsp::unsafe_arena_release_lifecycle() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* InitRsp::unsafe_arena_release_reply() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitRsp.reply)
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* InitRsp::_internal_mutable_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* InitRsp::_internal_mutable_reply() {
   
-  if (_impl_.lifecycle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
-    _impl_.lifecycle_ = p;
+  if (_impl_.reply_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(GetArenaForAllocation());
+    _impl_.reply_ = p;
   }
-  return _impl_.lifecycle_;
+  return _impl_.reply_;
 }
-inline ::rl::task::maze::v1::LifecycleReply* InitRsp::mutable_lifecycle() {
-  ::rl::task::maze::v1::LifecycleReply* _msg = _internal_mutable_lifecycle();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.InitRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* InitRsp::mutable_reply() {
+  ::rl::task::maze::v1::CommandReply* _msg = _internal_mutable_reply();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.InitRsp.reply)
   return _msg;
 }
-inline void InitRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void InitRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* reply) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.lifecycle_;
+    delete _impl_.reply_;
   }
-  if (lifecycle) {
+  if (reply) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(lifecycle);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(reply);
     if (message_arena != submessage_arena) {
-      lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, lifecycle, submessage_arena);
+      reply = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reply, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.lifecycle_ = lifecycle;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitRsp.lifecycle)
+  _impl_.reply_ = reply;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitRsp.reply)
 }
 
 // .rl.common.v1.ContentDigest accepted_map_digest = 2;
@@ -9287,97 +7443,7 @@ inline void EpisodeAssignment::set_allocated_episode_id(std::string* episode_id)
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.episode_id)
 }
 
-// .rl.task.maze.v1.TaskIdentity task = 2;
-inline bool EpisodeAssignment::_internal_has_task() const {
-  return this != internal_default_instance() && _impl_.task_ != nullptr;
-}
-inline bool EpisodeAssignment::has_task() const {
-  return _internal_has_task();
-}
-inline void EpisodeAssignment::clear_task() {
-  if (GetArenaForAllocation() == nullptr && _impl_.task_ != nullptr) {
-    delete _impl_.task_;
-  }
-  _impl_.task_ = nullptr;
-}
-inline const ::rl::task::maze::v1::TaskIdentity& EpisodeAssignment::_internal_task() const {
-  const ::rl::task::maze::v1::TaskIdentity* p = _impl_.task_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::TaskIdentity&>(
-      ::rl::task::maze::v1::_TaskIdentity_default_instance_);
-}
-inline const ::rl::task::maze::v1::TaskIdentity& EpisodeAssignment::task() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.task)
-  return _internal_task();
-}
-inline void EpisodeAssignment::unsafe_arena_set_allocated_task(
-    ::rl::task::maze::v1::TaskIdentity* task) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_);
-  }
-  _impl_.task_ = task;
-  if (task) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.task)
-}
-inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::release_task() {
-  
-  ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
-  _impl_.task_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::unsafe_arena_release_task() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.task)
-  
-  ::rl::task::maze::v1::TaskIdentity* temp = _impl_.task_;
-  _impl_.task_ = nullptr;
-  return temp;
-}
-inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::_internal_mutable_task() {
-  
-  if (_impl_.task_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::TaskIdentity>(GetArenaForAllocation());
-    _impl_.task_ = p;
-  }
-  return _impl_.task_;
-}
-inline ::rl::task::maze::v1::TaskIdentity* EpisodeAssignment::mutable_task() {
-  ::rl::task::maze::v1::TaskIdentity* _msg = _internal_mutable_task();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EpisodeAssignment.task)
-  return _msg;
-}
-inline void EpisodeAssignment::set_allocated_task(::rl::task::maze::v1::TaskIdentity* task) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.task_;
-  }
-  if (task) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(task);
-    if (message_arena != submessage_arena) {
-      task = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, task, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.task_ = task;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.task)
-}
-
-// .rl.task.maze.v1.EpisodeMode mode = 3;
+// .rl.task.maze.v1.EpisodeMode mode = 2;
 inline void EpisodeAssignment::clear_mode() {
   _impl_.mode_ = 0;
 }
@@ -9397,7 +7463,7 @@ inline void EpisodeAssignment::set_mode(::rl::task::maze::v1::EpisodeMode value)
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.mode)
 }
 
-// uint32 max_steps = 5;
+// uint32 max_steps = 3;
 inline void EpisodeAssignment::clear_max_steps() {
   _impl_.max_steps_ = 0u;
 }
@@ -9417,65 +7483,39 @@ inline void EpisodeAssignment::set_max_steps(uint32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.max_steps)
 }
 
-// bool continue_task = 6;
-inline void EpisodeAssignment::clear_continue_task() {
-  _impl_.continue_task_ = false;
+// .rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
+inline bool EpisodeAssignment::_internal_has_evaluation_model_artifact_digest() const {
+  return this != internal_default_instance() && _impl_.evaluation_model_artifact_digest_ != nullptr;
 }
-inline bool EpisodeAssignment::_internal_continue_task() const {
-  return _impl_.continue_task_;
+inline bool EpisodeAssignment::has_evaluation_model_artifact_digest() const {
+  return _internal_has_evaluation_model_artifact_digest();
 }
-inline bool EpisodeAssignment::continue_task() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.continue_task)
-  return _internal_continue_task();
+inline const ::rl::common::v1::ContentDigest& EpisodeAssignment::_internal_evaluation_model_artifact_digest() const {
+  const ::rl::common::v1::ContentDigest* p = _impl_.evaluation_model_artifact_digest_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
+      ::rl::common::v1::_ContentDigest_default_instance_);
 }
-inline void EpisodeAssignment::_internal_set_continue_task(bool value) {
-  
-  _impl_.continue_task_ = value;
+inline const ::rl::common::v1::ContentDigest& EpisodeAssignment::evaluation_model_artifact_digest() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
+  return _internal_evaluation_model_artifact_digest();
 }
-inline void EpisodeAssignment::set_continue_task(bool value) {
-  _internal_set_continue_task(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.continue_task)
-}
-
-// .rl.task.maze.v1.BehaviorPolicyBinding behavior_policy = 7;
-inline bool EpisodeAssignment::_internal_has_behavior_policy() const {
-  return this != internal_default_instance() && _impl_.behavior_policy_ != nullptr;
-}
-inline bool EpisodeAssignment::has_behavior_policy() const {
-  return _internal_has_behavior_policy();
-}
-inline void EpisodeAssignment::clear_behavior_policy() {
-  if (GetArenaForAllocation() == nullptr && _impl_.behavior_policy_ != nullptr) {
-    delete _impl_.behavior_policy_;
-  }
-  _impl_.behavior_policy_ = nullptr;
-}
-inline const ::rl::task::maze::v1::BehaviorPolicyBinding& EpisodeAssignment::_internal_behavior_policy() const {
-  const ::rl::task::maze::v1::BehaviorPolicyBinding* p = _impl_.behavior_policy_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::BehaviorPolicyBinding&>(
-      ::rl::task::maze::v1::_BehaviorPolicyBinding_default_instance_);
-}
-inline const ::rl::task::maze::v1::BehaviorPolicyBinding& EpisodeAssignment::behavior_policy() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
-  return _internal_behavior_policy();
-}
-inline void EpisodeAssignment::unsafe_arena_set_allocated_behavior_policy(
-    ::rl::task::maze::v1::BehaviorPolicyBinding* behavior_policy) {
+inline void EpisodeAssignment::unsafe_arena_set_allocated_evaluation_model_artifact_digest(
+    ::rl::common::v1::ContentDigest* evaluation_model_artifact_digest) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_policy_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.evaluation_model_artifact_digest_);
   }
-  _impl_.behavior_policy_ = behavior_policy;
-  if (behavior_policy) {
+  _impl_.evaluation_model_artifact_digest_ = evaluation_model_artifact_digest;
+  if (evaluation_model_artifact_digest) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
 }
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::release_behavior_policy() {
+inline ::rl::common::v1::ContentDigest* EpisodeAssignment::release_evaluation_model_artifact_digest() {
   
-  ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.evaluation_model_artifact_digest_;
+  _impl_.evaluation_model_artifact_digest_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -9487,71 +7527,106 @@ inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::release_b
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::unsafe_arena_release_behavior_policy() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
+inline ::rl::common::v1::ContentDigest* EpisodeAssignment::unsafe_arena_release_evaluation_model_artifact_digest() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
   
-  ::rl::task::maze::v1::BehaviorPolicyBinding* temp = _impl_.behavior_policy_;
-  _impl_.behavior_policy_ = nullptr;
+  ::rl::common::v1::ContentDigest* temp = _impl_.evaluation_model_artifact_digest_;
+  _impl_.evaluation_model_artifact_digest_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::_internal_mutable_behavior_policy() {
+inline ::rl::common::v1::ContentDigest* EpisodeAssignment::_internal_mutable_evaluation_model_artifact_digest() {
   
-  if (_impl_.behavior_policy_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::BehaviorPolicyBinding>(GetArenaForAllocation());
-    _impl_.behavior_policy_ = p;
+  if (_impl_.evaluation_model_artifact_digest_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
+    _impl_.evaluation_model_artifact_digest_ = p;
   }
-  return _impl_.behavior_policy_;
+  return _impl_.evaluation_model_artifact_digest_;
 }
-inline ::rl::task::maze::v1::BehaviorPolicyBinding* EpisodeAssignment::mutable_behavior_policy() {
-  ::rl::task::maze::v1::BehaviorPolicyBinding* _msg = _internal_mutable_behavior_policy();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
+inline ::rl::common::v1::ContentDigest* EpisodeAssignment::mutable_evaluation_model_artifact_digest() {
+  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_evaluation_model_artifact_digest();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
   return _msg;
 }
-inline void EpisodeAssignment::set_allocated_behavior_policy(::rl::task::maze::v1::BehaviorPolicyBinding* behavior_policy) {
+inline void EpisodeAssignment::set_allocated_evaluation_model_artifact_digest(::rl::common::v1::ContentDigest* evaluation_model_artifact_digest) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.behavior_policy_;
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.evaluation_model_artifact_digest_);
   }
-  if (behavior_policy) {
+  if (evaluation_model_artifact_digest) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(behavior_policy);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(evaluation_model_artifact_digest));
     if (message_arena != submessage_arena) {
-      behavior_policy = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, behavior_policy, submessage_arena);
+      evaluation_model_artifact_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, evaluation_model_artifact_digest, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.behavior_policy_ = behavior_policy;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.behavior_policy)
+  _impl_.evaluation_model_artifact_digest_ = evaluation_model_artifact_digest;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
 }
 
-// bool collect_training_samples = 8;
-inline void EpisodeAssignment::clear_collect_training_samples() {
-  _impl_.collect_training_samples_ = false;
+// -------------------------------------------------------------------
+
+// TaskComplete
+
+// string message = 1;
+inline void TaskComplete::clear_message() {
+  _impl_.message_.ClearToEmpty();
 }
-inline bool EpisodeAssignment::_internal_collect_training_samples() const {
-  return _impl_.collect_training_samples_;
+inline const std::string& TaskComplete::message() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.TaskComplete.message)
+  return _internal_message();
 }
-inline bool EpisodeAssignment::collect_training_samples() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.collect_training_samples)
-  return _internal_collect_training_samples();
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskComplete::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.TaskComplete.message)
 }
-inline void EpisodeAssignment::_internal_set_collect_training_samples(bool value) {
+inline std::string* TaskComplete::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.TaskComplete.message)
+  return _s;
+}
+inline const std::string& TaskComplete::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void TaskComplete::_internal_set_message(const std::string& value) {
   
-  _impl_.collect_training_samples_ = value;
+  _impl_.message_.Set(value, GetArenaForAllocation());
 }
-inline void EpisodeAssignment::set_collect_training_samples(bool value) {
-  _internal_set_collect_training_samples(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.collect_training_samples)
+inline std::string* TaskComplete::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskComplete::release_message() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.TaskComplete.message)
+  return _impl_.message_.Release();
+}
+inline void TaskComplete::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.TaskComplete.message)
 }
 
 // -------------------------------------------------------------------
 
 // BeginEpisodeReq
 
-// .rl.task.maze.v1.LifecycleCommand command = 1;
+// .rl.task.maze.v1.CommandIdentity command = 1;
 inline bool BeginEpisodeReq::_internal_has_command() const {
   return this != internal_default_instance() && _impl_.command_ != nullptr;
 }
@@ -9564,17 +7639,17 @@ inline void BeginEpisodeReq::clear_command() {
   }
   _impl_.command_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& BeginEpisodeReq::_internal_command() const {
-  const ::rl::task::maze::v1::LifecycleCommand* p = _impl_.command_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleCommand&>(
-      ::rl::task::maze::v1::_LifecycleCommand_default_instance_);
+inline const ::rl::task::maze::v1::CommandIdentity& BeginEpisodeReq::_internal_command() const {
+  const ::rl::task::maze::v1::CommandIdentity* p = _impl_.command_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandIdentity&>(
+      ::rl::task::maze::v1::_CommandIdentity_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& BeginEpisodeReq::command() const {
+inline const ::rl::task::maze::v1::CommandIdentity& BeginEpisodeReq::command() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.BeginEpisodeReq.command)
   return _internal_command();
 }
 inline void BeginEpisodeReq::unsafe_arena_set_allocated_command(
-    ::rl::task::maze::v1::LifecycleCommand* command) {
+    ::rl::task::maze::v1::CommandIdentity* command) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.command_);
   }
@@ -9586,9 +7661,9 @@ inline void BeginEpisodeReq::unsafe_arena_set_allocated_command(
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeReq.command)
 }
-inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* BeginEpisodeReq::release_command() {
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
@@ -9601,27 +7676,27 @@ inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::release_command(
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::unsafe_arena_release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* BeginEpisodeReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeReq.command)
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::_internal_mutable_command() {
+inline ::rl::task::maze::v1::CommandIdentity* BeginEpisodeReq::_internal_mutable_command() {
   
   if (_impl_.command_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandIdentity>(GetArenaForAllocation());
     _impl_.command_ = p;
   }
   return _impl_.command_;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* BeginEpisodeReq::mutable_command() {
-  ::rl::task::maze::v1::LifecycleCommand* _msg = _internal_mutable_command();
+inline ::rl::task::maze::v1::CommandIdentity* BeginEpisodeReq::mutable_command() {
+  ::rl::task::maze::v1::CommandIdentity* _msg = _internal_mutable_command();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BeginEpisodeReq.command)
   return _msg;
 }
-inline void BeginEpisodeReq::set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command) {
+inline void BeginEpisodeReq::set_allocated_command(::rl::task::maze::v1::CommandIdentity* command) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete _impl_.command_;
@@ -9645,45 +7720,45 @@ inline void BeginEpisodeReq::set_allocated_command(::rl::task::maze::v1::Lifecyc
 
 // BeginEpisodeRsp
 
-// .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-inline bool BeginEpisodeRsp::_internal_has_lifecycle() const {
-  return this != internal_default_instance() && _impl_.lifecycle_ != nullptr;
+// .rl.task.maze.v1.CommandReply reply = 1;
+inline bool BeginEpisodeRsp::_internal_has_reply() const {
+  return this != internal_default_instance() && _impl_.reply_ != nullptr;
 }
-inline bool BeginEpisodeRsp::has_lifecycle() const {
-  return _internal_has_lifecycle();
+inline bool BeginEpisodeRsp::has_reply() const {
+  return _internal_has_reply();
 }
-inline void BeginEpisodeRsp::clear_lifecycle() {
-  if (GetArenaForAllocation() == nullptr && _impl_.lifecycle_ != nullptr) {
-    delete _impl_.lifecycle_;
+inline void BeginEpisodeRsp::clear_reply() {
+  if (GetArenaForAllocation() == nullptr && _impl_.reply_ != nullptr) {
+    delete _impl_.reply_;
   }
-  _impl_.lifecycle_ = nullptr;
+  _impl_.reply_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleReply& BeginEpisodeRsp::_internal_lifecycle() const {
-  const ::rl::task::maze::v1::LifecycleReply* p = _impl_.lifecycle_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleReply&>(
-      ::rl::task::maze::v1::_LifecycleReply_default_instance_);
+inline const ::rl::task::maze::v1::CommandReply& BeginEpisodeRsp::_internal_reply() const {
+  const ::rl::task::maze::v1::CommandReply* p = _impl_.reply_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandReply&>(
+      ::rl::task::maze::v1::_CommandReply_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleReply& BeginEpisodeRsp::lifecycle() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
-  return _internal_lifecycle();
+inline const ::rl::task::maze::v1::CommandReply& BeginEpisodeRsp::reply() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BeginEpisodeRsp.reply)
+  return _internal_reply();
 }
-inline void BeginEpisodeRsp::unsafe_arena_set_allocated_lifecycle(
-    ::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void BeginEpisodeRsp::unsafe_arena_set_allocated_reply(
+    ::rl::task::maze::v1::CommandReply* reply) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.lifecycle_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reply_);
   }
-  _impl_.lifecycle_ = lifecycle;
-  if (lifecycle) {
+  _impl_.reply_ = reply;
+  if (reply) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.reply)
 }
-inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::release_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* BeginEpisodeRsp::release_reply() {
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -9695,136 +7770,203 @@ inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::release_lifecycle(
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::unsafe_arena_release_lifecycle() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* BeginEpisodeRsp::unsafe_arena_release_reply() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeRsp.reply)
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::_internal_mutable_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* BeginEpisodeRsp::_internal_mutable_reply() {
   
-  if (_impl_.lifecycle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
-    _impl_.lifecycle_ = p;
+  if (_impl_.reply_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(GetArenaForAllocation());
+    _impl_.reply_ = p;
   }
-  return _impl_.lifecycle_;
+  return _impl_.reply_;
 }
-inline ::rl::task::maze::v1::LifecycleReply* BeginEpisodeRsp::mutable_lifecycle() {
-  ::rl::task::maze::v1::LifecycleReply* _msg = _internal_mutable_lifecycle();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* BeginEpisodeRsp::mutable_reply() {
+  ::rl::task::maze::v1::CommandReply* _msg = _internal_mutable_reply();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BeginEpisodeRsp.reply)
   return _msg;
 }
-inline void BeginEpisodeRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void BeginEpisodeRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* reply) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.lifecycle_;
+    delete _impl_.reply_;
   }
-  if (lifecycle) {
+  if (reply) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(lifecycle);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(reply);
     if (message_arena != submessage_arena) {
-      lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, lifecycle, submessage_arena);
+      reply = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reply, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.lifecycle_ = lifecycle;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.lifecycle)
+  _impl_.reply_ = reply;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.reply)
 }
 
 // .rl.task.maze.v1.EpisodeAssignment assignment = 2;
 inline bool BeginEpisodeRsp::_internal_has_assignment() const {
-  return this != internal_default_instance() && _impl_.assignment_ != nullptr;
+  return outcome_case() == kAssignment;
 }
 inline bool BeginEpisodeRsp::has_assignment() const {
   return _internal_has_assignment();
 }
+inline void BeginEpisodeRsp::set_has_assignment() {
+  _impl_._oneof_case_[0] = kAssignment;
+}
 inline void BeginEpisodeRsp::clear_assignment() {
-  if (GetArenaForAllocation() == nullptr && _impl_.assignment_ != nullptr) {
-    delete _impl_.assignment_;
+  if (_internal_has_assignment()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete _impl_.outcome_.assignment_;
+    }
+    clear_has_outcome();
   }
-  _impl_.assignment_ = nullptr;
+}
+inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::release_assignment() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeRsp.assignment)
+  if (_internal_has_assignment()) {
+    clear_has_outcome();
+    ::rl::task::maze::v1::EpisodeAssignment* temp = _impl_.outcome_.assignment_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.outcome_.assignment_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
 }
 inline const ::rl::task::maze::v1::EpisodeAssignment& BeginEpisodeRsp::_internal_assignment() const {
-  const ::rl::task::maze::v1::EpisodeAssignment* p = _impl_.assignment_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::EpisodeAssignment&>(
-      ::rl::task::maze::v1::_EpisodeAssignment_default_instance_);
+  return _internal_has_assignment()
+      ? *_impl_.outcome_.assignment_
+      : reinterpret_cast< ::rl::task::maze::v1::EpisodeAssignment&>(::rl::task::maze::v1::_EpisodeAssignment_default_instance_);
 }
 inline const ::rl::task::maze::v1::EpisodeAssignment& BeginEpisodeRsp::assignment() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.BeginEpisodeRsp.assignment)
   return _internal_assignment();
 }
-inline void BeginEpisodeRsp::unsafe_arena_set_allocated_assignment(
-    ::rl::task::maze::v1::EpisodeAssignment* assignment) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.assignment_);
-  }
-  _impl_.assignment_ = assignment;
-  if (assignment) {
-    
+inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::unsafe_arena_release_assignment() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:rl.task.maze.v1.BeginEpisodeRsp.assignment)
+  if (_internal_has_assignment()) {
+    clear_has_outcome();
+    ::rl::task::maze::v1::EpisodeAssignment* temp = _impl_.outcome_.assignment_;
+    _impl_.outcome_.assignment_ = nullptr;
+    return temp;
   } else {
-    
+    return nullptr;
+  }
+}
+inline void BeginEpisodeRsp::unsafe_arena_set_allocated_assignment(::rl::task::maze::v1::EpisodeAssignment* assignment) {
+  clear_outcome();
+  if (assignment) {
+    set_has_assignment();
+    _impl_.outcome_.assignment_ = assignment;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.assignment)
 }
-inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::release_assignment() {
-  
-  ::rl::task::maze::v1::EpisodeAssignment* temp = _impl_.assignment_;
-  _impl_.assignment_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::unsafe_arena_release_assignment() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeRsp.assignment)
-  
-  ::rl::task::maze::v1::EpisodeAssignment* temp = _impl_.assignment_;
-  _impl_.assignment_ = nullptr;
-  return temp;
-}
 inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::_internal_mutable_assignment() {
-  
-  if (_impl_.assignment_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::EpisodeAssignment>(GetArenaForAllocation());
-    _impl_.assignment_ = p;
+  if (!_internal_has_assignment()) {
+    clear_outcome();
+    set_has_assignment();
+    _impl_.outcome_.assignment_ = CreateMaybeMessage< ::rl::task::maze::v1::EpisodeAssignment >(GetArenaForAllocation());
   }
-  return _impl_.assignment_;
+  return _impl_.outcome_.assignment_;
 }
 inline ::rl::task::maze::v1::EpisodeAssignment* BeginEpisodeRsp::mutable_assignment() {
   ::rl::task::maze::v1::EpisodeAssignment* _msg = _internal_mutable_assignment();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BeginEpisodeRsp.assignment)
   return _msg;
 }
-inline void BeginEpisodeRsp::set_allocated_assignment(::rl::task::maze::v1::EpisodeAssignment* assignment) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.assignment_;
-  }
-  if (assignment) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(assignment);
-    if (message_arena != submessage_arena) {
-      assignment = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, assignment, submessage_arena);
+
+// .rl.task.maze.v1.TaskComplete task_complete = 3;
+inline bool BeginEpisodeRsp::_internal_has_task_complete() const {
+  return outcome_case() == kTaskComplete;
+}
+inline bool BeginEpisodeRsp::has_task_complete() const {
+  return _internal_has_task_complete();
+}
+inline void BeginEpisodeRsp::set_has_task_complete() {
+  _impl_._oneof_case_[0] = kTaskComplete;
+}
+inline void BeginEpisodeRsp::clear_task_complete() {
+  if (_internal_has_task_complete()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete _impl_.outcome_.task_complete_;
     }
-    
-  } else {
-    
+    clear_has_outcome();
   }
-  _impl_.assignment_ = assignment;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.assignment)
+}
+inline ::rl::task::maze::v1::TaskComplete* BeginEpisodeRsp::release_task_complete() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.BeginEpisodeRsp.task_complete)
+  if (_internal_has_task_complete()) {
+    clear_has_outcome();
+    ::rl::task::maze::v1::TaskComplete* temp = _impl_.outcome_.task_complete_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.outcome_.task_complete_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::rl::task::maze::v1::TaskComplete& BeginEpisodeRsp::_internal_task_complete() const {
+  return _internal_has_task_complete()
+      ? *_impl_.outcome_.task_complete_
+      : reinterpret_cast< ::rl::task::maze::v1::TaskComplete&>(::rl::task::maze::v1::_TaskComplete_default_instance_);
+}
+inline const ::rl::task::maze::v1::TaskComplete& BeginEpisodeRsp::task_complete() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.BeginEpisodeRsp.task_complete)
+  return _internal_task_complete();
+}
+inline ::rl::task::maze::v1::TaskComplete* BeginEpisodeRsp::unsafe_arena_release_task_complete() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:rl.task.maze.v1.BeginEpisodeRsp.task_complete)
+  if (_internal_has_task_complete()) {
+    clear_has_outcome();
+    ::rl::task::maze::v1::TaskComplete* temp = _impl_.outcome_.task_complete_;
+    _impl_.outcome_.task_complete_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void BeginEpisodeRsp::unsafe_arena_set_allocated_task_complete(::rl::task::maze::v1::TaskComplete* task_complete) {
+  clear_outcome();
+  if (task_complete) {
+    set_has_task_complete();
+    _impl_.outcome_.task_complete_ = task_complete;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.BeginEpisodeRsp.task_complete)
+}
+inline ::rl::task::maze::v1::TaskComplete* BeginEpisodeRsp::_internal_mutable_task_complete() {
+  if (!_internal_has_task_complete()) {
+    clear_outcome();
+    set_has_task_complete();
+    _impl_.outcome_.task_complete_ = CreateMaybeMessage< ::rl::task::maze::v1::TaskComplete >(GetArenaForAllocation());
+  }
+  return _impl_.outcome_.task_complete_;
+}
+inline ::rl::task::maze::v1::TaskComplete* BeginEpisodeRsp::mutable_task_complete() {
+  ::rl::task::maze::v1::TaskComplete* _msg = _internal_mutable_task_complete();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.BeginEpisodeRsp.task_complete)
+  return _msg;
 }
 
+inline bool BeginEpisodeRsp::has_outcome() const {
+  return outcome_case() != OUTCOME_NOT_SET;
+}
+inline void BeginEpisodeRsp::clear_has_outcome() {
+  _impl_._oneof_case_[0] = OUTCOME_NOT_SET;
+}
+inline BeginEpisodeRsp::OutcomeCase BeginEpisodeRsp::outcome_case() const {
+  return BeginEpisodeRsp::OutcomeCase(_impl_._oneof_case_[0]);
+}
 // -------------------------------------------------------------------
 
 // Vec2
@@ -10075,7 +8217,7 @@ inline void AgentState::set_executed_action_id(int32_t value) {
 
 // UpdateReq
 
-// .rl.task.maze.v1.LifecycleCommand command = 1;
+// .rl.task.maze.v1.CommandIdentity command = 1;
 inline bool UpdateReq::_internal_has_command() const {
   return this != internal_default_instance() && _impl_.command_ != nullptr;
 }
@@ -10088,17 +8230,17 @@ inline void UpdateReq::clear_command() {
   }
   _impl_.command_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& UpdateReq::_internal_command() const {
-  const ::rl::task::maze::v1::LifecycleCommand* p = _impl_.command_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleCommand&>(
-      ::rl::task::maze::v1::_LifecycleCommand_default_instance_);
+inline const ::rl::task::maze::v1::CommandIdentity& UpdateReq::_internal_command() const {
+  const ::rl::task::maze::v1::CommandIdentity* p = _impl_.command_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandIdentity&>(
+      ::rl::task::maze::v1::_CommandIdentity_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& UpdateReq::command() const {
+inline const ::rl::task::maze::v1::CommandIdentity& UpdateReq::command() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateReq.command)
   return _internal_command();
 }
 inline void UpdateReq::unsafe_arena_set_allocated_command(
-    ::rl::task::maze::v1::LifecycleCommand* command) {
+    ::rl::task::maze::v1::CommandIdentity* command) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.command_);
   }
@@ -10110,9 +8252,9 @@ inline void UpdateReq::unsafe_arena_set_allocated_command(
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateReq.command)
 }
-inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* UpdateReq::release_command() {
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
@@ -10125,27 +8267,27 @@ inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::release_command() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::unsafe_arena_release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* UpdateReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateReq.command)
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::_internal_mutable_command() {
+inline ::rl::task::maze::v1::CommandIdentity* UpdateReq::_internal_mutable_command() {
   
   if (_impl_.command_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandIdentity>(GetArenaForAllocation());
     _impl_.command_ = p;
   }
   return _impl_.command_;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* UpdateReq::mutable_command() {
-  ::rl::task::maze::v1::LifecycleCommand* _msg = _internal_mutable_command();
+inline ::rl::task::maze::v1::CommandIdentity* UpdateReq::mutable_command() {
+  ::rl::task::maze::v1::CommandIdentity* _msg = _internal_mutable_command();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateReq.command)
   return _msg;
 }
-inline void UpdateReq::set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command) {
+inline void UpdateReq::set_allocated_command(::rl::task::maze::v1::CommandIdentity* command) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete _impl_.command_;
@@ -10271,47 +8413,189 @@ inline void AgentAction::set_action_id(int32_t value) {
 
 // -------------------------------------------------------------------
 
-// UpdateRsp
+// ActionBatch
 
-// .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-inline bool UpdateRsp::_internal_has_lifecycle() const {
-  return this != internal_default_instance() && _impl_.lifecycle_ != nullptr;
+// repeated .rl.task.maze.v1.AgentAction actions = 1;
+inline int ActionBatch::_internal_actions_size() const {
+  return _impl_.actions_.size();
 }
-inline bool UpdateRsp::has_lifecycle() const {
-  return _internal_has_lifecycle();
+inline int ActionBatch::actions_size() const {
+  return _internal_actions_size();
 }
-inline void UpdateRsp::clear_lifecycle() {
-  if (GetArenaForAllocation() == nullptr && _impl_.lifecycle_ != nullptr) {
-    delete _impl_.lifecycle_;
-  }
-  _impl_.lifecycle_ = nullptr;
+inline void ActionBatch::clear_actions() {
+  _impl_.actions_.Clear();
 }
-inline const ::rl::task::maze::v1::LifecycleReply& UpdateRsp::_internal_lifecycle() const {
-  const ::rl::task::maze::v1::LifecycleReply* p = _impl_.lifecycle_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleReply&>(
-      ::rl::task::maze::v1::_LifecycleReply_default_instance_);
+inline ::rl::task::maze::v1::AgentAction* ActionBatch::mutable_actions(int index) {
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.ActionBatch.actions)
+  return _impl_.actions_.Mutable(index);
 }
-inline const ::rl::task::maze::v1::LifecycleReply& UpdateRsp::lifecycle() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.lifecycle)
-  return _internal_lifecycle();
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >*
+ActionBatch::mutable_actions() {
+  // @@protoc_insertion_point(field_mutable_list:rl.task.maze.v1.ActionBatch.actions)
+  return &_impl_.actions_;
 }
-inline void UpdateRsp::unsafe_arena_set_allocated_lifecycle(
-    ::rl::task::maze::v1::LifecycleReply* lifecycle) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.lifecycle_);
-  }
-  _impl_.lifecycle_ = lifecycle;
-  if (lifecycle) {
+inline const ::rl::task::maze::v1::AgentAction& ActionBatch::_internal_actions(int index) const {
+  return _impl_.actions_.Get(index);
+}
+inline const ::rl::task::maze::v1::AgentAction& ActionBatch::actions(int index) const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.ActionBatch.actions)
+  return _internal_actions(index);
+}
+inline ::rl::task::maze::v1::AgentAction* ActionBatch::_internal_add_actions() {
+  return _impl_.actions_.Add();
+}
+inline ::rl::task::maze::v1::AgentAction* ActionBatch::add_actions() {
+  ::rl::task::maze::v1::AgentAction* _add = _internal_add_actions();
+  // @@protoc_insertion_point(field_add:rl.task.maze.v1.ActionBatch.actions)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >&
+ActionBatch::actions() const {
+  // @@protoc_insertion_point(field_list:rl.task.maze.v1.ActionBatch.actions)
+  return _impl_.actions_;
+}
+
+// -------------------------------------------------------------------
+
+// WaitControl
+
+// int32 retry_after_ms = 1;
+inline void WaitControl::clear_retry_after_ms() {
+  _impl_.retry_after_ms_ = 0;
+}
+inline int32_t WaitControl::_internal_retry_after_ms() const {
+  return _impl_.retry_after_ms_;
+}
+inline int32_t WaitControl::retry_after_ms() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.WaitControl.retry_after_ms)
+  return _internal_retry_after_ms();
+}
+inline void WaitControl::_internal_set_retry_after_ms(int32_t value) {
+  
+  _impl_.retry_after_ms_ = value;
+}
+inline void WaitControl::set_retry_after_ms(int32_t value) {
+  _internal_set_retry_after_ms(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.WaitControl.retry_after_ms)
+}
+
+// -------------------------------------------------------------------
+
+// StopControl
+
+// .rl.task.maze.v1.MazeTerminationReason reason = 1;
+inline void StopControl::clear_reason() {
+  _impl_.reason_ = 0;
+}
+inline ::rl::task::maze::v1::MazeTerminationReason StopControl::_internal_reason() const {
+  return static_cast< ::rl::task::maze::v1::MazeTerminationReason >(_impl_.reason_);
+}
+inline ::rl::task::maze::v1::MazeTerminationReason StopControl::reason() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.StopControl.reason)
+  return _internal_reason();
+}
+inline void StopControl::_internal_set_reason(::rl::task::maze::v1::MazeTerminationReason value) {
+  
+  _impl_.reason_ = value;
+}
+inline void StopControl::set_reason(::rl::task::maze::v1::MazeTerminationReason value) {
+  _internal_set_reason(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.StopControl.reason)
+}
+
+// string message = 2;
+inline void StopControl::clear_message() {
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& StopControl::message() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.StopControl.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void StopControl::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.StopControl.message)
+}
+inline std::string* StopControl::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.StopControl.message)
+  return _s;
+}
+inline const std::string& StopControl::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void StopControl::_internal_set_message(const std::string& value) {
+  
+  _impl_.message_.Set(value, GetArenaForAllocation());
+}
+inline std::string* StopControl::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* StopControl::release_message() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.StopControl.message)
+  return _impl_.message_.Release();
+}
+inline void StopControl::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateRsp.lifecycle)
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.StopControl.message)
 }
-inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::release_lifecycle() {
+
+// -------------------------------------------------------------------
+
+// UpdateRsp
+
+// .rl.task.maze.v1.CommandReply reply = 1;
+inline bool UpdateRsp::_internal_has_reply() const {
+  return this != internal_default_instance() && _impl_.reply_ != nullptr;
+}
+inline bool UpdateRsp::has_reply() const {
+  return _internal_has_reply();
+}
+inline void UpdateRsp::clear_reply() {
+  if (GetArenaForAllocation() == nullptr && _impl_.reply_ != nullptr) {
+    delete _impl_.reply_;
+  }
+  _impl_.reply_ = nullptr;
+}
+inline const ::rl::task::maze::v1::CommandReply& UpdateRsp::_internal_reply() const {
+  const ::rl::task::maze::v1::CommandReply* p = _impl_.reply_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandReply&>(
+      ::rl::task::maze::v1::_CommandReply_default_instance_);
+}
+inline const ::rl::task::maze::v1::CommandReply& UpdateRsp::reply() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.reply)
+  return _internal_reply();
+}
+inline void UpdateRsp::unsafe_arena_set_allocated_reply(
+    ::rl::task::maze::v1::CommandReply* reply) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reply_);
+  }
+  _impl_.reply_ = reply;
+  if (reply) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateRsp.reply)
+}
+inline ::rl::task::maze::v1::CommandReply* UpdateRsp::release_reply() {
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -10323,191 +8607,282 @@ inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::release_lifecycle() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::unsafe_arena_release_lifecycle() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* UpdateRsp::unsafe_arena_release_reply() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateRsp.reply)
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::_internal_mutable_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* UpdateRsp::_internal_mutable_reply() {
   
-  if (_impl_.lifecycle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
-    _impl_.lifecycle_ = p;
+  if (_impl_.reply_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(GetArenaForAllocation());
+    _impl_.reply_ = p;
   }
-  return _impl_.lifecycle_;
+  return _impl_.reply_;
 }
-inline ::rl::task::maze::v1::LifecycleReply* UpdateRsp::mutable_lifecycle() {
-  ::rl::task::maze::v1::LifecycleReply* _msg = _internal_mutable_lifecycle();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* UpdateRsp::mutable_reply() {
+  ::rl::task::maze::v1::CommandReply* _msg = _internal_mutable_reply();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.reply)
   return _msg;
 }
-inline void UpdateRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void UpdateRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* reply) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.lifecycle_;
+    delete _impl_.reply_;
   }
-  if (lifecycle) {
+  if (reply) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(lifecycle);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(reply);
     if (message_arena != submessage_arena) {
-      lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, lifecycle, submessage_arena);
+      reply = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reply, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.lifecycle_ = lifecycle;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.UpdateRsp.lifecycle)
+  _impl_.reply_ = reply;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.UpdateRsp.reply)
 }
 
-// repeated .rl.task.maze.v1.AgentAction actions = 2;
-inline int UpdateRsp::_internal_actions_size() const {
-  return _impl_.actions_.size();
+// .rl.task.maze.v1.ActionBatch action_batch = 2;
+inline bool UpdateRsp::_internal_has_action_batch() const {
+  return control_case() == kActionBatch;
 }
-inline int UpdateRsp::actions_size() const {
-  return _internal_actions_size();
+inline bool UpdateRsp::has_action_batch() const {
+  return _internal_has_action_batch();
 }
-inline void UpdateRsp::clear_actions() {
-  _impl_.actions_.Clear();
+inline void UpdateRsp::set_has_action_batch() {
+  _impl_._oneof_case_[0] = kActionBatch;
 }
-inline ::rl::task::maze::v1::AgentAction* UpdateRsp::mutable_actions(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.actions)
-  return _impl_.actions_.Mutable(index);
+inline void UpdateRsp::clear_action_batch() {
+  if (_internal_has_action_batch()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete _impl_.control_.action_batch_;
+    }
+    clear_has_control();
+  }
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >*
-UpdateRsp::mutable_actions() {
-  // @@protoc_insertion_point(field_mutable_list:rl.task.maze.v1.UpdateRsp.actions)
-  return &_impl_.actions_;
+inline ::rl::task::maze::v1::ActionBatch* UpdateRsp::release_action_batch() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateRsp.action_batch)
+  if (_internal_has_action_batch()) {
+    clear_has_control();
+    ::rl::task::maze::v1::ActionBatch* temp = _impl_.control_.action_batch_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.control_.action_batch_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
 }
-inline const ::rl::task::maze::v1::AgentAction& UpdateRsp::_internal_actions(int index) const {
-  return _impl_.actions_.Get(index);
+inline const ::rl::task::maze::v1::ActionBatch& UpdateRsp::_internal_action_batch() const {
+  return _internal_has_action_batch()
+      ? *_impl_.control_.action_batch_
+      : reinterpret_cast< ::rl::task::maze::v1::ActionBatch&>(::rl::task::maze::v1::_ActionBatch_default_instance_);
 }
-inline const ::rl::task::maze::v1::AgentAction& UpdateRsp::actions(int index) const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.actions)
-  return _internal_actions(index);
+inline const ::rl::task::maze::v1::ActionBatch& UpdateRsp::action_batch() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.action_batch)
+  return _internal_action_batch();
 }
-inline ::rl::task::maze::v1::AgentAction* UpdateRsp::_internal_add_actions() {
-  return _impl_.actions_.Add();
+inline ::rl::task::maze::v1::ActionBatch* UpdateRsp::unsafe_arena_release_action_batch() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:rl.task.maze.v1.UpdateRsp.action_batch)
+  if (_internal_has_action_batch()) {
+    clear_has_control();
+    ::rl::task::maze::v1::ActionBatch* temp = _impl_.control_.action_batch_;
+    _impl_.control_.action_batch_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
 }
-inline ::rl::task::maze::v1::AgentAction* UpdateRsp::add_actions() {
-  ::rl::task::maze::v1::AgentAction* _add = _internal_add_actions();
-  // @@protoc_insertion_point(field_add:rl.task.maze.v1.UpdateRsp.actions)
-  return _add;
+inline void UpdateRsp::unsafe_arena_set_allocated_action_batch(::rl::task::maze::v1::ActionBatch* action_batch) {
+  clear_control();
+  if (action_batch) {
+    set_has_action_batch();
+    _impl_.control_.action_batch_ = action_batch;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateRsp.action_batch)
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::v1::AgentAction >&
-UpdateRsp::actions() const {
-  // @@protoc_insertion_point(field_list:rl.task.maze.v1.UpdateRsp.actions)
-  return _impl_.actions_;
+inline ::rl::task::maze::v1::ActionBatch* UpdateRsp::_internal_mutable_action_batch() {
+  if (!_internal_has_action_batch()) {
+    clear_control();
+    set_has_action_batch();
+    _impl_.control_.action_batch_ = CreateMaybeMessage< ::rl::task::maze::v1::ActionBatch >(GetArenaForAllocation());
+  }
+  return _impl_.control_.action_batch_;
 }
-
-// bool replayed = 3;
-inline void UpdateRsp::clear_replayed() {
-  _impl_.replayed_ = false;
-}
-inline bool UpdateRsp::_internal_replayed() const {
-  return _impl_.replayed_;
-}
-inline bool UpdateRsp::replayed() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.replayed)
-  return _internal_replayed();
-}
-inline void UpdateRsp::_internal_set_replayed(bool value) {
-  
-  _impl_.replayed_ = value;
-}
-inline void UpdateRsp::set_replayed(bool value) {
-  _internal_set_replayed(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.replayed)
-}
-
-// bool task_stop_requested = 4;
-inline void UpdateRsp::clear_task_stop_requested() {
-  _impl_.task_stop_requested_ = false;
-}
-inline bool UpdateRsp::_internal_task_stop_requested() const {
-  return _impl_.task_stop_requested_;
-}
-inline bool UpdateRsp::task_stop_requested() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.task_stop_requested)
-  return _internal_task_stop_requested();
-}
-inline void UpdateRsp::_internal_set_task_stop_requested(bool value) {
-  
-  _impl_.task_stop_requested_ = value;
-}
-inline void UpdateRsp::set_task_stop_requested(bool value) {
-  _internal_set_task_stop_requested(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.task_stop_requested)
+inline ::rl::task::maze::v1::ActionBatch* UpdateRsp::mutable_action_batch() {
+  ::rl::task::maze::v1::ActionBatch* _msg = _internal_mutable_action_batch();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.action_batch)
+  return _msg;
 }
 
-// .rl.task.maze.v1.MazeTerminationReason task_stop_reason = 5;
-inline void UpdateRsp::clear_task_stop_reason() {
-  _impl_.task_stop_reason_ = 0;
+// .rl.task.maze.v1.WaitControl wait = 3;
+inline bool UpdateRsp::_internal_has_wait() const {
+  return control_case() == kWait;
 }
-inline ::rl::task::maze::v1::MazeTerminationReason UpdateRsp::_internal_task_stop_reason() const {
-  return static_cast< ::rl::task::maze::v1::MazeTerminationReason >(_impl_.task_stop_reason_);
+inline bool UpdateRsp::has_wait() const {
+  return _internal_has_wait();
 }
-inline ::rl::task::maze::v1::MazeTerminationReason UpdateRsp::task_stop_reason() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.task_stop_reason)
-  return _internal_task_stop_reason();
+inline void UpdateRsp::set_has_wait() {
+  _impl_._oneof_case_[0] = kWait;
 }
-inline void UpdateRsp::_internal_set_task_stop_reason(::rl::task::maze::v1::MazeTerminationReason value) {
-  
-  _impl_.task_stop_reason_ = value;
+inline void UpdateRsp::clear_wait() {
+  if (_internal_has_wait()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete _impl_.control_.wait_;
+    }
+    clear_has_control();
+  }
 }
-inline void UpdateRsp::set_task_stop_reason(::rl::task::maze::v1::MazeTerminationReason value) {
-  _internal_set_task_stop_reason(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.task_stop_reason)
+inline ::rl::task::maze::v1::WaitControl* UpdateRsp::release_wait() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateRsp.wait)
+  if (_internal_has_wait()) {
+    clear_has_control();
+    ::rl::task::maze::v1::WaitControl* temp = _impl_.control_.wait_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.control_.wait_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::rl::task::maze::v1::WaitControl& UpdateRsp::_internal_wait() const {
+  return _internal_has_wait()
+      ? *_impl_.control_.wait_
+      : reinterpret_cast< ::rl::task::maze::v1::WaitControl&>(::rl::task::maze::v1::_WaitControl_default_instance_);
+}
+inline const ::rl::task::maze::v1::WaitControl& UpdateRsp::wait() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.wait)
+  return _internal_wait();
+}
+inline ::rl::task::maze::v1::WaitControl* UpdateRsp::unsafe_arena_release_wait() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:rl.task.maze.v1.UpdateRsp.wait)
+  if (_internal_has_wait()) {
+    clear_has_control();
+    ::rl::task::maze::v1::WaitControl* temp = _impl_.control_.wait_;
+    _impl_.control_.wait_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void UpdateRsp::unsafe_arena_set_allocated_wait(::rl::task::maze::v1::WaitControl* wait) {
+  clear_control();
+  if (wait) {
+    set_has_wait();
+    _impl_.control_.wait_ = wait;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateRsp.wait)
+}
+inline ::rl::task::maze::v1::WaitControl* UpdateRsp::_internal_mutable_wait() {
+  if (!_internal_has_wait()) {
+    clear_control();
+    set_has_wait();
+    _impl_.control_.wait_ = CreateMaybeMessage< ::rl::task::maze::v1::WaitControl >(GetArenaForAllocation());
+  }
+  return _impl_.control_.wait_;
+}
+inline ::rl::task::maze::v1::WaitControl* UpdateRsp::mutable_wait() {
+  ::rl::task::maze::v1::WaitControl* _msg = _internal_mutable_wait();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.wait)
+  return _msg;
 }
 
-// .rl.task.maze.v1.EnvironmentControl environment_control = 6;
-inline void UpdateRsp::clear_environment_control() {
-  _impl_.environment_control_ = 0;
+// .rl.task.maze.v1.StopControl stop = 4;
+inline bool UpdateRsp::_internal_has_stop() const {
+  return control_case() == kStop;
 }
-inline ::rl::task::maze::v1::EnvironmentControl UpdateRsp::_internal_environment_control() const {
-  return static_cast< ::rl::task::maze::v1::EnvironmentControl >(_impl_.environment_control_);
+inline bool UpdateRsp::has_stop() const {
+  return _internal_has_stop();
 }
-inline ::rl::task::maze::v1::EnvironmentControl UpdateRsp::environment_control() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.environment_control)
-  return _internal_environment_control();
+inline void UpdateRsp::set_has_stop() {
+  _impl_._oneof_case_[0] = kStop;
 }
-inline void UpdateRsp::_internal_set_environment_control(::rl::task::maze::v1::EnvironmentControl value) {
-  
-  _impl_.environment_control_ = value;
+inline void UpdateRsp::clear_stop() {
+  if (_internal_has_stop()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete _impl_.control_.stop_;
+    }
+    clear_has_control();
+  }
 }
-inline void UpdateRsp::set_environment_control(::rl::task::maze::v1::EnvironmentControl value) {
-  _internal_set_environment_control(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.environment_control)
+inline ::rl::task::maze::v1::StopControl* UpdateRsp::release_stop() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateRsp.stop)
+  if (_internal_has_stop()) {
+    clear_has_control();
+    ::rl::task::maze::v1::StopControl* temp = _impl_.control_.stop_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    _impl_.control_.stop_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::rl::task::maze::v1::StopControl& UpdateRsp::_internal_stop() const {
+  return _internal_has_stop()
+      ? *_impl_.control_.stop_
+      : reinterpret_cast< ::rl::task::maze::v1::StopControl&>(::rl::task::maze::v1::_StopControl_default_instance_);
+}
+inline const ::rl::task::maze::v1::StopControl& UpdateRsp::stop() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.stop)
+  return _internal_stop();
+}
+inline ::rl::task::maze::v1::StopControl* UpdateRsp::unsafe_arena_release_stop() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:rl.task.maze.v1.UpdateRsp.stop)
+  if (_internal_has_stop()) {
+    clear_has_control();
+    ::rl::task::maze::v1::StopControl* temp = _impl_.control_.stop_;
+    _impl_.control_.stop_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void UpdateRsp::unsafe_arena_set_allocated_stop(::rl::task::maze::v1::StopControl* stop) {
+  clear_control();
+  if (stop) {
+    set_has_stop();
+    _impl_.control_.stop_ = stop;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateRsp.stop)
+}
+inline ::rl::task::maze::v1::StopControl* UpdateRsp::_internal_mutable_stop() {
+  if (!_internal_has_stop()) {
+    clear_control();
+    set_has_stop();
+    _impl_.control_.stop_ = CreateMaybeMessage< ::rl::task::maze::v1::StopControl >(GetArenaForAllocation());
+  }
+  return _impl_.control_.stop_;
+}
+inline ::rl::task::maze::v1::StopControl* UpdateRsp::mutable_stop() {
+  ::rl::task::maze::v1::StopControl* _msg = _internal_mutable_stop();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.stop)
+  return _msg;
 }
 
-// int32 retry_after_ms = 7;
-inline void UpdateRsp::clear_retry_after_ms() {
-  _impl_.retry_after_ms_ = 0;
+inline bool UpdateRsp::has_control() const {
+  return control_case() != CONTROL_NOT_SET;
 }
-inline int32_t UpdateRsp::_internal_retry_after_ms() const {
-  return _impl_.retry_after_ms_;
+inline void UpdateRsp::clear_has_control() {
+  _impl_._oneof_case_[0] = CONTROL_NOT_SET;
 }
-inline int32_t UpdateRsp::retry_after_ms() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.retry_after_ms)
-  return _internal_retry_after_ms();
+inline UpdateRsp::ControlCase UpdateRsp::control_case() const {
+  return UpdateRsp::ControlCase(_impl_._oneof_case_[0]);
 }
-inline void UpdateRsp::_internal_set_retry_after_ms(int32_t value) {
-  
-  _impl_.retry_after_ms_ = value;
-}
-inline void UpdateRsp::set_retry_after_ms(int32_t value) {
-  _internal_set_retry_after_ms(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.UpdateRsp.retry_after_ms)
-}
-
 // -------------------------------------------------------------------
 
 // EndEpisodeReq
 
-// .rl.task.maze.v1.LifecycleCommand command = 1;
+// .rl.task.maze.v1.CommandIdentity command = 1;
 inline bool EndEpisodeReq::_internal_has_command() const {
   return this != internal_default_instance() && _impl_.command_ != nullptr;
 }
@@ -10520,17 +8895,17 @@ inline void EndEpisodeReq::clear_command() {
   }
   _impl_.command_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& EndEpisodeReq::_internal_command() const {
-  const ::rl::task::maze::v1::LifecycleCommand* p = _impl_.command_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleCommand&>(
-      ::rl::task::maze::v1::_LifecycleCommand_default_instance_);
+inline const ::rl::task::maze::v1::CommandIdentity& EndEpisodeReq::_internal_command() const {
+  const ::rl::task::maze::v1::CommandIdentity* p = _impl_.command_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandIdentity&>(
+      ::rl::task::maze::v1::_CommandIdentity_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& EndEpisodeReq::command() const {
+inline const ::rl::task::maze::v1::CommandIdentity& EndEpisodeReq::command() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.EndEpisodeReq.command)
   return _internal_command();
 }
 inline void EndEpisodeReq::unsafe_arena_set_allocated_command(
-    ::rl::task::maze::v1::LifecycleCommand* command) {
+    ::rl::task::maze::v1::CommandIdentity* command) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.command_);
   }
@@ -10542,9 +8917,9 @@ inline void EndEpisodeReq::unsafe_arena_set_allocated_command(
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EndEpisodeReq.command)
 }
-inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* EndEpisodeReq::release_command() {
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
@@ -10557,27 +8932,27 @@ inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::release_command() 
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::unsafe_arena_release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* EndEpisodeReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.EndEpisodeReq.command)
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::_internal_mutable_command() {
+inline ::rl::task::maze::v1::CommandIdentity* EndEpisodeReq::_internal_mutable_command() {
   
   if (_impl_.command_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandIdentity>(GetArenaForAllocation());
     _impl_.command_ = p;
   }
   return _impl_.command_;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* EndEpisodeReq::mutable_command() {
-  ::rl::task::maze::v1::LifecycleCommand* _msg = _internal_mutable_command();
+inline ::rl::task::maze::v1::CommandIdentity* EndEpisodeReq::mutable_command() {
+  ::rl::task::maze::v1::CommandIdentity* _msg = _internal_mutable_command();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EndEpisodeReq.command)
   return _msg;
 }
-inline void EndEpisodeReq::set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command) {
+inline void EndEpisodeReq::set_allocated_command(::rl::task::maze::v1::CommandIdentity* command) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete _impl_.command_;
@@ -10877,45 +9252,45 @@ EpisodeOutcome::agents() const {
 
 // EndEpisodeRsp
 
-// .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-inline bool EndEpisodeRsp::_internal_has_lifecycle() const {
-  return this != internal_default_instance() && _impl_.lifecycle_ != nullptr;
+// .rl.task.maze.v1.CommandReply reply = 1;
+inline bool EndEpisodeRsp::_internal_has_reply() const {
+  return this != internal_default_instance() && _impl_.reply_ != nullptr;
 }
-inline bool EndEpisodeRsp::has_lifecycle() const {
-  return _internal_has_lifecycle();
+inline bool EndEpisodeRsp::has_reply() const {
+  return _internal_has_reply();
 }
-inline void EndEpisodeRsp::clear_lifecycle() {
-  if (GetArenaForAllocation() == nullptr && _impl_.lifecycle_ != nullptr) {
-    delete _impl_.lifecycle_;
+inline void EndEpisodeRsp::clear_reply() {
+  if (GetArenaForAllocation() == nullptr && _impl_.reply_ != nullptr) {
+    delete _impl_.reply_;
   }
-  _impl_.lifecycle_ = nullptr;
+  _impl_.reply_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleReply& EndEpisodeRsp::_internal_lifecycle() const {
-  const ::rl::task::maze::v1::LifecycleReply* p = _impl_.lifecycle_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleReply&>(
-      ::rl::task::maze::v1::_LifecycleReply_default_instance_);
+inline const ::rl::task::maze::v1::CommandReply& EndEpisodeRsp::_internal_reply() const {
+  const ::rl::task::maze::v1::CommandReply* p = _impl_.reply_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandReply&>(
+      ::rl::task::maze::v1::_CommandReply_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleReply& EndEpisodeRsp::lifecycle() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
-  return _internal_lifecycle();
+inline const ::rl::task::maze::v1::CommandReply& EndEpisodeRsp::reply() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EndEpisodeRsp.reply)
+  return _internal_reply();
 }
-inline void EndEpisodeRsp::unsafe_arena_set_allocated_lifecycle(
-    ::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void EndEpisodeRsp::unsafe_arena_set_allocated_reply(
+    ::rl::task::maze::v1::CommandReply* reply) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.lifecycle_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reply_);
   }
-  _impl_.lifecycle_ = lifecycle;
-  if (lifecycle) {
+  _impl_.reply_ = reply;
+  if (reply) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EndEpisodeRsp.reply)
 }
-inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::release_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* EndEpisodeRsp::release_reply() {
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -10927,44 +9302,44 @@ inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::release_lifecycle() 
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::unsafe_arena_release_lifecycle() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* EndEpisodeRsp::unsafe_arena_release_reply() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EndEpisodeRsp.reply)
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::_internal_mutable_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* EndEpisodeRsp::_internal_mutable_reply() {
   
-  if (_impl_.lifecycle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
-    _impl_.lifecycle_ = p;
+  if (_impl_.reply_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(GetArenaForAllocation());
+    _impl_.reply_ = p;
   }
-  return _impl_.lifecycle_;
+  return _impl_.reply_;
 }
-inline ::rl::task::maze::v1::LifecycleReply* EndEpisodeRsp::mutable_lifecycle() {
-  ::rl::task::maze::v1::LifecycleReply* _msg = _internal_mutable_lifecycle();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* EndEpisodeRsp::mutable_reply() {
+  ::rl::task::maze::v1::CommandReply* _msg = _internal_mutable_reply();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EndEpisodeRsp.reply)
   return _msg;
 }
-inline void EndEpisodeRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void EndEpisodeRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* reply) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.lifecycle_;
+    delete _impl_.reply_;
   }
-  if (lifecycle) {
+  if (reply) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(lifecycle);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(reply);
     if (message_arena != submessage_arena) {
-      lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, lifecycle, submessage_arena);
+      reply = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reply, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.lifecycle_ = lifecycle;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EndEpisodeRsp.lifecycle)
+  _impl_.reply_ = reply;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EndEpisodeRsp.reply)
 }
 
 // .rl.task.maze.v1.EpisodeOutcome outcome = 2;
@@ -11061,7 +9436,7 @@ inline void EndEpisodeRsp::set_allocated_outcome(::rl::task::maze::v1::EpisodeOu
 
 // AbortEpisodeReq
 
-// .rl.task.maze.v1.LifecycleCommand command = 1;
+// .rl.task.maze.v1.CommandIdentity command = 1;
 inline bool AbortEpisodeReq::_internal_has_command() const {
   return this != internal_default_instance() && _impl_.command_ != nullptr;
 }
@@ -11074,17 +9449,17 @@ inline void AbortEpisodeReq::clear_command() {
   }
   _impl_.command_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& AbortEpisodeReq::_internal_command() const {
-  const ::rl::task::maze::v1::LifecycleCommand* p = _impl_.command_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleCommand&>(
-      ::rl::task::maze::v1::_LifecycleCommand_default_instance_);
+inline const ::rl::task::maze::v1::CommandIdentity& AbortEpisodeReq::_internal_command() const {
+  const ::rl::task::maze::v1::CommandIdentity* p = _impl_.command_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandIdentity&>(
+      ::rl::task::maze::v1::_CommandIdentity_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& AbortEpisodeReq::command() const {
+inline const ::rl::task::maze::v1::CommandIdentity& AbortEpisodeReq::command() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.AbortEpisodeReq.command)
   return _internal_command();
 }
 inline void AbortEpisodeReq::unsafe_arena_set_allocated_command(
-    ::rl::task::maze::v1::LifecycleCommand* command) {
+    ::rl::task::maze::v1::CommandIdentity* command) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.command_);
   }
@@ -11096,9 +9471,9 @@ inline void AbortEpisodeReq::unsafe_arena_set_allocated_command(
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.AbortEpisodeReq.command)
 }
-inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* AbortEpisodeReq::release_command() {
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
@@ -11111,27 +9486,27 @@ inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::release_command(
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::unsafe_arena_release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* AbortEpisodeReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.AbortEpisodeReq.command)
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::_internal_mutable_command() {
+inline ::rl::task::maze::v1::CommandIdentity* AbortEpisodeReq::_internal_mutable_command() {
   
   if (_impl_.command_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandIdentity>(GetArenaForAllocation());
     _impl_.command_ = p;
   }
   return _impl_.command_;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* AbortEpisodeReq::mutable_command() {
-  ::rl::task::maze::v1::LifecycleCommand* _msg = _internal_mutable_command();
+inline ::rl::task::maze::v1::CommandIdentity* AbortEpisodeReq::mutable_command() {
+  ::rl::task::maze::v1::CommandIdentity* _msg = _internal_mutable_command();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.AbortEpisodeReq.command)
   return _msg;
 }
-inline void AbortEpisodeReq::set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command) {
+inline void AbortEpisodeReq::set_allocated_command(::rl::task::maze::v1::CommandIdentity* command) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete _impl_.command_;
@@ -11225,45 +9600,45 @@ inline void AbortEpisodeReq::set_allocated_message(std::string* message) {
 
 // AbortEpisodeRsp
 
-// .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-inline bool AbortEpisodeRsp::_internal_has_lifecycle() const {
-  return this != internal_default_instance() && _impl_.lifecycle_ != nullptr;
+// .rl.task.maze.v1.CommandReply reply = 1;
+inline bool AbortEpisodeRsp::_internal_has_reply() const {
+  return this != internal_default_instance() && _impl_.reply_ != nullptr;
 }
-inline bool AbortEpisodeRsp::has_lifecycle() const {
-  return _internal_has_lifecycle();
+inline bool AbortEpisodeRsp::has_reply() const {
+  return _internal_has_reply();
 }
-inline void AbortEpisodeRsp::clear_lifecycle() {
-  if (GetArenaForAllocation() == nullptr && _impl_.lifecycle_ != nullptr) {
-    delete _impl_.lifecycle_;
+inline void AbortEpisodeRsp::clear_reply() {
+  if (GetArenaForAllocation() == nullptr && _impl_.reply_ != nullptr) {
+    delete _impl_.reply_;
   }
-  _impl_.lifecycle_ = nullptr;
+  _impl_.reply_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleReply& AbortEpisodeRsp::_internal_lifecycle() const {
-  const ::rl::task::maze::v1::LifecycleReply* p = _impl_.lifecycle_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleReply&>(
-      ::rl::task::maze::v1::_LifecycleReply_default_instance_);
+inline const ::rl::task::maze::v1::CommandReply& AbortEpisodeRsp::_internal_reply() const {
+  const ::rl::task::maze::v1::CommandReply* p = _impl_.reply_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandReply&>(
+      ::rl::task::maze::v1::_CommandReply_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleReply& AbortEpisodeRsp::lifecycle() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
-  return _internal_lifecycle();
+inline const ::rl::task::maze::v1::CommandReply& AbortEpisodeRsp::reply() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.AbortEpisodeRsp.reply)
+  return _internal_reply();
 }
-inline void AbortEpisodeRsp::unsafe_arena_set_allocated_lifecycle(
-    ::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void AbortEpisodeRsp::unsafe_arena_set_allocated_reply(
+    ::rl::task::maze::v1::CommandReply* reply) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.lifecycle_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reply_);
   }
-  _impl_.lifecycle_ = lifecycle;
-  if (lifecycle) {
+  _impl_.reply_ = reply;
+  if (reply) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.reply)
 }
-inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::release_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* AbortEpisodeRsp::release_reply() {
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -11275,51 +9650,51 @@ inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::release_lifecycle(
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::unsafe_arena_release_lifecycle() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* AbortEpisodeRsp::unsafe_arena_release_reply() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.AbortEpisodeRsp.reply)
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::_internal_mutable_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* AbortEpisodeRsp::_internal_mutable_reply() {
   
-  if (_impl_.lifecycle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
-    _impl_.lifecycle_ = p;
+  if (_impl_.reply_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(GetArenaForAllocation());
+    _impl_.reply_ = p;
   }
-  return _impl_.lifecycle_;
+  return _impl_.reply_;
 }
-inline ::rl::task::maze::v1::LifecycleReply* AbortEpisodeRsp::mutable_lifecycle() {
-  ::rl::task::maze::v1::LifecycleReply* _msg = _internal_mutable_lifecycle();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* AbortEpisodeRsp::mutable_reply() {
+  ::rl::task::maze::v1::CommandReply* _msg = _internal_mutable_reply();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.AbortEpisodeRsp.reply)
   return _msg;
 }
-inline void AbortEpisodeRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void AbortEpisodeRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* reply) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.lifecycle_;
+    delete _impl_.reply_;
   }
-  if (lifecycle) {
+  if (reply) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(lifecycle);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(reply);
     if (message_arena != submessage_arena) {
-      lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, lifecycle, submessage_arena);
+      reply = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reply, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.lifecycle_ = lifecycle;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.lifecycle)
+  _impl_.reply_ = reply;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.reply)
 }
 
 // -------------------------------------------------------------------
 
 // CloseSessionReq
 
-// .rl.task.maze.v1.LifecycleCommand command = 1;
+// .rl.task.maze.v1.CommandIdentity command = 1;
 inline bool CloseSessionReq::_internal_has_command() const {
   return this != internal_default_instance() && _impl_.command_ != nullptr;
 }
@@ -11332,17 +9707,17 @@ inline void CloseSessionReq::clear_command() {
   }
   _impl_.command_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& CloseSessionReq::_internal_command() const {
-  const ::rl::task::maze::v1::LifecycleCommand* p = _impl_.command_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleCommand&>(
-      ::rl::task::maze::v1::_LifecycleCommand_default_instance_);
+inline const ::rl::task::maze::v1::CommandIdentity& CloseSessionReq::_internal_command() const {
+  const ::rl::task::maze::v1::CommandIdentity* p = _impl_.command_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandIdentity&>(
+      ::rl::task::maze::v1::_CommandIdentity_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleCommand& CloseSessionReq::command() const {
+inline const ::rl::task::maze::v1::CommandIdentity& CloseSessionReq::command() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.CloseSessionReq.command)
   return _internal_command();
 }
 inline void CloseSessionReq::unsafe_arena_set_allocated_command(
-    ::rl::task::maze::v1::LifecycleCommand* command) {
+    ::rl::task::maze::v1::CommandIdentity* command) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.command_);
   }
@@ -11354,9 +9729,9 @@ inline void CloseSessionReq::unsafe_arena_set_allocated_command(
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.CloseSessionReq.command)
 }
-inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* CloseSessionReq::release_command() {
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
@@ -11369,27 +9744,27 @@ inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::release_command(
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::unsafe_arena_release_command() {
+inline ::rl::task::maze::v1::CommandIdentity* CloseSessionReq::unsafe_arena_release_command() {
   // @@protoc_insertion_point(field_release:rl.task.maze.v1.CloseSessionReq.command)
   
-  ::rl::task::maze::v1::LifecycleCommand* temp = _impl_.command_;
+  ::rl::task::maze::v1::CommandIdentity* temp = _impl_.command_;
   _impl_.command_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::_internal_mutable_command() {
+inline ::rl::task::maze::v1::CommandIdentity* CloseSessionReq::_internal_mutable_command() {
   
   if (_impl_.command_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleCommand>(GetArenaForAllocation());
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandIdentity>(GetArenaForAllocation());
     _impl_.command_ = p;
   }
   return _impl_.command_;
 }
-inline ::rl::task::maze::v1::LifecycleCommand* CloseSessionReq::mutable_command() {
-  ::rl::task::maze::v1::LifecycleCommand* _msg = _internal_mutable_command();
+inline ::rl::task::maze::v1::CommandIdentity* CloseSessionReq::mutable_command() {
+  ::rl::task::maze::v1::CommandIdentity* _msg = _internal_mutable_command();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.CloseSessionReq.command)
   return _msg;
 }
-inline void CloseSessionReq::set_allocated_command(::rl::task::maze::v1::LifecycleCommand* command) {
+inline void CloseSessionReq::set_allocated_command(::rl::task::maze::v1::CommandIdentity* command) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete _impl_.command_;
@@ -11413,45 +9788,45 @@ inline void CloseSessionReq::set_allocated_command(::rl::task::maze::v1::Lifecyc
 
 // CloseSessionRsp
 
-// .rl.task.maze.v1.LifecycleReply lifecycle = 1;
-inline bool CloseSessionRsp::_internal_has_lifecycle() const {
-  return this != internal_default_instance() && _impl_.lifecycle_ != nullptr;
+// .rl.task.maze.v1.CommandReply reply = 1;
+inline bool CloseSessionRsp::_internal_has_reply() const {
+  return this != internal_default_instance() && _impl_.reply_ != nullptr;
 }
-inline bool CloseSessionRsp::has_lifecycle() const {
-  return _internal_has_lifecycle();
+inline bool CloseSessionRsp::has_reply() const {
+  return _internal_has_reply();
 }
-inline void CloseSessionRsp::clear_lifecycle() {
-  if (GetArenaForAllocation() == nullptr && _impl_.lifecycle_ != nullptr) {
-    delete _impl_.lifecycle_;
+inline void CloseSessionRsp::clear_reply() {
+  if (GetArenaForAllocation() == nullptr && _impl_.reply_ != nullptr) {
+    delete _impl_.reply_;
   }
-  _impl_.lifecycle_ = nullptr;
+  _impl_.reply_ = nullptr;
 }
-inline const ::rl::task::maze::v1::LifecycleReply& CloseSessionRsp::_internal_lifecycle() const {
-  const ::rl::task::maze::v1::LifecycleReply* p = _impl_.lifecycle_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::LifecycleReply&>(
-      ::rl::task::maze::v1::_LifecycleReply_default_instance_);
+inline const ::rl::task::maze::v1::CommandReply& CloseSessionRsp::_internal_reply() const {
+  const ::rl::task::maze::v1::CommandReply* p = _impl_.reply_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::CommandReply&>(
+      ::rl::task::maze::v1::_CommandReply_default_instance_);
 }
-inline const ::rl::task::maze::v1::LifecycleReply& CloseSessionRsp::lifecycle() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CloseSessionRsp.lifecycle)
-  return _internal_lifecycle();
+inline const ::rl::task::maze::v1::CommandReply& CloseSessionRsp::reply() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.CloseSessionRsp.reply)
+  return _internal_reply();
 }
-inline void CloseSessionRsp::unsafe_arena_set_allocated_lifecycle(
-    ::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void CloseSessionRsp::unsafe_arena_set_allocated_reply(
+    ::rl::task::maze::v1::CommandReply* reply) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.lifecycle_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.reply_);
   }
-  _impl_.lifecycle_ = lifecycle;
-  if (lifecycle) {
+  _impl_.reply_ = reply;
+  if (reply) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.CloseSessionRsp.lifecycle)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.CloseSessionRsp.reply)
 }
-inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::release_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* CloseSessionRsp::release_reply() {
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -11463,49 +9838,51 @@ inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::release_lifecycle(
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::unsafe_arena_release_lifecycle() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.CloseSessionRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* CloseSessionRsp::unsafe_arena_release_reply() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.CloseSessionRsp.reply)
   
-  ::rl::task::maze::v1::LifecycleReply* temp = _impl_.lifecycle_;
-  _impl_.lifecycle_ = nullptr;
+  ::rl::task::maze::v1::CommandReply* temp = _impl_.reply_;
+  _impl_.reply_ = nullptr;
   return temp;
 }
-inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::_internal_mutable_lifecycle() {
+inline ::rl::task::maze::v1::CommandReply* CloseSessionRsp::_internal_mutable_reply() {
   
-  if (_impl_.lifecycle_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::task::maze::v1::LifecycleReply>(GetArenaForAllocation());
-    _impl_.lifecycle_ = p;
+  if (_impl_.reply_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::CommandReply>(GetArenaForAllocation());
+    _impl_.reply_ = p;
   }
-  return _impl_.lifecycle_;
+  return _impl_.reply_;
 }
-inline ::rl::task::maze::v1::LifecycleReply* CloseSessionRsp::mutable_lifecycle() {
-  ::rl::task::maze::v1::LifecycleReply* _msg = _internal_mutable_lifecycle();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.CloseSessionRsp.lifecycle)
+inline ::rl::task::maze::v1::CommandReply* CloseSessionRsp::mutable_reply() {
+  ::rl::task::maze::v1::CommandReply* _msg = _internal_mutable_reply();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.CloseSessionRsp.reply)
   return _msg;
 }
-inline void CloseSessionRsp::set_allocated_lifecycle(::rl::task::maze::v1::LifecycleReply* lifecycle) {
+inline void CloseSessionRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* reply) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.lifecycle_;
+    delete _impl_.reply_;
   }
-  if (lifecycle) {
+  if (reply) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(lifecycle);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(reply);
     if (message_arena != submessage_arena) {
-      lifecycle = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, lifecycle, submessage_arena);
+      reply = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, reply, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.lifecycle_ = lifecycle;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.CloseSessionRsp.lifecycle)
+  _impl_.reply_ = reply;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.CloseSessionRsp.reply)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -11568,30 +9945,20 @@ inline void CloseSessionRsp::set_allocated_lifecycle(::rl::task::maze::v1::Lifec
 
 PROTOBUF_NAMESPACE_OPEN
 
-template <> struct is_proto_enum< ::rl::task::maze::v1::LifecycleResult> : ::std::true_type {};
+template <> struct is_proto_enum< ::rl::task::maze::v1::CommandResult> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::LifecycleResult>() {
-  return ::rl::task::maze::v1::LifecycleResult_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::CommandResult>() {
+  return ::rl::task::maze::v1::CommandResult_descriptor();
 }
-template <> struct is_proto_enum< ::rl::task::maze::v1::LifecycleErrorCode> : ::std::true_type {};
+template <> struct is_proto_enum< ::rl::task::maze::v1::CommandErrorCode> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::LifecycleErrorCode>() {
-  return ::rl::task::maze::v1::LifecycleErrorCode_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::CommandErrorCode>() {
+  return ::rl::task::maze::v1::CommandErrorCode_descriptor();
 }
-template <> struct is_proto_enum< ::rl::task::maze::v1::TaskState> : ::std::true_type {};
+template <> struct is_proto_enum< ::rl::task::maze::v1::SessionPhase> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::TaskState>() {
-  return ::rl::task::maze::v1::TaskState_descriptor();
-}
-template <> struct is_proto_enum< ::rl::task::maze::v1::SessionState> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::SessionState>() {
-  return ::rl::task::maze::v1::SessionState_descriptor();
-}
-template <> struct is_proto_enum< ::rl::task::maze::v1::EpisodeState> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::EpisodeState>() {
-  return ::rl::task::maze::v1::EpisodeState_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::SessionPhase>() {
+  return ::rl::task::maze::v1::SessionPhase_descriptor();
 }
 template <> struct is_proto_enum< ::rl::task::maze::v1::EpisodeMode> : ::std::true_type {};
 template <>
@@ -11603,20 +9970,10 @@ template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::WorkloadMode>() {
   return ::rl::task::maze::v1::WorkloadMode_descriptor();
 }
-template <> struct is_proto_enum< ::rl::task::maze::v1::ReplayPolicy> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::ReplayPolicy>() {
-  return ::rl::task::maze::v1::ReplayPolicy_descriptor();
-}
 template <> struct is_proto_enum< ::rl::task::maze::v1::MazeTerminationReason> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::MazeTerminationReason>() {
   return ::rl::task::maze::v1::MazeTerminationReason_descriptor();
-}
-template <> struct is_proto_enum< ::rl::task::maze::v1::EnvironmentControl> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::EnvironmentControl>() {
-  return ::rl::task::maze::v1::EnvironmentControl_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

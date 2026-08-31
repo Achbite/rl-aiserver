@@ -111,34 +111,3 @@ private:
     std::optional<int64_t> last_event_observed_at_unix_ms_;
     std::chrono::steady_clock::time_point last_batch_created_at_;
 };
-
-class EpisodeMetricsWindow {
-public:
-    explicit EpisodeMetricsWindow(std::size_t capacity);
-
-    void AddCompleted(maze::EpisodeMode episode_mode,
-                      std::vector<AgentEpisodeResult> agents);
-    void AddExcluded(maze::EpisodeMode episode_mode,
-                     std::size_t agent_count,
-                     maze::MazeTerminationReason reason);
-    void Fill(training::MetricSnapshot* snapshot,
-              const common::ServiceInstanceIdentity& source,
-              uint64_t sequence,
-              int64_t timestamp_unix_ms) const;
-
-private:
-    struct Entry {
-        bool excluded = false;
-        maze::EpisodeMode episode_mode = maze::EPISODE_MODE_UNSPECIFIED;
-        std::vector<AgentEpisodeResult> agents;
-    };
-
-    void Push(Entry entry);
-    void PushTraining(Entry entry);
-
-    std::size_t capacity_;
-    mutable std::mutex mutex_;
-    std::deque<Entry> entries_;
-    std::deque<Entry> training_entries_;
-    uint64_t completed_training_episode_count_ = 0;
-};

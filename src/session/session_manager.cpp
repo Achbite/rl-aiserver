@@ -45,7 +45,7 @@ int SessionManager::GetActiveSessionCount() const {
     std::lock_guard<std::mutex> lock(mutex_);
     int count = 0;
     for (const auto& item : sessions_) {
-        if (item.second.session_state != maze::SESSION_STATE_CLOSED) {
+        if (item.second.phase != maze::SESSION_PHASE_CLOSED) {
             ++count;
         }
     }
@@ -59,7 +59,7 @@ SessionManager::GetClientActivitySnapshot(int64_t now_unix_ms,
     ClientActivitySnapshot snapshot;
     for (const auto& item : sessions_) {
         const auto& session = item.second;
-        if (session.session_state == maze::SESSION_STATE_CLOSED) {
+        if (session.phase == maze::SESSION_PHASE_CLOSED) {
             continue;
         }
         ++snapshot.active_session_count;
@@ -81,7 +81,8 @@ int SessionManager::GetActiveEpisodeCount() const {
     std::lock_guard<std::mutex> lock(mutex_);
     int count = 0;
     for (const auto& item : sessions_) {
-        if (item.second.episode_state == EpisodeState::Active) {
+        if (item.second.phase == maze::SESSION_PHASE_EPISODE_RUNNING ||
+            item.second.phase == maze::SESSION_PHASE_EPISODE_TERMINAL) {
             ++count;
         }
     }
