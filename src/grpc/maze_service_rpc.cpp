@@ -13,11 +13,6 @@
 
 namespace {
 
-constexpr int kActionDirections[9][2] = {
-    {0, 0}, {0, 1}, {1, 1}, {1, 0}, {1, -1},
-    {0, -1}, {-1, -1}, {-1, 0}, {-1, 1},
-};
-
 double ElapsedMs(std::chrono::steady_clock::time_point start) {
     return std::chrono::duration<double, std::milli>(
                std::chrono::steady_clock::now() - start)
@@ -41,11 +36,7 @@ void FillContract(const AIServerConfig& config,
                   common::ContractIdentity* target) {
     target->set_package_name(config.contract.package_name);
     target->set_package_version(config.contract.package_version);
-    FillDigest(config.contract.source_digest, target->mutable_source_digest());
-    FillDigest(config.contract.artifact_digest,
-               target->mutable_artifact_digest());
     target->set_platform(config.contract.platform);
-    target->set_generator_identity(config.contract.generator_identity);
 }
 
 void FillServiceIdentity(const std::string& component,
@@ -71,33 +62,6 @@ maze::WorkloadMode WorkloadModeForRunMode(int run_mode) {
 bool IsEnvironmentTerminal(maze::MazeTerminationReason reason) {
     return reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED ||
            reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
-}
-
-bool ExpectedClientPosition(const SessionManager::Session& session,
-                            int from_gx,
-                            int from_gy,
-                            int action,
-                            int& expected_gx,
-                            int& expected_gy) {
-    if (!session.IsWalkable(from_gx, from_gy) ||
-        action < 0 || action >= 9) {
-        return false;
-    }
-    expected_gx = from_gx;
-    expected_gy = from_gy;
-    const int dx = kActionDirections[action][0];
-    const int dy = kActionDirections[action][1];
-    const int candidate_gx = from_gx + dx;
-    const int candidate_gy = from_gy + dy;
-    if (!session.IsWalkable(candidate_gx, candidate_gy)) return true;
-    if (dx != 0 && dy != 0 &&
-        (!session.IsWalkable(from_gx + dx, from_gy) ||
-         !session.IsWalkable(from_gx, from_gy + dy))) {
-        return true;
-    }
-    expected_gx = candidate_gx;
-    expected_gy = candidate_gy;
-    return true;
 }
 
 void FillReply(const SessionManager::Session& session,
@@ -272,7 +236,11 @@ grpc::Status MazeServiceImpl::OpenSession(
         req->client().component() != "maze-client" ||
         req->client().instance_id().empty() ||
         req->client().lifecycle_epoch() == 0 ||
-        req->environment_instance_id().empty()) {
+        req->environment_instance_id().empty() ||
+        req->task_protocol().protocol_id() !=
+            config_.task.task_protocol_id ||
+        req->task_protocol().protocol_version() !=
+            config_.task.task_protocol_version) {
         FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "Client or environment identity is invalid",
                          rsp->mutable_reply());
@@ -304,13 +272,16 @@ grpc::Status MazeServiceImpl::OpenSession(
     environment->set_agent_count(
         static_cast<std::uint32_t>(config_.environment.agent_count));
     environment->set_map_id(config_.task.fixed_map_id);
-    environment->mutable_expected_map_digest()->set_algorithm(
-        common::DIGEST_ALGORITHM_SHA256);
-    environment->mutable_expected_map_digest()->set_hex(
-        config_.task.fixed_map_checksum_sha256);
-    environment->set_action_rule_id(config_.task.action_rule_id);
     environment->set_episode_max_steps(
         static_cast<std::uint32_t>(config_.task.episode_max_steps));
+    environment->set_action_mask_mode(
+        config_.training_contract.action_mask_mode == "required"
+            ? maze::ACTION_MASK_MODE_REQUIRED
+            : maze::ACTION_MASK_MODE_DISABLED);
+    rsp->mutable_task_protocol()->set_protocol_id(
+        config_.task.task_protocol_id);
+    rsp->mutable_task_protocol()->set_protocol_version(
+        config_.task.task_protocol_version);
     rsp->set_workload_mode(session->workload_mode);
     FillReply(*session, 0, maze::COMMAND_RESULT_APPLIED,
               maze::COMMAND_ERROR_CODE_UNSPECIFIED,
@@ -354,11 +325,7 @@ grpc::Status MazeServiceImpl::Init(
     ValidatedMazeMap validated;
     std::string error;
     if (!ValidateMazeMapDescriptor(req->map(), config_.task.fixed_map_id,
-                                   config_.task.fixed_map_checksum_sha256,
-                                   validated, error) ||
-        validated.shortest_action_steps !=
-            config_.task.shortest_action_steps ||
-        req->map().action_rule_id() != config_.task.action_rule_id) {
+                                   validated, error)) {
         RejectCommand(*session, maze::COMMAND_ERROR_CODE_MAP_INVALID,
                       error.empty() ? "map contract identity does not match"
                                     : error,
@@ -369,9 +336,7 @@ grpc::Status MazeServiceImpl::Init(
     SessionManager::Session candidate = *session;
     SingleMapTaskController candidate_task_controller = task_controller_;
     candidate.map_id = req->map().map_id();
-    candidate.map_checksum_sha256 = validated.checksum_sha256;
     candidate.shortest_action_steps = validated.shortest_action_steps;
-    candidate.action_rule_id = req->map().action_rule_id();
     candidate.grid_cols = static_cast<int>(req->map().grid_columns());
     candidate.grid_rows = static_cast<int>(req->map().grid_rows());
     candidate.grid_size_microunits = req->map().grid_size_microunits();
@@ -399,12 +364,8 @@ grpc::Status MazeServiceImpl::Init(
         }
     }
     candidate.phase = maze::SESSION_PHASE_READY;
-    rsp->mutable_accepted_map_digest()->CopyFrom(
-        req->map().canonical_digest());
-    rsp->set_verified_shortest_action_steps(
-        static_cast<std::uint32_t>(validated.shortest_action_steps));
     CommitCommand(candidate, req->command(), *req, rsp,
-                  "map validated and session initialized");
+                  "map accepted and session initialized");
     if (config_.server.run_mode == aiserver_mode::kTraining) {
         task_controller_ = std::move(candidate_task_controller);
     }
@@ -552,12 +513,6 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     assignment.set_episode_id(episode_id);
     assignment.set_mode(plan.episode_mode);
     assignment.set_max_steps(static_cast<std::uint32_t>(plan.max_steps));
-    if (!training_episode) {
-        assignment.mutable_evaluation_model_artifact_digest()->set_algorithm(
-            common::DIGEST_ALGORITHM_SHA256);
-        assignment.mutable_evaluation_model_artifact_digest()->set_hex(
-            planned_model.artifact_digest());
-    }
     rsp->mutable_assignment()->CopyFrom(assignment);
     CommitCommand(
         candidate, req->command(), *req, rsp,
@@ -751,6 +706,27 @@ grpc::Status MazeServiceImpl::Update(
             return grpc::Status::OK;
         }
 
+        const bool mask_required =
+            config_.training_contract.action_mask_mode == "required";
+        const bool mask_has_available =
+            std::any_of(state.action_mask().begin(),
+                        state.action_mask().end(),
+                        [](bool available) { return available; });
+        if ((state.is_done() && state.action_mask_size() != 0) ||
+            (!state.is_done() && mask_required &&
+             (state.action_mask_size() !=
+                  config_.training_contract.action_count ||
+              !mask_has_available)) ||
+            (!state.is_done() && !mask_required &&
+             state.action_mask_size() != 0)) {
+            RejectCommand(*session,
+                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          "Agent action mask contradicts the TrainingContract",
+                          rsp->mutable_reply());
+            finish();
+            return grpc::Status::OK;
+        }
+
         const bool initial_observation = req->frame_id() == 0;
         if ((initial_observation && state.has_executed_action_id()) ||
             (!initial_observation &&
@@ -790,7 +766,6 @@ grpc::Status MazeServiceImpl::Update(
             (timeout &&
              req->frame_id() != static_cast<std::uint64_t>(
                                         candidate.current_max_steps)) ||
-            (goal != (gx == candidate.end_gx && gy == candidate.end_gy)) ||
             (!agent.has_pending_action &&
              agent.last_observation_frame_id < 0 && state.is_done())) {
             RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
@@ -799,22 +774,6 @@ grpc::Status MazeServiceImpl::Update(
             finish();
             return grpc::Status::OK;
         }
-        if (agent.has_pending_action) {
-            int expected_gx = 0;
-            int expected_gy = 0;
-            if (!ExpectedClientPosition(
-                    candidate, agent.prev_grid_x, agent.prev_grid_y,
-                    agent.pending_action, expected_gx, expected_gy) ||
-                expected_gx != gx || expected_gy != gy) {
-                RejectCommand(*session,
-                              maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
-                              "Client state does not match the assigned action",
-                              rsp->mutable_reply());
-                finish();
-                return grpc::Status::OK;
-            }
-        }
-
         std::string observation_error;
         if (!MazeObservation::ApplyState(
                 candidate, agent, gx, gy,
@@ -942,11 +901,14 @@ grpc::Status MazeServiceImpl::Update(
             int action = 0;
             float log_probability = 0.0f;
             float value = 0.0f;
+            const std::vector<bool> action_mask(
+                state.action_mask().begin(), state.action_mask().end());
             if (!PrepareModelAction(
                     candidate, agent, agent_id,
                     static_cast<int>(state.position().x()),
                     static_cast<int>(state.position().y()),
                     static_cast<int64_t>(req->frame_id()),
+                    action_mask,
                     candidate_segment_sequence,
                     candidate_model_activation_count,
                     candidate_latest_model_used,
@@ -962,7 +924,8 @@ grpc::Status MazeServiceImpl::Update(
             maze::AgentAction response_action;
             response_action.set_agent_id(
                 static_cast<std::uint32_t>(agent_id));
-            response_action.set_action_id(action);
+            response_action.set_action_id(
+                static_cast<maze::MazeAction>(action));
             candidate.last_actions.push_back(response_action);
             prepared_actions.push_back(std::move(response_action));
         }
@@ -1242,12 +1205,20 @@ grpc::Status MazeServiceImpl::EndEpisode(
     candidate.evaluation_pinned_model_checksum.clear();
     const auto episode_outcome =
         BuildEpisodeOutcome(*session, metric_agents);
-    training::EpisodeMetricFact metric_fact;
+    maze_metrics::EpisodeMetricFact metric_fact;
     if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING) {
         metric_fact = BuildEpisodeMetricFact(*session, metric_agents);
+        std::string metric_payload;
+        if (!metric_fact.SerializeToString(&metric_payload)) {
+            RejectCommand(*session,
+                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          "Episode metric payload serialization failed",
+                          rsp->mutable_reply());
+            return grpc::Status::OK;
+        }
         const int64_t observed_at_unix_ms = NowMs();
-        const auto append_result = metric_events_.AppendEpisode(
-            metric_fact, observed_at_unix_ms);
+        const auto append_result = metric_events_.AppendFact(
+            std::move(metric_payload), observed_at_unix_ms);
         if (!append_result.applied()) {
             RejectCommand(*session,
                           maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
@@ -1353,6 +1324,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
             agent.has_pending_action = false;
             agent.pending_action_frame_id = -1;
             agent.pending_obs.clear();
+            agent.pending_action_mask.clear();
             continue;
         }
         if (!agent.segment_open && !agent.has_pending_action &&
@@ -1404,6 +1376,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
                 agent.has_pending_action = false;
                 agent.pending_action_frame_id = -1;
                 agent.pending_obs.clear();
+                agent.pending_action_mask.clear();
             }
         } else {
             DiscardAgentSegment(

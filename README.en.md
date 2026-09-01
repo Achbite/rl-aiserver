@@ -7,9 +7,11 @@ R-PIN segments, GAE/value targets, and processed-transition delivery. For local
 training, start it after Learner is ready and connect Client afterwards.
 
 Local training runs only three containers: Learner, AIServer, and Client.
-`make shell` is a host command that prepares development artifacts from sibling
-source repositories; it does not download those repositories. A fresh workspace
-therefore needs at least these sibling directories:
+`make shell` is a host command. When `aiserver-dev` is absent it builds the
+development image and creates and starts the container. When the container
+exists, it starts it only if needed and enters it directly. It never reads the
+Contracts repository or synchronizes or replaces this checkout's `proto/`. A
+complete three-container workspace has these sibling directories:
 
 ```text
 workspace/
@@ -21,14 +23,15 @@ workspace/
   maze-client/
 ```
 
-The first three repositories supply development artifacts only and do not add
-runtime containers. See [rl-framework](https://github.com/Achbite/rl-framework)
-for the complete three-container startup order.
+The first three repositories add no runtime container. Sample Pool and Model
+Distributor are staged only into Learner. `rl-contracts` changes the Client and
+AIServer Maze Task Proto only through an explicit protocol-sync command. See
+[rl-framework](https://github.com/Achbite/rl-framework) for the startup order.
 
 ## 1. Development container, incremental build, and tests
 
 ```bash
-# Host: build or reuse the independent development image and enter it
+# Host: build/create when absent; otherwise reuse and enter directly
 make shell
 
 # Inside the container: build and test are explicit, separate entrypoints
@@ -37,6 +40,9 @@ bash ./test.sh
 
 # The host can also reuse the same container for a build
 make build
+
+# Explicitly refresh after Dockerfile.dev, toolchain, environment, or mount changes
+make dev-refresh
 ```
 
 The development image does not inherit an old runtime image and uses a
@@ -44,6 +50,10 @@ persistent ccache volume. `ninja: no work to do.` means no source changed; it
 does not automatically rerun tests. Tests may be started only from the
 repository root with `bash ./test.sh`; `build.sh`, Docker image builds, and
 other wrappers do not run them implicitly. Run `make shell` only on the host.
+`make dev-image` rebuilds only the image and never replaces an existing
+container. `make dev-refresh` rebuilds the image and recreates the container. It
+refuses while AIServer, tests, or a build are active. None of these entrypoints
+synchronizes protocols.
 
 ## 2. Run modes
 
@@ -60,9 +70,9 @@ make shell
 # Show the executable CLI-to-config mapping without starting the service
 bash ./run.sh --help
 
-# Deterministic evaluation from an explicit SaveModel.onnx
+# Deterministic evaluation from an explicit ONNX model file
 bash ./run.sh --config configs/server_config.yaml --workload evaluation \
-  --evaluation-model /absolute/path/SaveModel.onnx
+  --evaluation-model /absolute/path/model.onnx
 
 # Training; config supplies defaults and CLI explicitly overrides Learner endpoints
 bash ./run.sh --config configs/server_config.yaml --workload training \
@@ -70,10 +80,12 @@ bash ./run.sh --config configs/server_config.yaml --workload training \
   --model-distributor maze-learner:9200
 ```
 
-The final evaluation config/CLI value must point to a regular, non-symlink
-`SaveModel.onnx`. AIServer does not read a neighboring manifest or accept a
-directory entrypoint. `run.sh` only supervises the process and propagates its
-exit status; only the C++ config/CLI layer interprets business arguments.
+The final evaluation config/CLI value must point to a non-empty, regular,
+non-symlink ONNX file. Its filename and parent-directory layout are not part of
+the AIServer-Client or model-distribution contract. AIServer does not read a
+neighboring manifest or accept a directory entrypoint. `run.sh` only supervises
+the process and propagates its exit status; only the C++ config/CLI layer
+interprets business arguments.
 
 The default workload is `server.run_mode` in `configs/server_config.yaml`, and
 `--workload` only overrides that field. Reward formulas and numeric values are
@@ -91,6 +103,13 @@ in-process SampleDistributor. The only authority for the actual Agent count is
 a capacity limit. Client, task configuration, Learner, and SamplePool expose no
 second Agent-count authority.
 
+The Training Contract and
+`OpenSessionRsp.environment.action_mask_mode` explicitly select `disabled` or
+`required`. With masks disabled, Client state and training samples carry none.
+When required, AIServer validates the action dimension, masks unavailable logits,
+and carries the same mask into the transition consumed by Learner. It is not a
+mandatory default capability.
+
 AIServer validates segment continuity, close reason, termination semantics, and
 bootstrap exactly once when it closes the segment. These producer-internal
 facts are absent from `ProcessedTransition`; Learner and SamplePool receive only
@@ -102,7 +121,7 @@ and finite-inference checks:
 
 ```bash
 /opt/rl/aiserver/bin/maze_aiserver \
-  --inspect-model /absolute/path/SaveModel.onnx
+  --inspect-model /absolute/path/model.onnx
 ```
 
 The inspector emits only tensor identity; it loads no service configuration and
@@ -127,22 +146,41 @@ Models always come from the isolated training invocation's Learner Model Distrib
 
 ## 4. Build the runtime image
 
-The runtime image is built from the current worktree so development can follow
-edit, build, validate locally, and only then commit. Git clean/dirty state is
-diagnostic provenance, not a build admission gate. The Contracts artifact that is
-actually packaged must still be synchronized. Run from the host:
+The runtime image compiles the current worktree and repository-local `proto/`.
+Normal builds do not read the Contracts repository or compare Client/AIServer
+source, generator, hash, or platform identities. Only when intentionally
+adopting the current Maze release should you run the Framework command and review
+this repository's diff:
 
 ```bash
-bash scripts/sync_contract_snapshot.sh
+(cd ../rl-framework && bash sync_maze_protocol.sh)
+```
+
+Then build the current source with a project tag from the host:
+
+```bash
 RL_PROJECT_IMAGE_TAG=maze-tag-001 bash build_image.sh
 ```
 
 The build never consumes development artifacts or a development-container build
-directory. The full image reference is `rl-training/aiserver:maze-tag-001`, and a
-later tuning build may overwrite the same tag. Existing source-identity labels are
-diagnostic artifact facts and no longer determine the image tag.
+directory. AIServer still validates model/training tensor semantics against the
+fields and digest in its repository-owned Training Contract, but it does not use
+a central manifest package, platform, or cross-repository hash to lock Client
+communication. The full image reference is `rl-training/aiserver:maze-tag-001`,
+and a later tuning build may overwrite the same tag.
 
-## 5. Default addresses
+## 5. Refresh or remove the development container
+
+```bash
+make dev-refresh
+make dev-clean
+```
+
+`dev-refresh` preserves source and the ccache volume while replacing the
+development image/container environment. `dev-clean` removes the development
+container. Neither command synchronizes protocols.
+
+## 6. Default addresses
 
 | Service | Address |
 | --- | --- |

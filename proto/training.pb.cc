@@ -61,6 +61,7 @@ PROTOBUF_CONSTEXPR ProcessedTransition::ProcessedTransition(
     /*decltype(_impl_._has_bits_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
   , /*decltype(_impl_.observation_)*/{}
+  , /*decltype(_impl_.action_mask_)*/{}
   , /*decltype(_impl_.item_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.action_)*/0
   , /*decltype(_impl_.behavior_log_probability_)*/0
@@ -366,89 +367,13 @@ struct RawMetricSumCountDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RawMetricSumCountDefaultTypeInternal _RawMetricSumCount_default_instance_;
-PROTOBUF_CONSTEXPR AgentEpisodeMetricFact::AgentEpisodeMetricFact(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.reward_components_)*/{}
-  , /*decltype(_impl_.termination_reason_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.behavior_model_lineage_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.episode_return_)*/0
-  , /*decltype(_impl_.agent_id_)*/0u
-  , /*decltype(_impl_.success_)*/false
-  , /*decltype(_impl_.transition_count_)*/uint64_t{0u}
-  , /*decltype(_impl_.unique_cell_count_)*/uint64_t{0u}
-  , /*decltype(_impl_.blocked_move_count_)*/uint64_t{0u}
-  , /*decltype(_impl_.attempted_move_count_)*/uint64_t{0u}
-  , /*decltype(_impl_.shortest_action_steps_)*/0u
-  , /*decltype(_impl_.goal_rank_group_)*/0u
-  , /*decltype(_impl_.minimum_behavior_model_step_)*/uint64_t{0u}
-  , /*decltype(_impl_.maximum_behavior_model_step_)*/uint64_t{0u}
-  , /*decltype(_impl_.terminal_frame_id_)*/uint64_t{0u}} {}
-struct AgentEpisodeMetricFactDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR AgentEpisodeMetricFactDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~AgentEpisodeMetricFactDefaultTypeInternal() {}
-  union {
-    AgentEpisodeMetricFact _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AgentEpisodeMetricFactDefaultTypeInternal _AgentEpisodeMetricFact_default_instance_;
-PROTOBUF_CONSTEXPR EpisodeMetricFact::EpisodeMetricFact(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.agents_)*/{}
-  , /*decltype(_impl_.environment_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.episode_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.training_contract_digest_)*/nullptr
-  , /*decltype(_impl_._cached_size_)*/{}} {}
-struct EpisodeMetricFactDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR EpisodeMetricFactDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~EpisodeMetricFactDefaultTypeInternal() {}
-  union {
-    EpisodeMetricFact _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EpisodeMetricFactDefaultTypeInternal _EpisodeMetricFact_default_instance_;
-PROTOBUF_CONSTEXPR TrainUpdateMetricFact::TrainUpdateMetricFact(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.ppo_statistics_)*/{}
-  , /*decltype(_impl_.train_update_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.delivery_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.behavior_model_lineage_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.published_model_)*/nullptr
-  , /*decltype(_impl_.training_contract_digest_)*/nullptr
-  , /*decltype(_impl_.rollout_estimator_profile_digest_)*/nullptr
-  , /*decltype(_impl_.train_update_sequence_)*/uint64_t{0u}
-  , /*decltype(_impl_.cumulative_trained_samples_)*/int64_t{0}
-  , /*decltype(_impl_.actual_batch_size_)*/int64_t{0}
-  , /*decltype(_impl_.minimum_behavior_model_step_)*/uint64_t{0u}
-  , /*decltype(_impl_.maximum_behavior_model_step_)*/uint64_t{0u}
-  , /*decltype(_impl_.requested_train_batch_size_)*/int64_t{0}
-  , /*decltype(_impl_.pool_draw_slot_count_)*/int64_t{0}
-  , /*decltype(_impl_.unique_item_count_)*/int64_t{0}
-  , /*decltype(_impl_.duplicate_item_slot_count_)*/int64_t{0}
-  , /*decltype(_impl_.sample_evaluation_count_)*/int64_t{0}
-  , /*decltype(_impl_.optimizer_step_count_)*/int64_t{0}} {}
-struct TrainUpdateMetricFactDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR TrainUpdateMetricFactDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~TrainUpdateMetricFactDefaultTypeInternal() {}
-  union {
-    TrainUpdateMetricFact _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TrainUpdateMetricFactDefaultTypeInternal _TrainUpdateMetricFact_default_instance_;
 PROTOBUF_CONSTEXPR MetricEvent::MetricEvent(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_._has_bits_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_.fact_payload_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.event_sequence_)*/uint64_t{0u}
-  , /*decltype(_impl_.observed_at_unix_ms_)*/int64_t{0}
-  , /*decltype(_impl_.fact_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+  , /*decltype(_impl_.observed_at_unix_ms_)*/int64_t{0}} {}
 struct MetricEventDefaultTypeInternal {
   PROTOBUF_CONSTEXPR MetricEventDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -854,7 +779,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace v1
 }  // namespace training
 }  // namespace rl
-static ::_pb::Metadata file_level_metadata_training_2eproto[43];
+static ::_pb::Metadata file_level_metadata_training_2eproto[40];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_training_2eproto[16];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_training_2eproto = nullptr;
 
@@ -898,6 +823,7 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransition, _impl_.value_target_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransition, _impl_.behavior_model_step_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransition, _impl_.created_at_unix_ms_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransition, _impl_.action_mask_),
   ~0u,
   ~0u,
   ~0u,
@@ -906,6 +832,7 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,
   ~0u,
   0,
+  ~0u,
   ~0u,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _internal_metadata_),
@@ -1161,108 +1088,17 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.field_id_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.sum_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.agent_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.episode_return_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.transition_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.success_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.termination_reason_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.shortest_action_steps_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.unique_cell_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.blocked_move_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.attempted_move_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.reward_components_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.minimum_behavior_model_step_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.maximum_behavior_model_step_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.behavior_model_lineage_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.terminal_frame_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AgentEpisodeMetricFact, _impl_.goal_rank_group_),
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  1,
-  2,
-  ~0u,
-  3,
-  0,
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.environment_instance_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.episode_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.training_contract_digest_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::EpisodeMetricFact, _impl_.agents_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_._has_bits_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.train_update_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.train_update_sequence_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.published_model_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.delivery_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.training_contract_digest_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.cumulative_trained_samples_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.actual_batch_size_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.minimum_behavior_model_step_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.maximum_behavior_model_step_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.ppo_statistics_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.behavior_model_lineage_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.requested_train_batch_size_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.pool_draw_slot_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.unique_item_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.duplicate_item_slot_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.sample_evaluation_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.optimizer_step_count_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::TrainUpdateMetricFact, _impl_.rollout_estimator_profile_digest_),
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  0,
-  1,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_._has_bits_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _internal_metadata_),
   ~0u,  // no _extensions_
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_._oneof_case_[0]),
+  ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.event_sequence_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.observed_at_unix_ms_),
-  ::_pbi::kInvalidFieldOffsetTag,
-  ::_pbi::kInvalidFieldOffsetTag,
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.fact_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_.fact_payload_),
   ~0u,
   0,
-  ~0u,
   ~0u,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSequenceGap, _internal_metadata_),
@@ -1562,47 +1398,44 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 10, -1, sizeof(::rl::training::v1::ModelIdentity)},
   { 14, -1, -1, sizeof(::rl::training::v1::RolloutEstimatorProfile)},
-  { 24, 39, -1, sizeof(::rl::training::v1::ProcessedTransition)},
-  { 48, -1, -1, sizeof(::rl::training::v1::ProcessedTransitionEnvelope)},
-  { 60, -1, -1, sizeof(::rl::training::v1::SamplePoolItem)},
-  { 70, -1, -1, sizeof(::rl::training::v1::PushSamplesReq)},
-  { 77, -1, -1, sizeof(::rl::training::v1::PushSamplesRsp)},
-  { 89, -1, -1, sizeof(::rl::training::v1::GetBatchReq)},
-  { 100, -1, -1, sizeof(::rl::training::v1::GetBatchRsp)},
-  { 112, -1, -1, sizeof(::rl::training::v1::AckBatchReq)},
-  { 122, -1, -1, sizeof(::rl::training::v1::NackBatchReq)},
-  { 131, -1, -1, sizeof(::rl::training::v1::RenewLeaseReq)},
-  { 140, -1, -1, sizeof(::rl::training::v1::DeliveryRsp)},
-  { 152, -1, -1, sizeof(::rl::training::v1::FinalizeSamplePoolReq)},
-  { 161, 172, -1, sizeof(::rl::training::v1::FinalizeSamplePoolRsp)},
-  { 177, -1, -1, sizeof(::rl::training::v1::SamplePoolStatusReq)},
-  { 183, 241, -1, sizeof(::rl::training::v1::SamplePoolStatusRsp)},
-  { 293, -1, -1, sizeof(::rl::training::v1::RawMetricSumCount)},
-  { 302, 323, -1, sizeof(::rl::training::v1::AgentEpisodeMetricFact)},
-  { 338, -1, -1, sizeof(::rl::training::v1::EpisodeMetricFact)},
-  { 348, 372, -1, sizeof(::rl::training::v1::TrainUpdateMetricFact)},
-  { 390, 401, -1, sizeof(::rl::training::v1::MetricEvent)},
-  { 405, -1, -1, sizeof(::rl::training::v1::MetricSequenceGap)},
-  { 415, -1, -1, sizeof(::rl::training::v1::MetricBatch)},
-  { 434, -1, -1, sizeof(::rl::training::v1::MetricBatchCursor)},
-  { 444, -1, -1, sizeof(::rl::training::v1::GetMetricBatchReq)},
-  { 456, -1, -1, sizeof(::rl::training::v1::GetMetricBatchRsp)},
-  { 468, -1, -1, sizeof(::rl::training::v1::AckMetricBatchReq)},
-  { 477, -1, -1, sizeof(::rl::training::v1::AckMetricBatchRsp)},
-  { 489, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
-  { 495, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
-  { 541, -1, -1, sizeof(::rl::training::v1::SegmentCloseCount)},
-  { 549, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
-  { 562, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
-  { 571, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
-  { 581, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
-  { 590, 602, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
-  { 608, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
-  { 616, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
-  { 625, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
-  { 636, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
-  { 645, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
-  { 651, 678, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
+  { 24, 40, -1, sizeof(::rl::training::v1::ProcessedTransition)},
+  { 50, -1, -1, sizeof(::rl::training::v1::ProcessedTransitionEnvelope)},
+  { 62, -1, -1, sizeof(::rl::training::v1::SamplePoolItem)},
+  { 72, -1, -1, sizeof(::rl::training::v1::PushSamplesReq)},
+  { 79, -1, -1, sizeof(::rl::training::v1::PushSamplesRsp)},
+  { 91, -1, -1, sizeof(::rl::training::v1::GetBatchReq)},
+  { 102, -1, -1, sizeof(::rl::training::v1::GetBatchRsp)},
+  { 114, -1, -1, sizeof(::rl::training::v1::AckBatchReq)},
+  { 124, -1, -1, sizeof(::rl::training::v1::NackBatchReq)},
+  { 133, -1, -1, sizeof(::rl::training::v1::RenewLeaseReq)},
+  { 142, -1, -1, sizeof(::rl::training::v1::DeliveryRsp)},
+  { 154, -1, -1, sizeof(::rl::training::v1::FinalizeSamplePoolReq)},
+  { 163, 174, -1, sizeof(::rl::training::v1::FinalizeSamplePoolRsp)},
+  { 179, -1, -1, sizeof(::rl::training::v1::SamplePoolStatusReq)},
+  { 185, 243, -1, sizeof(::rl::training::v1::SamplePoolStatusRsp)},
+  { 295, -1, -1, sizeof(::rl::training::v1::RawMetricSumCount)},
+  { 304, 313, -1, sizeof(::rl::training::v1::MetricEvent)},
+  { 316, -1, -1, sizeof(::rl::training::v1::MetricSequenceGap)},
+  { 326, -1, -1, sizeof(::rl::training::v1::MetricBatch)},
+  { 345, -1, -1, sizeof(::rl::training::v1::MetricBatchCursor)},
+  { 355, -1, -1, sizeof(::rl::training::v1::GetMetricBatchReq)},
+  { 367, -1, -1, sizeof(::rl::training::v1::GetMetricBatchRsp)},
+  { 379, -1, -1, sizeof(::rl::training::v1::AckMetricBatchReq)},
+  { 388, -1, -1, sizeof(::rl::training::v1::AckMetricBatchRsp)},
+  { 400, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
+  { 406, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
+  { 452, -1, -1, sizeof(::rl::training::v1::SegmentCloseCount)},
+  { 460, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
+  { 473, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
+  { 482, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
+  { 492, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
+  { 501, 513, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
+  { 519, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
+  { 527, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
+  { 536, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
+  { 547, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
+  { 556, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
+  { 562, 589, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1624,9 +1457,6 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::rl::training::v1::_SamplePoolStatusReq_default_instance_._instance,
   &::rl::training::v1::_SamplePoolStatusRsp_default_instance_._instance,
   &::rl::training::v1::_RawMetricSumCount_default_instance_._instance,
-  &::rl::training::v1::_AgentEpisodeMetricFact_default_instance_._instance,
-  &::rl::training::v1::_EpisodeMetricFact_default_instance_._instance,
-  &::rl::training::v1::_TrainUpdateMetricFact_default_instance_._instance,
   &::rl::training::v1::_MetricEvent_default_instance_._instance,
   &::rl::training::v1::_MetricSequenceGap_default_instance_._instance,
   &::rl::training::v1::_MetricBatch_default_instance_._instance,
@@ -1666,487 +1496,443 @@ const char descriptor_table_protodef_training_2eproto[] PROTOBUF_SECTION_VARIABL
   "minal_bootstrap_semantics_idR\027value_targ"
   "et_formula_idR\021value_head_abi_idR\027reward"
   "_semantics_digestR\rnumeric_dtypeR\016finite"
-  "_rule_idR\026model_pin_semantics_id\"\204\002\n\023Pro"
+  "_rule_idR\026model_pin_semantics_id\"\231\002\n\023Pro"
   "cessedTransition\022\017\n\007item_id\030\001 \001(\t\022\023\n\013obs"
   "ervation\030\002 \003(\002\022\016\n\006action\030\003 \001(\005\022 \n\030behavi"
   "or_log_probability\030\004 \001(\002\022\026\n\016behavior_val"
   "ue\030\005 \001(\002\022\021\n\tadvantage\030\006 \001(\002\022\024\n\014value_tar"
   "get\030\007 \001(\002\022 \n\023behavior_model_step\030\010 \001(\004H\000"
-  "\210\001\001\022\032\n\022created_at_unix_ms\030\t \001(\003B\026\n\024_beha"
-  "vior_model_step\"\314\002\n\033ProcessedTransitionE"
-  "nvelope\022\023\n\013envelope_id\030\001 \001(\t\0223\n\016payload_"
-  "digest\030\002 \001(\0132\033.rl.common.v1.ContentDiges"
-  "t\0227\n\010producer\030\003 \001(\0132%.rl.common.v1.Servi"
-  "ceInstanceIdentity\022=\n\030training_contract_"
-  "digest\030\004 \001(\0132\033.rl.common.v1.ContentDiges"
-  "t\0225\n\016behavior_model\030\005 \001(\0132\035.rl.training."
-  "v1.ModelIdentity\0224\n\007samples\030\006 \003(\0132#.rl.t"
-  "raining.v1.ProcessedTransition\"\223\001\n\016Sampl"
-  "ePoolItem\0227\n\ntransition\030\001 \001(\0132#.rl.train"
-  "ing.v1.ProcessedTransition\022\027\n\017insert_seq"
-  "uence\030\002 \001(\004\022\033\n\023inserted_at_unix_ms\030\003 \001(\003"
-  "\022\022\n\ndraw_count\030\004 \001(\r\"`\n\016PushSamplesReq\022="
-  "\n\010envelope\030\002 \001(\0132+.rl.training.v1.Proces"
-  "sedTransitionEnvelopeJ\004\010\001\020\002R\tcredit_id\"\212"
-  "\002\n\016PushSamplesRsp\022*\n\006result\030\001 \001(\0162\032.rl.t"
-  "raining.v1.PushResult\022\017\n\007message\030\002 \001(\t\022\023"
-  "\n\013envelope_id\030\003 \001(\t\0225\n\016pressure_state\030\004 "
-  "\001(\0162\035.rl.training.v1.PressureState\022:\n\013sa"
-  "mple_pool\030\005 \001(\0132%.rl.common.v1.ServiceIn"
-  "stanceIdentity\0223\n\016payload_digest\030\006 \001(\0132\033"
-  ".rl.common.v1.ContentDigest\"\333\001\n\013GetBatch"
-  "Req\022\035\n\025requested_transitions\030\001 \001(\005\022\022\n\nti"
-  "meout_ms\030\002 \001(\005\0227\n\010consumer\030\003 \001(\0132%.rl.co"
-  "mmon.v1.ServiceInstanceIdentity\022\030\n\020lease"
-  "_timeout_ms\030\004 \001(\005\022F\n!required_training_c"
-  "ontract_digest\030\005 \001(\0132\033.rl.common.v1.Cont"
-  "entDigest\"\356\001\n\013GetBatchRsp\022.\n\006result\030\001 \001("
-  "\0162\036.rl.training.v1.GetBatchResult\022\017\n\007mes"
-  "sage\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022\036\n\026lease"
-  "_deadline_unix_ms\030\004 \001(\003\022-\n\005items\030\005 \003(\0132\036"
-  ".rl.training.v1.SamplePoolItem\022:\n\013sample"
-  "_pool\030\006 \001(\0132%.rl.common.v1.ServiceInstan"
-  "ceIdentity\"\251\001\n\013AckBatchReq\0227\n\010consumer\030\001"
-  " \001(\0132%.rl.common.v1.ServiceInstanceIdent"
-  "ity\022\023\n\013delivery_id\030\002 \001(\t\0223\n\013disposition\030"
-  "\003 \001(\0162\036.rl.training.v1.AckDisposition\022\027\n"
-  "\017train_update_id\030\004 \001(\t\"l\n\014NackBatchReq\0227"
-  "\n\010consumer\030\001 \001(\0132%.rl.common.v1.ServiceI"
-  "nstanceIdentity\022\023\n\013delivery_id\030\002 \001(\t\022\016\n\006"
-  "reason\030\003 \001(\t\"w\n\rRenewLeaseReq\0227\n\010consume"
-  "r\030\001 \001(\0132%.rl.common.v1.ServiceInstanceId"
-  "entity\022\023\n\013delivery_id\030\002 \001(\t\022\030\n\020lease_tim"
-  "eout_ms\030\003 \001(\005\"\321\001\n\013DeliveryRsp\022.\n\006result\030"
-  "\001 \001(\0162\036.rl.training.v1.DeliveryResult\022\017\n"
-  "\007message\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001(\t\022\036\n\026l"
-  "ease_deadline_unix_ms\030\004 \001(\003\0223\n\013dispositi"
-  "on\030\005 \001(\0162\036.rl.training.v1.AckDisposition"
-  "\022\027\n\017train_update_id\030\006 \001(\t\"\256\001\n\025FinalizeSa"
-  "mplePoolReq\0227\n\010consumer\030\001 \001(\0132%.rl.commo"
-  "n.v1.ServiceInstanceIdentity\022C\n\024expected"
-  "_sample_pool\030\002 \001(\0132%.rl.common.v1.Servic"
-  "eInstanceIdentity\022\027\n\017finalization_id\030\003 \001"
-  "(\t\"\363\001\n\025FinalizeSamplePoolRsp\0228\n\006result\030\001"
-  " \001(\0162(.rl.training.v1.SamplePoolFinalize"
-  "Result\022\017\n\007message\030\002 \001(\t\022\027\n\017finalization_"
-  "id\030\003 \001(\t\022:\n\013sample_pool\030\004 \001(\0132%.rl.commo"
-  "n.v1.ServiceInstanceIdentity\022!\n\024finalize"
-  "d_at_unix_ms\030\005 \001(\003H\000\210\001\001B\027\n\025_finalized_at"
-  "_unix_ms\"\025\n\023SamplePoolStatusReq\"\202\024\n\023Samp"
-  "lePoolStatusRsp\0220\n\010contract\030\001 \001(\0132\036.rl.c"
-  "ommon.v1.ContractIdentity\022:\n\013sample_pool"
-  "\030\002 \001(\0132%.rl.common.v1.ServiceInstanceIde"
-  "ntity\022\r\n\005ready\030\003 \001(\010\022\032\n\022push_attempt_cou"
-  "nt\030\004 \001(\003\022#\n\033accepted_unique_transitions\030"
-  "\005 \001(\003\022!\n\031accepted_unique_envelopes\030\006 \001(\003"
-  "\022$\n\034duplicate_push_attempt_count\030\007 \001(\003\022%"
-  "\n\035duplicate_transition_attempts\030\010 \001(\003\022#\n"
-  "\033rejected_push_attempt_count\030\t \001(\003\022$\n\034re"
-  "jected_transition_attempts\030\n \001(\003\022 \n\030acke"
-  "d_unique_transitions\030\013 \001(\003\022\037\n\027acked_uniq"
-  "ue_deliveries\030\014 \001(\003\022\031\n\021ready_transitions"
-  "\030\r \001(\003\022\032\n\022leased_transitions\030\017 \001(\003\022\034\n\024re"
-  "sident_transitions\030\021 \001(\003\022\032\n\022resident_env"
-  "elopes\030\022 \001(\003\022 \n\030resident_estimated_bytes"
-  "\030\023 \001(\003\022\034\n\024capacity_transitions\030\024 \001(\003\022\026\n\016"
-  "capacity_bytes\030\026 \001(\003\0225\n\016pressure_state\030\027"
-  " \001(\0162\035.rl.training.v1.PressureState\022\030\n\020r"
-  "edelivery_count\030\030 \001(\003\022\022\n\nnack_count\030\031 \001("
-  "\003\022\033\n\023expired_lease_count\030\032 \001(\003\022\"\n\025latest"
-  "_ack_at_unix_ms\030\033 \001(\003H\000\210\001\001\022\030\n\020target_hit"
-  "_count\030\034 \001(\003\022\031\n\021partial_get_count\030\035 \001(\003\022"
-  "\033\n\023empty_timeout_count\030\036 \001(\003\022\022\n\nlast_err"
-  "or\030\037 \001(\t\022 \n\030trained_transition_count\030! \001"
-  "(\003\022 \n\030invalid_transition_count\030# \001(\003\022+\n#"
-  "shutdown_untrained_transition_count\030$ \001("
-  "\003\022\031\n\021lease_renew_count\030% \001(\003\0227\n\014backend_"
-  "type\030& \001(\0162!.rl.training.v1.SampleBacken"
-  "dType\022 \n\030max_concurrent_consumers\030\' \001(\005\022"
-  "\035\n\025active_consumer_count\030( \001(\005\022\033\n\023consum"
-  "er_busy_count\030) \001(\003\022\025\n\ringress_ready\030* \001"
-  "(\010\022\022\n\npool_ready\030+ \001(\010\022\031\n\021timestamp_unix"
-  "_ms\030, \001(\003\022+\n\036oldest_ready_transition_age"
-  "_ms\030- \001(\003H\001\210\001\001\022%\n\030minimum_ready_model_st"
-  "ep\030. \001(\004H\002\210\001\001\022%\n\030maximum_ready_model_ste"
-  "p\030/ \001(\004H\003\210\001\001\022 \n\030evicted_transition_count"
-  "\030B \001(\003\022\036\n\026evicted_envelope_count\030C \001(\003\022\021"
-  "\n\tfinalized\030D \001(\010\022\027\n\017finalization_id\030E \001"
-  "(\t\022!\n\024finalized_at_unix_ms\030F \001(\003H\004\210\001\001\022\"\n"
-  "\032finalized_transition_count\030G \001(\003\022\032\n\022dra"
-  "w_attempt_count\030I \001(\003\022#\n\033drawn_transitio"
-  "n_slot_count\030J \001(\003\022*\n\"unsampled_evicted_"
-  "transition_count\030K \001(\003\0221\n)previously_dra"
-  "wn_evicted_transition_count\030L \001(\003B\030\n\026_la"
-  "test_ack_at_unix_msB!\n\037_oldest_ready_tra"
-  "nsition_age_msB\033\n\031_minimum_ready_model_s"
-  "tepB\033\n\031_maximum_ready_model_stepB\027\n\025_fin"
-  "alized_at_unix_msJ\004\010\016\020\017J\004\010\020\020\021J\004\010\025\020\026J\004\010 \020"
-  "!J\004\010\"\020#J\004\0100\020BJ\004\010H\020IR\021behavior_versionsR\033"
-  "minimum_ready_model_versionR\033maximum_rea"
-  "dy_model_versionR\025ready_queue_fragmentsR"
-  "\020leased_fragmentsR\022capacity_fragmentsR\016b"
-  "ehavior_stepsR\022stale_sample_countR\023activ"
-  "e_demand_countR\023active_demand_epochR\024act"
-  "ive_demand_age_msR\020reserved_samplesR\022res"
-  "erved_fragmentsR\030reserved_estimated_byte"
-  "sR\024credit_request_countR\022credit_grant_co"
-  "untR\023credit_commit_countR\024credit_release"
-  "_countR\023credit_expire_countR\023credit_revo"
-  "ke_countR\033credit_wait_no_demand_countR c"
-  "redit_wait_inflight_limit_countR\032credit_"
-  "wait_capacity_countR\032credit_wait_drainin"
-  "g_countR\023demand_upsert_countR\024demand_rel"
-  "ease_countR\030finalized_fragment_count\"A\n\021"
-  "RawMetricSumCount\022\020\n\010field_id\030\001 \001(\t\022\013\n\003s"
-  "um\030\002 \001(\001\022\r\n\005count\030\003 \001(\004\"\222\005\n\026AgentEpisode"
-  "MetricFact\022\020\n\010agent_id\030\001 \001(\r\022\026\n\016episode_"
-  "return\030\002 \001(\001\022\030\n\020transition_count\030\003 \001(\004\022\017"
-  "\n\007success\030\004 \001(\010\022\032\n\022termination_reason\030\005 "
-  "\001(\t\022\035\n\025shortest_action_steps\030\006 \001(\r\022\031\n\021un"
-  "ique_cell_count\030\007 \001(\004\022\032\n\022blocked_move_co"
-  "unt\030\010 \001(\004\022\034\n\024attempted_move_count\030\t \001(\004\022"
-  "<\n\021reward_components\030\n \003(\0132!.rl.training"
-  ".v1.RawMetricSumCount\022(\n\033minimum_behavio"
-  "r_model_step\030\013 \001(\004H\000\210\001\001\022(\n\033maximum_behav"
-  "ior_model_step\030\014 \001(\004H\001\210\001\001\022!\n\031behavior_mo"
-  "del_lineage_id\030\r \001(\t\022\036\n\021terminal_frame_i"
-  "d\030\016 \001(\004H\002\210\001\001\022\034\n\017goal_rank_group\030\017 \001(\rH\003\210"
-  "\001\001B\036\n\034_minimum_behavior_model_stepB\036\n\034_m"
-  "aximum_behavior_model_stepB\024\n\022_terminal_"
-  "frame_idB\022\n\020_goal_rank_groupR\032behavior_m"
-  "odel_version_minR\032behavior_model_version"
-  "_max\"\316\001\n\021EpisodeMetricFact\022\037\n\027environmen"
-  "t_instance_id\030\002 \001(\t\022\022\n\nepisode_id\030\003 \001(\t\022"
-  "=\n\030training_contract_digest\030\004 \001(\0132\033.rl.c"
-  "ommon.v1.ContentDigest\0226\n\006agents\030\005 \003(\0132&"
-  ".rl.training.v1.AgentEpisodeMetricFactJ\004"
-  "\010\001\020\002R\007task_id\"\312\006\n\025TrainUpdateMetricFact\022"
-  "\027\n\017train_update_id\030\001 \001(\t\022\035\n\025train_update"
-  "_sequence\030\002 \001(\004\0226\n\017published_model\030\003 \001(\013"
-  "2\035.rl.training.v1.ModelIdentity\022\023\n\013deliv"
-  "ery_id\030\004 \001(\t\022=\n\030training_contract_digest"
-  "\030\005 \001(\0132\033.rl.common.v1.ContentDigest\022\"\n\032c"
-  "umulative_trained_samples\030\006 \001(\003\022\031\n\021actua"
-  "l_batch_size\030\007 \001(\003\022(\n\033minimum_behavior_m"
-  "odel_step\030\010 \001(\004H\000\210\001\001\022(\n\033maximum_behavior"
-  "_model_step\030\t \001(\004H\001\210\001\001\0229\n\016ppo_statistics"
-  "\030\n \003(\0132!.rl.training.v1.RawMetricSumCoun"
-  "t\022!\n\031behavior_model_lineage_id\030\013 \001(\t\022\"\n\032"
-  "requested_train_batch_size\030\014 \001(\003\022\034\n\024pool"
-  "_draw_slot_count\030\r \001(\003\022\031\n\021unique_item_co"
-  "unt\030\016 \001(\003\022!\n\031duplicate_item_slot_count\030\017"
-  " \001(\003\022\037\n\027sample_evaluation_count\030\020 \001(\003\022\034\n"
-  "\024optimizer_step_count\030\021 \001(\003\022E\n rollout_e"
-  "stimator_profile_digest\030\022 \001(\0132\033.rl.commo"
-  "n.v1.ContentDigestB\036\n\034_minimum_behavior_"
-  "model_stepB\036\n\034_maximum_behavior_model_st"
-  "epR\032behavior_model_version_minR\032behavior"
-  "_model_version_max\"\233\002\n\013MetricEvent\022\026\n\016ev"
-  "ent_sequence\030\004 \001(\004\022 \n\023observed_at_unix_m"
-  "s\030\005 \001(\003H\001\210\001\001\0224\n\007episode\030\006 \001(\0132!.rl.train"
-  "ing.v1.EpisodeMetricFactH\000\022=\n\014train_upda"
-  "te\030\007 \001(\0132%.rl.training.v1.TrainUpdateMet"
-  "ricFactH\000B\006\n\004factB\026\n\024_observed_at_unix_m"
-  "sJ\004\010\001\020\004R\010contractR\017schema_identityR\006sour"
-  "ceR\024committed_at_unix_ms\"\237\001\n\021MetricSeque"
-  "nceGap\022(\n first_unavailable_event_sequen"
-  "ce\030\001 \001(\004\022\'\n\037last_unavailable_event_seque"
-  "nce\030\002 \001(\004\022\'\n\037oldest_available_event_sequ"
-  "ence\030\003 \001(\004\022\016\n\006reason\030\004 \001(\t\"\227\004\n\013MetricBat"
-  "ch\0220\n\010contract\030\001 \001(\0132\036.rl.common.v1.Cont"
-  "ractIdentity\0225\n\017schema_identity\030\002 \001(\0132\034."
-  "rl.common.v1.SchemaIdentity\0225\n\006source\030\003 "
-  "\001(\0132%.rl.common.v1.ServiceInstanceIdenti"
-  "ty\022\026\n\016batch_sequence\030\004 \001(\004\0221\n\014batch_dige"
-  "st\030\005 \001(\0132\033.rl.common.v1.ContentDigest\022\032\n"
-  "\022created_at_unix_ms\030\006 \001(\003\022\034\n\024first_event"
-  "_sequence\030\007 \001(\004\022\033\n\023last_event_sequence\030\010"
-  " \001(\004\022+\n\006events\030\t \003(\0132\033.rl.training.v1.Me"
-  "tricEvent\022\021\n\theartbeat\030\n \001(\010\022\024\n\014source_f"
-  "inal\030\013 \001(\010\022\034\n\024final_event_sequence\030\014 \001(\004"
-  "\022.\n\003gap\030\016 \001(\0132!.rl.training.v1.MetricSeq"
-  "uenceGapJ\004\010\r\020\016R\034event_time_watermark_uni"
-  "x_ms\"\324\001\n\021MetricBatchCursor\0225\n\006source\030\001 \001"
-  "(\0132%.rl.common.v1.ServiceInstanceIdentit"
-  "y\022#\n\033acknowledged_batch_sequence\030\002 \001(\004\022#"
-  "\n\033acknowledged_event_sequence\030\003 \001(\004\022>\n\031a"
-  "cknowledged_batch_digest\030\004 \001(\0132\033.rl.comm"
-  "on.v1.ContentDigest\"\361\001\n\021GetMetricBatchRe"
-  "q\0220\n\010contract\030\001 \001(\0132\036.rl.common.v1.Contr"
-  "actIdentity\0227\n\010consumer\030\002 \001(\0132%.rl.commo"
-  "n.v1.ServiceInstanceIdentity\0221\n\006cursor\030\003"
-  " \001(\0132!.rl.training.v1.MetricBatchCursor\022"
-  "\022\n\nmax_events\030\004 \001(\r\022\021\n\tmax_bytes\030\005 \001(\003\022\027"
-  "\n\017wait_timeout_ms\030\006 \001(\005\"\216\002\n\021GetMetricBat"
-  "chRsp\0221\n\006result\030\001 \001(\0162!.rl.training.v1.M"
-  "etricBatchResult\022\017\n\007message\030\002 \001(\t\022*\n\005bat"
-  "ch\030\003 \001(\0132\033.rl.training.v1.MetricBatch\0227\n"
-  "\010producer\030\004 \001(\0132%.rl.common.v1.ServiceIn"
-  "stanceIdentity\022\'\n\037oldest_available_event"
-  "_sequence\030\005 \001(\004\022\'\n\037latest_available_even"
-  "t_sequence\030\006 \001(\004\"\261\001\n\021AckMetricBatchReq\0220"
-  "\n\010contract\030\001 \001(\0132\036.rl.common.v1.Contract"
-  "Identity\0227\n\010consumer\030\002 \001(\0132%.rl.common.v"
-  "1.ServiceInstanceIdentity\0221\n\006cursor\030\003 \001("
-  "\0132!.rl.training.v1.MetricBatchCursor\"\242\002\n"
-  "\021AckMetricBatchRsp\0224\n\006result\030\001 \001(\0162$.rl."
-  "training.v1.MetricBatchAckResult\022\017\n\007mess"
-  "age\030\002 \001(\t\0227\n\010producer\030\003 \001(\0132%.rl.common."
-  "v1.ServiceInstanceIdentity\022\'\n\037oldest_ava"
-  "ilable_event_sequence\030\004 \001(\004\022\'\n\037latest_av"
-  "ailable_event_sequence\030\005 \001(\004\022;\n\020committe"
-  "d_cursor\030\006 \001(\0132!.rl.training.v1.MetricBa"
-  "tchCursor\"\023\n\021AIServerStatusReq\"\224\r\n\021AISer"
-  "verStatusRsp\0220\n\010contract\030\001 \001(\0132\036.rl.comm"
-  "on.v1.ContractIdentity\0227\n\010aiserver\030\002 \001(\013"
+  "\210\001\001\022\032\n\022created_at_unix_ms\030\t \001(\003\022\023\n\013actio"
+  "n_mask\030\n \003(\010B\026\n\024_behavior_model_step\"\314\002\n"
+  "\033ProcessedTransitionEnvelope\022\023\n\013envelope"
+  "_id\030\001 \001(\t\0223\n\016payload_digest\030\002 \001(\0132\033.rl.c"
+  "ommon.v1.ContentDigest\0227\n\010producer\030\003 \001(\013"
   "2%.rl.common.v1.ServiceInstanceIdentity\022"
-  ",\n\005state\030\003 \001(\0162\035.rl.training.v1.AIServer"
-  "State\022\r\n\005ready\030\004 \001(\010\022\031\n\021distributor_read"
-  "y\030\005 \001(\010\022/\n\013model_state\030\006 \001(\0162\032.rl.traini"
-  "ng.v1.ModelState\0223\n\014loaded_model\030\007 \001(\0132\035"
-  ".rl.training.v1.ModelIdentity\0223\n\014staged_"
-  "model\030\010 \001(\0132\035.rl.training.v1.ModelIdenti"
-  "ty\022 \n\030outbound_queue_envelopes\030\t \001(\003\022\"\n\032"
-  "outbound_queue_transitions\030\n \001(\003\022&\n\036outb"
-  "ound_queue_estimated_bytes\030\013 \001(\003\022%\n\035outb"
-  "ound_queue_high_watermark\030\014 \001(\003\022#\n\033produ"
-  "ced_unique_transitions\030\r \001(\003\022!\n\031produced"
-  "_unique_envelopes\030\016 \001(\003\022\032\n\022push_attempt_"
-  "count\030\017 \001(\003\022#\n\033accepted_unique_transitio"
-  "ns\030\020 \001(\003\022$\n\034duplicate_push_attempt_count"
-  "\030\021 \001(\003\022#\n\033rejected_push_attempt_count\030\022 "
-  "\001(\003\022\033\n\023retry_attempt_count\030\023 \001(\003\022%\n\035fina"
-  "l_drop_unique_transitions\030\024 \001(\003\022\"\n\032activ"
-  "e_actor_session_count\030\025 \001(\003\022\034\n\024active_se"
-  "gment_count\030\026 \001(\003\022\027\n\017inference_count\030\027 \001"
-  "(\003\022 \n\030inference_latency_sum_ms\030\030 \001(\001\022 \n\030"
-  "inference_latency_max_ms\030\031 \001(\001\022\026\n\016push_r"
-  "pc_count\030\032 \001(\003\022\037\n\027push_rpc_latency_sum_m"
-  "s\030\033 \001(\001\022\037\n\027push_rpc_latency_max_ms\030\034 \001(\001"
-  "\022\032\n\022model_switch_count\030\035 \001(\003\022$\n\034quaranti"
-  "ned_transition_count\030\036 \001(\003\022\"\n\032quarantine"
-  "d_envelope_count\030\037 \001(\003\022\022\n\nlast_error\030  \001"
-  "(\t\022\031\n\021timestamp_unix_ms\030! \001(\003\022E\n rollout"
-  "_estimator_profile_digest\030\" \001(\0132\033.rl.com"
-  "mon.v1.ContentDigest\022\034\n\024closed_segment_c"
-  "ount\030# \001(\003\022%\n\035pending_action_excluded_co"
-  "unt\030$ \001(\003\022\'\n\037rollout_estimator_failure_c"
-  "ount\030% \001(\003\022(\n per_agent_model_activation"
-  "_count\030& \001(\003\0221\n)superseded_without_agent"
-  "_activation_count\030\' \001(\003\022\?\n\024segment_close"
-  "_counts\030( \003(\0132!.rl.training.v1.SegmentCl"
-  "oseCountR\024credit_request_countR\022credit_g"
-  "rant_countR\021credit_wait_countR\026credit_re"
-  "acquire_countR\024producer_stale_countR\020cap"
-  "acity_wait_msR\026training_capacity_wait\"V\n"
-  "\021SegmentCloseCount\0222\n\006reason\030\001 \001(\0162\".rl."
-  "training.v1.SegmentCloseReason\022\r\n\005count\030"
-  "\002 \001(\003\"\310\004\n\025ModelArtifactManifest\022/\n\010ident"
-  "ity\030\003 \001(\0132\035.rl.training.v1.ModelIdentity"
-  "\022\022\n\nsize_bytes\030\r \001(\003\022\027\n\017trained_samples\030"
-  "\020 \001(\004\022;\n\026training_config_digest\030\021 \001(\0132\033."
-  "rl.common.v1.ContentDigest\022=\n\030training_c"
-  "ontract_digest\030\022 \001(\0132\033.rl.common.v1.Cont"
-  "entDigest\022\034\n\024published_at_unix_ms\030\023 \001(\003\022"
-  "J\n\031rollout_estimator_profile\030\025 \001(\0132\'.rl."
-  "training.v1.RolloutEstimatorProfileJ\004\010\001\020"
-  "\002J\004\010\002\020\003J\004\010\004\020\rJ\004\010\016\020\017J\004\010\017\020\020J\004\010\024\020\025R\027manifes"
-  "t_schema_versionR\010contractR\022observation_"
-  "schemaR\raction_schemaR\025model_architectur"
-  "e_idR\014tensor_dtypeR\013input_shapeR\014action_"
-  "shapeR\013value_shapeR\014artifact_uriR\nmodel_"
-  "fileR\004seedR\rtrain_updatesR\005ready\"\232\001\n\020Reg"
-  "isterModelReq\0227\n\010manifest\030\001 \001(\0132%.rl.tra"
-  "ining.v1.ModelArtifactManifest\0220\n\010contra"
-  "ct\030\002 \001(\0132\036.rl.common.v1.ContractIdentity"
-  "\022\033\n\023local_artifact_path\030\003 \001(\t\"\315\001\n\020Regist"
-  "erModelRsp\0223\n\006result\030\001 \001(\0162#.rl.training"
-  ".v1.ModelRegisterResult\022\017\n\007message\030\002 \001(\t"
-  "\0227\n\010manifest\030\003 \001(\0132%.rl.training.v1.Mode"
-  "lArtifactManifest\022:\n\013distributor\030\004 \001(\0132%"
-  ".rl.common.v1.ServiceInstanceIdentity\"\242\001"
-  "\n\023GetModelManifestReq\0226\n\017requested_model"
-  "\030\001 \001(\0132\035.rl.training.v1.ModelIdentity\0228\n"
-  "\trequester\030\002 \001(\0132%.rl.common.v1.ServiceI"
-  "nstanceIdentity\022\031\n\021latest_in_lineage\030\003 \001"
-  "(\010\"\340\002\n\023GetModelManifestRsp\0221\n\006result\030\001 \001"
-  "(\0162!.rl.training.v1.ModelLookupResult\022\017\n"
-  "\007message\030\002 \001(\t\0227\n\010manifest\030\003 \001(\0132%.rl.tr"
-  "aining.v1.ModelArtifactManifest\022:\n\013distr"
-  "ibutor\030\004 \001(\0132%.rl.common.v1.ServiceInsta"
-  "nceIdentity\022\'\n\032available_floor_model_ste"
-  "p\030\005 \001(\004H\000\210\001\001\022(\n\033latest_available_model_s"
-  "tep\030\006 \001(\004H\001\210\001\001B\035\n\033_available_floor_model"
-  "_stepB\036\n\034_latest_available_model_step\"\204\001"
-  "\n\020DownloadModelReq\0226\n\017requested_model\030\001 "
-  "\001(\0132\035.rl.training.v1.ModelIdentity\0228\n\tre"
-  "quester\030\002 \001(\0132%.rl.common.v1.ServiceInst"
-  "anceIdentity\"X\n\nModelChunk\022,\n\005model\030\001 \001("
-  "\0132\035.rl.training.v1.ModelIdentity\022\016\n\006offs"
-  "et\030\002 \001(\003\022\014\n\004data\030\003 \001(\014\"\325\001\n\013AckModelReq\0227"
-  "\n\010aiserver\030\001 \001(\0132%.rl.common.v1.ServiceI"
-  "nstanceIdentity\022,\n\005model\030\002 \001(\0132\035.rl.trai"
-  "ning.v1.ModelIdentity\022\030\n\020load_instance_i"
-  "d\030\003 \001(\t\0224\n\013load_status\030\004 \001(\0162\037.rl.traini"
-  "ng.v1.ModelLoadStatus\022\017\n\007message\030\005 \001(\t\"\212"
-  "\001\n\013AckModelRsp\022.\n\006result\030\001 \001(\0162\036.rl.trai"
-  "ning.v1.ModelAckResult\022\017\n\007message\030\002 \001(\t\022"
-  ":\n\013distributor\030\003 \001(\0132%.rl.common.v1.Serv"
-  "iceInstanceIdentity\"\033\n\031ModelDistributorS"
-  "tatusReq\"\263\007\n\031ModelDistributorStatusRsp\0220"
-  "\n\010contract\030\001 \001(\0132\036.rl.common.v1.Contract"
-  "Identity\022:\n\013distributor\030\002 \001(\0132%.rl.commo"
-  "n.v1.ServiceInstanceIdentity\022\r\n\005ready\030\003 "
-  "\001(\010\022\036\n\026registered_model_count\030\004 \001(\003\0223\n\014l"
-  "atest_model\030\005 \001(\0132\035.rl.training.v1.Model"
-  "Identity\022\036\n\026register_attempt_count\030\006 \001(\003"
-  "\022 \n\030duplicate_register_count\030\007 \001(\003\022\037\n\027re"
-  "jected_register_count\030\010 \001(\003\022\036\n\026download_"
-  "request_count\030\t \001(\003\022\036\n\026download_success_"
-  "count\030\n \001(\003\022\036\n\026download_failure_count\030\013 "
-  "\001(\003\022\024\n\014bytes_served\030\014 \001(\003\022\030\n\020loaded_ack_"
-  "count\030\r \001(\003\022\030\n\020failed_ack_count\030\016 \001(\003\022B\n"
-  "\023latest_ack_aiserver\030\017 \001(\0132%.rl.common.v"
-  "1.ServiceInstanceIdentity\0227\n\020latest_ack_"
-  "model\030\020 \001(\0132\035.rl.training.v1.ModelIdenti"
-  "ty\022:\n\021latest_ack_status\030\021 \001(\0162\037.rl.train"
-  "ing.v1.ModelLoadStatus\022\022\n\nlast_error\030\022 \001"
-  "(\t\022\031\n\021timestamp_unix_ms\030\023 \001(\003\022\'\n\032availab"
-  "le_floor_model_step\030\024 \001(\004H\000\210\001\001\022(\n\033latest"
-  "_available_model_step\030\025 \001(\004H\001\210\001\001B\035\n\033_ava"
-  "ilable_floor_model_stepB\036\n\034_latest_avail"
-  "able_model_stepR\035available_floor_model_v"
-  "ersionR\036latest_available_model_version*\270"
-  "\002\n\022SegmentCloseReason\022$\n SEGMENT_CLOSE_R"
-  "EASON_UNSPECIFIED\020\000\022\035\n\031SEGMENT_CLOSE_REA"
-  "SON_GOAL\020\001\022#\n\037SEGMENT_CLOSE_REASON_TIME_"
-  "LIMIT\020\002\022\035\n\031SEGMENT_CLOSE_REASON_TMAX\020\003\0220"
-  "\n,SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED"
-  "_CLOSE\020\004\0220\n,SEGMENT_CLOSE_REASON_CLIENT_"
-  "RECOVERY_TIMEOUT\020\005\0225\n1SEGMENT_CLOSE_REAS"
-  "ON_AISERVER_CONTROLLED_SHUTDOWN\020\006*\215\002\n\nPu"
-  "shResult\022\033\n\027PUSH_RESULT_UNSPECIFIED\020\000\022\030\n"
-  "\024PUSH_RESULT_ACCEPTED\020\001\022\031\n\025PUSH_RESULT_D"
-  "UPLICATE\020\002\022!\n\035PUSH_RESULT_REJECTED_CAPAC"
-  "ITY\020\003\022 \n\034PUSH_RESULT_REJECTED_INVALID\020\004\022"
-  "!\n\035PUSH_RESULT_REJECTED_IDENTITY\020\005\022!\n\035PU"
-  "SH_RESULT_REJECTED_CONFLICT\020\006\022\"\n\036PUSH_RE"
-  "SULT_REJECTED_FINALIZED\020\007*|\n\rPressureSta"
-  "te\022\036\n\032PRESSURE_STATE_UNSPECIFIED\020\000\022\031\n\025PR"
-  "ESSURE_STATE_NORMAL\020\001\022\027\n\023PRESSURE_STATE_"
-  "HIGH\020\002\022\027\n\023PRESSURE_STATE_FULL\020\003*\247\001\n\016GetB"
-  "atchResult\022 \n\034GET_BATCH_RESULT_UNSPECIFI"
-  "ED\020\000\022\033\n\027GET_BATCH_RESULT_LEASED\020\001\022\034\n\030GET"
-  "_BATCH_RESULT_TIMEOUT\020\002\022\031\n\025GET_BATCH_RES"
-  "ULT_BUSY\020\003\022\035\n\031GET_BATCH_RESULT_REJECTED\020"
-  "\004*\315\001\n\016DeliveryResult\022\037\n\033DELIVERY_RESULT_"
-  "UNSPECIFIED\020\000\022\033\n\027DELIVERY_RESULT_APPLIED"
-  "\020\001\022#\n\037DELIVERY_RESULT_ALREADY_APPLIED\020\002\022"
-  "\033\n\027DELIVERY_RESULT_EXPIRED\020\003\022\035\n\031DELIVERY"
-  "_RESULT_NOT_FOUND\020\004\022\034\n\030DELIVERY_RESULT_R"
-  "EJECTED\020\005*\260\001\n\016AckDisposition\022\037\n\033ACK_DISP"
-  "OSITION_UNSPECIFIED\020\000\022\033\n\027ACK_DISPOSITION"
-  "_TRAINED\020\001\022\033\n\027ACK_DISPOSITION_INVALID\020\003\022"
-  "&\n\"ACK_DISPOSITION_SHUTDOWN_UNTRAINED\020\004\""
-  "\004\010\002\020\002*\025ACK_DISPOSITION_STALE*\274\001\n\rAIServe"
-  "rState\022\036\n\032AISERVER_STATE_UNSPECIFIED\020\000\022\033"
-  "\n\027AISERVER_STATE_STARTING\020\001\022\030\n\024AISERVER_"
-  "STATE_READY\020\002\022\033\n\027AISERVER_STATE_DEGRADED"
-  "\020\003\022\033\n\027AISERVER_STATE_DRAINING\020\004\022\032\n\026AISER"
-  "VER_STATE_STOPPED\020\005*q\n\nModelState\022\033\n\027MOD"
-  "EL_STATE_UNSPECIFIED\020\000\022\027\n\023MODEL_STATE_WA"
-  "ITING\020\001\022\025\n\021MODEL_STATE_READY\020\002\022\026\n\022MODEL_"
-  "STATE_FAILED\020\003*\351\001\n\023ModelRegisterResult\022%"
-  "\n!MODEL_REGISTER_RESULT_UNSPECIFIED\020\000\022$\n"
-  " MODEL_REGISTER_RESULT_REGISTERED\020\001\022,\n(M"
-  "ODEL_REGISTER_RESULT_ALREADY_REGISTERED\020"
-  "\002\022*\n&MODEL_REGISTER_RESULT_REJECTED_INVA"
-  "LID\020\003\022+\n\'MODEL_REGISTER_RESULT_REJECTED_"
-  "CONFLICT\020\004*p\n\017ModelLoadStatus\022!\n\035MODEL_L"
-  "OAD_STATUS_UNSPECIFIED\020\000\022\034\n\030MODEL_LOAD_S"
-  "TATUS_LOADED\020\001\022\034\n\030MODEL_LOAD_STATUS_FAIL"
-  "ED\020\002*\265\001\n\016ModelAckResult\022 \n\034MODEL_ACK_RES"
-  "ULT_UNSPECIFIED\020\000\022\034\n\030MODEL_ACK_RESULT_AP"
-  "PLIED\020\001\022$\n MODEL_ACK_RESULT_ALREADY_APPL"
-  "IED\020\002\022\036\n\032MODEL_ACK_RESULT_NOT_FOUND\020\003\022\035\n"
-  "\031MODEL_ACK_RESULT_REJECTED\020\004*\245\001\n\021ModelLo"
-  "okupResult\022#\n\037MODEL_LOOKUP_RESULT_UNSPEC"
-  "IFIED\020\000\022\035\n\031MODEL_LOOKUP_RESULT_FOUND\020\001\022!"
-  "\n\035MODEL_LOOKUP_RESULT_NOT_FOUND\020\002\022)\n%MOD"
-  "EL_LOOKUP_RESULT_REJECTED_IDENTITY\020\003*^\n\021"
-  "SampleBackendType\022#\n\037SAMPLE_BACKEND_TYPE"
-  "_UNSPECIFIED\020\000\022$\n SAMPLE_BACKEND_TYPE_LO"
-  "CAL_MEMORY\020\001*\302\002\n\030SamplePoolFinalizeResul"
-  "t\022+\n\'SAMPLE_POOL_FINALIZE_RESULT_UNSPECI"
-  "FIED\020\000\022)\n%SAMPLE_POOL_FINALIZE_RESULT_FI"
-  "NALIZED\020\001\0221\n-SAMPLE_POOL_FINALIZE_RESULT"
-  "_ALREADY_FINALIZED\020\002\0225\n1SAMPLE_POOL_FINA"
-  "LIZE_RESULT_REJECTED_ACTIVE_LEASE\020\003\0221\n-S"
-  "AMPLE_POOL_FINALIZE_RESULT_REJECTED_IDEN"
-  "TITY\020\004\0221\n-SAMPLE_POOL_FINALIZE_RESULT_RE"
-  "JECTED_CONFLICT\020\005*\226\002\n\021MetricBatchResult\022"
-  "#\n\037METRIC_BATCH_RESULT_UNSPECIFIED\020\000\022!\n\035"
-  "METRIC_BATCH_RESULT_DELIVERED\020\001\022\034\n\030METRI"
-  "C_BATCH_RESULT_WAIT\020\002\022\035\n\031METRIC_BATCH_RE"
-  "SULT_FINAL\020\003\022)\n%METRIC_BATCH_RESULT_REJE"
-  "CTED_IDENTITY\020\004\022\'\n#METRIC_BATCH_RESULT_R"
-  "EJECTED_CURSOR\020\005\022(\n$METRIC_BATCH_RESULT_"
-  "REJECTED_INVALID\020\006*\302\002\n\024MetricBatchAckRes"
-  "ult\022\'\n#METRIC_BATCH_ACK_RESULT_UNSPECIFI"
-  "ED\020\000\022#\n\037METRIC_BATCH_ACK_RESULT_APPLIED\020"
-  "\001\022+\n\'METRIC_BATCH_ACK_RESULT_ALREADY_APP"
-  "LIED\020\002\022%\n!METRIC_BATCH_ACK_RESULT_NOT_FO"
-  "UND\020\003\022-\n)METRIC_BATCH_ACK_RESULT_REJECTE"
-  "D_IDENTITY\020\004\022+\n\'METRIC_BATCH_ACK_RESULT_"
-  "REJECTED_CURSOR\020\005\022,\n(METRIC_BATCH_ACK_RE"
-  "SULT_REJECTED_INVALID\020\0062z\n\035AIServerTrain"
-  "ingStatusService\022Y\n\021GetAIServerStatus\022!."
-  "rl.training.v1.AIServerStatusReq\032!.rl.tr"
-  "aining.v1.AIServerStatusRsp2\304\001\n\022MetricEv"
-  "entService\022V\n\016GetMetricBatch\022!.rl.traini"
-  "ng.v1.GetMetricBatchReq\032!.rl.training.v1"
-  ".GetMetricBatchRsp\022V\n\016AckMetricBatch\022!.r"
-  "l.training.v1.AckMetricBatchReq\032!.rl.tra"
-  "ining.v1.AckMetricBatchRsp2\300\001\n\030SamplePoo"
-  "lIngressService\022M\n\013PushSamples\022\036.rl.trai"
-  "ning.v1.PushSamplesReq\032\036.rl.training.v1."
-  "PushSamplesRsp\022U\n\tGetStatus\022#.rl.trainin"
-  "g.v1.SamplePoolStatusReq\032#.rl.training.v"
-  "1.SamplePoolStatusRsp2\364\003\n\031SamplePoolCons"
-  "umerService\022D\n\010GetBatch\022\033.rl.training.v1"
-  ".GetBatchReq\032\033.rl.training.v1.GetBatchRs"
-  "p\022D\n\010AckBatch\022\033.rl.training.v1.AckBatchR"
-  "eq\032\033.rl.training.v1.DeliveryRsp\022F\n\tNackB"
-  "atch\022\034.rl.training.v1.NackBatchReq\032\033.rl."
-  "training.v1.DeliveryRsp\022H\n\nRenewLease\022\035."
-  "rl.training.v1.RenewLeaseReq\032\033.rl.traini"
-  "ng.v1.DeliveryRsp\022b\n\022FinalizeSamplePool\022"
-  "%.rl.training.v1.FinalizeSamplePoolReq\032%"
-  ".rl.training.v1.FinalizeSamplePoolRsp\022U\n"
-  "\tGetStatus\022#.rl.training.v1.SamplePoolSt"
-  "atusReq\032#.rl.training.v1.SamplePoolStatu"
-  "sRsp2\326\003\n\027ModelDistributorService\022S\n\rRegi"
-  "sterModel\022 .rl.training.v1.RegisterModel"
-  "Req\032 .rl.training.v1.RegisterModelRsp\022\\\n"
-  "\020GetModelManifest\022#.rl.training.v1.GetMo"
-  "delManifestReq\032#.rl.training.v1.GetModel"
-  "ManifestRsp\022O\n\rDownloadModel\022 .rl.traini"
-  "ng.v1.DownloadModelReq\032\032.rl.training.v1."
-  "ModelChunk0\001\022D\n\010AckModel\022\033.rl.training.v"
-  "1.AckModelReq\032\033.rl.training.v1.AckModelR"
-  "sp\022q\n\031GetModelDistributorStatus\022).rl.tra"
-  "ining.v1.ModelDistributorStatusReq\032).rl."
-  "training.v1.ModelDistributorStatusRspB\003\200"
-  "\001\000b\006proto3"
+  "=\n\030training_contract_digest\030\004 \001(\0132\033.rl.c"
+  "ommon.v1.ContentDigest\0225\n\016behavior_model"
+  "\030\005 \001(\0132\035.rl.training.v1.ModelIdentity\0224\n"
+  "\007samples\030\006 \003(\0132#.rl.training.v1.Processe"
+  "dTransition\"\223\001\n\016SamplePoolItem\0227\n\ntransi"
+  "tion\030\001 \001(\0132#.rl.training.v1.ProcessedTra"
+  "nsition\022\027\n\017insert_sequence\030\002 \001(\004\022\033\n\023inse"
+  "rted_at_unix_ms\030\003 \001(\003\022\022\n\ndraw_count\030\004 \001("
+  "\r\"`\n\016PushSamplesReq\022=\n\010envelope\030\002 \001(\0132+."
+  "rl.training.v1.ProcessedTransitionEnvelo"
+  "peJ\004\010\001\020\002R\tcredit_id\"\212\002\n\016PushSamplesRsp\022*"
+  "\n\006result\030\001 \001(\0162\032.rl.training.v1.PushResu"
+  "lt\022\017\n\007message\030\002 \001(\t\022\023\n\013envelope_id\030\003 \001(\t"
+  "\0225\n\016pressure_state\030\004 \001(\0162\035.rl.training.v"
+  "1.PressureState\022:\n\013sample_pool\030\005 \001(\0132%.r"
+  "l.common.v1.ServiceInstanceIdentity\0223\n\016p"
+  "ayload_digest\030\006 \001(\0132\033.rl.common.v1.Conte"
+  "ntDigest\"\333\001\n\013GetBatchReq\022\035\n\025requested_tr"
+  "ansitions\030\001 \001(\005\022\022\n\ntimeout_ms\030\002 \001(\005\0227\n\010c"
+  "onsumer\030\003 \001(\0132%.rl.common.v1.ServiceInst"
+  "anceIdentity\022\030\n\020lease_timeout_ms\030\004 \001(\005\022F"
+  "\n!required_training_contract_digest\030\005 \001("
+  "\0132\033.rl.common.v1.ContentDigest\"\356\001\n\013GetBa"
+  "tchRsp\022.\n\006result\030\001 \001(\0162\036.rl.training.v1."
+  "GetBatchResult\022\017\n\007message\030\002 \001(\t\022\023\n\013deliv"
+  "ery_id\030\003 \001(\t\022\036\n\026lease_deadline_unix_ms\030\004"
+  " \001(\003\022-\n\005items\030\005 \003(\0132\036.rl.training.v1.Sam"
+  "plePoolItem\022:\n\013sample_pool\030\006 \001(\0132%.rl.co"
+  "mmon.v1.ServiceInstanceIdentity\"\251\001\n\013AckB"
+  "atchReq\0227\n\010consumer\030\001 \001(\0132%.rl.common.v1"
+  ".ServiceInstanceIdentity\022\023\n\013delivery_id\030"
+  "\002 \001(\t\0223\n\013disposition\030\003 \001(\0162\036.rl.training"
+  ".v1.AckDisposition\022\027\n\017train_update_id\030\004 "
+  "\001(\t\"l\n\014NackBatchReq\0227\n\010consumer\030\001 \001(\0132%."
+  "rl.common.v1.ServiceInstanceIdentity\022\023\n\013"
+  "delivery_id\030\002 \001(\t\022\016\n\006reason\030\003 \001(\t\"w\n\rRen"
+  "ewLeaseReq\0227\n\010consumer\030\001 \001(\0132%.rl.common"
+  ".v1.ServiceInstanceIdentity\022\023\n\013delivery_"
+  "id\030\002 \001(\t\022\030\n\020lease_timeout_ms\030\003 \001(\005\"\321\001\n\013D"
+  "eliveryRsp\022.\n\006result\030\001 \001(\0162\036.rl.training"
+  ".v1.DeliveryResult\022\017\n\007message\030\002 \001(\t\022\023\n\013d"
+  "elivery_id\030\003 \001(\t\022\036\n\026lease_deadline_unix_"
+  "ms\030\004 \001(\003\0223\n\013disposition\030\005 \001(\0162\036.rl.train"
+  "ing.v1.AckDisposition\022\027\n\017train_update_id"
+  "\030\006 \001(\t\"\256\001\n\025FinalizeSamplePoolReq\0227\n\010cons"
+  "umer\030\001 \001(\0132%.rl.common.v1.ServiceInstanc"
+  "eIdentity\022C\n\024expected_sample_pool\030\002 \001(\0132"
+  "%.rl.common.v1.ServiceInstanceIdentity\022\027"
+  "\n\017finalization_id\030\003 \001(\t\"\363\001\n\025FinalizeSamp"
+  "lePoolRsp\0228\n\006result\030\001 \001(\0162(.rl.training."
+  "v1.SamplePoolFinalizeResult\022\017\n\007message\030\002"
+  " \001(\t\022\027\n\017finalization_id\030\003 \001(\t\022:\n\013sample_"
+  "pool\030\004 \001(\0132%.rl.common.v1.ServiceInstanc"
+  "eIdentity\022!\n\024finalized_at_unix_ms\030\005 \001(\003H"
+  "\000\210\001\001B\027\n\025_finalized_at_unix_ms\"\025\n\023SampleP"
+  "oolStatusReq\"\202\024\n\023SamplePoolStatusRsp\0220\n\010"
+  "contract\030\001 \001(\0132\036.rl.common.v1.ContractId"
+  "entity\022:\n\013sample_pool\030\002 \001(\0132%.rl.common."
+  "v1.ServiceInstanceIdentity\022\r\n\005ready\030\003 \001("
+  "\010\022\032\n\022push_attempt_count\030\004 \001(\003\022#\n\033accepte"
+  "d_unique_transitions\030\005 \001(\003\022!\n\031accepted_u"
+  "nique_envelopes\030\006 \001(\003\022$\n\034duplicate_push_"
+  "attempt_count\030\007 \001(\003\022%\n\035duplicate_transit"
+  "ion_attempts\030\010 \001(\003\022#\n\033rejected_push_atte"
+  "mpt_count\030\t \001(\003\022$\n\034rejected_transition_a"
+  "ttempts\030\n \001(\003\022 \n\030acked_unique_transition"
+  "s\030\013 \001(\003\022\037\n\027acked_unique_deliveries\030\014 \001(\003"
+  "\022\031\n\021ready_transitions\030\r \001(\003\022\032\n\022leased_tr"
+  "ansitions\030\017 \001(\003\022\034\n\024resident_transitions\030"
+  "\021 \001(\003\022\032\n\022resident_envelopes\030\022 \001(\003\022 \n\030res"
+  "ident_estimated_bytes\030\023 \001(\003\022\034\n\024capacity_"
+  "transitions\030\024 \001(\003\022\026\n\016capacity_bytes\030\026 \001("
+  "\003\0225\n\016pressure_state\030\027 \001(\0162\035.rl.training."
+  "v1.PressureState\022\030\n\020redelivery_count\030\030 \001"
+  "(\003\022\022\n\nnack_count\030\031 \001(\003\022\033\n\023expired_lease_"
+  "count\030\032 \001(\003\022\"\n\025latest_ack_at_unix_ms\030\033 \001"
+  "(\003H\000\210\001\001\022\030\n\020target_hit_count\030\034 \001(\003\022\031\n\021par"
+  "tial_get_count\030\035 \001(\003\022\033\n\023empty_timeout_co"
+  "unt\030\036 \001(\003\022\022\n\nlast_error\030\037 \001(\t\022 \n\030trained"
+  "_transition_count\030! \001(\003\022 \n\030invalid_trans"
+  "ition_count\030# \001(\003\022+\n#shutdown_untrained_"
+  "transition_count\030$ \001(\003\022\031\n\021lease_renew_co"
+  "unt\030% \001(\003\0227\n\014backend_type\030& \001(\0162!.rl.tra"
+  "ining.v1.SampleBackendType\022 \n\030max_concur"
+  "rent_consumers\030\' \001(\005\022\035\n\025active_consumer_"
+  "count\030( \001(\005\022\033\n\023consumer_busy_count\030) \001(\003"
+  "\022\025\n\ringress_ready\030* \001(\010\022\022\n\npool_ready\030+ "
+  "\001(\010\022\031\n\021timestamp_unix_ms\030, \001(\003\022+\n\036oldest"
+  "_ready_transition_age_ms\030- \001(\003H\001\210\001\001\022%\n\030m"
+  "inimum_ready_model_step\030. \001(\004H\002\210\001\001\022%\n\030ma"
+  "ximum_ready_model_step\030/ \001(\004H\003\210\001\001\022 \n\030evi"
+  "cted_transition_count\030B \001(\003\022\036\n\026evicted_e"
+  "nvelope_count\030C \001(\003\022\021\n\tfinalized\030D \001(\010\022\027"
+  "\n\017finalization_id\030E \001(\t\022!\n\024finalized_at_"
+  "unix_ms\030F \001(\003H\004\210\001\001\022\"\n\032finalized_transiti"
+  "on_count\030G \001(\003\022\032\n\022draw_attempt_count\030I \001"
+  "(\003\022#\n\033drawn_transition_slot_count\030J \001(\003\022"
+  "*\n\"unsampled_evicted_transition_count\030K "
+  "\001(\003\0221\n)previously_drawn_evicted_transiti"
+  "on_count\030L \001(\003B\030\n\026_latest_ack_at_unix_ms"
+  "B!\n\037_oldest_ready_transition_age_msB\033\n\031_"
+  "minimum_ready_model_stepB\033\n\031_maximum_rea"
+  "dy_model_stepB\027\n\025_finalized_at_unix_msJ\004"
+  "\010\016\020\017J\004\010\020\020\021J\004\010\025\020\026J\004\010 \020!J\004\010\"\020#J\004\0100\020BJ\004\010H\020I"
+  "R\021behavior_versionsR\033minimum_ready_model"
+  "_versionR\033maximum_ready_model_versionR\025r"
+  "eady_queue_fragmentsR\020leased_fragmentsR\022"
+  "capacity_fragmentsR\016behavior_stepsR\022stal"
+  "e_sample_countR\023active_demand_countR\023act"
+  "ive_demand_epochR\024active_demand_age_msR\020"
+  "reserved_samplesR\022reserved_fragmentsR\030re"
+  "served_estimated_bytesR\024credit_request_c"
+  "ountR\022credit_grant_countR\023credit_commit_"
+  "countR\024credit_release_countR\023credit_expi"
+  "re_countR\023credit_revoke_countR\033credit_wa"
+  "it_no_demand_countR credit_wait_inflight"
+  "_limit_countR\032credit_wait_capacity_count"
+  "R\032credit_wait_draining_countR\023demand_ups"
+  "ert_countR\024demand_release_countR\030finaliz"
+  "ed_fragment_count\"A\n\021RawMetricSumCount\022\020"
+  "\n\010field_id\030\001 \001(\t\022\013\n\003sum\030\002 \001(\001\022\r\n\005count\030\003"
+  " \001(\004\"\321\001\n\013MetricEvent\022\026\n\016event_sequence\030\004"
+  " \001(\004\022 \n\023observed_at_unix_ms\030\005 \001(\003H\000\210\001\001\022\024"
+  "\n\014fact_payload\030\006 \001(\014B\026\n\024_observed_at_uni"
+  "x_msJ\004\010\001\020\004J\004\010\007\020\010R\010contractR\017schema_ident"
+  "ityR\006sourceR\024committed_at_unix_msR\007episo"
+  "deR\014train_update\"\237\001\n\021MetricSequenceGap\022("
+  "\n first_unavailable_event_sequence\030\001 \001(\004"
+  "\022\'\n\037last_unavailable_event_sequence\030\002 \001("
+  "\004\022\'\n\037oldest_available_event_sequence\030\003 \001"
+  "(\004\022\016\n\006reason\030\004 \001(\t\"\227\004\n\013MetricBatch\0220\n\010co"
+  "ntract\030\001 \001(\0132\036.rl.common.v1.ContractIden"
+  "tity\0225\n\017schema_identity\030\002 \001(\0132\034.rl.commo"
+  "n.v1.SchemaIdentity\0225\n\006source\030\003 \001(\0132%.rl"
+  ".common.v1.ServiceInstanceIdentity\022\026\n\016ba"
+  "tch_sequence\030\004 \001(\004\0221\n\014batch_digest\030\005 \001(\013"
+  "2\033.rl.common.v1.ContentDigest\022\032\n\022created"
+  "_at_unix_ms\030\006 \001(\003\022\034\n\024first_event_sequenc"
+  "e\030\007 \001(\004\022\033\n\023last_event_sequence\030\010 \001(\004\022+\n\006"
+  "events\030\t \003(\0132\033.rl.training.v1.MetricEven"
+  "t\022\021\n\theartbeat\030\n \001(\010\022\024\n\014source_final\030\013 \001"
+  "(\010\022\034\n\024final_event_sequence\030\014 \001(\004\022.\n\003gap\030"
+  "\016 \001(\0132!.rl.training.v1.MetricSequenceGap"
+  "J\004\010\r\020\016R\034event_time_watermark_unix_ms\"\324\001\n"
+  "\021MetricBatchCursor\0225\n\006source\030\001 \001(\0132%.rl."
+  "common.v1.ServiceInstanceIdentity\022#\n\033ack"
+  "nowledged_batch_sequence\030\002 \001(\004\022#\n\033acknow"
+  "ledged_event_sequence\030\003 \001(\004\022>\n\031acknowled"
+  "ged_batch_digest\030\004 \001(\0132\033.rl.common.v1.Co"
+  "ntentDigest\"\361\001\n\021GetMetricBatchReq\0220\n\010con"
+  "tract\030\001 \001(\0132\036.rl.common.v1.ContractIdent"
+  "ity\0227\n\010consumer\030\002 \001(\0132%.rl.common.v1.Ser"
+  "viceInstanceIdentity\0221\n\006cursor\030\003 \001(\0132!.r"
+  "l.training.v1.MetricBatchCursor\022\022\n\nmax_e"
+  "vents\030\004 \001(\r\022\021\n\tmax_bytes\030\005 \001(\003\022\027\n\017wait_t"
+  "imeout_ms\030\006 \001(\005\"\216\002\n\021GetMetricBatchRsp\0221\n"
+  "\006result\030\001 \001(\0162!.rl.training.v1.MetricBat"
+  "chResult\022\017\n\007message\030\002 \001(\t\022*\n\005batch\030\003 \001(\013"
+  "2\033.rl.training.v1.MetricBatch\0227\n\010produce"
+  "r\030\004 \001(\0132%.rl.common.v1.ServiceInstanceId"
+  "entity\022\'\n\037oldest_available_event_sequenc"
+  "e\030\005 \001(\004\022\'\n\037latest_available_event_sequen"
+  "ce\030\006 \001(\004\"\261\001\n\021AckMetricBatchReq\0220\n\010contra"
+  "ct\030\001 \001(\0132\036.rl.common.v1.ContractIdentity"
+  "\0227\n\010consumer\030\002 \001(\0132%.rl.common.v1.Servic"
+  "eInstanceIdentity\0221\n\006cursor\030\003 \001(\0132!.rl.t"
+  "raining.v1.MetricBatchCursor\"\242\002\n\021AckMetr"
+  "icBatchRsp\0224\n\006result\030\001 \001(\0162$.rl.training"
+  ".v1.MetricBatchAckResult\022\017\n\007message\030\002 \001("
+  "\t\0227\n\010producer\030\003 \001(\0132%.rl.common.v1.Servi"
+  "ceInstanceIdentity\022\'\n\037oldest_available_e"
+  "vent_sequence\030\004 \001(\004\022\'\n\037latest_available_"
+  "event_sequence\030\005 \001(\004\022;\n\020committed_cursor"
+  "\030\006 \001(\0132!.rl.training.v1.MetricBatchCurso"
+  "r\"\023\n\021AIServerStatusReq\"\224\r\n\021AIServerStatu"
+  "sRsp\0220\n\010contract\030\001 \001(\0132\036.rl.common.v1.Co"
+  "ntractIdentity\0227\n\010aiserver\030\002 \001(\0132%.rl.co"
+  "mmon.v1.ServiceInstanceIdentity\022,\n\005state"
+  "\030\003 \001(\0162\035.rl.training.v1.AIServerState\022\r\n"
+  "\005ready\030\004 \001(\010\022\031\n\021distributor_ready\030\005 \001(\010\022"
+  "/\n\013model_state\030\006 \001(\0162\032.rl.training.v1.Mo"
+  "delState\0223\n\014loaded_model\030\007 \001(\0132\035.rl.trai"
+  "ning.v1.ModelIdentity\0223\n\014staged_model\030\010 "
+  "\001(\0132\035.rl.training.v1.ModelIdentity\022 \n\030ou"
+  "tbound_queue_envelopes\030\t \001(\003\022\"\n\032outbound"
+  "_queue_transitions\030\n \001(\003\022&\n\036outbound_que"
+  "ue_estimated_bytes\030\013 \001(\003\022%\n\035outbound_que"
+  "ue_high_watermark\030\014 \001(\003\022#\n\033produced_uniq"
+  "ue_transitions\030\r \001(\003\022!\n\031produced_unique_"
+  "envelopes\030\016 \001(\003\022\032\n\022push_attempt_count\030\017 "
+  "\001(\003\022#\n\033accepted_unique_transitions\030\020 \001(\003"
+  "\022$\n\034duplicate_push_attempt_count\030\021 \001(\003\022#"
+  "\n\033rejected_push_attempt_count\030\022 \001(\003\022\033\n\023r"
+  "etry_attempt_count\030\023 \001(\003\022%\n\035final_drop_u"
+  "nique_transitions\030\024 \001(\003\022\"\n\032active_actor_"
+  "session_count\030\025 \001(\003\022\034\n\024active_segment_co"
+  "unt\030\026 \001(\003\022\027\n\017inference_count\030\027 \001(\003\022 \n\030in"
+  "ference_latency_sum_ms\030\030 \001(\001\022 \n\030inferenc"
+  "e_latency_max_ms\030\031 \001(\001\022\026\n\016push_rpc_count"
+  "\030\032 \001(\003\022\037\n\027push_rpc_latency_sum_ms\030\033 \001(\001\022"
+  "\037\n\027push_rpc_latency_max_ms\030\034 \001(\001\022\032\n\022mode"
+  "l_switch_count\030\035 \001(\003\022$\n\034quarantined_tran"
+  "sition_count\030\036 \001(\003\022\"\n\032quarantined_envelo"
+  "pe_count\030\037 \001(\003\022\022\n\nlast_error\030  \001(\t\022\031\n\021ti"
+  "mestamp_unix_ms\030! \001(\003\022E\n rollout_estimat"
+  "or_profile_digest\030\" \001(\0132\033.rl.common.v1.C"
+  "ontentDigest\022\034\n\024closed_segment_count\030# \001"
+  "(\003\022%\n\035pending_action_excluded_count\030$ \001("
+  "\003\022\'\n\037rollout_estimator_failure_count\030% \001"
+  "(\003\022(\n per_agent_model_activation_count\030&"
+  " \001(\003\0221\n)superseded_without_agent_activat"
+  "ion_count\030\' \001(\003\022\?\n\024segment_close_counts\030"
+  "( \003(\0132!.rl.training.v1.SegmentCloseCount"
+  "R\024credit_request_countR\022credit_grant_cou"
+  "ntR\021credit_wait_countR\026credit_reacquire_"
+  "countR\024producer_stale_countR\020capacity_wa"
+  "it_msR\026training_capacity_wait\"V\n\021Segment"
+  "CloseCount\0222\n\006reason\030\001 \001(\0162\".rl.training"
+  ".v1.SegmentCloseReason\022\r\n\005count\030\002 \001(\003\"\310\004"
+  "\n\025ModelArtifactManifest\022/\n\010identity\030\003 \001("
+  "\0132\035.rl.training.v1.ModelIdentity\022\022\n\nsize"
+  "_bytes\030\r \001(\003\022\027\n\017trained_samples\030\020 \001(\004\022;\n"
+  "\026training_config_digest\030\021 \001(\0132\033.rl.commo"
+  "n.v1.ContentDigest\022=\n\030training_contract_"
+  "digest\030\022 \001(\0132\033.rl.common.v1.ContentDiges"
+  "t\022\034\n\024published_at_unix_ms\030\023 \001(\003\022J\n\031rollo"
+  "ut_estimator_profile\030\025 \001(\0132\'.rl.training"
+  ".v1.RolloutEstimatorProfileJ\004\010\001\020\002J\004\010\002\020\003J"
+  "\004\010\004\020\rJ\004\010\016\020\017J\004\010\017\020\020J\004\010\024\020\025R\027manifest_schema"
+  "_versionR\010contractR\022observation_schemaR\r"
+  "action_schemaR\025model_architecture_idR\014te"
+  "nsor_dtypeR\013input_shapeR\014action_shapeR\013v"
+  "alue_shapeR\014artifact_uriR\nmodel_fileR\004se"
+  "edR\rtrain_updatesR\005ready\"\232\001\n\020RegisterMod"
+  "elReq\0227\n\010manifest\030\001 \001(\0132%.rl.training.v1"
+  ".ModelArtifactManifest\0220\n\010contract\030\002 \001(\013"
+  "2\036.rl.common.v1.ContractIdentity\022\033\n\023loca"
+  "l_artifact_path\030\003 \001(\t\"\315\001\n\020RegisterModelR"
+  "sp\0223\n\006result\030\001 \001(\0162#.rl.training.v1.Mode"
+  "lRegisterResult\022\017\n\007message\030\002 \001(\t\0227\n\010mani"
+  "fest\030\003 \001(\0132%.rl.training.v1.ModelArtifac"
+  "tManifest\022:\n\013distributor\030\004 \001(\0132%.rl.comm"
+  "on.v1.ServiceInstanceIdentity\"\242\001\n\023GetMod"
+  "elManifestReq\0226\n\017requested_model\030\001 \001(\0132\035"
+  ".rl.training.v1.ModelIdentity\0228\n\trequest"
+  "er\030\002 \001(\0132%.rl.common.v1.ServiceInstanceI"
+  "dentity\022\031\n\021latest_in_lineage\030\003 \001(\010\"\340\002\n\023G"
+  "etModelManifestRsp\0221\n\006result\030\001 \001(\0162!.rl."
+  "training.v1.ModelLookupResult\022\017\n\007message"
+  "\030\002 \001(\t\0227\n\010manifest\030\003 \001(\0132%.rl.training.v"
+  "1.ModelArtifactManifest\022:\n\013distributor\030\004"
+  " \001(\0132%.rl.common.v1.ServiceInstanceIdent"
+  "ity\022\'\n\032available_floor_model_step\030\005 \001(\004H"
+  "\000\210\001\001\022(\n\033latest_available_model_step\030\006 \001("
+  "\004H\001\210\001\001B\035\n\033_available_floor_model_stepB\036\n"
+  "\034_latest_available_model_step\"\204\001\n\020Downlo"
+  "adModelReq\0226\n\017requested_model\030\001 \001(\0132\035.rl"
+  ".training.v1.ModelIdentity\0228\n\trequester\030"
+  "\002 \001(\0132%.rl.common.v1.ServiceInstanceIden"
+  "tity\"X\n\nModelChunk\022,\n\005model\030\001 \001(\0132\035.rl.t"
+  "raining.v1.ModelIdentity\022\016\n\006offset\030\002 \001(\003"
+  "\022\014\n\004data\030\003 \001(\014\"\325\001\n\013AckModelReq\0227\n\010aiserv"
+  "er\030\001 \001(\0132%.rl.common.v1.ServiceInstanceI"
+  "dentity\022,\n\005model\030\002 \001(\0132\035.rl.training.v1."
+  "ModelIdentity\022\030\n\020load_instance_id\030\003 \001(\t\022"
+  "4\n\013load_status\030\004 \001(\0162\037.rl.training.v1.Mo"
+  "delLoadStatus\022\017\n\007message\030\005 \001(\t\"\212\001\n\013AckMo"
+  "delRsp\022.\n\006result\030\001 \001(\0162\036.rl.training.v1."
+  "ModelAckResult\022\017\n\007message\030\002 \001(\t\022:\n\013distr"
+  "ibutor\030\003 \001(\0132%.rl.common.v1.ServiceInsta"
+  "nceIdentity\"\033\n\031ModelDistributorStatusReq"
+  "\"\263\007\n\031ModelDistributorStatusRsp\0220\n\010contra"
+  "ct\030\001 \001(\0132\036.rl.common.v1.ContractIdentity"
+  "\022:\n\013distributor\030\002 \001(\0132%.rl.common.v1.Ser"
+  "viceInstanceIdentity\022\r\n\005ready\030\003 \001(\010\022\036\n\026r"
+  "egistered_model_count\030\004 \001(\003\0223\n\014latest_mo"
+  "del\030\005 \001(\0132\035.rl.training.v1.ModelIdentity"
+  "\022\036\n\026register_attempt_count\030\006 \001(\003\022 \n\030dupl"
+  "icate_register_count\030\007 \001(\003\022\037\n\027rejected_r"
+  "egister_count\030\010 \001(\003\022\036\n\026download_request_"
+  "count\030\t \001(\003\022\036\n\026download_success_count\030\n "
+  "\001(\003\022\036\n\026download_failure_count\030\013 \001(\003\022\024\n\014b"
+  "ytes_served\030\014 \001(\003\022\030\n\020loaded_ack_count\030\r "
+  "\001(\003\022\030\n\020failed_ack_count\030\016 \001(\003\022B\n\023latest_"
+  "ack_aiserver\030\017 \001(\0132%.rl.common.v1.Servic"
+  "eInstanceIdentity\0227\n\020latest_ack_model\030\020 "
+  "\001(\0132\035.rl.training.v1.ModelIdentity\022:\n\021la"
+  "test_ack_status\030\021 \001(\0162\037.rl.training.v1.M"
+  "odelLoadStatus\022\022\n\nlast_error\030\022 \001(\t\022\031\n\021ti"
+  "mestamp_unix_ms\030\023 \001(\003\022\'\n\032available_floor"
+  "_model_step\030\024 \001(\004H\000\210\001\001\022(\n\033latest_availab"
+  "le_model_step\030\025 \001(\004H\001\210\001\001B\035\n\033_available_f"
+  "loor_model_stepB\036\n\034_latest_available_mod"
+  "el_stepR\035available_floor_model_versionR\036"
+  "latest_available_model_version*\270\002\n\022Segme"
+  "ntCloseReason\022$\n SEGMENT_CLOSE_REASON_UN"
+  "SPECIFIED\020\000\022\035\n\031SEGMENT_CLOSE_REASON_GOAL"
+  "\020\001\022#\n\037SEGMENT_CLOSE_REASON_TIME_LIMIT\020\002\022"
+  "\035\n\031SEGMENT_CLOSE_REASON_TMAX\020\003\0220\n,SEGMEN"
+  "T_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE\020\004"
+  "\0220\n,SEGMENT_CLOSE_REASON_CLIENT_RECOVERY"
+  "_TIMEOUT\020\005\0225\n1SEGMENT_CLOSE_REASON_AISER"
+  "VER_CONTROLLED_SHUTDOWN\020\006*\215\002\n\nPushResult"
+  "\022\033\n\027PUSH_RESULT_UNSPECIFIED\020\000\022\030\n\024PUSH_RE"
+  "SULT_ACCEPTED\020\001\022\031\n\025PUSH_RESULT_DUPLICATE"
+  "\020\002\022!\n\035PUSH_RESULT_REJECTED_CAPACITY\020\003\022 \n"
+  "\034PUSH_RESULT_REJECTED_INVALID\020\004\022!\n\035PUSH_"
+  "RESULT_REJECTED_IDENTITY\020\005\022!\n\035PUSH_RESUL"
+  "T_REJECTED_CONFLICT\020\006\022\"\n\036PUSH_RESULT_REJ"
+  "ECTED_FINALIZED\020\007*|\n\rPressureState\022\036\n\032PR"
+  "ESSURE_STATE_UNSPECIFIED\020\000\022\031\n\025PRESSURE_S"
+  "TATE_NORMAL\020\001\022\027\n\023PRESSURE_STATE_HIGH\020\002\022\027"
+  "\n\023PRESSURE_STATE_FULL\020\003*\247\001\n\016GetBatchResu"
+  "lt\022 \n\034GET_BATCH_RESULT_UNSPECIFIED\020\000\022\033\n\027"
+  "GET_BATCH_RESULT_LEASED\020\001\022\034\n\030GET_BATCH_R"
+  "ESULT_TIMEOUT\020\002\022\031\n\025GET_BATCH_RESULT_BUSY"
+  "\020\003\022\035\n\031GET_BATCH_RESULT_REJECTED\020\004*\315\001\n\016De"
+  "liveryResult\022\037\n\033DELIVERY_RESULT_UNSPECIF"
+  "IED\020\000\022\033\n\027DELIVERY_RESULT_APPLIED\020\001\022#\n\037DE"
+  "LIVERY_RESULT_ALREADY_APPLIED\020\002\022\033\n\027DELIV"
+  "ERY_RESULT_EXPIRED\020\003\022\035\n\031DELIVERY_RESULT_"
+  "NOT_FOUND\020\004\022\034\n\030DELIVERY_RESULT_REJECTED\020"
+  "\005*\260\001\n\016AckDisposition\022\037\n\033ACK_DISPOSITION_"
+  "UNSPECIFIED\020\000\022\033\n\027ACK_DISPOSITION_TRAINED"
+  "\020\001\022\033\n\027ACK_DISPOSITION_INVALID\020\003\022&\n\"ACK_D"
+  "ISPOSITION_SHUTDOWN_UNTRAINED\020\004\"\004\010\002\020\002*\025A"
+  "CK_DISPOSITION_STALE*\274\001\n\rAIServerState\022\036"
+  "\n\032AISERVER_STATE_UNSPECIFIED\020\000\022\033\n\027AISERV"
+  "ER_STATE_STARTING\020\001\022\030\n\024AISERVER_STATE_RE"
+  "ADY\020\002\022\033\n\027AISERVER_STATE_DEGRADED\020\003\022\033\n\027AI"
+  "SERVER_STATE_DRAINING\020\004\022\032\n\026AISERVER_STAT"
+  "E_STOPPED\020\005*q\n\nModelState\022\033\n\027MODEL_STATE"
+  "_UNSPECIFIED\020\000\022\027\n\023MODEL_STATE_WAITING\020\001\022"
+  "\025\n\021MODEL_STATE_READY\020\002\022\026\n\022MODEL_STATE_FA"
+  "ILED\020\003*\351\001\n\023ModelRegisterResult\022%\n!MODEL_"
+  "REGISTER_RESULT_UNSPECIFIED\020\000\022$\n MODEL_R"
+  "EGISTER_RESULT_REGISTERED\020\001\022,\n(MODEL_REG"
+  "ISTER_RESULT_ALREADY_REGISTERED\020\002\022*\n&MOD"
+  "EL_REGISTER_RESULT_REJECTED_INVALID\020\003\022+\n"
+  "\'MODEL_REGISTER_RESULT_REJECTED_CONFLICT"
+  "\020\004*p\n\017ModelLoadStatus\022!\n\035MODEL_LOAD_STAT"
+  "US_UNSPECIFIED\020\000\022\034\n\030MODEL_LOAD_STATUS_LO"
+  "ADED\020\001\022\034\n\030MODEL_LOAD_STATUS_FAILED\020\002*\265\001\n"
+  "\016ModelAckResult\022 \n\034MODEL_ACK_RESULT_UNSP"
+  "ECIFIED\020\000\022\034\n\030MODEL_ACK_RESULT_APPLIED\020\001\022"
+  "$\n MODEL_ACK_RESULT_ALREADY_APPLIED\020\002\022\036\n"
+  "\032MODEL_ACK_RESULT_NOT_FOUND\020\003\022\035\n\031MODEL_A"
+  "CK_RESULT_REJECTED\020\004*\245\001\n\021ModelLookupResu"
+  "lt\022#\n\037MODEL_LOOKUP_RESULT_UNSPECIFIED\020\000\022"
+  "\035\n\031MODEL_LOOKUP_RESULT_FOUND\020\001\022!\n\035MODEL_"
+  "LOOKUP_RESULT_NOT_FOUND\020\002\022)\n%MODEL_LOOKU"
+  "P_RESULT_REJECTED_IDENTITY\020\003*^\n\021SampleBa"
+  "ckendType\022#\n\037SAMPLE_BACKEND_TYPE_UNSPECI"
+  "FIED\020\000\022$\n SAMPLE_BACKEND_TYPE_LOCAL_MEMO"
+  "RY\020\001*\302\002\n\030SamplePoolFinalizeResult\022+\n\'SAM"
+  "PLE_POOL_FINALIZE_RESULT_UNSPECIFIED\020\000\022)"
+  "\n%SAMPLE_POOL_FINALIZE_RESULT_FINALIZED\020"
+  "\001\0221\n-SAMPLE_POOL_FINALIZE_RESULT_ALREADY"
+  "_FINALIZED\020\002\0225\n1SAMPLE_POOL_FINALIZE_RES"
+  "ULT_REJECTED_ACTIVE_LEASE\020\003\0221\n-SAMPLE_PO"
+  "OL_FINALIZE_RESULT_REJECTED_IDENTITY\020\004\0221"
+  "\n-SAMPLE_POOL_FINALIZE_RESULT_REJECTED_C"
+  "ONFLICT\020\005*\226\002\n\021MetricBatchResult\022#\n\037METRI"
+  "C_BATCH_RESULT_UNSPECIFIED\020\000\022!\n\035METRIC_B"
+  "ATCH_RESULT_DELIVERED\020\001\022\034\n\030METRIC_BATCH_"
+  "RESULT_WAIT\020\002\022\035\n\031METRIC_BATCH_RESULT_FIN"
+  "AL\020\003\022)\n%METRIC_BATCH_RESULT_REJECTED_IDE"
+  "NTITY\020\004\022\'\n#METRIC_BATCH_RESULT_REJECTED_"
+  "CURSOR\020\005\022(\n$METRIC_BATCH_RESULT_REJECTED"
+  "_INVALID\020\006*\302\002\n\024MetricBatchAckResult\022\'\n#M"
+  "ETRIC_BATCH_ACK_RESULT_UNSPECIFIED\020\000\022#\n\037"
+  "METRIC_BATCH_ACK_RESULT_APPLIED\020\001\022+\n\'MET"
+  "RIC_BATCH_ACK_RESULT_ALREADY_APPLIED\020\002\022%"
+  "\n!METRIC_BATCH_ACK_RESULT_NOT_FOUND\020\003\022-\n"
+  ")METRIC_BATCH_ACK_RESULT_REJECTED_IDENTI"
+  "TY\020\004\022+\n\'METRIC_BATCH_ACK_RESULT_REJECTED"
+  "_CURSOR\020\005\022,\n(METRIC_BATCH_ACK_RESULT_REJ"
+  "ECTED_INVALID\020\0062z\n\035AIServerTrainingStatu"
+  "sService\022Y\n\021GetAIServerStatus\022!.rl.train"
+  "ing.v1.AIServerStatusReq\032!.rl.training.v"
+  "1.AIServerStatusRsp2\304\001\n\022MetricEventServi"
+  "ce\022V\n\016GetMetricBatch\022!.rl.training.v1.Ge"
+  "tMetricBatchReq\032!.rl.training.v1.GetMetr"
+  "icBatchRsp\022V\n\016AckMetricBatch\022!.rl.traini"
+  "ng.v1.AckMetricBatchReq\032!.rl.training.v1"
+  ".AckMetricBatchRsp2\300\001\n\030SamplePoolIngress"
+  "Service\022M\n\013PushSamples\022\036.rl.training.v1."
+  "PushSamplesReq\032\036.rl.training.v1.PushSamp"
+  "lesRsp\022U\n\tGetStatus\022#.rl.training.v1.Sam"
+  "plePoolStatusReq\032#.rl.training.v1.Sample"
+  "PoolStatusRsp2\364\003\n\031SamplePoolConsumerServ"
+  "ice\022D\n\010GetBatch\022\033.rl.training.v1.GetBatc"
+  "hReq\032\033.rl.training.v1.GetBatchRsp\022D\n\010Ack"
+  "Batch\022\033.rl.training.v1.AckBatchReq\032\033.rl."
+  "training.v1.DeliveryRsp\022F\n\tNackBatch\022\034.r"
+  "l.training.v1.NackBatchReq\032\033.rl.training"
+  ".v1.DeliveryRsp\022H\n\nRenewLease\022\035.rl.train"
+  "ing.v1.RenewLeaseReq\032\033.rl.training.v1.De"
+  "liveryRsp\022b\n\022FinalizeSamplePool\022%.rl.tra"
+  "ining.v1.FinalizeSamplePoolReq\032%.rl.trai"
+  "ning.v1.FinalizeSamplePoolRsp\022U\n\tGetStat"
+  "us\022#.rl.training.v1.SamplePoolStatusReq\032"
+  "#.rl.training.v1.SamplePoolStatusRsp2\326\003\n"
+  "\027ModelDistributorService\022S\n\rRegisterMode"
+  "l\022 .rl.training.v1.RegisterModelReq\032 .rl"
+  ".training.v1.RegisterModelRsp\022\\\n\020GetMode"
+  "lManifest\022#.rl.training.v1.GetModelManif"
+  "estReq\032#.rl.training.v1.GetModelManifest"
+  "Rsp\022O\n\rDownloadModel\022 .rl.training.v1.Do"
+  "wnloadModelReq\032\032.rl.training.v1.ModelChu"
+  "nk0\001\022D\n\010AckModel\022\033.rl.training.v1.AckMod"
+  "elReq\032\033.rl.training.v1.AckModelRsp\022q\n\031Ge"
+  "tModelDistributorStatus\022).rl.training.v1"
+  ".ModelDistributorStatusReq\032).rl.training"
+  ".v1.ModelDistributorStatusRspB\003\200\001\000b\006prot"
+  "o3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_training_2eproto_deps[1] = {
   &::descriptor_table_common_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_training_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_training_2eproto = {
-    false, false, 19410, descriptor_table_protodef_training_2eproto,
+    false, false, 17642, descriptor_table_protodef_training_2eproto,
     "training.proto",
-    &descriptor_table_training_2eproto_once, descriptor_table_training_2eproto_deps, 1, 43,
+    &descriptor_table_training_2eproto_once, descriptor_table_training_2eproto_deps, 1, 40,
     schemas, file_default_instances, TableStruct_training_2eproto::offsets,
     file_level_metadata_training_2eproto, file_level_enum_descriptors_training_2eproto,
     file_level_service_descriptors_training_2eproto,
@@ -3106,6 +2892,7 @@ ProcessedTransition::ProcessedTransition(const ProcessedTransition& from)
       decltype(_impl_._has_bits_){from._impl_._has_bits_}
     , /*decltype(_impl_._cached_size_)*/{}
     , decltype(_impl_.observation_){from._impl_.observation_}
+    , decltype(_impl_.action_mask_){from._impl_.action_mask_}
     , decltype(_impl_.item_id_){}
     , decltype(_impl_.action_){}
     , decltype(_impl_.behavior_log_probability_){}
@@ -3138,6 +2925,7 @@ inline void ProcessedTransition::SharedCtor(
       decltype(_impl_._has_bits_){}
     , /*decltype(_impl_._cached_size_)*/{}
     , decltype(_impl_.observation_){arena}
+    , decltype(_impl_.action_mask_){arena}
     , decltype(_impl_.item_id_){}
     , decltype(_impl_.action_){0}
     , decltype(_impl_.behavior_log_probability_){0}
@@ -3165,6 +2953,7 @@ ProcessedTransition::~ProcessedTransition() {
 inline void ProcessedTransition::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.observation_.~RepeatedField();
+  _impl_.action_mask_.~RepeatedField();
   _impl_.item_id_.Destroy();
 }
 
@@ -3179,6 +2968,7 @@ void ProcessedTransition::Clear() {
   (void) cached_has_bits;
 
   _impl_.observation_.Clear();
+  _impl_.action_mask_.Clear();
   _impl_.item_id_.ClearToEmpty();
   ::memset(&_impl_.action_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.advantage_) -
@@ -3272,6 +3062,17 @@ const char* ProcessedTransition::_InternalParse(const char* ptr, ::_pbi::ParseCo
       case 9:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
           _impl_.created_at_unix_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated bool action_mask = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedBoolParser(_internal_mutable_action_mask(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 80) {
+          _internal_add_action_mask(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3379,6 +3180,11 @@ uint8_t* ProcessedTransition::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt64ToArray(9, this->_internal_created_at_unix_ms(), target);
   }
 
+  // repeated bool action_mask = 10;
+  if (this->_internal_action_mask_size() > 0) {
+    target = stream->WriteFixedPacked(10, _internal_action_mask(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3399,6 +3205,17 @@ size_t ProcessedTransition::ByteSizeLong() const {
   {
     unsigned int count = static_cast<unsigned int>(this->_internal_observation_size());
     size_t data_size = 4UL * count;
+    if (data_size > 0) {
+      total_size += 1 +
+        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
+    }
+    total_size += data_size;
+  }
+
+  // repeated bool action_mask = 10;
+  {
+    unsigned int count = static_cast<unsigned int>(this->_internal_action_mask_size());
+    size_t data_size = 1UL * count;
     if (data_size > 0) {
       total_size += 1 +
         ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
@@ -3484,6 +3301,7 @@ void ProcessedTransition::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   (void) cached_has_bits;
 
   _this->_impl_.observation_.MergeFrom(from._impl_.observation_);
+  _this->_impl_.action_mask_.MergeFrom(from._impl_.action_mask_);
   if (!from._internal_item_id().empty()) {
     _this->_internal_set_item_id(from._internal_item_id());
   }
@@ -3545,6 +3363,7 @@ void ProcessedTransition::InternalSwap(ProcessedTransition* other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.observation_.InternalSwap(&other->_impl_.observation_);
+  _impl_.action_mask_.InternalSwap(&other->_impl_.action_mask_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.item_id_, lhs_arena,
       &other->_impl_.item_id_, rhs_arena
@@ -9531,1807 +9350,14 @@ void RawMetricSumCount::InternalSwap(RawMetricSumCount* other) {
 
 // ===================================================================
 
-class AgentEpisodeMetricFact::_Internal {
- public:
-  using HasBits = decltype(std::declval<AgentEpisodeMetricFact>()._impl_._has_bits_);
-  static void set_has_minimum_behavior_model_step(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
-  }
-  static void set_has_maximum_behavior_model_step(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
-  }
-  static void set_has_terminal_frame_id(HasBits* has_bits) {
-    (*has_bits)[0] |= 8u;
-  }
-  static void set_has_goal_rank_group(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-};
-
-AgentEpisodeMetricFact::AgentEpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:rl.training.v1.AgentEpisodeMetricFact)
-}
-AgentEpisodeMetricFact::AgentEpisodeMetricFact(const AgentEpisodeMetricFact& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  AgentEpisodeMetricFact* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.reward_components_){from._impl_.reward_components_}
-    , decltype(_impl_.termination_reason_){}
-    , decltype(_impl_.behavior_model_lineage_id_){}
-    , decltype(_impl_.episode_return_){}
-    , decltype(_impl_.agent_id_){}
-    , decltype(_impl_.success_){}
-    , decltype(_impl_.transition_count_){}
-    , decltype(_impl_.unique_cell_count_){}
-    , decltype(_impl_.blocked_move_count_){}
-    , decltype(_impl_.attempted_move_count_){}
-    , decltype(_impl_.shortest_action_steps_){}
-    , decltype(_impl_.goal_rank_group_){}
-    , decltype(_impl_.minimum_behavior_model_step_){}
-    , decltype(_impl_.maximum_behavior_model_step_){}
-    , decltype(_impl_.terminal_frame_id_){}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.termination_reason_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.termination_reason_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_termination_reason().empty()) {
-    _this->_impl_.termination_reason_.Set(from._internal_termination_reason(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.behavior_model_lineage_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_behavior_model_lineage_id().empty()) {
-    _this->_impl_.behavior_model_lineage_id_.Set(from._internal_behavior_model_lineage_id(), 
-      _this->GetArenaForAllocation());
-  }
-  ::memcpy(&_impl_.episode_return_, &from._impl_.episode_return_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.terminal_frame_id_) -
-    reinterpret_cast<char*>(&_impl_.episode_return_)) + sizeof(_impl_.terminal_frame_id_));
-  // @@protoc_insertion_point(copy_constructor:rl.training.v1.AgentEpisodeMetricFact)
-}
-
-inline void AgentEpisodeMetricFact::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.reward_components_){arena}
-    , decltype(_impl_.termination_reason_){}
-    , decltype(_impl_.behavior_model_lineage_id_){}
-    , decltype(_impl_.episode_return_){0}
-    , decltype(_impl_.agent_id_){0u}
-    , decltype(_impl_.success_){false}
-    , decltype(_impl_.transition_count_){uint64_t{0u}}
-    , decltype(_impl_.unique_cell_count_){uint64_t{0u}}
-    , decltype(_impl_.blocked_move_count_){uint64_t{0u}}
-    , decltype(_impl_.attempted_move_count_){uint64_t{0u}}
-    , decltype(_impl_.shortest_action_steps_){0u}
-    , decltype(_impl_.goal_rank_group_){0u}
-    , decltype(_impl_.minimum_behavior_model_step_){uint64_t{0u}}
-    , decltype(_impl_.maximum_behavior_model_step_){uint64_t{0u}}
-    , decltype(_impl_.terminal_frame_id_){uint64_t{0u}}
-  };
-  _impl_.termination_reason_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.termination_reason_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.behavior_model_lineage_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
-
-AgentEpisodeMetricFact::~AgentEpisodeMetricFact() {
-  // @@protoc_insertion_point(destructor:rl.training.v1.AgentEpisodeMetricFact)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
-  SharedDtor();
-}
-
-inline void AgentEpisodeMetricFact::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.reward_components_.~RepeatedPtrField();
-  _impl_.termination_reason_.Destroy();
-  _impl_.behavior_model_lineage_id_.Destroy();
-}
-
-void AgentEpisodeMetricFact::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void AgentEpisodeMetricFact::Clear() {
-// @@protoc_insertion_point(message_clear_start:rl.training.v1.AgentEpisodeMetricFact)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.reward_components_.Clear();
-  _impl_.termination_reason_.ClearToEmpty();
-  _impl_.behavior_model_lineage_id_.ClearToEmpty();
-  ::memset(&_impl_.episode_return_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.shortest_action_steps_) -
-      reinterpret_cast<char*>(&_impl_.episode_return_)) + sizeof(_impl_.shortest_action_steps_));
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
-    ::memset(&_impl_.goal_rank_group_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&_impl_.terminal_frame_id_) -
-        reinterpret_cast<char*>(&_impl_.goal_rank_group_)) + sizeof(_impl_.terminal_frame_id_));
-  }
-  _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* AgentEpisodeMetricFact::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // uint32 agent_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.agent_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // double episode_return = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 17)) {
-          _impl_.episode_return_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
-          ptr += sizeof(double);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint64 transition_count = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _impl_.transition_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // bool success = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string termination_reason = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
-          auto str = _internal_mutable_termination_reason();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.AgentEpisodeMetricFact.termination_reason"));
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 shortest_action_steps = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
-          _impl_.shortest_action_steps_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint64 unique_cell_count = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
-          _impl_.unique_cell_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint64 blocked_move_count = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
-          _impl_.blocked_move_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint64 attempted_move_count = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
-          _impl_.attempted_move_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_reward_components(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<82>(ptr));
-        } else
-          goto handle_unusual;
-        continue;
-      // optional uint64 minimum_behavior_model_step = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
-          _Internal::set_has_minimum_behavior_model_step(&has_bits);
-          _impl_.minimum_behavior_model_step_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional uint64 maximum_behavior_model_step = 12;
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
-          _Internal::set_has_maximum_behavior_model_step(&has_bits);
-          _impl_.maximum_behavior_model_step_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string behavior_model_lineage_id = 13;
-      case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 106)) {
-          auto str = _internal_mutable_behavior_model_lineage_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // optional uint64 terminal_frame_id = 14;
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 112)) {
-          _Internal::set_has_terminal_frame_id(&has_bits);
-          _impl_.terminal_frame_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional uint32 goal_rank_group = 15;
-      case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 120)) {
-          _Internal::set_has_goal_rank_group(&has_bits);
-          _impl_.goal_rank_group_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* AgentEpisodeMetricFact::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.AgentEpisodeMetricFact)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // uint32 agent_id = 1;
-  if (this->_internal_agent_id() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_agent_id(), target);
-  }
-
-  // double episode_return = 2;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_episode_return = this->_internal_episode_return();
-  uint64_t raw_episode_return;
-  memcpy(&raw_episode_return, &tmp_episode_return, sizeof(tmp_episode_return));
-  if (raw_episode_return != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(2, this->_internal_episode_return(), target);
-  }
-
-  // uint64 transition_count = 3;
-  if (this->_internal_transition_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(3, this->_internal_transition_count(), target);
-  }
-
-  // bool success = 4;
-  if (this->_internal_success() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_success(), target);
-  }
-
-  // string termination_reason = 5;
-  if (!this->_internal_termination_reason().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_termination_reason().data(), static_cast<int>(this->_internal_termination_reason().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.training.v1.AgentEpisodeMetricFact.termination_reason");
-    target = stream->WriteStringMaybeAliased(
-        5, this->_internal_termination_reason(), target);
-  }
-
-  // uint32 shortest_action_steps = 6;
-  if (this->_internal_shortest_action_steps() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_shortest_action_steps(), target);
-  }
-
-  // uint64 unique_cell_count = 7;
-  if (this->_internal_unique_cell_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(7, this->_internal_unique_cell_count(), target);
-  }
-
-  // uint64 blocked_move_count = 8;
-  if (this->_internal_blocked_move_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(8, this->_internal_blocked_move_count(), target);
-  }
-
-  // uint64 attempted_move_count = 9;
-  if (this->_internal_attempted_move_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(9, this->_internal_attempted_move_count(), target);
-  }
-
-  // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
-  for (unsigned i = 0,
-      n = static_cast<unsigned>(this->_internal_reward_components_size()); i < n; i++) {
-    const auto& repfield = this->_internal_reward_components(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(10, repfield, repfield.GetCachedSize(), target, stream);
-  }
-
-  // optional uint64 minimum_behavior_model_step = 11;
-  if (_internal_has_minimum_behavior_model_step()) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(11, this->_internal_minimum_behavior_model_step(), target);
-  }
-
-  // optional uint64 maximum_behavior_model_step = 12;
-  if (_internal_has_maximum_behavior_model_step()) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(12, this->_internal_maximum_behavior_model_step(), target);
-  }
-
-  // string behavior_model_lineage_id = 13;
-  if (!this->_internal_behavior_model_lineage_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_behavior_model_lineage_id().data(), static_cast<int>(this->_internal_behavior_model_lineage_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id");
-    target = stream->WriteStringMaybeAliased(
-        13, this->_internal_behavior_model_lineage_id(), target);
-  }
-
-  // optional uint64 terminal_frame_id = 14;
-  if (_internal_has_terminal_frame_id()) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(14, this->_internal_terminal_frame_id(), target);
-  }
-
-  // optional uint32 goal_rank_group = 15;
-  if (_internal_has_goal_rank_group()) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(15, this->_internal_goal_rank_group(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.AgentEpisodeMetricFact)
-  return target;
-}
-
-size_t AgentEpisodeMetricFact::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.AgentEpisodeMetricFact)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
-  total_size += 1UL * this->_internal_reward_components_size();
-  for (const auto& msg : this->_impl_.reward_components_) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
-  }
-
-  // string termination_reason = 5;
-  if (!this->_internal_termination_reason().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_termination_reason());
-  }
-
-  // string behavior_model_lineage_id = 13;
-  if (!this->_internal_behavior_model_lineage_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_behavior_model_lineage_id());
-  }
-
-  // double episode_return = 2;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_episode_return = this->_internal_episode_return();
-  uint64_t raw_episode_return;
-  memcpy(&raw_episode_return, &tmp_episode_return, sizeof(tmp_episode_return));
-  if (raw_episode_return != 0) {
-    total_size += 1 + 8;
-  }
-
-  // uint32 agent_id = 1;
-  if (this->_internal_agent_id() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_agent_id());
-  }
-
-  // bool success = 4;
-  if (this->_internal_success() != 0) {
-    total_size += 1 + 1;
-  }
-
-  // uint64 transition_count = 3;
-  if (this->_internal_transition_count() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_transition_count());
-  }
-
-  // uint64 unique_cell_count = 7;
-  if (this->_internal_unique_cell_count() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_unique_cell_count());
-  }
-
-  // uint64 blocked_move_count = 8;
-  if (this->_internal_blocked_move_count() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_blocked_move_count());
-  }
-
-  // uint64 attempted_move_count = 9;
-  if (this->_internal_attempted_move_count() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_attempted_move_count());
-  }
-
-  // uint32 shortest_action_steps = 6;
-  if (this->_internal_shortest_action_steps() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_shortest_action_steps());
-  }
-
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
-    // optional uint32 goal_rank_group = 15;
-    if (cached_has_bits & 0x00000001u) {
-      total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_goal_rank_group());
-    }
-
-    // optional uint64 minimum_behavior_model_step = 11;
-    if (cached_has_bits & 0x00000002u) {
-      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_minimum_behavior_model_step());
-    }
-
-    // optional uint64 maximum_behavior_model_step = 12;
-    if (cached_has_bits & 0x00000004u) {
-      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_maximum_behavior_model_step());
-    }
-
-    // optional uint64 terminal_frame_id = 14;
-    if (cached_has_bits & 0x00000008u) {
-      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_terminal_frame_id());
-    }
-
-  }
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData AgentEpisodeMetricFact::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    AgentEpisodeMetricFact::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AgentEpisodeMetricFact::GetClassData() const { return &_class_data_; }
-
-
-void AgentEpisodeMetricFact::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<AgentEpisodeMetricFact*>(&to_msg);
-  auto& from = static_cast<const AgentEpisodeMetricFact&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.AgentEpisodeMetricFact)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  _this->_impl_.reward_components_.MergeFrom(from._impl_.reward_components_);
-  if (!from._internal_termination_reason().empty()) {
-    _this->_internal_set_termination_reason(from._internal_termination_reason());
-  }
-  if (!from._internal_behavior_model_lineage_id().empty()) {
-    _this->_internal_set_behavior_model_lineage_id(from._internal_behavior_model_lineage_id());
-  }
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_episode_return = from._internal_episode_return();
-  uint64_t raw_episode_return;
-  memcpy(&raw_episode_return, &tmp_episode_return, sizeof(tmp_episode_return));
-  if (raw_episode_return != 0) {
-    _this->_internal_set_episode_return(from._internal_episode_return());
-  }
-  if (from._internal_agent_id() != 0) {
-    _this->_internal_set_agent_id(from._internal_agent_id());
-  }
-  if (from._internal_success() != 0) {
-    _this->_internal_set_success(from._internal_success());
-  }
-  if (from._internal_transition_count() != 0) {
-    _this->_internal_set_transition_count(from._internal_transition_count());
-  }
-  if (from._internal_unique_cell_count() != 0) {
-    _this->_internal_set_unique_cell_count(from._internal_unique_cell_count());
-  }
-  if (from._internal_blocked_move_count() != 0) {
-    _this->_internal_set_blocked_move_count(from._internal_blocked_move_count());
-  }
-  if (from._internal_attempted_move_count() != 0) {
-    _this->_internal_set_attempted_move_count(from._internal_attempted_move_count());
-  }
-  if (from._internal_shortest_action_steps() != 0) {
-    _this->_internal_set_shortest_action_steps(from._internal_shortest_action_steps());
-  }
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
-    if (cached_has_bits & 0x00000001u) {
-      _this->_impl_.goal_rank_group_ = from._impl_.goal_rank_group_;
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.minimum_behavior_model_step_ = from._impl_.minimum_behavior_model_step_;
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _this->_impl_.maximum_behavior_model_step_ = from._impl_.maximum_behavior_model_step_;
-    }
-    if (cached_has_bits & 0x00000008u) {
-      _this->_impl_.terminal_frame_id_ = from._impl_.terminal_frame_id_;
-    }
-    _this->_impl_._has_bits_[0] |= cached_has_bits;
-  }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void AgentEpisodeMetricFact::CopyFrom(const AgentEpisodeMetricFact& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.AgentEpisodeMetricFact)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool AgentEpisodeMetricFact::IsInitialized() const {
-  return true;
-}
-
-void AgentEpisodeMetricFact::InternalSwap(AgentEpisodeMetricFact* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _impl_.reward_components_.InternalSwap(&other->_impl_.reward_components_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.termination_reason_, lhs_arena,
-      &other->_impl_.termination_reason_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.behavior_model_lineage_id_, lhs_arena,
-      &other->_impl_.behavior_model_lineage_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(AgentEpisodeMetricFact, _impl_.terminal_frame_id_)
-      + sizeof(AgentEpisodeMetricFact::_impl_.terminal_frame_id_)
-      - PROTOBUF_FIELD_OFFSET(AgentEpisodeMetricFact, _impl_.episode_return_)>(
-          reinterpret_cast<char*>(&_impl_.episode_return_),
-          reinterpret_cast<char*>(&other->_impl_.episode_return_));
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata AgentEpisodeMetricFact::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[18]);
-}
-
-// ===================================================================
-
-class EpisodeMetricFact::_Internal {
- public:
-  static const ::rl::common::v1::ContentDigest& training_contract_digest(const EpisodeMetricFact* msg);
-};
-
-const ::rl::common::v1::ContentDigest&
-EpisodeMetricFact::_Internal::training_contract_digest(const EpisodeMetricFact* msg) {
-  return *msg->_impl_.training_contract_digest_;
-}
-void EpisodeMetricFact::clear_training_contract_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.training_contract_digest_ != nullptr) {
-    delete _impl_.training_contract_digest_;
-  }
-  _impl_.training_contract_digest_ = nullptr;
-}
-EpisodeMetricFact::EpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:rl.training.v1.EpisodeMetricFact)
-}
-EpisodeMetricFact::EpisodeMetricFact(const EpisodeMetricFact& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  EpisodeMetricFact* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.agents_){from._impl_.agents_}
-    , decltype(_impl_.environment_instance_id_){}
-    , decltype(_impl_.episode_id_){}
-    , decltype(_impl_.training_contract_digest_){nullptr}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.environment_instance_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.environment_instance_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_environment_instance_id().empty()) {
-    _this->_impl_.environment_instance_id_.Set(from._internal_environment_instance_id(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.episode_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.episode_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_episode_id().empty()) {
-    _this->_impl_.episode_id_.Set(from._internal_episode_id(), 
-      _this->GetArenaForAllocation());
-  }
-  if (from._internal_has_training_contract_digest()) {
-    _this->_impl_.training_contract_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.training_contract_digest_);
-  }
-  // @@protoc_insertion_point(copy_constructor:rl.training.v1.EpisodeMetricFact)
-}
-
-inline void EpisodeMetricFact::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_.agents_){arena}
-    , decltype(_impl_.environment_instance_id_){}
-    , decltype(_impl_.episode_id_){}
-    , decltype(_impl_.training_contract_digest_){nullptr}
-    , /*decltype(_impl_._cached_size_)*/{}
-  };
-  _impl_.environment_instance_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.environment_instance_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.episode_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.episode_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
-
-EpisodeMetricFact::~EpisodeMetricFact() {
-  // @@protoc_insertion_point(destructor:rl.training.v1.EpisodeMetricFact)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
-  SharedDtor();
-}
-
-inline void EpisodeMetricFact::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.agents_.~RepeatedPtrField();
-  _impl_.environment_instance_id_.Destroy();
-  _impl_.episode_id_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.training_contract_digest_;
-}
-
-void EpisodeMetricFact::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void EpisodeMetricFact::Clear() {
-// @@protoc_insertion_point(message_clear_start:rl.training.v1.EpisodeMetricFact)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.agents_.Clear();
-  _impl_.environment_instance_id_.ClearToEmpty();
-  _impl_.episode_id_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.training_contract_digest_ != nullptr) {
-    delete _impl_.training_contract_digest_;
-  }
-  _impl_.training_contract_digest_ = nullptr;
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* EpisodeMetricFact::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string environment_instance_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_environment_instance_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.EpisodeMetricFact.environment_instance_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string episode_id = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_episode_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.EpisodeMetricFact.episode_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ContentDigest training_contract_digest = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_training_contract_digest(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_agents(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* EpisodeMetricFact::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.EpisodeMetricFact)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string environment_instance_id = 2;
-  if (!this->_internal_environment_instance_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_environment_instance_id().data(), static_cast<int>(this->_internal_environment_instance_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.training.v1.EpisodeMetricFact.environment_instance_id");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_environment_instance_id(), target);
-  }
-
-  // string episode_id = 3;
-  if (!this->_internal_episode_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_episode_id().data(), static_cast<int>(this->_internal_episode_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.training.v1.EpisodeMetricFact.episode_id");
-    target = stream->WriteStringMaybeAliased(
-        3, this->_internal_episode_id(), target);
-  }
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 4;
-  if (this->_internal_has_training_contract_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::training_contract_digest(this),
-        _Internal::training_contract_digest(this).GetCachedSize(), target, stream);
-  }
-
-  // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
-  for (unsigned i = 0,
-      n = static_cast<unsigned>(this->_internal_agents_size()); i < n; i++) {
-    const auto& repfield = this->_internal_agents(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(5, repfield, repfield.GetCachedSize(), target, stream);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.EpisodeMetricFact)
-  return target;
-}
-
-size_t EpisodeMetricFact::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.EpisodeMetricFact)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
-  total_size += 1UL * this->_internal_agents_size();
-  for (const auto& msg : this->_impl_.agents_) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
-  }
-
-  // string environment_instance_id = 2;
-  if (!this->_internal_environment_instance_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_environment_instance_id());
-  }
-
-  // string episode_id = 3;
-  if (!this->_internal_episode_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_episode_id());
-  }
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 4;
-  if (this->_internal_has_training_contract_digest()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.training_contract_digest_);
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EpisodeMetricFact::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    EpisodeMetricFact::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EpisodeMetricFact::GetClassData() const { return &_class_data_; }
-
-
-void EpisodeMetricFact::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<EpisodeMetricFact*>(&to_msg);
-  auto& from = static_cast<const EpisodeMetricFact&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.EpisodeMetricFact)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  _this->_impl_.agents_.MergeFrom(from._impl_.agents_);
-  if (!from._internal_environment_instance_id().empty()) {
-    _this->_internal_set_environment_instance_id(from._internal_environment_instance_id());
-  }
-  if (!from._internal_episode_id().empty()) {
-    _this->_internal_set_episode_id(from._internal_episode_id());
-  }
-  if (from._internal_has_training_contract_digest()) {
-    _this->_internal_mutable_training_contract_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_training_contract_digest());
-  }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void EpisodeMetricFact::CopyFrom(const EpisodeMetricFact& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.EpisodeMetricFact)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool EpisodeMetricFact::IsInitialized() const {
-  return true;
-}
-
-void EpisodeMetricFact::InternalSwap(EpisodeMetricFact* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _impl_.agents_.InternalSwap(&other->_impl_.agents_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.environment_instance_id_, lhs_arena,
-      &other->_impl_.environment_instance_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.episode_id_, lhs_arena,
-      &other->_impl_.episode_id_, rhs_arena
-  );
-  swap(_impl_.training_contract_digest_, other->_impl_.training_contract_digest_);
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata EpisodeMetricFact::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[19]);
-}
-
-// ===================================================================
-
-class TrainUpdateMetricFact::_Internal {
- public:
-  using HasBits = decltype(std::declval<TrainUpdateMetricFact>()._impl_._has_bits_);
-  static const ::rl::training::v1::ModelIdentity& published_model(const TrainUpdateMetricFact* msg);
-  static const ::rl::common::v1::ContentDigest& training_contract_digest(const TrainUpdateMetricFact* msg);
-  static void set_has_minimum_behavior_model_step(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-  static void set_has_maximum_behavior_model_step(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
-  }
-  static const ::rl::common::v1::ContentDigest& rollout_estimator_profile_digest(const TrainUpdateMetricFact* msg);
-};
-
-const ::rl::training::v1::ModelIdentity&
-TrainUpdateMetricFact::_Internal::published_model(const TrainUpdateMetricFact* msg) {
-  return *msg->_impl_.published_model_;
-}
-const ::rl::common::v1::ContentDigest&
-TrainUpdateMetricFact::_Internal::training_contract_digest(const TrainUpdateMetricFact* msg) {
-  return *msg->_impl_.training_contract_digest_;
-}
-const ::rl::common::v1::ContentDigest&
-TrainUpdateMetricFact::_Internal::rollout_estimator_profile_digest(const TrainUpdateMetricFact* msg) {
-  return *msg->_impl_.rollout_estimator_profile_digest_;
-}
-void TrainUpdateMetricFact::clear_training_contract_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.training_contract_digest_ != nullptr) {
-    delete _impl_.training_contract_digest_;
-  }
-  _impl_.training_contract_digest_ = nullptr;
-}
-void TrainUpdateMetricFact::clear_rollout_estimator_profile_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.rollout_estimator_profile_digest_ != nullptr) {
-    delete _impl_.rollout_estimator_profile_digest_;
-  }
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-}
-TrainUpdateMetricFact::TrainUpdateMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:rl.training.v1.TrainUpdateMetricFact)
-}
-TrainUpdateMetricFact::TrainUpdateMetricFact(const TrainUpdateMetricFact& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  TrainUpdateMetricFact* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.ppo_statistics_){from._impl_.ppo_statistics_}
-    , decltype(_impl_.train_update_id_){}
-    , decltype(_impl_.delivery_id_){}
-    , decltype(_impl_.behavior_model_lineage_id_){}
-    , decltype(_impl_.published_model_){nullptr}
-    , decltype(_impl_.training_contract_digest_){nullptr}
-    , decltype(_impl_.rollout_estimator_profile_digest_){nullptr}
-    , decltype(_impl_.train_update_sequence_){}
-    , decltype(_impl_.cumulative_trained_samples_){}
-    , decltype(_impl_.actual_batch_size_){}
-    , decltype(_impl_.minimum_behavior_model_step_){}
-    , decltype(_impl_.maximum_behavior_model_step_){}
-    , decltype(_impl_.requested_train_batch_size_){}
-    , decltype(_impl_.pool_draw_slot_count_){}
-    , decltype(_impl_.unique_item_count_){}
-    , decltype(_impl_.duplicate_item_slot_count_){}
-    , decltype(_impl_.sample_evaluation_count_){}
-    , decltype(_impl_.optimizer_step_count_){}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.train_update_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.train_update_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_train_update_id().empty()) {
-    _this->_impl_.train_update_id_.Set(from._internal_train_update_id(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.delivery_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.delivery_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_delivery_id().empty()) {
-    _this->_impl_.delivery_id_.Set(from._internal_delivery_id(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.behavior_model_lineage_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_behavior_model_lineage_id().empty()) {
-    _this->_impl_.behavior_model_lineage_id_.Set(from._internal_behavior_model_lineage_id(), 
-      _this->GetArenaForAllocation());
-  }
-  if (from._internal_has_published_model()) {
-    _this->_impl_.published_model_ = new ::rl::training::v1::ModelIdentity(*from._impl_.published_model_);
-  }
-  if (from._internal_has_training_contract_digest()) {
-    _this->_impl_.training_contract_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.training_contract_digest_);
-  }
-  if (from._internal_has_rollout_estimator_profile_digest()) {
-    _this->_impl_.rollout_estimator_profile_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.rollout_estimator_profile_digest_);
-  }
-  ::memcpy(&_impl_.train_update_sequence_, &from._impl_.train_update_sequence_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.optimizer_step_count_) -
-    reinterpret_cast<char*>(&_impl_.train_update_sequence_)) + sizeof(_impl_.optimizer_step_count_));
-  // @@protoc_insertion_point(copy_constructor:rl.training.v1.TrainUpdateMetricFact)
-}
-
-inline void TrainUpdateMetricFact::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.ppo_statistics_){arena}
-    , decltype(_impl_.train_update_id_){}
-    , decltype(_impl_.delivery_id_){}
-    , decltype(_impl_.behavior_model_lineage_id_){}
-    , decltype(_impl_.published_model_){nullptr}
-    , decltype(_impl_.training_contract_digest_){nullptr}
-    , decltype(_impl_.rollout_estimator_profile_digest_){nullptr}
-    , decltype(_impl_.train_update_sequence_){uint64_t{0u}}
-    , decltype(_impl_.cumulative_trained_samples_){int64_t{0}}
-    , decltype(_impl_.actual_batch_size_){int64_t{0}}
-    , decltype(_impl_.minimum_behavior_model_step_){uint64_t{0u}}
-    , decltype(_impl_.maximum_behavior_model_step_){uint64_t{0u}}
-    , decltype(_impl_.requested_train_batch_size_){int64_t{0}}
-    , decltype(_impl_.pool_draw_slot_count_){int64_t{0}}
-    , decltype(_impl_.unique_item_count_){int64_t{0}}
-    , decltype(_impl_.duplicate_item_slot_count_){int64_t{0}}
-    , decltype(_impl_.sample_evaluation_count_){int64_t{0}}
-    , decltype(_impl_.optimizer_step_count_){int64_t{0}}
-  };
-  _impl_.train_update_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.train_update_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.delivery_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.delivery_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.behavior_model_lineage_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
-
-TrainUpdateMetricFact::~TrainUpdateMetricFact() {
-  // @@protoc_insertion_point(destructor:rl.training.v1.TrainUpdateMetricFact)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
-  SharedDtor();
-}
-
-inline void TrainUpdateMetricFact::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.ppo_statistics_.~RepeatedPtrField();
-  _impl_.train_update_id_.Destroy();
-  _impl_.delivery_id_.Destroy();
-  _impl_.behavior_model_lineage_id_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.published_model_;
-  if (this != internal_default_instance()) delete _impl_.training_contract_digest_;
-  if (this != internal_default_instance()) delete _impl_.rollout_estimator_profile_digest_;
-}
-
-void TrainUpdateMetricFact::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void TrainUpdateMetricFact::Clear() {
-// @@protoc_insertion_point(message_clear_start:rl.training.v1.TrainUpdateMetricFact)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.ppo_statistics_.Clear();
-  _impl_.train_update_id_.ClearToEmpty();
-  _impl_.delivery_id_.ClearToEmpty();
-  _impl_.behavior_model_lineage_id_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.published_model_ != nullptr) {
-    delete _impl_.published_model_;
-  }
-  _impl_.published_model_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.training_contract_digest_ != nullptr) {
-    delete _impl_.training_contract_digest_;
-  }
-  _impl_.training_contract_digest_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.rollout_estimator_profile_digest_ != nullptr) {
-    delete _impl_.rollout_estimator_profile_digest_;
-  }
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-  ::memset(&_impl_.train_update_sequence_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.actual_batch_size_) -
-      reinterpret_cast<char*>(&_impl_.train_update_sequence_)) + sizeof(_impl_.actual_batch_size_));
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    ::memset(&_impl_.minimum_behavior_model_step_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&_impl_.maximum_behavior_model_step_) -
-        reinterpret_cast<char*>(&_impl_.minimum_behavior_model_step_)) + sizeof(_impl_.maximum_behavior_model_step_));
-  }
-  ::memset(&_impl_.requested_train_batch_size_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.optimizer_step_count_) -
-      reinterpret_cast<char*>(&_impl_.requested_train_batch_size_)) + sizeof(_impl_.optimizer_step_count_));
-  _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* TrainUpdateMetricFact::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string train_update_id = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_train_update_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.TrainUpdateMetricFact.train_update_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // uint64 train_update_sequence = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.train_update_sequence_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.training.v1.ModelIdentity published_model = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_published_model(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string delivery_id = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          auto str = _internal_mutable_delivery_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.TrainUpdateMetricFact.delivery_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ContentDigest training_contract_digest = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
-          ptr = ctx->ParseMessage(_internal_mutable_training_contract_digest(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 cumulative_trained_samples = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
-          _impl_.cumulative_trained_samples_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 actual_batch_size = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
-          _impl_.actual_batch_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional uint64 minimum_behavior_model_step = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
-          _Internal::set_has_minimum_behavior_model_step(&has_bits);
-          _impl_.minimum_behavior_model_step_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // optional uint64 maximum_behavior_model_step = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
-          _Internal::set_has_maximum_behavior_model_step(&has_bits);
-          _impl_.maximum_behavior_model_step_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_ppo_statistics(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<82>(ptr));
-        } else
-          goto handle_unusual;
-        continue;
-      // string behavior_model_lineage_id = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
-          auto str = _internal_mutable_behavior_model_lineage_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 requested_train_batch_size = 12;
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
-          _impl_.requested_train_batch_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 pool_draw_slot_count = 13;
-      case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
-          _impl_.pool_draw_slot_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 unique_item_count = 14;
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 112)) {
-          _impl_.unique_item_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 duplicate_item_slot_count = 15;
-      case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 120)) {
-          _impl_.duplicate_item_slot_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 sample_evaluation_count = 16;
-      case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 128)) {
-          _impl_.sample_evaluation_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int64 optimizer_step_count = 17;
-      case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 136)) {
-          _impl_.optimizer_step_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
-      case 18:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 146)) {
-          ptr = ctx->ParseMessage(_internal_mutable_rollout_estimator_profile_digest(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* TrainUpdateMetricFact::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.TrainUpdateMetricFact)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string train_update_id = 1;
-  if (!this->_internal_train_update_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_train_update_id().data(), static_cast<int>(this->_internal_train_update_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.training.v1.TrainUpdateMetricFact.train_update_id");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_train_update_id(), target);
-  }
-
-  // uint64 train_update_sequence = 2;
-  if (this->_internal_train_update_sequence() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_train_update_sequence(), target);
-  }
-
-  // .rl.training.v1.ModelIdentity published_model = 3;
-  if (this->_internal_has_published_model()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::published_model(this),
-        _Internal::published_model(this).GetCachedSize(), target, stream);
-  }
-
-  // string delivery_id = 4;
-  if (!this->_internal_delivery_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_delivery_id().data(), static_cast<int>(this->_internal_delivery_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.training.v1.TrainUpdateMetricFact.delivery_id");
-    target = stream->WriteStringMaybeAliased(
-        4, this->_internal_delivery_id(), target);
-  }
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 5;
-  if (this->_internal_has_training_contract_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(5, _Internal::training_contract_digest(this),
-        _Internal::training_contract_digest(this).GetCachedSize(), target, stream);
-  }
-
-  // int64 cumulative_trained_samples = 6;
-  if (this->_internal_cumulative_trained_samples() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(6, this->_internal_cumulative_trained_samples(), target);
-  }
-
-  // int64 actual_batch_size = 7;
-  if (this->_internal_actual_batch_size() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(7, this->_internal_actual_batch_size(), target);
-  }
-
-  // optional uint64 minimum_behavior_model_step = 8;
-  if (_internal_has_minimum_behavior_model_step()) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(8, this->_internal_minimum_behavior_model_step(), target);
-  }
-
-  // optional uint64 maximum_behavior_model_step = 9;
-  if (_internal_has_maximum_behavior_model_step()) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(9, this->_internal_maximum_behavior_model_step(), target);
-  }
-
-  // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
-  for (unsigned i = 0,
-      n = static_cast<unsigned>(this->_internal_ppo_statistics_size()); i < n; i++) {
-    const auto& repfield = this->_internal_ppo_statistics(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(10, repfield, repfield.GetCachedSize(), target, stream);
-  }
-
-  // string behavior_model_lineage_id = 11;
-  if (!this->_internal_behavior_model_lineage_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_behavior_model_lineage_id().data(), static_cast<int>(this->_internal_behavior_model_lineage_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id");
-    target = stream->WriteStringMaybeAliased(
-        11, this->_internal_behavior_model_lineage_id(), target);
-  }
-
-  // int64 requested_train_batch_size = 12;
-  if (this->_internal_requested_train_batch_size() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(12, this->_internal_requested_train_batch_size(), target);
-  }
-
-  // int64 pool_draw_slot_count = 13;
-  if (this->_internal_pool_draw_slot_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(13, this->_internal_pool_draw_slot_count(), target);
-  }
-
-  // int64 unique_item_count = 14;
-  if (this->_internal_unique_item_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(14, this->_internal_unique_item_count(), target);
-  }
-
-  // int64 duplicate_item_slot_count = 15;
-  if (this->_internal_duplicate_item_slot_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(15, this->_internal_duplicate_item_slot_count(), target);
-  }
-
-  // int64 sample_evaluation_count = 16;
-  if (this->_internal_sample_evaluation_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(16, this->_internal_sample_evaluation_count(), target);
-  }
-
-  // int64 optimizer_step_count = 17;
-  if (this->_internal_optimizer_step_count() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(17, this->_internal_optimizer_step_count(), target);
-  }
-
-  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
-  if (this->_internal_has_rollout_estimator_profile_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(18, _Internal::rollout_estimator_profile_digest(this),
-        _Internal::rollout_estimator_profile_digest(this).GetCachedSize(), target, stream);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.TrainUpdateMetricFact)
-  return target;
-}
-
-size_t TrainUpdateMetricFact::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.TrainUpdateMetricFact)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
-  total_size += 1UL * this->_internal_ppo_statistics_size();
-  for (const auto& msg : this->_impl_.ppo_statistics_) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
-  }
-
-  // string train_update_id = 1;
-  if (!this->_internal_train_update_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_train_update_id());
-  }
-
-  // string delivery_id = 4;
-  if (!this->_internal_delivery_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_delivery_id());
-  }
-
-  // string behavior_model_lineage_id = 11;
-  if (!this->_internal_behavior_model_lineage_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_behavior_model_lineage_id());
-  }
-
-  // .rl.training.v1.ModelIdentity published_model = 3;
-  if (this->_internal_has_published_model()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.published_model_);
-  }
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 5;
-  if (this->_internal_has_training_contract_digest()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.training_contract_digest_);
-  }
-
-  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
-  if (this->_internal_has_rollout_estimator_profile_digest()) {
-    total_size += 2 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.rollout_estimator_profile_digest_);
-  }
-
-  // uint64 train_update_sequence = 2;
-  if (this->_internal_train_update_sequence() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_train_update_sequence());
-  }
-
-  // int64 cumulative_trained_samples = 6;
-  if (this->_internal_cumulative_trained_samples() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_cumulative_trained_samples());
-  }
-
-  // int64 actual_batch_size = 7;
-  if (this->_internal_actual_batch_size() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_actual_batch_size());
-  }
-
-  cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    // optional uint64 minimum_behavior_model_step = 8;
-    if (cached_has_bits & 0x00000001u) {
-      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_minimum_behavior_model_step());
-    }
-
-    // optional uint64 maximum_behavior_model_step = 9;
-    if (cached_has_bits & 0x00000002u) {
-      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_maximum_behavior_model_step());
-    }
-
-  }
-  // int64 requested_train_batch_size = 12;
-  if (this->_internal_requested_train_batch_size() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_requested_train_batch_size());
-  }
-
-  // int64 pool_draw_slot_count = 13;
-  if (this->_internal_pool_draw_slot_count() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_pool_draw_slot_count());
-  }
-
-  // int64 unique_item_count = 14;
-  if (this->_internal_unique_item_count() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_unique_item_count());
-  }
-
-  // int64 duplicate_item_slot_count = 15;
-  if (this->_internal_duplicate_item_slot_count() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_duplicate_item_slot_count());
-  }
-
-  // int64 sample_evaluation_count = 16;
-  if (this->_internal_sample_evaluation_count() != 0) {
-    total_size += 2 +
-      ::_pbi::WireFormatLite::Int64Size(
-        this->_internal_sample_evaluation_count());
-  }
-
-  // int64 optimizer_step_count = 17;
-  if (this->_internal_optimizer_step_count() != 0) {
-    total_size += 2 +
-      ::_pbi::WireFormatLite::Int64Size(
-        this->_internal_optimizer_step_count());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TrainUpdateMetricFact::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    TrainUpdateMetricFact::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TrainUpdateMetricFact::GetClassData() const { return &_class_data_; }
-
-
-void TrainUpdateMetricFact::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<TrainUpdateMetricFact*>(&to_msg);
-  auto& from = static_cast<const TrainUpdateMetricFact&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.TrainUpdateMetricFact)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  _this->_impl_.ppo_statistics_.MergeFrom(from._impl_.ppo_statistics_);
-  if (!from._internal_train_update_id().empty()) {
-    _this->_internal_set_train_update_id(from._internal_train_update_id());
-  }
-  if (!from._internal_delivery_id().empty()) {
-    _this->_internal_set_delivery_id(from._internal_delivery_id());
-  }
-  if (!from._internal_behavior_model_lineage_id().empty()) {
-    _this->_internal_set_behavior_model_lineage_id(from._internal_behavior_model_lineage_id());
-  }
-  if (from._internal_has_published_model()) {
-    _this->_internal_mutable_published_model()->::rl::training::v1::ModelIdentity::MergeFrom(
-        from._internal_published_model());
-  }
-  if (from._internal_has_training_contract_digest()) {
-    _this->_internal_mutable_training_contract_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_training_contract_digest());
-  }
-  if (from._internal_has_rollout_estimator_profile_digest()) {
-    _this->_internal_mutable_rollout_estimator_profile_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_rollout_estimator_profile_digest());
-  }
-  if (from._internal_train_update_sequence() != 0) {
-    _this->_internal_set_train_update_sequence(from._internal_train_update_sequence());
-  }
-  if (from._internal_cumulative_trained_samples() != 0) {
-    _this->_internal_set_cumulative_trained_samples(from._internal_cumulative_trained_samples());
-  }
-  if (from._internal_actual_batch_size() != 0) {
-    _this->_internal_set_actual_batch_size(from._internal_actual_batch_size());
-  }
-  cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      _this->_impl_.minimum_behavior_model_step_ = from._impl_.minimum_behavior_model_step_;
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _this->_impl_.maximum_behavior_model_step_ = from._impl_.maximum_behavior_model_step_;
-    }
-    _this->_impl_._has_bits_[0] |= cached_has_bits;
-  }
-  if (from._internal_requested_train_batch_size() != 0) {
-    _this->_internal_set_requested_train_batch_size(from._internal_requested_train_batch_size());
-  }
-  if (from._internal_pool_draw_slot_count() != 0) {
-    _this->_internal_set_pool_draw_slot_count(from._internal_pool_draw_slot_count());
-  }
-  if (from._internal_unique_item_count() != 0) {
-    _this->_internal_set_unique_item_count(from._internal_unique_item_count());
-  }
-  if (from._internal_duplicate_item_slot_count() != 0) {
-    _this->_internal_set_duplicate_item_slot_count(from._internal_duplicate_item_slot_count());
-  }
-  if (from._internal_sample_evaluation_count() != 0) {
-    _this->_internal_set_sample_evaluation_count(from._internal_sample_evaluation_count());
-  }
-  if (from._internal_optimizer_step_count() != 0) {
-    _this->_internal_set_optimizer_step_count(from._internal_optimizer_step_count());
-  }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void TrainUpdateMetricFact::CopyFrom(const TrainUpdateMetricFact& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.TrainUpdateMetricFact)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool TrainUpdateMetricFact::IsInitialized() const {
-  return true;
-}
-
-void TrainUpdateMetricFact::InternalSwap(TrainUpdateMetricFact* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _impl_.ppo_statistics_.InternalSwap(&other->_impl_.ppo_statistics_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.train_update_id_, lhs_arena,
-      &other->_impl_.train_update_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.delivery_id_, lhs_arena,
-      &other->_impl_.delivery_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.behavior_model_lineage_id_, lhs_arena,
-      &other->_impl_.behavior_model_lineage_id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TrainUpdateMetricFact, _impl_.optimizer_step_count_)
-      + sizeof(TrainUpdateMetricFact::_impl_.optimizer_step_count_)
-      - PROTOBUF_FIELD_OFFSET(TrainUpdateMetricFact, _impl_.published_model_)>(
-          reinterpret_cast<char*>(&_impl_.published_model_),
-          reinterpret_cast<char*>(&other->_impl_.published_model_));
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata TrainUpdateMetricFact::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[20]);
-}
-
-// ===================================================================
-
 class MetricEvent::_Internal {
  public:
   using HasBits = decltype(std::declval<MetricEvent>()._impl_._has_bits_);
   static void set_has_observed_at_unix_ms(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
-  static const ::rl::training::v1::EpisodeMetricFact& episode(const MetricEvent* msg);
-  static const ::rl::training::v1::TrainUpdateMetricFact& train_update(const MetricEvent* msg);
 };
 
-const ::rl::training::v1::EpisodeMetricFact&
-MetricEvent::_Internal::episode(const MetricEvent* msg) {
-  return *msg->_impl_.fact_.episode_;
-}
-const ::rl::training::v1::TrainUpdateMetricFact&
-MetricEvent::_Internal::train_update(const MetricEvent* msg) {
-  return *msg->_impl_.fact_.train_update_;
-}
-void MetricEvent::set_allocated_episode(::rl::training::v1::EpisodeMetricFact* episode) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  clear_fact();
-  if (episode) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(episode);
-    if (message_arena != submessage_arena) {
-      episode = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, episode, submessage_arena);
-    }
-    set_has_episode();
-    _impl_.fact_.episode_ = episode;
-  }
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.episode)
-}
-void MetricEvent::set_allocated_train_update(::rl::training::v1::TrainUpdateMetricFact* train_update) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  clear_fact();
-  if (train_update) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(train_update);
-    if (message_arena != submessage_arena) {
-      train_update = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, train_update, submessage_arena);
-    }
-    set_has_train_update();
-    _impl_.fact_.train_update_ = train_update;
-  }
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.train_update)
-}
 MetricEvent::MetricEvent(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -11344,31 +9370,22 @@ MetricEvent::MetricEvent(const MetricEvent& from)
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){from._impl_._has_bits_}
     , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.fact_payload_){}
     , decltype(_impl_.event_sequence_){}
-    , decltype(_impl_.observed_at_unix_ms_){}
-    , decltype(_impl_.fact_){}
-    , /*decltype(_impl_._oneof_case_)*/{}};
+    , decltype(_impl_.observed_at_unix_ms_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.fact_payload_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.fact_payload_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_fact_payload().empty()) {
+    _this->_impl_.fact_payload_.Set(from._internal_fact_payload(), 
+      _this->GetArenaForAllocation());
+  }
   ::memcpy(&_impl_.event_sequence_, &from._impl_.event_sequence_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.observed_at_unix_ms_) -
     reinterpret_cast<char*>(&_impl_.event_sequence_)) + sizeof(_impl_.observed_at_unix_ms_));
-  clear_has_fact();
-  switch (from.fact_case()) {
-    case kEpisode: {
-      _this->_internal_mutable_episode()->::rl::training::v1::EpisodeMetricFact::MergeFrom(
-          from._internal_episode());
-      break;
-    }
-    case kTrainUpdate: {
-      _this->_internal_mutable_train_update()->::rl::training::v1::TrainUpdateMetricFact::MergeFrom(
-          from._internal_train_update());
-      break;
-    }
-    case FACT_NOT_SET: {
-      break;
-    }
-  }
   // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricEvent)
 }
 
@@ -11379,12 +9396,14 @@ inline void MetricEvent::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){}
     , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.fact_payload_){}
     , decltype(_impl_.event_sequence_){uint64_t{0u}}
     , decltype(_impl_.observed_at_unix_ms_){int64_t{0}}
-    , decltype(_impl_.fact_){}
-    , /*decltype(_impl_._oneof_case_)*/{}
   };
-  clear_has_fact();
+  _impl_.fact_payload_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.fact_payload_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 MetricEvent::~MetricEvent() {
@@ -11398,37 +9417,12 @@ MetricEvent::~MetricEvent() {
 
 inline void MetricEvent::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  if (has_fact()) {
-    clear_fact();
-  }
+  _impl_.fact_payload_.Destroy();
 }
 
 void MetricEvent::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
-
-void MetricEvent::clear_fact() {
-// @@protoc_insertion_point(one_of_clear_start:rl.training.v1.MetricEvent)
-  switch (fact_case()) {
-    case kEpisode: {
-      if (GetArenaForAllocation() == nullptr) {
-        delete _impl_.fact_.episode_;
-      }
-      break;
-    }
-    case kTrainUpdate: {
-      if (GetArenaForAllocation() == nullptr) {
-        delete _impl_.fact_.train_update_;
-      }
-      break;
-    }
-    case FACT_NOT_SET: {
-      break;
-    }
-  }
-  _impl_._oneof_case_[0] = FACT_NOT_SET;
-}
-
 
 void MetricEvent::Clear() {
 // @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricEvent)
@@ -11436,9 +9430,9 @@ void MetricEvent::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.fact_payload_.ClearToEmpty();
   _impl_.event_sequence_ = uint64_t{0u};
   _impl_.observed_at_unix_ms_ = int64_t{0};
-  clear_fact();
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -11467,18 +9461,11 @@ const char* MetricEvent::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
         } else
           goto handle_unusual;
         continue;
-      // .rl.training.v1.EpisodeMetricFact episode = 6;
+      // bytes fact_payload = 6;
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
-          ptr = ctx->ParseMessage(_internal_mutable_episode(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.training.v1.TrainUpdateMetricFact train_update = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
-          ptr = ctx->ParseMessage(_internal_mutable_train_update(), ptr);
+          auto str = _internal_mutable_fact_payload();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -11525,18 +9512,10 @@ uint8_t* MetricEvent::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt64ToArray(5, this->_internal_observed_at_unix_ms(), target);
   }
 
-  // .rl.training.v1.EpisodeMetricFact episode = 6;
-  if (_internal_has_episode()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(6, _Internal::episode(this),
-        _Internal::episode(this).GetCachedSize(), target, stream);
-  }
-
-  // .rl.training.v1.TrainUpdateMetricFact train_update = 7;
-  if (_internal_has_train_update()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(7, _Internal::train_update(this),
-        _Internal::train_update(this).GetCachedSize(), target, stream);
+  // bytes fact_payload = 6;
+  if (!this->_internal_fact_payload().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        6, this->_internal_fact_payload(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -11555,6 +9534,13 @@ size_t MetricEvent::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // bytes fact_payload = 6;
+  if (!this->_internal_fact_payload().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_fact_payload());
+  }
+
   // uint64 event_sequence = 4;
   if (this->_internal_event_sequence() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_event_sequence());
@@ -11566,25 +9552,6 @@ size_t MetricEvent::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_observed_at_unix_ms());
   }
 
-  switch (fact_case()) {
-    // .rl.training.v1.EpisodeMetricFact episode = 6;
-    case kEpisode: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *_impl_.fact_.episode_);
-      break;
-    }
-    // .rl.training.v1.TrainUpdateMetricFact train_update = 7;
-    case kTrainUpdate: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *_impl_.fact_.train_update_);
-      break;
-    }
-    case FACT_NOT_SET: {
-      break;
-    }
-  }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -11603,26 +9570,14 @@ void MetricEvent::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_fact_payload().empty()) {
+    _this->_internal_set_fact_payload(from._internal_fact_payload());
+  }
   if (from._internal_event_sequence() != 0) {
     _this->_internal_set_event_sequence(from._internal_event_sequence());
   }
   if (from._internal_has_observed_at_unix_ms()) {
     _this->_internal_set_observed_at_unix_ms(from._internal_observed_at_unix_ms());
-  }
-  switch (from.fact_case()) {
-    case kEpisode: {
-      _this->_internal_mutable_episode()->::rl::training::v1::EpisodeMetricFact::MergeFrom(
-          from._internal_episode());
-      break;
-    }
-    case kTrainUpdate: {
-      _this->_internal_mutable_train_update()->::rl::training::v1::TrainUpdateMetricFact::MergeFrom(
-          from._internal_train_update());
-      break;
-    }
-    case FACT_NOT_SET: {
-      break;
-    }
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -11640,22 +9595,26 @@ bool MetricEvent::IsInitialized() const {
 
 void MetricEvent::InternalSwap(MetricEvent* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.fact_payload_, lhs_arena,
+      &other->_impl_.fact_payload_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(MetricEvent, _impl_.observed_at_unix_ms_)
       + sizeof(MetricEvent::_impl_.observed_at_unix_ms_)
       - PROTOBUF_FIELD_OFFSET(MetricEvent, _impl_.event_sequence_)>(
           reinterpret_cast<char*>(&_impl_.event_sequence_),
           reinterpret_cast<char*>(&other->_impl_.event_sequence_));
-  swap(_impl_.fact_, other->_impl_.fact_);
-  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricEvent::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[21]);
+      file_level_metadata_training_2eproto[18]);
 }
 
 // ===================================================================
@@ -11942,7 +9901,7 @@ void MetricSequenceGap::InternalSwap(MetricSequenceGap* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricSequenceGap::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[22]);
+      file_level_metadata_training_2eproto[19]);
 }
 
 // ===================================================================
@@ -12536,7 +10495,7 @@ void MetricBatch::InternalSwap(MetricBatch* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricBatch::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[23]);
+      file_level_metadata_training_2eproto[20]);
 }
 
 // ===================================================================
@@ -12841,7 +10800,7 @@ void MetricBatchCursor::InternalSwap(MetricBatchCursor* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricBatchCursor::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[24]);
+      file_level_metadata_training_2eproto[21]);
 }
 
 // ===================================================================
@@ -13211,7 +11170,7 @@ void GetMetricBatchReq::InternalSwap(GetMetricBatchReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetMetricBatchReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[25]);
+      file_level_metadata_training_2eproto[22]);
 }
 
 // ===================================================================
@@ -13589,7 +11548,7 @@ void GetMetricBatchRsp::InternalSwap(GetMetricBatchRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetMetricBatchRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[26]);
+      file_level_metadata_training_2eproto[23]);
 }
 
 // ===================================================================
@@ -13881,7 +11840,7 @@ void AckMetricBatchReq::InternalSwap(AckMetricBatchReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckMetricBatchReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[27]);
+      file_level_metadata_training_2eproto[24]);
 }
 
 // ===================================================================
@@ -14259,7 +12218,7 @@ void AckMetricBatchRsp::InternalSwap(AckMetricBatchRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckMetricBatchRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[28]);
+      file_level_metadata_training_2eproto[25]);
 }
 
 // ===================================================================
@@ -14299,7 +12258,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AIServerStatusReq::GetClassDat
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[29]);
+      file_level_metadata_training_2eproto[26]);
 }
 
 // ===================================================================
@@ -15653,7 +13612,7 @@ void AIServerStatusRsp::InternalSwap(AIServerStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[30]);
+      file_level_metadata_training_2eproto[27]);
 }
 
 // ===================================================================
@@ -15867,7 +13826,7 @@ void SegmentCloseCount::InternalSwap(SegmentCloseCount* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SegmentCloseCount::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[31]);
+      file_level_metadata_training_2eproto[28]);
 }
 
 // ===================================================================
@@ -16282,7 +14241,7 @@ void ModelArtifactManifest::InternalSwap(ModelArtifactManifest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelArtifactManifest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[32]);
+      file_level_metadata_training_2eproto[29]);
 }
 
 // ===================================================================
@@ -16579,7 +14538,7 @@ void RegisterModelReq::InternalSwap(RegisterModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[33]);
+      file_level_metadata_training_2eproto[30]);
 }
 
 // ===================================================================
@@ -16905,7 +14864,7 @@ void RegisterModelRsp::InternalSwap(RegisterModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[34]);
+      file_level_metadata_training_2eproto[31]);
 }
 
 // ===================================================================
@@ -17176,7 +15135,7 @@ void GetModelManifestReq::InternalSwap(GetModelManifestReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[35]);
+      file_level_metadata_training_2eproto[32]);
 }
 
 // ===================================================================
@@ -17580,7 +15539,7 @@ void GetModelManifestRsp::InternalSwap(GetModelManifestRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[36]);
+      file_level_metadata_training_2eproto[33]);
 }
 
 // ===================================================================
@@ -17825,7 +15784,7 @@ void DownloadModelReq::InternalSwap(DownloadModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata DownloadModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[37]);
+      file_level_metadata_training_2eproto[34]);
 }
 
 // ===================================================================
@@ -18096,7 +16055,7 @@ void ModelChunk::InternalSwap(ModelChunk* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelChunk::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[38]);
+      file_level_metadata_training_2eproto[35]);
 }
 
 // ===================================================================
@@ -18472,7 +16431,7 @@ void AckModelReq::InternalSwap(AckModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[39]);
+      file_level_metadata_training_2eproto[36]);
 }
 
 // ===================================================================
@@ -18757,7 +16716,7 @@ void AckModelRsp::InternalSwap(AckModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[40]);
+      file_level_metadata_training_2eproto[37]);
 }
 
 // ===================================================================
@@ -18797,7 +16756,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ModelDistributorStatusReq::Get
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[41]);
+      file_level_metadata_training_2eproto[38]);
 }
 
 // ===================================================================
@@ -19632,7 +17591,7 @@ void ModelDistributorStatusRsp::InternalSwap(ModelDistributorStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[42]);
+      file_level_metadata_training_2eproto[39]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -19711,18 +17670,6 @@ Arena::CreateMaybeMessage< ::rl::training::v1::SamplePoolStatusRsp >(Arena* aren
 template<> PROTOBUF_NOINLINE ::rl::training::v1::RawMetricSumCount*
 Arena::CreateMaybeMessage< ::rl::training::v1::RawMetricSumCount >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::training::v1::RawMetricSumCount >(arena);
-}
-template<> PROTOBUF_NOINLINE ::rl::training::v1::AgentEpisodeMetricFact*
-Arena::CreateMaybeMessage< ::rl::training::v1::AgentEpisodeMetricFact >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::rl::training::v1::AgentEpisodeMetricFact >(arena);
-}
-template<> PROTOBUF_NOINLINE ::rl::training::v1::EpisodeMetricFact*
-Arena::CreateMaybeMessage< ::rl::training::v1::EpisodeMetricFact >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::rl::training::v1::EpisodeMetricFact >(arena);
-}
-template<> PROTOBUF_NOINLINE ::rl::training::v1::TrainUpdateMetricFact*
-Arena::CreateMaybeMessage< ::rl::training::v1::TrainUpdateMetricFact >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::rl::training::v1::TrainUpdateMetricFact >(arena);
 }
 template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricEvent*
 Arena::CreateMaybeMessage< ::rl::training::v1::MetricEvent >(Arena* arena) {

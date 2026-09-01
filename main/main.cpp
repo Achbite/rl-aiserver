@@ -35,9 +35,11 @@ static const char* kManagedReadyMarker =
 static bool PublishManagedReadyMarker(
     const common::ServiceInstanceIdentity& source,
     const common::SchemaIdentity& schema,
+    const ContractConfig& contract,
     int container_port,
     std::string& error) {
-    if (std::getenv("RL_CONFIG_PATH") == nullptr) return true;
+    const char* managed = std::getenv("RL_INFRA_MANAGED");
+    if (managed == nullptr || std::string(managed) != "true") return true;
     namespace fs = std::filesystem;
     std::error_code filesystem_error;
     const fs::path destination(kManagedReadyMarker);
@@ -62,7 +64,10 @@ static bool PublishManagedReadyMarker(
                << "schema_id=" << schema.schema_id() << "\n"
                << "schema_version=" << schema.schema_version() << "\n"
                << "schema_digest=" << schema.canonical_digest().hex()
-               << "\n";
+               << "\n"
+               << "contract_package=" << contract.package_name << "\n"
+               << "contract_version=" << contract.package_version << "\n"
+               << "contract_platform=" << contract.platform << "\n";
         output.flush();
         if (!output) {
             fs::remove(temporary, filesystem_error);
@@ -81,7 +86,8 @@ static bool PublishManagedReadyMarker(
 }
 
 static void RemoveManagedReadyMarker() {
-    if (std::getenv("RL_CONFIG_PATH") == nullptr) return;
+    const char* managed = std::getenv("RL_INFRA_MANAGED");
+    if (managed == nullptr || std::string(managed) != "true") return;
     std::error_code ignored;
     std::filesystem::remove(kManagedReadyMarker, ignored);
 }
@@ -124,14 +130,13 @@ static std::string ShapeJson(const std::vector<int64_t>& shape) {
 
 static int InspectModel(const std::filesystem::path& model_path) {
     std::error_code filesystem_error;
-    if (model_path.filename() != "SaveModel.onnx" ||
-        std::filesystem::is_symlink(model_path, filesystem_error) ||
+    if (std::filesystem::is_symlink(model_path, filesystem_error) ||
         filesystem_error ||
         !std::filesystem::is_regular_file(model_path, filesystem_error) ||
         filesystem_error) {
         std::fprintf(
             stderr,
-            "--inspect-model must name an explicit regular SaveModel.onnx\n");
+            "--inspect-model must name an explicit regular ONNX file\n");
         return 2;
     }
 
@@ -143,27 +148,6 @@ static int InspectModel(const std::filesystem::path& model_path) {
             model_path.string(), 17, 9, prepared, &error)) {
         std::fprintf(stderr, "model inspection failed: %s\n", error.c_str());
         return 2;
-    }
-
-    for (const float probe_value : {0.0F, 1.0F, -1.0F}) {
-        std::vector<float> logits;
-        float value = 0.0F;
-        if (!inferencer.InferPrepared(
-                prepared,
-                std::vector<float>(17, probe_value),
-                17,
-                logits,
-                value) ||
-            logits.size() != 9 || !std::isfinite(value)) {
-            std::fprintf(stderr, "model finite inference probe failed\n");
-            return 2;
-        }
-        for (float logit : logits) {
-            if (!std::isfinite(logit)) {
-                std::fprintf(stderr, "model finite inference probe failed\n");
-                return 2;
-            }
-        }
     }
 
     const auto& session = prepared.session;
@@ -185,7 +169,7 @@ static int InspectModel(const std::filesystem::path& model_path) {
         << ShapeJson(action_shape) << "},"
         << "\"value_output\":{\"name\":\"value\","
         << "\"dtype\":\"float32\",\"shape\":"
-        << ShapeJson(value_shape) << "},\"finite_probe\":true}"
+        << ShapeJson(value_shape) << "},\"metadata_valid\":true}"
         << std::endl;
     return 0;
 }
@@ -394,7 +378,7 @@ int main(int argc, char* argv[]) {
         "最终配置: workload=%s, listen=0.0.0.0:%d, "
         "evaluation_model=%s, local_train=%s, "
         "model_distributor=%s:%d, sample_distributor=%s:%d, "
-        "max_agents=%d, agent_count=%d, map=%s, task_digest=%s",
+        "max_agents=%d, agent_count=%d, map=%s, task_protocol=%s/%u",
         aiserver_mode::Workload(cfg.server.run_mode),
         cfg.server.listen_port,
         cfg.model.evaluation_model_path.c_str(),
@@ -404,7 +388,8 @@ int main(int argc, char* argv[]) {
         cfg.sample_distributor.host.c_str(),
         cfg.sample_distributor.port, cfg.server.max_agents,
         cfg.environment.agent_count, cfg.task.fixed_map_id.c_str(),
-        cfg.task.task_config_digest.hex.c_str());
+        cfg.task.task_protocol_id.c_str(),
+        cfg.task.task_protocol_version);
 
     // ---- 3. 创建 gRPC 服务 ----
     MazeServiceImpl service(cfg);
@@ -438,7 +423,7 @@ int main(int argc, char* argv[]) {
     std::string readiness_error;
     if (!PublishManagedReadyMarker(
             service.MetricSourceIdentity(), service.MetricSchemaIdentity(),
-            cfg.server.listen_port, readiness_error)) {
+            cfg.contract, cfg.server.listen_port, readiness_error)) {
         LOG_ERROR("Main", "AIServer managed readiness 发布失败: %s",
                   readiness_error.c_str());
         service.BeginShutdown();

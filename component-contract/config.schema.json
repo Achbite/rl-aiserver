@@ -23,17 +23,13 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "package_name", "package_version", "source_digest",
-        "artifact_digest", "platform", "generator_identity",
+        "package_name", "package_version", "platform",
         "training_contract_path"
       ],
       "properties": {
         "package_name": {"type": "string", "minLength": 1},
         "package_version": {"type": "string", "minLength": 1},
-        "source_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-        "artifact_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
         "platform": {"type": "string", "minLength": 1},
-        "generator_identity": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
         "training_contract_path": {"type": "string", "minLength": 1}
       }
     },
@@ -84,15 +80,13 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "task_contract_id", "fixed_map_id", "fixed_map_checksum_sha256",
-        "action_rule_id", "shortest_action_steps", "episode_max_steps"
+        "task_protocol_id", "task_protocol_version", "fixed_map_id",
+        "episode_max_steps"
       ],
       "properties": {
-        "task_contract_id": {"type": "string", "minLength": 1},
+        "task_protocol_id": {"type": "string", "minLength": 1},
+        "task_protocol_version": {"type": "integer", "minimum": 1},
         "fixed_map_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
-        "fixed_map_checksum_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-        "action_rule_id": {"type": "string", "minLength": 1},
-        "shortest_action_steps": {"type": "integer", "minimum": 1},
         "episode_max_steps": {"type": "integer", "minimum": 1}
       }
     },

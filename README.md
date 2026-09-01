@@ -5,8 +5,9 @@
 AIServer 提供静态模型评测，以及训练中的推理、per-Agent R-PIN segment、GAE/Value Target 和
 processed-transition 样本发送。本地训练在 Learner ready 后启动 AIServer，再连接 Client。
 
-本地训练只运行 Learner、AIServer 和 Client 三个容器。`make shell` 是宿主机命令，会从同一父目录的
-源码准备开发制品，但不会自动下载依赖仓库。冷启动工作区至少需要以下同级目录：
+本地训练只运行 Learner、AIServer 和 Client 三个容器。`make shell` 是宿主机命令：没有
+`aiserver-dev` 时构建开发镜像、创建并启动容器；容器存在时只在必要时启动它，然后直接进入。
+它不会读取 Contracts 仓，也不会同步或覆盖本仓 `proto/`。完整三容器工作区包含以下同级目录：
 
 ```text
 workspace/
@@ -18,13 +19,14 @@ workspace/
   maze-client/
 ```
 
-前三个依赖仓只提供开发制品，不会增加运行容器。完整的三容器启动顺序也可参阅
+前三个仓库不增加运行容器。Sample Pool/Model Distributor 只装配到 Learner；`rl-contracts` 的
+Maze Task Proto 只有在开发者显式执行协议同步时才会更新 Client/AIServer。完整启动顺序参阅
 [rl-framework](https://github.com/Achbite/rl-framework)。
 
 ## 1. 开发容器、增量构建与测试
 
 ```bash
-# 宿主机：自动构建或复用独立开发镜像并进入容器
+# 宿主机：容器不存在时构建并创建；存在时直接复用并进入
 make shell
 
 # 容器内：构建与测试是两个显式入口
@@ -33,11 +35,16 @@ bash ./test.sh
 
 # 宿主机也可复用同一容器执行构建
 make build
+
+# Dockerfile.dev、工具链、环境变量或挂载变化后显式刷新
+make dev-refresh
 ```
 
 开发容器不继承旧 runtime image，使用持久 ccache。`ninja: no work to do.` 表示源码未变化，
 不会自动重复运行测试。测试只能在仓库根通过 `bash ./test.sh` 启动；`build.sh`、Docker image
-构建和其他 wrapper 不会隐式运行测试。`make shell` 只能在宿主机执行。
+构建和其他 wrapper 不会隐式运行测试。`make shell` 只能在宿主机执行。`make dev-image` 只重建
+镜像，不替换已有容器；`make dev-refresh` 才会重建镜像并重建容器。若 AIServer、测试或编译仍在
+运行，刷新会明确失败，必须先停止对应进程。上述入口都不会同步协议。
 
 ## 2. 运行模式
 
@@ -54,9 +61,9 @@ make shell
 # 查看实际二进制接受的覆盖项及其 config 字段（不启动服务）
 bash ./run.sh --help
 
-# 使用显式 SaveModel.onnx 的确定性评测
+# 使用显式 ONNX 模型文件进行确定性评测
 bash ./run.sh --config configs/server_config.yaml --workload evaluation \
-  --evaluation-model /absolute/path/SaveModel.onnx
+  --evaluation-model /absolute/path/model.onnx
 
 # 训练模式；config 提供默认值，CLI 显式覆盖 Learner 地址
 bash ./run.sh --config configs/server_config.yaml --workload training \
@@ -64,9 +71,9 @@ bash ./run.sh --config configs/server_config.yaml --workload training \
   --model-distributor maze-learner:9200
 ```
 
-评估的最终 config/CLI 值必须指向一个常规、非符号链接的 `SaveModel.onnx` 文件；不会读取
-相邻 manifest，也不允许目录入口。`run.sh` 只监督进程和传播退出码，业务参数只由 C++ 的
-config/CLI 层解释。
+评估的最终 config/CLI 值必须指向一个非空、常规且非符号链接的 ONNX 文件；文件名和上层目录
+不属于 AIServer↔Client 或模型分发合同。评测入口不会读取相邻 manifest，也不允许目录入口。
+`run.sh` 只监督进程和传播退出码，业务参数只由 C++ 的 config/CLI 层解释。
 
 默认 workload 明确配置在 `configs/server_config.yaml` 的 `server.run_mode`；
 `--workload` 只是覆盖它。Reward 公式和数值由 `src/ai/maze_reward.cpp` 固定持有，
@@ -79,6 +86,10 @@ behavior model，默认最多累计 128 条 completed transition 后封口，计
 `environment.agent_count/RL_AISERVER_AGENT_COUNT`；`server.max_agents` 只是容量上限。Client、
 任务配置、Learner 和 SamplePool 不提供第二个 Agent 数权威入口。
 
+Action mask 由 Training Contract 与 `OpenSessionRsp.environment.action_mask_mode` 共同明确为
+`disabled` 或 `required`。关闭时 Client state 和训练样本不带 mask；开启时 AIServer 校验动作维度、
+屏蔽不可用 logits，并把同一 mask 随 transition 交给 Learner。它不作为默认必选能力。
+
 segment 连续性、close reason、终止语义和 bootstrap 由 AIServer 在封口时一次性校验；
 这些 producer 内部事实不会进入 `ProcessedTransition`。Learner 和 SamplePool 只接收已经计算好的
 PPO observation/action/log-probability/value/advantage/value-target。已 Prepare/ACK 的新模型只在
@@ -88,7 +99,7 @@ PPO observation/action/log-probability/value/advantage/value-target。已 Prepar
 
 ```bash
 /opt/rl/aiserver/bin/maze_aiserver \
-  --inspect-model /absolute/path/SaveModel.onnx
+  --inspect-model /absolute/path/model.onnx
 ```
 
 探针只输出模型张量身份，不加载服务配置，也不启动端口。
@@ -109,20 +120,35 @@ bash ./run.sh --config configs/server_config.yaml --workload training
 
 ## 4. 构建运行镜像
 
-运行镜像直接构建当前工作树，以便按“修改、构建镜像、本地验证、确认后提交”的顺序开发；Git
-clean/dirty 状态只记录为诊断来源，不是构建放行条件。构建仍要求当前实际使用的 Contracts 制品已同步。
-在宿主机执行：
+运行镜像直接构建当前工作树和仓库本地 `proto/`。普通构建不读取 Contracts 仓，也不比较
+Client/AIServer 的源码、生成器、哈希或平台。只有明确决定采用 Contracts 仓当前 Maze release 时，
+才从 Framework 执行以下命令并审查本仓 diff：
 
 ```bash
-bash scripts/sync_contract_snapshot.sh
+(cd ../rl-framework && bash sync_maze_protocol.sh)
+```
+
+随后在宿主机用项目 tag 构建当前源码：
+
+```bash
 RL_PROJECT_IMAGE_TAG=maze-tag-001 bash build_image.sh
 ```
 
-正式构建不读取开发 artifact 或开发容器 build 目录。完整镜像引用为
-`rl-training/aiserver:maze-tag-001`；同名 tag 允许由后续微调构建直接覆盖。已有 source identity
-标签只保留为制品诊断信息，不再决定镜像 tag。
+正式构建不读取开发 artifact 或开发容器 build 目录。AIServer 仍按本仓 Training Contract 字段与
+digest 校验模型/训练张量语义，但不会用中央 manifest 的包名、平台或跨仓哈希锁定 Client 通信。
+完整镜像引用为 `rl-training/aiserver:maze-tag-001`；同名 tag 允许由后续微调构建直接覆盖。
 
-## 5. 默认地址
+## 5. 刷新与清理开发容器
+
+```bash
+make dev-refresh
+make dev-clean
+```
+
+`dev-refresh` 保留源码与 ccache volume，只替换开发镜像/容器环境；`dev-clean` 删除开发容器。
+两者都不会同步协议。
+
+## 6. 默认地址
 
 | 服务 | 地址 |
 | --- | --- |

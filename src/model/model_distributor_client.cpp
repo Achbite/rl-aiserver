@@ -81,18 +81,8 @@ bool IsRetryableAuthorityTransport(const grpc::Status& status) {
 
 bool ContractMatchesConfig(const common::ContractIdentity& actual,
                            const ContractConfig& expected) {
-    return expected.source_digest.algorithm == "sha256" &&
-           expected.artifact_digest.algorithm == "sha256" &&
-           actual.package_name() == expected.package_name &&
-           actual.package_version() == expected.package_version &&
-           actual.source_digest().algorithm() ==
-               common::DIGEST_ALGORITHM_SHA256 &&
-           actual.source_digest().hex() == expected.source_digest.hex &&
-           actual.artifact_digest().algorithm() ==
-               common::DIGEST_ALGORITHM_SHA256 &&
-           actual.artifact_digest().hex() == expected.artifact_digest.hex &&
-           actual.platform() == expected.platform &&
-           actual.generator_identity() == expected.generator_identity;
+    return actual.package_name() == expected.package_name &&
+           actual.package_version() == expected.package_version;
 }
 
 bool WriteAll(int descriptor, const char* data, std::size_t size) {

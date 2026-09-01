@@ -1,6 +1,5 @@
 #include "config/config_loader.h"
 
-#include "ai/maze_reward.h"
 #include "log/logger.h"
 
 #include <google/protobuf/struct.pb.h>
@@ -21,7 +20,6 @@
 #include <cctype>
 #include <cmath>
 #include <limits>
-#include <map>
 
 namespace {
 
@@ -150,60 +148,8 @@ bool IsSha256Hex(const std::string& value) {
     });
 }
 
-std::string JsonQuote(const std::string& value) {
-    std::ostringstream output;
-    output << '"';
-    static constexpr char kHex[] = "0123456789abcdef";
-    for (const unsigned char character : value) {
-        switch (character) {
-            case '"': output << "\\\""; break;
-            case '\\': output << "\\\\"; break;
-            case '\b': output << "\\b"; break;
-            case '\f': output << "\\f"; break;
-            case '\n': output << "\\n"; break;
-            case '\r': output << "\\r"; break;
-            case '\t': output << "\\t"; break;
-            default:
-                if (character < 0x20) {
-                    output << "\\u00" << kHex[character >> 4]
-                           << kHex[character & 0x0f];
-                } else {
-                    output << static_cast<char>(character);
-                }
-        }
-    }
-    output << '"';
-    return output.str();
-}
-
-std::string CanonicalFileTableDigest(
-    const google::protobuf::Struct& files) {
-    std::map<std::string, std::string> ordered;
-    for (const auto& item : files.fields()) {
-        if (item.second.kind_case() !=
-                google::protobuf::Value::kStringValue ||
-            item.second.string_value().empty()) {
-            return "";
-        }
-        ordered.emplace(item.first, item.second.string_value());
-    }
-    if (ordered.empty()) return "";
-    std::ostringstream canonical;
-    canonical << '{';
-    bool first = true;
-    for (const auto& item : ordered) {
-        if (!first) canonical << ',';
-        first = false;
-        canonical << JsonQuote(item.first) << ':'
-                  << JsonQuote(item.second);
-    }
-    canonical << '}';
-    return Sha256Hex(canonical.str());
-}
-
 bool LoadMetricEventSchema(const std::string& yaml_path,
                            const std::string& configured_path,
-                           const ContractConfig& contract,
                            MetricsConfig& metrics,
                            std::string& error) {
     namespace fs = std::filesystem;
@@ -231,7 +177,7 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
             google::protobuf::Value::kStringValue ||
         schema_version->second.kind_case() !=
             google::protobuf::Value::kNumberValue ||
-        schema_id->second.string_value() != "maze.metrics" ||
+        schema_id->second.string_value() != "maze.episode.metrics" ||
         schema_version->second.number_value() != 1.0) {
         error = "metric schema catalog identity is invalid";
         return false;
@@ -248,55 +194,6 @@ bool LoadMetricEventSchema(const std::string& yaml_path,
     if (!ReadFile(digest_path, digest_bytes, error) ||
         TrimAscii(digest_bytes) != catalog_digest) {
         error = "metric schema digest file does not match the catalog";
-        return false;
-    }
-    const fs::path manifest_path = catalog_path.parent_path().parent_path() /
-                                   "manifest.json";
-    std::string manifest_bytes;
-    if (!ReadFile(manifest_path, manifest_bytes, error)) return false;
-    google::protobuf::Struct manifest;
-    if (!google::protobuf::util::JsonStringToMessage(
-             manifest_bytes, &manifest).ok()) {
-        error = "contract snapshot manifest is invalid";
-        return false;
-    }
-    const auto* source_digest = JsonStruct(manifest, "source_digest");
-    const auto* artifact_digest = JsonStruct(manifest, "artifact_digest");
-    const auto* metric_schemas = JsonStruct(manifest, "metric_schemas");
-    const auto* schema_metadata = metric_schemas
-        ? JsonStruct(*metric_schemas, "maze.metrics") : nullptr;
-    const auto* canonical_digest = schema_metadata
-        ? JsonStruct(*schema_metadata, "canonical_digest") : nullptr;
-    const auto* files = JsonStruct(manifest, "files");
-    const std::string catalog_relative = "schemas/maze.metrics.json";
-    const std::string digest_relative = "schemas/maze.metrics.sha256";
-    if (!JsonStringEquals(manifest, "package", contract.package_name) ||
-        !JsonStringEquals(manifest, "version", contract.package_version) ||
-        !JsonStringEquals(manifest, "platform", contract.platform) ||
-        !JsonStringEquals(manifest, "generator_identity",
-                          contract.generator_identity) ||
-        !source_digest ||
-        !JsonStringEquals(*source_digest, "algorithm", "sha256") ||
-        !JsonStringEquals(*source_digest, "hex",
-                          contract.source_digest.hex) ||
-        !artifact_digest ||
-        !JsonStringEquals(*artifact_digest, "algorithm", "sha256") ||
-        !JsonStringEquals(*artifact_digest, "hex",
-                          contract.artifact_digest.hex) ||
-        !files ||
-        CanonicalFileTableDigest(*files) !=
-            contract.artifact_digest.hex ||
-        !schema_metadata ||
-        !JsonNumberEquals(*schema_metadata, "schema_version", 1.0) ||
-        !JsonStringEquals(*schema_metadata, "path", catalog_relative) ||
-        !JsonStringEquals(*schema_metadata, "digest_path", digest_relative) ||
-        !canonical_digest ||
-        !JsonStringEquals(*canonical_digest, "algorithm", "sha256") ||
-        !JsonStringEquals(*canonical_digest, "hex", catalog_digest) ||
-        !JsonStringEquals(*files, catalog_relative, catalog_digest) ||
-        !JsonStringEquals(*files, digest_relative,
-                          Sha256Hex(digest_bytes))) {
-        error = "metric schema catalog is not bound to the selected contract manifest";
         return false;
     }
     metrics.event_schema_catalog_path = catalog_path.string();
@@ -363,52 +260,6 @@ bool LoadTrainingContract(const std::string& yaml_path,
         return false;
     }
 
-    const fs::path manifest_path = descriptor_path.parent_path().parent_path() /
-                                   "manifest.json";
-    std::string manifest_bytes;
-    if (!ReadFile(manifest_path, manifest_bytes, error)) return false;
-    google::protobuf::Struct manifest;
-    if (!google::protobuf::util::JsonStringToMessage(
-             manifest_bytes, &manifest).ok()) {
-        error = "contract snapshot manifest is invalid";
-        return false;
-    }
-    const auto* source_digest = JsonStruct(manifest, "source_digest");
-    const auto* artifact_digest = JsonStruct(manifest, "artifact_digest");
-    const auto* descriptor_metadata = JsonStruct(manifest, "training_contract");
-    const auto* canonical_digest = descriptor_metadata
-        ? JsonStruct(*descriptor_metadata, "canonical_digest") : nullptr;
-    const auto* files = JsonStruct(manifest, "files");
-    constexpr const char* kDescriptorRelative =
-        "schemas/training-contract.json";
-    constexpr const char* kDigestRelative =
-        "schemas/training-contract.sha256";
-    if (!JsonStringEquals(manifest, "package", contract.package_name) ||
-        !JsonStringEquals(manifest, "version", contract.package_version) ||
-        !JsonStringEquals(manifest, "platform", contract.platform) ||
-        !JsonStringEquals(manifest, "generator_identity",
-                          contract.generator_identity) ||
-        !source_digest ||
-        !JsonStringEquals(*source_digest, "algorithm", "sha256") ||
-        !JsonStringEquals(*source_digest, "hex", contract.source_digest.hex) ||
-        !artifact_digest ||
-        !JsonStringEquals(*artifact_digest, "algorithm", "sha256") ||
-        !JsonStringEquals(*artifact_digest, "hex",
-                          contract.artifact_digest.hex) ||
-        !files || CanonicalFileTableDigest(*files) !=
-                      contract.artifact_digest.hex ||
-        !descriptor_metadata ||
-        !JsonStringEquals(*descriptor_metadata, "path", kDescriptorRelative) ||
-        !JsonStringEquals(*descriptor_metadata, "digest_path", kDigestRelative) ||
-        !canonical_digest ||
-        !JsonStringEquals(*canonical_digest, "algorithm", "sha256") ||
-        !JsonStringEquals(*canonical_digest, "hex", descriptor_digest) ||
-        !JsonStringEquals(*files, kDescriptorRelative, descriptor_digest) ||
-        !JsonStringEquals(*files, kDigestRelative, Sha256Hex(digest_bytes))) {
-        error = "training contract is not bound to the selected artifact";
-        return false;
-    }
-
     google::protobuf::Struct document;
     if (!google::protobuf::util::JsonStringToMessage(bytes, &document).ok() ||
         !JsonHasExactFields(
@@ -438,11 +289,10 @@ bool LoadTrainingContract(const std::string& yaml_path,
         !JsonStringValue(document, "training_contract_id",
                          training.training_contract_id) ||
         training.training_contract_id != "maze.training" ||
-        HasVersionSuffix(training.training_contract_id) ||
         !JsonStringValue(document, "model_architecture_id",
                          training.model_architecture_id) ||
-        training.model_architecture_id != "maze.mlp-17x64x64" ||
-        HasVersionSuffix(training.model_architecture_id) ||
+        training.model_architecture_id !=
+            "actor-critic.independent-mlp" ||
         !JsonStringValue(document, "tensor_dtype", training.tensor_dtype) ||
         training.tensor_dtype != "float32" ||
         !JsonPositiveInteger(document, "observation_dimension",
@@ -452,10 +302,14 @@ bool LoadTrainingContract(const std::string& yaml_path,
         training.action_count != 9 ||
         !JsonPositiveInteger(document, "hidden_dimension",
                              training.hidden_dimension) ||
-        training.hidden_dimension != 64 ||
         !JsonHasExactFields(
             *policy_document,
-            {"distribution_schema_id", "sampling", "temperature"}) ||
+            {"action_mask_mode", "distribution_schema_id", "sampling",
+             "temperature"}) ||
+        !JsonStringValue(*policy_document, "action_mask_mode",
+                         training.action_mask_mode) ||
+        (training.action_mask_mode != "disabled" &&
+         training.action_mask_mode != "required") ||
         !JsonStringValue(*policy_document, "distribution_schema_id",
                          distribution_schema_id) ||
         distribution_schema_id != "categorical.logits" ||
@@ -715,27 +569,6 @@ static bool ReadEnvironmentInt(const char* name,
     return true;
 }
 
-static std::string ComputeTaskConfigDigest(const AIServerConfig& config) {
-    std::ostringstream canonical;
-    canonical
-        << "{\"action_rule_id\":" << JsonQuote(config.task.action_rule_id)
-        << ",\"episode_max_steps\":" << config.task.episode_max_steps
-        << ",\"fixed_map_checksum_sha256\":"
-        << JsonQuote(config.task.fixed_map_checksum_sha256)
-        << ",\"fixed_map_id\":" << JsonQuote(config.task.fixed_map_id)
-        << ",\"reward\":" << MazeRewardCanonicalParametersJson()
-        << ",\"reward_schema_digest\":"
-        << JsonQuote(
-               config.training_contract.reward_schema.canonical_digest.hex)
-        << ",\"reward_schema_id\":"
-        << JsonQuote(config.training_contract.reward_schema.schema_id)
-        << ",\"shortest_action_steps\":"
-        << config.task.shortest_action_steps
-        << ",\"task_contract_id\":"
-        << JsonQuote(config.task.task_contract_id) << '}';
-    return Sha256Hex(canonical.str());
-}
-
 // ---- 从 YAML 文件加载配置，依次应用环境和 CLI 覆盖 ----
 bool LoadServerConfig(const std::string& yaml_path,
                       const AIServerConfigOverrides& overrides,
@@ -780,16 +613,14 @@ bool LoadServerConfig(const std::string& yaml_path,
     static const std::set<std::string> allowed_entries = {
         "server.run_mode", "server.listen_port", "server.max_agents",
         "contract.package_name", "contract.package_version",
-        "contract.source_digest", "contract.artifact_digest",
-        "contract.platform", "contract.generator_identity",
+        "contract.platform",
         "contract.training_contract_path", "policy.sampling_seed",
         "observation.ray_max_range", "strategy.grid_size",
         "strategy.replan_interval", "model.evaluation_model_path",
         "model.local_train_dir", "model.startup_timeout_ms",
-        "environment.agent_count", "task.task_contract_id",
-        "task.fixed_map_id",
-        "task.fixed_map_checksum_sha256", "task.action_rule_id",
-        "task.shortest_action_steps", "task.episode_max_steps",
+        "environment.agent_count", "task.task_protocol_id",
+        "task.task_protocol_version", "task.fixed_map_id",
+        "task.episode_max_steps",
         "model_distribution.host", "model_distribution.port",
         "model_distribution.poll_interval_ms",
         "model_distribution.rpc_timeout_ms", "sample_distributor.enabled",
@@ -820,10 +651,7 @@ bool LoadServerConfig(const std::string& yaml_path,
     const std::pair<const char*, const char*> required[] = {
         {"contract", "package_name"},
         {"contract", "package_version"},
-        {"contract", "source_digest"},
-        {"contract", "artifact_digest"},
         {"contract", "platform"},
-        {"contract", "generator_identity"},
         {"contract", "training_contract_path"},
         {"policy", "sampling_seed"},
         {"observation", "ray_max_range"},
@@ -832,11 +660,9 @@ bool LoadServerConfig(const std::string& yaml_path,
         {"server", "max_agents"},
         {"environment", "agent_count"},
         {"metrics", "event_schema_catalog"},
-        {"task", "task_contract_id"},
+        {"task", "task_protocol_id"},
+        {"task", "task_protocol_version"},
         {"task", "fixed_map_id"},
-        {"task", "fixed_map_checksum_sha256"},
-        {"task", "action_rule_id"},
-        {"task", "shortest_action_steps"},
         {"task", "episode_max_steps"},
         {"model", "evaluation_model_path"},
         {"model", "local_train_dir"},
@@ -863,7 +689,7 @@ bool LoadServerConfig(const std::string& yaml_path,
         {"strategy", "grid_size"},
         {"strategy", "replan_interval"},
         {"model", "startup_timeout_ms"},
-        {"task", "shortest_action_steps"},
+        {"task", "task_protocol_version"},
         {"task", "episode_max_steps"},
         {"model_distribution", "port"},
         {"model_distribution", "poll_interval_ms"},
@@ -903,14 +729,8 @@ bool LoadServerConfig(const std::string& yaml_path,
         FindValue(entries, "contract", "package_name");
     out_config.contract.package_version =
         FindValue(entries, "contract", "package_version");
-    out_config.contract.source_digest.hex =
-        FindValue(entries, "contract", "source_digest");
-    out_config.contract.artifact_digest.hex =
-        FindValue(entries, "contract", "artifact_digest");
     out_config.contract.platform =
         FindValue(entries, "contract", "platform");
-    out_config.contract.generator_identity =
-        FindValue(entries, "contract", "generator_identity");
     out_config.contract.training_contract_path =
         FindValue(entries, "contract", "training_contract_path");
     out_config.policy.sampling_seed = static_cast<uint32_t>(SafeSize(
@@ -950,22 +770,15 @@ bool LoadServerConfig(const std::string& yaml_path,
         SafeInt(FindValue(entries, "model", "startup_timeout_ms"), 30000);
 
     // --- task ---
-    out_config.task.task_contract_id =
-        FindValue(entries, "task", "task_contract_id");
+    out_config.task.task_protocol_id =
+        FindValue(entries, "task", "task_protocol_id");
+    out_config.task.task_protocol_version = static_cast<uint32_t>(SafeInt(
+        FindValue(entries, "task", "task_protocol_version"), 0));
     out_config.environment.agent_count = SafeInt(
         FindValue(entries, "environment", "agent_count"), 4);
     std::string fixed_map_id =
         FindValue(entries, "task", "fixed_map_id");
     if (!fixed_map_id.empty()) out_config.task.fixed_map_id = fixed_map_id;
-    std::string fixed_map_checksum =
-        FindValue(entries, "task", "fixed_map_checksum_sha256");
-    if (!fixed_map_checksum.empty()) {
-        out_config.task.fixed_map_checksum_sha256 = fixed_map_checksum;
-    }
-    out_config.task.action_rule_id =
-        FindValue(entries, "task", "action_rule_id");
-    out_config.task.shortest_action_steps = SafeInt(
-        FindValue(entries, "task", "shortest_action_steps"), 0);
     out_config.task.episode_max_steps = SafeInt(
         FindValue(entries, "task", "episode_max_steps"), 0);
 
@@ -1052,6 +865,36 @@ bool LoadServerConfig(const std::string& yaml_path,
         out_config.environment.agent_count = *environment_integer;
         record_environment_override("environment.agent_count");
     }
+    environment_string.reset();
+    if (!ReadEnvironment("RL_INFRA_DATA_ROOT", environment_string, error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_string.has_value()) {
+        const fs::path data_root(*environment_string);
+        if (!data_root.is_absolute()) {
+            error = "RL_INFRA_DATA_ROOT must be absolute";
+            LOG_ERROR("Config", "%s", error.c_str());
+            return false;
+        }
+        out_config.model.local_train_dir =
+            (data_root / "aiserver").lexically_normal().string();
+        record_environment_override("model.local_train_dir");
+    }
+    environment_string.reset();
+    if (!ReadEnvironment("RL_INFRA_POD_ID", environment_string, error)) {
+        LOG_ERROR("Config", "%s", error.c_str());
+        return false;
+    }
+    if (environment_string.has_value()) {
+        out_config.sample_distributor.aiserver_id =
+            *environment_string + "-aiserver";
+        out_config.sample_distributor.env_id =
+            *environment_string + "-env";
+        record_environment_override("sample_distributor.aiserver_id");
+        record_environment_override("sample_distributor.env_id");
+    }
+    environment_string.reset();
     if (!ReadEnvironment("RL_TASK_MAP_ID", environment_string, error)) {
         LOG_ERROR("Config", "%s", error.c_str());
         return false;
@@ -1059,26 +902,6 @@ bool LoadServerConfig(const std::string& yaml_path,
     if (environment_string.has_value()) {
         out_config.task.fixed_map_id = *environment_string;
         record_environment_override("task.fixed_map_id");
-    }
-    environment_string.reset();
-    if (!ReadEnvironment("RL_TASK_MAP_EXPECTED_SHA256", environment_string,
-                         error)) {
-        LOG_ERROR("Config", "%s", error.c_str());
-        return false;
-    }
-    if (environment_string.has_value()) {
-        out_config.task.fixed_map_checksum_sha256 = *environment_string;
-        record_environment_override("task.fixed_map_checksum_sha256");
-    }
-    environment_integer.reset();
-    if (!ReadEnvironmentInt("RL_TASK_SHORTEST_ACTION_STEPS",
-                            environment_integer, error)) {
-        LOG_ERROR("Config", "%s", error.c_str());
-        return false;
-    }
-    if (environment_integer.has_value()) {
-        out_config.task.shortest_action_steps = *environment_integer;
-        record_environment_override("task.shortest_action_steps");
     }
     environment_integer.reset();
     if (!ReadEnvironmentInt("RL_TASK_EPISODE_MAX_STEPS",
@@ -1156,12 +979,11 @@ bool LoadServerConfig(const std::string& yaml_path,
     if (out_config.server.run_mode == aiserver_mode::kEvaluation) {
         const fs::path model_path(out_config.model.evaluation_model_path);
         const auto model_status = fs::symlink_status(model_path, fs_error);
-        if (out_config.model.evaluation_model_path.empty() ||
-            model_path.filename() != kModelArtifactFile || fs_error ||
+        if (out_config.model.evaluation_model_path.empty() || fs_error ||
             fs::is_symlink(model_status) ||
             !fs::is_regular_file(model_status)) {
             error = "evaluation requires an explicit regular, non-symlink "
-                    "SaveModel.onnx";
+                    "model file";
             LOG_ERROR("Config", "%s: %s", error.c_str(),
                       model_path.c_str());
             return false;
@@ -1172,7 +994,6 @@ bool LoadServerConfig(const std::string& yaml_path,
     if (!LoadMetricEventSchema(
             config_path.string(),
             FindValue(entries, "metrics", "event_schema_catalog"),
-            out_config.contract,
             out_config.metrics, metric_schema_error)) {
         LOG_ERROR("Config", "%s", metric_schema_error.c_str());
         return false;
@@ -1181,13 +1002,10 @@ bool LoadServerConfig(const std::string& yaml_path,
     const auto digest_valid = [](const DigestConfig& digest) {
         return digest.algorithm == "sha256" && IsLowerSha256(digest.hex);
     };
-    out_config.task.task_config_digest.hex =
-        ComputeTaskConfigDigest(out_config);
     const bool immutable_identity_valid =
         out_config.contract.package_name == "rl-contracts" &&
         out_config.contract.package_version == "0.15.0" &&
         !out_config.contract.platform.empty() &&
-        IsLowerSha256(out_config.contract.generator_identity) &&
         out_config.training_contract.training_contract_id ==
             "maze.training" &&
         out_config.training_contract.observation_schema.schema_id ==
@@ -1197,14 +1015,13 @@ bool LoadServerConfig(const std::string& yaml_path,
         out_config.training_contract.reward_schema.schema_id ==
             "maze.reward" &&
         out_config.training_contract.model_architecture_id ==
-            "maze.mlp-17x64x64";
+            "actor-critic.independent-mlp";
     if (!immutable_identity_valid ||
-        !digest_valid(out_config.contract.source_digest) ||
-        !digest_valid(out_config.contract.artifact_digest) ||
         !digest_valid(out_config.training_contract.observation_schema.canonical_digest) ||
         !digest_valid(out_config.training_contract.action_schema.canonical_digest) ||
         !digest_valid(out_config.training_contract.reward_schema.canonical_digest) ||
-        out_config.metrics.event_schema.schema_id != "maze.metrics" ||
+        out_config.metrics.event_schema.schema_id !=
+            "maze.episode.metrics" ||
         out_config.metrics.event_schema.schema_version != 1 ||
         !digest_valid(out_config.metrics.event_schema.canonical_digest) ||
         !digest_valid(out_config.training_contract.canonical_digest)) {
@@ -1212,19 +1029,14 @@ bool LoadServerConfig(const std::string& yaml_path,
         LOG_ERROR("Config", "%s", error.c_str());
         return false;
     }
-    if (out_config.task.task_contract_id != "maze.task" ||
-        !digest_valid(out_config.task.task_config_digest) ||
-        out_config.task.action_rule_id !=
-            "maze.action.9-way.no-corner-cut") {
-        LOG_ERROR("Config", "Maze task contract identity mismatch");
+    if (out_config.task.task_protocol_id != "rl.task.maze" ||
+        out_config.task.task_protocol_version != 1) {
+        LOG_ERROR("Config", "Maze task protocol identity mismatch");
         return false;
     }
     static const std::regex map_id_pattern("[A-Za-z0-9_-]+");
     if (!std::regex_match(out_config.task.fixed_map_id, map_id_pattern) ||
-        !IsLowerSha256(out_config.task.fixed_map_checksum_sha256) ||
-        out_config.task.shortest_action_steps <= 0 ||
-        out_config.task.episode_max_steps <
-            out_config.task.shortest_action_steps) {
+        out_config.task.episode_max_steps <= 0) {
         LOG_ERROR("Config", "effective Maze map or episode identity is invalid");
         return false;
     }
@@ -1284,11 +1096,11 @@ bool LoadServerConfig(const std::string& yaml_path,
              out_config.model.expected_action_dim,
              out_config.model.observation_schema_id.c_str(),
              out_config.model.action_schema_id.c_str());
-    LOG_INFO("Config", "environment: agent_count=%d; task: contract=%s map=%s digest=%s",
+    LOG_INFO("Config", "environment: agent_count=%d; task: protocol=%s/%u map=%s",
              out_config.environment.agent_count,
-             out_config.task.task_contract_id.c_str(),
-             out_config.task.fixed_map_id.c_str(),
-             out_config.task.task_config_digest.hex.c_str());
+             out_config.task.task_protocol_id.c_str(),
+             out_config.task.task_protocol_version,
+             out_config.task.fixed_map_id.c_str());
     LOG_INFO("Config", "model_distribution: target=%s:%d, poll_interval_ms=%d, rpc_timeout_ms=%d",
              out_config.model_distribution.host.c_str(),
              out_config.model_distribution.port,

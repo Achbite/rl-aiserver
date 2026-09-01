@@ -75,8 +75,8 @@ MetricEventJournal::MetricEventJournal(
     *committed_cursor_.mutable_source() = source_;
 }
 
-MetricEventJournal::AppendResult MetricEventJournal::AppendEpisode(
-    training::EpisodeMetricFact fact,
+MetricEventJournal::AppendResult MetricEventJournal::AppendFact(
+    std::string fact_payload,
     int64_t observed_at_unix_ms) {
     std::lock_guard<std::mutex> lock(mutex_);
     AppendResult result;
@@ -93,7 +93,7 @@ MetricEventJournal::AppendResult MetricEventJournal::AppendEpisode(
     }
     event.set_event_sequence(next_event_sequence_++);
     event.set_observed_at_unix_ms(observed_at_unix_ms);
-    *event.mutable_episode() = std::move(fact);
+    event.set_fact_payload(std::move(fact_payload));
     last_event_observed_at_unix_ms_ = observed_at_unix_ms;
     event_bytes_ += event.ByteSizeLong();
     events_.push_back(std::move(event));
@@ -130,7 +130,8 @@ bool MetricEventJournal::WaitForFinalAcknowledgement(
 
 bool MetricEventJournal::ValidContract(
     const common::ContractIdentity& contract) const {
-    return contract.SerializeAsString() == contract_.SerializeAsString();
+    return contract.package_name() == contract_.package_name() &&
+           contract.package_version() == contract_.package_version();
 }
 
 bool MetricEventJournal::ValidConsumer(

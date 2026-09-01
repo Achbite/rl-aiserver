@@ -1,68 +1,28 @@
 {
-  "artifact_digest": {
-    "algorithm": "sha256",
-    "hex": "0c278cfcf85ab4dbff72177eeeea165ebb113bb36867ae71975bf8c14da2be33"
-  },
-  "contract_packages": [
-    "rl.common.v1",
-    "rl.training.v1",
-    "rl.task.maze.v1"
+  "files": [
+    "common.pb.cc",
+    "common.pb.h",
+    "common.proto",
+    "maze_metrics.pb.cc",
+    "maze_metrics.pb.h",
+    "maze_metrics.proto",
+    "maze_task.grpc.pb.cc",
+    "maze_task.grpc.pb.h",
+    "maze_task.pb.cc",
+    "maze_task.pb.h",
+    "maze_task.proto",
+    "schemas/maze.episode.metrics.json",
+    "schemas/maze.episode.metrics.sha256",
+    "schemas/training-contract.json",
+    "schemas/training-contract.sha256"
   ],
-  "files": {
-    "common.proto": "6019ed0edfe5bb971869ab7bc47894345d6cdbe96fa19b25f2ba1354fd44f8de",
-    "cpp/common.pb.cc": "f60748148a57c527511a3b2f19489e76a91aaed0f65ddb90f1719cdf6bbcc25a",
-    "cpp/common.pb.h": "51f378e8c2f6669b130f4885ac00fc3ed52643fa631ae0e6523da52d2510cf5d",
-    "cpp/maze_task.grpc.pb.cc": "0acc49d19afed5f790e35bd194410934dd83b15b82b0377680ff15cb9d085da0",
-    "cpp/maze_task.grpc.pb.h": "662161d3efebbbec2cac43addec3ff0935e2704cc48004ace8a5916ea7ccf7fc",
-    "cpp/maze_task.pb.cc": "9f3272e687766756cfb20f89d4590c0b5f03c3e029ab426718dd4d94079047b2",
-    "cpp/maze_task.pb.h": "e505b3eaf41ea9d2593ed09476a64f496facd804ecb99aff5206bbaa8299136c",
-    "cpp/training.grpc.pb.cc": "8969dd9e98704dcc38d4e3deb83315f44b1b64d95457a4c6436c2cef0ea9e4aa",
-    "cpp/training.grpc.pb.h": "a38b3c131e470afbe3f0e71f41a64cc81a97d3a88422dfb3303e6cff77b7f8da",
-    "cpp/training.pb.cc": "e644b23d23e474b8cb7c5c0414397a425bb65a04309e3e13ed6df0ad3cde88fb",
-    "cpp/training.pb.h": "20ce543e2c49ea1df1b1135f1e8767bea84c4fe9b9a750af689d76e4735e6577",
-    "generator-identity.json": "e0ff2ea349578e209b5b5d6f632c967ee8ea46c7999df5cf97502b24ca69532d",
-    "maze_task.proto": "cefd57ff15cdf70bf5b33e13d72c81f417c863e9ce01cf74153d657080055cab",
-    "python/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "python/common_pb2.py": "823786a30eff49ac558f6030d14900471ac840119b0b32cffddb5641cd0d83f0",
-    "python/maze_task_pb2.py": "fe36682a4fca679f68738fb51840a2d2757573c81104e6cc26058cc9305c8b7c",
-    "python/maze_task_pb2_grpc.py": "bf929f4d04ed8068d6698f3741210d038f778a0a53687e997b83bef1178a0fad",
-    "python/training_pb2.py": "688f0d3c95b120d1b321d97f0db45f4f7d57ca1e523a3c58496909a8dbbecac3",
-    "python/training_pb2_grpc.py": "2327885bfd7e2d25f5d08f1121f80c628a0eab955dc8a7b84f4db4a05a934e3e",
-    "schemas/maze.metrics.json": "5088c184d439855d9eb241f471d88c818fe27ea245d6f9e31bb1d95f57883f5a",
-    "schemas/maze.metrics.sha256": "4c12e24844fe363c89a62b13cc3749c4acc7755b14852e35d0a2a4f1bfa3a0a4",
-    "schemas/training-contract.json": "d9d79cee44e50a26e24a9761a8075675c48dea66b2e7071d9f4235cade2ba4cc",
-    "schemas/training-contract.sha256": "c9fc1f4dd6f92b3e4026dcf3d0850dc6a6e96ce3aefbf23c3d15391a94c49329",
-    "training.proto": "41d77f7b8203bd386b1ef13c69b8921c1cfb85ef6c7b3319a6b9db34010490ce"
+  "schema_version": "rl.local-task-protocol.v1",
+  "source_release": {
+    "package": "rl-task-maze-contracts",
+    "version": "0.15.0"
   },
-  "generator_identity": "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8",
-  "metric_schemas": {
-    "maze.metrics": {
-      "canonical_digest": {
-        "algorithm": "sha256",
-        "hex": "5088c184d439855d9eb241f471d88c818fe27ea245d6f9e31bb1d95f57883f5a"
-      },
-      "digest_path": "schemas/maze.metrics.sha256",
-      "path": "schemas/maze.metrics.json",
-      "schema_version": 1
-    }
-  },
-  "package": "rl-contracts",
-  "platform": "linux/arm64",
-  "schema_version": 2,
-  "source_commit": "d5b8ee5dcb99",
-  "source_digest": {
-    "algorithm": "sha256",
-    "hex": "ebcad0a4c652243ca16fc2c8c14d3f7b4b3b95f1bbd925c7063d22907374c026"
-  },
-  "source_id": "contract-source-ebcad0a4c652243c",
-  "source_tree_state": "clean",
-  "training_contract": {
-    "canonical_digest": {
-      "algorithm": "sha256",
-      "hex": "d9d79cee44e50a26e24a9761a8075675c48dea66b2e7071d9f4235cade2ba4cc"
-    },
-    "digest_path": "schemas/training-contract.sha256",
-    "path": "schemas/training-contract.json"
-  },
-  "version": "0.15.0"
+  "task_protocol": {
+    "protocol_id": "rl.task.maze",
+    "protocol_version": 1
+  }
 }

@@ -1,4 +1,5 @@
 #include "ai/onnx_inferencer.h"
+#include "ai/maze_observation.h"
 #include "model/model_distributor_client.h"
 #include "model/model_manifest.h"
 
@@ -77,18 +78,12 @@ void FillContract(const ContractConfig& source,
                   common::ContractIdentity* destination) {
     destination->set_package_name(source.package_name);
     destination->set_package_version(source.package_version);
-    SetDigest(source.source_digest.hex, destination->mutable_source_digest());
-    SetDigest(source.artifact_digest.hex,
-              destination->mutable_artifact_digest());
     destination->set_platform(source.platform);
-    destination->set_generator_identity(source.generator_identity);
 }
 
 AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
     AIServerConfig config;
-    config.contract.source_digest.hex = std::string(64, '1');
-    config.contract.artifact_digest.hex = std::string(64, '2');
-    config.contract.generator_identity = std::string(64, '3');
+    const int action_count = static_cast<int>(maze::MazeAction_MAX) + 1;
     config.training_contract.training_contract_id = "maze.training";
     config.training_contract.observation_schema = {
         "maze.observation", 1, {"sha256", std::string(64, '4')}};
@@ -97,11 +92,13 @@ AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
     config.training_contract.reward_schema = {
         "maze.reward", 1, {"sha256", std::string(64, '6')}};
     config.training_contract.model_architecture_id =
-        "maze.mlp-17x64x64";
+        "actor-critic.independent-mlp";
     config.training_contract.canonical_digest.hex = std::string(64, '7');
-    config.training_contract.observation_dimension = 17;
-    config.training_contract.action_count = 9;
-    config.training_contract.hidden_dimension = 64;
+    config.training_contract.observation_dimension =
+        MazeObservation::kDimension;
+    config.training_contract.action_count = action_count;
+    config.training_contract.hidden_dimension =
+        config.training_contract.observation_dimension;
     config.training_contract.tensor_dtype = "float32";
     config.training_contract.gae_formula_id = "gae.backward";
     config.training_contract.terminal_bootstrap_semantics_id =
@@ -113,12 +110,16 @@ AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
     config.training_contract.finite_rule_id = "reject-nonfinite";
     config.training_contract.model_pin_semantics_id =
         "per-agent-segment-pin";
+    config.training_contract.action_mask_mode = "disabled";
     config.policy.training_temperature = 1.0;
-    config.model.expected_obs_dim = 17;
-    config.model.expected_action_dim = 9;
+    config.model.expected_obs_dim =
+        config.training_contract.observation_dimension;
+    config.model.expected_action_dim =
+        config.training_contract.action_count;
     config.model.observation_schema_id = "maze.observation";
     config.model.action_schema_id = "maze.action";
-    config.model.model_architecture_id = "maze.mlp-17x64x64";
+    config.model.model_architecture_id =
+        config.training_contract.model_architecture_id;
     config.model.tensor_dtype = "float32";
     config.model.local_train_dir = (root / "train").string();
     config.model_distribution.host = "127.0.0.1";

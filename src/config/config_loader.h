@@ -9,7 +9,7 @@
 #include "config/run_mode.h"
 #include "task/single_map_task_controller.h"
 
-inline constexpr char kModelArtifactFile[] = "SaveModel.onnx";
+inline constexpr char kPublishedModelFile[] = "SaveModel.onnx";
 inline constexpr char kModelManifestFile[] = "manifest.pb";
 
 // ---- 服务参数 ----
@@ -53,10 +53,7 @@ struct SchemaConfig {
 struct ContractConfig {
     std::string package_name = "rl-contracts";
     std::string package_version = "0.15.0";
-    DigestConfig source_digest;
-    DigestConfig artifact_digest;
     std::string platform = "linux/arm64";
-    std::string generator_identity;
     std::string training_contract_path;
 };
 
@@ -78,6 +75,7 @@ struct TrainingContractConfig {
     std::string numeric_dtype;
     std::string finite_rule_id;
     std::string model_pin_semantics_id;
+    std::string action_mask_mode;
 };
 
 struct PolicyConfig {
@@ -105,16 +103,9 @@ struct EnvironmentConfig {
 // Maze task ownership belongs to AIServer. Client configuration cannot
 // override any value in this structure.
 struct MazeTaskConfig {
-    std::string task_contract_id = "maze.task";
-    DigestConfig task_config_digest{
-        "sha256",
-        "2502369d3df20d5c02001e7481cacd6c5be32c263cb88bdb2a40db2aee4bb167"};
+    std::string task_protocol_id = "rl.task.maze";
+    uint32_t task_protocol_version = 1;
     std::string fixed_map_id = "maze_117436372";
-    std::string fixed_map_checksum_sha256 =
-        "da9198e61cbcf393fc9934fee0139c09645d3569c2ede1452984051f3b4168e3";
-    std::string action_rule_id =
-        "maze.action.9-way.no-corner-cut";
-    int shortest_action_steps = 188;
     int episode_max_steps = 1504;
 };
 

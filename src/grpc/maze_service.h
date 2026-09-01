@@ -112,7 +112,7 @@ private:
                                      std::string& error) const;
     void InitAgentSolver(SessionManager::AgentRuntime& agent,
                          const SessionManager::Session& session);
-    training::EpisodeMetricFact BuildEpisodeMetricFact(
+    maze_metrics::EpisodeMetricFact BuildEpisodeMetricFact(
         const SessionManager::Session& session,
         const std::vector<AgentEpisodeResult>& agents) const;
     maze::EpisodeOutcome BuildEpisodeOutcome(
@@ -147,6 +147,7 @@ private:
         int gx,
         int gy,
         int64_t action_frame_id,
+        const std::vector<bool>& action_mask,
         uint64_t& next_segment_sequence,
         int64_t& per_agent_activation_count,
         bool& latest_model_used,

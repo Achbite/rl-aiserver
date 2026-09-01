@@ -177,6 +177,9 @@ message ProcessedTransition {
     // Explicit presence preserves bootstrap model step zero.
     optional uint64 behavior_model_step = 8;
     int64 created_at_unix_ms = 9;
+    // Task-defined action availability captured at behavior inference time.
+    // Empty means action masking is disabled by the immutable TrainingContract.
+    repeated bool action_mask = 10;
 }
 
 // Transport envelope and the sole identity boundary for one immutable set of
@@ -364,63 +367,6 @@ message RawMetricSumCount {
     uint64 count = 3;
 }
 
-message AgentEpisodeMetricFact {
-    reserved "behavior_model_version_min", "behavior_model_version_max";
-    uint32 agent_id = 1;
-    double episode_return = 2;
-    uint64 transition_count = 3;
-    bool success = 4;
-    // Task-specific termination enums stay outside the task-neutral training
-    // contract. This value is the canonical enum name emitted by the owner.
-    string termination_reason = 5;
-    uint32 shortest_action_steps = 6;
-    uint64 unique_cell_count = 7;
-    uint64 blocked_move_count = 8;
-    uint64 attempted_move_count = 9;
-    repeated RawMetricSumCount reward_components = 10;
-    optional uint64 minimum_behavior_model_step = 11;
-    optional uint64 maximum_behavior_model_step = 12;
-    string behavior_model_lineage_id = 13;
-    optional uint64 terminal_frame_id = 14;
-    optional uint32 goal_rank_group = 15;
-}
-
-// One immutable fact is emitted after a successful Environment Episode commit.
-// The repeated Agent facts preserve raw per-Agent sufficient statistics and
-// intentionally contain no precomputed cross-Agent mean.
-message EpisodeMetricFact {
-    reserved 1;
-    reserved "task_id";
-    string environment_instance_id = 2;
-    string episode_id = 3;
-    rl.common.v1.ContentDigest training_contract_digest = 4;
-    repeated AgentEpisodeMetricFact agents = 5;
-}
-
-// One immutable fact is emitted only after the Learner update transaction has
-// published its model and settled its input delivery.
-message TrainUpdateMetricFact {
-    reserved "behavior_model_version_min", "behavior_model_version_max";
-    string train_update_id = 1;
-    uint64 train_update_sequence = 2;
-    ModelIdentity published_model = 3;
-    string delivery_id = 4;
-    rl.common.v1.ContentDigest training_contract_digest = 5;
-    int64 cumulative_trained_samples = 6;
-    int64 actual_batch_size = 7;
-    optional uint64 minimum_behavior_model_step = 8;
-    optional uint64 maximum_behavior_model_step = 9;
-    repeated RawMetricSumCount ppo_statistics = 10;
-    string behavior_model_lineage_id = 11;
-    int64 requested_train_batch_size = 12;
-    int64 pool_draw_slot_count = 13;
-    int64 unique_item_count = 14;
-    int64 duplicate_item_slot_count = 15;
-    int64 sample_evaluation_count = 16;
-    int64 optimizer_step_count = 17;
-    rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
-}
-
 message MetricEvent {
     reserved 1 to 3;
     reserved "contract", "schema_identity", "source",
@@ -432,10 +378,11 @@ message MetricEvent {
     // Raw producer wall-clock observation. Presence is required, but this value
     // is not an ordering key and may repeat or regress after clock adjustment.
     optional int64 observed_at_unix_ms = 5;
-    oneof fact {
-        EpisodeMetricFact episode = 6;
-        TrainUpdateMetricFact train_update = 7;
-    }
+    // The schema identified by MetricBatch.schema_identity owns these bytes.
+    // Transport, persistence, cursor and ACK layers keep them opaque.
+    bytes fact_payload = 6;
+    reserved 7;
+    reserved "episode", "train_update";
 }
 
 message MetricSequenceGap {

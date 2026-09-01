@@ -61,8 +61,8 @@ public:
 
     const common::ServiceInstanceIdentity& source() const { return source_; }
 
-    AppendResult AppendEpisode(training::EpisodeMetricFact fact,
-                               int64_t observed_at_unix_ms);
+    AppendResult AppendFact(std::string fact_payload,
+                            int64_t observed_at_unix_ms);
     void Finalize();
     bool WaitForFinalAcknowledgement(
         std::chrono::milliseconds timeout);

@@ -27,10 +27,9 @@ namespace v1 {
 PROTOBUF_CONSTEXPR EnvironmentSpec::EnvironmentSpec(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.map_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.action_rule_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.expected_map_digest_)*/nullptr
   , /*decltype(_impl_.agent_count_)*/0u
   , /*decltype(_impl_.episode_max_steps_)*/0u
+  , /*decltype(_impl_.action_mask_mode_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct EnvironmentSpecDefaultTypeInternal {
   PROTOBUF_CONSTEXPR EnvironmentSpecDefaultTypeInternal()
@@ -45,8 +44,6 @@ PROTOBUF_CONSTEXPR MapDescriptor::MapDescriptor(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.map_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.blocked_bitmap_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.action_rule_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.canonical_digest_)*/nullptr
   , /*decltype(_impl_.grid_columns_)*/0u
   , /*decltype(_impl_.grid_rows_)*/0u
   , /*decltype(_impl_.grid_size_microunits_)*/0u
@@ -54,7 +51,6 @@ PROTOBUF_CONSTEXPR MapDescriptor::MapDescriptor(
   , /*decltype(_impl_.start_grid_y_)*/0
   , /*decltype(_impl_.goal_grid_x_)*/0
   , /*decltype(_impl_.goal_grid_y_)*/0
-  , /*decltype(_impl_.shortest_action_steps_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct MapDescriptorDefaultTypeInternal {
   PROTOBUF_CONSTEXPR MapDescriptorDefaultTypeInternal()
@@ -103,6 +99,7 @@ PROTOBUF_CONSTEXPR OpenSessionReq::OpenSessionReq(
     /*decltype(_impl_.environment_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.request_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.client_)*/nullptr
+  , /*decltype(_impl_.task_protocol_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct OpenSessionReqDefaultTypeInternal {
   PROTOBUF_CONSTEXPR OpenSessionReqDefaultTypeInternal()
@@ -119,6 +116,7 @@ PROTOBUF_CONSTEXPR OpenSessionRsp::OpenSessionRsp(
   , /*decltype(_impl_.reply_)*/nullptr
   , /*decltype(_impl_.aiserver_)*/nullptr
   , /*decltype(_impl_.environment_)*/nullptr
+  , /*decltype(_impl_.task_protocol_)*/nullptr
   , /*decltype(_impl_.session_epoch_)*/uint64_t{0u}
   , /*decltype(_impl_.workload_mode_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -148,8 +146,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR InitRsp::InitRsp(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.reply_)*/nullptr
-  , /*decltype(_impl_.accepted_map_digest_)*/nullptr
-  , /*decltype(_impl_.verified_shortest_action_steps_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct InitRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR InitRspDefaultTypeInternal()
@@ -163,7 +159,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR EpisodeAssignment::EpisodeAssignment(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.episode_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.evaluation_model_artifact_digest_)*/nullptr
   , /*decltype(_impl_.mode_)*/0
   , /*decltype(_impl_.max_steps_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -235,6 +230,7 @@ PROTOBUF_CONSTEXPR AgentState::AgentState(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_._has_bits_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_.action_mask_)*/{}
   , /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.agent_id_)*/0u
   , /*decltype(_impl_.termination_reason_)*/0
@@ -452,7 +448,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace task
 }  // namespace rl
 static ::_pb::Metadata file_level_metadata_maze_5ftask_2eproto[28];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_5ftask_2eproto[6];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_5ftask_2eproto[8];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_maze_5ftask_2eproto = nullptr;
 
 const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -464,9 +460,8 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EnvironmentSpec, _impl_.agent_count_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EnvironmentSpec, _impl_.map_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EnvironmentSpec, _impl_.expected_map_digest_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EnvironmentSpec, _impl_.action_rule_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EnvironmentSpec, _impl_.episode_max_steps_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EnvironmentSpec, _impl_.action_mask_mode_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -482,9 +477,6 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _impl_.goal_grid_x_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _impl_.goal_grid_y_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _impl_.blocked_bitmap_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _impl_.canonical_digest_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _impl_.shortest_action_steps_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::MapDescriptor, _impl_.action_rule_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::CommandIdentity, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -515,6 +507,7 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.client_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.environment_instance_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.request_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.task_protocol_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -527,6 +520,7 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.aiserver_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.workload_mode_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.environment_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.task_protocol_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::InitReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -542,8 +536,6 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::InitRsp, _impl_.reply_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::InitRsp, _impl_.accepted_map_digest_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::InitRsp, _impl_.verified_shortest_action_steps_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -553,7 +545,6 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.episode_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.mode_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.max_steps_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::EpisodeAssignment, _impl_.evaluation_model_artifact_digest_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::TaskComplete, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -598,12 +589,14 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.termination_reason_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.last_move_blocked_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.executed_action_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AgentState, _impl_.action_mask_),
   ~0u,
   ~0u,
   ~0u,
   ~0u,
   ~0u,
   0,
+  ~0u,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -726,33 +719,33 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::rl::task::maze::v1::EnvironmentSpec)},
-  { 11, -1, -1, sizeof(::rl::task::maze::v1::MapDescriptor)},
-  { 29, -1, -1, sizeof(::rl::task::maze::v1::CommandIdentity)},
-  { 39, -1, -1, sizeof(::rl::task::maze::v1::CommandReply)},
-  { 50, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionReq)},
-  { 59, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionRsp)},
-  { 71, -1, -1, sizeof(::rl::task::maze::v1::InitReq)},
-  { 79, -1, -1, sizeof(::rl::task::maze::v1::InitRsp)},
-  { 88, -1, -1, sizeof(::rl::task::maze::v1::EpisodeAssignment)},
-  { 98, -1, -1, sizeof(::rl::task::maze::v1::TaskComplete)},
-  { 105, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeReq)},
-  { 112, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeRsp)},
-  { 122, -1, -1, sizeof(::rl::task::maze::v1::Vec2)},
-  { 130, 142, -1, sizeof(::rl::task::maze::v1::AgentState)},
-  { 148, -1, -1, sizeof(::rl::task::maze::v1::UpdateReq)},
-  { 157, -1, -1, sizeof(::rl::task::maze::v1::AgentAction)},
-  { 165, -1, -1, sizeof(::rl::task::maze::v1::ActionBatch)},
-  { 172, -1, -1, sizeof(::rl::task::maze::v1::WaitControl)},
-  { 179, -1, -1, sizeof(::rl::task::maze::v1::StopControl)},
-  { 187, -1, -1, sizeof(::rl::task::maze::v1::UpdateRsp)},
-  { 198, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
-  { 205, 216, -1, sizeof(::rl::task::maze::v1::AgentEpisodeOutcome)},
-  { 221, -1, -1, sizeof(::rl::task::maze::v1::EpisodeOutcome)},
-  { 229, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
-  { 237, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
-  { 246, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
-  { 253, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
-  { 260, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
+  { 10, -1, -1, sizeof(::rl::task::maze::v1::MapDescriptor)},
+  { 25, -1, -1, sizeof(::rl::task::maze::v1::CommandIdentity)},
+  { 35, -1, -1, sizeof(::rl::task::maze::v1::CommandReply)},
+  { 46, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionReq)},
+  { 56, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionRsp)},
+  { 69, -1, -1, sizeof(::rl::task::maze::v1::InitReq)},
+  { 77, -1, -1, sizeof(::rl::task::maze::v1::InitRsp)},
+  { 84, -1, -1, sizeof(::rl::task::maze::v1::EpisodeAssignment)},
+  { 93, -1, -1, sizeof(::rl::task::maze::v1::TaskComplete)},
+  { 100, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeReq)},
+  { 107, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeRsp)},
+  { 117, -1, -1, sizeof(::rl::task::maze::v1::Vec2)},
+  { 125, 138, -1, sizeof(::rl::task::maze::v1::AgentState)},
+  { 145, -1, -1, sizeof(::rl::task::maze::v1::UpdateReq)},
+  { 154, -1, -1, sizeof(::rl::task::maze::v1::AgentAction)},
+  { 162, -1, -1, sizeof(::rl::task::maze::v1::ActionBatch)},
+  { 169, -1, -1, sizeof(::rl::task::maze::v1::WaitControl)},
+  { 176, -1, -1, sizeof(::rl::task::maze::v1::StopControl)},
+  { 184, -1, -1, sizeof(::rl::task::maze::v1::UpdateRsp)},
+  { 195, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
+  { 202, 213, -1, sizeof(::rl::task::maze::v1::AgentEpisodeOutcome)},
+  { 218, -1, -1, sizeof(::rl::task::maze::v1::EpisodeOutcome)},
+  { 226, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
+  { 234, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
+  { 243, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
+  { 250, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
+  { 257, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -788,151 +781,162 @@ static const ::_pb::Message* const file_default_instances[] = {
 
 const char descriptor_table_protodef_maze_5ftask_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\017maze_task.proto\022\017rl.task.maze.v1\032\014comm"
-  "on.proto\"\243\001\n\017EnvironmentSpec\022\023\n\013agent_co"
-  "unt\030\001 \001(\r\022\016\n\006map_id\030\002 \001(\t\0228\n\023expected_ma"
-  "p_digest\030\003 \001(\0132\033.rl.common.v1.ContentDig"
-  "est\022\026\n\016action_rule_id\030\004 \001(\t\022\031\n\021episode_m"
-  "ax_steps\030\005 \001(\r\"\302\002\n\rMapDescriptor\022\016\n\006map_"
-  "id\030\001 \001(\t\022\024\n\014grid_columns\030\002 \001(\r\022\021\n\tgrid_r"
-  "ows\030\003 \001(\r\022\034\n\024grid_size_microunits\030\004 \001(\r\022"
-  "\024\n\014start_grid_x\030\005 \001(\005\022\024\n\014start_grid_y\030\006 "
-  "\001(\005\022\023\n\013goal_grid_x\030\007 \001(\005\022\023\n\013goal_grid_y\030"
-  "\010 \001(\005\022\026\n\016blocked_bitmap\030\t \001(\014\0225\n\020canonic"
-  "al_digest\030\n \001(\0132\033.rl.common.v1.ContentDi"
-  "gest\022\035\n\025shortest_action_steps\030\013 \001(\r\022\026\n\016a"
-  "ction_rule_id\030\014 \001(\t\"b\n\017CommandIdentity\022\022"
-  "\n\nsession_id\030\001 \001(\t\022\025\n\rsession_epoch\030\002 \001("
-  "\004\022\020\n\010sequence\030\003 \001(\004\022\022\n\nepisode_id\030\004 \001(\t\""
-  "\316\001\n\014CommandReply\022.\n\006result\030\001 \001(\0162\036.rl.ta"
-  "sk.maze.v1.CommandResult\0225\n\nerror_code\030\002"
-  " \001(\0162!.rl.task.maze.v1.CommandErrorCode\022"
-  "\017\n\007message\030\003 \001(\t\022\030\n\020applied_sequence\030\004 \001"
-  "(\004\022,\n\005phase\030\005 \001(\0162\035.rl.task.maze.v1.Sess"
-  "ionPhase\"|\n\016OpenSessionReq\0225\n\006client\030\001 \001"
-  "(\0132%.rl.common.v1.ServiceInstanceIdentit"
-  "y\022\037\n\027environment_instance_id\030\002 \001(\t\022\022\n\nre"
-  "quest_id\030\003 \001(\t\"\217\002\n\016OpenSessionRsp\022,\n\005rep"
-  "ly\030\001 \001(\0132\035.rl.task.maze.v1.CommandReply\022"
-  "\022\n\nsession_id\030\002 \001(\t\022\025\n\rsession_epoch\030\003 \001"
-  "(\004\0227\n\010aiserver\030\004 \001(\0132%.rl.common.v1.Serv"
-  "iceInstanceIdentity\0224\n\rworkload_mode\030\005 \001"
-  "(\0162\035.rl.task.maze.v1.WorkloadMode\0225\n\013env"
-  "ironment\030\006 \001(\0132 .rl.task.maze.v1.Environ"
-  "mentSpec\"i\n\007InitReq\0221\n\007command\030\001 \001(\0132 .r"
-  "l.task.maze.v1.CommandIdentity\022+\n\003map\030\002 "
-  "\001(\0132\036.rl.task.maze.v1.MapDescriptor\"\231\001\n\007"
-  "InitRsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.maze.v1"
-  ".CommandReply\0228\n\023accepted_map_digest\030\002 \001"
-  "(\0132\033.rl.common.v1.ContentDigest\022&\n\036verif"
-  "ied_shortest_action_steps\030\003 \001(\r\"\255\001\n\021Epis"
-  "odeAssignment\022\022\n\nepisode_id\030\001 \001(\t\022*\n\004mod"
-  "e\030\002 \001(\0162\034.rl.task.maze.v1.EpisodeMode\022\021\n"
-  "\tmax_steps\030\003 \001(\r\022E\n evaluation_model_art"
-  "ifact_digest\030\004 \001(\0132\033.rl.common.v1.Conten"
-  "tDigest\"\037\n\014TaskComplete\022\017\n\007message\030\001 \001(\t"
-  "\"D\n\017BeginEpisodeReq\0221\n\007command\030\001 \001(\0132 .r"
-  "l.task.maze.v1.CommandIdentity\"\274\001\n\017Begin"
-  "EpisodeRsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.maze"
-  ".v1.CommandReply\0228\n\nassignment\030\002 \001(\0132\".r"
-  "l.task.maze.v1.EpisodeAssignmentH\000\0226\n\rta"
-  "sk_complete\030\003 \001(\0132\035.rl.task.maze.v1.Task"
-  "CompleteH\000B\t\n\007outcome\"\034\n\004Vec2\022\t\n\001x\030\001 \001(\002"
-  "\022\t\n\001y\030\002 \001(\002\"\357\001\n\nAgentState\022\020\n\010agent_id\030\001"
-  " \001(\r\022\'\n\010position\030\002 \001(\0132\025.rl.task.maze.v1"
-  ".Vec2\022\017\n\007is_done\030\003 \001(\010\022B\n\022termination_re"
-  "ason\030\004 \001(\0162&.rl.task.maze.v1.MazeTermina"
-  "tionReason\022\031\n\021last_move_blocked\030\005 \001(\010\022\037\n"
-  "\022executed_action_id\030\006 \001(\005H\000\210\001\001B\025\n\023_execu"
-  "ted_action_id\"}\n\tUpdateReq\0221\n\007command\030\001 "
-  "\001(\0132 .rl.task.maze.v1.CommandIdentity\022\020\n"
-  "\010frame_id\030\002 \001(\004\022+\n\006agents\030\003 \003(\0132\033.rl.tas"
-  "k.maze.v1.AgentState\"2\n\013AgentAction\022\020\n\010a"
-  "gent_id\030\001 \001(\r\022\021\n\taction_id\030\002 \001(\005\"<\n\013Acti"
-  "onBatch\022-\n\007actions\030\001 \003(\0132\034.rl.task.maze."
-  "v1.AgentAction\"%\n\013WaitControl\022\026\n\016retry_a"
-  "fter_ms\030\001 \001(\005\"V\n\013StopControl\0226\n\006reason\030\001"
-  " \001(\0162&.rl.task.maze.v1.MazeTerminationRe"
-  "ason\022\017\n\007message\030\002 \001(\t\"\326\001\n\tUpdateRsp\022,\n\005r"
+  "on.proto\"\275\001\n\017EnvironmentSpec\022\023\n\013agent_co"
+  "unt\030\001 \001(\r\022\016\n\006map_id\030\002 \001(\t\022\031\n\021episode_max"
+  "_steps\030\005 \001(\r\0229\n\020action_mask_mode\030\006 \001(\0162\037"
+  ".rl.task.maze.v1.ActionMaskModeJ\004\010\003\020\004J\004\010"
+  "\004\020\005R\023expected_map_digestR\016action_rule_id"
+  "\"\223\002\n\rMapDescriptor\022\016\n\006map_id\030\001 \001(\t\022\024\n\014gr"
+  "id_columns\030\002 \001(\r\022\021\n\tgrid_rows\030\003 \001(\r\022\034\n\024g"
+  "rid_size_microunits\030\004 \001(\r\022\024\n\014start_grid_"
+  "x\030\005 \001(\005\022\024\n\014start_grid_y\030\006 \001(\005\022\023\n\013goal_gr"
+  "id_x\030\007 \001(\005\022\023\n\013goal_grid_y\030\010 \001(\005\022\026\n\016block"
+  "ed_bitmap\030\t \001(\014J\004\010\n\020\rR\020canonical_digestR"
+  "\025shortest_action_stepsR\016action_rule_id\"b"
+  "\n\017CommandIdentity\022\022\n\nsession_id\030\001 \001(\t\022\025\n"
+  "\rsession_epoch\030\002 \001(\004\022\020\n\010sequence\030\003 \001(\004\022\022"
+  "\n\nepisode_id\030\004 \001(\t\"\316\001\n\014CommandReply\022.\n\006r"
+  "esult\030\001 \001(\0162\036.rl.task.maze.v1.CommandRes"
+  "ult\0225\n\nerror_code\030\002 \001(\0162!.rl.task.maze.v"
+  "1.CommandErrorCode\022\017\n\007message\030\003 \001(\t\022\030\n\020a"
+  "pplied_sequence\030\004 \001(\004\022,\n\005phase\030\005 \001(\0162\035.r"
+  "l.task.maze.v1.SessionPhase\"\263\001\n\016OpenSess"
+  "ionReq\0225\n\006client\030\001 \001(\0132%.rl.common.v1.Se"
+  "rviceInstanceIdentity\022\037\n\027environment_ins"
+  "tance_id\030\002 \001(\t\022\022\n\nrequest_id\030\003 \001(\t\0225\n\rta"
+  "sk_protocol\030\004 \001(\0132\036.rl.common.v1.Protoco"
+  "lIdentity\"\306\002\n\016OpenSessionRsp\022,\n\005reply\030\001 "
+  "\001(\0132\035.rl.task.maze.v1.CommandReply\022\022\n\nse"
+  "ssion_id\030\002 \001(\t\022\025\n\rsession_epoch\030\003 \001(\004\0227\n"
+  "\010aiserver\030\004 \001(\0132%.rl.common.v1.ServiceIn"
+  "stanceIdentity\0224\n\rworkload_mode\030\005 \001(\0162\035."
+  "rl.task.maze.v1.WorkloadMode\0225\n\013environm"
+  "ent\030\006 \001(\0132 .rl.task.maze.v1.EnvironmentS"
+  "pec\0225\n\rtask_protocol\030\007 \001(\0132\036.rl.common.v"
+  "1.ProtocolIdentity\"i\n\007InitReq\0221\n\007command"
+  "\030\001 \001(\0132 .rl.task.maze.v1.CommandIdentity"
+  "\022+\n\003map\030\002 \001(\0132\036.rl.task.maze.v1.MapDescr"
+  "iptor\"x\n\007InitRsp\022,\n\005reply\030\001 \001(\0132\035.rl.tas"
+  "k.maze.v1.CommandReplyJ\004\010\002\020\003J\004\010\003\020\004R\023acce"
+  "pted_map_digestR\036verified_shortest_actio"
+  "n_steps\"\216\001\n\021EpisodeAssignment\022\022\n\nepisode"
+  "_id\030\001 \001(\t\022*\n\004mode\030\002 \001(\0162\034.rl.task.maze.v"
+  "1.EpisodeMode\022\021\n\tmax_steps\030\003 \001(\rJ\004\010\004\020\005R "
+  "evaluation_model_artifact_digest\"\037\n\014Task"
+  "Complete\022\017\n\007message\030\001 \001(\t\"D\n\017BeginEpisod"
+  "eReq\0221\n\007command\030\001 \001(\0132 .rl.task.maze.v1."
+  "CommandIdentity\"\274\001\n\017BeginEpisodeRsp\022,\n\005r"
   "eply\030\001 \001(\0132\035.rl.task.maze.v1.CommandRepl"
-  "y\0224\n\014action_batch\030\002 \001(\0132\034.rl.task.maze.v"
-  "1.ActionBatchH\000\022,\n\004wait\030\003 \001(\0132\034.rl.task."
-  "maze.v1.WaitControlH\000\022,\n\004stop\030\004 \001(\0132\034.rl"
-  ".task.maze.v1.StopControlH\000B\t\n\007control\"B"
-  "\n\rEndEpisodeReq\0221\n\007command\030\001 \001(\0132 .rl.ta"
-  "sk.maze.v1.CommandIdentity\"\347\001\n\023AgentEpis"
-  "odeOutcome\022\020\n\010agent_id\030\001 \001(\r\022B\n\022terminat"
-  "ion_reason\030\002 \001(\0162&.rl.task.maze.v1.MazeT"
-  "erminationReason\022\031\n\021terminal_frame_id\030\003 "
-  "\001(\004\022-\n\016final_position\030\004 \001(\0132\025.rl.task.ma"
-  "ze.v1.Vec2\022\034\n\017goal_rank_group\030\005 \001(\rH\000\210\001\001"
-  "B\022\n\020_goal_rank_group\"Z\n\016EpisodeOutcome\022\022"
-  "\n\nepisode_id\030\001 \001(\t\0224\n\006agents\030\002 \003(\0132$.rl."
-  "task.maze.v1.AgentEpisodeOutcome\"o\n\rEndE"
-  "pisodeRsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.maze."
-  "v1.CommandReply\0220\n\007outcome\030\002 \001(\0132\037.rl.ta"
-  "sk.maze.v1.EpisodeOutcome\"\215\001\n\017AbortEpiso"
-  "deReq\0221\n\007command\030\001 \001(\0132 .rl.task.maze.v1"
-  ".CommandIdentity\0226\n\006reason\030\002 \001(\0162&.rl.ta"
-  "sk.maze.v1.MazeTerminationReason\022\017\n\007mess"
-  "age\030\003 \001(\t\"\?\n\017AbortEpisodeRsp\022,\n\005reply\030\001 "
-  "\001(\0132\035.rl.task.maze.v1.CommandReply\"D\n\017Cl"
-  "oseSessionReq\0221\n\007command\030\001 \001(\0132 .rl.task"
-  ".maze.v1.CommandIdentity\"\?\n\017CloseSession"
-  "Rsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.maze.v1.Com"
-  "mandReply*\245\001\n\rCommandResult\022\036\n\032COMMAND_R"
-  "ESULT_UNSPECIFIED\020\000\022\032\n\026COMMAND_RESULT_AP"
-  "PLIED\020\001\022\"\n\036COMMAND_RESULT_ALREADY_APPLIE"
-  "D\020\002\022\027\n\023COMMAND_RESULT_WAIT\020\003\022\033\n\027COMMAND_"
-  "RESULT_REJECTED\020\004*\314\002\n\020CommandErrorCode\022\""
-  "\n\036COMMAND_ERROR_CODE_UNSPECIFIED\020\000\022\'\n#CO"
-  "MMAND_ERROR_CODE_INVALID_IDENTITY\020\001\022\"\n\036C"
-  "OMMAND_ERROR_CODE_STALE_EPOCH\020\002\022#\n\037COMMA"
-  "ND_ERROR_CODE_OUT_OF_ORDER\020\003\022\'\n#COMMAND_"
-  "ERROR_CODE_PAYLOAD_CONFLICT\020\004\022%\n!COMMAND"
-  "_ERROR_CODE_STATE_CONFLICT\020\005\022\"\n\036COMMAND_"
-  "ERROR_CODE_MAP_INVALID\020\006\022.\n*COMMAND_ERRO"
-  "R_CODE_MODEL_IDENTITY_MISMATCH\020\007*\373\001\n\014Ses"
-  "sionPhase\022\035\n\031SESSION_PHASE_UNSPECIFIED\020\000"
-  "\022\026\n\022SESSION_PHASE_OPEN\020\001\022\027\n\023SESSION_PHAS"
-  "E_READY\020\002\022!\n\035SESSION_PHASE_EPISODE_RUNNI"
-  "NG\020\003\022\"\n\036SESSION_PHASE_EPISODE_TERMINAL\020\004"
-  "\022\037\n\033SESSION_PHASE_TASK_COMPLETE\020\005\022\030\n\024SES"
-  "SION_PHASE_CLOSED\020\006\022\031\n\025SESSION_PHASE_ABO"
-  "RTED\020\007*c\n\013EpisodeMode\022\034\n\030EPISODE_MODE_UN"
-  "SPECIFIED\020\000\022\031\n\025EPISODE_MODE_TRAINING\020\001\022\033"
-  "\n\027EPISODE_MODE_EVALUATION\020\002*g\n\014WorkloadM"
-  "ode\022\035\n\031WORKLOAD_MODE_UNSPECIFIED\020\000\022\032\n\026WO"
-  "RKLOAD_MODE_TRAINING\020\001\022\034\n\030WORKLOAD_MODE_"
-  "EVALUATION\020\002*\262\002\n\025MazeTerminationReason\022\'"
-  "\n#MAZE_TERMINATION_REASON_UNSPECIFIED\020\000\022"
-  "\"\n\036MAZE_TERMINATION_REASON_ACTIVE\020\001\022(\n$M"
-  "AZE_TERMINATION_REASON_GOAL_REACHED\020\002\022&\n"
-  "\"MAZE_TERMINATION_REASON_TIME_LIMIT\020\003\022(\n"
-  "$MAZE_TERMINATION_REASON_CLIENT_ABORT\020\004\022"
-  ")\n%MAZE_TERMINATION_REASON_CHAIN_FAILURE"
-  "\020\005\022%\n!MAZE_TERMINATION_REASON_TASK_STOP\020"
-  "\0062\252\004\n\017MazeTaskService\022O\n\013OpenSession\022\037.r"
-  "l.task.maze.v1.OpenSessionReq\032\037.rl.task."
-  "maze.v1.OpenSessionRsp\022:\n\004Init\022\030.rl.task"
-  ".maze.v1.InitReq\032\030.rl.task.maze.v1.InitR"
-  "sp\022R\n\014BeginEpisode\022 .rl.task.maze.v1.Beg"
-  "inEpisodeReq\032 .rl.task.maze.v1.BeginEpis"
-  "odeRsp\022@\n\006Update\022\032.rl.task.maze.v1.Updat"
-  "eReq\032\032.rl.task.maze.v1.UpdateRsp\022L\n\nEndE"
-  "pisode\022\036.rl.task.maze.v1.EndEpisodeReq\032\036"
-  ".rl.task.maze.v1.EndEpisodeRsp\022R\n\014AbortE"
-  "pisode\022 .rl.task.maze.v1.AbortEpisodeReq"
-  "\032 .rl.task.maze.v1.AbortEpisodeRsp\022R\n\014Cl"
-  "oseSession\022 .rl.task.maze.v1.CloseSessio"
-  "nReq\032 .rl.task.maze.v1.CloseSessionRspB\003"
-  "\200\001\000b\006proto3"
+  "y\0228\n\nassignment\030\002 \001(\0132\".rl.task.maze.v1."
+  "EpisodeAssignmentH\000\0226\n\rtask_complete\030\003 \001"
+  "(\0132\035.rl.task.maze.v1.TaskCompleteH\000B\t\n\007o"
+  "utcome\"\034\n\004Vec2\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\241\002\n"
+  "\nAgentState\022\020\n\010agent_id\030\001 \001(\r\022\'\n\010positio"
+  "n\030\002 \001(\0132\025.rl.task.maze.v1.Vec2\022\017\n\007is_don"
+  "e\030\003 \001(\010\022B\n\022termination_reason\030\004 \001(\0162&.rl"
+  ".task.maze.v1.MazeTerminationReason\022\031\n\021l"
+  "ast_move_blocked\030\005 \001(\010\022<\n\022executed_actio"
+  "n_id\030\006 \001(\0162\033.rl.task.maze.v1.MazeActionH"
+  "\000\210\001\001\022\023\n\013action_mask\030\007 \003(\010B\025\n\023_executed_a"
+  "ction_id\"}\n\tUpdateReq\0221\n\007command\030\001 \001(\0132 "
+  ".rl.task.maze.v1.CommandIdentity\022\020\n\010fram"
+  "e_id\030\002 \001(\004\022+\n\006agents\030\003 \003(\0132\033.rl.task.maz"
+  "e.v1.AgentState\"O\n\013AgentAction\022\020\n\010agent_"
+  "id\030\001 \001(\r\022.\n\taction_id\030\002 \001(\0162\033.rl.task.ma"
+  "ze.v1.MazeAction\"<\n\013ActionBatch\022-\n\007actio"
+  "ns\030\001 \003(\0132\034.rl.task.maze.v1.AgentAction\"%"
+  "\n\013WaitControl\022\026\n\016retry_after_ms\030\001 \001(\005\"V\n"
+  "\013StopControl\0226\n\006reason\030\001 \001(\0162&.rl.task.m"
+  "aze.v1.MazeTerminationReason\022\017\n\007message\030"
+  "\002 \001(\t\"\326\001\n\tUpdateRsp\022,\n\005reply\030\001 \001(\0132\035.rl."
+  "task.maze.v1.CommandReply\0224\n\014action_batc"
+  "h\030\002 \001(\0132\034.rl.task.maze.v1.ActionBatchH\000\022"
+  ",\n\004wait\030\003 \001(\0132\034.rl.task.maze.v1.WaitCont"
+  "rolH\000\022,\n\004stop\030\004 \001(\0132\034.rl.task.maze.v1.St"
+  "opControlH\000B\t\n\007control\"B\n\rEndEpisodeReq\022"
+  "1\n\007command\030\001 \001(\0132 .rl.task.maze.v1.Comma"
+  "ndIdentity\"\347\001\n\023AgentEpisodeOutcome\022\020\n\010ag"
+  "ent_id\030\001 \001(\r\022B\n\022termination_reason\030\002 \001(\016"
+  "2&.rl.task.maze.v1.MazeTerminationReason"
+  "\022\031\n\021terminal_frame_id\030\003 \001(\004\022-\n\016final_pos"
+  "ition\030\004 \001(\0132\025.rl.task.maze.v1.Vec2\022\034\n\017go"
+  "al_rank_group\030\005 \001(\rH\000\210\001\001B\022\n\020_goal_rank_g"
+  "roup\"Z\n\016EpisodeOutcome\022\022\n\nepisode_id\030\001 \001"
+  "(\t\0224\n\006agents\030\002 \003(\0132$.rl.task.maze.v1.Age"
+  "ntEpisodeOutcome\"o\n\rEndEpisodeRsp\022,\n\005rep"
+  "ly\030\001 \001(\0132\035.rl.task.maze.v1.CommandReply\022"
+  "0\n\007outcome\030\002 \001(\0132\037.rl.task.maze.v1.Episo"
+  "deOutcome\"\215\001\n\017AbortEpisodeReq\0221\n\007command"
+  "\030\001 \001(\0132 .rl.task.maze.v1.CommandIdentity"
+  "\0226\n\006reason\030\002 \001(\0162&.rl.task.maze.v1.MazeT"
+  "erminationReason\022\017\n\007message\030\003 \001(\t\"\?\n\017Abo"
+  "rtEpisodeRsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.ma"
+  "ze.v1.CommandReply\"D\n\017CloseSessionReq\0221\n"
+  "\007command\030\001 \001(\0132 .rl.task.maze.v1.Command"
+  "Identity\"\?\n\017CloseSessionRsp\022,\n\005reply\030\001 \001"
+  "(\0132\035.rl.task.maze.v1.CommandReply*\245\001\n\rCo"
+  "mmandResult\022\036\n\032COMMAND_RESULT_UNSPECIFIE"
+  "D\020\000\022\032\n\026COMMAND_RESULT_APPLIED\020\001\022\"\n\036COMMA"
+  "ND_RESULT_ALREADY_APPLIED\020\002\022\027\n\023COMMAND_R"
+  "ESULT_WAIT\020\003\022\033\n\027COMMAND_RESULT_REJECTED\020"
+  "\004*\314\002\n\020CommandErrorCode\022\"\n\036COMMAND_ERROR_"
+  "CODE_UNSPECIFIED\020\000\022\'\n#COMMAND_ERROR_CODE"
+  "_INVALID_IDENTITY\020\001\022\"\n\036COMMAND_ERROR_COD"
+  "E_STALE_EPOCH\020\002\022#\n\037COMMAND_ERROR_CODE_OU"
+  "T_OF_ORDER\020\003\022\'\n#COMMAND_ERROR_CODE_PAYLO"
+  "AD_CONFLICT\020\004\022%\n!COMMAND_ERROR_CODE_STAT"
+  "E_CONFLICT\020\005\022\"\n\036COMMAND_ERROR_CODE_MAP_I"
+  "NVALID\020\006\022.\n*COMMAND_ERROR_CODE_MODEL_IDE"
+  "NTITY_MISMATCH\020\007*\373\001\n\014SessionPhase\022\035\n\031SES"
+  "SION_PHASE_UNSPECIFIED\020\000\022\026\n\022SESSION_PHAS"
+  "E_OPEN\020\001\022\027\n\023SESSION_PHASE_READY\020\002\022!\n\035SES"
+  "SION_PHASE_EPISODE_RUNNING\020\003\022\"\n\036SESSION_"
+  "PHASE_EPISODE_TERMINAL\020\004\022\037\n\033SESSION_PHAS"
+  "E_TASK_COMPLETE\020\005\022\030\n\024SESSION_PHASE_CLOSE"
+  "D\020\006\022\031\n\025SESSION_PHASE_ABORTED\020\007*c\n\013Episod"
+  "eMode\022\034\n\030EPISODE_MODE_UNSPECIFIED\020\000\022\031\n\025E"
+  "PISODE_MODE_TRAINING\020\001\022\033\n\027EPISODE_MODE_E"
+  "VALUATION\020\002*g\n\014WorkloadMode\022\035\n\031WORKLOAD_"
+  "MODE_UNSPECIFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAI"
+  "NING\020\001\022\034\n\030WORKLOAD_MODE_EVALUATION\020\002*\343\001\n"
+  "\nMazeAction\022\024\n\020MAZE_ACTION_NOOP\020\000\022\022\n\016MAZ"
+  "E_ACTION_UP\020\001\022\030\n\024MAZE_ACTION_UP_RIGHT\020\002\022"
+  "\025\n\021MAZE_ACTION_RIGHT\020\003\022\032\n\026MAZE_ACTION_DO"
+  "WN_RIGHT\020\004\022\024\n\020MAZE_ACTION_DOWN\020\005\022\031\n\025MAZE"
+  "_ACTION_DOWN_LEFT\020\006\022\024\n\020MAZE_ACTION_LEFT\020"
+  "\007\022\027\n\023MAZE_ACTION_UP_LEFT\020\010*p\n\016ActionMask"
+  "Mode\022 \n\034ACTION_MASK_MODE_UNSPECIFIED\020\000\022\035"
+  "\n\031ACTION_MASK_MODE_DISABLED\020\001\022\035\n\031ACTION_"
+  "MASK_MODE_REQUIRED\020\002*\262\002\n\025MazeTermination"
+  "Reason\022\'\n#MAZE_TERMINATION_REASON_UNSPEC"
+  "IFIED\020\000\022\"\n\036MAZE_TERMINATION_REASON_ACTIV"
+  "E\020\001\022(\n$MAZE_TERMINATION_REASON_GOAL_REAC"
+  "HED\020\002\022&\n\"MAZE_TERMINATION_REASON_TIME_LI"
+  "MIT\020\003\022(\n$MAZE_TERMINATION_REASON_CLIENT_"
+  "ABORT\020\004\022)\n%MAZE_TERMINATION_REASON_CHAIN"
+  "_FAILURE\020\005\022%\n!MAZE_TERMINATION_REASON_TA"
+  "SK_STOP\020\0062\252\004\n\017MazeTaskService\022O\n\013OpenSes"
+  "sion\022\037.rl.task.maze.v1.OpenSessionReq\032\037."
+  "rl.task.maze.v1.OpenSessionRsp\022:\n\004Init\022\030"
+  ".rl.task.maze.v1.InitReq\032\030.rl.task.maze."
+  "v1.InitRsp\022R\n\014BeginEpisode\022 .rl.task.maz"
+  "e.v1.BeginEpisodeReq\032 .rl.task.maze.v1.B"
+  "eginEpisodeRsp\022@\n\006Update\022\032.rl.task.maze."
+  "v1.UpdateReq\032\032.rl.task.maze.v1.UpdateRsp"
+  "\022L\n\nEndEpisode\022\036.rl.task.maze.v1.EndEpis"
+  "odeReq\032\036.rl.task.maze.v1.EndEpisodeRsp\022R"
+  "\n\014AbortEpisode\022 .rl.task.maze.v1.AbortEp"
+  "isodeReq\032 .rl.task.maze.v1.AbortEpisodeR"
+  "sp\022R\n\014CloseSession\022 .rl.task.maze.v1.Clo"
+  "seSessionReq\032 .rl.task.maze.v1.CloseSess"
+  "ionRspB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_maze_5ftask_2eproto_deps[1] = {
   &::descriptor_table_common_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_maze_5ftask_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_maze_5ftask_2eproto = {
-    false, false, 5531, descriptor_table_protodef_maze_5ftask_2eproto,
+    false, false, 5979, descriptor_table_protodef_maze_5ftask_2eproto,
     "maze_task.proto",
     &descriptor_table_maze_5ftask_2eproto_once, descriptor_table_maze_5ftask_2eproto_deps, 1, 28,
     schemas, file_default_instances, TableStruct_maze_5ftask_2eproto::offsets,
@@ -1036,9 +1040,45 @@ bool WorkloadMode_IsValid(int value) {
   }
 }
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MazeTerminationReason_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MazeAction_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
   return file_level_enum_descriptors_maze_5ftask_2eproto[5];
+}
+bool MazeAction_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ActionMaskMode_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
+  return file_level_enum_descriptors_maze_5ftask_2eproto[6];
+}
+bool ActionMaskMode_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MazeTerminationReason_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_maze_5ftask_2eproto);
+  return file_level_enum_descriptors_maze_5ftask_2eproto[7];
 }
 bool MazeTerminationReason_IsValid(int value) {
   switch (value) {
@@ -1060,19 +1100,8 @@ bool MazeTerminationReason_IsValid(int value) {
 
 class EnvironmentSpec::_Internal {
  public:
-  static const ::rl::common::v1::ContentDigest& expected_map_digest(const EnvironmentSpec* msg);
 };
 
-const ::rl::common::v1::ContentDigest&
-EnvironmentSpec::_Internal::expected_map_digest(const EnvironmentSpec* msg) {
-  return *msg->_impl_.expected_map_digest_;
-}
-void EnvironmentSpec::clear_expected_map_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.expected_map_digest_ != nullptr) {
-    delete _impl_.expected_map_digest_;
-  }
-  _impl_.expected_map_digest_ = nullptr;
-}
 EnvironmentSpec::EnvironmentSpec(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -1084,10 +1113,9 @@ EnvironmentSpec::EnvironmentSpec(const EnvironmentSpec& from)
   EnvironmentSpec* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.map_id_){}
-    , decltype(_impl_.action_rule_id_){}
-    , decltype(_impl_.expected_map_digest_){nullptr}
     , decltype(_impl_.agent_count_){}
     , decltype(_impl_.episode_max_steps_){}
+    , decltype(_impl_.action_mask_mode_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -1099,20 +1127,9 @@ EnvironmentSpec::EnvironmentSpec(const EnvironmentSpec& from)
     _this->_impl_.map_id_.Set(from._internal_map_id(), 
       _this->GetArenaForAllocation());
   }
-  _impl_.action_rule_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.action_rule_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_action_rule_id().empty()) {
-    _this->_impl_.action_rule_id_.Set(from._internal_action_rule_id(), 
-      _this->GetArenaForAllocation());
-  }
-  if (from._internal_has_expected_map_digest()) {
-    _this->_impl_.expected_map_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.expected_map_digest_);
-  }
   ::memcpy(&_impl_.agent_count_, &from._impl_.agent_count_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.episode_max_steps_) -
-    reinterpret_cast<char*>(&_impl_.agent_count_)) + sizeof(_impl_.episode_max_steps_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.action_mask_mode_) -
+    reinterpret_cast<char*>(&_impl_.agent_count_)) + sizeof(_impl_.action_mask_mode_));
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.EnvironmentSpec)
 }
 
@@ -1122,19 +1139,14 @@ inline void EnvironmentSpec::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.map_id_){}
-    , decltype(_impl_.action_rule_id_){}
-    , decltype(_impl_.expected_map_digest_){nullptr}
     , decltype(_impl_.agent_count_){0u}
     , decltype(_impl_.episode_max_steps_){0u}
+    , decltype(_impl_.action_mask_mode_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.map_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.map_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.action_rule_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.action_rule_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -1150,8 +1162,6 @@ EnvironmentSpec::~EnvironmentSpec() {
 inline void EnvironmentSpec::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.map_id_.Destroy();
-  _impl_.action_rule_id_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.expected_map_digest_;
 }
 
 void EnvironmentSpec::SetCachedSize(int size) const {
@@ -1165,14 +1175,9 @@ void EnvironmentSpec::Clear() {
   (void) cached_has_bits;
 
   _impl_.map_id_.ClearToEmpty();
-  _impl_.action_rule_id_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.expected_map_digest_ != nullptr) {
-    delete _impl_.expected_map_digest_;
-  }
-  _impl_.expected_map_digest_ = nullptr;
   ::memset(&_impl_.agent_count_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.episode_max_steps_) -
-      reinterpret_cast<char*>(&_impl_.agent_count_)) + sizeof(_impl_.episode_max_steps_));
+      reinterpret_cast<char*>(&_impl_.action_mask_mode_) -
+      reinterpret_cast<char*>(&_impl_.agent_count_)) + sizeof(_impl_.action_mask_mode_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1200,29 +1205,20 @@ const char* EnvironmentSpec::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // .rl.common.v1.ContentDigest expected_map_digest = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_expected_map_digest(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string action_rule_id = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          auto str = _internal_mutable_action_rule_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.EnvironmentSpec.action_rule_id"));
-        } else
-          goto handle_unusual;
-        continue;
       // uint32 episode_max_steps = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
           _impl_.episode_max_steps_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.task.maze.v1.ActionMaskMode action_mask_mode = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_action_mask_mode(static_cast<::rl::task::maze::v1::ActionMaskMode>(val));
         } else
           goto handle_unusual;
         continue;
@@ -1271,27 +1267,17 @@ uint8_t* EnvironmentSpec::_InternalSerialize(
         2, this->_internal_map_id(), target);
   }
 
-  // .rl.common.v1.ContentDigest expected_map_digest = 3;
-  if (this->_internal_has_expected_map_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::expected_map_digest(this),
-        _Internal::expected_map_digest(this).GetCachedSize(), target, stream);
-  }
-
-  // string action_rule_id = 4;
-  if (!this->_internal_action_rule_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_action_rule_id().data(), static_cast<int>(this->_internal_action_rule_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.task.maze.v1.EnvironmentSpec.action_rule_id");
-    target = stream->WriteStringMaybeAliased(
-        4, this->_internal_action_rule_id(), target);
-  }
-
   // uint32 episode_max_steps = 5;
   if (this->_internal_episode_max_steps() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(5, this->_internal_episode_max_steps(), target);
+  }
+
+  // .rl.task.maze.v1.ActionMaskMode action_mask_mode = 6;
+  if (this->_internal_action_mask_mode() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      6, this->_internal_action_mask_mode(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1317,20 +1303,6 @@ size_t EnvironmentSpec::ByteSizeLong() const {
         this->_internal_map_id());
   }
 
-  // string action_rule_id = 4;
-  if (!this->_internal_action_rule_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_action_rule_id());
-  }
-
-  // .rl.common.v1.ContentDigest expected_map_digest = 3;
-  if (this->_internal_has_expected_map_digest()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.expected_map_digest_);
-  }
-
   // uint32 agent_count = 1;
   if (this->_internal_agent_count() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_agent_count());
@@ -1339,6 +1311,12 @@ size_t EnvironmentSpec::ByteSizeLong() const {
   // uint32 episode_max_steps = 5;
   if (this->_internal_episode_max_steps() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_episode_max_steps());
+  }
+
+  // .rl.task.maze.v1.ActionMaskMode action_mask_mode = 6;
+  if (this->_internal_action_mask_mode() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_action_mask_mode());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1362,18 +1340,14 @@ void EnvironmentSpec::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   if (!from._internal_map_id().empty()) {
     _this->_internal_set_map_id(from._internal_map_id());
   }
-  if (!from._internal_action_rule_id().empty()) {
-    _this->_internal_set_action_rule_id(from._internal_action_rule_id());
-  }
-  if (from._internal_has_expected_map_digest()) {
-    _this->_internal_mutable_expected_map_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_expected_map_digest());
-  }
   if (from._internal_agent_count() != 0) {
     _this->_internal_set_agent_count(from._internal_agent_count());
   }
   if (from._internal_episode_max_steps() != 0) {
     _this->_internal_set_episode_max_steps(from._internal_episode_max_steps());
+  }
+  if (from._internal_action_mask_mode() != 0) {
+    _this->_internal_set_action_mask_mode(from._internal_action_mask_mode());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1398,16 +1372,12 @@ void EnvironmentSpec::InternalSwap(EnvironmentSpec* other) {
       &_impl_.map_id_, lhs_arena,
       &other->_impl_.map_id_, rhs_arena
   );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.action_rule_id_, lhs_arena,
-      &other->_impl_.action_rule_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(EnvironmentSpec, _impl_.episode_max_steps_)
-      + sizeof(EnvironmentSpec::_impl_.episode_max_steps_)
-      - PROTOBUF_FIELD_OFFSET(EnvironmentSpec, _impl_.expected_map_digest_)>(
-          reinterpret_cast<char*>(&_impl_.expected_map_digest_),
-          reinterpret_cast<char*>(&other->_impl_.expected_map_digest_));
+      PROTOBUF_FIELD_OFFSET(EnvironmentSpec, _impl_.action_mask_mode_)
+      + sizeof(EnvironmentSpec::_impl_.action_mask_mode_)
+      - PROTOBUF_FIELD_OFFSET(EnvironmentSpec, _impl_.agent_count_)>(
+          reinterpret_cast<char*>(&_impl_.agent_count_),
+          reinterpret_cast<char*>(&other->_impl_.agent_count_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata EnvironmentSpec::GetMetadata() const {
@@ -1420,19 +1390,8 @@ void EnvironmentSpec::InternalSwap(EnvironmentSpec* other) {
 
 class MapDescriptor::_Internal {
  public:
-  static const ::rl::common::v1::ContentDigest& canonical_digest(const MapDescriptor* msg);
 };
 
-const ::rl::common::v1::ContentDigest&
-MapDescriptor::_Internal::canonical_digest(const MapDescriptor* msg) {
-  return *msg->_impl_.canonical_digest_;
-}
-void MapDescriptor::clear_canonical_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.canonical_digest_ != nullptr) {
-    delete _impl_.canonical_digest_;
-  }
-  _impl_.canonical_digest_ = nullptr;
-}
 MapDescriptor::MapDescriptor(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -1445,8 +1404,6 @@ MapDescriptor::MapDescriptor(const MapDescriptor& from)
   new (&_impl_) Impl_{
       decltype(_impl_.map_id_){}
     , decltype(_impl_.blocked_bitmap_){}
-    , decltype(_impl_.action_rule_id_){}
-    , decltype(_impl_.canonical_digest_){nullptr}
     , decltype(_impl_.grid_columns_){}
     , decltype(_impl_.grid_rows_){}
     , decltype(_impl_.grid_size_microunits_){}
@@ -1454,7 +1411,6 @@ MapDescriptor::MapDescriptor(const MapDescriptor& from)
     , decltype(_impl_.start_grid_y_){}
     , decltype(_impl_.goal_grid_x_){}
     , decltype(_impl_.goal_grid_y_){}
-    , decltype(_impl_.shortest_action_steps_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -1474,20 +1430,9 @@ MapDescriptor::MapDescriptor(const MapDescriptor& from)
     _this->_impl_.blocked_bitmap_.Set(from._internal_blocked_bitmap(), 
       _this->GetArenaForAllocation());
   }
-  _impl_.action_rule_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.action_rule_id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_action_rule_id().empty()) {
-    _this->_impl_.action_rule_id_.Set(from._internal_action_rule_id(), 
-      _this->GetArenaForAllocation());
-  }
-  if (from._internal_has_canonical_digest()) {
-    _this->_impl_.canonical_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.canonical_digest_);
-  }
   ::memcpy(&_impl_.grid_columns_, &from._impl_.grid_columns_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.shortest_action_steps_) -
-    reinterpret_cast<char*>(&_impl_.grid_columns_)) + sizeof(_impl_.shortest_action_steps_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.goal_grid_y_) -
+    reinterpret_cast<char*>(&_impl_.grid_columns_)) + sizeof(_impl_.goal_grid_y_));
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.MapDescriptor)
 }
 
@@ -1498,8 +1443,6 @@ inline void MapDescriptor::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.map_id_){}
     , decltype(_impl_.blocked_bitmap_){}
-    , decltype(_impl_.action_rule_id_){}
-    , decltype(_impl_.canonical_digest_){nullptr}
     , decltype(_impl_.grid_columns_){0u}
     , decltype(_impl_.grid_rows_){0u}
     , decltype(_impl_.grid_size_microunits_){0u}
@@ -1507,7 +1450,6 @@ inline void MapDescriptor::SharedCtor(
     , decltype(_impl_.start_grid_y_){0}
     , decltype(_impl_.goal_grid_x_){0}
     , decltype(_impl_.goal_grid_y_){0}
-    , decltype(_impl_.shortest_action_steps_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.map_id_.InitDefault();
@@ -1517,10 +1459,6 @@ inline void MapDescriptor::SharedCtor(
   _impl_.blocked_bitmap_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.blocked_bitmap_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.action_rule_id_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.action_rule_id_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -1537,8 +1475,6 @@ inline void MapDescriptor::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.map_id_.Destroy();
   _impl_.blocked_bitmap_.Destroy();
-  _impl_.action_rule_id_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.canonical_digest_;
 }
 
 void MapDescriptor::SetCachedSize(int size) const {
@@ -1553,14 +1489,9 @@ void MapDescriptor::Clear() {
 
   _impl_.map_id_.ClearToEmpty();
   _impl_.blocked_bitmap_.ClearToEmpty();
-  _impl_.action_rule_id_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.canonical_digest_ != nullptr) {
-    delete _impl_.canonical_digest_;
-  }
-  _impl_.canonical_digest_ = nullptr;
   ::memset(&_impl_.grid_columns_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.shortest_action_steps_) -
-      reinterpret_cast<char*>(&_impl_.grid_columns_)) + sizeof(_impl_.shortest_action_steps_));
+      reinterpret_cast<char*>(&_impl_.goal_grid_y_) -
+      reinterpret_cast<char*>(&_impl_.grid_columns_)) + sizeof(_impl_.goal_grid_y_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1642,32 +1573,6 @@ const char* MapDescriptor::_InternalParse(const char* ptr, ::_pbi::ParseContext*
           auto str = _internal_mutable_blocked_bitmap();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ContentDigest canonical_digest = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
-          ptr = ctx->ParseMessage(_internal_mutable_canonical_digest(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 shortest_action_steps = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
-          _impl_.shortest_action_steps_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string action_rule_id = 12;
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
-          auto str = _internal_mutable_action_rule_id();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.MapDescriptor.action_rule_id"));
         } else
           goto handle_unusual;
         continue;
@@ -1758,29 +1663,6 @@ uint8_t* MapDescriptor::_InternalSerialize(
         9, this->_internal_blocked_bitmap(), target);
   }
 
-  // .rl.common.v1.ContentDigest canonical_digest = 10;
-  if (this->_internal_has_canonical_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(10, _Internal::canonical_digest(this),
-        _Internal::canonical_digest(this).GetCachedSize(), target, stream);
-  }
-
-  // uint32 shortest_action_steps = 11;
-  if (this->_internal_shortest_action_steps() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(11, this->_internal_shortest_action_steps(), target);
-  }
-
-  // string action_rule_id = 12;
-  if (!this->_internal_action_rule_id().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_action_rule_id().data(), static_cast<int>(this->_internal_action_rule_id().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.task.maze.v1.MapDescriptor.action_rule_id");
-    target = stream->WriteStringMaybeAliased(
-        12, this->_internal_action_rule_id(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1809,20 +1691,6 @@ size_t MapDescriptor::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_blocked_bitmap());
-  }
-
-  // string action_rule_id = 12;
-  if (!this->_internal_action_rule_id().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_action_rule_id());
-  }
-
-  // .rl.common.v1.ContentDigest canonical_digest = 10;
-  if (this->_internal_has_canonical_digest()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.canonical_digest_);
   }
 
   // uint32 grid_columns = 2;
@@ -1860,11 +1728,6 @@ size_t MapDescriptor::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_goal_grid_y());
   }
 
-  // uint32 shortest_action_steps = 11;
-  if (this->_internal_shortest_action_steps() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_shortest_action_steps());
-  }
-
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -1889,13 +1752,6 @@ void MapDescriptor::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   if (!from._internal_blocked_bitmap().empty()) {
     _this->_internal_set_blocked_bitmap(from._internal_blocked_bitmap());
   }
-  if (!from._internal_action_rule_id().empty()) {
-    _this->_internal_set_action_rule_id(from._internal_action_rule_id());
-  }
-  if (from._internal_has_canonical_digest()) {
-    _this->_internal_mutable_canonical_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_canonical_digest());
-  }
   if (from._internal_grid_columns() != 0) {
     _this->_internal_set_grid_columns(from._internal_grid_columns());
   }
@@ -1916,9 +1772,6 @@ void MapDescriptor::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   }
   if (from._internal_goal_grid_y() != 0) {
     _this->_internal_set_goal_grid_y(from._internal_goal_grid_y());
-  }
-  if (from._internal_shortest_action_steps() != 0) {
-    _this->_internal_set_shortest_action_steps(from._internal_shortest_action_steps());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1947,16 +1800,12 @@ void MapDescriptor::InternalSwap(MapDescriptor* other) {
       &_impl_.blocked_bitmap_, lhs_arena,
       &other->_impl_.blocked_bitmap_, rhs_arena
   );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.action_rule_id_, lhs_arena,
-      &other->_impl_.action_rule_id_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(MapDescriptor, _impl_.shortest_action_steps_)
-      + sizeof(MapDescriptor::_impl_.shortest_action_steps_)
-      - PROTOBUF_FIELD_OFFSET(MapDescriptor, _impl_.canonical_digest_)>(
-          reinterpret_cast<char*>(&_impl_.canonical_digest_),
-          reinterpret_cast<char*>(&other->_impl_.canonical_digest_));
+      PROTOBUF_FIELD_OFFSET(MapDescriptor, _impl_.goal_grid_y_)
+      + sizeof(MapDescriptor::_impl_.goal_grid_y_)
+      - PROTOBUF_FIELD_OFFSET(MapDescriptor, _impl_.grid_columns_)>(
+          reinterpret_cast<char*>(&_impl_.grid_columns_),
+          reinterpret_cast<char*>(&other->_impl_.grid_columns_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata MapDescriptor::GetMetadata() const {
@@ -2603,17 +2452,28 @@ void CommandReply::InternalSwap(CommandReply* other) {
 class OpenSessionReq::_Internal {
  public:
   static const ::rl::common::v1::ServiceInstanceIdentity& client(const OpenSessionReq* msg);
+  static const ::rl::common::v1::ProtocolIdentity& task_protocol(const OpenSessionReq* msg);
 };
 
 const ::rl::common::v1::ServiceInstanceIdentity&
 OpenSessionReq::_Internal::client(const OpenSessionReq* msg) {
   return *msg->_impl_.client_;
 }
+const ::rl::common::v1::ProtocolIdentity&
+OpenSessionReq::_Internal::task_protocol(const OpenSessionReq* msg) {
+  return *msg->_impl_.task_protocol_;
+}
 void OpenSessionReq::clear_client() {
   if (GetArenaForAllocation() == nullptr && _impl_.client_ != nullptr) {
     delete _impl_.client_;
   }
   _impl_.client_ = nullptr;
+}
+void OpenSessionReq::clear_task_protocol() {
+  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
+    delete _impl_.task_protocol_;
+  }
+  _impl_.task_protocol_ = nullptr;
 }
 OpenSessionReq::OpenSessionReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -2628,6 +2488,7 @@ OpenSessionReq::OpenSessionReq(const OpenSessionReq& from)
       decltype(_impl_.environment_instance_id_){}
     , decltype(_impl_.request_id_){}
     , decltype(_impl_.client_){nullptr}
+    , decltype(_impl_.task_protocol_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -2650,6 +2511,9 @@ OpenSessionReq::OpenSessionReq(const OpenSessionReq& from)
   if (from._internal_has_client()) {
     _this->_impl_.client_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.client_);
   }
+  if (from._internal_has_task_protocol()) {
+    _this->_impl_.task_protocol_ = new ::rl::common::v1::ProtocolIdentity(*from._impl_.task_protocol_);
+  }
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.OpenSessionReq)
 }
 
@@ -2661,6 +2525,7 @@ inline void OpenSessionReq::SharedCtor(
       decltype(_impl_.environment_instance_id_){}
     , decltype(_impl_.request_id_){}
     , decltype(_impl_.client_){nullptr}
+    , decltype(_impl_.task_protocol_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.environment_instance_id_.InitDefault();
@@ -2687,6 +2552,7 @@ inline void OpenSessionReq::SharedDtor() {
   _impl_.environment_instance_id_.Destroy();
   _impl_.request_id_.Destroy();
   if (this != internal_default_instance()) delete _impl_.client_;
+  if (this != internal_default_instance()) delete _impl_.task_protocol_;
 }
 
 void OpenSessionReq::SetCachedSize(int size) const {
@@ -2705,6 +2571,10 @@ void OpenSessionReq::Clear() {
     delete _impl_.client_;
   }
   _impl_.client_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
+    delete _impl_.task_protocol_;
+  }
+  _impl_.task_protocol_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2739,6 +2609,14 @@ const char* OpenSessionReq::_InternalParse(const char* ptr, ::_pbi::ParseContext
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.OpenSessionReq.request_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ProtocolIdentity task_protocol = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_task_protocol(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2798,6 +2676,13 @@ uint8_t* OpenSessionReq::_InternalSerialize(
         3, this->_internal_request_id(), target);
   }
 
+  // .rl.common.v1.ProtocolIdentity task_protocol = 4;
+  if (this->_internal_has_task_protocol()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::task_protocol(this),
+        _Internal::task_protocol(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2835,6 +2720,13 @@ size_t OpenSessionReq::ByteSizeLong() const {
         *_impl_.client_);
   }
 
+  // .rl.common.v1.ProtocolIdentity task_protocol = 4;
+  if (this->_internal_has_task_protocol()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.task_protocol_);
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2863,6 +2755,10 @@ void OpenSessionReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
     _this->_internal_mutable_client()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
         from._internal_client());
   }
+  if (from._internal_has_task_protocol()) {
+    _this->_internal_mutable_task_protocol()->::rl::common::v1::ProtocolIdentity::MergeFrom(
+        from._internal_task_protocol());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2890,7 +2786,12 @@ void OpenSessionReq::InternalSwap(OpenSessionReq* other) {
       &_impl_.request_id_, lhs_arena,
       &other->_impl_.request_id_, rhs_arena
   );
-  swap(_impl_.client_, other->_impl_.client_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(OpenSessionReq, _impl_.task_protocol_)
+      + sizeof(OpenSessionReq::_impl_.task_protocol_)
+      - PROTOBUF_FIELD_OFFSET(OpenSessionReq, _impl_.client_)>(
+          reinterpret_cast<char*>(&_impl_.client_),
+          reinterpret_cast<char*>(&other->_impl_.client_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata OpenSessionReq::GetMetadata() const {
@@ -2906,6 +2807,7 @@ class OpenSessionRsp::_Internal {
   static const ::rl::task::maze::v1::CommandReply& reply(const OpenSessionRsp* msg);
   static const ::rl::common::v1::ServiceInstanceIdentity& aiserver(const OpenSessionRsp* msg);
   static const ::rl::task::maze::v1::EnvironmentSpec& environment(const OpenSessionRsp* msg);
+  static const ::rl::common::v1::ProtocolIdentity& task_protocol(const OpenSessionRsp* msg);
 };
 
 const ::rl::task::maze::v1::CommandReply&
@@ -2920,11 +2822,21 @@ const ::rl::task::maze::v1::EnvironmentSpec&
 OpenSessionRsp::_Internal::environment(const OpenSessionRsp* msg) {
   return *msg->_impl_.environment_;
 }
+const ::rl::common::v1::ProtocolIdentity&
+OpenSessionRsp::_Internal::task_protocol(const OpenSessionRsp* msg) {
+  return *msg->_impl_.task_protocol_;
+}
 void OpenSessionRsp::clear_aiserver() {
   if (GetArenaForAllocation() == nullptr && _impl_.aiserver_ != nullptr) {
     delete _impl_.aiserver_;
   }
   _impl_.aiserver_ = nullptr;
+}
+void OpenSessionRsp::clear_task_protocol() {
+  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
+    delete _impl_.task_protocol_;
+  }
+  _impl_.task_protocol_ = nullptr;
 }
 OpenSessionRsp::OpenSessionRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -2940,6 +2852,7 @@ OpenSessionRsp::OpenSessionRsp(const OpenSessionRsp& from)
     , decltype(_impl_.reply_){nullptr}
     , decltype(_impl_.aiserver_){nullptr}
     , decltype(_impl_.environment_){nullptr}
+    , decltype(_impl_.task_protocol_){nullptr}
     , decltype(_impl_.session_epoch_){}
     , decltype(_impl_.workload_mode_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -2962,6 +2875,9 @@ OpenSessionRsp::OpenSessionRsp(const OpenSessionRsp& from)
   if (from._internal_has_environment()) {
     _this->_impl_.environment_ = new ::rl::task::maze::v1::EnvironmentSpec(*from._impl_.environment_);
   }
+  if (from._internal_has_task_protocol()) {
+    _this->_impl_.task_protocol_ = new ::rl::common::v1::ProtocolIdentity(*from._impl_.task_protocol_);
+  }
   ::memcpy(&_impl_.session_epoch_, &from._impl_.session_epoch_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.workload_mode_) -
     reinterpret_cast<char*>(&_impl_.session_epoch_)) + sizeof(_impl_.workload_mode_));
@@ -2977,6 +2893,7 @@ inline void OpenSessionRsp::SharedCtor(
     , decltype(_impl_.reply_){nullptr}
     , decltype(_impl_.aiserver_){nullptr}
     , decltype(_impl_.environment_){nullptr}
+    , decltype(_impl_.task_protocol_){nullptr}
     , decltype(_impl_.session_epoch_){uint64_t{0u}}
     , decltype(_impl_.workload_mode_){0}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -3002,6 +2919,7 @@ inline void OpenSessionRsp::SharedDtor() {
   if (this != internal_default_instance()) delete _impl_.reply_;
   if (this != internal_default_instance()) delete _impl_.aiserver_;
   if (this != internal_default_instance()) delete _impl_.environment_;
+  if (this != internal_default_instance()) delete _impl_.task_protocol_;
 }
 
 void OpenSessionRsp::SetCachedSize(int size) const {
@@ -3027,6 +2945,10 @@ void OpenSessionRsp::Clear() {
     delete _impl_.environment_;
   }
   _impl_.environment_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
+    delete _impl_.task_protocol_;
+  }
+  _impl_.task_protocol_ = nullptr;
   ::memset(&_impl_.session_epoch_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.workload_mode_) -
       reinterpret_cast<char*>(&_impl_.session_epoch_)) + sizeof(_impl_.workload_mode_));
@@ -3086,6 +3008,14 @@ const char* OpenSessionRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
           ptr = ctx->ParseMessage(_internal_mutable_environment(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.common.v1.ProtocolIdentity task_protocol = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          ptr = ctx->ParseMessage(_internal_mutable_task_protocol(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3163,6 +3093,13 @@ uint8_t* OpenSessionRsp::_InternalSerialize(
         _Internal::environment(this).GetCachedSize(), target, stream);
   }
 
+  // .rl.common.v1.ProtocolIdentity task_protocol = 7;
+  if (this->_internal_has_task_protocol()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(7, _Internal::task_protocol(this),
+        _Internal::task_protocol(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3205,6 +3142,13 @@ size_t OpenSessionRsp::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.environment_);
+  }
+
+  // .rl.common.v1.ProtocolIdentity task_protocol = 7;
+  if (this->_internal_has_task_protocol()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.task_protocol_);
   }
 
   // uint64 session_epoch = 3;
@@ -3250,6 +3194,10 @@ void OpenSessionRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   if (from._internal_has_environment()) {
     _this->_internal_mutable_environment()->::rl::task::maze::v1::EnvironmentSpec::MergeFrom(
         from._internal_environment());
+  }
+  if (from._internal_has_task_protocol()) {
+    _this->_internal_mutable_task_protocol()->::rl::common::v1::ProtocolIdentity::MergeFrom(
+        from._internal_task_protocol());
   }
   if (from._internal_session_epoch() != 0) {
     _this->_internal_set_session_epoch(from._internal_session_epoch());
@@ -3538,22 +3486,11 @@ void InitReq::InternalSwap(InitReq* other) {
 class InitRsp::_Internal {
  public:
   static const ::rl::task::maze::v1::CommandReply& reply(const InitRsp* msg);
-  static const ::rl::common::v1::ContentDigest& accepted_map_digest(const InitRsp* msg);
 };
 
 const ::rl::task::maze::v1::CommandReply&
 InitRsp::_Internal::reply(const InitRsp* msg) {
   return *msg->_impl_.reply_;
-}
-const ::rl::common::v1::ContentDigest&
-InitRsp::_Internal::accepted_map_digest(const InitRsp* msg) {
-  return *msg->_impl_.accepted_map_digest_;
-}
-void InitRsp::clear_accepted_map_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.accepted_map_digest_ != nullptr) {
-    delete _impl_.accepted_map_digest_;
-  }
-  _impl_.accepted_map_digest_ = nullptr;
 }
 InitRsp::InitRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -3566,18 +3503,12 @@ InitRsp::InitRsp(const InitRsp& from)
   InitRsp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.reply_){nullptr}
-    , decltype(_impl_.accepted_map_digest_){nullptr}
-    , decltype(_impl_.verified_shortest_action_steps_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_reply()) {
     _this->_impl_.reply_ = new ::rl::task::maze::v1::CommandReply(*from._impl_.reply_);
   }
-  if (from._internal_has_accepted_map_digest()) {
-    _this->_impl_.accepted_map_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.accepted_map_digest_);
-  }
-  _this->_impl_.verified_shortest_action_steps_ = from._impl_.verified_shortest_action_steps_;
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.InitRsp)
 }
 
@@ -3587,8 +3518,6 @@ inline void InitRsp::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.reply_){nullptr}
-    , decltype(_impl_.accepted_map_digest_){nullptr}
-    , decltype(_impl_.verified_shortest_action_steps_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -3605,7 +3534,6 @@ InitRsp::~InitRsp() {
 inline void InitRsp::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.reply_;
-  if (this != internal_default_instance()) delete _impl_.accepted_map_digest_;
 }
 
 void InitRsp::SetCachedSize(int size) const {
@@ -3622,11 +3550,6 @@ void InitRsp::Clear() {
     delete _impl_.reply_;
   }
   _impl_.reply_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.accepted_map_digest_ != nullptr) {
-    delete _impl_.accepted_map_digest_;
-  }
-  _impl_.accepted_map_digest_ = nullptr;
-  _impl_.verified_shortest_action_steps_ = 0u;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3640,22 +3563,6 @@ const char* InitRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_reply(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ContentDigest accepted_map_digest = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_accepted_map_digest(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 verified_shortest_action_steps = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _impl_.verified_shortest_action_steps_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3696,19 +3603,6 @@ uint8_t* InitRsp::_InternalSerialize(
         _Internal::reply(this).GetCachedSize(), target, stream);
   }
 
-  // .rl.common.v1.ContentDigest accepted_map_digest = 2;
-  if (this->_internal_has_accepted_map_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::accepted_map_digest(this),
-        _Internal::accepted_map_digest(this).GetCachedSize(), target, stream);
-  }
-
-  // uint32 verified_shortest_action_steps = 3;
-  if (this->_internal_verified_shortest_action_steps() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_verified_shortest_action_steps(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3730,18 +3624,6 @@ size_t InitRsp::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.reply_);
-  }
-
-  // .rl.common.v1.ContentDigest accepted_map_digest = 2;
-  if (this->_internal_has_accepted_map_digest()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.accepted_map_digest_);
-  }
-
-  // uint32 verified_shortest_action_steps = 3;
-  if (this->_internal_verified_shortest_action_steps() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_verified_shortest_action_steps());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3766,13 +3648,6 @@ void InitRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
     _this->_internal_mutable_reply()->::rl::task::maze::v1::CommandReply::MergeFrom(
         from._internal_reply());
   }
-  if (from._internal_has_accepted_map_digest()) {
-    _this->_internal_mutable_accepted_map_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_accepted_map_digest());
-  }
-  if (from._internal_verified_shortest_action_steps() != 0) {
-    _this->_internal_set_verified_shortest_action_steps(from._internal_verified_shortest_action_steps());
-  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -3790,12 +3665,7 @@ bool InitRsp::IsInitialized() const {
 void InitRsp::InternalSwap(InitRsp* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(InitRsp, _impl_.verified_shortest_action_steps_)
-      + sizeof(InitRsp::_impl_.verified_shortest_action_steps_)
-      - PROTOBUF_FIELD_OFFSET(InitRsp, _impl_.reply_)>(
-          reinterpret_cast<char*>(&_impl_.reply_),
-          reinterpret_cast<char*>(&other->_impl_.reply_));
+  swap(_impl_.reply_, other->_impl_.reply_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata InitRsp::GetMetadata() const {
@@ -3808,19 +3678,8 @@ void InitRsp::InternalSwap(InitRsp* other) {
 
 class EpisodeAssignment::_Internal {
  public:
-  static const ::rl::common::v1::ContentDigest& evaluation_model_artifact_digest(const EpisodeAssignment* msg);
 };
 
-const ::rl::common::v1::ContentDigest&
-EpisodeAssignment::_Internal::evaluation_model_artifact_digest(const EpisodeAssignment* msg) {
-  return *msg->_impl_.evaluation_model_artifact_digest_;
-}
-void EpisodeAssignment::clear_evaluation_model_artifact_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.evaluation_model_artifact_digest_ != nullptr) {
-    delete _impl_.evaluation_model_artifact_digest_;
-  }
-  _impl_.evaluation_model_artifact_digest_ = nullptr;
-}
 EpisodeAssignment::EpisodeAssignment(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -3832,7 +3691,6 @@ EpisodeAssignment::EpisodeAssignment(const EpisodeAssignment& from)
   EpisodeAssignment* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.episode_id_){}
-    , decltype(_impl_.evaluation_model_artifact_digest_){nullptr}
     , decltype(_impl_.mode_){}
     , decltype(_impl_.max_steps_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -3846,9 +3704,6 @@ EpisodeAssignment::EpisodeAssignment(const EpisodeAssignment& from)
     _this->_impl_.episode_id_.Set(from._internal_episode_id(), 
       _this->GetArenaForAllocation());
   }
-  if (from._internal_has_evaluation_model_artifact_digest()) {
-    _this->_impl_.evaluation_model_artifact_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.evaluation_model_artifact_digest_);
-  }
   ::memcpy(&_impl_.mode_, &from._impl_.mode_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.max_steps_) -
     reinterpret_cast<char*>(&_impl_.mode_)) + sizeof(_impl_.max_steps_));
@@ -3861,7 +3716,6 @@ inline void EpisodeAssignment::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.episode_id_){}
-    , decltype(_impl_.evaluation_model_artifact_digest_){nullptr}
     , decltype(_impl_.mode_){0}
     , decltype(_impl_.max_steps_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -3884,7 +3738,6 @@ EpisodeAssignment::~EpisodeAssignment() {
 inline void EpisodeAssignment::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.episode_id_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.evaluation_model_artifact_digest_;
 }
 
 void EpisodeAssignment::SetCachedSize(int size) const {
@@ -3898,10 +3751,6 @@ void EpisodeAssignment::Clear() {
   (void) cached_has_bits;
 
   _impl_.episode_id_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.evaluation_model_artifact_digest_ != nullptr) {
-    delete _impl_.evaluation_model_artifact_digest_;
-  }
-  _impl_.evaluation_model_artifact_digest_ = nullptr;
   ::memset(&_impl_.mode_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.max_steps_) -
       reinterpret_cast<char*>(&_impl_.mode_)) + sizeof(_impl_.max_steps_));
@@ -3937,14 +3786,6 @@ const char* EpisodeAssignment::_InternalParse(const char* ptr, ::_pbi::ParseCont
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.max_steps_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_evaluation_model_artifact_digest(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -4001,13 +3842,6 @@ uint8_t* EpisodeAssignment::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_max_steps(), target);
   }
 
-  // .rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
-  if (this->_internal_has_evaluation_model_artifact_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::evaluation_model_artifact_digest(this),
-        _Internal::evaluation_model_artifact_digest(this).GetCachedSize(), target, stream);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4029,13 +3863,6 @@ size_t EpisodeAssignment::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_episode_id());
-  }
-
-  // .rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
-  if (this->_internal_has_evaluation_model_artifact_digest()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.evaluation_model_artifact_digest_);
   }
 
   // .rl.task.maze.v1.EpisodeMode mode = 2;
@@ -4070,10 +3897,6 @@ void EpisodeAssignment::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   if (!from._internal_episode_id().empty()) {
     _this->_internal_set_episode_id(from._internal_episode_id());
   }
-  if (from._internal_has_evaluation_model_artifact_digest()) {
-    _this->_internal_mutable_evaluation_model_artifact_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_evaluation_model_artifact_digest());
-  }
   if (from._internal_mode() != 0) {
     _this->_internal_set_mode(from._internal_mode());
   }
@@ -4106,9 +3929,9 @@ void EpisodeAssignment::InternalSwap(EpisodeAssignment* other) {
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(EpisodeAssignment, _impl_.max_steps_)
       + sizeof(EpisodeAssignment::_impl_.max_steps_)
-      - PROTOBUF_FIELD_OFFSET(EpisodeAssignment, _impl_.evaluation_model_artifact_digest_)>(
-          reinterpret_cast<char*>(&_impl_.evaluation_model_artifact_digest_),
-          reinterpret_cast<char*>(&other->_impl_.evaluation_model_artifact_digest_));
+      - PROTOBUF_FIELD_OFFSET(EpisodeAssignment, _impl_.mode_)>(
+          reinterpret_cast<char*>(&_impl_.mode_),
+          reinterpret_cast<char*>(&other->_impl_.mode_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeAssignment::GetMetadata() const {
@@ -5122,6 +4945,7 @@ AgentState::AgentState(const AgentState& from)
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){from._impl_._has_bits_}
     , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.action_mask_){from._impl_.action_mask_}
     , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.agent_id_){}
     , decltype(_impl_.termination_reason_){}
@@ -5146,6 +4970,7 @@ inline void AgentState::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_._has_bits_){}
     , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.action_mask_){arena}
     , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.agent_id_){0u}
     , decltype(_impl_.termination_reason_){0}
@@ -5166,6 +4991,7 @@ AgentState::~AgentState() {
 
 inline void AgentState::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.action_mask_.~RepeatedField();
   if (this != internal_default_instance()) delete _impl_.position_;
 }
 
@@ -5179,6 +5005,7 @@ void AgentState::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.action_mask_.Clear();
   if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
     delete _impl_.position_;
   }
@@ -5239,11 +5066,22 @@ const char* AgentState::_InternalParse(const char* ptr, ::_pbi::ParseContext* ct
         } else
           goto handle_unusual;
         continue;
-      // optional int32 executed_action_id = 6;
+      // optional .rl.task.maze.v1.MazeAction executed_action_id = 6;
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
-          _Internal::set_has_executed_action_id(&has_bits);
-          _impl_.executed_action_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_executed_action_id(static_cast<::rl::task::maze::v1::MazeAction>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated bool action_mask = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedBoolParser(_internal_mutable_action_mask(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 56) {
+          _internal_add_action_mask(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -5310,10 +5148,16 @@ uint8_t* AgentState::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteBoolToArray(5, this->_internal_last_move_blocked(), target);
   }
 
-  // optional int32 executed_action_id = 6;
+  // optional .rl.task.maze.v1.MazeAction executed_action_id = 6;
   if (_internal_has_executed_action_id()) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_executed_action_id(), target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      6, this->_internal_executed_action_id(), target);
+  }
+
+  // repeated bool action_mask = 7;
+  if (this->_internal_action_mask_size() > 0) {
+    target = stream->WriteFixedPacked(7, _internal_action_mask(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5331,6 +5175,17 @@ size_t AgentState::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // repeated bool action_mask = 7;
+  {
+    unsigned int count = static_cast<unsigned int>(this->_internal_action_mask_size());
+    size_t data_size = 1UL * count;
+    if (data_size > 0) {
+      total_size += 1 +
+        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
+    }
+    total_size += data_size;
+  }
 
   // .rl.task.maze.v1.Vec2 position = 2;
   if (this->_internal_has_position()) {
@@ -5360,10 +5215,11 @@ size_t AgentState::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
-  // optional int32 executed_action_id = 6;
+  // optional .rl.task.maze.v1.MazeAction executed_action_id = 6;
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_executed_action_id());
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_executed_action_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -5384,6 +5240,7 @@ void AgentState::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PRO
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  _this->_impl_.action_mask_.MergeFrom(from._impl_.action_mask_);
   if (from._internal_has_position()) {
     _this->_internal_mutable_position()->::rl::task::maze::v1::Vec2::MergeFrom(
         from._internal_position());
@@ -5421,6 +5278,7 @@ void AgentState::InternalSwap(AgentState* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  _impl_.action_mask_.InternalSwap(&other->_impl_.action_mask_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(AgentState, _impl_.executed_action_id_)
       + sizeof(AgentState::_impl_.executed_action_id_)
@@ -5774,11 +5632,12 @@ const char* AgentAction::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
         } else
           goto handle_unusual;
         continue;
-      // int32 action_id = 2;
+      // .rl.task.maze.v1.MazeAction action_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.action_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
+          _internal_set_action_id(static_cast<::rl::task::maze::v1::MazeAction>(val));
         } else
           goto handle_unusual;
         continue;
@@ -5817,10 +5676,11 @@ uint8_t* AgentAction::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_agent_id(), target);
   }
 
-  // int32 action_id = 2;
+  // .rl.task.maze.v1.MazeAction action_id = 2;
   if (this->_internal_action_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_action_id(), target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      2, this->_internal_action_id(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5844,9 +5704,10 @@ size_t AgentAction::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_agent_id());
   }
 
-  // int32 action_id = 2;
+  // .rl.task.maze.v1.MazeAction action_id = 2;
   if (this->_internal_action_id() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_action_id());
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_action_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);

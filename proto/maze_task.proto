@@ -57,6 +57,27 @@ enum WorkloadMode {
     WORKLOAD_MODE_EVALUATION = 2;
 }
 
+// Action numeric values are the Environment command IDs. The enum is the
+// public contract between Client and AIServer; neither side needs the other
+// component's source or build identity.
+enum MazeAction {
+    MAZE_ACTION_NOOP = 0;
+    MAZE_ACTION_UP = 1;
+    MAZE_ACTION_UP_RIGHT = 2;
+    MAZE_ACTION_RIGHT = 3;
+    MAZE_ACTION_DOWN_RIGHT = 4;
+    MAZE_ACTION_DOWN = 5;
+    MAZE_ACTION_DOWN_LEFT = 6;
+    MAZE_ACTION_LEFT = 7;
+    MAZE_ACTION_UP_LEFT = 8;
+}
+
+enum ActionMaskMode {
+    ACTION_MASK_MODE_UNSPECIFIED = 0;
+    ACTION_MASK_MODE_DISABLED = 1;
+    ACTION_MASK_MODE_REQUIRED = 2;
+}
+
 enum MazeTerminationReason {
     MAZE_TERMINATION_REASON_UNSPECIFIED = 0;
     MAZE_TERMINATION_REASON_ACTIVE = 1;
@@ -73,9 +94,10 @@ enum MazeTerminationReason {
 message EnvironmentSpec {
     uint32 agent_count = 1;
     string map_id = 2;
-    rl.common.v1.ContentDigest expected_map_digest = 3;
-    string action_rule_id = 4;
+    reserved 3, 4;
+    reserved "expected_map_digest", "action_rule_id";
     uint32 episode_max_steps = 5;
+    ActionMaskMode action_mask_mode = 6;
 }
 
 message MapDescriptor {
@@ -88,13 +110,8 @@ message MapDescriptor {
     int32 goal_grid_x = 7;
     int32 goal_grid_y = 8;
     bytes blocked_bitmap = 9;
-    // Canonical bytes are: magic "rl.task.maze.map\0", then big-endian
-    // grid/position integers, length-prefixed bitmap bytes, and the
-    // length-prefixed UTF-8 action_rule_id. shortest_action_steps is derived
-    // independently and is therefore not part of this digest.
-    rl.common.v1.ContentDigest canonical_digest = 10;
-    uint32 shortest_action_steps = 11;
-    string action_rule_id = 12;
+    reserved 10 to 12;
+    reserved "canonical_digest", "shortest_action_steps", "action_rule_id";
 }
 
 message CommandIdentity {
@@ -117,6 +134,7 @@ message OpenSessionReq {
     rl.common.v1.ServiceInstanceIdentity client = 1;
     string environment_instance_id = 2;
     string request_id = 3;
+    rl.common.v1.ProtocolIdentity task_protocol = 4;
 }
 
 message OpenSessionRsp {
@@ -126,6 +144,7 @@ message OpenSessionRsp {
     rl.common.v1.ServiceInstanceIdentity aiserver = 4;
     WorkloadMode workload_mode = 5;
     EnvironmentSpec environment = 6;
+    rl.common.v1.ProtocolIdentity task_protocol = 7;
 }
 
 message InitReq {
@@ -135,16 +154,16 @@ message InitReq {
 
 message InitRsp {
     CommandReply reply = 1;
-    rl.common.v1.ContentDigest accepted_map_digest = 2;
-    uint32 verified_shortest_action_steps = 3;
+    reserved 2, 3;
+    reserved "accepted_map_digest", "verified_shortest_action_steps";
 }
 
 message EpisodeAssignment {
     string episode_id = 1;
     EpisodeMode mode = 2;
     uint32 max_steps = 3;
-    // Present only for evaluation, whose model is pinned for the Episode.
-    rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
+    reserved 4;
+    reserved "evaluation_model_artifact_digest";
 }
 
 message TaskComplete {
@@ -174,7 +193,10 @@ message AgentState {
     bool is_done = 3;
     MazeTerminationReason termination_reason = 4;
     bool last_move_blocked = 5;
-    optional int32 executed_action_id = 6;
+    optional MazeAction executed_action_id = 6;
+    // When required, index N states whether MazeAction numeric value N is
+    // currently executable. When disabled this field must be empty.
+    repeated bool action_mask = 7;
 }
 
 message UpdateReq {
@@ -185,7 +207,7 @@ message UpdateReq {
 
 message AgentAction {
     uint32 agent_id = 1;
-    int32 action_id = 2;
+    MazeAction action_id = 2;
 }
 
 message ActionBatch {

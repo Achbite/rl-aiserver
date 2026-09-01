@@ -40,6 +40,14 @@ message SchemaIdentity {
     ContentDigest canonical_digest = 3;
 }
 
+// Public wire-protocol identity. It describes the task contract that two
+// independently built components speak; it is deliberately unrelated to
+// source-tree, build, generator or platform identity.
+message ProtocolIdentity {
+    string protocol_id = 1;
+    uint32 protocol_version = 2;
+}
+
 message ServiceInstanceIdentity {
     string component = 1;
     string instance_id = 2;
