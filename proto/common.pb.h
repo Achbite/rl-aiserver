@@ -54,6 +54,9 @@ extern ContentDigestDefaultTypeInternal _ContentDigest_default_instance_;
 class ContractIdentity;
 struct ContractIdentityDefaultTypeInternal;
 extern ContractIdentityDefaultTypeInternal _ContractIdentity_default_instance_;
+class ProtocolIdentity;
+struct ProtocolIdentityDefaultTypeInternal;
+extern ProtocolIdentityDefaultTypeInternal _ProtocolIdentity_default_instance_;
 class SchemaIdentity;
 struct SchemaIdentityDefaultTypeInternal;
 extern SchemaIdentityDefaultTypeInternal _SchemaIdentity_default_instance_;
@@ -66,6 +69,7 @@ extern ServiceInstanceIdentityDefaultTypeInternal _ServiceInstanceIdentity_defau
 PROTOBUF_NAMESPACE_OPEN
 template<> ::rl::common::v1::ContentDigest* Arena::CreateMaybeMessage<::rl::common::v1::ContentDigest>(Arena*);
 template<> ::rl::common::v1::ContractIdentity* Arena::CreateMaybeMessage<::rl::common::v1::ContractIdentity>(Arena*);
+template<> ::rl::common::v1::ProtocolIdentity* Arena::CreateMaybeMessage<::rl::common::v1::ProtocolIdentity>(Arena*);
 template<> ::rl::common::v1::SchemaIdentity* Arena::CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(Arena*);
 template<> ::rl::common::v1::ServiceInstanceIdentity* Arena::CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -716,6 +720,170 @@ class SchemaIdentity final :
 };
 // -------------------------------------------------------------------
 
+class ProtocolIdentity final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.common.v1.ProtocolIdentity) */ {
+ public:
+  inline ProtocolIdentity() : ProtocolIdentity(nullptr) {}
+  ~ProtocolIdentity() override;
+  explicit PROTOBUF_CONSTEXPR ProtocolIdentity(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ProtocolIdentity(const ProtocolIdentity& from);
+  ProtocolIdentity(ProtocolIdentity&& from) noexcept
+    : ProtocolIdentity() {
+    *this = ::std::move(from);
+  }
+
+  inline ProtocolIdentity& operator=(const ProtocolIdentity& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ProtocolIdentity& operator=(ProtocolIdentity&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ProtocolIdentity& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ProtocolIdentity* internal_default_instance() {
+    return reinterpret_cast<const ProtocolIdentity*>(
+               &_ProtocolIdentity_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(ProtocolIdentity& a, ProtocolIdentity& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ProtocolIdentity* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ProtocolIdentity* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ProtocolIdentity* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ProtocolIdentity>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ProtocolIdentity& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ProtocolIdentity& from) {
+    ProtocolIdentity::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ProtocolIdentity* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.common.v1.ProtocolIdentity";
+  }
+  protected:
+  explicit ProtocolIdentity(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kProtocolIdFieldNumber = 1,
+    kProtocolVersionFieldNumber = 2,
+  };
+  // string protocol_id = 1;
+  void clear_protocol_id();
+  const std::string& protocol_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_protocol_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_protocol_id();
+  PROTOBUF_NODISCARD std::string* release_protocol_id();
+  void set_allocated_protocol_id(std::string* protocol_id);
+  private:
+  const std::string& _internal_protocol_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_protocol_id(const std::string& value);
+  std::string* _internal_mutable_protocol_id();
+  public:
+
+  // uint32 protocol_version = 2;
+  void clear_protocol_version();
+  uint32_t protocol_version() const;
+  void set_protocol_version(uint32_t value);
+  private:
+  uint32_t _internal_protocol_version() const;
+  void _internal_set_protocol_version(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.common.v1.ProtocolIdentity)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr protocol_id_;
+    uint32_t protocol_version_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_common_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ServiceInstanceIdentity final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.common.v1.ServiceInstanceIdentity) */ {
  public:
@@ -764,7 +932,7 @@ class ServiceInstanceIdentity final :
                &_ServiceInstanceIdentity_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(ServiceInstanceIdentity& a, ServiceInstanceIdentity& b) {
     a.Swap(&b);
@@ -1525,6 +1693,80 @@ inline void SchemaIdentity::set_allocated_canonical_digest(::rl::common::v1::Con
 
 // -------------------------------------------------------------------
 
+// ProtocolIdentity
+
+// string protocol_id = 1;
+inline void ProtocolIdentity::clear_protocol_id() {
+  _impl_.protocol_id_.ClearToEmpty();
+}
+inline const std::string& ProtocolIdentity::protocol_id() const {
+  // @@protoc_insertion_point(field_get:rl.common.v1.ProtocolIdentity.protocol_id)
+  return _internal_protocol_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ProtocolIdentity::set_protocol_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.protocol_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.common.v1.ProtocolIdentity.protocol_id)
+}
+inline std::string* ProtocolIdentity::mutable_protocol_id() {
+  std::string* _s = _internal_mutable_protocol_id();
+  // @@protoc_insertion_point(field_mutable:rl.common.v1.ProtocolIdentity.protocol_id)
+  return _s;
+}
+inline const std::string& ProtocolIdentity::_internal_protocol_id() const {
+  return _impl_.protocol_id_.Get();
+}
+inline void ProtocolIdentity::_internal_set_protocol_id(const std::string& value) {
+  
+  _impl_.protocol_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ProtocolIdentity::_internal_mutable_protocol_id() {
+  
+  return _impl_.protocol_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ProtocolIdentity::release_protocol_id() {
+  // @@protoc_insertion_point(field_release:rl.common.v1.ProtocolIdentity.protocol_id)
+  return _impl_.protocol_id_.Release();
+}
+inline void ProtocolIdentity::set_allocated_protocol_id(std::string* protocol_id) {
+  if (protocol_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.protocol_id_.SetAllocated(protocol_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.protocol_id_.IsDefault()) {
+    _impl_.protocol_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.common.v1.ProtocolIdentity.protocol_id)
+}
+
+// uint32 protocol_version = 2;
+inline void ProtocolIdentity::clear_protocol_version() {
+  _impl_.protocol_version_ = 0u;
+}
+inline uint32_t ProtocolIdentity::_internal_protocol_version() const {
+  return _impl_.protocol_version_;
+}
+inline uint32_t ProtocolIdentity::protocol_version() const {
+  // @@protoc_insertion_point(field_get:rl.common.v1.ProtocolIdentity.protocol_version)
+  return _internal_protocol_version();
+}
+inline void ProtocolIdentity::_internal_set_protocol_version(uint32_t value) {
+  
+  _impl_.protocol_version_ = value;
+}
+inline void ProtocolIdentity::set_protocol_version(uint32_t value) {
+  _internal_set_protocol_version(value);
+  // @@protoc_insertion_point(field_set:rl.common.v1.ProtocolIdentity.protocol_version)
+}
+
+// -------------------------------------------------------------------
+
 // ServiceInstanceIdentity
 
 // string component = 1;
@@ -1650,6 +1892,8 @@ inline void ServiceInstanceIdentity::set_lifecycle_epoch(uint64_t value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

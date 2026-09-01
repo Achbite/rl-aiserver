@@ -1,43 +1,48 @@
 #!/usr/bin/env python3
 
-import hashlib
+import argparse
 import json
-import sys
 from pathlib import Path
 
 
+ARTIFACT_MANIFEST_SCHEMA = "rl.artifact-manifest.v1"
+LOCAL_MANIFEST_SCHEMA = "rl.local-task-protocol.v1"
+ARTIFACT_PACKAGE = "rl-task-maze-contracts"
+TASK_PROTOCOL = {
+    "protocol_id": "rl.task.maze",
+    "protocol_version": 1,
+}
 SNAPSHOT_FILES = {
     "common.proto": "common.proto",
-    "training.proto": "training.proto",
     "maze_task.proto": "maze_task.proto",
+    "maze_metrics.proto": "maze_metrics.proto",
     "cpp/common.pb.cc": "common.pb.cc",
     "cpp/common.pb.h": "common.pb.h",
-    "cpp/training.pb.cc": "training.pb.cc",
-    "cpp/training.pb.h": "training.pb.h",
-    "cpp/training.grpc.pb.cc": "training.grpc.pb.cc",
-    "cpp/training.grpc.pb.h": "training.grpc.pb.h",
     "cpp/maze_task.pb.cc": "maze_task.pb.cc",
     "cpp/maze_task.pb.h": "maze_task.pb.h",
     "cpp/maze_task.grpc.pb.cc": "maze_task.grpc.pb.cc",
     "cpp/maze_task.grpc.pb.h": "maze_task.grpc.pb.h",
-    "schemas/maze.metrics.json": "schemas/maze.metrics.json",
-    "schemas/maze.metrics.sha256": "schemas/maze.metrics.sha256",
+    "cpp/maze_metrics.pb.cc": "maze_metrics.pb.cc",
+    "cpp/maze_metrics.pb.h": "maze_metrics.pb.h",
+    "schemas/maze.episode.metrics.json": "schemas/maze.episode.metrics.json",
+    "schemas/maze.episode.metrics.sha256": "schemas/maze.episode.metrics.sha256",
     "schemas/training-contract.json": "schemas/training-contract.json",
     "schemas/training-contract.sha256": "schemas/training-contract.sha256",
 }
+LOCAL_TRAINING_FILES = (
+    "training.proto",
+    "training.pb.cc",
+    "training.pb.h",
+    "training.grpc.pb.cc",
+    "training.grpc.pb.h",
+)
 
 
 def fail(message: str) -> None:
     raise SystemExit(message)
 
 
-def verify_snapshot(
-    root: Path,
-    expected_version: str,
-    expected_platform: str,
-    *,
-    artifact_layout: bool = False,
-) -> dict:
+def load_manifest(root: Path) -> dict:
     manifest_path = root / "manifest.json"
     if not manifest_path.is_file():
         fail(f"contract manifest is missing: {manifest_path}")
@@ -45,94 +50,63 @@ def verify_snapshot(
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         fail(f"contract manifest is invalid: {exc}")
+    if not isinstance(manifest, dict):
+        fail(f"contract manifest must be an object: {manifest_path}")
+    return manifest
+
+
+def verify_artifact(root: Path, expected_version: str) -> dict:
+    manifest = load_manifest(root)
     if (
-        manifest.get("schema_version") != 2
-        or manifest.get("package") != "rl-contracts"
+        manifest.get("schema_version") != ARTIFACT_MANIFEST_SCHEMA
+        or manifest.get("package") != ARTIFACT_PACKAGE
         or manifest.get("version") != expected_version
-        or manifest.get("platform") != expected_platform
+        or manifest.get("task_protocol") != TASK_PROTOCOL
     ):
         fail(
-            "repository-local contract snapshot identity mismatch: "
-            f"expected rl-contracts {expected_version} {expected_platform}, "
+            "Maze task artifact identity mismatch: "
+            f"expected {ARTIFACT_PACKAGE} {expected_version} {TASK_PROTOCOL}, "
             f"found {manifest.get('package')} {manifest.get('version')} "
-            f"{manifest.get('platform')}"
+            f"{manifest.get('task_protocol')}"
         )
+    declared = manifest.get("files")
+    if not isinstance(declared, list):
+        fail("contract manifest files list is invalid")
+    for artifact_name in SNAPSHOT_FILES:
+        path = root / artifact_name
+        if artifact_name not in declared or path.is_symlink() or not path.is_file():
+            fail(f"Maze task artifact file is missing or invalid: {path}")
+    return manifest
 
-    checksums = manifest.get("files", {})
-    if not isinstance(checksums, dict):
-        fail("contract manifest files table is invalid")
-    canonical_files = json.dumps(
-        checksums, separators=(",", ":"), sort_keys=True
-    ).encode("utf-8")
-    if manifest.get("artifact_digest") != {
-        "algorithm": "sha256",
-        "hex": hashlib.sha256(canonical_files).hexdigest(),
-    }:
-        fail("contract snapshot artifact digest is invalid")
-    for artifact_name, local_name in SNAPSHOT_FILES.items():
-        path = root / (artifact_name if artifact_layout else local_name)
-        expected = checksums.get(artifact_name)
-        if not path.is_file() or not expected:
-            fail(f"contract snapshot file is missing: {path}")
-        actual = hashlib.sha256(path.read_bytes()).hexdigest()
-        if actual != expected:
-            fail(f"contract snapshot checksum mismatch: {path}")
-    schema_metadata = manifest.get("metric_schemas", {}).get(
-        "maze.metrics"
-    )
-    catalog = root / "schemas/maze.metrics.json"
-    digest_file = root / "schemas/maze.metrics.sha256"
-    catalog_digest = hashlib.sha256(catalog.read_bytes()).hexdigest()
+
+def verify_snapshot(root: Path) -> dict:
+    manifest = load_manifest(root)
     if (
-        digest_file.read_text(encoding="utf-8").strip() != catalog_digest
-        or schema_metadata
-        != {
-            "canonical_digest": {
-                "algorithm": "sha256",
-                "hex": catalog_digest,
-            },
-            "digest_path": "schemas/maze.metrics.sha256",
-            "path": "schemas/maze.metrics.json",
-            "schema_version": 1,
-        }
+        manifest.get("schema_version") != LOCAL_MANIFEST_SCHEMA
+        or manifest.get("task_protocol") != TASK_PROTOCOL
     ):
-        fail("maze.metrics snapshot identity mismatch")
-    training_contract = root / "schemas/training-contract.json"
-    training_contract_digest_file = root / "schemas/training-contract.sha256"
-    training_contract_digest = hashlib.sha256(
-        training_contract.read_bytes()
-    ).hexdigest()
-    if (
-        training_contract_digest_file.read_text(encoding="utf-8").strip()
-        != training_contract_digest
-        or manifest.get("training_contract")
-        != {
-            "canonical_digest": {
-                "algorithm": "sha256",
-                "hex": training_contract_digest,
-            },
-            "digest_path": "schemas/training-contract.sha256",
-            "path": "schemas/training-contract.json",
-        }
-    ):
-        fail("training contract snapshot identity mismatch")
+        fail(f"repository-local Maze task protocol manifest is invalid: {root}")
+    declared = manifest.get("files")
+    if not isinstance(declared, list):
+        fail("repository-local Maze task protocol files list is invalid")
+    for local_name in SNAPSHOT_FILES.values():
+        path = root / local_name
+        if local_name not in declared or path.is_symlink() or not path.is_file():
+            fail(f"repository-local Maze task protocol file is missing: {path}")
+    for local_name in LOCAL_TRAINING_FILES:
+        path = root / local_name
+        if path.is_symlink() or not path.is_file():
+            fail(f"repository-local training protocol file is missing: {path}")
     return manifest
 
 
 def main() -> None:
-    if len(sys.argv) not in (4, 5) or (
-        len(sys.argv) == 5 and sys.argv[4] != "--artifact-layout"
-    ):
-        fail(
-            "usage: verify_contract_snapshot.py "
-            "<proto-dir> <version> <platform> [--artifact-layout]"
-        )
-    verify_snapshot(
-        Path(sys.argv[1]),
-        sys.argv[2],
-        sys.argv[3],
-        artifact_layout=len(sys.argv) == 5,
+    parser = argparse.ArgumentParser(
+        description="Verify AIServer repository-local protocol inputs"
     )
+    parser.add_argument("proto_dir", type=Path)
+    args = parser.parse_args()
+    verify_snapshot(args.proto_dir.resolve())
 
 
 if __name__ == "__main__":

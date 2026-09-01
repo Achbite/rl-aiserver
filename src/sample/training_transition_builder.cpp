@@ -32,9 +32,23 @@ bool BuildRawRolloutTransition(
     const RewardDetail& reward,
     int expected_obs_dim,
     int expected_action_dim,
+    const std::string& action_mask_mode,
     SessionManager::RawRolloutTransition& transition,
     std::string& error) {
     transition = SessionManager::RawRolloutTransition{};
+    const bool mask_valid =
+        (action_mask_mode == "disabled" &&
+         agent.pending_action_mask.empty()) ||
+        (action_mask_mode == "required" &&
+         agent.pending_action_mask.size() ==
+             static_cast<std::size_t>(expected_action_dim) &&
+         std::any_of(agent.pending_action_mask.begin(),
+                     agent.pending_action_mask.end(),
+                     [](bool available) { return available; }) &&
+         agent.pending_action >= 0 &&
+         agent.pending_action < expected_action_dim &&
+         agent.pending_action_mask[
+             static_cast<std::size_t>(agent.pending_action)]);
     if (!agent.has_pending_action || !agent.segment_open ||
         !agent.pinned_prepared_model.valid() || !reward.valid ||
         agent.pending_action_frame_id < 0 || agent.pending_action < 0 ||
@@ -44,7 +58,7 @@ bool BuildRawRolloutTransition(
         !FiniteVector(agent.pending_obs) ||
         !FiniteVector(next_observation) ||
         !std::isfinite(agent.pending_log_prob) ||
-        !std::isfinite(agent.pending_value) ||
+        !std::isfinite(agent.pending_value) || !mask_valid ||
         !std::isfinite(reward.total)) {
         error = "trusted rollout transition inputs are incomplete or non-finite";
         return false;
@@ -62,6 +76,7 @@ bool BuildRawRolloutTransition(
     transition.reward = reward.total;
     transition.behavior_log_probability = agent.pending_log_prob;
     transition.behavior_value = agent.pending_value;
+    transition.action_mask = agent.pending_action_mask;
     transition.action_step =
         static_cast<uint64_t>(agent.pending_action_frame_id);
     transition.created_at_unix_ms =
@@ -133,6 +148,7 @@ bool ProjectProcessedSegment(
     const training::ModelIdentity& behavior_model,
     int observation_dimension,
     int action_count,
+    const std::string& action_mask_mode,
     std::vector<training::ProcessedTransition>& processed,
     std::string& error) {
     processed.clear();
@@ -151,11 +167,20 @@ bool ProjectProcessedSegment(
     uint64_t expected_action_step = raw_segment.front().action_step;
     for (std::size_t index = 0; index < raw_segment.size(); ++index) {
         const auto& raw = raw_segment[index];
+        const bool mask_valid =
+            (action_mask_mode == "disabled" && raw.action_mask.empty()) ||
+            (action_mask_mode == "required" &&
+             raw.action_mask.size() ==
+                 static_cast<std::size_t>(action_count) &&
+             std::any_of(raw.action_mask.begin(), raw.action_mask.end(),
+                         [](bool available) { return available; }) &&
+             raw.action >= 0 && raw.action < action_count &&
+             raw.action_mask[static_cast<std::size_t>(raw.action)]);
         if (raw.observation.size() !=
                 static_cast<std::size_t>(observation_dimension) ||
             raw.next_observation.size() !=
                 static_cast<std::size_t>(observation_dimension) ||
-            raw.action < 0 || raw.action >= action_count ||
+            raw.action < 0 || raw.action >= action_count || !mask_valid ||
             raw.action_step != expected_action_step ||
             raw.created_at_unix_ms <= 0 || !FiniteVector(raw.observation) ||
             !FiniteVector(raw.next_observation) ||
@@ -182,6 +207,9 @@ bool ProjectProcessedSegment(
         item.set_value_target(value_targets[index]);
         item.set_behavior_model_step(behavior_model.model_step());
         item.set_created_at_unix_ms(raw.created_at_unix_ms);
+        for (const bool available : raw.action_mask) {
+            item.add_action_mask(available);
+        }
         processed.push_back(std::move(item));
         ++expected_action_step;
     }

@@ -9,13 +9,37 @@ if [ -x "${repo_dir}/bin/maze_aiserver" ]; then
 fi
 aiserver_bin="${AISERVER_BIN:-${default_aiserver_bin}}"
 managed=0
-if [ -n "${RL_CONFIG_PATH:-}" ]; then
+if [ "${RL_INFRA_MANAGED:-}" = "true" ]; then
     managed=1
-    if [[ "${RL_CONFIG_PATH}" != /* ]]; then
-        echo "RL_CONFIG_PATH must be absolute" >&2
-        exit 2
-    fi
     rm -f /run/rl/readiness.json /run/rl/aiserver-managed-ready
+elif [ -n "${RL_INFRA_MANAGED:-}" ]; then
+    echo "RL_INFRA_MANAGED must be exactly true when supplied" >&2
+    exit 2
+fi
+
+runtime_arguments=("$@")
+if [ "${managed}" -eq 1 ]; then
+    required_platform_values=(
+        RL_INFRA_ENDPOINT_AISERVER_TASK_PORT
+        RL_INFRA_ENDPOINT_SAMPLE_POOL_HOST
+        RL_INFRA_ENDPOINT_SAMPLE_POOL_PORT
+        RL_INFRA_ENDPOINT_MODEL_DISTRIBUTOR_HOST
+        RL_INFRA_ENDPOINT_MODEL_DISTRIBUTOR_PORT
+        RL_INFRA_DATA_ROOT
+        RL_INFRA_POD_ID
+    )
+    for name in "${required_platform_values[@]}"; do
+        if [ -z "${!name:-}" ]; then
+            echo "AIServer managed runtime fact is missing: ${name}" >&2
+            exit 2
+        fi
+    done
+    runtime_arguments+=(
+        --workload training
+        --listen-port "${RL_INFRA_ENDPOINT_AISERVER_TASK_PORT}"
+        --sample-distributor "${RL_INFRA_ENDPOINT_SAMPLE_POOL_HOST}:${RL_INFRA_ENDPOINT_SAMPLE_POOL_PORT}"
+        --model-distributor "${RL_INFRA_ENDPOINT_MODEL_DISTRIBUTOR_HOST}:${RL_INFRA_ENDPOINT_MODEL_DISTRIBUTOR_PORT}"
+    )
 fi
 
 aiserver_pid=""
@@ -109,7 +133,7 @@ fi
 
 cd "${repo_dir}"
 
-"${aiserver_bin}" "$@" &
+"${aiserver_bin}" "${runtime_arguments[@]}" &
 aiserver_pid=$!
 
 if [ "${managed}" -eq 1 ]; then
@@ -140,19 +164,24 @@ if [ "${managed}" -eq 1 ]; then
     metric_schema_id="$(marker_value schema_id)"
     metric_schema_version="$(marker_value schema_version)"
     metric_schema_digest="$(marker_value schema_digest)"
+    contract_package="$(marker_value contract_package)"
+    contract_version="$(marker_value contract_version)"
+    contract_platform="$(marker_value contract_platform)"
     if [ "${metric_component}" != "rl-aiserver" ] ||
        [ "${metric_container_port}" != "9002" ] ||
        [ -z "${metric_instance_id}" ] ||
        [[ ! "${metric_lifecycle_epoch}" =~ ^[1-9][0-9]*$ ]] ||
-       [ "${metric_schema_id}" != "maze.metrics" ] ||
+       [ "${metric_schema_id}" != "maze.episode.metrics" ] ||
        [ "${metric_schema_version}" != "1" ] ||
-       [[ ! "${metric_schema_digest}" =~ ^[0-9a-f]{64}$ ]]; then
+       [[ ! "${metric_schema_digest}" =~ ^[0-9a-f]{64}$ ]] ||
+       [ "${contract_package}" != "rl-contracts" ] ||
+       [ -z "${contract_version}" ] ||
+       [ -z "${contract_platform}" ]; then
         echo "AIServer managed metric source identity is invalid" >&2
         exit 1
     fi
     python3 scripts/publish_readiness.py \
         --component aiserver \
-        --config "${RL_CONFIG_PATH}" \
         --fact grpc=serving \
         --fact metric_service=serving \
         --fact metric_component="${metric_component}" \
@@ -161,7 +190,10 @@ if [ "${managed}" -eq 1 ]; then
         --fact metric_container_port="${metric_container_port}" \
         --fact metric_schema_id="${metric_schema_id}" \
         --fact metric_schema_version="${metric_schema_version}" \
-        --fact metric_schema_digest="${metric_schema_digest}"
+        --fact metric_schema_digest="${metric_schema_digest}" \
+        --fact contract_package="${contract_package}" \
+        --fact contract_version="${contract_version}" \
+        --fact contract_platform="${contract_platform}"
 fi
 
 while [ "${stopping}" -eq 0 ]; do

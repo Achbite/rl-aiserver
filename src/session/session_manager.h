@@ -34,6 +34,7 @@ public:
         float reward = 0.0f;
         float behavior_log_probability = 0.0f;
         float behavior_value = 0.0f;
+        std::vector<bool> action_mask;
         uint64_t action_step = 0;
         int64_t created_at_unix_ms = 0;
     };
@@ -55,6 +56,7 @@ public:
         float pending_log_prob = 0.0f;
         float pending_value = 0.0f;
         std::vector<float> pending_obs;
+        std::vector<bool> pending_action_mask;
 
         // R-PIN segment state. The prepared ORT session is copied as a shared
         // owner so model-cache pruning cannot invalidate in-flight inference.
@@ -102,9 +104,7 @@ public:
         maze::SessionPhase phase = maze::SESSION_PHASE_OPEN;
         LifecycleReplayWindow command_replay;
         std::string map_id;
-        std::string map_checksum_sha256;
         int shortest_action_steps = 0;
-        std::string action_rule_id;
         maze::WorkloadMode workload_mode =
             maze::WORKLOAD_MODE_UNSPECIFIED;
         std::unordered_map<int, AgentRuntime> agents;   // agent_id → 运行时状态

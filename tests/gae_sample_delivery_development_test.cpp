@@ -1,4 +1,5 @@
 #include "grpc/maze_service.h"
+#include "ai/maze_observation.h"
 #include "sample/sample_sender.h"
 #include "sample/training_transition_builder.h"
 #include "task/maze_map_contract.h"
@@ -35,11 +36,7 @@ void FillContract(const ContractConfig& source,
                   common::ContractIdentity* destination) {
     destination->set_package_name(source.package_name);
     destination->set_package_version(source.package_version);
-    SetDigest(source.source_digest.hex, destination->mutable_source_digest());
-    SetDigest(source.artifact_digest.hex,
-              destination->mutable_artifact_digest());
     destination->set_platform(source.platform);
-    destination->set_generator_identity(source.generator_identity);
 }
 
 class CapturingSamplePool final
@@ -107,10 +104,8 @@ private:
 
 AIServerConfig MakeConfig(int sample_pool_port) {
     AIServerConfig config;
+    const int action_count = static_cast<int>(maze::MazeAction_MAX) + 1;
     config.server.run_mode = aiserver_mode::kTraining;
-    config.contract.source_digest.hex = std::string(64, '1');
-    config.contract.artifact_digest.hex = std::string(64, '2');
-    config.contract.generator_identity = std::string(64, '3');
     config.training_contract.training_contract_id = "maze.training";
     config.training_contract.observation_schema = {
         "maze.observation", 1, {"sha256", std::string(64, '4')}};
@@ -119,11 +114,13 @@ AIServerConfig MakeConfig(int sample_pool_port) {
     config.training_contract.reward_schema = {
         "maze.reward", 1, {"sha256", std::string(64, '6')}};
     config.training_contract.model_architecture_id =
-        "maze.mlp-17x64x64";
+        "actor-critic.independent-mlp";
     config.training_contract.canonical_digest.hex = std::string(64, '7');
-    config.training_contract.observation_dimension = 17;
-    config.training_contract.action_count = 9;
-    config.training_contract.hidden_dimension = 64;
+    config.training_contract.observation_dimension =
+        MazeObservation::kDimension;
+    config.training_contract.action_count = action_count;
+    config.training_contract.hidden_dimension =
+        config.training_contract.observation_dimension;
     config.training_contract.tensor_dtype = "float32";
     config.training_contract.gae_formula_id = "gae.backward";
     config.training_contract.terminal_bootstrap_semantics_id =
@@ -135,12 +132,16 @@ AIServerConfig MakeConfig(int sample_pool_port) {
     config.training_contract.finite_rule_id = "reject-nonfinite";
     config.training_contract.model_pin_semantics_id =
         "per-agent-segment-pin";
+    config.training_contract.action_mask_mode = "disabled";
     config.policy.training_temperature = 1.0;
-    config.model.expected_obs_dim = 17;
-    config.model.expected_action_dim = 9;
+    config.model.expected_obs_dim =
+        config.training_contract.observation_dimension;
+    config.model.expected_action_dim =
+        config.training_contract.action_count;
     config.model.observation_schema_id = "maze.observation";
     config.model.action_schema_id = "maze.action";
-    config.model.model_architecture_id = "maze.mlp-17x64x64";
+    config.model.model_architecture_id =
+        config.training_contract.model_architecture_id;
     config.model.tensor_dtype = "float32";
     config.sample_distributor.host = "127.0.0.1";
     config.sample_distributor.port = sample_pool_port;
@@ -172,25 +173,13 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     map.set_goal_grid_x(2);
     map.set_goal_grid_y(2);
     map.set_blocked_bitmap(std::string(9, '\0'));
-    map.set_shortest_action_steps(2);
-    map.set_action_rule_id("maze.action.9-way.no-corner-cut");
-    std::string map_error;
-    const std::string map_checksum =
-        CanonicalMazeMapChecksum(map, map_error);
-    Require(!map_checksum.empty(),
-            "build the fixed public MapDescriptor: " + map_error);
-    SetDigest(map_checksum, map.mutable_canonical_digest());
-
     AIServerConfig config = MakeConfig(1);
     config.server.run_mode = aiserver_mode::kEvaluation;
     config.environment.agent_count = 1;
     config.observation.ray_max_range = 2;
     config.model.evaluation_model_path = fixture_path;
+    config.training_contract.action_mask_mode = "required";
     config.task.fixed_map_id = map.map_id();
-    config.task.fixed_map_checksum_sha256 = map_checksum;
-    config.task.action_rule_id = map.action_rule_id();
-    config.task.shortest_action_steps =
-        static_cast<int>(map.shortest_action_steps());
     config.task.episode_max_steps = 10;
     MazeServiceImpl service(config);
     Require(service.Start(),
@@ -202,6 +191,10 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     open_request.mutable_client()->set_lifecycle_epoch(1);
     open_request.set_environment_instance_id("environment-fixed");
     open_request.set_request_id("open-fixed");
+    open_request.mutable_task_protocol()->set_protocol_id(
+        config.task.task_protocol_id);
+    open_request.mutable_task_protocol()->set_protocol_version(
+        config.task.task_protocol_version);
     maze::OpenSessionRsp open_response;
     service.OpenSession(nullptr, &open_request, &open_response);
     Require(open_response.reply().result() ==
@@ -219,8 +212,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     maze::InitRsp init_response;
     service.Init(nullptr, &init_request, &init_response);
     Require(init_response.reply().result() ==
-                maze::COMMAND_RESULT_APPLIED &&
-                init_response.verified_shortest_action_steps() == 2,
+                maze::COMMAND_RESULT_APPLIED,
             "initialize the public Session with the fixed map");
 
     maze::BeginEpisodeReq begin_request;
@@ -253,6 +245,10 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     state->set_is_done(false);
     state->set_termination_reason(
         maze::MAZE_TERMINATION_REASON_ACTIVE);
+    for (int action_id = maze::MazeAction_MIN;
+         action_id <= maze::MazeAction_MAX; ++action_id) {
+        state->add_action_mask(action_id == maze::MAZE_ACTION_NOOP);
+    }
 
     maze::UpdateRsp response;
     service.Update(nullptr, &request, &response);
@@ -261,9 +257,9 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
                 response.reply().applied_sequence() == 3 &&
                 response.action_batch().actions_size() == 1 &&
                 response.action_batch().actions(0).agent_id() == 0 &&
-                response.action_batch().actions(0).action_id() >= 0 &&
-                response.action_batch().actions(0).action_id() <= 8,
-            "production Update returns one model-selected Client action");
+                response.action_batch().actions(0).action_id() ==
+                    maze::MAZE_ACTION_NOOP,
+            "production Update applies the Client-owned action mask");
     Require(response.reply().phase() ==
                 maze::SESSION_PHASE_EPISODE_RUNNING,
             "the model-selected action commits through the public Update");
@@ -273,10 +269,14 @@ SessionManager::RawRolloutTransition MakeRawTransition(
     uint64_t action_step,
     float behavior_value) {
     SessionManager::RawRolloutTransition transition;
-    transition.observation.assign(17, static_cast<float>(action_step));
+    transition.observation.assign(
+        MazeObservation::kDimension, static_cast<float>(action_step));
     transition.next_observation.assign(
-        17, static_cast<float>(action_step + 1));
-    transition.action = static_cast<int>(action_step % 9);
+        MazeObservation::kDimension,
+        static_cast<float>(action_step + 1));
+    const auto action_count =
+        static_cast<uint64_t>(maze::MazeAction_MAX) + 1;
+    transition.action = static_cast<int>(action_step % action_count);
     transition.reward = 0.0f;
     transition.behavior_log_probability = -0.5f;
     transition.behavior_value = behavior_value;
@@ -320,7 +320,9 @@ training::ProcessedTransitionEnvelope BuildSegment(
     std::vector<training::ProcessedTransition> processed;
     Require(ProjectProcessedSegment(
                 segment, advantages, value_targets, segment_id,
-                behavior_model, 17, 9, processed, error) &&
+                behavior_model, MazeObservation::kDimension,
+                static_cast<int>(maze::MazeAction_MAX) + 1,
+                "disabled", processed, error) &&
                 processed.size() == 2,
             "project the GAE result into the production training payload: " +
                 error);

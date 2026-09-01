@@ -8,6 +8,8 @@
 
 class MazeObservation {
 public:
+    static constexpr int kDimension = 17;
+
     static bool Build(const SessionManager::Session& session,
                       const SessionManager::AgentRuntime& agent,
                       int gx,

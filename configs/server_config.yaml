@@ -5,18 +5,15 @@
 
 # --- 服务参数：启动模式在这里配置，CLI --workload 可显式覆盖 ---
 server:
-  run_mode: "evaluation"          # exact values: training | evaluation
+  run_mode: "training"          # exact values: training | evaluation
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
 
-# --- 当前 rl-contracts 制品身份与唯一训练合同 ---
+# --- 当前 rl-contracts 类型选择与唯一训练合同 ---
 contract:
   package_name: "rl-contracts"
   package_version: "0.15.0"
-  source_digest: "ebcad0a4c652243ca16fc2c8c14d3f7b4b3b95f1bbd925c7063d22907374c026"
-  artifact_digest: "0c278cfcf85ab4dbff72177eeeea165ebb113bb36867ae71975bf8c14da2be33"
   platform: "linux/arm64"
-  generator_identity: "0eb73fc2cb675bdb34bf3db9c99dae62a82f93a5e3a72db84dcf3936464729c8"
   training_contract_path: "../proto/schemas/training-contract.json"
 
 policy:
@@ -44,11 +41,9 @@ environment:
 
 # --- Maze 任务语义（Client 只能执行，不能覆盖）---
 task:
-  task_contract_id: "maze.task"
+  task_protocol_id: "rl.task.maze"
+  task_protocol_version: 1
   fixed_map_id: "maze_117436372"
-  fixed_map_checksum_sha256: "da9198e61cbcf393fc9934fee0139c09645d3569c2ede1452984051f3b4168e3"
-  action_rule_id: "maze.action.9-way.no-corner-cut"
-  shortest_action_steps: 188
   episode_max_steps: 1504
 
 # --- 训练模型分发参数（仅 training 生效）---
@@ -81,4 +76,4 @@ sample_distributor:
   env_id: "env-0"
 
 metrics:
-  event_schema_catalog: "../proto/schemas/maze.metrics.json"
+  event_schema_catalog: "../proto/schemas/maze.episode.metrics.json"

@@ -1,0 +1,9 @@
+.git
+_deps
+build
+log
+logs
+models
+sample-distributor
+__pycache__
+*.pyc

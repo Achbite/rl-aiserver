@@ -12,6 +12,7 @@ bool ValidateEpisodeModelOutput(const std::vector<float>& logits,
                                 std::string& error);
 
 bool SelectEpisodeAction(const std::vector<float>& logits,
+                         const std::vector<bool>& action_mask,
                          maze::EpisodeMode mode,
                          double temperature,
                          std::mt19937& generator,

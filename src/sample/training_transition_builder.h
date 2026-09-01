@@ -14,6 +14,7 @@ bool BuildRawRolloutTransition(
     const RewardDetail& reward,
     int expected_obs_dim,
     int expected_action_dim,
+    const std::string& action_mask_mode,
     SessionManager::RawRolloutTransition& transition,
     std::string& error);
 
@@ -40,5 +41,6 @@ bool ProjectProcessedSegment(
     const training::ModelIdentity& behavior_model,
     int observation_dimension,
     int action_count,
+    const std::string& action_mask_mode,
     std::vector<training::ProcessedTransition>& processed,
     std::string& error);

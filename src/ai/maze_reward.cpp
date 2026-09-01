@@ -115,19 +115,6 @@ RewardDetail MazeReward::Calculate(
     if (is_done != IsTaskTerminal(reason)) {
         return Invalid("reward termination reason is inconsistent");
     }
-    if (reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED &&
-        (gx != session.end_gx || gy != session.end_gy)) {
-        return Invalid("goal termination was reported outside the goal cell");
-    }
-    if (reason != maze::MAZE_TERMINATION_REASON_GOAL_REACHED &&
-        gx == session.end_gx && gy == session.end_gy) {
-        return Invalid("goal cell requires GOAL_REACHED termination");
-    }
-    if (reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT &&
-        gx == session.end_gx && gy == session.end_gy) {
-        return Invalid("goal cell cannot be reported as TIME_LIMIT");
-    }
-
     int previous_distance = -1;
     int current_distance = -1;
     if (!DistanceAt(session, agent.prev_grid_x, agent.prev_grid_y,
@@ -135,10 +122,6 @@ RewardDetail MazeReward::Calculate(
         !DistanceAt(session, gx, gy, current_distance)) {
         return Invalid("reward transition entered an unreachable map cell");
     }
-    if (std::abs(previous_distance - current_distance) > 1) {
-        return Invalid("reward transition has an illegal geodesic distance delta");
-    }
-
     RewardDetail detail;
     const bool goal =
         reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED;

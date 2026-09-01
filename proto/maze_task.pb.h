@@ -315,6 +315,64 @@ inline bool WorkloadMode_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<WorkloadMode>(
     WorkloadMode_descriptor(), name, value);
 }
+enum MazeAction : int {
+  MAZE_ACTION_NOOP = 0,
+  MAZE_ACTION_UP = 1,
+  MAZE_ACTION_UP_RIGHT = 2,
+  MAZE_ACTION_RIGHT = 3,
+  MAZE_ACTION_DOWN_RIGHT = 4,
+  MAZE_ACTION_DOWN = 5,
+  MAZE_ACTION_DOWN_LEFT = 6,
+  MAZE_ACTION_LEFT = 7,
+  MAZE_ACTION_UP_LEFT = 8,
+  MazeAction_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  MazeAction_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool MazeAction_IsValid(int value);
+constexpr MazeAction MazeAction_MIN = MAZE_ACTION_NOOP;
+constexpr MazeAction MazeAction_MAX = MAZE_ACTION_UP_LEFT;
+constexpr int MazeAction_ARRAYSIZE = MazeAction_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MazeAction_descriptor();
+template<typename T>
+inline const std::string& MazeAction_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, MazeAction>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function MazeAction_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    MazeAction_descriptor(), enum_t_value);
+}
+inline bool MazeAction_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MazeAction* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MazeAction>(
+    MazeAction_descriptor(), name, value);
+}
+enum ActionMaskMode : int {
+  ACTION_MASK_MODE_UNSPECIFIED = 0,
+  ACTION_MASK_MODE_DISABLED = 1,
+  ACTION_MASK_MODE_REQUIRED = 2,
+  ActionMaskMode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  ActionMaskMode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool ActionMaskMode_IsValid(int value);
+constexpr ActionMaskMode ActionMaskMode_MIN = ACTION_MASK_MODE_UNSPECIFIED;
+constexpr ActionMaskMode ActionMaskMode_MAX = ACTION_MASK_MODE_REQUIRED;
+constexpr int ActionMaskMode_ARRAYSIZE = ActionMaskMode_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ActionMaskMode_descriptor();
+template<typename T>
+inline const std::string& ActionMaskMode_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ActionMaskMode>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ActionMaskMode_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ActionMaskMode_descriptor(), enum_t_value);
+}
+inline bool ActionMaskMode_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ActionMaskMode* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ActionMaskMode>(
+    ActionMaskMode_descriptor(), name, value);
+}
 enum MazeTerminationReason : int {
   MAZE_TERMINATION_REASON_UNSPECIFIED = 0,
   MAZE_TERMINATION_REASON_ACTIVE = 1,
@@ -469,10 +527,9 @@ class EnvironmentSpec final :
 
   enum : int {
     kMapIdFieldNumber = 2,
-    kActionRuleIdFieldNumber = 4,
-    kExpectedMapDigestFieldNumber = 3,
     kAgentCountFieldNumber = 1,
     kEpisodeMaxStepsFieldNumber = 5,
+    kActionMaskModeFieldNumber = 6,
   };
   // string map_id = 2;
   void clear_map_id();
@@ -487,38 +544,6 @@ class EnvironmentSpec final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_map_id(const std::string& value);
   std::string* _internal_mutable_map_id();
   public:
-
-  // string action_rule_id = 4;
-  void clear_action_rule_id();
-  const std::string& action_rule_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_action_rule_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_action_rule_id();
-  PROTOBUF_NODISCARD std::string* release_action_rule_id();
-  void set_allocated_action_rule_id(std::string* action_rule_id);
-  private:
-  const std::string& _internal_action_rule_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_action_rule_id(const std::string& value);
-  std::string* _internal_mutable_action_rule_id();
-  public:
-
-  // .rl.common.v1.ContentDigest expected_map_digest = 3;
-  bool has_expected_map_digest() const;
-  private:
-  bool _internal_has_expected_map_digest() const;
-  public:
-  void clear_expected_map_digest();
-  const ::rl::common::v1::ContentDigest& expected_map_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_expected_map_digest();
-  ::rl::common::v1::ContentDigest* mutable_expected_map_digest();
-  void set_allocated_expected_map_digest(::rl::common::v1::ContentDigest* expected_map_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_expected_map_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_expected_map_digest();
-  public:
-  void unsafe_arena_set_allocated_expected_map_digest(
-      ::rl::common::v1::ContentDigest* expected_map_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_expected_map_digest();
 
   // uint32 agent_count = 1;
   void clear_agent_count();
@@ -538,6 +563,15 @@ class EnvironmentSpec final :
   void _internal_set_episode_max_steps(uint32_t value);
   public:
 
+  // .rl.task.maze.v1.ActionMaskMode action_mask_mode = 6;
+  void clear_action_mask_mode();
+  ::rl::task::maze::v1::ActionMaskMode action_mask_mode() const;
+  void set_action_mask_mode(::rl::task::maze::v1::ActionMaskMode value);
+  private:
+  ::rl::task::maze::v1::ActionMaskMode _internal_action_mask_mode() const;
+  void _internal_set_action_mask_mode(::rl::task::maze::v1::ActionMaskMode value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.EnvironmentSpec)
  private:
   class _Internal;
@@ -547,10 +581,9 @@ class EnvironmentSpec final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr map_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr action_rule_id_;
-    ::rl::common::v1::ContentDigest* expected_map_digest_;
     uint32_t agent_count_;
     uint32_t episode_max_steps_;
+    int action_mask_mode_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -681,8 +714,6 @@ class MapDescriptor final :
   enum : int {
     kMapIdFieldNumber = 1,
     kBlockedBitmapFieldNumber = 9,
-    kActionRuleIdFieldNumber = 12,
-    kCanonicalDigestFieldNumber = 10,
     kGridColumnsFieldNumber = 2,
     kGridRowsFieldNumber = 3,
     kGridSizeMicrounitsFieldNumber = 4,
@@ -690,7 +721,6 @@ class MapDescriptor final :
     kStartGridYFieldNumber = 6,
     kGoalGridXFieldNumber = 7,
     kGoalGridYFieldNumber = 8,
-    kShortestActionStepsFieldNumber = 11,
   };
   // string map_id = 1;
   void clear_map_id();
@@ -719,38 +749,6 @@ class MapDescriptor final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_blocked_bitmap(const std::string& value);
   std::string* _internal_mutable_blocked_bitmap();
   public:
-
-  // string action_rule_id = 12;
-  void clear_action_rule_id();
-  const std::string& action_rule_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_action_rule_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_action_rule_id();
-  PROTOBUF_NODISCARD std::string* release_action_rule_id();
-  void set_allocated_action_rule_id(std::string* action_rule_id);
-  private:
-  const std::string& _internal_action_rule_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_action_rule_id(const std::string& value);
-  std::string* _internal_mutable_action_rule_id();
-  public:
-
-  // .rl.common.v1.ContentDigest canonical_digest = 10;
-  bool has_canonical_digest() const;
-  private:
-  bool _internal_has_canonical_digest() const;
-  public:
-  void clear_canonical_digest();
-  const ::rl::common::v1::ContentDigest& canonical_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_canonical_digest();
-  ::rl::common::v1::ContentDigest* mutable_canonical_digest();
-  void set_allocated_canonical_digest(::rl::common::v1::ContentDigest* canonical_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_canonical_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_canonical_digest();
-  public:
-  void unsafe_arena_set_allocated_canonical_digest(
-      ::rl::common::v1::ContentDigest* canonical_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_canonical_digest();
 
   // uint32 grid_columns = 2;
   void clear_grid_columns();
@@ -815,15 +813,6 @@ class MapDescriptor final :
   void _internal_set_goal_grid_y(int32_t value);
   public:
 
-  // uint32 shortest_action_steps = 11;
-  void clear_shortest_action_steps();
-  uint32_t shortest_action_steps() const;
-  void set_shortest_action_steps(uint32_t value);
-  private:
-  uint32_t _internal_shortest_action_steps() const;
-  void _internal_set_shortest_action_steps(uint32_t value);
-  public:
-
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.MapDescriptor)
  private:
   class _Internal;
@@ -834,8 +823,6 @@ class MapDescriptor final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr map_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr blocked_bitmap_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr action_rule_id_;
-    ::rl::common::v1::ContentDigest* canonical_digest_;
     uint32_t grid_columns_;
     uint32_t grid_rows_;
     uint32_t grid_size_microunits_;
@@ -843,7 +830,6 @@ class MapDescriptor final :
     int32_t start_grid_y_;
     int32_t goal_grid_x_;
     int32_t goal_grid_y_;
-    uint32_t shortest_action_steps_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1363,6 +1349,7 @@ class OpenSessionReq final :
     kEnvironmentInstanceIdFieldNumber = 2,
     kRequestIdFieldNumber = 3,
     kClientFieldNumber = 1,
+    kTaskProtocolFieldNumber = 4,
   };
   // string environment_instance_id = 2;
   void clear_environment_instance_id();
@@ -1410,6 +1397,24 @@ class OpenSessionReq final :
       ::rl::common::v1::ServiceInstanceIdentity* client);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_client();
 
+  // .rl.common.v1.ProtocolIdentity task_protocol = 4;
+  bool has_task_protocol() const;
+  private:
+  bool _internal_has_task_protocol() const;
+  public:
+  void clear_task_protocol();
+  const ::rl::common::v1::ProtocolIdentity& task_protocol() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ProtocolIdentity* release_task_protocol();
+  ::rl::common::v1::ProtocolIdentity* mutable_task_protocol();
+  void set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol);
+  private:
+  const ::rl::common::v1::ProtocolIdentity& _internal_task_protocol() const;
+  ::rl::common::v1::ProtocolIdentity* _internal_mutable_task_protocol();
+  public:
+  void unsafe_arena_set_allocated_task_protocol(
+      ::rl::common::v1::ProtocolIdentity* task_protocol);
+  ::rl::common::v1::ProtocolIdentity* unsafe_arena_release_task_protocol();
+
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.OpenSessionReq)
  private:
   class _Internal;
@@ -1421,6 +1426,7 @@ class OpenSessionReq final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr request_id_;
     ::rl::common::v1::ServiceInstanceIdentity* client_;
+    ::rl::common::v1::ProtocolIdentity* task_protocol_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1553,6 +1559,7 @@ class OpenSessionRsp final :
     kReplyFieldNumber = 1,
     kAiserverFieldNumber = 4,
     kEnvironmentFieldNumber = 6,
+    kTaskProtocolFieldNumber = 7,
     kSessionEpochFieldNumber = 3,
     kWorkloadModeFieldNumber = 5,
   };
@@ -1624,6 +1631,24 @@ class OpenSessionRsp final :
       ::rl::task::maze::v1::EnvironmentSpec* environment);
   ::rl::task::maze::v1::EnvironmentSpec* unsafe_arena_release_environment();
 
+  // .rl.common.v1.ProtocolIdentity task_protocol = 7;
+  bool has_task_protocol() const;
+  private:
+  bool _internal_has_task_protocol() const;
+  public:
+  void clear_task_protocol();
+  const ::rl::common::v1::ProtocolIdentity& task_protocol() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ProtocolIdentity* release_task_protocol();
+  ::rl::common::v1::ProtocolIdentity* mutable_task_protocol();
+  void set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol);
+  private:
+  const ::rl::common::v1::ProtocolIdentity& _internal_task_protocol() const;
+  ::rl::common::v1::ProtocolIdentity* _internal_mutable_task_protocol();
+  public:
+  void unsafe_arena_set_allocated_task_protocol(
+      ::rl::common::v1::ProtocolIdentity* task_protocol);
+  ::rl::common::v1::ProtocolIdentity* unsafe_arena_release_task_protocol();
+
   // uint64 session_epoch = 3;
   void clear_session_epoch();
   uint64_t session_epoch() const;
@@ -1654,6 +1679,7 @@ class OpenSessionRsp final :
     ::rl::task::maze::v1::CommandReply* reply_;
     ::rl::common::v1::ServiceInstanceIdentity* aiserver_;
     ::rl::task::maze::v1::EnvironmentSpec* environment_;
+    ::rl::common::v1::ProtocolIdentity* task_protocol_;
     uint64_t session_epoch_;
     int workload_mode_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -1962,8 +1988,6 @@ class InitRsp final :
 
   enum : int {
     kReplyFieldNumber = 1,
-    kAcceptedMapDigestFieldNumber = 2,
-    kVerifiedShortestActionStepsFieldNumber = 3,
   };
   // .rl.task.maze.v1.CommandReply reply = 1;
   bool has_reply() const;
@@ -1983,33 +2007,6 @@ class InitRsp final :
       ::rl::task::maze::v1::CommandReply* reply);
   ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
-  // .rl.common.v1.ContentDigest accepted_map_digest = 2;
-  bool has_accepted_map_digest() const;
-  private:
-  bool _internal_has_accepted_map_digest() const;
-  public:
-  void clear_accepted_map_digest();
-  const ::rl::common::v1::ContentDigest& accepted_map_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_accepted_map_digest();
-  ::rl::common::v1::ContentDigest* mutable_accepted_map_digest();
-  void set_allocated_accepted_map_digest(::rl::common::v1::ContentDigest* accepted_map_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_accepted_map_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_accepted_map_digest();
-  public:
-  void unsafe_arena_set_allocated_accepted_map_digest(
-      ::rl::common::v1::ContentDigest* accepted_map_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_accepted_map_digest();
-
-  // uint32 verified_shortest_action_steps = 3;
-  void clear_verified_shortest_action_steps();
-  uint32_t verified_shortest_action_steps() const;
-  void set_verified_shortest_action_steps(uint32_t value);
-  private:
-  uint32_t _internal_verified_shortest_action_steps() const;
-  void _internal_set_verified_shortest_action_steps(uint32_t value);
-  public:
-
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.InitRsp)
  private:
   class _Internal;
@@ -2019,8 +2016,6 @@ class InitRsp final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::rl::task::maze::v1::CommandReply* reply_;
-    ::rl::common::v1::ContentDigest* accepted_map_digest_;
-    uint32_t verified_shortest_action_steps_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2150,7 +2145,6 @@ class EpisodeAssignment final :
 
   enum : int {
     kEpisodeIdFieldNumber = 1,
-    kEvaluationModelArtifactDigestFieldNumber = 4,
     kModeFieldNumber = 2,
     kMaxStepsFieldNumber = 3,
   };
@@ -2167,24 +2161,6 @@ class EpisodeAssignment final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_episode_id(const std::string& value);
   std::string* _internal_mutable_episode_id();
   public:
-
-  // .rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
-  bool has_evaluation_model_artifact_digest() const;
-  private:
-  bool _internal_has_evaluation_model_artifact_digest() const;
-  public:
-  void clear_evaluation_model_artifact_digest();
-  const ::rl::common::v1::ContentDigest& evaluation_model_artifact_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_evaluation_model_artifact_digest();
-  ::rl::common::v1::ContentDigest* mutable_evaluation_model_artifact_digest();
-  void set_allocated_evaluation_model_artifact_digest(::rl::common::v1::ContentDigest* evaluation_model_artifact_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_evaluation_model_artifact_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_evaluation_model_artifact_digest();
-  public:
-  void unsafe_arena_set_allocated_evaluation_model_artifact_digest(
-      ::rl::common::v1::ContentDigest* evaluation_model_artifact_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_evaluation_model_artifact_digest();
 
   // .rl.task.maze.v1.EpisodeMode mode = 2;
   void clear_mode();
@@ -2213,7 +2189,6 @@ class EpisodeAssignment final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::rl::common::v1::ContentDigest* evaluation_model_artifact_digest_;
     int mode_;
     uint32_t max_steps_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3029,6 +3004,7 @@ class AgentState final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kActionMaskFieldNumber = 7,
     kPositionFieldNumber = 2,
     kAgentIdFieldNumber = 1,
     kTerminationReasonFieldNumber = 4,
@@ -3036,6 +3012,28 @@ class AgentState final :
     kLastMoveBlockedFieldNumber = 5,
     kExecutedActionIdFieldNumber = 6,
   };
+  // repeated bool action_mask = 7;
+  int action_mask_size() const;
+  private:
+  int _internal_action_mask_size() const;
+  public:
+  void clear_action_mask();
+  private:
+  bool _internal_action_mask(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+      _internal_action_mask() const;
+  void _internal_add_action_mask(bool value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+      _internal_mutable_action_mask();
+  public:
+  bool action_mask(int index) const;
+  void set_action_mask(int index, bool value);
+  void add_action_mask(bool value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+      action_mask() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+      mutable_action_mask();
+
   // .rl.task.maze.v1.Vec2 position = 2;
   bool has_position() const;
   private:
@@ -3090,17 +3088,17 @@ class AgentState final :
   void _internal_set_last_move_blocked(bool value);
   public:
 
-  // optional int32 executed_action_id = 6;
+  // optional .rl.task.maze.v1.MazeAction executed_action_id = 6;
   bool has_executed_action_id() const;
   private:
   bool _internal_has_executed_action_id() const;
   public:
   void clear_executed_action_id();
-  int32_t executed_action_id() const;
-  void set_executed_action_id(int32_t value);
+  ::rl::task::maze::v1::MazeAction executed_action_id() const;
+  void set_executed_action_id(::rl::task::maze::v1::MazeAction value);
   private:
-  int32_t _internal_executed_action_id() const;
-  void _internal_set_executed_action_id(int32_t value);
+  ::rl::task::maze::v1::MazeAction _internal_executed_action_id() const;
+  void _internal_set_executed_action_id(::rl::task::maze::v1::MazeAction value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.AgentState)
@@ -3113,12 +3111,13 @@ class AgentState final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool > action_mask_;
     ::rl::task::maze::v1::Vec2* position_;
     uint32_t agent_id_;
     int termination_reason_;
     bool is_done_;
     bool last_move_blocked_;
-    int32_t executed_action_id_;
+    int executed_action_id_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_maze_5ftask_2eproto;
@@ -3446,13 +3445,13 @@ class AgentAction final :
   void _internal_set_agent_id(uint32_t value);
   public:
 
-  // int32 action_id = 2;
+  // .rl.task.maze.v1.MazeAction action_id = 2;
   void clear_action_id();
-  int32_t action_id() const;
-  void set_action_id(int32_t value);
+  ::rl::task::maze::v1::MazeAction action_id() const;
+  void set_action_id(::rl::task::maze::v1::MazeAction value);
   private:
-  int32_t _internal_action_id() const;
-  void _internal_set_action_id(int32_t value);
+  ::rl::task::maze::v1::MazeAction _internal_action_id() const;
+  void _internal_set_action_id(::rl::task::maze::v1::MazeAction value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.AgentAction)
@@ -3464,7 +3463,7 @@ class AgentAction final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     uint32_t agent_id_;
-    int32_t action_id_;
+    int action_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5626,141 +5625,6 @@ inline void EnvironmentSpec::set_allocated_map_id(std::string* map_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EnvironmentSpec.map_id)
 }
 
-// .rl.common.v1.ContentDigest expected_map_digest = 3;
-inline bool EnvironmentSpec::_internal_has_expected_map_digest() const {
-  return this != internal_default_instance() && _impl_.expected_map_digest_ != nullptr;
-}
-inline bool EnvironmentSpec::has_expected_map_digest() const {
-  return _internal_has_expected_map_digest();
-}
-inline const ::rl::common::v1::ContentDigest& EnvironmentSpec::_internal_expected_map_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.expected_map_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& EnvironmentSpec::expected_map_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
-  return _internal_expected_map_digest();
-}
-inline void EnvironmentSpec::unsafe_arena_set_allocated_expected_map_digest(
-    ::rl::common::v1::ContentDigest* expected_map_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.expected_map_digest_);
-  }
-  _impl_.expected_map_digest_ = expected_map_digest;
-  if (expected_map_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
-}
-inline ::rl::common::v1::ContentDigest* EnvironmentSpec::release_expected_map_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.expected_map_digest_;
-  _impl_.expected_map_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EnvironmentSpec::unsafe_arena_release_expected_map_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.expected_map_digest_;
-  _impl_.expected_map_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EnvironmentSpec::_internal_mutable_expected_map_digest() {
-  
-  if (_impl_.expected_map_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.expected_map_digest_ = p;
-  }
-  return _impl_.expected_map_digest_;
-}
-inline ::rl::common::v1::ContentDigest* EnvironmentSpec::mutable_expected_map_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_expected_map_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
-  return _msg;
-}
-inline void EnvironmentSpec::set_allocated_expected_map_digest(::rl::common::v1::ContentDigest* expected_map_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.expected_map_digest_);
-  }
-  if (expected_map_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(expected_map_digest));
-    if (message_arena != submessage_arena) {
-      expected_map_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, expected_map_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.expected_map_digest_ = expected_map_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EnvironmentSpec.expected_map_digest)
-}
-
-// string action_rule_id = 4;
-inline void EnvironmentSpec::clear_action_rule_id() {
-  _impl_.action_rule_id_.ClearToEmpty();
-}
-inline const std::string& EnvironmentSpec::action_rule_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
-  return _internal_action_rule_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void EnvironmentSpec::set_action_rule_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.action_rule_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
-}
-inline std::string* EnvironmentSpec::mutable_action_rule_id() {
-  std::string* _s = _internal_mutable_action_rule_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
-  return _s;
-}
-inline const std::string& EnvironmentSpec::_internal_action_rule_id() const {
-  return _impl_.action_rule_id_.Get();
-}
-inline void EnvironmentSpec::_internal_set_action_rule_id(const std::string& value) {
-  
-  _impl_.action_rule_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* EnvironmentSpec::_internal_mutable_action_rule_id() {
-  
-  return _impl_.action_rule_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* EnvironmentSpec::release_action_rule_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
-  return _impl_.action_rule_id_.Release();
-}
-inline void EnvironmentSpec::set_allocated_action_rule_id(std::string* action_rule_id) {
-  if (action_rule_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.action_rule_id_.SetAllocated(action_rule_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.action_rule_id_.IsDefault()) {
-    _impl_.action_rule_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EnvironmentSpec.action_rule_id)
-}
-
 // uint32 episode_max_steps = 5;
 inline void EnvironmentSpec::clear_episode_max_steps() {
   _impl_.episode_max_steps_ = 0u;
@@ -5779,6 +5643,26 @@ inline void EnvironmentSpec::_internal_set_episode_max_steps(uint32_t value) {
 inline void EnvironmentSpec::set_episode_max_steps(uint32_t value) {
   _internal_set_episode_max_steps(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentSpec.episode_max_steps)
+}
+
+// .rl.task.maze.v1.ActionMaskMode action_mask_mode = 6;
+inline void EnvironmentSpec::clear_action_mask_mode() {
+  _impl_.action_mask_mode_ = 0;
+}
+inline ::rl::task::maze::v1::ActionMaskMode EnvironmentSpec::_internal_action_mask_mode() const {
+  return static_cast< ::rl::task::maze::v1::ActionMaskMode >(_impl_.action_mask_mode_);
+}
+inline ::rl::task::maze::v1::ActionMaskMode EnvironmentSpec::action_mask_mode() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EnvironmentSpec.action_mask_mode)
+  return _internal_action_mask_mode();
+}
+inline void EnvironmentSpec::_internal_set_action_mask_mode(::rl::task::maze::v1::ActionMaskMode value) {
+  
+  _impl_.action_mask_mode_ = value;
+}
+inline void EnvironmentSpec::set_action_mask_mode(::rl::task::maze::v1::ActionMaskMode value) {
+  _internal_set_action_mask_mode(value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.EnvironmentSpec.action_mask_mode)
 }
 
 // -------------------------------------------------------------------
@@ -6023,161 +5907,6 @@ inline void MapDescriptor::set_allocated_blocked_bitmap(std::string* blocked_bit
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MapDescriptor.blocked_bitmap)
-}
-
-// .rl.common.v1.ContentDigest canonical_digest = 10;
-inline bool MapDescriptor::_internal_has_canonical_digest() const {
-  return this != internal_default_instance() && _impl_.canonical_digest_ != nullptr;
-}
-inline bool MapDescriptor::has_canonical_digest() const {
-  return _internal_has_canonical_digest();
-}
-inline const ::rl::common::v1::ContentDigest& MapDescriptor::_internal_canonical_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.canonical_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& MapDescriptor::canonical_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MapDescriptor.canonical_digest)
-  return _internal_canonical_digest();
-}
-inline void MapDescriptor::unsafe_arena_set_allocated_canonical_digest(
-    ::rl::common::v1::ContentDigest* canonical_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.canonical_digest_);
-  }
-  _impl_.canonical_digest_ = canonical_digest;
-  if (canonical_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.MapDescriptor.canonical_digest)
-}
-inline ::rl::common::v1::ContentDigest* MapDescriptor::release_canonical_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.canonical_digest_;
-  _impl_.canonical_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* MapDescriptor::unsafe_arena_release_canonical_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MapDescriptor.canonical_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.canonical_digest_;
-  _impl_.canonical_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* MapDescriptor::_internal_mutable_canonical_digest() {
-  
-  if (_impl_.canonical_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.canonical_digest_ = p;
-  }
-  return _impl_.canonical_digest_;
-}
-inline ::rl::common::v1::ContentDigest* MapDescriptor::mutable_canonical_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_canonical_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MapDescriptor.canonical_digest)
-  return _msg;
-}
-inline void MapDescriptor::set_allocated_canonical_digest(::rl::common::v1::ContentDigest* canonical_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.canonical_digest_);
-  }
-  if (canonical_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(canonical_digest));
-    if (message_arena != submessage_arena) {
-      canonical_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, canonical_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.canonical_digest_ = canonical_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MapDescriptor.canonical_digest)
-}
-
-// uint32 shortest_action_steps = 11;
-inline void MapDescriptor::clear_shortest_action_steps() {
-  _impl_.shortest_action_steps_ = 0u;
-}
-inline uint32_t MapDescriptor::_internal_shortest_action_steps() const {
-  return _impl_.shortest_action_steps_;
-}
-inline uint32_t MapDescriptor::shortest_action_steps() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MapDescriptor.shortest_action_steps)
-  return _internal_shortest_action_steps();
-}
-inline void MapDescriptor::_internal_set_shortest_action_steps(uint32_t value) {
-  
-  _impl_.shortest_action_steps_ = value;
-}
-inline void MapDescriptor::set_shortest_action_steps(uint32_t value) {
-  _internal_set_shortest_action_steps(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.shortest_action_steps)
-}
-
-// string action_rule_id = 12;
-inline void MapDescriptor::clear_action_rule_id() {
-  _impl_.action_rule_id_.ClearToEmpty();
-}
-inline const std::string& MapDescriptor::action_rule_id() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.MapDescriptor.action_rule_id)
-  return _internal_action_rule_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void MapDescriptor::set_action_rule_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.action_rule_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.MapDescriptor.action_rule_id)
-}
-inline std::string* MapDescriptor::mutable_action_rule_id() {
-  std::string* _s = _internal_mutable_action_rule_id();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.MapDescriptor.action_rule_id)
-  return _s;
-}
-inline const std::string& MapDescriptor::_internal_action_rule_id() const {
-  return _impl_.action_rule_id_.Get();
-}
-inline void MapDescriptor::_internal_set_action_rule_id(const std::string& value) {
-  
-  _impl_.action_rule_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* MapDescriptor::_internal_mutable_action_rule_id() {
-  
-  return _impl_.action_rule_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* MapDescriptor::release_action_rule_id() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.MapDescriptor.action_rule_id)
-  return _impl_.action_rule_id_.Release();
-}
-inline void MapDescriptor::set_allocated_action_rule_id(std::string* action_rule_id) {
-  if (action_rule_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.action_rule_id_.SetAllocated(action_rule_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.action_rule_id_.IsDefault()) {
-    _impl_.action_rule_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.MapDescriptor.action_rule_id)
 }
 
 // -------------------------------------------------------------------
@@ -6647,6 +6376,91 @@ inline void OpenSessionReq::set_allocated_request_id(std::string* request_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.request_id)
 }
 
+// .rl.common.v1.ProtocolIdentity task_protocol = 4;
+inline bool OpenSessionReq::_internal_has_task_protocol() const {
+  return this != internal_default_instance() && _impl_.task_protocol_ != nullptr;
+}
+inline bool OpenSessionReq::has_task_protocol() const {
+  return _internal_has_task_protocol();
+}
+inline const ::rl::common::v1::ProtocolIdentity& OpenSessionReq::_internal_task_protocol() const {
+  const ::rl::common::v1::ProtocolIdentity* p = _impl_.task_protocol_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ProtocolIdentity&>(
+      ::rl::common::v1::_ProtocolIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ProtocolIdentity& OpenSessionReq::task_protocol() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionReq.task_protocol)
+  return _internal_task_protocol();
+}
+inline void OpenSessionReq::unsafe_arena_set_allocated_task_protocol(
+    ::rl::common::v1::ProtocolIdentity* task_protocol) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
+  }
+  _impl_.task_protocol_ = task_protocol;
+  if (task_protocol) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionReq.task_protocol)
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::release_task_protocol() {
+  
+  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
+  _impl_.task_protocol_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::unsafe_arena_release_task_protocol() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionReq.task_protocol)
+  
+  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
+  _impl_.task_protocol_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::_internal_mutable_task_protocol() {
+  
+  if (_impl_.task_protocol_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ProtocolIdentity>(GetArenaForAllocation());
+    _impl_.task_protocol_ = p;
+  }
+  return _impl_.task_protocol_;
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::mutable_task_protocol() {
+  ::rl::common::v1::ProtocolIdentity* _msg = _internal_mutable_task_protocol();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionReq.task_protocol)
+  return _msg;
+}
+inline void OpenSessionReq::set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
+  }
+  if (task_protocol) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(task_protocol));
+    if (message_arena != submessage_arena) {
+      task_protocol = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, task_protocol, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.task_protocol_ = task_protocol;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.task_protocol)
+}
+
 // -------------------------------------------------------------------
 
 // OpenSessionRsp
@@ -7006,6 +6820,91 @@ inline void OpenSessionRsp::set_allocated_environment(::rl::task::maze::v1::Envi
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.environment)
 }
 
+// .rl.common.v1.ProtocolIdentity task_protocol = 7;
+inline bool OpenSessionRsp::_internal_has_task_protocol() const {
+  return this != internal_default_instance() && _impl_.task_protocol_ != nullptr;
+}
+inline bool OpenSessionRsp::has_task_protocol() const {
+  return _internal_has_task_protocol();
+}
+inline const ::rl::common::v1::ProtocolIdentity& OpenSessionRsp::_internal_task_protocol() const {
+  const ::rl::common::v1::ProtocolIdentity* p = _impl_.task_protocol_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ProtocolIdentity&>(
+      ::rl::common::v1::_ProtocolIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ProtocolIdentity& OpenSessionRsp::task_protocol() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.task_protocol)
+  return _internal_task_protocol();
+}
+inline void OpenSessionRsp::unsafe_arena_set_allocated_task_protocol(
+    ::rl::common::v1::ProtocolIdentity* task_protocol) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
+  }
+  _impl_.task_protocol_ = task_protocol;
+  if (task_protocol) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_protocol)
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::release_task_protocol() {
+  
+  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
+  _impl_.task_protocol_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::unsafe_arena_release_task_protocol() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.task_protocol)
+  
+  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
+  _impl_.task_protocol_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::_internal_mutable_task_protocol() {
+  
+  if (_impl_.task_protocol_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ProtocolIdentity>(GetArenaForAllocation());
+    _impl_.task_protocol_ = p;
+  }
+  return _impl_.task_protocol_;
+}
+inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::mutable_task_protocol() {
+  ::rl::common::v1::ProtocolIdentity* _msg = _internal_mutable_task_protocol();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionRsp.task_protocol)
+  return _msg;
+}
+inline void OpenSessionRsp::set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
+  }
+  if (task_protocol) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(task_protocol));
+    if (message_arena != submessage_arena) {
+      task_protocol = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, task_protocol, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.task_protocol_ = task_protocol;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_protocol)
+}
+
 // -------------------------------------------------------------------
 
 // InitReq
@@ -7284,111 +7183,6 @@ inline void InitRsp::set_allocated_reply(::rl::task::maze::v1::CommandReply* rep
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitRsp.reply)
 }
 
-// .rl.common.v1.ContentDigest accepted_map_digest = 2;
-inline bool InitRsp::_internal_has_accepted_map_digest() const {
-  return this != internal_default_instance() && _impl_.accepted_map_digest_ != nullptr;
-}
-inline bool InitRsp::has_accepted_map_digest() const {
-  return _internal_has_accepted_map_digest();
-}
-inline const ::rl::common::v1::ContentDigest& InitRsp::_internal_accepted_map_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.accepted_map_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& InitRsp::accepted_map_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.InitRsp.accepted_map_digest)
-  return _internal_accepted_map_digest();
-}
-inline void InitRsp::unsafe_arena_set_allocated_accepted_map_digest(
-    ::rl::common::v1::ContentDigest* accepted_map_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.accepted_map_digest_);
-  }
-  _impl_.accepted_map_digest_ = accepted_map_digest;
-  if (accepted_map_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.InitRsp.accepted_map_digest)
-}
-inline ::rl::common::v1::ContentDigest* InitRsp::release_accepted_map_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.accepted_map_digest_;
-  _impl_.accepted_map_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* InitRsp::unsafe_arena_release_accepted_map_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.InitRsp.accepted_map_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.accepted_map_digest_;
-  _impl_.accepted_map_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* InitRsp::_internal_mutable_accepted_map_digest() {
-  
-  if (_impl_.accepted_map_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.accepted_map_digest_ = p;
-  }
-  return _impl_.accepted_map_digest_;
-}
-inline ::rl::common::v1::ContentDigest* InitRsp::mutable_accepted_map_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_accepted_map_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.InitRsp.accepted_map_digest)
-  return _msg;
-}
-inline void InitRsp::set_allocated_accepted_map_digest(::rl::common::v1::ContentDigest* accepted_map_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.accepted_map_digest_);
-  }
-  if (accepted_map_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(accepted_map_digest));
-    if (message_arena != submessage_arena) {
-      accepted_map_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, accepted_map_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.accepted_map_digest_ = accepted_map_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.InitRsp.accepted_map_digest)
-}
-
-// uint32 verified_shortest_action_steps = 3;
-inline void InitRsp::clear_verified_shortest_action_steps() {
-  _impl_.verified_shortest_action_steps_ = 0u;
-}
-inline uint32_t InitRsp::_internal_verified_shortest_action_steps() const {
-  return _impl_.verified_shortest_action_steps_;
-}
-inline uint32_t InitRsp::verified_shortest_action_steps() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.InitRsp.verified_shortest_action_steps)
-  return _internal_verified_shortest_action_steps();
-}
-inline void InitRsp::_internal_set_verified_shortest_action_steps(uint32_t value) {
-  
-  _impl_.verified_shortest_action_steps_ = value;
-}
-inline void InitRsp::set_verified_shortest_action_steps(uint32_t value) {
-  _internal_set_verified_shortest_action_steps(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.InitRsp.verified_shortest_action_steps)
-}
-
 // -------------------------------------------------------------------
 
 // EpisodeAssignment
@@ -7481,91 +7275,6 @@ inline void EpisodeAssignment::_internal_set_max_steps(uint32_t value) {
 inline void EpisodeAssignment::set_max_steps(uint32_t value) {
   _internal_set_max_steps(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.EpisodeAssignment.max_steps)
-}
-
-// .rl.common.v1.ContentDigest evaluation_model_artifact_digest = 4;
-inline bool EpisodeAssignment::_internal_has_evaluation_model_artifact_digest() const {
-  return this != internal_default_instance() && _impl_.evaluation_model_artifact_digest_ != nullptr;
-}
-inline bool EpisodeAssignment::has_evaluation_model_artifact_digest() const {
-  return _internal_has_evaluation_model_artifact_digest();
-}
-inline const ::rl::common::v1::ContentDigest& EpisodeAssignment::_internal_evaluation_model_artifact_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.evaluation_model_artifact_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& EpisodeAssignment::evaluation_model_artifact_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
-  return _internal_evaluation_model_artifact_digest();
-}
-inline void EpisodeAssignment::unsafe_arena_set_allocated_evaluation_model_artifact_digest(
-    ::rl::common::v1::ContentDigest* evaluation_model_artifact_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.evaluation_model_artifact_digest_);
-  }
-  _impl_.evaluation_model_artifact_digest_ = evaluation_model_artifact_digest;
-  if (evaluation_model_artifact_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
-}
-inline ::rl::common::v1::ContentDigest* EpisodeAssignment::release_evaluation_model_artifact_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.evaluation_model_artifact_digest_;
-  _impl_.evaluation_model_artifact_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeAssignment::unsafe_arena_release_evaluation_model_artifact_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.evaluation_model_artifact_digest_;
-  _impl_.evaluation_model_artifact_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeAssignment::_internal_mutable_evaluation_model_artifact_digest() {
-  
-  if (_impl_.evaluation_model_artifact_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.evaluation_model_artifact_digest_ = p;
-  }
-  return _impl_.evaluation_model_artifact_digest_;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeAssignment::mutable_evaluation_model_artifact_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_evaluation_model_artifact_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
-  return _msg;
-}
-inline void EpisodeAssignment::set_allocated_evaluation_model_artifact_digest(::rl::common::v1::ContentDigest* evaluation_model_artifact_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.evaluation_model_artifact_digest_);
-  }
-  if (evaluation_model_artifact_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(evaluation_model_artifact_digest));
-    if (message_arena != submessage_arena) {
-      evaluation_model_artifact_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, evaluation_model_artifact_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.evaluation_model_artifact_digest_ = evaluation_model_artifact_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.EpisodeAssignment.evaluation_model_artifact_digest)
 }
 
 // -------------------------------------------------------------------
@@ -8185,7 +7894,7 @@ inline void AgentState::set_last_move_blocked(bool value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.AgentState.last_move_blocked)
 }
 
-// optional int32 executed_action_id = 6;
+// optional .rl.task.maze.v1.MazeAction executed_action_id = 6;
 inline bool AgentState::_internal_has_executed_action_id() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   return value;
@@ -8197,20 +7906,67 @@ inline void AgentState::clear_executed_action_id() {
   _impl_.executed_action_id_ = 0;
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline int32_t AgentState::_internal_executed_action_id() const {
-  return _impl_.executed_action_id_;
+inline ::rl::task::maze::v1::MazeAction AgentState::_internal_executed_action_id() const {
+  return static_cast< ::rl::task::maze::v1::MazeAction >(_impl_.executed_action_id_);
 }
-inline int32_t AgentState::executed_action_id() const {
+inline ::rl::task::maze::v1::MazeAction AgentState::executed_action_id() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.AgentState.executed_action_id)
   return _internal_executed_action_id();
 }
-inline void AgentState::_internal_set_executed_action_id(int32_t value) {
+inline void AgentState::_internal_set_executed_action_id(::rl::task::maze::v1::MazeAction value) {
   _impl_._has_bits_[0] |= 0x00000001u;
   _impl_.executed_action_id_ = value;
 }
-inline void AgentState::set_executed_action_id(int32_t value) {
+inline void AgentState::set_executed_action_id(::rl::task::maze::v1::MazeAction value) {
   _internal_set_executed_action_id(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.AgentState.executed_action_id)
+}
+
+// repeated bool action_mask = 7;
+inline int AgentState::_internal_action_mask_size() const {
+  return _impl_.action_mask_.size();
+}
+inline int AgentState::action_mask_size() const {
+  return _internal_action_mask_size();
+}
+inline void AgentState::clear_action_mask() {
+  _impl_.action_mask_.Clear();
+}
+inline bool AgentState::_internal_action_mask(int index) const {
+  return _impl_.action_mask_.Get(index);
+}
+inline bool AgentState::action_mask(int index) const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.AgentState.action_mask)
+  return _internal_action_mask(index);
+}
+inline void AgentState::set_action_mask(int index, bool value) {
+  _impl_.action_mask_.Set(index, value);
+  // @@protoc_insertion_point(field_set:rl.task.maze.v1.AgentState.action_mask)
+}
+inline void AgentState::_internal_add_action_mask(bool value) {
+  _impl_.action_mask_.Add(value);
+}
+inline void AgentState::add_action_mask(bool value) {
+  _internal_add_action_mask(value);
+  // @@protoc_insertion_point(field_add:rl.task.maze.v1.AgentState.action_mask)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+AgentState::_internal_action_mask() const {
+  return _impl_.action_mask_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+AgentState::action_mask() const {
+  // @@protoc_insertion_point(field_list:rl.task.maze.v1.AgentState.action_mask)
+  return _internal_action_mask();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+AgentState::_internal_mutable_action_mask() {
+  return &_impl_.action_mask_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+AgentState::mutable_action_mask() {
+  // @@protoc_insertion_point(field_mutable_list:rl.task.maze.v1.AgentState.action_mask)
+  return _internal_mutable_action_mask();
 }
 
 // -------------------------------------------------------------------
@@ -8391,22 +8147,22 @@ inline void AgentAction::set_agent_id(uint32_t value) {
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.AgentAction.agent_id)
 }
 
-// int32 action_id = 2;
+// .rl.task.maze.v1.MazeAction action_id = 2;
 inline void AgentAction::clear_action_id() {
   _impl_.action_id_ = 0;
 }
-inline int32_t AgentAction::_internal_action_id() const {
-  return _impl_.action_id_;
+inline ::rl::task::maze::v1::MazeAction AgentAction::_internal_action_id() const {
+  return static_cast< ::rl::task::maze::v1::MazeAction >(_impl_.action_id_);
 }
-inline int32_t AgentAction::action_id() const {
+inline ::rl::task::maze::v1::MazeAction AgentAction::action_id() const {
   // @@protoc_insertion_point(field_get:rl.task.maze.v1.AgentAction.action_id)
   return _internal_action_id();
 }
-inline void AgentAction::_internal_set_action_id(int32_t value) {
+inline void AgentAction::_internal_set_action_id(::rl::task::maze::v1::MazeAction value) {
   
   _impl_.action_id_ = value;
 }
-inline void AgentAction::set_action_id(int32_t value) {
+inline void AgentAction::set_action_id(::rl::task::maze::v1::MazeAction value) {
   _internal_set_action_id(value);
   // @@protoc_insertion_point(field_set:rl.task.maze.v1.AgentAction.action_id)
 }
@@ -9969,6 +9725,16 @@ template <> struct is_proto_enum< ::rl::task::maze::v1::WorkloadMode> : ::std::t
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::WorkloadMode>() {
   return ::rl::task::maze::v1::WorkloadMode_descriptor();
+}
+template <> struct is_proto_enum< ::rl::task::maze::v1::MazeAction> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::MazeAction>() {
+  return ::rl::task::maze::v1::MazeAction_descriptor();
+}
+template <> struct is_proto_enum< ::rl::task::maze::v1::ActionMaskMode> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::task::maze::v1::ActionMaskMode>() {
+  return ::rl::task::maze::v1::ActionMaskMode_descriptor();
 }
 template <> struct is_proto_enum< ::rl::task::maze::v1::MazeTerminationReason> : ::std::true_type {};
 template <>

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package rl.task.maze.metrics.v1;
+
+option cc_generic_services = false;
+
+import "common.proto";
+import "training.proto";
+
+// Maze-owned Episode facts. The generic MetricBatch transport carries their
+// deterministic serialized bytes under the maze.episode.metrics schema.
+message AgentEpisodeMetricFact {
+    reserved "behavior_model_version_min", "behavior_model_version_max";
+    uint32 agent_id = 1;
+    double episode_return = 2;
+    uint64 transition_count = 3;
+    bool success = 4;
+    string termination_reason = 5;
+    uint32 shortest_action_steps = 6;
+    uint64 unique_cell_count = 7;
+    uint64 blocked_move_count = 8;
+    uint64 attempted_move_count = 9;
+    repeated rl.training.v1.RawMetricSumCount reward_components = 10;
+    optional uint64 minimum_behavior_model_step = 11;
+    optional uint64 maximum_behavior_model_step = 12;
+    string behavior_model_lineage_id = 13;
+    optional uint64 terminal_frame_id = 14;
+    optional uint32 goal_rank_group = 15;
+}
+
+message EpisodeMetricFact {
+    reserved 1;
+    reserved "task_id";
+    string environment_instance_id = 2;
+    string episode_id = 3;
+    rl.common.v1.ContentDigest training_contract_digest = 4;
+    repeated AgentEpisodeMetricFact agents = 5;
+}

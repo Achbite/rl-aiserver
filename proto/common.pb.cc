@@ -70,6 +70,20 @@ struct SchemaIdentityDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SchemaIdentityDefaultTypeInternal _SchemaIdentity_default_instance_;
+PROTOBUF_CONSTEXPR ProtocolIdentity::ProtocolIdentity(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.protocol_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.protocol_version_)*/0u
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ProtocolIdentityDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ProtocolIdentityDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ProtocolIdentityDefaultTypeInternal() {}
+  union {
+    ProtocolIdentity _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ProtocolIdentityDefaultTypeInternal _ProtocolIdentity_default_instance_;
 PROTOBUF_CONSTEXPR ServiceInstanceIdentity::ServiceInstanceIdentity(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.component_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -88,7 +102,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace v1
 }  // namespace common
 }  // namespace rl
-static ::_pb::Metadata file_level_metadata_common_2eproto[4];
+static ::_pb::Metadata file_level_metadata_common_2eproto[5];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_common_2eproto[2];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_common_2eproto = nullptr;
 
@@ -123,6 +137,14 @@ const uint32_t TableStruct_common_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::rl::common::v1::SchemaIdentity, _impl_.schema_version_),
   PROTOBUF_FIELD_OFFSET(::rl::common::v1::SchemaIdentity, _impl_.canonical_digest_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::common::v1::ProtocolIdentity, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::common::v1::ProtocolIdentity, _impl_.protocol_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::common::v1::ProtocolIdentity, _impl_.protocol_version_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::common::v1::ServiceInstanceIdentity, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -136,13 +158,15 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 0, -1, -1, sizeof(::rl::common::v1::ContentDigest)},
   { 8, -1, -1, sizeof(::rl::common::v1::ContractIdentity)},
   { 20, -1, -1, sizeof(::rl::common::v1::SchemaIdentity)},
-  { 29, -1, -1, sizeof(::rl::common::v1::ServiceInstanceIdentity)},
+  { 29, -1, -1, sizeof(::rl::common::v1::ProtocolIdentity)},
+  { 37, -1, -1, sizeof(::rl::common::v1::ServiceInstanceIdentity)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
   &::rl::common::v1::_ContentDigest_default_instance_._instance,
   &::rl::common::v1::_ContractIdentity_default_instance_._instance,
   &::rl::common::v1::_SchemaIdentity_default_instance_._instance,
+  &::rl::common::v1::_ProtocolIdentity_default_instance_._instance,
   &::rl::common::v1::_ServiceInstanceIdentity_default_instance_._instance,
 };
 
@@ -158,21 +182,23 @@ const char descriptor_table_protodef_common_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "ty\030\006 \001(\t\"r\n\016SchemaIdentity\022\021\n\tschema_id\030"
   "\001 \001(\t\022\026\n\016schema_version\030\002 \001(\r\0225\n\020canonic"
   "al_digest\030\003 \001(\0132\033.rl.common.v1.ContentDi"
-  "gest\"Z\n\027ServiceInstanceIdentity\022\021\n\tcompo"
-  "nent\030\001 \001(\t\022\023\n\013instance_id\030\002 \001(\t\022\027\n\017lifec"
-  "ycle_epoch\030\003 \001(\004*\226\001\n\017OperationResult\022 \n\034"
-  "OPERATION_RESULT_UNSPECIFIED\020\000\022\034\n\030OPERAT"
-  "ION_RESULT_APPLIED\020\001\022$\n OPERATION_RESULT"
-  "_ALREADY_APPLIED\020\002\022\035\n\031OPERATION_RESULT_R"
-  "EJECTED\020\003*P\n\017DigestAlgorithm\022 \n\034DIGEST_A"
-  "LGORITHM_UNSPECIFIED\020\000\022\033\n\027DIGEST_ALGORIT"
-  "HM_SHA256\020\001B\003\200\001\000b\006proto3"
+  "gest\"A\n\020ProtocolIdentity\022\023\n\013protocol_id\030"
+  "\001 \001(\t\022\030\n\020protocol_version\030\002 \001(\r\"Z\n\027Servi"
+  "ceInstanceIdentity\022\021\n\tcomponent\030\001 \001(\t\022\023\n"
+  "\013instance_id\030\002 \001(\t\022\027\n\017lifecycle_epoch\030\003 "
+  "\001(\004*\226\001\n\017OperationResult\022 \n\034OPERATION_RES"
+  "ULT_UNSPECIFIED\020\000\022\034\n\030OPERATION_RESULT_AP"
+  "PLIED\020\001\022$\n OPERATION_RESULT_ALREADY_APPL"
+  "IED\020\002\022\035\n\031OPERATION_RESULT_REJECTED\020\003*P\n\017"
+  "DigestAlgorithm\022 \n\034DIGEST_ALGORITHM_UNSP"
+  "ECIFIED\020\000\022\033\n\027DIGEST_ALGORITHM_SHA256\020\001B\003"
+  "\200\001\000b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_common_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_common_2eproto = {
-    false, false, 784, descriptor_table_protodef_common_2eproto,
+    false, false, 851, descriptor_table_protodef_common_2eproto,
     "common.proto",
-    &descriptor_table_common_2eproto_once, nullptr, 0, 4,
+    &descriptor_table_common_2eproto_once, nullptr, 0, 5,
     schemas, file_default_instances, TableStruct_common_2eproto::offsets,
     file_level_metadata_common_2eproto, file_level_enum_descriptors_common_2eproto,
     file_level_service_descriptors_common_2eproto,
@@ -1169,6 +1195,236 @@ void SchemaIdentity::InternalSwap(SchemaIdentity* other) {
 
 // ===================================================================
 
+class ProtocolIdentity::_Internal {
+ public:
+};
+
+ProtocolIdentity::ProtocolIdentity(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.common.v1.ProtocolIdentity)
+}
+ProtocolIdentity::ProtocolIdentity(const ProtocolIdentity& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ProtocolIdentity* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.protocol_id_){}
+    , decltype(_impl_.protocol_version_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.protocol_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.protocol_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_protocol_id().empty()) {
+    _this->_impl_.protocol_id_.Set(from._internal_protocol_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.protocol_version_ = from._impl_.protocol_version_;
+  // @@protoc_insertion_point(copy_constructor:rl.common.v1.ProtocolIdentity)
+}
+
+inline void ProtocolIdentity::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.protocol_id_){}
+    , decltype(_impl_.protocol_version_){0u}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.protocol_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.protocol_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ProtocolIdentity::~ProtocolIdentity() {
+  // @@protoc_insertion_point(destructor:rl.common.v1.ProtocolIdentity)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ProtocolIdentity::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.protocol_id_.Destroy();
+}
+
+void ProtocolIdentity::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ProtocolIdentity::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.common.v1.ProtocolIdentity)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.protocol_id_.ClearToEmpty();
+  _impl_.protocol_version_ = 0u;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ProtocolIdentity::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string protocol_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_protocol_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.common.v1.ProtocolIdentity.protocol_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 protocol_version = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.protocol_version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ProtocolIdentity::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.common.v1.ProtocolIdentity)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string protocol_id = 1;
+  if (!this->_internal_protocol_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_protocol_id().data(), static_cast<int>(this->_internal_protocol_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.common.v1.ProtocolIdentity.protocol_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_protocol_id(), target);
+  }
+
+  // uint32 protocol_version = 2;
+  if (this->_internal_protocol_version() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_protocol_version(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.common.v1.ProtocolIdentity)
+  return target;
+}
+
+size_t ProtocolIdentity::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.common.v1.ProtocolIdentity)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string protocol_id = 1;
+  if (!this->_internal_protocol_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_protocol_id());
+  }
+
+  // uint32 protocol_version = 2;
+  if (this->_internal_protocol_version() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_protocol_version());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ProtocolIdentity::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ProtocolIdentity::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ProtocolIdentity::GetClassData() const { return &_class_data_; }
+
+
+void ProtocolIdentity::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ProtocolIdentity*>(&to_msg);
+  auto& from = static_cast<const ProtocolIdentity&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.common.v1.ProtocolIdentity)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_protocol_id().empty()) {
+    _this->_internal_set_protocol_id(from._internal_protocol_id());
+  }
+  if (from._internal_protocol_version() != 0) {
+    _this->_internal_set_protocol_version(from._internal_protocol_version());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ProtocolIdentity::CopyFrom(const ProtocolIdentity& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.common.v1.ProtocolIdentity)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ProtocolIdentity::IsInitialized() const {
+  return true;
+}
+
+void ProtocolIdentity::InternalSwap(ProtocolIdentity* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.protocol_id_, lhs_arena,
+      &other->_impl_.protocol_id_, rhs_arena
+  );
+  swap(_impl_.protocol_version_, other->_impl_.protocol_version_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ProtocolIdentity::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_common_2eproto_getter, &descriptor_table_common_2eproto_once,
+      file_level_metadata_common_2eproto[3]);
+}
+
+// ===================================================================
+
 class ServiceInstanceIdentity::_Internal {
  public:
 };
@@ -1444,7 +1700,7 @@ void ServiceInstanceIdentity::InternalSwap(ServiceInstanceIdentity* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ServiceInstanceIdentity::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_common_2eproto_getter, &descriptor_table_common_2eproto_once,
-      file_level_metadata_common_2eproto[3]);
+      file_level_metadata_common_2eproto[4]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -1463,6 +1719,10 @@ Arena::CreateMaybeMessage< ::rl::common::v1::ContractIdentity >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::rl::common::v1::SchemaIdentity*
 Arena::CreateMaybeMessage< ::rl::common::v1::SchemaIdentity >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::common::v1::SchemaIdentity >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::common::v1::ProtocolIdentity*
+Arena::CreateMaybeMessage< ::rl::common::v1::ProtocolIdentity >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::common::v1::ProtocolIdentity >(arena);
 }
 template<> PROTOBUF_NOINLINE ::rl::common::v1::ServiceInstanceIdentity*
 Arena::CreateMaybeMessage< ::rl::common::v1::ServiceInstanceIdentity >(Arena* arena) {

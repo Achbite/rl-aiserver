@@ -71,18 +71,12 @@ extern AckModelReqDefaultTypeInternal _AckModelReq_default_instance_;
 class AckModelRsp;
 struct AckModelRspDefaultTypeInternal;
 extern AckModelRspDefaultTypeInternal _AckModelRsp_default_instance_;
-class AgentEpisodeMetricFact;
-struct AgentEpisodeMetricFactDefaultTypeInternal;
-extern AgentEpisodeMetricFactDefaultTypeInternal _AgentEpisodeMetricFact_default_instance_;
 class DeliveryRsp;
 struct DeliveryRspDefaultTypeInternal;
 extern DeliveryRspDefaultTypeInternal _DeliveryRsp_default_instance_;
 class DownloadModelReq;
 struct DownloadModelReqDefaultTypeInternal;
 extern DownloadModelReqDefaultTypeInternal _DownloadModelReq_default_instance_;
-class EpisodeMetricFact;
-struct EpisodeMetricFactDefaultTypeInternal;
-extern EpisodeMetricFactDefaultTypeInternal _EpisodeMetricFact_default_instance_;
 class FinalizeSamplePoolReq;
 struct FinalizeSamplePoolReqDefaultTypeInternal;
 extern FinalizeSamplePoolReqDefaultTypeInternal _FinalizeSamplePoolReq_default_instance_;
@@ -176,9 +170,6 @@ extern SamplePoolStatusRspDefaultTypeInternal _SamplePoolStatusRsp_default_insta
 class SegmentCloseCount;
 struct SegmentCloseCountDefaultTypeInternal;
 extern SegmentCloseCountDefaultTypeInternal _SegmentCloseCount_default_instance_;
-class TrainUpdateMetricFact;
-struct TrainUpdateMetricFactDefaultTypeInternal;
-extern TrainUpdateMetricFactDefaultTypeInternal _TrainUpdateMetricFact_default_instance_;
 }  // namespace v1
 }  // namespace training
 }  // namespace rl
@@ -190,10 +181,8 @@ template<> ::rl::training::v1::AckMetricBatchReq* Arena::CreateMaybeMessage<::rl
 template<> ::rl::training::v1::AckMetricBatchRsp* Arena::CreateMaybeMessage<::rl::training::v1::AckMetricBatchRsp>(Arena*);
 template<> ::rl::training::v1::AckModelReq* Arena::CreateMaybeMessage<::rl::training::v1::AckModelReq>(Arena*);
 template<> ::rl::training::v1::AckModelRsp* Arena::CreateMaybeMessage<::rl::training::v1::AckModelRsp>(Arena*);
-template<> ::rl::training::v1::AgentEpisodeMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::AgentEpisodeMetricFact>(Arena*);
 template<> ::rl::training::v1::DeliveryRsp* Arena::CreateMaybeMessage<::rl::training::v1::DeliveryRsp>(Arena*);
 template<> ::rl::training::v1::DownloadModelReq* Arena::CreateMaybeMessage<::rl::training::v1::DownloadModelReq>(Arena*);
-template<> ::rl::training::v1::EpisodeMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::EpisodeMetricFact>(Arena*);
 template<> ::rl::training::v1::FinalizeSamplePoolReq* Arena::CreateMaybeMessage<::rl::training::v1::FinalizeSamplePoolReq>(Arena*);
 template<> ::rl::training::v1::FinalizeSamplePoolRsp* Arena::CreateMaybeMessage<::rl::training::v1::FinalizeSamplePoolRsp>(Arena*);
 template<> ::rl::training::v1::GetBatchReq* Arena::CreateMaybeMessage<::rl::training::v1::GetBatchReq>(Arena*);
@@ -225,7 +214,6 @@ template<> ::rl::training::v1::SamplePoolItem* Arena::CreateMaybeMessage<::rl::t
 template<> ::rl::training::v1::SamplePoolStatusReq* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolStatusReq>(Arena*);
 template<> ::rl::training::v1::SamplePoolStatusRsp* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolStatusRsp>(Arena*);
 template<> ::rl::training::v1::SegmentCloseCount* Arena::CreateMaybeMessage<::rl::training::v1::SegmentCloseCount>(Arena*);
-template<> ::rl::training::v1::TrainUpdateMetricFact* Arena::CreateMaybeMessage<::rl::training::v1::TrainUpdateMetricFact>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace rl {
 namespace training {
@@ -1205,6 +1193,7 @@ class ProcessedTransition final :
 
   enum : int {
     kObservationFieldNumber = 2,
+    kActionMaskFieldNumber = 10,
     kItemIdFieldNumber = 1,
     kActionFieldNumber = 3,
     kBehaviorLogProbabilityFieldNumber = 4,
@@ -1235,6 +1224,28 @@ class ProcessedTransition final :
       observation() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< float >*
       mutable_observation();
+
+  // repeated bool action_mask = 10;
+  int action_mask_size() const;
+  private:
+  int _internal_action_mask_size() const;
+  public:
+  void clear_action_mask();
+  private:
+  bool _internal_action_mask(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+      _internal_action_mask() const;
+  void _internal_add_action_mask(bool value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+      _internal_mutable_action_mask();
+  public:
+  bool action_mask(int index) const;
+  void set_action_mask(int index, bool value);
+  void add_action_mask(bool value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+      action_mask() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+      mutable_action_mask();
 
   // string item_id = 1;
   void clear_item_id();
@@ -1328,6 +1339,7 @@ class ProcessedTransition final :
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedField< float > observation_;
+    ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool > action_mask_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr item_id_;
     int32_t action_;
     float behavior_log_probability_;
@@ -4865,948 +4877,6 @@ class RawMetricSumCount final :
 };
 // -------------------------------------------------------------------
 
-class AgentEpisodeMetricFact final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.AgentEpisodeMetricFact) */ {
- public:
-  inline AgentEpisodeMetricFact() : AgentEpisodeMetricFact(nullptr) {}
-  ~AgentEpisodeMetricFact() override;
-  explicit PROTOBUF_CONSTEXPR AgentEpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  AgentEpisodeMetricFact(const AgentEpisodeMetricFact& from);
-  AgentEpisodeMetricFact(AgentEpisodeMetricFact&& from) noexcept
-    : AgentEpisodeMetricFact() {
-    *this = ::std::move(from);
-  }
-
-  inline AgentEpisodeMetricFact& operator=(const AgentEpisodeMetricFact& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline AgentEpisodeMetricFact& operator=(AgentEpisodeMetricFact&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const AgentEpisodeMetricFact& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const AgentEpisodeMetricFact* internal_default_instance() {
-    return reinterpret_cast<const AgentEpisodeMetricFact*>(
-               &_AgentEpisodeMetricFact_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    18;
-
-  friend void swap(AgentEpisodeMetricFact& a, AgentEpisodeMetricFact& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(AgentEpisodeMetricFact* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(AgentEpisodeMetricFact* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  AgentEpisodeMetricFact* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<AgentEpisodeMetricFact>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const AgentEpisodeMetricFact& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const AgentEpisodeMetricFact& from) {
-    AgentEpisodeMetricFact::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(AgentEpisodeMetricFact* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.AgentEpisodeMetricFact";
-  }
-  protected:
-  explicit AgentEpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kRewardComponentsFieldNumber = 10,
-    kTerminationReasonFieldNumber = 5,
-    kBehaviorModelLineageIdFieldNumber = 13,
-    kEpisodeReturnFieldNumber = 2,
-    kAgentIdFieldNumber = 1,
-    kSuccessFieldNumber = 4,
-    kTransitionCountFieldNumber = 3,
-    kUniqueCellCountFieldNumber = 7,
-    kBlockedMoveCountFieldNumber = 8,
-    kAttemptedMoveCountFieldNumber = 9,
-    kShortestActionStepsFieldNumber = 6,
-    kGoalRankGroupFieldNumber = 15,
-    kMinimumBehaviorModelStepFieldNumber = 11,
-    kMaximumBehaviorModelStepFieldNumber = 12,
-    kTerminalFrameIdFieldNumber = 14,
-  };
-  // repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
-  int reward_components_size() const;
-  private:
-  int _internal_reward_components_size() const;
-  public:
-  void clear_reward_components();
-  ::rl::training::v1::RawMetricSumCount* mutable_reward_components(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >*
-      mutable_reward_components();
-  private:
-  const ::rl::training::v1::RawMetricSumCount& _internal_reward_components(int index) const;
-  ::rl::training::v1::RawMetricSumCount* _internal_add_reward_components();
-  public:
-  const ::rl::training::v1::RawMetricSumCount& reward_components(int index) const;
-  ::rl::training::v1::RawMetricSumCount* add_reward_components();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >&
-      reward_components() const;
-
-  // string termination_reason = 5;
-  void clear_termination_reason();
-  const std::string& termination_reason() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_termination_reason(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_termination_reason();
-  PROTOBUF_NODISCARD std::string* release_termination_reason();
-  void set_allocated_termination_reason(std::string* termination_reason);
-  private:
-  const std::string& _internal_termination_reason() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_termination_reason(const std::string& value);
-  std::string* _internal_mutable_termination_reason();
-  public:
-
-  // string behavior_model_lineage_id = 13;
-  void clear_behavior_model_lineage_id();
-  const std::string& behavior_model_lineage_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_behavior_model_lineage_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_behavior_model_lineage_id();
-  PROTOBUF_NODISCARD std::string* release_behavior_model_lineage_id();
-  void set_allocated_behavior_model_lineage_id(std::string* behavior_model_lineage_id);
-  private:
-  const std::string& _internal_behavior_model_lineage_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_behavior_model_lineage_id(const std::string& value);
-  std::string* _internal_mutable_behavior_model_lineage_id();
-  public:
-
-  // double episode_return = 2;
-  void clear_episode_return();
-  double episode_return() const;
-  void set_episode_return(double value);
-  private:
-  double _internal_episode_return() const;
-  void _internal_set_episode_return(double value);
-  public:
-
-  // uint32 agent_id = 1;
-  void clear_agent_id();
-  uint32_t agent_id() const;
-  void set_agent_id(uint32_t value);
-  private:
-  uint32_t _internal_agent_id() const;
-  void _internal_set_agent_id(uint32_t value);
-  public:
-
-  // bool success = 4;
-  void clear_success();
-  bool success() const;
-  void set_success(bool value);
-  private:
-  bool _internal_success() const;
-  void _internal_set_success(bool value);
-  public:
-
-  // uint64 transition_count = 3;
-  void clear_transition_count();
-  uint64_t transition_count() const;
-  void set_transition_count(uint64_t value);
-  private:
-  uint64_t _internal_transition_count() const;
-  void _internal_set_transition_count(uint64_t value);
-  public:
-
-  // uint64 unique_cell_count = 7;
-  void clear_unique_cell_count();
-  uint64_t unique_cell_count() const;
-  void set_unique_cell_count(uint64_t value);
-  private:
-  uint64_t _internal_unique_cell_count() const;
-  void _internal_set_unique_cell_count(uint64_t value);
-  public:
-
-  // uint64 blocked_move_count = 8;
-  void clear_blocked_move_count();
-  uint64_t blocked_move_count() const;
-  void set_blocked_move_count(uint64_t value);
-  private:
-  uint64_t _internal_blocked_move_count() const;
-  void _internal_set_blocked_move_count(uint64_t value);
-  public:
-
-  // uint64 attempted_move_count = 9;
-  void clear_attempted_move_count();
-  uint64_t attempted_move_count() const;
-  void set_attempted_move_count(uint64_t value);
-  private:
-  uint64_t _internal_attempted_move_count() const;
-  void _internal_set_attempted_move_count(uint64_t value);
-  public:
-
-  // uint32 shortest_action_steps = 6;
-  void clear_shortest_action_steps();
-  uint32_t shortest_action_steps() const;
-  void set_shortest_action_steps(uint32_t value);
-  private:
-  uint32_t _internal_shortest_action_steps() const;
-  void _internal_set_shortest_action_steps(uint32_t value);
-  public:
-
-  // optional uint32 goal_rank_group = 15;
-  bool has_goal_rank_group() const;
-  private:
-  bool _internal_has_goal_rank_group() const;
-  public:
-  void clear_goal_rank_group();
-  uint32_t goal_rank_group() const;
-  void set_goal_rank_group(uint32_t value);
-  private:
-  uint32_t _internal_goal_rank_group() const;
-  void _internal_set_goal_rank_group(uint32_t value);
-  public:
-
-  // optional uint64 minimum_behavior_model_step = 11;
-  bool has_minimum_behavior_model_step() const;
-  private:
-  bool _internal_has_minimum_behavior_model_step() const;
-  public:
-  void clear_minimum_behavior_model_step();
-  uint64_t minimum_behavior_model_step() const;
-  void set_minimum_behavior_model_step(uint64_t value);
-  private:
-  uint64_t _internal_minimum_behavior_model_step() const;
-  void _internal_set_minimum_behavior_model_step(uint64_t value);
-  public:
-
-  // optional uint64 maximum_behavior_model_step = 12;
-  bool has_maximum_behavior_model_step() const;
-  private:
-  bool _internal_has_maximum_behavior_model_step() const;
-  public:
-  void clear_maximum_behavior_model_step();
-  uint64_t maximum_behavior_model_step() const;
-  void set_maximum_behavior_model_step(uint64_t value);
-  private:
-  uint64_t _internal_maximum_behavior_model_step() const;
-  void _internal_set_maximum_behavior_model_step(uint64_t value);
-  public:
-
-  // optional uint64 terminal_frame_id = 14;
-  bool has_terminal_frame_id() const;
-  private:
-  bool _internal_has_terminal_frame_id() const;
-  public:
-  void clear_terminal_frame_id();
-  uint64_t terminal_frame_id() const;
-  void set_terminal_frame_id(uint64_t value);
-  private:
-  uint64_t _internal_terminal_frame_id() const;
-  void _internal_set_terminal_frame_id(uint64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.AgentEpisodeMetricFact)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount > reward_components_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr termination_reason_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr behavior_model_lineage_id_;
-    double episode_return_;
-    uint32_t agent_id_;
-    bool success_;
-    uint64_t transition_count_;
-    uint64_t unique_cell_count_;
-    uint64_t blocked_move_count_;
-    uint64_t attempted_move_count_;
-    uint32_t shortest_action_steps_;
-    uint32_t goal_rank_group_;
-    uint64_t minimum_behavior_model_step_;
-    uint64_t maximum_behavior_model_step_;
-    uint64_t terminal_frame_id_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
-class EpisodeMetricFact final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.EpisodeMetricFact) */ {
- public:
-  inline EpisodeMetricFact() : EpisodeMetricFact(nullptr) {}
-  ~EpisodeMetricFact() override;
-  explicit PROTOBUF_CONSTEXPR EpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  EpisodeMetricFact(const EpisodeMetricFact& from);
-  EpisodeMetricFact(EpisodeMetricFact&& from) noexcept
-    : EpisodeMetricFact() {
-    *this = ::std::move(from);
-  }
-
-  inline EpisodeMetricFact& operator=(const EpisodeMetricFact& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline EpisodeMetricFact& operator=(EpisodeMetricFact&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const EpisodeMetricFact& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const EpisodeMetricFact* internal_default_instance() {
-    return reinterpret_cast<const EpisodeMetricFact*>(
-               &_EpisodeMetricFact_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    19;
-
-  friend void swap(EpisodeMetricFact& a, EpisodeMetricFact& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(EpisodeMetricFact* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(EpisodeMetricFact* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  EpisodeMetricFact* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<EpisodeMetricFact>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const EpisodeMetricFact& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const EpisodeMetricFact& from) {
-    EpisodeMetricFact::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(EpisodeMetricFact* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.EpisodeMetricFact";
-  }
-  protected:
-  explicit EpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kAgentsFieldNumber = 5,
-    kEnvironmentInstanceIdFieldNumber = 2,
-    kEpisodeIdFieldNumber = 3,
-    kTrainingContractDigestFieldNumber = 4,
-  };
-  // repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
-  int agents_size() const;
-  private:
-  int _internal_agents_size() const;
-  public:
-  void clear_agents();
-  ::rl::training::v1::AgentEpisodeMetricFact* mutable_agents(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::AgentEpisodeMetricFact >*
-      mutable_agents();
-  private:
-  const ::rl::training::v1::AgentEpisodeMetricFact& _internal_agents(int index) const;
-  ::rl::training::v1::AgentEpisodeMetricFact* _internal_add_agents();
-  public:
-  const ::rl::training::v1::AgentEpisodeMetricFact& agents(int index) const;
-  ::rl::training::v1::AgentEpisodeMetricFact* add_agents();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::AgentEpisodeMetricFact >&
-      agents() const;
-
-  // string environment_instance_id = 2;
-  void clear_environment_instance_id();
-  const std::string& environment_instance_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_environment_instance_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_environment_instance_id();
-  PROTOBUF_NODISCARD std::string* release_environment_instance_id();
-  void set_allocated_environment_instance_id(std::string* environment_instance_id);
-  private:
-  const std::string& _internal_environment_instance_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_environment_instance_id(const std::string& value);
-  std::string* _internal_mutable_environment_instance_id();
-  public:
-
-  // string episode_id = 3;
-  void clear_episode_id();
-  const std::string& episode_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_episode_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_episode_id();
-  PROTOBUF_NODISCARD std::string* release_episode_id();
-  void set_allocated_episode_id(std::string* episode_id);
-  private:
-  const std::string& _internal_episode_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_episode_id(const std::string& value);
-  std::string* _internal_mutable_episode_id();
-  public:
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 4;
-  bool has_training_contract_digest() const;
-  private:
-  bool _internal_has_training_contract_digest() const;
-  public:
-  void clear_training_contract_digest();
-  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
-  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
-  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
-  public:
-  void unsafe_arena_set_allocated_training_contract_digest(
-      ::rl::common::v1::ContentDigest* training_contract_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.EpisodeMetricFact)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::AgentEpisodeMetricFact > agents_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_instance_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::rl::common::v1::ContentDigest* training_contract_digest_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
-class TrainUpdateMetricFact final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.TrainUpdateMetricFact) */ {
- public:
-  inline TrainUpdateMetricFact() : TrainUpdateMetricFact(nullptr) {}
-  ~TrainUpdateMetricFact() override;
-  explicit PROTOBUF_CONSTEXPR TrainUpdateMetricFact(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  TrainUpdateMetricFact(const TrainUpdateMetricFact& from);
-  TrainUpdateMetricFact(TrainUpdateMetricFact&& from) noexcept
-    : TrainUpdateMetricFact() {
-    *this = ::std::move(from);
-  }
-
-  inline TrainUpdateMetricFact& operator=(const TrainUpdateMetricFact& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline TrainUpdateMetricFact& operator=(TrainUpdateMetricFact&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const TrainUpdateMetricFact& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const TrainUpdateMetricFact* internal_default_instance() {
-    return reinterpret_cast<const TrainUpdateMetricFact*>(
-               &_TrainUpdateMetricFact_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    20;
-
-  friend void swap(TrainUpdateMetricFact& a, TrainUpdateMetricFact& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(TrainUpdateMetricFact* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(TrainUpdateMetricFact* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  TrainUpdateMetricFact* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TrainUpdateMetricFact>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TrainUpdateMetricFact& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const TrainUpdateMetricFact& from) {
-    TrainUpdateMetricFact::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(TrainUpdateMetricFact* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.TrainUpdateMetricFact";
-  }
-  protected:
-  explicit TrainUpdateMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kPpoStatisticsFieldNumber = 10,
-    kTrainUpdateIdFieldNumber = 1,
-    kDeliveryIdFieldNumber = 4,
-    kBehaviorModelLineageIdFieldNumber = 11,
-    kPublishedModelFieldNumber = 3,
-    kTrainingContractDigestFieldNumber = 5,
-    kRolloutEstimatorProfileDigestFieldNumber = 18,
-    kTrainUpdateSequenceFieldNumber = 2,
-    kCumulativeTrainedSamplesFieldNumber = 6,
-    kActualBatchSizeFieldNumber = 7,
-    kMinimumBehaviorModelStepFieldNumber = 8,
-    kMaximumBehaviorModelStepFieldNumber = 9,
-    kRequestedTrainBatchSizeFieldNumber = 12,
-    kPoolDrawSlotCountFieldNumber = 13,
-    kUniqueItemCountFieldNumber = 14,
-    kDuplicateItemSlotCountFieldNumber = 15,
-    kSampleEvaluationCountFieldNumber = 16,
-    kOptimizerStepCountFieldNumber = 17,
-  };
-  // repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
-  int ppo_statistics_size() const;
-  private:
-  int _internal_ppo_statistics_size() const;
-  public:
-  void clear_ppo_statistics();
-  ::rl::training::v1::RawMetricSumCount* mutable_ppo_statistics(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >*
-      mutable_ppo_statistics();
-  private:
-  const ::rl::training::v1::RawMetricSumCount& _internal_ppo_statistics(int index) const;
-  ::rl::training::v1::RawMetricSumCount* _internal_add_ppo_statistics();
-  public:
-  const ::rl::training::v1::RawMetricSumCount& ppo_statistics(int index) const;
-  ::rl::training::v1::RawMetricSumCount* add_ppo_statistics();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >&
-      ppo_statistics() const;
-
-  // string train_update_id = 1;
-  void clear_train_update_id();
-  const std::string& train_update_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_train_update_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_train_update_id();
-  PROTOBUF_NODISCARD std::string* release_train_update_id();
-  void set_allocated_train_update_id(std::string* train_update_id);
-  private:
-  const std::string& _internal_train_update_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_train_update_id(const std::string& value);
-  std::string* _internal_mutable_train_update_id();
-  public:
-
-  // string delivery_id = 4;
-  void clear_delivery_id();
-  const std::string& delivery_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_delivery_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_delivery_id();
-  PROTOBUF_NODISCARD std::string* release_delivery_id();
-  void set_allocated_delivery_id(std::string* delivery_id);
-  private:
-  const std::string& _internal_delivery_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_delivery_id(const std::string& value);
-  std::string* _internal_mutable_delivery_id();
-  public:
-
-  // string behavior_model_lineage_id = 11;
-  void clear_behavior_model_lineage_id();
-  const std::string& behavior_model_lineage_id() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_behavior_model_lineage_id(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_behavior_model_lineage_id();
-  PROTOBUF_NODISCARD std::string* release_behavior_model_lineage_id();
-  void set_allocated_behavior_model_lineage_id(std::string* behavior_model_lineage_id);
-  private:
-  const std::string& _internal_behavior_model_lineage_id() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_behavior_model_lineage_id(const std::string& value);
-  std::string* _internal_mutable_behavior_model_lineage_id();
-  public:
-
-  // .rl.training.v1.ModelIdentity published_model = 3;
-  bool has_published_model() const;
-  private:
-  bool _internal_has_published_model() const;
-  public:
-  void clear_published_model();
-  const ::rl::training::v1::ModelIdentity& published_model() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::ModelIdentity* release_published_model();
-  ::rl::training::v1::ModelIdentity* mutable_published_model();
-  void set_allocated_published_model(::rl::training::v1::ModelIdentity* published_model);
-  private:
-  const ::rl::training::v1::ModelIdentity& _internal_published_model() const;
-  ::rl::training::v1::ModelIdentity* _internal_mutable_published_model();
-  public:
-  void unsafe_arena_set_allocated_published_model(
-      ::rl::training::v1::ModelIdentity* published_model);
-  ::rl::training::v1::ModelIdentity* unsafe_arena_release_published_model();
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 5;
-  bool has_training_contract_digest() const;
-  private:
-  bool _internal_has_training_contract_digest() const;
-  public:
-  void clear_training_contract_digest();
-  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
-  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
-  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
-  public:
-  void unsafe_arena_set_allocated_training_contract_digest(
-      ::rl::common::v1::ContentDigest* training_contract_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
-
-  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
-  bool has_rollout_estimator_profile_digest() const;
-  private:
-  bool _internal_has_rollout_estimator_profile_digest() const;
-  public:
-  void clear_rollout_estimator_profile_digest();
-  const ::rl::common::v1::ContentDigest& rollout_estimator_profile_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_rollout_estimator_profile_digest();
-  ::rl::common::v1::ContentDigest* mutable_rollout_estimator_profile_digest();
-  void set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_rollout_estimator_profile_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_rollout_estimator_profile_digest();
-  public:
-  void unsafe_arena_set_allocated_rollout_estimator_profile_digest(
-      ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_rollout_estimator_profile_digest();
-
-  // uint64 train_update_sequence = 2;
-  void clear_train_update_sequence();
-  uint64_t train_update_sequence() const;
-  void set_train_update_sequence(uint64_t value);
-  private:
-  uint64_t _internal_train_update_sequence() const;
-  void _internal_set_train_update_sequence(uint64_t value);
-  public:
-
-  // int64 cumulative_trained_samples = 6;
-  void clear_cumulative_trained_samples();
-  int64_t cumulative_trained_samples() const;
-  void set_cumulative_trained_samples(int64_t value);
-  private:
-  int64_t _internal_cumulative_trained_samples() const;
-  void _internal_set_cumulative_trained_samples(int64_t value);
-  public:
-
-  // int64 actual_batch_size = 7;
-  void clear_actual_batch_size();
-  int64_t actual_batch_size() const;
-  void set_actual_batch_size(int64_t value);
-  private:
-  int64_t _internal_actual_batch_size() const;
-  void _internal_set_actual_batch_size(int64_t value);
-  public:
-
-  // optional uint64 minimum_behavior_model_step = 8;
-  bool has_minimum_behavior_model_step() const;
-  private:
-  bool _internal_has_minimum_behavior_model_step() const;
-  public:
-  void clear_minimum_behavior_model_step();
-  uint64_t minimum_behavior_model_step() const;
-  void set_minimum_behavior_model_step(uint64_t value);
-  private:
-  uint64_t _internal_minimum_behavior_model_step() const;
-  void _internal_set_minimum_behavior_model_step(uint64_t value);
-  public:
-
-  // optional uint64 maximum_behavior_model_step = 9;
-  bool has_maximum_behavior_model_step() const;
-  private:
-  bool _internal_has_maximum_behavior_model_step() const;
-  public:
-  void clear_maximum_behavior_model_step();
-  uint64_t maximum_behavior_model_step() const;
-  void set_maximum_behavior_model_step(uint64_t value);
-  private:
-  uint64_t _internal_maximum_behavior_model_step() const;
-  void _internal_set_maximum_behavior_model_step(uint64_t value);
-  public:
-
-  // int64 requested_train_batch_size = 12;
-  void clear_requested_train_batch_size();
-  int64_t requested_train_batch_size() const;
-  void set_requested_train_batch_size(int64_t value);
-  private:
-  int64_t _internal_requested_train_batch_size() const;
-  void _internal_set_requested_train_batch_size(int64_t value);
-  public:
-
-  // int64 pool_draw_slot_count = 13;
-  void clear_pool_draw_slot_count();
-  int64_t pool_draw_slot_count() const;
-  void set_pool_draw_slot_count(int64_t value);
-  private:
-  int64_t _internal_pool_draw_slot_count() const;
-  void _internal_set_pool_draw_slot_count(int64_t value);
-  public:
-
-  // int64 unique_item_count = 14;
-  void clear_unique_item_count();
-  int64_t unique_item_count() const;
-  void set_unique_item_count(int64_t value);
-  private:
-  int64_t _internal_unique_item_count() const;
-  void _internal_set_unique_item_count(int64_t value);
-  public:
-
-  // int64 duplicate_item_slot_count = 15;
-  void clear_duplicate_item_slot_count();
-  int64_t duplicate_item_slot_count() const;
-  void set_duplicate_item_slot_count(int64_t value);
-  private:
-  int64_t _internal_duplicate_item_slot_count() const;
-  void _internal_set_duplicate_item_slot_count(int64_t value);
-  public:
-
-  // int64 sample_evaluation_count = 16;
-  void clear_sample_evaluation_count();
-  int64_t sample_evaluation_count() const;
-  void set_sample_evaluation_count(int64_t value);
-  private:
-  int64_t _internal_sample_evaluation_count() const;
-  void _internal_set_sample_evaluation_count(int64_t value);
-  public:
-
-  // int64 optimizer_step_count = 17;
-  void clear_optimizer_step_count();
-  int64_t optimizer_step_count() const;
-  void set_optimizer_step_count(int64_t value);
-  private:
-  int64_t _internal_optimizer_step_count() const;
-  void _internal_set_optimizer_step_count(int64_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.TrainUpdateMetricFact)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount > ppo_statistics_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr train_update_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr delivery_id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr behavior_model_lineage_id_;
-    ::rl::training::v1::ModelIdentity* published_model_;
-    ::rl::common::v1::ContentDigest* training_contract_digest_;
-    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
-    uint64_t train_update_sequence_;
-    int64_t cumulative_trained_samples_;
-    int64_t actual_batch_size_;
-    uint64_t minimum_behavior_model_step_;
-    uint64_t maximum_behavior_model_step_;
-    int64_t requested_train_batch_size_;
-    int64_t pool_draw_slot_count_;
-    int64_t unique_item_count_;
-    int64_t duplicate_item_slot_count_;
-    int64_t sample_evaluation_count_;
-    int64_t optimizer_step_count_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
 class MetricEvent final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.MetricEvent) */ {
  public:
@@ -5850,18 +4920,12 @@ class MetricEvent final :
   static const MetricEvent& default_instance() {
     return *internal_default_instance();
   }
-  enum FactCase {
-    kEpisode = 6,
-    kTrainUpdate = 7,
-    FACT_NOT_SET = 0,
-  };
-
   static inline const MetricEvent* internal_default_instance() {
     return reinterpret_cast<const MetricEvent*>(
                &_MetricEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    18;
 
   friend void swap(MetricEvent& a, MetricEvent& b) {
     a.Swap(&b);
@@ -5934,11 +4998,24 @@ class MetricEvent final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kFactPayloadFieldNumber = 6,
     kEventSequenceFieldNumber = 4,
     kObservedAtUnixMsFieldNumber = 5,
-    kEpisodeFieldNumber = 6,
-    kTrainUpdateFieldNumber = 7,
   };
+  // bytes fact_payload = 6;
+  void clear_fact_payload();
+  const std::string& fact_payload() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_fact_payload(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_fact_payload();
+  PROTOBUF_NODISCARD std::string* release_fact_payload();
+  void set_allocated_fact_payload(std::string* fact_payload);
+  private:
+  const std::string& _internal_fact_payload() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_fact_payload(const std::string& value);
+  std::string* _internal_mutable_fact_payload();
+  public:
+
   // uint64 event_sequence = 4;
   void clear_event_sequence();
   uint64_t event_sequence() const;
@@ -5961,52 +5038,9 @@ class MetricEvent final :
   void _internal_set_observed_at_unix_ms(int64_t value);
   public:
 
-  // .rl.training.v1.EpisodeMetricFact episode = 6;
-  bool has_episode() const;
-  private:
-  bool _internal_has_episode() const;
-  public:
-  void clear_episode();
-  const ::rl::training::v1::EpisodeMetricFact& episode() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::EpisodeMetricFact* release_episode();
-  ::rl::training::v1::EpisodeMetricFact* mutable_episode();
-  void set_allocated_episode(::rl::training::v1::EpisodeMetricFact* episode);
-  private:
-  const ::rl::training::v1::EpisodeMetricFact& _internal_episode() const;
-  ::rl::training::v1::EpisodeMetricFact* _internal_mutable_episode();
-  public:
-  void unsafe_arena_set_allocated_episode(
-      ::rl::training::v1::EpisodeMetricFact* episode);
-  ::rl::training::v1::EpisodeMetricFact* unsafe_arena_release_episode();
-
-  // .rl.training.v1.TrainUpdateMetricFact train_update = 7;
-  bool has_train_update() const;
-  private:
-  bool _internal_has_train_update() const;
-  public:
-  void clear_train_update();
-  const ::rl::training::v1::TrainUpdateMetricFact& train_update() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::TrainUpdateMetricFact* release_train_update();
-  ::rl::training::v1::TrainUpdateMetricFact* mutable_train_update();
-  void set_allocated_train_update(::rl::training::v1::TrainUpdateMetricFact* train_update);
-  private:
-  const ::rl::training::v1::TrainUpdateMetricFact& _internal_train_update() const;
-  ::rl::training::v1::TrainUpdateMetricFact* _internal_mutable_train_update();
-  public:
-  void unsafe_arena_set_allocated_train_update(
-      ::rl::training::v1::TrainUpdateMetricFact* train_update);
-  ::rl::training::v1::TrainUpdateMetricFact* unsafe_arena_release_train_update();
-
-  void clear_fact();
-  FactCase fact_case() const;
   // @@protoc_insertion_point(class_scope:rl.training.v1.MetricEvent)
  private:
   class _Internal;
-  void set_has_episode();
-  void set_has_train_update();
-
-  inline bool has_fact() const;
-  inline void clear_has_fact();
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
@@ -6014,16 +5048,9 @@ class MetricEvent final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fact_payload_;
     uint64_t event_sequence_;
     int64_t observed_at_unix_ms_;
-    union FactUnion {
-      constexpr FactUnion() : _constinit_{} {}
-        ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
-      ::rl::training::v1::EpisodeMetricFact* episode_;
-      ::rl::training::v1::TrainUpdateMetricFact* train_update_;
-    } fact_;
-    uint32_t _oneof_case_[1];
-
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -6078,7 +5105,7 @@ class MetricSequenceGap final :
                &_MetricSequenceGap_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    19;
 
   friend void swap(MetricSequenceGap& a, MetricSequenceGap& b) {
     a.Swap(&b);
@@ -6264,7 +5291,7 @@ class MetricBatch final :
                &_MetricBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    20;
 
   friend void swap(MetricBatch& a, MetricBatch& b) {
     a.Swap(&b);
@@ -6598,7 +5625,7 @@ class MetricBatchCursor final :
                &_MetricBatchCursor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    21;
 
   friend void swap(MetricBatchCursor& a, MetricBatchCursor& b) {
     a.Swap(&b);
@@ -6797,7 +5824,7 @@ class GetMetricBatchReq final :
                &_GetMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    22;
 
   friend void swap(GetMetricBatchReq& a, GetMetricBatchReq& b) {
     a.Swap(&b);
@@ -7027,7 +6054,7 @@ class GetMetricBatchRsp final :
                &_GetMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    23;
 
   friend void swap(GetMetricBatchRsp& a, GetMetricBatchRsp& b) {
     a.Swap(&b);
@@ -7253,7 +6280,7 @@ class AckMetricBatchReq final :
                &_AckMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    24;
 
   friend void swap(AckMetricBatchReq& a, AckMetricBatchReq& b) {
     a.Swap(&b);
@@ -7450,7 +6477,7 @@ class AckMetricBatchRsp final :
                &_AckMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    25;
 
   friend void swap(AckMetricBatchRsp& a, AckMetricBatchRsp& b) {
     a.Swap(&b);
@@ -7675,7 +6702,7 @@ class AIServerStatusReq final :
                &_AIServerStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    26;
 
   friend void swap(AIServerStatusReq& a, AIServerStatusReq& b) {
     a.Swap(&b);
@@ -7794,7 +6821,7 @@ class AIServerStatusRsp final :
                &_AIServerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    27;
 
   friend void swap(AIServerStatusRsp& a, AIServerStatusRsp& b) {
     a.Swap(&b);
@@ -8430,7 +7457,7 @@ class SegmentCloseCount final :
                &_SegmentCloseCount_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    28;
 
   friend void swap(SegmentCloseCount& a, SegmentCloseCount& b) {
     a.Swap(&b);
@@ -8589,7 +7616,7 @@ class ModelArtifactManifest final :
                &_ModelArtifactManifest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    29;
 
   friend void swap(ModelArtifactManifest& a, ModelArtifactManifest& b) {
     a.Swap(&b);
@@ -8839,7 +7866,7 @@ class RegisterModelReq final :
                &_RegisterModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    30;
 
   friend void swap(RegisterModelReq& a, RegisterModelReq& b) {
     a.Swap(&b);
@@ -9032,7 +8059,7 @@ class RegisterModelRsp final :
                &_RegisterModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    31;
 
   friend void swap(RegisterModelRsp& a, RegisterModelRsp& b) {
     a.Swap(&b);
@@ -9236,7 +8263,7 @@ class GetModelManifestReq final :
                &_GetModelManifestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    32;
 
   friend void swap(GetModelManifestReq& a, GetModelManifestReq& b) {
     a.Swap(&b);
@@ -9424,7 +8451,7 @@ class GetModelManifestRsp final :
                &_GetModelManifestRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    33;
 
   friend void swap(GetModelManifestRsp& a, GetModelManifestRsp& b) {
     a.Swap(&b);
@@ -9659,7 +8686,7 @@ class DownloadModelReq final :
                &_DownloadModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    34;
 
   friend void swap(DownloadModelReq& a, DownloadModelReq& b) {
     a.Swap(&b);
@@ -9836,7 +8863,7 @@ class ModelChunk final :
                &_ModelChunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    35;
 
   friend void swap(ModelChunk& a, ModelChunk& b) {
     a.Swap(&b);
@@ -10020,7 +9047,7 @@ class AckModelReq final :
                &_AckModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    36;
 
   friend void swap(AckModelReq& a, AckModelReq& b) {
     a.Swap(&b);
@@ -10240,7 +9267,7 @@ class AckModelRsp final :
                &_AckModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    37;
 
   friend void swap(AckModelRsp& a, AckModelRsp& b) {
     a.Swap(&b);
@@ -10423,7 +9450,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    38;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -10542,7 +9569,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    39;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -11574,6 +10601,53 @@ inline void ProcessedTransition::_internal_set_created_at_unix_ms(int64_t value)
 inline void ProcessedTransition::set_created_at_unix_ms(int64_t value) {
   _internal_set_created_at_unix_ms(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.created_at_unix_ms)
+}
+
+// repeated bool action_mask = 10;
+inline int ProcessedTransition::_internal_action_mask_size() const {
+  return _impl_.action_mask_.size();
+}
+inline int ProcessedTransition::action_mask_size() const {
+  return _internal_action_mask_size();
+}
+inline void ProcessedTransition::clear_action_mask() {
+  _impl_.action_mask_.Clear();
+}
+inline bool ProcessedTransition::_internal_action_mask(int index) const {
+  return _impl_.action_mask_.Get(index);
+}
+inline bool ProcessedTransition::action_mask(int index) const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransition.action_mask)
+  return _internal_action_mask(index);
+}
+inline void ProcessedTransition::set_action_mask(int index, bool value) {
+  _impl_.action_mask_.Set(index, value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransition.action_mask)
+}
+inline void ProcessedTransition::_internal_add_action_mask(bool value) {
+  _impl_.action_mask_.Add(value);
+}
+inline void ProcessedTransition::add_action_mask(bool value) {
+  _internal_add_action_mask(value);
+  // @@protoc_insertion_point(field_add:rl.training.v1.ProcessedTransition.action_mask)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+ProcessedTransition::_internal_action_mask() const {
+  return _impl_.action_mask_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
+ProcessedTransition::action_mask() const {
+  // @@protoc_insertion_point(field_list:rl.training.v1.ProcessedTransition.action_mask)
+  return _internal_action_mask();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+ProcessedTransition::_internal_mutable_action_mask() {
+  return &_impl_.action_mask_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
+ProcessedTransition::mutable_action_mask() {
+  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.ProcessedTransition.action_mask)
+  return _internal_mutable_action_mask();
 }
 
 // -------------------------------------------------------------------
@@ -15686,1341 +14760,6 @@ inline void RawMetricSumCount::set_count(uint64_t value) {
 
 // -------------------------------------------------------------------
 
-// AgentEpisodeMetricFact
-
-// uint32 agent_id = 1;
-inline void AgentEpisodeMetricFact::clear_agent_id() {
-  _impl_.agent_id_ = 0u;
-}
-inline uint32_t AgentEpisodeMetricFact::_internal_agent_id() const {
-  return _impl_.agent_id_;
-}
-inline uint32_t AgentEpisodeMetricFact::agent_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.agent_id)
-  return _internal_agent_id();
-}
-inline void AgentEpisodeMetricFact::_internal_set_agent_id(uint32_t value) {
-  
-  _impl_.agent_id_ = value;
-}
-inline void AgentEpisodeMetricFact::set_agent_id(uint32_t value) {
-  _internal_set_agent_id(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.agent_id)
-}
-
-// double episode_return = 2;
-inline void AgentEpisodeMetricFact::clear_episode_return() {
-  _impl_.episode_return_ = 0;
-}
-inline double AgentEpisodeMetricFact::_internal_episode_return() const {
-  return _impl_.episode_return_;
-}
-inline double AgentEpisodeMetricFact::episode_return() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.episode_return)
-  return _internal_episode_return();
-}
-inline void AgentEpisodeMetricFact::_internal_set_episode_return(double value) {
-  
-  _impl_.episode_return_ = value;
-}
-inline void AgentEpisodeMetricFact::set_episode_return(double value) {
-  _internal_set_episode_return(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.episode_return)
-}
-
-// uint64 transition_count = 3;
-inline void AgentEpisodeMetricFact::clear_transition_count() {
-  _impl_.transition_count_ = uint64_t{0u};
-}
-inline uint64_t AgentEpisodeMetricFact::_internal_transition_count() const {
-  return _impl_.transition_count_;
-}
-inline uint64_t AgentEpisodeMetricFact::transition_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.transition_count)
-  return _internal_transition_count();
-}
-inline void AgentEpisodeMetricFact::_internal_set_transition_count(uint64_t value) {
-  
-  _impl_.transition_count_ = value;
-}
-inline void AgentEpisodeMetricFact::set_transition_count(uint64_t value) {
-  _internal_set_transition_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.transition_count)
-}
-
-// bool success = 4;
-inline void AgentEpisodeMetricFact::clear_success() {
-  _impl_.success_ = false;
-}
-inline bool AgentEpisodeMetricFact::_internal_success() const {
-  return _impl_.success_;
-}
-inline bool AgentEpisodeMetricFact::success() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.success)
-  return _internal_success();
-}
-inline void AgentEpisodeMetricFact::_internal_set_success(bool value) {
-  
-  _impl_.success_ = value;
-}
-inline void AgentEpisodeMetricFact::set_success(bool value) {
-  _internal_set_success(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.success)
-}
-
-// string termination_reason = 5;
-inline void AgentEpisodeMetricFact::clear_termination_reason() {
-  _impl_.termination_reason_.ClearToEmpty();
-}
-inline const std::string& AgentEpisodeMetricFact::termination_reason() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.termination_reason)
-  return _internal_termination_reason();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void AgentEpisodeMetricFact::set_termination_reason(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.termination_reason_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.termination_reason)
-}
-inline std::string* AgentEpisodeMetricFact::mutable_termination_reason() {
-  std::string* _s = _internal_mutable_termination_reason();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.AgentEpisodeMetricFact.termination_reason)
-  return _s;
-}
-inline const std::string& AgentEpisodeMetricFact::_internal_termination_reason() const {
-  return _impl_.termination_reason_.Get();
-}
-inline void AgentEpisodeMetricFact::_internal_set_termination_reason(const std::string& value) {
-  
-  _impl_.termination_reason_.Set(value, GetArenaForAllocation());
-}
-inline std::string* AgentEpisodeMetricFact::_internal_mutable_termination_reason() {
-  
-  return _impl_.termination_reason_.Mutable(GetArenaForAllocation());
-}
-inline std::string* AgentEpisodeMetricFact::release_termination_reason() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.AgentEpisodeMetricFact.termination_reason)
-  return _impl_.termination_reason_.Release();
-}
-inline void AgentEpisodeMetricFact::set_allocated_termination_reason(std::string* termination_reason) {
-  if (termination_reason != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.termination_reason_.SetAllocated(termination_reason, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.termination_reason_.IsDefault()) {
-    _impl_.termination_reason_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AgentEpisodeMetricFact.termination_reason)
-}
-
-// uint32 shortest_action_steps = 6;
-inline void AgentEpisodeMetricFact::clear_shortest_action_steps() {
-  _impl_.shortest_action_steps_ = 0u;
-}
-inline uint32_t AgentEpisodeMetricFact::_internal_shortest_action_steps() const {
-  return _impl_.shortest_action_steps_;
-}
-inline uint32_t AgentEpisodeMetricFact::shortest_action_steps() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.shortest_action_steps)
-  return _internal_shortest_action_steps();
-}
-inline void AgentEpisodeMetricFact::_internal_set_shortest_action_steps(uint32_t value) {
-  
-  _impl_.shortest_action_steps_ = value;
-}
-inline void AgentEpisodeMetricFact::set_shortest_action_steps(uint32_t value) {
-  _internal_set_shortest_action_steps(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.shortest_action_steps)
-}
-
-// uint64 unique_cell_count = 7;
-inline void AgentEpisodeMetricFact::clear_unique_cell_count() {
-  _impl_.unique_cell_count_ = uint64_t{0u};
-}
-inline uint64_t AgentEpisodeMetricFact::_internal_unique_cell_count() const {
-  return _impl_.unique_cell_count_;
-}
-inline uint64_t AgentEpisodeMetricFact::unique_cell_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.unique_cell_count)
-  return _internal_unique_cell_count();
-}
-inline void AgentEpisodeMetricFact::_internal_set_unique_cell_count(uint64_t value) {
-  
-  _impl_.unique_cell_count_ = value;
-}
-inline void AgentEpisodeMetricFact::set_unique_cell_count(uint64_t value) {
-  _internal_set_unique_cell_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.unique_cell_count)
-}
-
-// uint64 blocked_move_count = 8;
-inline void AgentEpisodeMetricFact::clear_blocked_move_count() {
-  _impl_.blocked_move_count_ = uint64_t{0u};
-}
-inline uint64_t AgentEpisodeMetricFact::_internal_blocked_move_count() const {
-  return _impl_.blocked_move_count_;
-}
-inline uint64_t AgentEpisodeMetricFact::blocked_move_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.blocked_move_count)
-  return _internal_blocked_move_count();
-}
-inline void AgentEpisodeMetricFact::_internal_set_blocked_move_count(uint64_t value) {
-  
-  _impl_.blocked_move_count_ = value;
-}
-inline void AgentEpisodeMetricFact::set_blocked_move_count(uint64_t value) {
-  _internal_set_blocked_move_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.blocked_move_count)
-}
-
-// uint64 attempted_move_count = 9;
-inline void AgentEpisodeMetricFact::clear_attempted_move_count() {
-  _impl_.attempted_move_count_ = uint64_t{0u};
-}
-inline uint64_t AgentEpisodeMetricFact::_internal_attempted_move_count() const {
-  return _impl_.attempted_move_count_;
-}
-inline uint64_t AgentEpisodeMetricFact::attempted_move_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.attempted_move_count)
-  return _internal_attempted_move_count();
-}
-inline void AgentEpisodeMetricFact::_internal_set_attempted_move_count(uint64_t value) {
-  
-  _impl_.attempted_move_count_ = value;
-}
-inline void AgentEpisodeMetricFact::set_attempted_move_count(uint64_t value) {
-  _internal_set_attempted_move_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.attempted_move_count)
-}
-
-// repeated .rl.training.v1.RawMetricSumCount reward_components = 10;
-inline int AgentEpisodeMetricFact::_internal_reward_components_size() const {
-  return _impl_.reward_components_.size();
-}
-inline int AgentEpisodeMetricFact::reward_components_size() const {
-  return _internal_reward_components_size();
-}
-inline void AgentEpisodeMetricFact::clear_reward_components() {
-  _impl_.reward_components_.Clear();
-}
-inline ::rl::training::v1::RawMetricSumCount* AgentEpisodeMetricFact::mutable_reward_components(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.AgentEpisodeMetricFact.reward_components)
-  return _impl_.reward_components_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >*
-AgentEpisodeMetricFact::mutable_reward_components() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.AgentEpisodeMetricFact.reward_components)
-  return &_impl_.reward_components_;
-}
-inline const ::rl::training::v1::RawMetricSumCount& AgentEpisodeMetricFact::_internal_reward_components(int index) const {
-  return _impl_.reward_components_.Get(index);
-}
-inline const ::rl::training::v1::RawMetricSumCount& AgentEpisodeMetricFact::reward_components(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.reward_components)
-  return _internal_reward_components(index);
-}
-inline ::rl::training::v1::RawMetricSumCount* AgentEpisodeMetricFact::_internal_add_reward_components() {
-  return _impl_.reward_components_.Add();
-}
-inline ::rl::training::v1::RawMetricSumCount* AgentEpisodeMetricFact::add_reward_components() {
-  ::rl::training::v1::RawMetricSumCount* _add = _internal_add_reward_components();
-  // @@protoc_insertion_point(field_add:rl.training.v1.AgentEpisodeMetricFact.reward_components)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >&
-AgentEpisodeMetricFact::reward_components() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.AgentEpisodeMetricFact.reward_components)
-  return _impl_.reward_components_;
-}
-
-// optional uint64 minimum_behavior_model_step = 11;
-inline bool AgentEpisodeMetricFact::_internal_has_minimum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline bool AgentEpisodeMetricFact::has_minimum_behavior_model_step() const {
-  return _internal_has_minimum_behavior_model_step();
-}
-inline void AgentEpisodeMetricFact::clear_minimum_behavior_model_step() {
-  _impl_.minimum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline uint64_t AgentEpisodeMetricFact::_internal_minimum_behavior_model_step() const {
-  return _impl_.minimum_behavior_model_step_;
-}
-inline uint64_t AgentEpisodeMetricFact::minimum_behavior_model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.minimum_behavior_model_step)
-  return _internal_minimum_behavior_model_step();
-}
-inline void AgentEpisodeMetricFact::_internal_set_minimum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000002u;
-  _impl_.minimum_behavior_model_step_ = value;
-}
-inline void AgentEpisodeMetricFact::set_minimum_behavior_model_step(uint64_t value) {
-  _internal_set_minimum_behavior_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.minimum_behavior_model_step)
-}
-
-// optional uint64 maximum_behavior_model_step = 12;
-inline bool AgentEpisodeMetricFact::_internal_has_maximum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline bool AgentEpisodeMetricFact::has_maximum_behavior_model_step() const {
-  return _internal_has_maximum_behavior_model_step();
-}
-inline void AgentEpisodeMetricFact::clear_maximum_behavior_model_step() {
-  _impl_.maximum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000004u;
-}
-inline uint64_t AgentEpisodeMetricFact::_internal_maximum_behavior_model_step() const {
-  return _impl_.maximum_behavior_model_step_;
-}
-inline uint64_t AgentEpisodeMetricFact::maximum_behavior_model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.maximum_behavior_model_step)
-  return _internal_maximum_behavior_model_step();
-}
-inline void AgentEpisodeMetricFact::_internal_set_maximum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000004u;
-  _impl_.maximum_behavior_model_step_ = value;
-}
-inline void AgentEpisodeMetricFact::set_maximum_behavior_model_step(uint64_t value) {
-  _internal_set_maximum_behavior_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.maximum_behavior_model_step)
-}
-
-// string behavior_model_lineage_id = 13;
-inline void AgentEpisodeMetricFact::clear_behavior_model_lineage_id() {
-  _impl_.behavior_model_lineage_id_.ClearToEmpty();
-}
-inline const std::string& AgentEpisodeMetricFact::behavior_model_lineage_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id)
-  return _internal_behavior_model_lineage_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void AgentEpisodeMetricFact::set_behavior_model_lineage_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.behavior_model_lineage_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id)
-}
-inline std::string* AgentEpisodeMetricFact::mutable_behavior_model_lineage_id() {
-  std::string* _s = _internal_mutable_behavior_model_lineage_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id)
-  return _s;
-}
-inline const std::string& AgentEpisodeMetricFact::_internal_behavior_model_lineage_id() const {
-  return _impl_.behavior_model_lineage_id_.Get();
-}
-inline void AgentEpisodeMetricFact::_internal_set_behavior_model_lineage_id(const std::string& value) {
-  
-  _impl_.behavior_model_lineage_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* AgentEpisodeMetricFact::_internal_mutable_behavior_model_lineage_id() {
-  
-  return _impl_.behavior_model_lineage_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* AgentEpisodeMetricFact::release_behavior_model_lineage_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id)
-  return _impl_.behavior_model_lineage_id_.Release();
-}
-inline void AgentEpisodeMetricFact::set_allocated_behavior_model_lineage_id(std::string* behavior_model_lineage_id) {
-  if (behavior_model_lineage_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.behavior_model_lineage_id_.SetAllocated(behavior_model_lineage_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.behavior_model_lineage_id_.IsDefault()) {
-    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AgentEpisodeMetricFact.behavior_model_lineage_id)
-}
-
-// optional uint64 terminal_frame_id = 14;
-inline bool AgentEpisodeMetricFact::_internal_has_terminal_frame_id() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
-  return value;
-}
-inline bool AgentEpisodeMetricFact::has_terminal_frame_id() const {
-  return _internal_has_terminal_frame_id();
-}
-inline void AgentEpisodeMetricFact::clear_terminal_frame_id() {
-  _impl_.terminal_frame_id_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000008u;
-}
-inline uint64_t AgentEpisodeMetricFact::_internal_terminal_frame_id() const {
-  return _impl_.terminal_frame_id_;
-}
-inline uint64_t AgentEpisodeMetricFact::terminal_frame_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.terminal_frame_id)
-  return _internal_terminal_frame_id();
-}
-inline void AgentEpisodeMetricFact::_internal_set_terminal_frame_id(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000008u;
-  _impl_.terminal_frame_id_ = value;
-}
-inline void AgentEpisodeMetricFact::set_terminal_frame_id(uint64_t value) {
-  _internal_set_terminal_frame_id(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.terminal_frame_id)
-}
-
-// optional uint32 goal_rank_group = 15;
-inline bool AgentEpisodeMetricFact::_internal_has_goal_rank_group() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline bool AgentEpisodeMetricFact::has_goal_rank_group() const {
-  return _internal_has_goal_rank_group();
-}
-inline void AgentEpisodeMetricFact::clear_goal_rank_group() {
-  _impl_.goal_rank_group_ = 0u;
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline uint32_t AgentEpisodeMetricFact::_internal_goal_rank_group() const {
-  return _impl_.goal_rank_group_;
-}
-inline uint32_t AgentEpisodeMetricFact::goal_rank_group() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AgentEpisodeMetricFact.goal_rank_group)
-  return _internal_goal_rank_group();
-}
-inline void AgentEpisodeMetricFact::_internal_set_goal_rank_group(uint32_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.goal_rank_group_ = value;
-}
-inline void AgentEpisodeMetricFact::set_goal_rank_group(uint32_t value) {
-  _internal_set_goal_rank_group(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.AgentEpisodeMetricFact.goal_rank_group)
-}
-
-// -------------------------------------------------------------------
-
-// EpisodeMetricFact
-
-// string environment_instance_id = 2;
-inline void EpisodeMetricFact::clear_environment_instance_id() {
-  _impl_.environment_instance_id_.ClearToEmpty();
-}
-inline const std::string& EpisodeMetricFact::environment_instance_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.EpisodeMetricFact.environment_instance_id)
-  return _internal_environment_instance_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void EpisodeMetricFact::set_environment_instance_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.environment_instance_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.EpisodeMetricFact.environment_instance_id)
-}
-inline std::string* EpisodeMetricFact::mutable_environment_instance_id() {
-  std::string* _s = _internal_mutable_environment_instance_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.EpisodeMetricFact.environment_instance_id)
-  return _s;
-}
-inline const std::string& EpisodeMetricFact::_internal_environment_instance_id() const {
-  return _impl_.environment_instance_id_.Get();
-}
-inline void EpisodeMetricFact::_internal_set_environment_instance_id(const std::string& value) {
-  
-  _impl_.environment_instance_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* EpisodeMetricFact::_internal_mutable_environment_instance_id() {
-  
-  return _impl_.environment_instance_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* EpisodeMetricFact::release_environment_instance_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.EpisodeMetricFact.environment_instance_id)
-  return _impl_.environment_instance_id_.Release();
-}
-inline void EpisodeMetricFact::set_allocated_environment_instance_id(std::string* environment_instance_id) {
-  if (environment_instance_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.environment_instance_id_.SetAllocated(environment_instance_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.environment_instance_id_.IsDefault()) {
-    _impl_.environment_instance_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.EpisodeMetricFact.environment_instance_id)
-}
-
-// string episode_id = 3;
-inline void EpisodeMetricFact::clear_episode_id() {
-  _impl_.episode_id_.ClearToEmpty();
-}
-inline const std::string& EpisodeMetricFact::episode_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.EpisodeMetricFact.episode_id)
-  return _internal_episode_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void EpisodeMetricFact::set_episode_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.episode_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.EpisodeMetricFact.episode_id)
-}
-inline std::string* EpisodeMetricFact::mutable_episode_id() {
-  std::string* _s = _internal_mutable_episode_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.EpisodeMetricFact.episode_id)
-  return _s;
-}
-inline const std::string& EpisodeMetricFact::_internal_episode_id() const {
-  return _impl_.episode_id_.Get();
-}
-inline void EpisodeMetricFact::_internal_set_episode_id(const std::string& value) {
-  
-  _impl_.episode_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* EpisodeMetricFact::_internal_mutable_episode_id() {
-  
-  return _impl_.episode_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* EpisodeMetricFact::release_episode_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.EpisodeMetricFact.episode_id)
-  return _impl_.episode_id_.Release();
-}
-inline void EpisodeMetricFact::set_allocated_episode_id(std::string* episode_id) {
-  if (episode_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.episode_id_.SetAllocated(episode_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.episode_id_.IsDefault()) {
-    _impl_.episode_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.EpisodeMetricFact.episode_id)
-}
-
-// .rl.common.v1.ContentDigest training_contract_digest = 4;
-inline bool EpisodeMetricFact::_internal_has_training_contract_digest() const {
-  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
-}
-inline bool EpisodeMetricFact::has_training_contract_digest() const {
-  return _internal_has_training_contract_digest();
-}
-inline const ::rl::common::v1::ContentDigest& EpisodeMetricFact::_internal_training_contract_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& EpisodeMetricFact::training_contract_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.EpisodeMetricFact.training_contract_digest)
-  return _internal_training_contract_digest();
-}
-inline void EpisodeMetricFact::unsafe_arena_set_allocated_training_contract_digest(
-    ::rl::common::v1::ContentDigest* training_contract_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  if (training_contract_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.EpisodeMetricFact.training_contract_digest)
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::release_training_contract_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::unsafe_arena_release_training_contract_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.EpisodeMetricFact.training_contract_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::_internal_mutable_training_contract_digest() {
-  
-  if (_impl_.training_contract_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.training_contract_digest_ = p;
-  }
-  return _impl_.training_contract_digest_;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::mutable_training_contract_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.EpisodeMetricFact.training_contract_digest)
-  return _msg;
-}
-inline void EpisodeMetricFact::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  if (training_contract_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
-    if (message_arena != submessage_arena) {
-      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_contract_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.EpisodeMetricFact.training_contract_digest)
-}
-
-// repeated .rl.training.v1.AgentEpisodeMetricFact agents = 5;
-inline int EpisodeMetricFact::_internal_agents_size() const {
-  return _impl_.agents_.size();
-}
-inline int EpisodeMetricFact::agents_size() const {
-  return _internal_agents_size();
-}
-inline void EpisodeMetricFact::clear_agents() {
-  _impl_.agents_.Clear();
-}
-inline ::rl::training::v1::AgentEpisodeMetricFact* EpisodeMetricFact::mutable_agents(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.EpisodeMetricFact.agents)
-  return _impl_.agents_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::AgentEpisodeMetricFact >*
-EpisodeMetricFact::mutable_agents() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.EpisodeMetricFact.agents)
-  return &_impl_.agents_;
-}
-inline const ::rl::training::v1::AgentEpisodeMetricFact& EpisodeMetricFact::_internal_agents(int index) const {
-  return _impl_.agents_.Get(index);
-}
-inline const ::rl::training::v1::AgentEpisodeMetricFact& EpisodeMetricFact::agents(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.EpisodeMetricFact.agents)
-  return _internal_agents(index);
-}
-inline ::rl::training::v1::AgentEpisodeMetricFact* EpisodeMetricFact::_internal_add_agents() {
-  return _impl_.agents_.Add();
-}
-inline ::rl::training::v1::AgentEpisodeMetricFact* EpisodeMetricFact::add_agents() {
-  ::rl::training::v1::AgentEpisodeMetricFact* _add = _internal_add_agents();
-  // @@protoc_insertion_point(field_add:rl.training.v1.EpisodeMetricFact.agents)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::AgentEpisodeMetricFact >&
-EpisodeMetricFact::agents() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.EpisodeMetricFact.agents)
-  return _impl_.agents_;
-}
-
-// -------------------------------------------------------------------
-
-// TrainUpdateMetricFact
-
-// string train_update_id = 1;
-inline void TrainUpdateMetricFact::clear_train_update_id() {
-  _impl_.train_update_id_.ClearToEmpty();
-}
-inline const std::string& TrainUpdateMetricFact::train_update_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.train_update_id)
-  return _internal_train_update_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TrainUpdateMetricFact::set_train_update_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.train_update_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.train_update_id)
-}
-inline std::string* TrainUpdateMetricFact::mutable_train_update_id() {
-  std::string* _s = _internal_mutable_train_update_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.train_update_id)
-  return _s;
-}
-inline const std::string& TrainUpdateMetricFact::_internal_train_update_id() const {
-  return _impl_.train_update_id_.Get();
-}
-inline void TrainUpdateMetricFact::_internal_set_train_update_id(const std::string& value) {
-  
-  _impl_.train_update_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TrainUpdateMetricFact::_internal_mutable_train_update_id() {
-  
-  return _impl_.train_update_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TrainUpdateMetricFact::release_train_update_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.train_update_id)
-  return _impl_.train_update_id_.Release();
-}
-inline void TrainUpdateMetricFact::set_allocated_train_update_id(std::string* train_update_id) {
-  if (train_update_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.train_update_id_.SetAllocated(train_update_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.train_update_id_.IsDefault()) {
-    _impl_.train_update_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.train_update_id)
-}
-
-// uint64 train_update_sequence = 2;
-inline void TrainUpdateMetricFact::clear_train_update_sequence() {
-  _impl_.train_update_sequence_ = uint64_t{0u};
-}
-inline uint64_t TrainUpdateMetricFact::_internal_train_update_sequence() const {
-  return _impl_.train_update_sequence_;
-}
-inline uint64_t TrainUpdateMetricFact::train_update_sequence() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.train_update_sequence)
-  return _internal_train_update_sequence();
-}
-inline void TrainUpdateMetricFact::_internal_set_train_update_sequence(uint64_t value) {
-  
-  _impl_.train_update_sequence_ = value;
-}
-inline void TrainUpdateMetricFact::set_train_update_sequence(uint64_t value) {
-  _internal_set_train_update_sequence(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.train_update_sequence)
-}
-
-// .rl.training.v1.ModelIdentity published_model = 3;
-inline bool TrainUpdateMetricFact::_internal_has_published_model() const {
-  return this != internal_default_instance() && _impl_.published_model_ != nullptr;
-}
-inline bool TrainUpdateMetricFact::has_published_model() const {
-  return _internal_has_published_model();
-}
-inline void TrainUpdateMetricFact::clear_published_model() {
-  if (GetArenaForAllocation() == nullptr && _impl_.published_model_ != nullptr) {
-    delete _impl_.published_model_;
-  }
-  _impl_.published_model_ = nullptr;
-}
-inline const ::rl::training::v1::ModelIdentity& TrainUpdateMetricFact::_internal_published_model() const {
-  const ::rl::training::v1::ModelIdentity* p = _impl_.published_model_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::ModelIdentity&>(
-      ::rl::training::v1::_ModelIdentity_default_instance_);
-}
-inline const ::rl::training::v1::ModelIdentity& TrainUpdateMetricFact::published_model() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.published_model)
-  return _internal_published_model();
-}
-inline void TrainUpdateMetricFact::unsafe_arena_set_allocated_published_model(
-    ::rl::training::v1::ModelIdentity* published_model) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.published_model_);
-  }
-  _impl_.published_model_ = published_model;
-  if (published_model) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainUpdateMetricFact.published_model)
-}
-inline ::rl::training::v1::ModelIdentity* TrainUpdateMetricFact::release_published_model() {
-  
-  ::rl::training::v1::ModelIdentity* temp = _impl_.published_model_;
-  _impl_.published_model_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::ModelIdentity* TrainUpdateMetricFact::unsafe_arena_release_published_model() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.published_model)
-  
-  ::rl::training::v1::ModelIdentity* temp = _impl_.published_model_;
-  _impl_.published_model_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::ModelIdentity* TrainUpdateMetricFact::_internal_mutable_published_model() {
-  
-  if (_impl_.published_model_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::ModelIdentity>(GetArenaForAllocation());
-    _impl_.published_model_ = p;
-  }
-  return _impl_.published_model_;
-}
-inline ::rl::training::v1::ModelIdentity* TrainUpdateMetricFact::mutable_published_model() {
-  ::rl::training::v1::ModelIdentity* _msg = _internal_mutable_published_model();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.published_model)
-  return _msg;
-}
-inline void TrainUpdateMetricFact::set_allocated_published_model(::rl::training::v1::ModelIdentity* published_model) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.published_model_;
-  }
-  if (published_model) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(published_model);
-    if (message_arena != submessage_arena) {
-      published_model = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, published_model, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.published_model_ = published_model;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.published_model)
-}
-
-// string delivery_id = 4;
-inline void TrainUpdateMetricFact::clear_delivery_id() {
-  _impl_.delivery_id_.ClearToEmpty();
-}
-inline const std::string& TrainUpdateMetricFact::delivery_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.delivery_id)
-  return _internal_delivery_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TrainUpdateMetricFact::set_delivery_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.delivery_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.delivery_id)
-}
-inline std::string* TrainUpdateMetricFact::mutable_delivery_id() {
-  std::string* _s = _internal_mutable_delivery_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.delivery_id)
-  return _s;
-}
-inline const std::string& TrainUpdateMetricFact::_internal_delivery_id() const {
-  return _impl_.delivery_id_.Get();
-}
-inline void TrainUpdateMetricFact::_internal_set_delivery_id(const std::string& value) {
-  
-  _impl_.delivery_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TrainUpdateMetricFact::_internal_mutable_delivery_id() {
-  
-  return _impl_.delivery_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TrainUpdateMetricFact::release_delivery_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.delivery_id)
-  return _impl_.delivery_id_.Release();
-}
-inline void TrainUpdateMetricFact::set_allocated_delivery_id(std::string* delivery_id) {
-  if (delivery_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.delivery_id_.SetAllocated(delivery_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.delivery_id_.IsDefault()) {
-    _impl_.delivery_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.delivery_id)
-}
-
-// .rl.common.v1.ContentDigest training_contract_digest = 5;
-inline bool TrainUpdateMetricFact::_internal_has_training_contract_digest() const {
-  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
-}
-inline bool TrainUpdateMetricFact::has_training_contract_digest() const {
-  return _internal_has_training_contract_digest();
-}
-inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::_internal_training_contract_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::training_contract_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
-  return _internal_training_contract_digest();
-}
-inline void TrainUpdateMetricFact::unsafe_arena_set_allocated_training_contract_digest(
-    ::rl::common::v1::ContentDigest* training_contract_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  if (training_contract_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::release_training_contract_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::unsafe_arena_release_training_contract_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::_internal_mutable_training_contract_digest() {
-  
-  if (_impl_.training_contract_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.training_contract_digest_ = p;
-  }
-  return _impl_.training_contract_digest_;
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::mutable_training_contract_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
-  return _msg;
-}
-inline void TrainUpdateMetricFact::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  if (training_contract_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
-    if (message_arena != submessage_arena) {
-      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_contract_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.training_contract_digest)
-}
-
-// int64 cumulative_trained_samples = 6;
-inline void TrainUpdateMetricFact::clear_cumulative_trained_samples() {
-  _impl_.cumulative_trained_samples_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_cumulative_trained_samples() const {
-  return _impl_.cumulative_trained_samples_;
-}
-inline int64_t TrainUpdateMetricFact::cumulative_trained_samples() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.cumulative_trained_samples)
-  return _internal_cumulative_trained_samples();
-}
-inline void TrainUpdateMetricFact::_internal_set_cumulative_trained_samples(int64_t value) {
-  
-  _impl_.cumulative_trained_samples_ = value;
-}
-inline void TrainUpdateMetricFact::set_cumulative_trained_samples(int64_t value) {
-  _internal_set_cumulative_trained_samples(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.cumulative_trained_samples)
-}
-
-// int64 actual_batch_size = 7;
-inline void TrainUpdateMetricFact::clear_actual_batch_size() {
-  _impl_.actual_batch_size_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_actual_batch_size() const {
-  return _impl_.actual_batch_size_;
-}
-inline int64_t TrainUpdateMetricFact::actual_batch_size() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.actual_batch_size)
-  return _internal_actual_batch_size();
-}
-inline void TrainUpdateMetricFact::_internal_set_actual_batch_size(int64_t value) {
-  
-  _impl_.actual_batch_size_ = value;
-}
-inline void TrainUpdateMetricFact::set_actual_batch_size(int64_t value) {
-  _internal_set_actual_batch_size(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.actual_batch_size)
-}
-
-// optional uint64 minimum_behavior_model_step = 8;
-inline bool TrainUpdateMetricFact::_internal_has_minimum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
-  return value;
-}
-inline bool TrainUpdateMetricFact::has_minimum_behavior_model_step() const {
-  return _internal_has_minimum_behavior_model_step();
-}
-inline void TrainUpdateMetricFact::clear_minimum_behavior_model_step() {
-  _impl_.minimum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000001u;
-}
-inline uint64_t TrainUpdateMetricFact::_internal_minimum_behavior_model_step() const {
-  return _impl_.minimum_behavior_model_step_;
-}
-inline uint64_t TrainUpdateMetricFact::minimum_behavior_model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.minimum_behavior_model_step)
-  return _internal_minimum_behavior_model_step();
-}
-inline void TrainUpdateMetricFact::_internal_set_minimum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000001u;
-  _impl_.minimum_behavior_model_step_ = value;
-}
-inline void TrainUpdateMetricFact::set_minimum_behavior_model_step(uint64_t value) {
-  _internal_set_minimum_behavior_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.minimum_behavior_model_step)
-}
-
-// optional uint64 maximum_behavior_model_step = 9;
-inline bool TrainUpdateMetricFact::_internal_has_maximum_behavior_model_step() const {
-  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline bool TrainUpdateMetricFact::has_maximum_behavior_model_step() const {
-  return _internal_has_maximum_behavior_model_step();
-}
-inline void TrainUpdateMetricFact::clear_maximum_behavior_model_step() {
-  _impl_.maximum_behavior_model_step_ = uint64_t{0u};
-  _impl_._has_bits_[0] &= ~0x00000002u;
-}
-inline uint64_t TrainUpdateMetricFact::_internal_maximum_behavior_model_step() const {
-  return _impl_.maximum_behavior_model_step_;
-}
-inline uint64_t TrainUpdateMetricFact::maximum_behavior_model_step() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.maximum_behavior_model_step)
-  return _internal_maximum_behavior_model_step();
-}
-inline void TrainUpdateMetricFact::_internal_set_maximum_behavior_model_step(uint64_t value) {
-  _impl_._has_bits_[0] |= 0x00000002u;
-  _impl_.maximum_behavior_model_step_ = value;
-}
-inline void TrainUpdateMetricFact::set_maximum_behavior_model_step(uint64_t value) {
-  _internal_set_maximum_behavior_model_step(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.maximum_behavior_model_step)
-}
-
-// repeated .rl.training.v1.RawMetricSumCount ppo_statistics = 10;
-inline int TrainUpdateMetricFact::_internal_ppo_statistics_size() const {
-  return _impl_.ppo_statistics_.size();
-}
-inline int TrainUpdateMetricFact::ppo_statistics_size() const {
-  return _internal_ppo_statistics_size();
-}
-inline void TrainUpdateMetricFact::clear_ppo_statistics() {
-  _impl_.ppo_statistics_.Clear();
-}
-inline ::rl::training::v1::RawMetricSumCount* TrainUpdateMetricFact::mutable_ppo_statistics(int index) {
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.ppo_statistics)
-  return _impl_.ppo_statistics_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >*
-TrainUpdateMetricFact::mutable_ppo_statistics() {
-  // @@protoc_insertion_point(field_mutable_list:rl.training.v1.TrainUpdateMetricFact.ppo_statistics)
-  return &_impl_.ppo_statistics_;
-}
-inline const ::rl::training::v1::RawMetricSumCount& TrainUpdateMetricFact::_internal_ppo_statistics(int index) const {
-  return _impl_.ppo_statistics_.Get(index);
-}
-inline const ::rl::training::v1::RawMetricSumCount& TrainUpdateMetricFact::ppo_statistics(int index) const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.ppo_statistics)
-  return _internal_ppo_statistics(index);
-}
-inline ::rl::training::v1::RawMetricSumCount* TrainUpdateMetricFact::_internal_add_ppo_statistics() {
-  return _impl_.ppo_statistics_.Add();
-}
-inline ::rl::training::v1::RawMetricSumCount* TrainUpdateMetricFact::add_ppo_statistics() {
-  ::rl::training::v1::RawMetricSumCount* _add = _internal_add_ppo_statistics();
-  // @@protoc_insertion_point(field_add:rl.training.v1.TrainUpdateMetricFact.ppo_statistics)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::RawMetricSumCount >&
-TrainUpdateMetricFact::ppo_statistics() const {
-  // @@protoc_insertion_point(field_list:rl.training.v1.TrainUpdateMetricFact.ppo_statistics)
-  return _impl_.ppo_statistics_;
-}
-
-// string behavior_model_lineage_id = 11;
-inline void TrainUpdateMetricFact::clear_behavior_model_lineage_id() {
-  _impl_.behavior_model_lineage_id_.ClearToEmpty();
-}
-inline const std::string& TrainUpdateMetricFact::behavior_model_lineage_id() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id)
-  return _internal_behavior_model_lineage_id();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void TrainUpdateMetricFact::set_behavior_model_lineage_id(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.behavior_model_lineage_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id)
-}
-inline std::string* TrainUpdateMetricFact::mutable_behavior_model_lineage_id() {
-  std::string* _s = _internal_mutable_behavior_model_lineage_id();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id)
-  return _s;
-}
-inline const std::string& TrainUpdateMetricFact::_internal_behavior_model_lineage_id() const {
-  return _impl_.behavior_model_lineage_id_.Get();
-}
-inline void TrainUpdateMetricFact::_internal_set_behavior_model_lineage_id(const std::string& value) {
-  
-  _impl_.behavior_model_lineage_id_.Set(value, GetArenaForAllocation());
-}
-inline std::string* TrainUpdateMetricFact::_internal_mutable_behavior_model_lineage_id() {
-  
-  return _impl_.behavior_model_lineage_id_.Mutable(GetArenaForAllocation());
-}
-inline std::string* TrainUpdateMetricFact::release_behavior_model_lineage_id() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id)
-  return _impl_.behavior_model_lineage_id_.Release();
-}
-inline void TrainUpdateMetricFact::set_allocated_behavior_model_lineage_id(std::string* behavior_model_lineage_id) {
-  if (behavior_model_lineage_id != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.behavior_model_lineage_id_.SetAllocated(behavior_model_lineage_id, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.behavior_model_lineage_id_.IsDefault()) {
-    _impl_.behavior_model_lineage_id_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.behavior_model_lineage_id)
-}
-
-// int64 requested_train_batch_size = 12;
-inline void TrainUpdateMetricFact::clear_requested_train_batch_size() {
-  _impl_.requested_train_batch_size_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_requested_train_batch_size() const {
-  return _impl_.requested_train_batch_size_;
-}
-inline int64_t TrainUpdateMetricFact::requested_train_batch_size() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.requested_train_batch_size)
-  return _internal_requested_train_batch_size();
-}
-inline void TrainUpdateMetricFact::_internal_set_requested_train_batch_size(int64_t value) {
-  
-  _impl_.requested_train_batch_size_ = value;
-}
-inline void TrainUpdateMetricFact::set_requested_train_batch_size(int64_t value) {
-  _internal_set_requested_train_batch_size(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.requested_train_batch_size)
-}
-
-// int64 pool_draw_slot_count = 13;
-inline void TrainUpdateMetricFact::clear_pool_draw_slot_count() {
-  _impl_.pool_draw_slot_count_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_pool_draw_slot_count() const {
-  return _impl_.pool_draw_slot_count_;
-}
-inline int64_t TrainUpdateMetricFact::pool_draw_slot_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.pool_draw_slot_count)
-  return _internal_pool_draw_slot_count();
-}
-inline void TrainUpdateMetricFact::_internal_set_pool_draw_slot_count(int64_t value) {
-  
-  _impl_.pool_draw_slot_count_ = value;
-}
-inline void TrainUpdateMetricFact::set_pool_draw_slot_count(int64_t value) {
-  _internal_set_pool_draw_slot_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.pool_draw_slot_count)
-}
-
-// int64 unique_item_count = 14;
-inline void TrainUpdateMetricFact::clear_unique_item_count() {
-  _impl_.unique_item_count_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_unique_item_count() const {
-  return _impl_.unique_item_count_;
-}
-inline int64_t TrainUpdateMetricFact::unique_item_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.unique_item_count)
-  return _internal_unique_item_count();
-}
-inline void TrainUpdateMetricFact::_internal_set_unique_item_count(int64_t value) {
-  
-  _impl_.unique_item_count_ = value;
-}
-inline void TrainUpdateMetricFact::set_unique_item_count(int64_t value) {
-  _internal_set_unique_item_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.unique_item_count)
-}
-
-// int64 duplicate_item_slot_count = 15;
-inline void TrainUpdateMetricFact::clear_duplicate_item_slot_count() {
-  _impl_.duplicate_item_slot_count_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_duplicate_item_slot_count() const {
-  return _impl_.duplicate_item_slot_count_;
-}
-inline int64_t TrainUpdateMetricFact::duplicate_item_slot_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.duplicate_item_slot_count)
-  return _internal_duplicate_item_slot_count();
-}
-inline void TrainUpdateMetricFact::_internal_set_duplicate_item_slot_count(int64_t value) {
-  
-  _impl_.duplicate_item_slot_count_ = value;
-}
-inline void TrainUpdateMetricFact::set_duplicate_item_slot_count(int64_t value) {
-  _internal_set_duplicate_item_slot_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.duplicate_item_slot_count)
-}
-
-// int64 sample_evaluation_count = 16;
-inline void TrainUpdateMetricFact::clear_sample_evaluation_count() {
-  _impl_.sample_evaluation_count_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_sample_evaluation_count() const {
-  return _impl_.sample_evaluation_count_;
-}
-inline int64_t TrainUpdateMetricFact::sample_evaluation_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.sample_evaluation_count)
-  return _internal_sample_evaluation_count();
-}
-inline void TrainUpdateMetricFact::_internal_set_sample_evaluation_count(int64_t value) {
-  
-  _impl_.sample_evaluation_count_ = value;
-}
-inline void TrainUpdateMetricFact::set_sample_evaluation_count(int64_t value) {
-  _internal_set_sample_evaluation_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.sample_evaluation_count)
-}
-
-// int64 optimizer_step_count = 17;
-inline void TrainUpdateMetricFact::clear_optimizer_step_count() {
-  _impl_.optimizer_step_count_ = int64_t{0};
-}
-inline int64_t TrainUpdateMetricFact::_internal_optimizer_step_count() const {
-  return _impl_.optimizer_step_count_;
-}
-inline int64_t TrainUpdateMetricFact::optimizer_step_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.optimizer_step_count)
-  return _internal_optimizer_step_count();
-}
-inline void TrainUpdateMetricFact::_internal_set_optimizer_step_count(int64_t value) {
-  
-  _impl_.optimizer_step_count_ = value;
-}
-inline void TrainUpdateMetricFact::set_optimizer_step_count(int64_t value) {
-  _internal_set_optimizer_step_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.TrainUpdateMetricFact.optimizer_step_count)
-}
-
-// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 18;
-inline bool TrainUpdateMetricFact::_internal_has_rollout_estimator_profile_digest() const {
-  return this != internal_default_instance() && _impl_.rollout_estimator_profile_digest_ != nullptr;
-}
-inline bool TrainUpdateMetricFact::has_rollout_estimator_profile_digest() const {
-  return _internal_has_rollout_estimator_profile_digest();
-}
-inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::_internal_rollout_estimator_profile_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.rollout_estimator_profile_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& TrainUpdateMetricFact::rollout_estimator_profile_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
-  return _internal_rollout_estimator_profile_digest();
-}
-inline void TrainUpdateMetricFact::unsafe_arena_set_allocated_rollout_estimator_profile_digest(
-    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
-  }
-  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
-  if (rollout_estimator_profile_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::release_rollout_estimator_profile_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::unsafe_arena_release_rollout_estimator_profile_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::_internal_mutable_rollout_estimator_profile_digest() {
-  
-  if (_impl_.rollout_estimator_profile_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.rollout_estimator_profile_digest_ = p;
-  }
-  return _impl_.rollout_estimator_profile_digest_;
-}
-inline ::rl::common::v1::ContentDigest* TrainUpdateMetricFact::mutable_rollout_estimator_profile_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_rollout_estimator_profile_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
-  return _msg;
-}
-inline void TrainUpdateMetricFact::set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
-  }
-  if (rollout_estimator_profile_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(rollout_estimator_profile_digest));
-    if (message_arena != submessage_arena) {
-      rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, rollout_estimator_profile_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.TrainUpdateMetricFact.rollout_estimator_profile_digest)
-}
-
-// -------------------------------------------------------------------
-
 // MetricEvent
 
 // uint64 event_sequence = 4;
@@ -17071,163 +14810,56 @@ inline void MetricEvent::set_observed_at_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.MetricEvent.observed_at_unix_ms)
 }
 
-// .rl.training.v1.EpisodeMetricFact episode = 6;
-inline bool MetricEvent::_internal_has_episode() const {
-  return fact_case() == kEpisode;
+// bytes fact_payload = 6;
+inline void MetricEvent::clear_fact_payload() {
+  _impl_.fact_payload_.ClearToEmpty();
 }
-inline bool MetricEvent::has_episode() const {
-  return _internal_has_episode();
+inline const std::string& MetricEvent::fact_payload() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.fact_payload)
+  return _internal_fact_payload();
 }
-inline void MetricEvent::set_has_episode() {
-  _impl_._oneof_case_[0] = kEpisode;
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void MetricEvent::set_fact_payload(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.fact_payload_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:rl.training.v1.MetricEvent.fact_payload)
 }
-inline void MetricEvent::clear_episode() {
-  if (_internal_has_episode()) {
-    if (GetArenaForAllocation() == nullptr) {
-      delete _impl_.fact_.episode_;
-    }
-    clear_has_fact();
-  }
+inline std::string* MetricEvent::mutable_fact_payload() {
+  std::string* _s = _internal_mutable_fact_payload();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricEvent.fact_payload)
+  return _s;
 }
-inline ::rl::training::v1::EpisodeMetricFact* MetricEvent::release_episode() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricEvent.episode)
-  if (_internal_has_episode()) {
-    clear_has_fact();
-    ::rl::training::v1::EpisodeMetricFact* temp = _impl_.fact_.episode_;
-    if (GetArenaForAllocation() != nullptr) {
-      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-    }
-    _impl_.fact_.episode_ = nullptr;
-    return temp;
+inline const std::string& MetricEvent::_internal_fact_payload() const {
+  return _impl_.fact_payload_.Get();
+}
+inline void MetricEvent::_internal_set_fact_payload(const std::string& value) {
+  
+  _impl_.fact_payload_.Set(value, GetArenaForAllocation());
+}
+inline std::string* MetricEvent::_internal_mutable_fact_payload() {
+  
+  return _impl_.fact_payload_.Mutable(GetArenaForAllocation());
+}
+inline std::string* MetricEvent::release_fact_payload() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.MetricEvent.fact_payload)
+  return _impl_.fact_payload_.Release();
+}
+inline void MetricEvent::set_allocated_fact_payload(std::string* fact_payload) {
+  if (fact_payload != nullptr) {
+    
   } else {
-    return nullptr;
+    
   }
-}
-inline const ::rl::training::v1::EpisodeMetricFact& MetricEvent::_internal_episode() const {
-  return _internal_has_episode()
-      ? *_impl_.fact_.episode_
-      : reinterpret_cast< ::rl::training::v1::EpisodeMetricFact&>(::rl::training::v1::_EpisodeMetricFact_default_instance_);
-}
-inline const ::rl::training::v1::EpisodeMetricFact& MetricEvent::episode() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.episode)
-  return _internal_episode();
-}
-inline ::rl::training::v1::EpisodeMetricFact* MetricEvent::unsafe_arena_release_episode() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:rl.training.v1.MetricEvent.episode)
-  if (_internal_has_episode()) {
-    clear_has_fact();
-    ::rl::training::v1::EpisodeMetricFact* temp = _impl_.fact_.episode_;
-    _impl_.fact_.episode_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
+  _impl_.fact_payload_.SetAllocated(fact_payload, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.fact_payload_.IsDefault()) {
+    _impl_.fact_payload_.Set("", GetArenaForAllocation());
   }
-}
-inline void MetricEvent::unsafe_arena_set_allocated_episode(::rl::training::v1::EpisodeMetricFact* episode) {
-  clear_fact();
-  if (episode) {
-    set_has_episode();
-    _impl_.fact_.episode_ = episode;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricEvent.episode)
-}
-inline ::rl::training::v1::EpisodeMetricFact* MetricEvent::_internal_mutable_episode() {
-  if (!_internal_has_episode()) {
-    clear_fact();
-    set_has_episode();
-    _impl_.fact_.episode_ = CreateMaybeMessage< ::rl::training::v1::EpisodeMetricFact >(GetArenaForAllocation());
-  }
-  return _impl_.fact_.episode_;
-}
-inline ::rl::training::v1::EpisodeMetricFact* MetricEvent::mutable_episode() {
-  ::rl::training::v1::EpisodeMetricFact* _msg = _internal_mutable_episode();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricEvent.episode)
-  return _msg;
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.fact_payload)
 }
 
-// .rl.training.v1.TrainUpdateMetricFact train_update = 7;
-inline bool MetricEvent::_internal_has_train_update() const {
-  return fact_case() == kTrainUpdate;
-}
-inline bool MetricEvent::has_train_update() const {
-  return _internal_has_train_update();
-}
-inline void MetricEvent::set_has_train_update() {
-  _impl_._oneof_case_[0] = kTrainUpdate;
-}
-inline void MetricEvent::clear_train_update() {
-  if (_internal_has_train_update()) {
-    if (GetArenaForAllocation() == nullptr) {
-      delete _impl_.fact_.train_update_;
-    }
-    clear_has_fact();
-  }
-}
-inline ::rl::training::v1::TrainUpdateMetricFact* MetricEvent::release_train_update() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricEvent.train_update)
-  if (_internal_has_train_update()) {
-    clear_has_fact();
-    ::rl::training::v1::TrainUpdateMetricFact* temp = _impl_.fact_.train_update_;
-    if (GetArenaForAllocation() != nullptr) {
-      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-    }
-    _impl_.fact_.train_update_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline const ::rl::training::v1::TrainUpdateMetricFact& MetricEvent::_internal_train_update() const {
-  return _internal_has_train_update()
-      ? *_impl_.fact_.train_update_
-      : reinterpret_cast< ::rl::training::v1::TrainUpdateMetricFact&>(::rl::training::v1::_TrainUpdateMetricFact_default_instance_);
-}
-inline const ::rl::training::v1::TrainUpdateMetricFact& MetricEvent::train_update() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.train_update)
-  return _internal_train_update();
-}
-inline ::rl::training::v1::TrainUpdateMetricFact* MetricEvent::unsafe_arena_release_train_update() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:rl.training.v1.MetricEvent.train_update)
-  if (_internal_has_train_update()) {
-    clear_has_fact();
-    ::rl::training::v1::TrainUpdateMetricFact* temp = _impl_.fact_.train_update_;
-    _impl_.fact_.train_update_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline void MetricEvent::unsafe_arena_set_allocated_train_update(::rl::training::v1::TrainUpdateMetricFact* train_update) {
-  clear_fact();
-  if (train_update) {
-    set_has_train_update();
-    _impl_.fact_.train_update_ = train_update;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricEvent.train_update)
-}
-inline ::rl::training::v1::TrainUpdateMetricFact* MetricEvent::_internal_mutable_train_update() {
-  if (!_internal_has_train_update()) {
-    clear_fact();
-    set_has_train_update();
-    _impl_.fact_.train_update_ = CreateMaybeMessage< ::rl::training::v1::TrainUpdateMetricFact >(GetArenaForAllocation());
-  }
-  return _impl_.fact_.train_update_;
-}
-inline ::rl::training::v1::TrainUpdateMetricFact* MetricEvent::mutable_train_update() {
-  ::rl::training::v1::TrainUpdateMetricFact* _msg = _internal_mutable_train_update();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricEvent.train_update)
-  return _msg;
-}
-
-inline bool MetricEvent::has_fact() const {
-  return fact_case() != FACT_NOT_SET;
-}
-inline void MetricEvent::clear_has_fact() {
-  _impl_._oneof_case_[0] = FACT_NOT_SET;
-}
-inline MetricEvent::FactCase MetricEvent::fact_case() const {
-  return MetricEvent::FactCase(_impl_._oneof_case_[0]);
-}
 // -------------------------------------------------------------------
 
 // MetricSequenceGap
@@ -23582,12 +21214,6 @@ inline void ModelDistributorStatusRsp::set_latest_available_model_step(uint64_t 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

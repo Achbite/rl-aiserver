@@ -1,14 +1,11 @@
 [
   {
     "map_id": "maze_117436372",
-    "canonical_sha256": "da9198e61cbcf393fc9934fee0139c09645d3569c2ede1452984051f3b4168e3",
     "registry": "maps/test",
     "aiserver_task": {
-      "task_contract_id": "maze.task",
+      "task_protocol_id": "rl.task.maze",
+      "task_protocol_version": 1,
       "fixed_map_id": "maze_117436372",
-      "fixed_map_checksum_sha256": "da9198e61cbcf393fc9934fee0139c09645d3569c2ede1452984051f3b4168e3",
-      "action_rule_id": "maze.action.9-way.no-corner-cut",
-      "shortest_action_steps": 188,
       "episode_max_steps": 1504
     }
   }

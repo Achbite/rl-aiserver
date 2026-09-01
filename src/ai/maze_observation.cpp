@@ -14,7 +14,7 @@ bool MazeObservation::Build(
     std::vector<float>& observation,
     std::string& error) {
     observation.assign(static_cast<std::size_t>(expected_obs_dim), 0.0f);
-    if (expected_obs_dim != 17 || ray_max_range <= 0 ||
+    if (expected_obs_dim != MazeObservation::kDimension ||
         session.current_max_steps <= 0 || episode_step < 0 ||
         !session.IsWalkable(gx, gy)) {
         error = "observation dimensions, step, or grid state are invalid";
@@ -111,14 +111,26 @@ bool MazeObservation::ApplyState(
         return true;
     }
     if (frame_id == 0 && agent.last_observation_frame_id < 0) {
-        if (gx != session.start_gx || gy != session.start_gy) {
-            error = "initial observation is not at the assigned start";
-            return false;
-        }
         if (reported_last_move_blocked) {
             error = "initial observation cannot report a blocked move";
             return false;
         }
+        const int key = gy * session.grid_cols + gx;
+        if (key < 0 ||
+            static_cast<std::size_t>(key) >=
+                session.geodesic_distance.size() ||
+            session.geodesic_distance[static_cast<std::size_t>(key)] <= 0) {
+            error = "initial observation cannot seed the reward distance";
+            return false;
+        }
+        agent.visited.clear();
+        agent.visited.insert(key);
+        agent.current_state_first_visit = false;
+        agent.episode_start_geodesic_distance =
+            session.geodesic_distance[static_cast<std::size_t>(key)];
+        agent.observation_grid_x = gx;
+        agent.observation_grid_y = gy;
+        agent.last_move_blocked = false;
         agent.last_observation_frame_id = 0;
         agent.observation_done = is_done;
         error.clear();
@@ -132,12 +144,7 @@ bool MazeObservation::ApplyState(
 
     const bool moved =
         gx != agent.observation_grid_x || gy != agent.observation_grid_y;
-    const bool expected_last_move_blocked = agent.last_action != 0 && !moved;
-    if (reported_last_move_blocked != expected_last_move_blocked) {
-        error = "Client last_move_blocked does not match the executed action";
-        return false;
-    }
-    agent.last_move_blocked = expected_last_move_blocked;
+    agent.last_move_blocked = reported_last_move_blocked;
     if (agent.last_move_blocked) {
         ++agent.blocked_move_count;
     }

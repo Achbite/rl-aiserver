@@ -208,7 +208,7 @@ bool LoadModelManifestFile(const AIServerConfig& config,
     }
 
     const std::filesystem::path model_path =
-        manifest_path.parent_path() / kModelArtifactFile;
+        manifest_path.parent_path() / kPublishedModelFile;
     std::error_code filesystem_error;
     const auto actual_size =
         std::filesystem::file_size(model_path, filesystem_error);

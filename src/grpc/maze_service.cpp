@@ -48,35 +48,6 @@ bool ShouldFetchModelCandidate(
             distributor_latest_step > *staged_step);
 }
 
-constexpr int kActionDirections[9][2] = {
-    {0, 0}, {0, 1}, {1, 1}, {1, 0}, {1, -1},
-    {0, -1}, {-1, -1}, {-1, 0}, {-1, 1},
-};
-
-bool ExpectedClientPosition(const SessionManager::Session& session,
-                            int from_gx, int from_gy, int action,
-                            int& expected_gx, int& expected_gy) {
-    if (!session.IsWalkable(from_gx, from_gy) ||
-        action < 0 || action >= 9) {
-        return false;
-    }
-    expected_gx = from_gx;
-    expected_gy = from_gy;
-    const int dx = kActionDirections[action][0];
-    const int dy = kActionDirections[action][1];
-    const int candidate_gx = from_gx + dx;
-    const int candidate_gy = from_gy + dy;
-    if (!session.IsWalkable(candidate_gx, candidate_gy)) return true;
-    if (dx != 0 && dy != 0 &&
-        (!session.IsWalkable(from_gx + dx, from_gy) ||
-         !session.IsWalkable(from_gx, from_gy + dy))) {
-        return true;
-    }
-    expected_gx = candidate_gx;
-    expected_gy = candidate_gy;
-    return true;
-}
-
 void FillDigest(const DigestConfig& source, common::ContentDigest* target) {
     target->set_algorithm(common::DIGEST_ALGORITHM_SHA256);
     target->set_hex(source.hex);
@@ -86,11 +57,7 @@ void FillContract(const AIServerConfig& config,
                   common::ContractIdentity* target) {
     target->set_package_name(config.contract.package_name);
     target->set_package_version(config.contract.package_version);
-    FillDigest(config.contract.source_digest, target->mutable_source_digest());
-    FillDigest(config.contract.artifact_digest,
-               target->mutable_artifact_digest());
     target->set_platform(config.contract.platform);
-    target->set_generator_identity(config.contract.generator_identity);
 }
 
 void FillServiceIdentity(const std::string& component,
@@ -514,10 +481,10 @@ bool MazeServiceImpl::PrepareModelArtifact(
         config_.model.expected_action_dim, prepared, &error);
 }
 
-training::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
+maze_metrics::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
     const SessionManager::Session& session,
     const std::vector<AgentEpisodeResult>& agents) const {
-    training::EpisodeMetricFact fact;
+    maze_metrics::EpisodeMetricFact fact;
     fact.set_environment_instance_id(session.environment_instance_id);
     fact.set_episode_id(session.current_episode_id);
     FillDigest(config_.training_contract.canonical_digest,
@@ -846,6 +813,7 @@ bool MazeServiceImpl::RecoverExpiredClientSessions() {
                     agent.has_pending_action = false;
                     agent.pending_action_frame_id = -1;
                     agent.pending_obs.clear();
+                    agent.pending_action_mask.clear();
                 }
             } else {
                 DiscardAgentSegment(
@@ -1189,6 +1157,7 @@ bool MazeServiceImpl::BeginShutdown() {
                     agent.has_pending_action = false;
                     agent.pending_action_frame_id = -1;
                     agent.pending_obs.clear();
+                    agent.pending_action_mask.clear();
                     continue;
                 }
                 if (!agent.segment_open && !agent.has_pending_action &&
@@ -1241,6 +1210,7 @@ bool MazeServiceImpl::BeginShutdown() {
                         agent.has_pending_action = false;
                         agent.pending_action_frame_id = -1;
                         agent.pending_obs.clear();
+                        agent.pending_action_mask.clear();
                     }
                 } else {
                     DiscardAgentSegment(
@@ -1648,6 +1618,7 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
         agent.pending_log_prob = 0.0f;
         agent.pending_value = 0.0f;
         agent.pending_obs.clear();
+        agent.pending_action_mask.clear();
         agent.segment_open = false;
         agent.segment_id.clear();
         agent.pinned_model = ModelManifest{};
@@ -1655,18 +1626,11 @@ void MazeServiceImpl::ResetEpisodeState(SessionManager::Session& session,
         agent.segment_transitions.clear();
         agent.last_completed_transition_at_unix_ms = 0;
         agent.visited.clear();
-        agent.visited.insert(
-            session.start_gy * session.grid_cols + session.start_gx);
         agent.current_state_first_visit = false;
         agent.first_visit_bonus_total = 0.0f;
-        const std::size_t start_index = static_cast<std::size_t>(
-            session.start_gy * session.grid_cols + session.start_gx);
-        agent.episode_start_geodesic_distance =
-            start_index < session.geodesic_distance.size()
-                ? session.geodesic_distance[start_index]
-                : -1;
-        agent.observation_grid_x = session.start_gx;
-        agent.observation_grid_y = session.start_gy;
+        agent.episode_start_geodesic_distance = -1;
+        agent.observation_grid_x = -1;
+        agent.observation_grid_y = -1;
         agent.last_move_blocked = false;
         agent.blocked_move_count = 0;
         agent.observation_done = false;
@@ -1691,6 +1655,7 @@ bool MazeServiceImpl::PrepareModelAction(
     int gx,
     int gy,
     int64_t action_frame_id,
+    const std::vector<bool>& action_mask,
     uint64_t& next_segment_sequence,
     int64_t& per_agent_activation_count,
     bool& latest_model_used,
@@ -1749,7 +1714,7 @@ bool MazeServiceImpl::PrepareModelAction(
 
     std::string action_error;
     if (!SelectEpisodeAction(
-            logits, session.current_episode_mode,
+            logits, action_mask, session.current_episode_mode,
             config_.policy.training_temperature, action_rng,
             action, log_prob, action_error)) {
         MarkDegraded(action_error);
@@ -1761,6 +1726,7 @@ bool MazeServiceImpl::PrepareModelAction(
         return false;
     }
     agent.pending_obs = std::move(obs);
+    agent.pending_action_mask = action_mask;
     agent.pending_action = action;
     agent.pending_action_frame_id = action_frame_id;
     agent.pending_log_prob = log_prob;
@@ -1817,7 +1783,9 @@ bool MazeServiceImpl::FinalizePendingTransition(
         if (!BuildRawRolloutTransition(
                 agent, next_observation, reward,
                 config_.model.expected_obs_dim,
-                config_.model.expected_action_dim, transition, error)) {
+                config_.model.expected_action_dim,
+                config_.training_contract.action_mask_mode,
+                transition, error)) {
             error = "training transition continuity is invalid: " + error;
             return false;
         }
@@ -1871,6 +1839,7 @@ bool MazeServiceImpl::FinalizePendingTransition(
     agent.has_pending_action = false;
     agent.pending_action_frame_id = -1;
     agent.pending_obs.clear();
+    agent.pending_action_mask.clear();
 
     error.clear();
     return true;
@@ -1934,6 +1903,7 @@ bool MazeServiceImpl::PrepareAgentSegmentClose(
             agent.segment_id, agent.pinned_model.wire.identity(),
             config_.training_contract.observation_dimension,
             config_.training_contract.action_count,
+            config_.training_contract.action_mask_mode,
             processed, error)) {
         return false;
     }
@@ -2043,6 +2013,7 @@ void MazeServiceImpl::DiscardAgentSegment(
     agent.has_pending_action = false;
     agent.pending_action_frame_id = -1;
     agent.pending_obs.clear();
+    agent.pending_action_mask.clear();
     agent.segment_open = false;
     agent.segment_id.clear();
     agent.pinned_model = ModelManifest{};

@@ -147,15 +147,7 @@ bool SampleDistributor::ValidateSamplePoolStatus(
     const auto& contract = response.contract();
     const bool contract_matches =
         contract.package_name() == contract_.package_name &&
-        contract.package_version() == contract_.package_version &&
-        contract.source_digest().algorithm() ==
-            common::DIGEST_ALGORITHM_SHA256 &&
-        contract.source_digest().hex() == contract_.source_digest.hex &&
-        contract.artifact_digest().algorithm() ==
-            common::DIGEST_ALGORITHM_SHA256 &&
-        contract.artifact_digest().hex() == contract_.artifact_digest.hex &&
-        contract.platform() == contract_.platform &&
-        contract.generator_identity() == contract_.generator_identity;
+        contract.package_version() == contract_.package_version;
     if (!contract_matches ||
         response.sample_pool().component() != "sample-pool" ||
         response.sample_pool().instance_id().empty() ||

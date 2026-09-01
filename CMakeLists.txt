@@ -34,18 +34,14 @@ set(SOURCES
     src/task/single_map_task_controller.cpp
 )
 
-set(CONTRACT_CPP_DIR "" CACHE PATH "Generated C++ contract directory")
-if(CONTRACT_CPP_DIR)
-    set(PROTO_GEN_DIR ${CONTRACT_CPP_DIR})
-else()
-    set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
-endif()
+set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
 set(PROTO_SOURCES
     ${PROTO_GEN_DIR}/common.pb.cc
     ${PROTO_GEN_DIR}/training.pb.cc
     ${PROTO_GEN_DIR}/training.grpc.pb.cc
     ${PROTO_GEN_DIR}/maze_task.pb.cc
     ${PROTO_GEN_DIR}/maze_task.grpc.pb.cc
+    ${PROTO_GEN_DIR}/maze_metrics.pb.cc
 )
 
 # --- 可执行文件 ---

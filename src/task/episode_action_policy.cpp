@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <numeric>
 
 bool ValidateEpisodeModelOutput(const std::vector<float>& logits,
@@ -28,6 +29,7 @@ bool ValidateEpisodeModelOutput(const std::vector<float>& logits,
 }
 
 bool SelectEpisodeAction(const std::vector<float>& logits,
+                         const std::vector<bool>& action_mask,
                          maze::EpisodeMode mode,
                          double temperature,
                          std::mt19937& generator,
@@ -45,22 +47,47 @@ bool SelectEpisodeAction(const std::vector<float>& logits,
             return false;
         }
     }
+    if (!action_mask.empty() &&
+        (action_mask.size() != logits.size() ||
+         std::none_of(action_mask.begin(), action_mask.end(),
+                      [](bool available) { return available; }))) {
+        error = "action mask does not define an available model action";
+        return false;
+    }
+    const auto available = [&](std::size_t index) {
+        return action_mask.empty() || action_mask[index];
+    };
 
     if (mode == maze::EPISODE_MODE_EVALUATION) {
-        action = static_cast<int>(std::distance(
-            logits.begin(),
-            std::max_element(logits.begin(), logits.end())));
+        std::size_t selected = logits.size();
+        for (std::size_t index = 0; index < logits.size(); ++index) {
+            if (available(index) &&
+                (selected == logits.size() ||
+                 logits[index] > logits[selected])) {
+                selected = index;
+            }
+        }
+        action = static_cast<int>(selected);
         log_probability = 0.0f;
         return true;
     }
     if (mode == maze::EPISODE_MODE_TRAINING) {
-        const double maximum = *std::max_element(logits.begin(), logits.end());
+        double maximum = -std::numeric_limits<double>::infinity();
+        for (std::size_t index = 0; index < logits.size(); ++index) {
+            if (available(index)) {
+                maximum = std::max(
+                    maximum, static_cast<double>(logits[index]));
+            }
+        }
         std::vector<double> probabilities;
         probabilities.reserve(logits.size());
         double sum = 0.0;
-        for (float logit : logits) {
-            const double weight = std::exp(
-                (static_cast<double>(logit) - maximum) / temperature);
+        for (std::size_t index = 0; index < logits.size(); ++index) {
+            const double weight = available(index)
+                ? std::exp(
+                      (static_cast<double>(logits[index]) - maximum) /
+                      temperature)
+                : 0.0;
             probabilities.push_back(weight);
             sum += weight;
         }
