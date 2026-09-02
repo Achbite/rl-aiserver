@@ -237,7 +237,7 @@ class AIServerTrainingStatusService final {
 };
 
 // Implemented independently by each metric-event owner (AIServer and Learner).
-// A retry with the same cursor returns the same batch identity and digest until
+// A retry with the same cursor returns the same batch identity until
 // it is acknowledged or an explicit gap proves the requested event unavailable.
 class MetricEventService final {
  public:

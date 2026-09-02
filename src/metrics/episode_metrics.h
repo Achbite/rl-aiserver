@@ -51,9 +51,7 @@ public:
     static constexpr std::size_t kDefaultEventCapacity = 4096;
     static constexpr std::size_t kDefaultByteCapacity = 16 * 1024 * 1024;
 
-    MetricEventJournal(common::ContractIdentity contract,
-                       common::SchemaIdentity schema,
-                       common::ServiceInstanceIdentity source,
+    MetricEventJournal(common::ServiceInstanceIdentity source,
                        std::size_t capacity = kDefaultEventCapacity,
                        std::size_t byte_capacity = kDefaultByteCapacity,
                        std::chrono::milliseconds flush_interval =
@@ -72,7 +70,6 @@ public:
              training::AckMetricBatchRsp& response);
 
 private:
-    bool ValidContract(const common::ContractIdentity& contract) const;
     bool ValidConsumer(
         const common::ServiceInstanceIdentity& consumer) const;
     bool SameConsumer(
@@ -87,10 +84,6 @@ private:
     bool BuildPendingBatch(const training::GetMetricBatchReq& request,
                            int64_t now_unix_ms,
                            std::string& error);
-    static std::string BatchDigest(const training::MetricBatch& batch);
-
-    common::ContractIdentity contract_;
-    common::SchemaIdentity schema_;
     common::ServiceInstanceIdentity source_;
     std::size_t capacity_;
     std::size_t byte_capacity_;

@@ -17,14 +17,12 @@ double ElapsedMs(std::chrono::steady_clock::time_point start) {
 bool SameSamplePool(const common::ServiceInstanceIdentity& actual,
                     const std::string& expected_instance_id,
                     uint64_t expected_lifecycle_epoch) {
-    return actual.component() == "sample-pool" &&
-           actual.instance_id() == expected_instance_id &&
+    return actual.instance_id() == expected_instance_id &&
            actual.lifecycle_epoch() == expected_lifecycle_epoch;
 }
 
 bool IsTerminalPushRejection(training::PushResult result) {
     return result == training::PUSH_RESULT_REJECTED_INVALID ||
-           result == training::PUSH_RESULT_REJECTED_IDENTITY ||
            result == training::PUSH_RESULT_REJECTED_CONFLICT ||
            result == training::PUSH_RESULT_REJECTED_FINALIZED;
 }
@@ -65,38 +63,24 @@ bool ValidatePushResponse(
         error = "PushSamples response does not echo the exact envelope_id";
         return false;
     }
-    const bool acknowledged_exact_payload =
-        response.payload_digest().algorithm() ==
-            common::DIGEST_ALGORITHM_SHA256 &&
-        response.payload_digest().algorithm() ==
-            envelope.payload_digest().algorithm() &&
-        response.payload_digest().hex() == envelope.payload_digest().hex();
     if (response.result() == training::PUSH_RESULT_ACCEPTED) {
         if (transition_count <= 0 ||
-            transition_count != envelope.samples_size() ||
-            !acknowledged_exact_payload) {
-            error = "PushSamples ACCEPTED response does not acknowledge the "
-                    "exact immutable payload";
+            transition_count != envelope.samples_size()) {
+            error = "PushSamples ACCEPTED response has an invalid count";
             return false;
         }
         return true;
     }
     if (response.result() == training::PUSH_RESULT_DUPLICATE) {
         if (transition_count <= 0 ||
-            transition_count != envelope.samples_size() ||
-            !acknowledged_exact_payload) {
-            error = "PushSamples DUPLICATE response does not identify the "
-                    "exact immutable payload";
+            transition_count != envelope.samples_size()) {
+            error = "PushSamples DUPLICATE response has an invalid count";
             return false;
         }
         return true;
     }
     if (response.result() == training::PUSH_RESULT_REJECTED_CAPACITY ||
         IsTerminalPushRejection(response.result())) {
-        if (response.has_payload_digest()) {
-            error = "PushSamples rejection must not acknowledge a payload";
-            return false;
-        }
         return true;
     }
     error = "PushSamples response result is unspecified";
@@ -106,7 +90,7 @@ bool ValidatePushResponse(
 }  // namespace
 
 SampleDistributor::SampleDistributor(const AIServerConfig& config)
-    : config_(config.sample_distributor), contract_(config.contract) {}
+    : config_(config.sample_distributor) {}
 
 SampleDistributor::~SampleDistributor() {
     StopAndDrain();
@@ -144,16 +128,10 @@ bool SampleDistributor::ProbeSamplePool() {
 bool SampleDistributor::ValidateSamplePoolStatus(
     const training::SamplePoolStatusRsp& response,
     std::string& error) const {
-    const auto& contract = response.contract();
-    const bool contract_matches =
-        contract.package_name() == contract_.package_name &&
-        contract.package_version() == contract_.package_version;
-    if (!contract_matches ||
-        response.sample_pool().component() != "sample-pool" ||
+    if (response.sample_pool().component().empty() ||
         response.sample_pool().instance_id().empty() ||
         response.sample_pool().lifecycle_epoch() == 0) {
-        error = "SamplePool ingress identity does not match configured " +
-                contract_.package_version;
+        error = "SamplePool ingress lifecycle identity is invalid";
         return false;
     }
     // pool_ready is a data-availability fact. An empty Pool remains a valid

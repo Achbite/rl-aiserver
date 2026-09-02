@@ -155,9 +155,6 @@ extern RegisterModelRspDefaultTypeInternal _RegisterModelRsp_default_instance_;
 class RenewLeaseReq;
 struct RenewLeaseReqDefaultTypeInternal;
 extern RenewLeaseReqDefaultTypeInternal _RenewLeaseReq_default_instance_;
-class RolloutEstimatorProfile;
-struct RolloutEstimatorProfileDefaultTypeInternal;
-extern RolloutEstimatorProfileDefaultTypeInternal _RolloutEstimatorProfile_default_instance_;
 class SamplePoolItem;
 struct SamplePoolItemDefaultTypeInternal;
 extern SamplePoolItemDefaultTypeInternal _SamplePoolItem_default_instance_;
@@ -209,7 +206,6 @@ template<> ::rl::training::v1::RawMetricSumCount* Arena::CreateMaybeMessage<::rl
 template<> ::rl::training::v1::RegisterModelReq* Arena::CreateMaybeMessage<::rl::training::v1::RegisterModelReq>(Arena*);
 template<> ::rl::training::v1::RegisterModelRsp* Arena::CreateMaybeMessage<::rl::training::v1::RegisterModelRsp>(Arena*);
 template<> ::rl::training::v1::RenewLeaseReq* Arena::CreateMaybeMessage<::rl::training::v1::RenewLeaseReq>(Arena*);
-template<> ::rl::training::v1::RolloutEstimatorProfile* Arena::CreateMaybeMessage<::rl::training::v1::RolloutEstimatorProfile>(Arena*);
 template<> ::rl::training::v1::SamplePoolItem* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolItem>(Arena*);
 template<> ::rl::training::v1::SamplePoolStatusReq* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolStatusReq>(Arena*);
 template<> ::rl::training::v1::SamplePoolStatusRsp* Arena::CreateMaybeMessage<::rl::training::v1::SamplePoolStatusRsp>(Arena*);
@@ -255,7 +251,6 @@ enum PushResult : int {
   PUSH_RESULT_DUPLICATE = 2,
   PUSH_RESULT_REJECTED_CAPACITY = 3,
   PUSH_RESULT_REJECTED_INVALID = 4,
-  PUSH_RESULT_REJECTED_IDENTITY = 5,
   PUSH_RESULT_REJECTED_CONFLICT = 6,
   PUSH_RESULT_REJECTED_FINALIZED = 7,
   PushResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
@@ -533,13 +528,12 @@ enum ModelLookupResult : int {
   MODEL_LOOKUP_RESULT_UNSPECIFIED = 0,
   MODEL_LOOKUP_RESULT_FOUND = 1,
   MODEL_LOOKUP_RESULT_NOT_FOUND = 2,
-  MODEL_LOOKUP_RESULT_REJECTED_IDENTITY = 3,
   ModelLookupResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   ModelLookupResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool ModelLookupResult_IsValid(int value);
 constexpr ModelLookupResult ModelLookupResult_MIN = MODEL_LOOKUP_RESULT_UNSPECIFIED;
-constexpr ModelLookupResult ModelLookupResult_MAX = MODEL_LOOKUP_RESULT_REJECTED_IDENTITY;
+constexpr ModelLookupResult ModelLookupResult_MAX = MODEL_LOOKUP_RESULT_NOT_FOUND;
 constexpr int ModelLookupResult_ARRAYSIZE = ModelLookupResult_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ModelLookupResult_descriptor();
@@ -586,7 +580,6 @@ enum SamplePoolFinalizeResult : int {
   SAMPLE_POOL_FINALIZE_RESULT_FINALIZED = 1,
   SAMPLE_POOL_FINALIZE_RESULT_ALREADY_FINALIZED = 2,
   SAMPLE_POOL_FINALIZE_RESULT_REJECTED_ACTIVE_LEASE = 3,
-  SAMPLE_POOL_FINALIZE_RESULT_REJECTED_IDENTITY = 4,
   SAMPLE_POOL_FINALIZE_RESULT_REJECTED_CONFLICT = 5,
   SamplePoolFinalizeResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   SamplePoolFinalizeResult_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
@@ -615,7 +608,6 @@ enum MetricBatchResult : int {
   METRIC_BATCH_RESULT_DELIVERED = 1,
   METRIC_BATCH_RESULT_WAIT = 2,
   METRIC_BATCH_RESULT_FINAL = 3,
-  METRIC_BATCH_RESULT_REJECTED_IDENTITY = 4,
   METRIC_BATCH_RESULT_REJECTED_CURSOR = 5,
   METRIC_BATCH_RESULT_REJECTED_INVALID = 6,
   MetricBatchResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
@@ -645,7 +637,6 @@ enum MetricBatchAckResult : int {
   METRIC_BATCH_ACK_RESULT_APPLIED = 1,
   METRIC_BATCH_ACK_RESULT_ALREADY_APPLIED = 2,
   METRIC_BATCH_ACK_RESULT_NOT_FOUND = 3,
-  METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY = 4,
   METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR = 5,
   METRIC_BATCH_ACK_RESULT_REJECTED_INVALID = 6,
   MetricBatchAckResult_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
@@ -669,6 +660,32 @@ inline bool MetricBatchAckResult_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MetricBatchAckResult* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MetricBatchAckResult>(
     MetricBatchAckResult_descriptor(), name, value);
+}
+enum MetricFactKind : int {
+  METRIC_FACT_KIND_UNSPECIFIED = 0,
+  METRIC_FACT_KIND_MAZE_EPISODE = 1,
+  METRIC_FACT_KIND_TRAIN_UPDATE = 2,
+  MetricFactKind_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  MetricFactKind_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool MetricFactKind_IsValid(int value);
+constexpr MetricFactKind MetricFactKind_MIN = METRIC_FACT_KIND_UNSPECIFIED;
+constexpr MetricFactKind MetricFactKind_MAX = METRIC_FACT_KIND_TRAIN_UPDATE;
+constexpr int MetricFactKind_ARRAYSIZE = MetricFactKind_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricFactKind_descriptor();
+template<typename T>
+inline const std::string& MetricFactKind_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, MetricFactKind>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function MetricFactKind_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    MetricFactKind_descriptor(), enum_t_value);
+}
+inline bool MetricFactKind_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, MetricFactKind* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<MetricFactKind>(
+    MetricFactKind_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -794,8 +811,6 @@ class ModelIdentity final :
 
   enum : int {
     kModelLineageIdFieldNumber = 1,
-    kArtifactDigestFieldNumber = 3,
-    kManifestDigestFieldNumber = 4,
     kModelStepFieldNumber = 2,
   };
   // string model_lineage_id = 1;
@@ -811,42 +826,6 @@ class ModelIdentity final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_model_lineage_id(const std::string& value);
   std::string* _internal_mutable_model_lineage_id();
   public:
-
-  // .rl.common.v1.ContentDigest artifact_digest = 3;
-  bool has_artifact_digest() const;
-  private:
-  bool _internal_has_artifact_digest() const;
-  public:
-  void clear_artifact_digest();
-  const ::rl::common::v1::ContentDigest& artifact_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_artifact_digest();
-  ::rl::common::v1::ContentDigest* mutable_artifact_digest();
-  void set_allocated_artifact_digest(::rl::common::v1::ContentDigest* artifact_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_artifact_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_artifact_digest();
-  public:
-  void unsafe_arena_set_allocated_artifact_digest(
-      ::rl::common::v1::ContentDigest* artifact_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_artifact_digest();
-
-  // .rl.common.v1.ContentDigest manifest_digest = 4;
-  bool has_manifest_digest() const;
-  private:
-  bool _internal_has_manifest_digest() const;
-  public:
-  void clear_manifest_digest();
-  const ::rl::common::v1::ContentDigest& manifest_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_manifest_digest();
-  ::rl::common::v1::ContentDigest* mutable_manifest_digest();
-  void set_allocated_manifest_digest(::rl::common::v1::ContentDigest* manifest_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_manifest_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_manifest_digest();
-  public:
-  void unsafe_arena_set_allocated_manifest_digest(
-      ::rl::common::v1::ContentDigest* manifest_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_manifest_digest();
 
   // optional uint64 model_step = 2;
   bool has_model_step() const;
@@ -872,199 +851,7 @@ class ModelIdentity final :
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_lineage_id_;
-    ::rl::common::v1::ContentDigest* artifact_digest_;
-    ::rl::common::v1::ContentDigest* manifest_digest_;
     uint64_t model_step_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_training_2eproto;
-};
-// -------------------------------------------------------------------
-
-class RolloutEstimatorProfile final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.RolloutEstimatorProfile) */ {
- public:
-  inline RolloutEstimatorProfile() : RolloutEstimatorProfile(nullptr) {}
-  ~RolloutEstimatorProfile() override;
-  explicit PROTOBUF_CONSTEXPR RolloutEstimatorProfile(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  RolloutEstimatorProfile(const RolloutEstimatorProfile& from);
-  RolloutEstimatorProfile(RolloutEstimatorProfile&& from) noexcept
-    : RolloutEstimatorProfile() {
-    *this = ::std::move(from);
-  }
-
-  inline RolloutEstimatorProfile& operator=(const RolloutEstimatorProfile& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline RolloutEstimatorProfile& operator=(RolloutEstimatorProfile&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const RolloutEstimatorProfile& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const RolloutEstimatorProfile* internal_default_instance() {
-    return reinterpret_cast<const RolloutEstimatorProfile*>(
-               &_RolloutEstimatorProfile_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    1;
-
-  friend void swap(RolloutEstimatorProfile& a, RolloutEstimatorProfile& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(RolloutEstimatorProfile* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(RolloutEstimatorProfile* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  RolloutEstimatorProfile* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<RolloutEstimatorProfile>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const RolloutEstimatorProfile& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const RolloutEstimatorProfile& from) {
-    RolloutEstimatorProfile::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(RolloutEstimatorProfile* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.training.v1.RolloutEstimatorProfile";
-  }
-  protected:
-  explicit RolloutEstimatorProfile(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kProfileDigestFieldNumber = 13,
-    kGammaFieldNumber = 2,
-    kGaeLambdaFieldNumber = 3,
-    kTmaxFieldNumber = 4,
-  };
-  // .rl.common.v1.ContentDigest profile_digest = 13;
-  bool has_profile_digest() const;
-  private:
-  bool _internal_has_profile_digest() const;
-  public:
-  void clear_profile_digest();
-  const ::rl::common::v1::ContentDigest& profile_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_profile_digest();
-  ::rl::common::v1::ContentDigest* mutable_profile_digest();
-  void set_allocated_profile_digest(::rl::common::v1::ContentDigest* profile_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_profile_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_profile_digest();
-  public:
-  void unsafe_arena_set_allocated_profile_digest(
-      ::rl::common::v1::ContentDigest* profile_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_profile_digest();
-
-  // double gamma = 2;
-  void clear_gamma();
-  double gamma() const;
-  void set_gamma(double value);
-  private:
-  double _internal_gamma() const;
-  void _internal_set_gamma(double value);
-  public:
-
-  // double gae_lambda = 3;
-  void clear_gae_lambda();
-  double gae_lambda() const;
-  void set_gae_lambda(double value);
-  private:
-  double _internal_gae_lambda() const;
-  void _internal_set_gae_lambda(double value);
-  public:
-
-  // uint32 tmax = 4;
-  void clear_tmax();
-  uint32_t tmax() const;
-  void set_tmax(uint32_t value);
-  private:
-  uint32_t _internal_tmax() const;
-  void _internal_set_tmax(uint32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.training.v1.RolloutEstimatorProfile)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::rl::common::v1::ContentDigest* profile_digest_;
-    double gamma_;
-    double gae_lambda_;
-    uint32_t tmax_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -1119,7 +906,7 @@ class ProcessedTransition final :
                &_ProcessedTransition_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    1;
 
   friend void swap(ProcessedTransition& a, ProcessedTransition& b) {
     a.Swap(&b);
@@ -1402,7 +1189,7 @@ class ProcessedTransitionEnvelope final :
                &_ProcessedTransitionEnvelope_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    2;
 
   friend void swap(ProcessedTransitionEnvelope& a, ProcessedTransitionEnvelope& b) {
     a.Swap(&b);
@@ -1477,9 +1264,7 @@ class ProcessedTransitionEnvelope final :
   enum : int {
     kSamplesFieldNumber = 6,
     kEnvelopeIdFieldNumber = 1,
-    kPayloadDigestFieldNumber = 2,
     kProducerFieldNumber = 3,
-    kTrainingContractDigestFieldNumber = 4,
     kBehaviorModelFieldNumber = 5,
   };
   // repeated .rl.training.v1.ProcessedTransition samples = 6;
@@ -1514,24 +1299,6 @@ class ProcessedTransitionEnvelope final :
   std::string* _internal_mutable_envelope_id();
   public:
 
-  // .rl.common.v1.ContentDigest payload_digest = 2;
-  bool has_payload_digest() const;
-  private:
-  bool _internal_has_payload_digest() const;
-  public:
-  void clear_payload_digest();
-  const ::rl::common::v1::ContentDigest& payload_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_payload_digest();
-  ::rl::common::v1::ContentDigest* mutable_payload_digest();
-  void set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_payload_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_payload_digest();
-  public:
-  void unsafe_arena_set_allocated_payload_digest(
-      ::rl::common::v1::ContentDigest* payload_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
-
   // .rl.common.v1.ServiceInstanceIdentity producer = 3;
   bool has_producer() const;
   private:
@@ -1549,24 +1316,6 @@ class ProcessedTransitionEnvelope final :
   void unsafe_arena_set_allocated_producer(
       ::rl::common::v1::ServiceInstanceIdentity* producer);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_producer();
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 4;
-  bool has_training_contract_digest() const;
-  private:
-  bool _internal_has_training_contract_digest() const;
-  public:
-  void clear_training_contract_digest();
-  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
-  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
-  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
-  public:
-  void unsafe_arena_set_allocated_training_contract_digest(
-      ::rl::common::v1::ContentDigest* training_contract_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
 
   // .rl.training.v1.ModelIdentity behavior_model = 5;
   bool has_behavior_model() const;
@@ -1596,9 +1345,7 @@ class ProcessedTransitionEnvelope final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition > samples_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr envelope_id_;
-    ::rl::common::v1::ContentDigest* payload_digest_;
     ::rl::common::v1::ServiceInstanceIdentity* producer_;
-    ::rl::common::v1::ContentDigest* training_contract_digest_;
     ::rl::training::v1::ModelIdentity* behavior_model_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1655,7 +1402,7 @@ class SamplePoolItem final :
                &_SamplePoolItem_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    3;
 
   friend void swap(SamplePoolItem& a, SamplePoolItem& b) {
     a.Swap(&b);
@@ -1845,7 +1592,7 @@ class PushSamplesReq final :
                &_PushSamplesReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    4;
 
   friend void swap(PushSamplesReq& a, PushSamplesReq& b) {
     a.Swap(&b);
@@ -2002,7 +1749,7 @@ class PushSamplesRsp final :
                &_PushSamplesRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    5;
 
   friend void swap(PushSamplesRsp& a, PushSamplesRsp& b) {
     a.Swap(&b);
@@ -2078,7 +1825,6 @@ class PushSamplesRsp final :
     kMessageFieldNumber = 2,
     kEnvelopeIdFieldNumber = 3,
     kSamplePoolFieldNumber = 5,
-    kPayloadDigestFieldNumber = 6,
     kResultFieldNumber = 1,
     kPressureStateFieldNumber = 4,
   };
@@ -2128,24 +1874,6 @@ class PushSamplesRsp final :
       ::rl::common::v1::ServiceInstanceIdentity* sample_pool);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_sample_pool();
 
-  // .rl.common.v1.ContentDigest payload_digest = 6;
-  bool has_payload_digest() const;
-  private:
-  bool _internal_has_payload_digest() const;
-  public:
-  void clear_payload_digest();
-  const ::rl::common::v1::ContentDigest& payload_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_payload_digest();
-  ::rl::common::v1::ContentDigest* mutable_payload_digest();
-  void set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_payload_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_payload_digest();
-  public:
-  void unsafe_arena_set_allocated_payload_digest(
-      ::rl::common::v1::ContentDigest* payload_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_payload_digest();
-
   // .rl.training.v1.PushResult result = 1;
   void clear_result();
   ::rl::training::v1::PushResult result() const;
@@ -2175,7 +1903,6 @@ class PushSamplesRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr envelope_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
-    ::rl::common::v1::ContentDigest* payload_digest_;
     int result_;
     int pressure_state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2233,7 +1960,7 @@ class GetBatchReq final :
                &_GetBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    6;
 
   friend void swap(GetBatchReq& a, GetBatchReq& b) {
     a.Swap(&b);
@@ -2307,7 +2034,6 @@ class GetBatchReq final :
 
   enum : int {
     kConsumerFieldNumber = 3,
-    kRequiredTrainingContractDigestFieldNumber = 5,
     kRequestedTransitionsFieldNumber = 1,
     kTimeoutMsFieldNumber = 2,
     kLeaseTimeoutMsFieldNumber = 4,
@@ -2329,24 +2055,6 @@ class GetBatchReq final :
   void unsafe_arena_set_allocated_consumer(
       ::rl::common::v1::ServiceInstanceIdentity* consumer);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_consumer();
-
-  // .rl.common.v1.ContentDigest required_training_contract_digest = 5;
-  bool has_required_training_contract_digest() const;
-  private:
-  bool _internal_has_required_training_contract_digest() const;
-  public:
-  void clear_required_training_contract_digest();
-  const ::rl::common::v1::ContentDigest& required_training_contract_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_required_training_contract_digest();
-  ::rl::common::v1::ContentDigest* mutable_required_training_contract_digest();
-  void set_allocated_required_training_contract_digest(::rl::common::v1::ContentDigest* required_training_contract_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_required_training_contract_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_required_training_contract_digest();
-  public:
-  void unsafe_arena_set_allocated_required_training_contract_digest(
-      ::rl::common::v1::ContentDigest* required_training_contract_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_required_training_contract_digest();
 
   // int32 requested_transitions = 1;
   void clear_requested_transitions();
@@ -2384,7 +2092,6 @@ class GetBatchReq final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::rl::common::v1::ServiceInstanceIdentity* consumer_;
-    ::rl::common::v1::ContentDigest* required_training_contract_digest_;
     int32_t requested_transitions_;
     int32_t timeout_ms_;
     int32_t lease_timeout_ms_;
@@ -2443,7 +2150,7 @@ class GetBatchRsp final :
                &_GetBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    7;
 
   friend void swap(GetBatchRsp& a, GetBatchRsp& b) {
     a.Swap(&b);
@@ -2674,7 +2381,7 @@ class AckBatchReq final :
                &_AckBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    8;
 
   friend void swap(AckBatchReq& a, AckBatchReq& b) {
     a.Swap(&b);
@@ -2874,7 +2581,7 @@ class NackBatchReq final :
                &_NackBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    9;
 
   friend void swap(NackBatchReq& a, NackBatchReq& b) {
     a.Swap(&b);
@@ -3063,7 +2770,7 @@ class RenewLeaseReq final :
                &_RenewLeaseReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    10;
 
   friend void swap(RenewLeaseReq& a, RenewLeaseReq& b) {
     a.Swap(&b);
@@ -3247,7 +2954,7 @@ class DeliveryRsp final :
                &_DeliveryRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    11;
 
   friend void swap(DeliveryRsp& a, DeliveryRsp& b) {
     a.Swap(&b);
@@ -3465,7 +3172,7 @@ class FinalizeSamplePoolReq final :
                &_FinalizeSamplePoolReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    12;
 
   friend void swap(FinalizeSamplePoolReq& a, FinalizeSamplePoolReq& b) {
     a.Swap(&b);
@@ -3658,7 +3365,7 @@ class FinalizeSamplePoolRsp final :
                &_FinalizeSamplePoolRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    13;
 
   friend void swap(FinalizeSamplePoolRsp& a, FinalizeSamplePoolRsp& b) {
     a.Swap(&b);
@@ -3873,7 +3580,7 @@ class SamplePoolStatusReq final :
                &_SamplePoolStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    14;
 
   friend void swap(SamplePoolStatusReq& a, SamplePoolStatusReq& b) {
     a.Swap(&b);
@@ -3992,7 +3699,7 @@ class SamplePoolStatusRsp final :
                &_SamplePoolStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    15;
 
   friend void swap(SamplePoolStatusRsp& a, SamplePoolStatusRsp& b) {
     a.Swap(&b);
@@ -4067,7 +3774,6 @@ class SamplePoolStatusRsp final :
   enum : int {
     kLastErrorFieldNumber = 31,
     kFinalizationIdFieldNumber = 69,
-    kContractFieldNumber = 1,
     kSamplePoolFieldNumber = 2,
     kPushAttemptCountFieldNumber = 4,
     kAcceptedUniqueTransitionsFieldNumber = 5,
@@ -4145,24 +3851,6 @@ class SamplePoolStatusRsp final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_finalization_id(const std::string& value);
   std::string* _internal_mutable_finalization_id();
   public:
-
-  // .rl.common.v1.ContractIdentity contract = 1;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
 
   // .rl.common.v1.ServiceInstanceIdentity sample_pool = 2;
   bool has_sample_pool() const;
@@ -4646,7 +4334,6 @@ class SamplePoolStatusRsp final :
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr finalization_id_;
-    ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
     int64_t push_attempt_count_;
     int64_t accepted_unique_transitions_;
@@ -4750,7 +4437,7 @@ class RawMetricSumCount final :
                &_RawMetricSumCount_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    16;
 
   friend void swap(RawMetricSumCount& a, RawMetricSumCount& b) {
     a.Swap(&b);
@@ -4925,7 +4612,7 @@ class MetricEvent final :
                &_MetricEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    17;
 
   friend void swap(MetricEvent& a, MetricEvent& b) {
     a.Swap(&b);
@@ -5001,6 +4688,7 @@ class MetricEvent final :
     kFactPayloadFieldNumber = 6,
     kEventSequenceFieldNumber = 4,
     kObservedAtUnixMsFieldNumber = 5,
+    kFactKindFieldNumber = 7,
   };
   // bytes fact_payload = 6;
   void clear_fact_payload();
@@ -5038,6 +4726,15 @@ class MetricEvent final :
   void _internal_set_observed_at_unix_ms(int64_t value);
   public:
 
+  // .rl.training.v1.MetricFactKind fact_kind = 7;
+  void clear_fact_kind();
+  ::rl::training::v1::MetricFactKind fact_kind() const;
+  void set_fact_kind(::rl::training::v1::MetricFactKind value);
+  private:
+  ::rl::training::v1::MetricFactKind _internal_fact_kind() const;
+  void _internal_set_fact_kind(::rl::training::v1::MetricFactKind value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.training.v1.MetricEvent)
  private:
   class _Internal;
@@ -5051,6 +4748,7 @@ class MetricEvent final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fact_payload_;
     uint64_t event_sequence_;
     int64_t observed_at_unix_ms_;
+    int fact_kind_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_training_2eproto;
@@ -5105,7 +4803,7 @@ class MetricSequenceGap final :
                &_MetricSequenceGap_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    18;
 
   friend void swap(MetricSequenceGap& a, MetricSequenceGap& b) {
     a.Swap(&b);
@@ -5291,7 +4989,7 @@ class MetricBatch final :
                &_MetricBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    19;
 
   friend void swap(MetricBatch& a, MetricBatch& b) {
     a.Swap(&b);
@@ -5365,10 +5063,7 @@ class MetricBatch final :
 
   enum : int {
     kEventsFieldNumber = 9,
-    kContractFieldNumber = 1,
-    kSchemaIdentityFieldNumber = 2,
     kSourceFieldNumber = 3,
-    kBatchDigestFieldNumber = 5,
     kGapFieldNumber = 14,
     kBatchSequenceFieldNumber = 4,
     kCreatedAtUnixMsFieldNumber = 6,
@@ -5396,42 +5091,6 @@ class MetricBatch final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricEvent >&
       events() const;
 
-  // .rl.common.v1.ContractIdentity contract = 1;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
-
-  // .rl.common.v1.SchemaIdentity schema_identity = 2;
-  bool has_schema_identity() const;
-  private:
-  bool _internal_has_schema_identity() const;
-  public:
-  void clear_schema_identity();
-  const ::rl::common::v1::SchemaIdentity& schema_identity() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::SchemaIdentity* release_schema_identity();
-  ::rl::common::v1::SchemaIdentity* mutable_schema_identity();
-  void set_allocated_schema_identity(::rl::common::v1::SchemaIdentity* schema_identity);
-  private:
-  const ::rl::common::v1::SchemaIdentity& _internal_schema_identity() const;
-  ::rl::common::v1::SchemaIdentity* _internal_mutable_schema_identity();
-  public:
-  void unsafe_arena_set_allocated_schema_identity(
-      ::rl::common::v1::SchemaIdentity* schema_identity);
-  ::rl::common::v1::SchemaIdentity* unsafe_arena_release_schema_identity();
-
   // .rl.common.v1.ServiceInstanceIdentity source = 3;
   bool has_source() const;
   private:
@@ -5449,24 +5108,6 @@ class MetricBatch final :
   void unsafe_arena_set_allocated_source(
       ::rl::common::v1::ServiceInstanceIdentity* source);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_source();
-
-  // .rl.common.v1.ContentDigest batch_digest = 5;
-  bool has_batch_digest() const;
-  private:
-  bool _internal_has_batch_digest() const;
-  public:
-  void clear_batch_digest();
-  const ::rl::common::v1::ContentDigest& batch_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_batch_digest();
-  ::rl::common::v1::ContentDigest* mutable_batch_digest();
-  void set_allocated_batch_digest(::rl::common::v1::ContentDigest* batch_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_batch_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_batch_digest();
-  public:
-  void unsafe_arena_set_allocated_batch_digest(
-      ::rl::common::v1::ContentDigest* batch_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_batch_digest();
 
   // .rl.training.v1.MetricSequenceGap gap = 14;
   bool has_gap() const;
@@ -5558,10 +5199,7 @@ class MetricBatch final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::MetricEvent > events_;
-    ::rl::common::v1::ContractIdentity* contract_;
-    ::rl::common::v1::SchemaIdentity* schema_identity_;
     ::rl::common::v1::ServiceInstanceIdentity* source_;
-    ::rl::common::v1::ContentDigest* batch_digest_;
     ::rl::training::v1::MetricSequenceGap* gap_;
     uint64_t batch_sequence_;
     int64_t created_at_unix_ms_;
@@ -5625,7 +5263,7 @@ class MetricBatchCursor final :
                &_MetricBatchCursor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    20;
 
   friend void swap(MetricBatchCursor& a, MetricBatchCursor& b) {
     a.Swap(&b);
@@ -5699,7 +5337,6 @@ class MetricBatchCursor final :
 
   enum : int {
     kSourceFieldNumber = 1,
-    kAcknowledgedBatchDigestFieldNumber = 4,
     kAcknowledgedBatchSequenceFieldNumber = 2,
     kAcknowledgedEventSequenceFieldNumber = 3,
   };
@@ -5720,24 +5357,6 @@ class MetricBatchCursor final :
   void unsafe_arena_set_allocated_source(
       ::rl::common::v1::ServiceInstanceIdentity* source);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_source();
-
-  // .rl.common.v1.ContentDigest acknowledged_batch_digest = 4;
-  bool has_acknowledged_batch_digest() const;
-  private:
-  bool _internal_has_acknowledged_batch_digest() const;
-  public:
-  void clear_acknowledged_batch_digest();
-  const ::rl::common::v1::ContentDigest& acknowledged_batch_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_acknowledged_batch_digest();
-  ::rl::common::v1::ContentDigest* mutable_acknowledged_batch_digest();
-  void set_allocated_acknowledged_batch_digest(::rl::common::v1::ContentDigest* acknowledged_batch_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_acknowledged_batch_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_acknowledged_batch_digest();
-  public:
-  void unsafe_arena_set_allocated_acknowledged_batch_digest(
-      ::rl::common::v1::ContentDigest* acknowledged_batch_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_acknowledged_batch_digest();
 
   // uint64 acknowledged_batch_sequence = 2;
   void clear_acknowledged_batch_sequence();
@@ -5766,7 +5385,6 @@ class MetricBatchCursor final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::rl::common::v1::ServiceInstanceIdentity* source_;
-    ::rl::common::v1::ContentDigest* acknowledged_batch_digest_;
     uint64_t acknowledged_batch_sequence_;
     uint64_t acknowledged_event_sequence_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -5824,7 +5442,7 @@ class GetMetricBatchReq final :
                &_GetMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    21;
 
   friend void swap(GetMetricBatchReq& a, GetMetricBatchReq& b) {
     a.Swap(&b);
@@ -5897,31 +5515,12 @@ class GetMetricBatchReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kContractFieldNumber = 1,
     kConsumerFieldNumber = 2,
     kCursorFieldNumber = 3,
     kMaxBytesFieldNumber = 5,
     kMaxEventsFieldNumber = 4,
     kWaitTimeoutMsFieldNumber = 6,
   };
-  // .rl.common.v1.ContractIdentity contract = 1;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
-
   // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
   bool has_consumer() const;
   private:
@@ -5993,7 +5592,6 @@ class GetMetricBatchReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::ServiceInstanceIdentity* consumer_;
     ::rl::training::v1::MetricBatchCursor* cursor_;
     int64_t max_bytes_;
@@ -6054,7 +5652,7 @@ class GetMetricBatchRsp final :
                &_GetMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    22;
 
   friend void swap(GetMetricBatchRsp& a, GetMetricBatchRsp& b) {
     a.Swap(&b);
@@ -6280,7 +5878,7 @@ class AckMetricBatchReq final :
                &_AckMetricBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    23;
 
   friend void swap(AckMetricBatchReq& a, AckMetricBatchReq& b) {
     a.Swap(&b);
@@ -6353,28 +5951,9 @@ class AckMetricBatchReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kContractFieldNumber = 1,
     kConsumerFieldNumber = 2,
     kCursorFieldNumber = 3,
   };
-  // .rl.common.v1.ContractIdentity contract = 1;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
-
   // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
   bool has_consumer() const;
   private:
@@ -6419,7 +5998,6 @@ class AckMetricBatchReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::ServiceInstanceIdentity* consumer_;
     ::rl::training::v1::MetricBatchCursor* cursor_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -6477,7 +6055,7 @@ class AckMetricBatchRsp final :
                &_AckMetricBatchRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    24;
 
   friend void swap(AckMetricBatchRsp& a, AckMetricBatchRsp& b) {
     a.Swap(&b);
@@ -6702,7 +6280,7 @@ class AIServerStatusReq final :
                &_AIServerStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    25;
 
   friend void swap(AIServerStatusReq& a, AIServerStatusReq& b) {
     a.Swap(&b);
@@ -6821,7 +6399,7 @@ class AIServerStatusRsp final :
                &_AIServerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    26;
 
   friend void swap(AIServerStatusRsp& a, AIServerStatusRsp& b) {
     a.Swap(&b);
@@ -6896,11 +6474,9 @@ class AIServerStatusRsp final :
   enum : int {
     kSegmentCloseCountsFieldNumber = 40,
     kLastErrorFieldNumber = 32,
-    kContractFieldNumber = 1,
     kAiserverFieldNumber = 2,
     kLoadedModelFieldNumber = 7,
     kStagedModelFieldNumber = 8,
-    kRolloutEstimatorProfileDigestFieldNumber = 34,
     kStateFieldNumber = 3,
     kReadyFieldNumber = 4,
     kDistributorReadyFieldNumber = 5,
@@ -6967,24 +6543,6 @@ class AIServerStatusRsp final :
   std::string* _internal_mutable_last_error();
   public:
 
-  // .rl.common.v1.ContractIdentity contract = 1;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
-
   // .rl.common.v1.ServiceInstanceIdentity aiserver = 2;
   bool has_aiserver() const;
   private:
@@ -7038,24 +6596,6 @@ class AIServerStatusRsp final :
   void unsafe_arena_set_allocated_staged_model(
       ::rl::training::v1::ModelIdentity* staged_model);
   ::rl::training::v1::ModelIdentity* unsafe_arena_release_staged_model();
-
-  // .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 34;
-  bool has_rollout_estimator_profile_digest() const;
-  private:
-  bool _internal_has_rollout_estimator_profile_digest() const;
-  public:
-  void clear_rollout_estimator_profile_digest();
-  const ::rl::common::v1::ContentDigest& rollout_estimator_profile_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_rollout_estimator_profile_digest();
-  ::rl::common::v1::ContentDigest* mutable_rollout_estimator_profile_digest();
-  void set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_rollout_estimator_profile_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_rollout_estimator_profile_digest();
-  public:
-  void unsafe_arena_set_allocated_rollout_estimator_profile_digest(
-      ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_rollout_estimator_profile_digest();
 
   // .rl.training.v1.AIServerState state = 3;
   void clear_state();
@@ -7364,11 +6904,9 @@ class AIServerStatusRsp final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::SegmentCloseCount > segment_close_counts_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
-    ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::ServiceInstanceIdentity* aiserver_;
     ::rl::training::v1::ModelIdentity* loaded_model_;
     ::rl::training::v1::ModelIdentity* staged_model_;
-    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest_;
     int state_;
     bool ready_;
     bool distributor_ready_;
@@ -7457,7 +6995,7 @@ class SegmentCloseCount final :
                &_SegmentCloseCount_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    27;
 
   friend void swap(SegmentCloseCount& a, SegmentCloseCount& b) {
     a.Swap(&b);
@@ -7616,7 +7154,7 @@ class ModelArtifactManifest final :
                &_ModelArtifactManifest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    28;
 
   friend void swap(ModelArtifactManifest& a, ModelArtifactManifest& b) {
     a.Swap(&b);
@@ -7690,9 +7228,6 @@ class ModelArtifactManifest final :
 
   enum : int {
     kIdentityFieldNumber = 3,
-    kTrainingConfigDigestFieldNumber = 17,
-    kTrainingContractDigestFieldNumber = 18,
-    kRolloutEstimatorProfileFieldNumber = 21,
     kSizeBytesFieldNumber = 13,
     kTrainedSamplesFieldNumber = 16,
     kPublishedAtUnixMsFieldNumber = 19,
@@ -7714,60 +7249,6 @@ class ModelArtifactManifest final :
   void unsafe_arena_set_allocated_identity(
       ::rl::training::v1::ModelIdentity* identity);
   ::rl::training::v1::ModelIdentity* unsafe_arena_release_identity();
-
-  // .rl.common.v1.ContentDigest training_config_digest = 17;
-  bool has_training_config_digest() const;
-  private:
-  bool _internal_has_training_config_digest() const;
-  public:
-  void clear_training_config_digest();
-  const ::rl::common::v1::ContentDigest& training_config_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_config_digest();
-  ::rl::common::v1::ContentDigest* mutable_training_config_digest();
-  void set_allocated_training_config_digest(::rl::common::v1::ContentDigest* training_config_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_training_config_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_training_config_digest();
-  public:
-  void unsafe_arena_set_allocated_training_config_digest(
-      ::rl::common::v1::ContentDigest* training_config_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_config_digest();
-
-  // .rl.common.v1.ContentDigest training_contract_digest = 18;
-  bool has_training_contract_digest() const;
-  private:
-  bool _internal_has_training_contract_digest() const;
-  public:
-  void clear_training_contract_digest();
-  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
-  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
-  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
-  public:
-  void unsafe_arena_set_allocated_training_contract_digest(
-      ::rl::common::v1::ContentDigest* training_contract_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
-
-  // .rl.training.v1.RolloutEstimatorProfile rollout_estimator_profile = 21;
-  bool has_rollout_estimator_profile() const;
-  private:
-  bool _internal_has_rollout_estimator_profile() const;
-  public:
-  void clear_rollout_estimator_profile();
-  const ::rl::training::v1::RolloutEstimatorProfile& rollout_estimator_profile() const;
-  PROTOBUF_NODISCARD ::rl::training::v1::RolloutEstimatorProfile* release_rollout_estimator_profile();
-  ::rl::training::v1::RolloutEstimatorProfile* mutable_rollout_estimator_profile();
-  void set_allocated_rollout_estimator_profile(::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile);
-  private:
-  const ::rl::training::v1::RolloutEstimatorProfile& _internal_rollout_estimator_profile() const;
-  ::rl::training::v1::RolloutEstimatorProfile* _internal_mutable_rollout_estimator_profile();
-  public:
-  void unsafe_arena_set_allocated_rollout_estimator_profile(
-      ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile);
-  ::rl::training::v1::RolloutEstimatorProfile* unsafe_arena_release_rollout_estimator_profile();
 
   // int64 size_bytes = 13;
   void clear_size_bytes();
@@ -7805,9 +7286,6 @@ class ModelArtifactManifest final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::rl::training::v1::ModelIdentity* identity_;
-    ::rl::common::v1::ContentDigest* training_config_digest_;
-    ::rl::common::v1::ContentDigest* training_contract_digest_;
-    ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile_;
     int64_t size_bytes_;
     uint64_t trained_samples_;
     int64_t published_at_unix_ms_;
@@ -7866,7 +7344,7 @@ class RegisterModelReq final :
                &_RegisterModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    29;
 
   friend void swap(RegisterModelReq& a, RegisterModelReq& b) {
     a.Swap(&b);
@@ -7941,7 +7419,6 @@ class RegisterModelReq final :
   enum : int {
     kLocalArtifactPathFieldNumber = 3,
     kManifestFieldNumber = 1,
-    kContractFieldNumber = 2,
   };
   // string local_artifact_path = 3;
   void clear_local_artifact_path();
@@ -7975,24 +7452,6 @@ class RegisterModelReq final :
       ::rl::training::v1::ModelArtifactManifest* manifest);
   ::rl::training::v1::ModelArtifactManifest* unsafe_arena_release_manifest();
 
-  // .rl.common.v1.ContractIdentity contract = 2;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
-
   // @@protoc_insertion_point(class_scope:rl.training.v1.RegisterModelReq)
  private:
   class _Internal;
@@ -8003,7 +7462,6 @@ class RegisterModelReq final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr local_artifact_path_;
     ::rl::training::v1::ModelArtifactManifest* manifest_;
-    ::rl::common::v1::ContractIdentity* contract_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -8059,7 +7517,7 @@ class RegisterModelRsp final :
                &_RegisterModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    30;
 
   friend void swap(RegisterModelRsp& a, RegisterModelRsp& b) {
     a.Swap(&b);
@@ -8263,7 +7721,7 @@ class GetModelManifestReq final :
                &_GetModelManifestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    31;
 
   friend void swap(GetModelManifestReq& a, GetModelManifestReq& b) {
     a.Swap(&b);
@@ -8451,7 +7909,7 @@ class GetModelManifestRsp final :
                &_GetModelManifestRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    32;
 
   friend void swap(GetModelManifestRsp& a, GetModelManifestRsp& b) {
     a.Swap(&b);
@@ -8686,7 +8144,7 @@ class DownloadModelReq final :
                &_DownloadModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    33;
 
   friend void swap(DownloadModelReq& a, DownloadModelReq& b) {
     a.Swap(&b);
@@ -8863,7 +8321,7 @@ class ModelChunk final :
                &_ModelChunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    34;
 
   friend void swap(ModelChunk& a, ModelChunk& b) {
     a.Swap(&b);
@@ -9047,7 +8505,7 @@ class AckModelReq final :
                &_AckModelReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    35;
 
   friend void swap(AckModelReq& a, AckModelReq& b) {
     a.Swap(&b);
@@ -9267,7 +8725,7 @@ class AckModelRsp final :
                &_AckModelRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    36;
 
   friend void swap(AckModelRsp& a, AckModelRsp& b) {
     a.Swap(&b);
@@ -9450,7 +8908,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    37;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -9569,7 +9027,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    38;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -9643,7 +9101,6 @@ class ModelDistributorStatusRsp final :
 
   enum : int {
     kLastErrorFieldNumber = 18,
-    kContractFieldNumber = 1,
     kDistributorFieldNumber = 2,
     kLatestModelFieldNumber = 5,
     kLatestAckAiserverFieldNumber = 15,
@@ -9677,24 +9134,6 @@ class ModelDistributorStatusRsp final :
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_last_error(const std::string& value);
   std::string* _internal_mutable_last_error();
   public:
-
-  // .rl.common.v1.ContractIdentity contract = 1;
-  bool has_contract() const;
-  private:
-  bool _internal_has_contract() const;
-  public:
-  void clear_contract();
-  const ::rl::common::v1::ContractIdentity& contract() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContractIdentity* release_contract();
-  ::rl::common::v1::ContractIdentity* mutable_contract();
-  void set_allocated_contract(::rl::common::v1::ContractIdentity* contract);
-  private:
-  const ::rl::common::v1::ContractIdentity& _internal_contract() const;
-  ::rl::common::v1::ContractIdentity* _internal_mutable_contract();
-  public:
-  void unsafe_arena_set_allocated_contract(
-      ::rl::common::v1::ContractIdentity* contract);
-  ::rl::common::v1::ContractIdentity* unsafe_arena_release_contract();
 
   // .rl.common.v1.ServiceInstanceIdentity distributor = 2;
   bool has_distributor() const;
@@ -9922,7 +9361,6 @@ class ModelDistributorStatusRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
-    ::rl::common::v1::ContractIdentity* contract_;
     ::rl::common::v1::ServiceInstanceIdentity* distributor_;
     ::rl::training::v1::ModelIdentity* latest_model_;
     ::rl::common::v1::ServiceInstanceIdentity* latest_ack_aiserver_;
@@ -10033,325 +9471,6 @@ inline void ModelIdentity::_internal_set_model_step(uint64_t value) {
 inline void ModelIdentity::set_model_step(uint64_t value) {
   _internal_set_model_step(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.ModelIdentity.model_step)
-}
-
-// .rl.common.v1.ContentDigest artifact_digest = 3;
-inline bool ModelIdentity::_internal_has_artifact_digest() const {
-  return this != internal_default_instance() && _impl_.artifact_digest_ != nullptr;
-}
-inline bool ModelIdentity::has_artifact_digest() const {
-  return _internal_has_artifact_digest();
-}
-inline const ::rl::common::v1::ContentDigest& ModelIdentity::_internal_artifact_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.artifact_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& ModelIdentity::artifact_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelIdentity.artifact_digest)
-  return _internal_artifact_digest();
-}
-inline void ModelIdentity::unsafe_arena_set_allocated_artifact_digest(
-    ::rl::common::v1::ContentDigest* artifact_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.artifact_digest_);
-  }
-  _impl_.artifact_digest_ = artifact_digest;
-  if (artifact_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelIdentity.artifact_digest)
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::release_artifact_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.artifact_digest_;
-  _impl_.artifact_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::unsafe_arena_release_artifact_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelIdentity.artifact_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.artifact_digest_;
-  _impl_.artifact_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::_internal_mutable_artifact_digest() {
-  
-  if (_impl_.artifact_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.artifact_digest_ = p;
-  }
-  return _impl_.artifact_digest_;
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::mutable_artifact_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_artifact_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelIdentity.artifact_digest)
-  return _msg;
-}
-inline void ModelIdentity::set_allocated_artifact_digest(::rl::common::v1::ContentDigest* artifact_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.artifact_digest_);
-  }
-  if (artifact_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(artifact_digest));
-    if (message_arena != submessage_arena) {
-      artifact_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, artifact_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.artifact_digest_ = artifact_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelIdentity.artifact_digest)
-}
-
-// .rl.common.v1.ContentDigest manifest_digest = 4;
-inline bool ModelIdentity::_internal_has_manifest_digest() const {
-  return this != internal_default_instance() && _impl_.manifest_digest_ != nullptr;
-}
-inline bool ModelIdentity::has_manifest_digest() const {
-  return _internal_has_manifest_digest();
-}
-inline const ::rl::common::v1::ContentDigest& ModelIdentity::_internal_manifest_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.manifest_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& ModelIdentity::manifest_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelIdentity.manifest_digest)
-  return _internal_manifest_digest();
-}
-inline void ModelIdentity::unsafe_arena_set_allocated_manifest_digest(
-    ::rl::common::v1::ContentDigest* manifest_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.manifest_digest_);
-  }
-  _impl_.manifest_digest_ = manifest_digest;
-  if (manifest_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelIdentity.manifest_digest)
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::release_manifest_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.manifest_digest_;
-  _impl_.manifest_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::unsafe_arena_release_manifest_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelIdentity.manifest_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.manifest_digest_;
-  _impl_.manifest_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::_internal_mutable_manifest_digest() {
-  
-  if (_impl_.manifest_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.manifest_digest_ = p;
-  }
-  return _impl_.manifest_digest_;
-}
-inline ::rl::common::v1::ContentDigest* ModelIdentity::mutable_manifest_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_manifest_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelIdentity.manifest_digest)
-  return _msg;
-}
-inline void ModelIdentity::set_allocated_manifest_digest(::rl::common::v1::ContentDigest* manifest_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.manifest_digest_);
-  }
-  if (manifest_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(manifest_digest));
-    if (message_arena != submessage_arena) {
-      manifest_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, manifest_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.manifest_digest_ = manifest_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelIdentity.manifest_digest)
-}
-
-// -------------------------------------------------------------------
-
-// RolloutEstimatorProfile
-
-// double gamma = 2;
-inline void RolloutEstimatorProfile::clear_gamma() {
-  _impl_.gamma_ = 0;
-}
-inline double RolloutEstimatorProfile::_internal_gamma() const {
-  return _impl_.gamma_;
-}
-inline double RolloutEstimatorProfile::gamma() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.gamma)
-  return _internal_gamma();
-}
-inline void RolloutEstimatorProfile::_internal_set_gamma(double value) {
-  
-  _impl_.gamma_ = value;
-}
-inline void RolloutEstimatorProfile::set_gamma(double value) {
-  _internal_set_gamma(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.gamma)
-}
-
-// double gae_lambda = 3;
-inline void RolloutEstimatorProfile::clear_gae_lambda() {
-  _impl_.gae_lambda_ = 0;
-}
-inline double RolloutEstimatorProfile::_internal_gae_lambda() const {
-  return _impl_.gae_lambda_;
-}
-inline double RolloutEstimatorProfile::gae_lambda() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.gae_lambda)
-  return _internal_gae_lambda();
-}
-inline void RolloutEstimatorProfile::_internal_set_gae_lambda(double value) {
-  
-  _impl_.gae_lambda_ = value;
-}
-inline void RolloutEstimatorProfile::set_gae_lambda(double value) {
-  _internal_set_gae_lambda(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.gae_lambda)
-}
-
-// uint32 tmax = 4;
-inline void RolloutEstimatorProfile::clear_tmax() {
-  _impl_.tmax_ = 0u;
-}
-inline uint32_t RolloutEstimatorProfile::_internal_tmax() const {
-  return _impl_.tmax_;
-}
-inline uint32_t RolloutEstimatorProfile::tmax() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.tmax)
-  return _internal_tmax();
-}
-inline void RolloutEstimatorProfile::_internal_set_tmax(uint32_t value) {
-  
-  _impl_.tmax_ = value;
-}
-inline void RolloutEstimatorProfile::set_tmax(uint32_t value) {
-  _internal_set_tmax(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.RolloutEstimatorProfile.tmax)
-}
-
-// .rl.common.v1.ContentDigest profile_digest = 13;
-inline bool RolloutEstimatorProfile::_internal_has_profile_digest() const {
-  return this != internal_default_instance() && _impl_.profile_digest_ != nullptr;
-}
-inline bool RolloutEstimatorProfile::has_profile_digest() const {
-  return _internal_has_profile_digest();
-}
-inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::_internal_profile_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.profile_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& RolloutEstimatorProfile::profile_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RolloutEstimatorProfile.profile_digest)
-  return _internal_profile_digest();
-}
-inline void RolloutEstimatorProfile::unsafe_arena_set_allocated_profile_digest(
-    ::rl::common::v1::ContentDigest* profile_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.profile_digest_);
-  }
-  _impl_.profile_digest_ = profile_digest;
-  if (profile_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.RolloutEstimatorProfile.profile_digest)
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::release_profile_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.profile_digest_;
-  _impl_.profile_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::unsafe_arena_release_profile_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RolloutEstimatorProfile.profile_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.profile_digest_;
-  _impl_.profile_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::_internal_mutable_profile_digest() {
-  
-  if (_impl_.profile_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.profile_digest_ = p;
-  }
-  return _impl_.profile_digest_;
-}
-inline ::rl::common::v1::ContentDigest* RolloutEstimatorProfile::mutable_profile_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_profile_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RolloutEstimatorProfile.profile_digest)
-  return _msg;
-}
-inline void RolloutEstimatorProfile::set_allocated_profile_digest(::rl::common::v1::ContentDigest* profile_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.profile_digest_);
-  }
-  if (profile_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(profile_digest));
-    if (message_arena != submessage_arena) {
-      profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, profile_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.profile_digest_ = profile_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RolloutEstimatorProfile.profile_digest)
 }
 
 // -------------------------------------------------------------------
@@ -10704,91 +9823,6 @@ inline void ProcessedTransitionEnvelope::set_allocated_envelope_id(std::string* 
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.envelope_id)
 }
 
-// .rl.common.v1.ContentDigest payload_digest = 2;
-inline bool ProcessedTransitionEnvelope::_internal_has_payload_digest() const {
-  return this != internal_default_instance() && _impl_.payload_digest_ != nullptr;
-}
-inline bool ProcessedTransitionEnvelope::has_payload_digest() const {
-  return _internal_has_payload_digest();
-}
-inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::_internal_payload_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.payload_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::payload_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
-  return _internal_payload_digest();
-}
-inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_payload_digest(
-    ::rl::common::v1::ContentDigest* payload_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
-  }
-  _impl_.payload_digest_ = payload_digest;
-  if (payload_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::release_payload_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
-  _impl_.payload_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::unsafe_arena_release_payload_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
-  _impl_.payload_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::_internal_mutable_payload_digest() {
-  
-  if (_impl_.payload_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.payload_digest_ = p;
-  }
-  return _impl_.payload_digest_;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::mutable_payload_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_payload_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
-  return _msg;
-}
-inline void ProcessedTransitionEnvelope::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
-  }
-  if (payload_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(payload_digest));
-    if (message_arena != submessage_arena) {
-      payload_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, payload_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.payload_digest_ = payload_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.payload_digest)
-}
-
 // .rl.common.v1.ServiceInstanceIdentity producer = 3;
 inline bool ProcessedTransitionEnvelope::_internal_has_producer() const {
   return this != internal_default_instance() && _impl_.producer_ != nullptr;
@@ -10872,91 +9906,6 @@ inline void ProcessedTransitionEnvelope::set_allocated_producer(::rl::common::v1
   }
   _impl_.producer_ = producer;
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.producer)
-}
-
-// .rl.common.v1.ContentDigest training_contract_digest = 4;
-inline bool ProcessedTransitionEnvelope::_internal_has_training_contract_digest() const {
-  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
-}
-inline bool ProcessedTransitionEnvelope::has_training_contract_digest() const {
-  return _internal_has_training_contract_digest();
-}
-inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::_internal_training_contract_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& ProcessedTransitionEnvelope::training_contract_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
-  return _internal_training_contract_digest();
-}
-inline void ProcessedTransitionEnvelope::unsafe_arena_set_allocated_training_contract_digest(
-    ::rl::common::v1::ContentDigest* training_contract_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  if (training_contract_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::release_training_contract_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::unsafe_arena_release_training_contract_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::_internal_mutable_training_contract_digest() {
-  
-  if (_impl_.training_contract_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.training_contract_digest_ = p;
-  }
-  return _impl_.training_contract_digest_;
-}
-inline ::rl::common::v1::ContentDigest* ProcessedTransitionEnvelope::mutable_training_contract_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
-  return _msg;
-}
-inline void ProcessedTransitionEnvelope::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  if (training_contract_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
-    if (message_arena != submessage_arena) {
-      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_contract_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ProcessedTransitionEnvelope.training_contract_digest)
 }
 
 // .rl.training.v1.ModelIdentity behavior_model = 5;
@@ -11566,91 +10515,6 @@ inline void PushSamplesRsp::set_allocated_sample_pool(::rl::common::v1::ServiceI
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.sample_pool)
 }
 
-// .rl.common.v1.ContentDigest payload_digest = 6;
-inline bool PushSamplesRsp::_internal_has_payload_digest() const {
-  return this != internal_default_instance() && _impl_.payload_digest_ != nullptr;
-}
-inline bool PushSamplesRsp::has_payload_digest() const {
-  return _internal_has_payload_digest();
-}
-inline const ::rl::common::v1::ContentDigest& PushSamplesRsp::_internal_payload_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.payload_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& PushSamplesRsp::payload_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.PushSamplesRsp.payload_digest)
-  return _internal_payload_digest();
-}
-inline void PushSamplesRsp::unsafe_arena_set_allocated_payload_digest(
-    ::rl::common::v1::ContentDigest* payload_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
-  }
-  _impl_.payload_digest_ = payload_digest;
-  if (payload_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.PushSamplesRsp.payload_digest)
-}
-inline ::rl::common::v1::ContentDigest* PushSamplesRsp::release_payload_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
-  _impl_.payload_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* PushSamplesRsp::unsafe_arena_release_payload_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.PushSamplesRsp.payload_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.payload_digest_;
-  _impl_.payload_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* PushSamplesRsp::_internal_mutable_payload_digest() {
-  
-  if (_impl_.payload_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.payload_digest_ = p;
-  }
-  return _impl_.payload_digest_;
-}
-inline ::rl::common::v1::ContentDigest* PushSamplesRsp::mutable_payload_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_payload_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.PushSamplesRsp.payload_digest)
-  return _msg;
-}
-inline void PushSamplesRsp::set_allocated_payload_digest(::rl::common::v1::ContentDigest* payload_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.payload_digest_);
-  }
-  if (payload_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(payload_digest));
-    if (message_arena != submessage_arena) {
-      payload_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, payload_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.payload_digest_ = payload_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.PushSamplesRsp.payload_digest)
-}
-
 // -------------------------------------------------------------------
 
 // GetBatchReq
@@ -11798,91 +10662,6 @@ inline void GetBatchReq::_internal_set_lease_timeout_ms(int32_t value) {
 inline void GetBatchReq::set_lease_timeout_ms(int32_t value) {
   _internal_set_lease_timeout_ms(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchReq.lease_timeout_ms)
-}
-
-// .rl.common.v1.ContentDigest required_training_contract_digest = 5;
-inline bool GetBatchReq::_internal_has_required_training_contract_digest() const {
-  return this != internal_default_instance() && _impl_.required_training_contract_digest_ != nullptr;
-}
-inline bool GetBatchReq::has_required_training_contract_digest() const {
-  return _internal_has_required_training_contract_digest();
-}
-inline const ::rl::common::v1::ContentDigest& GetBatchReq::_internal_required_training_contract_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.required_training_contract_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& GetBatchReq::required_training_contract_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchReq.required_training_contract_digest)
-  return _internal_required_training_contract_digest();
-}
-inline void GetBatchReq::unsafe_arena_set_allocated_required_training_contract_digest(
-    ::rl::common::v1::ContentDigest* required_training_contract_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_training_contract_digest_);
-  }
-  _impl_.required_training_contract_digest_ = required_training_contract_digest;
-  if (required_training_contract_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetBatchReq.required_training_contract_digest)
-}
-inline ::rl::common::v1::ContentDigest* GetBatchReq::release_required_training_contract_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.required_training_contract_digest_;
-  _impl_.required_training_contract_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* GetBatchReq::unsafe_arena_release_required_training_contract_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.GetBatchReq.required_training_contract_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.required_training_contract_digest_;
-  _impl_.required_training_contract_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* GetBatchReq::_internal_mutable_required_training_contract_digest() {
-  
-  if (_impl_.required_training_contract_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.required_training_contract_digest_ = p;
-  }
-  return _impl_.required_training_contract_digest_;
-}
-inline ::rl::common::v1::ContentDigest* GetBatchReq::mutable_required_training_contract_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_required_training_contract_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetBatchReq.required_training_contract_digest)
-  return _msg;
-}
-inline void GetBatchReq::set_allocated_required_training_contract_digest(::rl::common::v1::ContentDigest* required_training_contract_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.required_training_contract_digest_);
-  }
-  if (required_training_contract_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(required_training_contract_digest));
-    if (message_arena != submessage_arena) {
-      required_training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, required_training_contract_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.required_training_contract_digest_ = required_training_contract_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchReq.required_training_contract_digest)
 }
 
 // -------------------------------------------------------------------
@@ -13394,91 +12173,6 @@ inline void FinalizeSamplePoolRsp::set_finalized_at_unix_ms(int64_t value) {
 
 // SamplePoolStatusRsp
 
-// .rl.common.v1.ContractIdentity contract = 1;
-inline bool SamplePoolStatusRsp::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool SamplePoolStatusRsp::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& SamplePoolStatusRsp::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& SamplePoolStatusRsp::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.contract)
-  return _internal_contract();
-}
-inline void SamplePoolStatusRsp::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SamplePoolStatusRsp.contract)
-}
-inline ::rl::common::v1::ContractIdentity* SamplePoolStatusRsp::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* SamplePoolStatusRsp::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.SamplePoolStatusRsp.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* SamplePoolStatusRsp::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* SamplePoolStatusRsp::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.SamplePoolStatusRsp.contract)
-  return _msg;
-}
-inline void SamplePoolStatusRsp::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SamplePoolStatusRsp.contract)
-}
-
 // .rl.common.v1.ServiceInstanceIdentity sample_pool = 2;
 inline bool SamplePoolStatusRsp::_internal_has_sample_pool() const {
   return this != internal_default_instance() && _impl_.sample_pool_ != nullptr;
@@ -14860,6 +13554,26 @@ inline void MetricEvent::set_allocated_fact_payload(std::string* fact_payload) {
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricEvent.fact_payload)
 }
 
+// .rl.training.v1.MetricFactKind fact_kind = 7;
+inline void MetricEvent::clear_fact_kind() {
+  _impl_.fact_kind_ = 0;
+}
+inline ::rl::training::v1::MetricFactKind MetricEvent::_internal_fact_kind() const {
+  return static_cast< ::rl::training::v1::MetricFactKind >(_impl_.fact_kind_);
+}
+inline ::rl::training::v1::MetricFactKind MetricEvent::fact_kind() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.MetricEvent.fact_kind)
+  return _internal_fact_kind();
+}
+inline void MetricEvent::_internal_set_fact_kind(::rl::training::v1::MetricFactKind value) {
+  
+  _impl_.fact_kind_ = value;
+}
+inline void MetricEvent::set_fact_kind(::rl::training::v1::MetricFactKind value) {
+  _internal_set_fact_kind(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.MetricEvent.fact_kind)
+}
+
 // -------------------------------------------------------------------
 
 // MetricSequenceGap
@@ -14978,176 +13692,6 @@ inline void MetricSequenceGap::set_allocated_reason(std::string* reason) {
 
 // MetricBatch
 
-// .rl.common.v1.ContractIdentity contract = 1;
-inline bool MetricBatch::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool MetricBatch::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& MetricBatch::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& MetricBatch::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricBatch.contract)
-  return _internal_contract();
-}
-inline void MetricBatch::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricBatch.contract)
-}
-inline ::rl::common::v1::ContractIdentity* MetricBatch::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* MetricBatch::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricBatch.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* MetricBatch::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* MetricBatch::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricBatch.contract)
-  return _msg;
-}
-inline void MetricBatch::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricBatch.contract)
-}
-
-// .rl.common.v1.SchemaIdentity schema_identity = 2;
-inline bool MetricBatch::_internal_has_schema_identity() const {
-  return this != internal_default_instance() && _impl_.schema_identity_ != nullptr;
-}
-inline bool MetricBatch::has_schema_identity() const {
-  return _internal_has_schema_identity();
-}
-inline const ::rl::common::v1::SchemaIdentity& MetricBatch::_internal_schema_identity() const {
-  const ::rl::common::v1::SchemaIdentity* p = _impl_.schema_identity_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::SchemaIdentity&>(
-      ::rl::common::v1::_SchemaIdentity_default_instance_);
-}
-inline const ::rl::common::v1::SchemaIdentity& MetricBatch::schema_identity() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricBatch.schema_identity)
-  return _internal_schema_identity();
-}
-inline void MetricBatch::unsafe_arena_set_allocated_schema_identity(
-    ::rl::common::v1::SchemaIdentity* schema_identity) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.schema_identity_);
-  }
-  _impl_.schema_identity_ = schema_identity;
-  if (schema_identity) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricBatch.schema_identity)
-}
-inline ::rl::common::v1::SchemaIdentity* MetricBatch::release_schema_identity() {
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.schema_identity_;
-  _impl_.schema_identity_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricBatch::unsafe_arena_release_schema_identity() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricBatch.schema_identity)
-  
-  ::rl::common::v1::SchemaIdentity* temp = _impl_.schema_identity_;
-  _impl_.schema_identity_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricBatch::_internal_mutable_schema_identity() {
-  
-  if (_impl_.schema_identity_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::SchemaIdentity>(GetArenaForAllocation());
-    _impl_.schema_identity_ = p;
-  }
-  return _impl_.schema_identity_;
-}
-inline ::rl::common::v1::SchemaIdentity* MetricBatch::mutable_schema_identity() {
-  ::rl::common::v1::SchemaIdentity* _msg = _internal_mutable_schema_identity();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricBatch.schema_identity)
-  return _msg;
-}
-inline void MetricBatch::set_allocated_schema_identity(::rl::common::v1::SchemaIdentity* schema_identity) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.schema_identity_);
-  }
-  if (schema_identity) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(schema_identity));
-    if (message_arena != submessage_arena) {
-      schema_identity = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, schema_identity, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.schema_identity_ = schema_identity;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricBatch.schema_identity)
-}
-
 // .rl.common.v1.ServiceInstanceIdentity source = 3;
 inline bool MetricBatch::_internal_has_source() const {
   return this != internal_default_instance() && _impl_.source_ != nullptr;
@@ -15251,91 +13795,6 @@ inline void MetricBatch::_internal_set_batch_sequence(uint64_t value) {
 inline void MetricBatch::set_batch_sequence(uint64_t value) {
   _internal_set_batch_sequence(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.MetricBatch.batch_sequence)
-}
-
-// .rl.common.v1.ContentDigest batch_digest = 5;
-inline bool MetricBatch::_internal_has_batch_digest() const {
-  return this != internal_default_instance() && _impl_.batch_digest_ != nullptr;
-}
-inline bool MetricBatch::has_batch_digest() const {
-  return _internal_has_batch_digest();
-}
-inline const ::rl::common::v1::ContentDigest& MetricBatch::_internal_batch_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.batch_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& MetricBatch::batch_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricBatch.batch_digest)
-  return _internal_batch_digest();
-}
-inline void MetricBatch::unsafe_arena_set_allocated_batch_digest(
-    ::rl::common::v1::ContentDigest* batch_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.batch_digest_);
-  }
-  _impl_.batch_digest_ = batch_digest;
-  if (batch_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricBatch.batch_digest)
-}
-inline ::rl::common::v1::ContentDigest* MetricBatch::release_batch_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.batch_digest_;
-  _impl_.batch_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* MetricBatch::unsafe_arena_release_batch_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricBatch.batch_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.batch_digest_;
-  _impl_.batch_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* MetricBatch::_internal_mutable_batch_digest() {
-  
-  if (_impl_.batch_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.batch_digest_ = p;
-  }
-  return _impl_.batch_digest_;
-}
-inline ::rl::common::v1::ContentDigest* MetricBatch::mutable_batch_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_batch_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricBatch.batch_digest)
-  return _msg;
-}
-inline void MetricBatch::set_allocated_batch_digest(::rl::common::v1::ContentDigest* batch_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.batch_digest_);
-  }
-  if (batch_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(batch_digest));
-    if (message_arena != submessage_arena) {
-      batch_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, batch_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.batch_digest_ = batch_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricBatch.batch_digest)
 }
 
 // int64 created_at_unix_ms = 6;
@@ -15717,179 +14176,9 @@ inline void MetricBatchCursor::set_acknowledged_event_sequence(uint64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.MetricBatchCursor.acknowledged_event_sequence)
 }
 
-// .rl.common.v1.ContentDigest acknowledged_batch_digest = 4;
-inline bool MetricBatchCursor::_internal_has_acknowledged_batch_digest() const {
-  return this != internal_default_instance() && _impl_.acknowledged_batch_digest_ != nullptr;
-}
-inline bool MetricBatchCursor::has_acknowledged_batch_digest() const {
-  return _internal_has_acknowledged_batch_digest();
-}
-inline const ::rl::common::v1::ContentDigest& MetricBatchCursor::_internal_acknowledged_batch_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.acknowledged_batch_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& MetricBatchCursor::acknowledged_batch_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.MetricBatchCursor.acknowledged_batch_digest)
-  return _internal_acknowledged_batch_digest();
-}
-inline void MetricBatchCursor::unsafe_arena_set_allocated_acknowledged_batch_digest(
-    ::rl::common::v1::ContentDigest* acknowledged_batch_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.acknowledged_batch_digest_);
-  }
-  _impl_.acknowledged_batch_digest_ = acknowledged_batch_digest;
-  if (acknowledged_batch_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.MetricBatchCursor.acknowledged_batch_digest)
-}
-inline ::rl::common::v1::ContentDigest* MetricBatchCursor::release_acknowledged_batch_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.acknowledged_batch_digest_;
-  _impl_.acknowledged_batch_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* MetricBatchCursor::unsafe_arena_release_acknowledged_batch_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.MetricBatchCursor.acknowledged_batch_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.acknowledged_batch_digest_;
-  _impl_.acknowledged_batch_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* MetricBatchCursor::_internal_mutable_acknowledged_batch_digest() {
-  
-  if (_impl_.acknowledged_batch_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.acknowledged_batch_digest_ = p;
-  }
-  return _impl_.acknowledged_batch_digest_;
-}
-inline ::rl::common::v1::ContentDigest* MetricBatchCursor::mutable_acknowledged_batch_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_acknowledged_batch_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.MetricBatchCursor.acknowledged_batch_digest)
-  return _msg;
-}
-inline void MetricBatchCursor::set_allocated_acknowledged_batch_digest(::rl::common::v1::ContentDigest* acknowledged_batch_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.acknowledged_batch_digest_);
-  }
-  if (acknowledged_batch_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(acknowledged_batch_digest));
-    if (message_arena != submessage_arena) {
-      acknowledged_batch_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, acknowledged_batch_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.acknowledged_batch_digest_ = acknowledged_batch_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricBatchCursor.acknowledged_batch_digest)
-}
-
 // -------------------------------------------------------------------
 
 // GetMetricBatchReq
-
-// .rl.common.v1.ContractIdentity contract = 1;
-inline bool GetMetricBatchReq::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool GetMetricBatchReq::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& GetMetricBatchReq::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& GetMetricBatchReq::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.GetMetricBatchReq.contract)
-  return _internal_contract();
-}
-inline void GetMetricBatchReq::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetMetricBatchReq.contract)
-}
-inline ::rl::common::v1::ContractIdentity* GetMetricBatchReq::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* GetMetricBatchReq::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.GetMetricBatchReq.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* GetMetricBatchReq::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* GetMetricBatchReq::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetMetricBatchReq.contract)
-  return _msg;
-}
-inline void GetMetricBatchReq::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetMetricBatchReq.contract)
-}
 
 // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
 inline bool GetMetricBatchReq::_internal_has_consumer() const {
@@ -16419,91 +14708,6 @@ inline void GetMetricBatchRsp::set_latest_available_event_sequence(uint64_t valu
 
 // AckMetricBatchReq
 
-// .rl.common.v1.ContractIdentity contract = 1;
-inline bool AckMetricBatchReq::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool AckMetricBatchReq::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& AckMetricBatchReq::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& AckMetricBatchReq::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AckMetricBatchReq.contract)
-  return _internal_contract();
-}
-inline void AckMetricBatchReq::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AckMetricBatchReq.contract)
-}
-inline ::rl::common::v1::ContractIdentity* AckMetricBatchReq::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* AckMetricBatchReq::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.AckMetricBatchReq.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* AckMetricBatchReq::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* AckMetricBatchReq::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.AckMetricBatchReq.contract)
-  return _msg;
-}
-inline void AckMetricBatchReq::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AckMetricBatchReq.contract)
-}
-
 // .rl.common.v1.ServiceInstanceIdentity consumer = 2;
 inline bool AckMetricBatchReq::_internal_has_consumer() const {
   return this != internal_default_instance() && _impl_.consumer_ != nullptr;
@@ -16975,91 +15179,6 @@ inline void AckMetricBatchRsp::set_allocated_committed_cursor(::rl::training::v1
 // -------------------------------------------------------------------
 
 // AIServerStatusRsp
-
-// .rl.common.v1.ContractIdentity contract = 1;
-inline bool AIServerStatusRsp::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool AIServerStatusRsp::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& AIServerStatusRsp::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& AIServerStatusRsp::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.contract)
-  return _internal_contract();
-}
-inline void AIServerStatusRsp::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AIServerStatusRsp.contract)
-}
-inline ::rl::common::v1::ContractIdentity* AIServerStatusRsp::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* AIServerStatusRsp::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.AIServerStatusRsp.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* AIServerStatusRsp::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* AIServerStatusRsp::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.AIServerStatusRsp.contract)
-  return _msg;
-}
-inline void AIServerStatusRsp::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.contract)
-}
 
 // .rl.common.v1.ServiceInstanceIdentity aiserver = 2;
 inline bool AIServerStatusRsp::_internal_has_aiserver() const {
@@ -17936,91 +16055,6 @@ inline void AIServerStatusRsp::set_timestamp_unix_ms(int64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.AIServerStatusRsp.timestamp_unix_ms)
 }
 
-// .rl.common.v1.ContentDigest rollout_estimator_profile_digest = 34;
-inline bool AIServerStatusRsp::_internal_has_rollout_estimator_profile_digest() const {
-  return this != internal_default_instance() && _impl_.rollout_estimator_profile_digest_ != nullptr;
-}
-inline bool AIServerStatusRsp::has_rollout_estimator_profile_digest() const {
-  return _internal_has_rollout_estimator_profile_digest();
-}
-inline const ::rl::common::v1::ContentDigest& AIServerStatusRsp::_internal_rollout_estimator_profile_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.rollout_estimator_profile_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& AIServerStatusRsp::rollout_estimator_profile_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
-  return _internal_rollout_estimator_profile_digest();
-}
-inline void AIServerStatusRsp::unsafe_arena_set_allocated_rollout_estimator_profile_digest(
-    ::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
-  }
-  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
-  if (rollout_estimator_profile_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
-}
-inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::release_rollout_estimator_profile_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::unsafe_arena_release_rollout_estimator_profile_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.rollout_estimator_profile_digest_;
-  _impl_.rollout_estimator_profile_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::_internal_mutable_rollout_estimator_profile_digest() {
-  
-  if (_impl_.rollout_estimator_profile_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.rollout_estimator_profile_digest_ = p;
-  }
-  return _impl_.rollout_estimator_profile_digest_;
-}
-inline ::rl::common::v1::ContentDigest* AIServerStatusRsp::mutable_rollout_estimator_profile_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_rollout_estimator_profile_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
-  return _msg;
-}
-inline void AIServerStatusRsp::set_allocated_rollout_estimator_profile_digest(::rl::common::v1::ContentDigest* rollout_estimator_profile_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_digest_);
-  }
-  if (rollout_estimator_profile_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(rollout_estimator_profile_digest));
-    if (message_arena != submessage_arena) {
-      rollout_estimator_profile_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, rollout_estimator_profile_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.rollout_estimator_profile_digest_ = rollout_estimator_profile_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.AIServerStatusRsp.rollout_estimator_profile_digest)
-}
-
 // int64 closed_segment_count = 35;
 inline void AIServerStatusRsp::clear_closed_segment_count() {
   _impl_.closed_segment_count_ = int64_t{0};
@@ -18339,176 +16373,6 @@ inline void ModelArtifactManifest::set_trained_samples(uint64_t value) {
   // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.trained_samples)
 }
 
-// .rl.common.v1.ContentDigest training_config_digest = 17;
-inline bool ModelArtifactManifest::_internal_has_training_config_digest() const {
-  return this != internal_default_instance() && _impl_.training_config_digest_ != nullptr;
-}
-inline bool ModelArtifactManifest::has_training_config_digest() const {
-  return _internal_has_training_config_digest();
-}
-inline const ::rl::common::v1::ContentDigest& ModelArtifactManifest::_internal_training_config_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.training_config_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& ModelArtifactManifest::training_config_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.training_config_digest)
-  return _internal_training_config_digest();
-}
-inline void ModelArtifactManifest::unsafe_arena_set_allocated_training_config_digest(
-    ::rl::common::v1::ContentDigest* training_config_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_config_digest_);
-  }
-  _impl_.training_config_digest_ = training_config_digest;
-  if (training_config_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.training_config_digest)
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::release_training_config_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_config_digest_;
-  _impl_.training_config_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::unsafe_arena_release_training_config_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.training_config_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_config_digest_;
-  _impl_.training_config_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::_internal_mutable_training_config_digest() {
-  
-  if (_impl_.training_config_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.training_config_digest_ = p;
-  }
-  return _impl_.training_config_digest_;
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::mutable_training_config_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_config_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.training_config_digest)
-  return _msg;
-}
-inline void ModelArtifactManifest::set_allocated_training_config_digest(::rl::common::v1::ContentDigest* training_config_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_config_digest_);
-  }
-  if (training_config_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_config_digest));
-    if (message_arena != submessage_arena) {
-      training_config_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_config_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.training_config_digest_ = training_config_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.training_config_digest)
-}
-
-// .rl.common.v1.ContentDigest training_contract_digest = 18;
-inline bool ModelArtifactManifest::_internal_has_training_contract_digest() const {
-  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
-}
-inline bool ModelArtifactManifest::has_training_contract_digest() const {
-  return _internal_has_training_contract_digest();
-}
-inline const ::rl::common::v1::ContentDigest& ModelArtifactManifest::_internal_training_contract_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& ModelArtifactManifest::training_contract_digest() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.training_contract_digest)
-  return _internal_training_contract_digest();
-}
-inline void ModelArtifactManifest::unsafe_arena_set_allocated_training_contract_digest(
-    ::rl::common::v1::ContentDigest* training_contract_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  if (training_contract_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.training_contract_digest)
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::release_training_contract_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::unsafe_arena_release_training_contract_digest() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.training_contract_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::_internal_mutable_training_contract_digest() {
-  
-  if (_impl_.training_contract_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.training_contract_digest_ = p;
-  }
-  return _impl_.training_contract_digest_;
-}
-inline ::rl::common::v1::ContentDigest* ModelArtifactManifest::mutable_training_contract_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.training_contract_digest)
-  return _msg;
-}
-inline void ModelArtifactManifest::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  if (training_contract_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
-    if (message_arena != submessage_arena) {
-      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_contract_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.training_contract_digest)
-}
-
 // int64 published_at_unix_ms = 19;
 inline void ModelArtifactManifest::clear_published_at_unix_ms() {
   _impl_.published_at_unix_ms_ = int64_t{0};
@@ -18527,96 +16391,6 @@ inline void ModelArtifactManifest::_internal_set_published_at_unix_ms(int64_t va
 inline void ModelArtifactManifest::set_published_at_unix_ms(int64_t value) {
   _internal_set_published_at_unix_ms(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.ModelArtifactManifest.published_at_unix_ms)
-}
-
-// .rl.training.v1.RolloutEstimatorProfile rollout_estimator_profile = 21;
-inline bool ModelArtifactManifest::_internal_has_rollout_estimator_profile() const {
-  return this != internal_default_instance() && _impl_.rollout_estimator_profile_ != nullptr;
-}
-inline bool ModelArtifactManifest::has_rollout_estimator_profile() const {
-  return _internal_has_rollout_estimator_profile();
-}
-inline void ModelArtifactManifest::clear_rollout_estimator_profile() {
-  if (GetArenaForAllocation() == nullptr && _impl_.rollout_estimator_profile_ != nullptr) {
-    delete _impl_.rollout_estimator_profile_;
-  }
-  _impl_.rollout_estimator_profile_ = nullptr;
-}
-inline const ::rl::training::v1::RolloutEstimatorProfile& ModelArtifactManifest::_internal_rollout_estimator_profile() const {
-  const ::rl::training::v1::RolloutEstimatorProfile* p = _impl_.rollout_estimator_profile_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::RolloutEstimatorProfile&>(
-      ::rl::training::v1::_RolloutEstimatorProfile_default_instance_);
-}
-inline const ::rl::training::v1::RolloutEstimatorProfile& ModelArtifactManifest::rollout_estimator_profile() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
-  return _internal_rollout_estimator_profile();
-}
-inline void ModelArtifactManifest::unsafe_arena_set_allocated_rollout_estimator_profile(
-    ::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.rollout_estimator_profile_);
-  }
-  _impl_.rollout_estimator_profile_ = rollout_estimator_profile;
-  if (rollout_estimator_profile) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
-}
-inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::release_rollout_estimator_profile() {
-  
-  ::rl::training::v1::RolloutEstimatorProfile* temp = _impl_.rollout_estimator_profile_;
-  _impl_.rollout_estimator_profile_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::unsafe_arena_release_rollout_estimator_profile() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
-  
-  ::rl::training::v1::RolloutEstimatorProfile* temp = _impl_.rollout_estimator_profile_;
-  _impl_.rollout_estimator_profile_ = nullptr;
-  return temp;
-}
-inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::_internal_mutable_rollout_estimator_profile() {
-  
-  if (_impl_.rollout_estimator_profile_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::training::v1::RolloutEstimatorProfile>(GetArenaForAllocation());
-    _impl_.rollout_estimator_profile_ = p;
-  }
-  return _impl_.rollout_estimator_profile_;
-}
-inline ::rl::training::v1::RolloutEstimatorProfile* ModelArtifactManifest::mutable_rollout_estimator_profile() {
-  ::rl::training::v1::RolloutEstimatorProfile* _msg = _internal_mutable_rollout_estimator_profile();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
-  return _msg;
-}
-inline void ModelArtifactManifest::set_allocated_rollout_estimator_profile(::rl::training::v1::RolloutEstimatorProfile* rollout_estimator_profile) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete _impl_.rollout_estimator_profile_;
-  }
-  if (rollout_estimator_profile) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(rollout_estimator_profile);
-    if (message_arena != submessage_arena) {
-      rollout_estimator_profile = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, rollout_estimator_profile, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.rollout_estimator_profile_ = rollout_estimator_profile;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelArtifactManifest.rollout_estimator_profile)
 }
 
 // -------------------------------------------------------------------
@@ -18711,91 +16485,6 @@ inline void RegisterModelReq::set_allocated_manifest(::rl::training::v1::ModelAr
   }
   _impl_.manifest_ = manifest;
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RegisterModelReq.manifest)
-}
-
-// .rl.common.v1.ContractIdentity contract = 2;
-inline bool RegisterModelReq::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool RegisterModelReq::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& RegisterModelReq::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& RegisterModelReq::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.RegisterModelReq.contract)
-  return _internal_contract();
-}
-inline void RegisterModelReq::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.RegisterModelReq.contract)
-}
-inline ::rl::common::v1::ContractIdentity* RegisterModelReq::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* RegisterModelReq::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.RegisterModelReq.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* RegisterModelReq::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* RegisterModelReq::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.RegisterModelReq.contract)
-  return _msg;
-}
-inline void RegisterModelReq::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.RegisterModelReq.contract)
 }
 
 // string local_artifact_path = 3;
@@ -20410,91 +18099,6 @@ inline void AckModelRsp::set_allocated_distributor(::rl::common::v1::ServiceInst
 
 // ModelDistributorStatusRsp
 
-// .rl.common.v1.ContractIdentity contract = 1;
-inline bool ModelDistributorStatusRsp::_internal_has_contract() const {
-  return this != internal_default_instance() && _impl_.contract_ != nullptr;
-}
-inline bool ModelDistributorStatusRsp::has_contract() const {
-  return _internal_has_contract();
-}
-inline const ::rl::common::v1::ContractIdentity& ModelDistributorStatusRsp::_internal_contract() const {
-  const ::rl::common::v1::ContractIdentity* p = _impl_.contract_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContractIdentity&>(
-      ::rl::common::v1::_ContractIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ContractIdentity& ModelDistributorStatusRsp::contract() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.ModelDistributorStatusRsp.contract)
-  return _internal_contract();
-}
-inline void ModelDistributorStatusRsp::unsafe_arena_set_allocated_contract(
-    ::rl::common::v1::ContractIdentity* contract) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  _impl_.contract_ = contract;
-  if (contract) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.ModelDistributorStatusRsp.contract)
-}
-inline ::rl::common::v1::ContractIdentity* ModelDistributorStatusRsp::release_contract() {
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* ModelDistributorStatusRsp::unsafe_arena_release_contract() {
-  // @@protoc_insertion_point(field_release:rl.training.v1.ModelDistributorStatusRsp.contract)
-  
-  ::rl::common::v1::ContractIdentity* temp = _impl_.contract_;
-  _impl_.contract_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContractIdentity* ModelDistributorStatusRsp::_internal_mutable_contract() {
-  
-  if (_impl_.contract_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContractIdentity>(GetArenaForAllocation());
-    _impl_.contract_ = p;
-  }
-  return _impl_.contract_;
-}
-inline ::rl::common::v1::ContractIdentity* ModelDistributorStatusRsp::mutable_contract() {
-  ::rl::common::v1::ContractIdentity* _msg = _internal_mutable_contract();
-  // @@protoc_insertion_point(field_mutable:rl.training.v1.ModelDistributorStatusRsp.contract)
-  return _msg;
-}
-inline void ModelDistributorStatusRsp::set_allocated_contract(::rl::common::v1::ContractIdentity* contract) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.contract_);
-  }
-  if (contract) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(contract));
-    if (message_arena != submessage_arena) {
-      contract = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, contract, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.contract_ = contract;
-  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.ModelDistributorStatusRsp.contract)
-}
-
 // .rl.common.v1.ServiceInstanceIdentity distributor = 2;
 inline bool ModelDistributorStatusRsp::_internal_has_distributor() const {
   return this != internal_default_instance() && _impl_.distributor_ != nullptr;
@@ -21290,8 +18894,6 @@ inline void ModelDistributorStatusRsp::set_latest_available_model_step(uint64_t 
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -21380,6 +18982,11 @@ template <> struct is_proto_enum< ::rl::training::v1::MetricBatchAckResult> : ::
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::MetricBatchAckResult>() {
   return ::rl::training::v1::MetricBatchAckResult_descriptor();
+}
+template <> struct is_proto_enum< ::rl::training::v1::MetricFactKind> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::MetricFactKind>() {
+  return ::rl::training::v1::MetricFactKind_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

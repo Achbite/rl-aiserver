@@ -78,7 +78,7 @@ bool OnnxInferencer::PrepareModel(const std::string& model_path,
         if (std::string(input_name.get()) != INPUT_NAME ||
             std::string(action_name.get()) != OUTPUT_ACTION_LOGITS ||
             std::string(value_name.get()) != OUTPUT_VALUE) {
-            throw std::runtime_error("ONNX tensor names do not match the inference contract");
+            throw std::runtime_error("ONNX tensor names do not match configured model I/O");
         }
 
         auto input_type_info = new_session->GetInputTypeInfo(0);
@@ -100,7 +100,7 @@ bool OnnxInferencer::PrepareModel(const std::string& model_path,
             !CompatibleBatchShape(action_shape, expected_action_dim) ||
             !CompatibleBatchShape(value_shape, 1)) {
             std::ostringstream message;
-            message << "ONNX tensor contract mismatch: input(type="
+            message << "ONNX tensor type/shape does not match configured model dimensions: input(type="
                     << static_cast<int>(input_type)
                     << ",shape=" << ShapeText(input_shape)
                     << "), action(type=" << static_cast<int>(action_type)

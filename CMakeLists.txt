@@ -91,7 +91,7 @@ if(BUILD_TESTING)
         crypto
     )
     add_test(
-        NAME aiserver_model_update_development_contract
+        NAME aiserver_model_update_data_path
         COMMAND aiserver_model_update_development_test
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/maze_policy.onnx
     )
@@ -135,7 +135,7 @@ if(BUILD_TESTING)
     target_compile_options(
         aiserver_gae_sample_delivery_development_test PRIVATE -UNDEBUG)
     add_test(
-        NAME aiserver_gae_sample_delivery_development_contract
+        NAME aiserver_gae_sample_delivery_data_path
         COMMAND aiserver_gae_sample_delivery_development_test
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/maze_policy.onnx
     )

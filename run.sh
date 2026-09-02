@@ -161,23 +161,12 @@ if [ "${managed}" -eq 1 ]; then
     metric_instance_id="$(marker_value instance_id)"
     metric_lifecycle_epoch="$(marker_value lifecycle_epoch)"
     metric_container_port="$(marker_value container_port)"
-    metric_schema_id="$(marker_value schema_id)"
-    metric_schema_version="$(marker_value schema_version)"
-    metric_schema_digest="$(marker_value schema_digest)"
-    contract_package="$(marker_value contract_package)"
-    contract_version="$(marker_value contract_version)"
-    contract_platform="$(marker_value contract_platform)"
-    if [ "${metric_component}" != "rl-aiserver" ] ||
-       [ "${metric_container_port}" != "9002" ] ||
+    if [ -z "${metric_component}" ] ||
        [ -z "${metric_instance_id}" ] ||
        [[ ! "${metric_lifecycle_epoch}" =~ ^[1-9][0-9]*$ ]] ||
-       [ "${metric_schema_id}" != "maze.episode.metrics" ] ||
-       [ "${metric_schema_version}" != "1" ] ||
-       [[ ! "${metric_schema_digest}" =~ ^[0-9a-f]{64}$ ]] ||
-       [ "${contract_package}" != "rl-contracts" ] ||
-       [ -z "${contract_version}" ] ||
-       [ -z "${contract_platform}" ]; then
-        echo "AIServer managed metric source identity is invalid" >&2
+       [[ ! "${metric_container_port}" =~ ^[1-9][0-9]*$ ]] ||
+       [ "${metric_container_port}" -gt 65535 ]; then
+        echo "AIServer managed readiness identity is invalid" >&2
         exit 1
     fi
     python3 scripts/publish_readiness.py \
@@ -187,13 +176,7 @@ if [ "${managed}" -eq 1 ]; then
         --fact metric_component="${metric_component}" \
         --fact metric_instance_id="${metric_instance_id}" \
         --fact metric_lifecycle_epoch="${metric_lifecycle_epoch}" \
-        --fact metric_container_port="${metric_container_port}" \
-        --fact metric_schema_id="${metric_schema_id}" \
-        --fact metric_schema_version="${metric_schema_version}" \
-        --fact metric_schema_digest="${metric_schema_digest}" \
-        --fact contract_package="${contract_package}" \
-        --fact contract_version="${contract_version}" \
-        --fact contract_platform="${contract_platform}"
+        --fact metric_container_port="${metric_container_port}"
 fi
 
 while [ "${stopping}" -eq 0 ]; do

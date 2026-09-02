@@ -33,54 +33,18 @@ struct ModelConfig {
     int         startup_timeout_ms = 30000;
     int         expected_obs_dim = 0;
     int         expected_action_dim = 0;
-    std::string observation_schema_id;
-    std::string action_schema_id;
-    std::string model_architecture_id;
-    std::string tensor_dtype;
-};
-
-struct DigestConfig {
-    std::string algorithm = "sha256";
-    std::string hex;
-};
-
-struct SchemaConfig {
-    std::string schema_id;
-    uint32_t schema_version = 1;
-    DigestConfig canonical_digest;
-};
-
-struct ContractConfig {
-    std::string package_name = "rl-contracts";
-    std::string package_version = "0.15.0";
-    std::string platform = "linux/arm64";
-    std::string training_contract_path;
-};
-
-struct TrainingContractConfig {
-    std::string training_contract_id;
-    SchemaConfig observation_schema;
-    SchemaConfig action_schema;
-    SchemaConfig reward_schema;
-    std::string model_architecture_id;
-    DigestConfig canonical_digest;
-    int observation_dimension = 0;
-    int action_count = 0;
-    int hidden_dimension = 0;
-    std::string tensor_dtype;
-    std::string gae_formula_id;
-    std::string terminal_bootstrap_semantics_id;
-    std::string value_target_formula_id;
-    std::string value_head_abi_id;
-    std::string numeric_dtype;
-    std::string finite_rule_id;
-    std::string model_pin_semantics_id;
-    std::string action_mask_mode;
 };
 
 struct PolicyConfig {
     double training_temperature = 0.0;
     uint32_t sampling_seed = 0;
+    std::string action_mask_mode;
+};
+
+struct RolloutConfig {
+    double gamma = 0.99;
+    double gae_lambda = 0.95;
+    uint32_t tmax = 128;
 };
 
 struct ObservationConfig {
@@ -94,8 +58,7 @@ struct ModelDistributionConfig {
     int rpc_timeout_ms = 5000;
 };
 
-// Runtime Environment assignment owned only by AIServer. It is deliberately
-// excluded from MazeTaskConfig and the task configuration digest.
+// Runtime Environment assignment owned only by AIServer.
 struct EnvironmentConfig {
     int agent_count = 4;
 };
@@ -103,8 +66,6 @@ struct EnvironmentConfig {
 // Maze task ownership belongs to AIServer. Client configuration cannot
 // override any value in this structure.
 struct MazeTaskConfig {
-    std::string task_protocol_id = "rl.task.maze";
-    uint32_t task_protocol_version = 1;
     std::string fixed_map_id = "maze_117436372";
     int episode_max_steps = 1504;
 };
@@ -131,25 +92,18 @@ struct SampleDistributorConfig {
     std::string env_id            = "env-0";
 };
 
-struct MetricsConfig {
-    std::string event_schema_catalog_path;
-    SchemaConfig event_schema;
-};
-
 // ---- AIServer 完整配置 ----
 struct AIServerConfig {
     ServerConfig   server;
     StrategyConfig strategy;
-    ContractConfig contract;
-    TrainingContractConfig training_contract;
     PolicyConfig policy;
+    RolloutConfig rollout;
     ObservationConfig observation;
     ModelConfig    model;
     ModelDistributionConfig model_distribution;
     EnvironmentConfig environment;
     MazeTaskConfig task;
     SampleDistributorConfig sample_distributor;
-    MetricsConfig metrics;
 };
 
 struct AIServerConfigOverrides {
@@ -169,8 +123,7 @@ struct AIServerConfigLoadReport {
 };
 
 // ---- 配置加载器 ----
-// Load and validate the complete immutable training identity. Missing or
-// malformed critical identity fields fail closed.
+// Load and validate runtime configuration at its owning type boundary.
 bool LoadServerConfig(const std::string& yaml_path, AIServerConfig& out_config);
 bool LoadServerConfig(const std::string& yaml_path,
                       const AIServerConfigOverrides& overrides,

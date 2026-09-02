@@ -7,13 +7,10 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 #include <grpcpp/grpcpp.h>
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <openssl/evp.h>
 #include <sstream>
 #include <string>
 #include <unistd.h>
@@ -27,44 +24,6 @@ void Require(bool condition, const std::string& message) {
     std::exit(1);
 }
 
-void SetDigest(const std::string& hex, common::ContentDigest* digest) {
-    digest->set_algorithm(common::DIGEST_ALGORITHM_SHA256);
-    digest->set_hex(hex);
-}
-
-std::string Sha256(const std::string& data) {
-    EVP_MD_CTX* context = EVP_MD_CTX_new();
-    Require(context != nullptr, "create SHA-256 context");
-    unsigned char digest[EVP_MAX_MD_SIZE];
-    unsigned int digest_size = 0;
-    const bool ok =
-        EVP_DigestInit_ex(context, EVP_sha256(), nullptr) == 1 &&
-        EVP_DigestUpdate(context, data.data(), data.size()) == 1 &&
-        EVP_DigestFinal_ex(context, digest, &digest_size) == 1;
-    EVP_MD_CTX_free(context);
-    Require(ok && digest_size == 32, "compute SHA-256");
-    static constexpr char kHex[] = "0123456789abcdef";
-    std::string result;
-    result.reserve(64);
-    for (unsigned int index = 0; index < digest_size; ++index) {
-        result.push_back(kHex[digest[index] >> 4]);
-        result.push_back(kHex[digest[index] & 0x0f]);
-    }
-    return result;
-}
-
-template <typename Message>
-std::string DeterministicBytes(const Message& message) {
-    std::string serialized;
-    google::protobuf::io::StringOutputStream output(&serialized);
-    google::protobuf::io::CodedOutputStream coded(&output);
-    coded.SetSerializationDeterministic(true);
-    Require(message.SerializeToCodedStream(&coded) && !coded.HadError(),
-            "serialize protobuf deterministically");
-    coded.Trim();
-    return serialized;
-}
-
 std::string ReadFile(const std::filesystem::path& path) {
     std::ifstream input(path, std::ios::binary);
     Require(input.is_open(), "open fixed ONNX fixture");
@@ -74,53 +33,13 @@ std::string ReadFile(const std::filesystem::path& path) {
     return output.str();
 }
 
-void FillContract(const ContractConfig& source,
-                  common::ContractIdentity* destination) {
-    destination->set_package_name(source.package_name);
-    destination->set_package_version(source.package_version);
-    destination->set_platform(source.platform);
-}
-
 AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
     AIServerConfig config;
     const int action_count = static_cast<int>(maze::MazeAction_MAX) + 1;
-    config.training_contract.training_contract_id = "maze.training";
-    config.training_contract.observation_schema = {
-        "maze.observation", 1, {"sha256", std::string(64, '4')}};
-    config.training_contract.action_schema = {
-        "maze.action", 1, {"sha256", std::string(64, '5')}};
-    config.training_contract.reward_schema = {
-        "maze.reward", 1, {"sha256", std::string(64, '6')}};
-    config.training_contract.model_architecture_id =
-        "actor-critic.independent-mlp";
-    config.training_contract.canonical_digest.hex = std::string(64, '7');
-    config.training_contract.observation_dimension =
-        MazeObservation::kDimension;
-    config.training_contract.action_count = action_count;
-    config.training_contract.hidden_dimension =
-        config.training_contract.observation_dimension;
-    config.training_contract.tensor_dtype = "float32";
-    config.training_contract.gae_formula_id = "gae.backward";
-    config.training_contract.terminal_bootstrap_semantics_id =
-        "maze.timeout-keep-and-cut-bootstrap";
-    config.training_contract.value_target_formula_id =
-        "advantage-plus-behavior-value";
-    config.training_contract.value_head_abi_id = "scalar-value.float32";
-    config.training_contract.numeric_dtype = "float32";
-    config.training_contract.finite_rule_id = "reject-nonfinite";
-    config.training_contract.model_pin_semantics_id =
-        "per-agent-segment-pin";
-    config.training_contract.action_mask_mode = "disabled";
     config.policy.training_temperature = 1.0;
-    config.model.expected_obs_dim =
-        config.training_contract.observation_dimension;
-    config.model.expected_action_dim =
-        config.training_contract.action_count;
-    config.model.observation_schema_id = "maze.observation";
-    config.model.action_schema_id = "maze.action";
-    config.model.model_architecture_id =
-        config.training_contract.model_architecture_id;
-    config.model.tensor_dtype = "float32";
+    config.policy.action_mask_mode = "disabled";
+    config.model.expected_obs_dim = MazeObservation::kDimension;
+    config.model.expected_action_dim = action_count;
     config.model.local_train_dir = (root / "train").string();
     config.model_distribution.host = "127.0.0.1";
     config.model_distribution.port = port;
@@ -129,33 +48,14 @@ AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
 }
 
 training::ModelArtifactManifest MakeManifest(
-    const AIServerConfig& config,
     const std::string& model_bytes) {
     training::ModelArtifactManifest manifest;
     auto* identity = manifest.mutable_identity();
     identity->set_model_lineage_id("lineage-fixed");
     identity->set_model_step(0);
-    SetDigest(Sha256(model_bytes), identity->mutable_artifact_digest());
     manifest.set_size_bytes(static_cast<int64_t>(model_bytes.size()));
     manifest.set_trained_samples(0);
-    SetDigest(std::string(64, '8'),
-              manifest.mutable_training_config_digest());
-    SetDigest(config.training_contract.canonical_digest.hex,
-              manifest.mutable_training_contract_digest());
-
-    auto* profile = manifest.mutable_rollout_estimator_profile();
-    profile->set_gamma(0.99);
-    profile->set_gae_lambda(0.95);
-    profile->set_tmax(128);
-    profile->clear_profile_digest();
-    const std::string profile_digest = Sha256(DeterministicBytes(*profile));
-    SetDigest(profile_digest, profile->mutable_profile_digest());
-
     manifest.set_published_at_unix_ms(1700000000000);
-    manifest.mutable_identity()->clear_manifest_digest();
-    const std::string manifest_digest = Sha256(DeterministicBytes(manifest));
-    SetDigest(manifest_digest,
-              manifest.mutable_identity()->mutable_manifest_digest());
     return manifest;
 }
 
@@ -163,18 +63,15 @@ class FixedModelDistributor final
     : public training::ModelDistributorService::Service {
 public:
     FixedModelDistributor(training::ModelArtifactManifest manifest,
-                          std::string model_bytes,
-                          common::ContractIdentity contract)
+                          std::string model_bytes)
         : manifest_(std::move(manifest)),
-          model_bytes_(std::move(model_bytes)),
-          contract_(std::move(contract)) {}
+          model_bytes_(std::move(model_bytes)) {}
 
     grpc::Status GetModelDistributorStatus(
         grpc::ServerContext*,
         const training::ModelDistributorStatusReq*,
         training::ModelDistributorStatusRsp* response) override {
         response->set_ready(true);
-        *response->mutable_contract() = contract_;
         FillAuthority(response->mutable_distributor());
         *response->mutable_latest_model() = manifest_.identity();
         response->set_available_floor_model_step(0);
@@ -243,7 +140,6 @@ private:
 
     training::ModelArtifactManifest manifest_;
     std::string model_bytes_;
-    common::ContractIdentity contract_;
     mutable std::mutex mutex_;
     training::AckModelReq ack_;
 };
@@ -267,11 +163,8 @@ void TestModelUpdate(const std::string& fixture_path) {
     TemporaryRoot root;
     const std::string model_bytes = ReadFile(fixture_path);
     AIServerConfig config = MakeConfig(root.path(), 0);
-    const auto wire_manifest = MakeManifest(config, model_bytes);
-    common::ContractIdentity contract;
-    FillContract(config.contract, &contract);
-    FixedModelDistributor distributor(
-        wire_manifest, model_bytes, std::move(contract));
+    const auto wire_manifest = MakeManifest(model_bytes);
+    FixedModelDistributor distributor(wire_manifest, model_bytes);
 
     int port = 0;
     grpc::ServerBuilder builder;
@@ -340,7 +233,7 @@ void TestModelUpdate(const std::string& fixture_path) {
 int main(int argc, char** argv) {
     Require(argc == 2, "usage: model_update_development_test MODEL");
     TestModelUpdate(argv[1]);
-    std::cout << "aiserver_model_update_development_contract: PASS"
+    std::cout << "aiserver_model_update_data_path: PASS"
               << std::endl;
     return 0;
 }

@@ -17,7 +17,6 @@
 #include <atomic>
 #include <chrono>
 #include <cstdint>
-#include <functional>
 #include <mutex>
 #include <random>
 #include <set>
@@ -79,7 +78,6 @@ public:
         training::AckMetricBatchRsp* rsp) override;
 
     common::ServiceInstanceIdentity MetricSourceIdentity() const;
-    common::SchemaIdentity MetricSchemaIdentity() const;
 
 private:
     bool LoadInitialModel();
@@ -221,14 +219,11 @@ private:
     std::unordered_map<std::string, std::string> open_responses_;
     MetricEventJournal metric_events_;
     SingleMapTaskController task_controller_;
-    std::function<bool(const SingleMapTaskController&, std::string&)>
-        task_controller_receipt_writer_;
     bool started_ = false;
     bool shutdown_started_ = false;
     bool shutdown_completed_ = false;
     bool shutdown_succeeded_ = true;
     bool client_initialized_ = false;
-    bool task_stop_requested_ = false;
 
     int64_t produced_unique_transitions_ = 0;
     std::unordered_map<ModelStep, int64_t> produced_transitions_by_model_;

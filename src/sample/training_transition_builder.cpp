@@ -14,16 +14,6 @@ bool FiniteVector(const std::vector<float>& values) {
     return true;
 }
 
-bool IsSha256Digest(const common::ContentDigest& digest) {
-    if (digest.algorithm() != common::DIGEST_ALGORITHM_SHA256 ||
-        digest.hex().size() != 64) {
-        return false;
-    }
-    return std::all_of(digest.hex().begin(), digest.hex().end(), [](char c) {
-        return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
-    });
-}
-
 }  // namespace
 
 bool BuildRawRolloutTransition(
@@ -156,9 +146,7 @@ bool ProjectProcessedSegment(
         value_targets.size() != raw_segment.size() || segment_id.empty() ||
         observation_dimension <= 0 || action_count <= 0 ||
         behavior_model.model_lineage_id().empty() ||
-        !behavior_model.has_model_step() ||
-        !IsSha256Digest(behavior_model.artifact_digest()) ||
-        !IsSha256Digest(behavior_model.manifest_digest())) {
+        !behavior_model.has_model_step()) {
         error = "processed segment identity or estimator output is incomplete";
         return false;
     }

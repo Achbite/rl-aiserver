@@ -99,7 +99,6 @@ PROTOBUF_CONSTEXPR OpenSessionReq::OpenSessionReq(
     /*decltype(_impl_.environment_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.request_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.client_)*/nullptr
-  , /*decltype(_impl_.task_protocol_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct OpenSessionReqDefaultTypeInternal {
   PROTOBUF_CONSTEXPR OpenSessionReqDefaultTypeInternal()
@@ -116,7 +115,6 @@ PROTOBUF_CONSTEXPR OpenSessionRsp::OpenSessionRsp(
   , /*decltype(_impl_.reply_)*/nullptr
   , /*decltype(_impl_.aiserver_)*/nullptr
   , /*decltype(_impl_.environment_)*/nullptr
-  , /*decltype(_impl_.task_protocol_)*/nullptr
   , /*decltype(_impl_.session_epoch_)*/uint64_t{0u}
   , /*decltype(_impl_.workload_mode_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -301,20 +299,6 @@ struct WaitControlDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 WaitControlDefaultTypeInternal _WaitControl_default_instance_;
-PROTOBUF_CONSTEXPR StopControl::StopControl(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.reason_)*/0
-  , /*decltype(_impl_._cached_size_)*/{}} {}
-struct StopControlDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR StopControlDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~StopControlDefaultTypeInternal() {}
-  union {
-    StopControl _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StopControlDefaultTypeInternal _StopControl_default_instance_;
 PROTOBUF_CONSTEXPR UpdateRsp::UpdateRsp(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.reply_)*/nullptr
@@ -407,6 +391,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR AbortEpisodeRsp::AbortEpisodeRsp(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.reply_)*/nullptr
+  , /*decltype(_impl_.wait_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct AbortEpisodeRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR AbortEpisodeRspDefaultTypeInternal()
@@ -447,7 +432,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace maze
 }  // namespace task
 }  // namespace rl
-static ::_pb::Metadata file_level_metadata_maze_5ftask_2eproto[28];
+static ::_pb::Metadata file_level_metadata_maze_5ftask_2eproto[27];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_maze_5ftask_2eproto[8];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_maze_5ftask_2eproto = nullptr;
 
@@ -507,7 +492,6 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.client_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.environment_instance_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.request_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionReq, _impl_.task_protocol_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -520,7 +504,6 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.aiserver_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.workload_mode_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.environment_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::OpenSessionRsp, _impl_.task_protocol_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::InitReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -629,21 +612,12 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::WaitControl, _impl_.retry_after_ms_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::StopControl, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::StopControl, _impl_.reason_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::StopControl, _impl_.message_),
-  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _internal_metadata_),
   ~0u,  // no _extensions_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_._oneof_case_[0]),
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_.reply_),
-  ::_pbi::kInvalidFieldOffsetTag,
   ::_pbi::kInvalidFieldOffsetTag,
   ::_pbi::kInvalidFieldOffsetTag,
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::UpdateRsp, _impl_.control_),
@@ -702,6 +676,7 @@ const uint32_t TableStruct_maze_5ftask_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AbortEpisodeRsp, _impl_.reply_),
+  PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::AbortEpisodeRsp, _impl_.wait_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::v1::CloseSessionReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -723,29 +698,28 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 25, -1, -1, sizeof(::rl::task::maze::v1::CommandIdentity)},
   { 35, -1, -1, sizeof(::rl::task::maze::v1::CommandReply)},
   { 46, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionReq)},
-  { 56, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionRsp)},
-  { 69, -1, -1, sizeof(::rl::task::maze::v1::InitReq)},
-  { 77, -1, -1, sizeof(::rl::task::maze::v1::InitRsp)},
-  { 84, -1, -1, sizeof(::rl::task::maze::v1::EpisodeAssignment)},
-  { 93, -1, -1, sizeof(::rl::task::maze::v1::TaskComplete)},
-  { 100, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeReq)},
-  { 107, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeRsp)},
-  { 117, -1, -1, sizeof(::rl::task::maze::v1::Vec2)},
-  { 125, 138, -1, sizeof(::rl::task::maze::v1::AgentState)},
-  { 145, -1, -1, sizeof(::rl::task::maze::v1::UpdateReq)},
-  { 154, -1, -1, sizeof(::rl::task::maze::v1::AgentAction)},
-  { 162, -1, -1, sizeof(::rl::task::maze::v1::ActionBatch)},
-  { 169, -1, -1, sizeof(::rl::task::maze::v1::WaitControl)},
-  { 176, -1, -1, sizeof(::rl::task::maze::v1::StopControl)},
-  { 184, -1, -1, sizeof(::rl::task::maze::v1::UpdateRsp)},
-  { 195, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
-  { 202, 213, -1, sizeof(::rl::task::maze::v1::AgentEpisodeOutcome)},
-  { 218, -1, -1, sizeof(::rl::task::maze::v1::EpisodeOutcome)},
-  { 226, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
-  { 234, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
-  { 243, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
-  { 250, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
-  { 257, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
+  { 55, -1, -1, sizeof(::rl::task::maze::v1::OpenSessionRsp)},
+  { 67, -1, -1, sizeof(::rl::task::maze::v1::InitReq)},
+  { 75, -1, -1, sizeof(::rl::task::maze::v1::InitRsp)},
+  { 82, -1, -1, sizeof(::rl::task::maze::v1::EpisodeAssignment)},
+  { 91, -1, -1, sizeof(::rl::task::maze::v1::TaskComplete)},
+  { 98, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeReq)},
+  { 105, -1, -1, sizeof(::rl::task::maze::v1::BeginEpisodeRsp)},
+  { 115, -1, -1, sizeof(::rl::task::maze::v1::Vec2)},
+  { 123, 136, -1, sizeof(::rl::task::maze::v1::AgentState)},
+  { 143, -1, -1, sizeof(::rl::task::maze::v1::UpdateReq)},
+  { 152, -1, -1, sizeof(::rl::task::maze::v1::AgentAction)},
+  { 160, -1, -1, sizeof(::rl::task::maze::v1::ActionBatch)},
+  { 167, -1, -1, sizeof(::rl::task::maze::v1::WaitControl)},
+  { 174, -1, -1, sizeof(::rl::task::maze::v1::UpdateRsp)},
+  { 184, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeReq)},
+  { 191, 202, -1, sizeof(::rl::task::maze::v1::AgentEpisodeOutcome)},
+  { 207, -1, -1, sizeof(::rl::task::maze::v1::EpisodeOutcome)},
+  { 215, -1, -1, sizeof(::rl::task::maze::v1::EndEpisodeRsp)},
+  { 223, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeReq)},
+  { 232, -1, -1, sizeof(::rl::task::maze::v1::AbortEpisodeRsp)},
+  { 240, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionReq)},
+  { 247, -1, -1, sizeof(::rl::task::maze::v1::CloseSessionRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -767,7 +741,6 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::rl::task::maze::v1::_AgentAction_default_instance_._instance,
   &::rl::task::maze::v1::_ActionBatch_default_instance_._instance,
   &::rl::task::maze::v1::_WaitControl_default_instance_._instance,
-  &::rl::task::maze::v1::_StopControl_default_instance_._instance,
   &::rl::task::maze::v1::_UpdateRsp_default_instance_._instance,
   &::rl::task::maze::v1::_EndEpisodeReq_default_instance_._instance,
   &::rl::task::maze::v1::_AgentEpisodeOutcome_default_instance_._instance,
@@ -800,145 +773,141 @@ const char descriptor_table_protodef_maze_5ftask_2eproto[] PROTOBUF_SECTION_VARI
   "ult\0225\n\nerror_code\030\002 \001(\0162!.rl.task.maze.v"
   "1.CommandErrorCode\022\017\n\007message\030\003 \001(\t\022\030\n\020a"
   "pplied_sequence\030\004 \001(\004\022,\n\005phase\030\005 \001(\0162\035.r"
-  "l.task.maze.v1.SessionPhase\"\263\001\n\016OpenSess"
+  "l.task.maze.v1.SessionPhase\"\221\001\n\016OpenSess"
   "ionReq\0225\n\006client\030\001 \001(\0132%.rl.common.v1.Se"
   "rviceInstanceIdentity\022\037\n\027environment_ins"
-  "tance_id\030\002 \001(\t\022\022\n\nrequest_id\030\003 \001(\t\0225\n\rta"
-  "sk_protocol\030\004 \001(\0132\036.rl.common.v1.Protoco"
-  "lIdentity\"\306\002\n\016OpenSessionRsp\022,\n\005reply\030\001 "
-  "\001(\0132\035.rl.task.maze.v1.CommandReply\022\022\n\nse"
-  "ssion_id\030\002 \001(\t\022\025\n\rsession_epoch\030\003 \001(\004\0227\n"
-  "\010aiserver\030\004 \001(\0132%.rl.common.v1.ServiceIn"
-  "stanceIdentity\0224\n\rworkload_mode\030\005 \001(\0162\035."
-  "rl.task.maze.v1.WorkloadMode\0225\n\013environm"
-  "ent\030\006 \001(\0132 .rl.task.maze.v1.EnvironmentS"
-  "pec\0225\n\rtask_protocol\030\007 \001(\0132\036.rl.common.v"
-  "1.ProtocolIdentity\"i\n\007InitReq\0221\n\007command"
-  "\030\001 \001(\0132 .rl.task.maze.v1.CommandIdentity"
-  "\022+\n\003map\030\002 \001(\0132\036.rl.task.maze.v1.MapDescr"
-  "iptor\"x\n\007InitRsp\022,\n\005reply\030\001 \001(\0132\035.rl.tas"
-  "k.maze.v1.CommandReplyJ\004\010\002\020\003J\004\010\003\020\004R\023acce"
-  "pted_map_digestR\036verified_shortest_actio"
-  "n_steps\"\216\001\n\021EpisodeAssignment\022\022\n\nepisode"
-  "_id\030\001 \001(\t\022*\n\004mode\030\002 \001(\0162\034.rl.task.maze.v"
-  "1.EpisodeMode\022\021\n\tmax_steps\030\003 \001(\rJ\004\010\004\020\005R "
-  "evaluation_model_artifact_digest\"\037\n\014Task"
-  "Complete\022\017\n\007message\030\001 \001(\t\"D\n\017BeginEpisod"
-  "eReq\0221\n\007command\030\001 \001(\0132 .rl.task.maze.v1."
-  "CommandIdentity\"\274\001\n\017BeginEpisodeRsp\022,\n\005r"
-  "eply\030\001 \001(\0132\035.rl.task.maze.v1.CommandRepl"
-  "y\0228\n\nassignment\030\002 \001(\0132\".rl.task.maze.v1."
-  "EpisodeAssignmentH\000\0226\n\rtask_complete\030\003 \001"
-  "(\0132\035.rl.task.maze.v1.TaskCompleteH\000B\t\n\007o"
-  "utcome\"\034\n\004Vec2\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\241\002\n"
-  "\nAgentState\022\020\n\010agent_id\030\001 \001(\r\022\'\n\010positio"
-  "n\030\002 \001(\0132\025.rl.task.maze.v1.Vec2\022\017\n\007is_don"
-  "e\030\003 \001(\010\022B\n\022termination_reason\030\004 \001(\0162&.rl"
-  ".task.maze.v1.MazeTerminationReason\022\031\n\021l"
-  "ast_move_blocked\030\005 \001(\010\022<\n\022executed_actio"
-  "n_id\030\006 \001(\0162\033.rl.task.maze.v1.MazeActionH"
-  "\000\210\001\001\022\023\n\013action_mask\030\007 \003(\010B\025\n\023_executed_a"
-  "ction_id\"}\n\tUpdateReq\0221\n\007command\030\001 \001(\0132 "
-  ".rl.task.maze.v1.CommandIdentity\022\020\n\010fram"
-  "e_id\030\002 \001(\004\022+\n\006agents\030\003 \003(\0132\033.rl.task.maz"
-  "e.v1.AgentState\"O\n\013AgentAction\022\020\n\010agent_"
-  "id\030\001 \001(\r\022.\n\taction_id\030\002 \001(\0162\033.rl.task.ma"
-  "ze.v1.MazeAction\"<\n\013ActionBatch\022-\n\007actio"
-  "ns\030\001 \003(\0132\034.rl.task.maze.v1.AgentAction\"%"
-  "\n\013WaitControl\022\026\n\016retry_after_ms\030\001 \001(\005\"V\n"
-  "\013StopControl\0226\n\006reason\030\001 \001(\0162&.rl.task.m"
-  "aze.v1.MazeTerminationReason\022\017\n\007message\030"
-  "\002 \001(\t\"\326\001\n\tUpdateRsp\022,\n\005reply\030\001 \001(\0132\035.rl."
-  "task.maze.v1.CommandReply\0224\n\014action_batc"
-  "h\030\002 \001(\0132\034.rl.task.maze.v1.ActionBatchH\000\022"
-  ",\n\004wait\030\003 \001(\0132\034.rl.task.maze.v1.WaitCont"
-  "rolH\000\022,\n\004stop\030\004 \001(\0132\034.rl.task.maze.v1.St"
-  "opControlH\000B\t\n\007control\"B\n\rEndEpisodeReq\022"
+  "tance_id\030\002 \001(\t\022\022\n\nrequest_id\030\003 \001(\tJ\004\010\004\020\005"
+  "R\rtask_protocol\"\244\002\n\016OpenSessionRsp\022,\n\005re"
+  "ply\030\001 \001(\0132\035.rl.task.maze.v1.CommandReply"
+  "\022\022\n\nsession_id\030\002 \001(\t\022\025\n\rsession_epoch\030\003 "
+  "\001(\004\0227\n\010aiserver\030\004 \001(\0132%.rl.common.v1.Ser"
+  "viceInstanceIdentity\0224\n\rworkload_mode\030\005 "
+  "\001(\0162\035.rl.task.maze.v1.WorkloadMode\0225\n\013en"
+  "vironment\030\006 \001(\0132 .rl.task.maze.v1.Enviro"
+  "nmentSpecJ\004\010\007\020\010R\rtask_protocol\"i\n\007InitRe"
+  "q\0221\n\007command\030\001 \001(\0132 .rl.task.maze.v1.Com"
+  "mandIdentity\022+\n\003map\030\002 \001(\0132\036.rl.task.maze"
+  ".v1.MapDescriptor\"x\n\007InitRsp\022,\n\005reply\030\001 "
+  "\001(\0132\035.rl.task.maze.v1.CommandReplyJ\004\010\002\020\003"
+  "J\004\010\003\020\004R\023accepted_map_digestR\036verified_sh"
+  "ortest_action_steps\"\216\001\n\021EpisodeAssignmen"
+  "t\022\022\n\nepisode_id\030\001 \001(\t\022*\n\004mode\030\002 \001(\0162\034.rl"
+  ".task.maze.v1.EpisodeMode\022\021\n\tmax_steps\030\003"
+  " \001(\rJ\004\010\004\020\005R evaluation_model_artifact_di"
+  "gest\"\037\n\014TaskComplete\022\017\n\007message\030\001 \001(\t\"D\n"
+  "\017BeginEpisodeReq\0221\n\007command\030\001 \001(\0132 .rl.t"
+  "ask.maze.v1.CommandIdentity\"\274\001\n\017BeginEpi"
+  "sodeRsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.maze.v1"
+  ".CommandReply\0228\n\nassignment\030\002 \001(\0132\".rl.t"
+  "ask.maze.v1.EpisodeAssignmentH\000\0226\n\rtask_"
+  "complete\030\003 \001(\0132\035.rl.task.maze.v1.TaskCom"
+  "pleteH\000B\t\n\007outcome\"\034\n\004Vec2\022\t\n\001x\030\001 \001(\002\022\t\n"
+  "\001y\030\002 \001(\002\"\241\002\n\nAgentState\022\020\n\010agent_id\030\001 \001("
+  "\r\022\'\n\010position\030\002 \001(\0132\025.rl.task.maze.v1.Ve"
+  "c2\022\017\n\007is_done\030\003 \001(\010\022B\n\022termination_reaso"
+  "n\030\004 \001(\0162&.rl.task.maze.v1.MazeTerminatio"
+  "nReason\022\031\n\021last_move_blocked\030\005 \001(\010\022<\n\022ex"
+  "ecuted_action_id\030\006 \001(\0162\033.rl.task.maze.v1"
+  ".MazeActionH\000\210\001\001\022\023\n\013action_mask\030\007 \003(\010B\025\n"
+  "\023_executed_action_id\"}\n\tUpdateReq\0221\n\007com"
+  "mand\030\001 \001(\0132 .rl.task.maze.v1.CommandIden"
+  "tity\022\020\n\010frame_id\030\002 \001(\004\022+\n\006agents\030\003 \003(\0132\033"
+  ".rl.task.maze.v1.AgentState\"O\n\013AgentActi"
+  "on\022\020\n\010agent_id\030\001 \001(\r\022.\n\taction_id\030\002 \001(\0162"
+  "\033.rl.task.maze.v1.MazeAction\"<\n\013ActionBa"
+  "tch\022-\n\007actions\030\001 \003(\0132\034.rl.task.maze.v1.A"
+  "gentAction\"%\n\013WaitControl\022\026\n\016retry_after"
+  "_ms\030\001 \001(\005\"\264\001\n\tUpdateRsp\022,\n\005reply\030\001 \001(\0132\035"
+  ".rl.task.maze.v1.CommandReply\0224\n\014action_"
+  "batch\030\002 \001(\0132\034.rl.task.maze.v1.ActionBatc"
+  "hH\000\022,\n\004wait\030\003 \001(\0132\034.rl.task.maze.v1.Wait"
+  "ControlH\000B\t\n\007controlJ\004\010\004\020\005R\004stop\"B\n\rEndE"
+  "pisodeReq\0221\n\007command\030\001 \001(\0132 .rl.task.maz"
+  "e.v1.CommandIdentity\"\347\001\n\023AgentEpisodeOut"
+  "come\022\020\n\010agent_id\030\001 \001(\r\022B\n\022termination_re"
+  "ason\030\002 \001(\0162&.rl.task.maze.v1.MazeTermina"
+  "tionReason\022\031\n\021terminal_frame_id\030\003 \001(\004\022-\n"
+  "\016final_position\030\004 \001(\0132\025.rl.task.maze.v1."
+  "Vec2\022\034\n\017goal_rank_group\030\005 \001(\rH\000\210\001\001B\022\n\020_g"
+  "oal_rank_group\"Z\n\016EpisodeOutcome\022\022\n\nepis"
+  "ode_id\030\001 \001(\t\0224\n\006agents\030\002 \003(\0132$.rl.task.m"
+  "aze.v1.AgentEpisodeOutcome\"o\n\rEndEpisode"
+  "Rsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.maze.v1.Com"
+  "mandReply\0220\n\007outcome\030\002 \001(\0132\037.rl.task.maz"
+  "e.v1.EpisodeOutcome\"\215\001\n\017AbortEpisodeReq\022"
   "1\n\007command\030\001 \001(\0132 .rl.task.maze.v1.Comma"
-  "ndIdentity\"\347\001\n\023AgentEpisodeOutcome\022\020\n\010ag"
-  "ent_id\030\001 \001(\r\022B\n\022termination_reason\030\002 \001(\016"
-  "2&.rl.task.maze.v1.MazeTerminationReason"
-  "\022\031\n\021terminal_frame_id\030\003 \001(\004\022-\n\016final_pos"
-  "ition\030\004 \001(\0132\025.rl.task.maze.v1.Vec2\022\034\n\017go"
-  "al_rank_group\030\005 \001(\rH\000\210\001\001B\022\n\020_goal_rank_g"
-  "roup\"Z\n\016EpisodeOutcome\022\022\n\nepisode_id\030\001 \001"
-  "(\t\0224\n\006agents\030\002 \003(\0132$.rl.task.maze.v1.Age"
-  "ntEpisodeOutcome\"o\n\rEndEpisodeRsp\022,\n\005rep"
-  "ly\030\001 \001(\0132\035.rl.task.maze.v1.CommandReply\022"
-  "0\n\007outcome\030\002 \001(\0132\037.rl.task.maze.v1.Episo"
-  "deOutcome\"\215\001\n\017AbortEpisodeReq\0221\n\007command"
-  "\030\001 \001(\0132 .rl.task.maze.v1.CommandIdentity"
-  "\0226\n\006reason\030\002 \001(\0162&.rl.task.maze.v1.MazeT"
-  "erminationReason\022\017\n\007message\030\003 \001(\t\"\?\n\017Abo"
-  "rtEpisodeRsp\022,\n\005reply\030\001 \001(\0132\035.rl.task.ma"
-  "ze.v1.CommandReply\"D\n\017CloseSessionReq\0221\n"
-  "\007command\030\001 \001(\0132 .rl.task.maze.v1.Command"
-  "Identity\"\?\n\017CloseSessionRsp\022,\n\005reply\030\001 \001"
-  "(\0132\035.rl.task.maze.v1.CommandReply*\245\001\n\rCo"
-  "mmandResult\022\036\n\032COMMAND_RESULT_UNSPECIFIE"
-  "D\020\000\022\032\n\026COMMAND_RESULT_APPLIED\020\001\022\"\n\036COMMA"
-  "ND_RESULT_ALREADY_APPLIED\020\002\022\027\n\023COMMAND_R"
-  "ESULT_WAIT\020\003\022\033\n\027COMMAND_RESULT_REJECTED\020"
-  "\004*\314\002\n\020CommandErrorCode\022\"\n\036COMMAND_ERROR_"
-  "CODE_UNSPECIFIED\020\000\022\'\n#COMMAND_ERROR_CODE"
-  "_INVALID_IDENTITY\020\001\022\"\n\036COMMAND_ERROR_COD"
-  "E_STALE_EPOCH\020\002\022#\n\037COMMAND_ERROR_CODE_OU"
-  "T_OF_ORDER\020\003\022\'\n#COMMAND_ERROR_CODE_PAYLO"
-  "AD_CONFLICT\020\004\022%\n!COMMAND_ERROR_CODE_STAT"
-  "E_CONFLICT\020\005\022\"\n\036COMMAND_ERROR_CODE_MAP_I"
-  "NVALID\020\006\022.\n*COMMAND_ERROR_CODE_MODEL_IDE"
-  "NTITY_MISMATCH\020\007*\373\001\n\014SessionPhase\022\035\n\031SES"
-  "SION_PHASE_UNSPECIFIED\020\000\022\026\n\022SESSION_PHAS"
-  "E_OPEN\020\001\022\027\n\023SESSION_PHASE_READY\020\002\022!\n\035SES"
-  "SION_PHASE_EPISODE_RUNNING\020\003\022\"\n\036SESSION_"
-  "PHASE_EPISODE_TERMINAL\020\004\022\037\n\033SESSION_PHAS"
-  "E_TASK_COMPLETE\020\005\022\030\n\024SESSION_PHASE_CLOSE"
-  "D\020\006\022\031\n\025SESSION_PHASE_ABORTED\020\007*c\n\013Episod"
-  "eMode\022\034\n\030EPISODE_MODE_UNSPECIFIED\020\000\022\031\n\025E"
-  "PISODE_MODE_TRAINING\020\001\022\033\n\027EPISODE_MODE_E"
-  "VALUATION\020\002*g\n\014WorkloadMode\022\035\n\031WORKLOAD_"
-  "MODE_UNSPECIFIED\020\000\022\032\n\026WORKLOAD_MODE_TRAI"
-  "NING\020\001\022\034\n\030WORKLOAD_MODE_EVALUATION\020\002*\343\001\n"
-  "\nMazeAction\022\024\n\020MAZE_ACTION_NOOP\020\000\022\022\n\016MAZ"
-  "E_ACTION_UP\020\001\022\030\n\024MAZE_ACTION_UP_RIGHT\020\002\022"
-  "\025\n\021MAZE_ACTION_RIGHT\020\003\022\032\n\026MAZE_ACTION_DO"
-  "WN_RIGHT\020\004\022\024\n\020MAZE_ACTION_DOWN\020\005\022\031\n\025MAZE"
-  "_ACTION_DOWN_LEFT\020\006\022\024\n\020MAZE_ACTION_LEFT\020"
-  "\007\022\027\n\023MAZE_ACTION_UP_LEFT\020\010*p\n\016ActionMask"
-  "Mode\022 \n\034ACTION_MASK_MODE_UNSPECIFIED\020\000\022\035"
-  "\n\031ACTION_MASK_MODE_DISABLED\020\001\022\035\n\031ACTION_"
-  "MASK_MODE_REQUIRED\020\002*\262\002\n\025MazeTermination"
-  "Reason\022\'\n#MAZE_TERMINATION_REASON_UNSPEC"
-  "IFIED\020\000\022\"\n\036MAZE_TERMINATION_REASON_ACTIV"
-  "E\020\001\022(\n$MAZE_TERMINATION_REASON_GOAL_REAC"
-  "HED\020\002\022&\n\"MAZE_TERMINATION_REASON_TIME_LI"
-  "MIT\020\003\022(\n$MAZE_TERMINATION_REASON_CLIENT_"
-  "ABORT\020\004\022)\n%MAZE_TERMINATION_REASON_CHAIN"
-  "_FAILURE\020\005\022%\n!MAZE_TERMINATION_REASON_TA"
-  "SK_STOP\020\0062\252\004\n\017MazeTaskService\022O\n\013OpenSes"
-  "sion\022\037.rl.task.maze.v1.OpenSessionReq\032\037."
-  "rl.task.maze.v1.OpenSessionRsp\022:\n\004Init\022\030"
-  ".rl.task.maze.v1.InitReq\032\030.rl.task.maze."
-  "v1.InitRsp\022R\n\014BeginEpisode\022 .rl.task.maz"
-  "e.v1.BeginEpisodeReq\032 .rl.task.maze.v1.B"
-  "eginEpisodeRsp\022@\n\006Update\022\032.rl.task.maze."
-  "v1.UpdateReq\032\032.rl.task.maze.v1.UpdateRsp"
-  "\022L\n\nEndEpisode\022\036.rl.task.maze.v1.EndEpis"
-  "odeReq\032\036.rl.task.maze.v1.EndEpisodeRsp\022R"
-  "\n\014AbortEpisode\022 .rl.task.maze.v1.AbortEp"
-  "isodeReq\032 .rl.task.maze.v1.AbortEpisodeR"
-  "sp\022R\n\014CloseSession\022 .rl.task.maze.v1.Clo"
-  "seSessionReq\032 .rl.task.maze.v1.CloseSess"
-  "ionRspB\003\200\001\000b\006proto3"
+  "ndIdentity\0226\n\006reason\030\002 \001(\0162&.rl.task.maz"
+  "e.v1.MazeTerminationReason\022\017\n\007message\030\003 "
+  "\001(\t\"k\n\017AbortEpisodeRsp\022,\n\005reply\030\001 \001(\0132\035."
+  "rl.task.maze.v1.CommandReply\022*\n\004wait\030\002 \001"
+  "(\0132\034.rl.task.maze.v1.WaitControl\"D\n\017Clos"
+  "eSessionReq\0221\n\007command\030\001 \001(\0132 .rl.task.m"
+  "aze.v1.CommandIdentity\"\?\n\017CloseSessionRs"
+  "p\022,\n\005reply\030\001 \001(\0132\035.rl.task.maze.v1.Comma"
+  "ndReply*\245\001\n\rCommandResult\022\036\n\032COMMAND_RES"
+  "ULT_UNSPECIFIED\020\000\022\032\n\026COMMAND_RESULT_APPL"
+  "IED\020\001\022\"\n\036COMMAND_RESULT_ALREADY_APPLIED\020"
+  "\002\022\027\n\023COMMAND_RESULT_WAIT\020\003\022\033\n\027COMMAND_RE"
+  "SULT_REJECTED\020\004*\314\002\n\020CommandErrorCode\022\"\n\036"
+  "COMMAND_ERROR_CODE_UNSPECIFIED\020\000\022\'\n#COMM"
+  "AND_ERROR_CODE_INVALID_IDENTITY\020\001\022\"\n\036COM"
+  "MAND_ERROR_CODE_STALE_EPOCH\020\002\022#\n\037COMMAND"
+  "_ERROR_CODE_OUT_OF_ORDER\020\003\022\'\n#COMMAND_ER"
+  "ROR_CODE_PAYLOAD_CONFLICT\020\004\022%\n!COMMAND_E"
+  "RROR_CODE_STATE_CONFLICT\020\005\022\"\n\036COMMAND_ER"
+  "ROR_CODE_MAP_INVALID\020\006\022.\n*COMMAND_ERROR_"
+  "CODE_MODEL_IDENTITY_MISMATCH\020\007*\373\001\n\014Sessi"
+  "onPhase\022\035\n\031SESSION_PHASE_UNSPECIFIED\020\000\022\026"
+  "\n\022SESSION_PHASE_OPEN\020\001\022\027\n\023SESSION_PHASE_"
+  "READY\020\002\022!\n\035SESSION_PHASE_EPISODE_RUNNING"
+  "\020\003\022\"\n\036SESSION_PHASE_EPISODE_TERMINAL\020\004\022\037"
+  "\n\033SESSION_PHASE_TASK_COMPLETE\020\005\022\030\n\024SESSI"
+  "ON_PHASE_CLOSED\020\006\022\031\n\025SESSION_PHASE_ABORT"
+  "ED\020\007*c\n\013EpisodeMode\022\034\n\030EPISODE_MODE_UNSP"
+  "ECIFIED\020\000\022\031\n\025EPISODE_MODE_TRAINING\020\001\022\033\n\027"
+  "EPISODE_MODE_EVALUATION\020\002*g\n\014WorkloadMod"
+  "e\022\035\n\031WORKLOAD_MODE_UNSPECIFIED\020\000\022\032\n\026WORK"
+  "LOAD_MODE_TRAINING\020\001\022\034\n\030WORKLOAD_MODE_EV"
+  "ALUATION\020\002*\343\001\n\nMazeAction\022\024\n\020MAZE_ACTION"
+  "_NOOP\020\000\022\022\n\016MAZE_ACTION_UP\020\001\022\030\n\024MAZE_ACTI"
+  "ON_UP_RIGHT\020\002\022\025\n\021MAZE_ACTION_RIGHT\020\003\022\032\n\026"
+  "MAZE_ACTION_DOWN_RIGHT\020\004\022\024\n\020MAZE_ACTION_"
+  "DOWN\020\005\022\031\n\025MAZE_ACTION_DOWN_LEFT\020\006\022\024\n\020MAZ"
+  "E_ACTION_LEFT\020\007\022\027\n\023MAZE_ACTION_UP_LEFT\020\010"
+  "*p\n\016ActionMaskMode\022 \n\034ACTION_MASK_MODE_U"
+  "NSPECIFIED\020\000\022\035\n\031ACTION_MASK_MODE_DISABLE"
+  "D\020\001\022\035\n\031ACTION_MASK_MODE_REQUIRED\020\002*\264\002\n\025M"
+  "azeTerminationReason\022\'\n#MAZE_TERMINATION"
+  "_REASON_UNSPECIFIED\020\000\022\"\n\036MAZE_TERMINATIO"
+  "N_REASON_ACTIVE\020\001\022(\n$MAZE_TERMINATION_RE"
+  "ASON_GOAL_REACHED\020\002\022&\n\"MAZE_TERMINATION_"
+  "REASON_TIME_LIMIT\020\003\022(\n$MAZE_TERMINATION_"
+  "REASON_CLIENT_ABORT\020\004\022)\n%MAZE_TERMINATIO"
+  "N_REASON_CHAIN_FAILURE\020\005\"\004\010\006\020\006*!MAZE_TER"
+  "MINATION_REASON_TASK_STOP2\252\004\n\017MazeTaskSe"
+  "rvice\022O\n\013OpenSession\022\037.rl.task.maze.v1.O"
+  "penSessionReq\032\037.rl.task.maze.v1.OpenSess"
+  "ionRsp\022:\n\004Init\022\030.rl.task.maze.v1.InitReq"
+  "\032\030.rl.task.maze.v1.InitRsp\022R\n\014BeginEpiso"
+  "de\022 .rl.task.maze.v1.BeginEpisodeReq\032 .r"
+  "l.task.maze.v1.BeginEpisodeRsp\022@\n\006Update"
+  "\022\032.rl.task.maze.v1.UpdateReq\032\032.rl.task.m"
+  "aze.v1.UpdateRsp\022L\n\nEndEpisode\022\036.rl.task"
+  ".maze.v1.EndEpisodeReq\032\036.rl.task.maze.v1"
+  ".EndEpisodeRsp\022R\n\014AbortEpisode\022 .rl.task"
+  ".maze.v1.AbortEpisodeReq\032 .rl.task.maze."
+  "v1.AbortEpisodeRsp\022R\n\014CloseSession\022 .rl."
+  "task.maze.v1.CloseSessionReq\032 .rl.task.m"
+  "aze.v1.CloseSessionRspB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_maze_5ftask_2eproto_deps[1] = {
   &::descriptor_table_common_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_maze_5ftask_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_maze_5ftask_2eproto = {
-    false, false, 5979, descriptor_table_protodef_maze_5ftask_2eproto,
+    false, false, 5835, descriptor_table_protodef_maze_5ftask_2eproto,
     "maze_task.proto",
-    &descriptor_table_maze_5ftask_2eproto_once, descriptor_table_maze_5ftask_2eproto_deps, 1, 28,
+    &descriptor_table_maze_5ftask_2eproto_once, descriptor_table_maze_5ftask_2eproto_deps, 1, 27,
     schemas, file_default_instances, TableStruct_maze_5ftask_2eproto::offsets,
     file_level_metadata_maze_5ftask_2eproto, file_level_enum_descriptors_maze_5ftask_2eproto,
     file_level_service_descriptors_maze_5ftask_2eproto,
@@ -1088,7 +1057,6 @@ bool MazeTerminationReason_IsValid(int value) {
     case 3:
     case 4:
     case 5:
-    case 6:
       return true;
     default:
       return false;
@@ -2452,28 +2420,17 @@ void CommandReply::InternalSwap(CommandReply* other) {
 class OpenSessionReq::_Internal {
  public:
   static const ::rl::common::v1::ServiceInstanceIdentity& client(const OpenSessionReq* msg);
-  static const ::rl::common::v1::ProtocolIdentity& task_protocol(const OpenSessionReq* msg);
 };
 
 const ::rl::common::v1::ServiceInstanceIdentity&
 OpenSessionReq::_Internal::client(const OpenSessionReq* msg) {
   return *msg->_impl_.client_;
 }
-const ::rl::common::v1::ProtocolIdentity&
-OpenSessionReq::_Internal::task_protocol(const OpenSessionReq* msg) {
-  return *msg->_impl_.task_protocol_;
-}
 void OpenSessionReq::clear_client() {
   if (GetArenaForAllocation() == nullptr && _impl_.client_ != nullptr) {
     delete _impl_.client_;
   }
   _impl_.client_ = nullptr;
-}
-void OpenSessionReq::clear_task_protocol() {
-  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
-    delete _impl_.task_protocol_;
-  }
-  _impl_.task_protocol_ = nullptr;
 }
 OpenSessionReq::OpenSessionReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -2488,7 +2445,6 @@ OpenSessionReq::OpenSessionReq(const OpenSessionReq& from)
       decltype(_impl_.environment_instance_id_){}
     , decltype(_impl_.request_id_){}
     , decltype(_impl_.client_){nullptr}
-    , decltype(_impl_.task_protocol_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -2511,9 +2467,6 @@ OpenSessionReq::OpenSessionReq(const OpenSessionReq& from)
   if (from._internal_has_client()) {
     _this->_impl_.client_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.client_);
   }
-  if (from._internal_has_task_protocol()) {
-    _this->_impl_.task_protocol_ = new ::rl::common::v1::ProtocolIdentity(*from._impl_.task_protocol_);
-  }
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.OpenSessionReq)
 }
 
@@ -2525,7 +2478,6 @@ inline void OpenSessionReq::SharedCtor(
       decltype(_impl_.environment_instance_id_){}
     , decltype(_impl_.request_id_){}
     , decltype(_impl_.client_){nullptr}
-    , decltype(_impl_.task_protocol_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.environment_instance_id_.InitDefault();
@@ -2552,7 +2504,6 @@ inline void OpenSessionReq::SharedDtor() {
   _impl_.environment_instance_id_.Destroy();
   _impl_.request_id_.Destroy();
   if (this != internal_default_instance()) delete _impl_.client_;
-  if (this != internal_default_instance()) delete _impl_.task_protocol_;
 }
 
 void OpenSessionReq::SetCachedSize(int size) const {
@@ -2571,10 +2522,6 @@ void OpenSessionReq::Clear() {
     delete _impl_.client_;
   }
   _impl_.client_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
-    delete _impl_.task_protocol_;
-  }
-  _impl_.task_protocol_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2609,14 +2556,6 @@ const char* OpenSessionReq::_InternalParse(const char* ptr, ::_pbi::ParseContext
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.OpenSessionReq.request_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ProtocolIdentity task_protocol = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_task_protocol(), ptr);
-          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2676,13 +2615,6 @@ uint8_t* OpenSessionReq::_InternalSerialize(
         3, this->_internal_request_id(), target);
   }
 
-  // .rl.common.v1.ProtocolIdentity task_protocol = 4;
-  if (this->_internal_has_task_protocol()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::task_protocol(this),
-        _Internal::task_protocol(this).GetCachedSize(), target, stream);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2720,13 +2652,6 @@ size_t OpenSessionReq::ByteSizeLong() const {
         *_impl_.client_);
   }
 
-  // .rl.common.v1.ProtocolIdentity task_protocol = 4;
-  if (this->_internal_has_task_protocol()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.task_protocol_);
-  }
-
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2755,10 +2680,6 @@ void OpenSessionReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
     _this->_internal_mutable_client()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
         from._internal_client());
   }
-  if (from._internal_has_task_protocol()) {
-    _this->_internal_mutable_task_protocol()->::rl::common::v1::ProtocolIdentity::MergeFrom(
-        from._internal_task_protocol());
-  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2786,12 +2707,7 @@ void OpenSessionReq::InternalSwap(OpenSessionReq* other) {
       &_impl_.request_id_, lhs_arena,
       &other->_impl_.request_id_, rhs_arena
   );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(OpenSessionReq, _impl_.task_protocol_)
-      + sizeof(OpenSessionReq::_impl_.task_protocol_)
-      - PROTOBUF_FIELD_OFFSET(OpenSessionReq, _impl_.client_)>(
-          reinterpret_cast<char*>(&_impl_.client_),
-          reinterpret_cast<char*>(&other->_impl_.client_));
+  swap(_impl_.client_, other->_impl_.client_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata OpenSessionReq::GetMetadata() const {
@@ -2807,7 +2723,6 @@ class OpenSessionRsp::_Internal {
   static const ::rl::task::maze::v1::CommandReply& reply(const OpenSessionRsp* msg);
   static const ::rl::common::v1::ServiceInstanceIdentity& aiserver(const OpenSessionRsp* msg);
   static const ::rl::task::maze::v1::EnvironmentSpec& environment(const OpenSessionRsp* msg);
-  static const ::rl::common::v1::ProtocolIdentity& task_protocol(const OpenSessionRsp* msg);
 };
 
 const ::rl::task::maze::v1::CommandReply&
@@ -2822,21 +2737,11 @@ const ::rl::task::maze::v1::EnvironmentSpec&
 OpenSessionRsp::_Internal::environment(const OpenSessionRsp* msg) {
   return *msg->_impl_.environment_;
 }
-const ::rl::common::v1::ProtocolIdentity&
-OpenSessionRsp::_Internal::task_protocol(const OpenSessionRsp* msg) {
-  return *msg->_impl_.task_protocol_;
-}
 void OpenSessionRsp::clear_aiserver() {
   if (GetArenaForAllocation() == nullptr && _impl_.aiserver_ != nullptr) {
     delete _impl_.aiserver_;
   }
   _impl_.aiserver_ = nullptr;
-}
-void OpenSessionRsp::clear_task_protocol() {
-  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
-    delete _impl_.task_protocol_;
-  }
-  _impl_.task_protocol_ = nullptr;
 }
 OpenSessionRsp::OpenSessionRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -2852,7 +2757,6 @@ OpenSessionRsp::OpenSessionRsp(const OpenSessionRsp& from)
     , decltype(_impl_.reply_){nullptr}
     , decltype(_impl_.aiserver_){nullptr}
     , decltype(_impl_.environment_){nullptr}
-    , decltype(_impl_.task_protocol_){nullptr}
     , decltype(_impl_.session_epoch_){}
     , decltype(_impl_.workload_mode_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -2875,9 +2779,6 @@ OpenSessionRsp::OpenSessionRsp(const OpenSessionRsp& from)
   if (from._internal_has_environment()) {
     _this->_impl_.environment_ = new ::rl::task::maze::v1::EnvironmentSpec(*from._impl_.environment_);
   }
-  if (from._internal_has_task_protocol()) {
-    _this->_impl_.task_protocol_ = new ::rl::common::v1::ProtocolIdentity(*from._impl_.task_protocol_);
-  }
   ::memcpy(&_impl_.session_epoch_, &from._impl_.session_epoch_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.workload_mode_) -
     reinterpret_cast<char*>(&_impl_.session_epoch_)) + sizeof(_impl_.workload_mode_));
@@ -2893,7 +2794,6 @@ inline void OpenSessionRsp::SharedCtor(
     , decltype(_impl_.reply_){nullptr}
     , decltype(_impl_.aiserver_){nullptr}
     , decltype(_impl_.environment_){nullptr}
-    , decltype(_impl_.task_protocol_){nullptr}
     , decltype(_impl_.session_epoch_){uint64_t{0u}}
     , decltype(_impl_.workload_mode_){0}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -2919,7 +2819,6 @@ inline void OpenSessionRsp::SharedDtor() {
   if (this != internal_default_instance()) delete _impl_.reply_;
   if (this != internal_default_instance()) delete _impl_.aiserver_;
   if (this != internal_default_instance()) delete _impl_.environment_;
-  if (this != internal_default_instance()) delete _impl_.task_protocol_;
 }
 
 void OpenSessionRsp::SetCachedSize(int size) const {
@@ -2945,10 +2844,6 @@ void OpenSessionRsp::Clear() {
     delete _impl_.environment_;
   }
   _impl_.environment_ = nullptr;
-  if (GetArenaForAllocation() == nullptr && _impl_.task_protocol_ != nullptr) {
-    delete _impl_.task_protocol_;
-  }
-  _impl_.task_protocol_ = nullptr;
   ::memset(&_impl_.session_epoch_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.workload_mode_) -
       reinterpret_cast<char*>(&_impl_.session_epoch_)) + sizeof(_impl_.workload_mode_));
@@ -3008,14 +2903,6 @@ const char* OpenSessionRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
           ptr = ctx->ParseMessage(_internal_mutable_environment(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ProtocolIdentity task_protocol = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
-          ptr = ctx->ParseMessage(_internal_mutable_task_protocol(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3093,13 +2980,6 @@ uint8_t* OpenSessionRsp::_InternalSerialize(
         _Internal::environment(this).GetCachedSize(), target, stream);
   }
 
-  // .rl.common.v1.ProtocolIdentity task_protocol = 7;
-  if (this->_internal_has_task_protocol()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(7, _Internal::task_protocol(this),
-        _Internal::task_protocol(this).GetCachedSize(), target, stream);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3142,13 +3022,6 @@ size_t OpenSessionRsp::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.environment_);
-  }
-
-  // .rl.common.v1.ProtocolIdentity task_protocol = 7;
-  if (this->_internal_has_task_protocol()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.task_protocol_);
   }
 
   // uint64 session_epoch = 3;
@@ -3194,10 +3067,6 @@ void OpenSessionRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   if (from._internal_has_environment()) {
     _this->_internal_mutable_environment()->::rl::task::maze::v1::EnvironmentSpec::MergeFrom(
         from._internal_environment());
-  }
-  if (from._internal_has_task_protocol()) {
-    _this->_internal_mutable_task_protocol()->::rl::common::v1::ProtocolIdentity::MergeFrom(
-        from._internal_task_protocol());
   }
   if (from._internal_session_epoch() != 0) {
     _this->_internal_set_session_epoch(from._internal_session_epoch());
@@ -6130,245 +5999,11 @@ void WaitControl::InternalSwap(WaitControl* other) {
 
 // ===================================================================
 
-class StopControl::_Internal {
- public:
-};
-
-StopControl::StopControl(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:rl.task.maze.v1.StopControl)
-}
-StopControl::StopControl(const StopControl& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  StopControl* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.message_){}
-    , decltype(_impl_.reason_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.message_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.message_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_message().empty()) {
-    _this->_impl_.message_.Set(from._internal_message(), 
-      _this->GetArenaForAllocation());
-  }
-  _this->_impl_.reason_ = from._impl_.reason_;
-  // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.StopControl)
-}
-
-inline void StopControl::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_.message_){}
-    , decltype(_impl_.reason_){0}
-    , /*decltype(_impl_._cached_size_)*/{}
-  };
-  _impl_.message_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.message_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-}
-
-StopControl::~StopControl() {
-  // @@protoc_insertion_point(destructor:rl.task.maze.v1.StopControl)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
-  SharedDtor();
-}
-
-inline void StopControl::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.message_.Destroy();
-}
-
-void StopControl::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
-}
-
-void StopControl::Clear() {
-// @@protoc_insertion_point(message_clear_start:rl.task.maze.v1.StopControl)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _impl_.message_.ClearToEmpty();
-  _impl_.reason_ = 0;
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* StopControl::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .rl.task.maze.v1.MazeTerminationReason reason = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-          _internal_set_reason(static_cast<::rl::task::maze::v1::MazeTerminationReason>(val));
-        } else
-          goto handle_unusual;
-        continue;
-      // string message = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_message();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.v1.StopControl.message"));
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* StopControl::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:rl.task.maze.v1.StopControl)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // .rl.task.maze.v1.MazeTerminationReason reason = 1;
-  if (this->_internal_reason() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteEnumToArray(
-      1, this->_internal_reason(), target);
-  }
-
-  // string message = 2;
-  if (!this->_internal_message().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "rl.task.maze.v1.StopControl.message");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_message(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:rl.task.maze.v1.StopControl)
-  return target;
-}
-
-size_t StopControl::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:rl.task.maze.v1.StopControl)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string message = 2;
-  if (!this->_internal_message().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_message());
-  }
-
-  // .rl.task.maze.v1.MazeTerminationReason reason = 1;
-  if (this->_internal_reason() != 0) {
-    total_size += 1 +
-      ::_pbi::WireFormatLite::EnumSize(this->_internal_reason());
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData StopControl::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    StopControl::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*StopControl::GetClassData() const { return &_class_data_; }
-
-
-void StopControl::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<StopControl*>(&to_msg);
-  auto& from = static_cast<const StopControl&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:rl.task.maze.v1.StopControl)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (!from._internal_message().empty()) {
-    _this->_internal_set_message(from._internal_message());
-  }
-  if (from._internal_reason() != 0) {
-    _this->_internal_set_reason(from._internal_reason());
-  }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void StopControl::CopyFrom(const StopControl& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:rl.task.maze.v1.StopControl)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool StopControl::IsInitialized() const {
-  return true;
-}
-
-void StopControl::InternalSwap(StopControl* other) {
-  using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.message_, lhs_arena,
-      &other->_impl_.message_, rhs_arena
-  );
-  swap(_impl_.reason_, other->_impl_.reason_);
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata StopControl::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[18]);
-}
-
-// ===================================================================
-
 class UpdateRsp::_Internal {
  public:
   static const ::rl::task::maze::v1::CommandReply& reply(const UpdateRsp* msg);
   static const ::rl::task::maze::v1::ActionBatch& action_batch(const UpdateRsp* msg);
   static const ::rl::task::maze::v1::WaitControl& wait(const UpdateRsp* msg);
-  static const ::rl::task::maze::v1::StopControl& stop(const UpdateRsp* msg);
 };
 
 const ::rl::task::maze::v1::CommandReply&
@@ -6382,10 +6017,6 @@ UpdateRsp::_Internal::action_batch(const UpdateRsp* msg) {
 const ::rl::task::maze::v1::WaitControl&
 UpdateRsp::_Internal::wait(const UpdateRsp* msg) {
   return *msg->_impl_.control_.wait_;
-}
-const ::rl::task::maze::v1::StopControl&
-UpdateRsp::_Internal::stop(const UpdateRsp* msg) {
-  return *msg->_impl_.control_.stop_;
 }
 void UpdateRsp::set_allocated_action_batch(::rl::task::maze::v1::ActionBatch* action_batch) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
@@ -6417,21 +6048,6 @@ void UpdateRsp::set_allocated_wait(::rl::task::maze::v1::WaitControl* wait) {
   }
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.UpdateRsp.wait)
 }
-void UpdateRsp::set_allocated_stop(::rl::task::maze::v1::StopControl* stop) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  clear_control();
-  if (stop) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(stop);
-    if (message_arena != submessage_arena) {
-      stop = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, stop, submessage_arena);
-    }
-    set_has_stop();
-    _impl_.control_.stop_ = stop;
-  }
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.UpdateRsp.stop)
-}
 UpdateRsp::UpdateRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -6461,11 +6077,6 @@ UpdateRsp::UpdateRsp(const UpdateRsp& from)
     case kWait: {
       _this->_internal_mutable_wait()->::rl::task::maze::v1::WaitControl::MergeFrom(
           from._internal_wait());
-      break;
-    }
-    case kStop: {
-      _this->_internal_mutable_stop()->::rl::task::maze::v1::StopControl::MergeFrom(
-          from._internal_stop());
       break;
     }
     case CONTROL_NOT_SET: {
@@ -6524,12 +6135,6 @@ void UpdateRsp::clear_control() {
       }
       break;
     }
-    case kStop: {
-      if (GetArenaForAllocation() == nullptr) {
-        delete _impl_.control_.stop_;
-      }
-      break;
-    }
     case CONTROL_NOT_SET: {
       break;
     }
@@ -6578,14 +6183,6 @@ const char* UpdateRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_wait(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.task.maze.v1.StopControl stop = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_stop(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -6640,13 +6237,6 @@ uint8_t* UpdateRsp::_InternalSerialize(
         _Internal::wait(this).GetCachedSize(), target, stream);
   }
 
-  // .rl.task.maze.v1.StopControl stop = 4;
-  if (_internal_has_stop()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::stop(this),
-        _Internal::stop(this).GetCachedSize(), target, stream);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -6683,13 +6273,6 @@ size_t UpdateRsp::ByteSizeLong() const {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *_impl_.control_.wait_);
-      break;
-    }
-    // .rl.task.maze.v1.StopControl stop = 4;
-    case kStop: {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *_impl_.control_.stop_);
       break;
     }
     case CONTROL_NOT_SET: {
@@ -6729,11 +6312,6 @@ void UpdateRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROT
           from._internal_wait());
       break;
     }
-    case kStop: {
-      _this->_internal_mutable_stop()->::rl::task::maze::v1::StopControl::MergeFrom(
-          from._internal_stop());
-      break;
-    }
     case CONTROL_NOT_SET: {
       break;
     }
@@ -6763,7 +6341,7 @@ void UpdateRsp::InternalSwap(UpdateRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UpdateRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[19]);
+      file_level_metadata_maze_5ftask_2eproto[18]);
 }
 
 // ===================================================================
@@ -6956,7 +6534,7 @@ void EndEpisodeReq::InternalSwap(EndEpisodeReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EndEpisodeReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[20]);
+      file_level_metadata_maze_5ftask_2eproto[19]);
 }
 
 // ===================================================================
@@ -7272,7 +6850,7 @@ void AgentEpisodeOutcome::InternalSwap(AgentEpisodeOutcome* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AgentEpisodeOutcome::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[21]);
+      file_level_metadata_maze_5ftask_2eproto[20]);
 }
 
 // ===================================================================
@@ -7509,7 +7087,7 @@ void EpisodeOutcome::InternalSwap(EpisodeOutcome* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeOutcome::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[22]);
+      file_level_metadata_maze_5ftask_2eproto[21]);
 }
 
 // ===================================================================
@@ -7748,7 +7326,7 @@ void EndEpisodeRsp::InternalSwap(EndEpisodeRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EndEpisodeRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[23]);
+      file_level_metadata_maze_5ftask_2eproto[22]);
 }
 
 // ===================================================================
@@ -8027,7 +7605,7 @@ void AbortEpisodeReq::InternalSwap(AbortEpisodeReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AbortEpisodeReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[24]);
+      file_level_metadata_maze_5ftask_2eproto[23]);
 }
 
 // ===================================================================
@@ -8035,11 +7613,16 @@ void AbortEpisodeReq::InternalSwap(AbortEpisodeReq* other) {
 class AbortEpisodeRsp::_Internal {
  public:
   static const ::rl::task::maze::v1::CommandReply& reply(const AbortEpisodeRsp* msg);
+  static const ::rl::task::maze::v1::WaitControl& wait(const AbortEpisodeRsp* msg);
 };
 
 const ::rl::task::maze::v1::CommandReply&
 AbortEpisodeRsp::_Internal::reply(const AbortEpisodeRsp* msg) {
   return *msg->_impl_.reply_;
+}
+const ::rl::task::maze::v1::WaitControl&
+AbortEpisodeRsp::_Internal::wait(const AbortEpisodeRsp* msg) {
+  return *msg->_impl_.wait_;
 }
 AbortEpisodeRsp::AbortEpisodeRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -8052,11 +7635,15 @@ AbortEpisodeRsp::AbortEpisodeRsp(const AbortEpisodeRsp& from)
   AbortEpisodeRsp* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.reply_){nullptr}
+    , decltype(_impl_.wait_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_reply()) {
     _this->_impl_.reply_ = new ::rl::task::maze::v1::CommandReply(*from._impl_.reply_);
+  }
+  if (from._internal_has_wait()) {
+    _this->_impl_.wait_ = new ::rl::task::maze::v1::WaitControl(*from._impl_.wait_);
   }
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.v1.AbortEpisodeRsp)
 }
@@ -8067,6 +7654,7 @@ inline void AbortEpisodeRsp::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.reply_){nullptr}
+    , decltype(_impl_.wait_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -8083,6 +7671,7 @@ AbortEpisodeRsp::~AbortEpisodeRsp() {
 inline void AbortEpisodeRsp::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.reply_;
+  if (this != internal_default_instance()) delete _impl_.wait_;
 }
 
 void AbortEpisodeRsp::SetCachedSize(int size) const {
@@ -8099,6 +7688,10 @@ void AbortEpisodeRsp::Clear() {
     delete _impl_.reply_;
   }
   _impl_.reply_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.wait_ != nullptr) {
+    delete _impl_.wait_;
+  }
+  _impl_.wait_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -8112,6 +7705,14 @@ const char* AbortEpisodeRsp::_InternalParse(const char* ptr, ::_pbi::ParseContex
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_reply(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.task.maze.v1.WaitControl wait = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_wait(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -8152,6 +7753,13 @@ uint8_t* AbortEpisodeRsp::_InternalSerialize(
         _Internal::reply(this).GetCachedSize(), target, stream);
   }
 
+  // .rl.task.maze.v1.WaitControl wait = 2;
+  if (this->_internal_has_wait()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::wait(this),
+        _Internal::wait(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -8173,6 +7781,13 @@ size_t AbortEpisodeRsp::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.reply_);
+  }
+
+  // .rl.task.maze.v1.WaitControl wait = 2;
+  if (this->_internal_has_wait()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.wait_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -8197,6 +7812,10 @@ void AbortEpisodeRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
     _this->_internal_mutable_reply()->::rl::task::maze::v1::CommandReply::MergeFrom(
         from._internal_reply());
   }
+  if (from._internal_has_wait()) {
+    _this->_internal_mutable_wait()->::rl::task::maze::v1::WaitControl::MergeFrom(
+        from._internal_wait());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -8214,13 +7833,18 @@ bool AbortEpisodeRsp::IsInitialized() const {
 void AbortEpisodeRsp::InternalSwap(AbortEpisodeRsp* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.reply_, other->_impl_.reply_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(AbortEpisodeRsp, _impl_.wait_)
+      + sizeof(AbortEpisodeRsp::_impl_.wait_)
+      - PROTOBUF_FIELD_OFFSET(AbortEpisodeRsp, _impl_.reply_)>(
+          reinterpret_cast<char*>(&_impl_.reply_),
+          reinterpret_cast<char*>(&other->_impl_.reply_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata AbortEpisodeRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[25]);
+      file_level_metadata_maze_5ftask_2eproto[24]);
 }
 
 // ===================================================================
@@ -8413,7 +8037,7 @@ void CloseSessionReq::InternalSwap(CloseSessionReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CloseSessionReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[26]);
+      file_level_metadata_maze_5ftask_2eproto[25]);
 }
 
 // ===================================================================
@@ -8606,7 +8230,7 @@ void CloseSessionRsp::InternalSwap(CloseSessionRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CloseSessionRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_maze_5ftask_2eproto_getter, &descriptor_table_maze_5ftask_2eproto_once,
-      file_level_metadata_maze_5ftask_2eproto[27]);
+      file_level_metadata_maze_5ftask_2eproto[26]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -8686,10 +8310,6 @@ Arena::CreateMaybeMessage< ::rl::task::maze::v1::ActionBatch >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::rl::task::maze::v1::WaitControl*
 Arena::CreateMaybeMessage< ::rl::task::maze::v1::WaitControl >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::task::maze::v1::WaitControl >(arena);
-}
-template<> PROTOBUF_NOINLINE ::rl::task::maze::v1::StopControl*
-Arena::CreateMaybeMessage< ::rl::task::maze::v1::StopControl >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::rl::task::maze::v1::StopControl >(arena);
 }
 template<> PROTOBUF_NOINLINE ::rl::task::maze::v1::UpdateRsp*
 Arena::CreateMaybeMessage< ::rl::task::maze::v1::UpdateRsp >(Arena* arena) {

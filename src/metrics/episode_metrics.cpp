@@ -1,47 +1,9 @@
 #include "metrics/episode_metrics.h"
 
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
-#include <openssl/evp.h>
-
 #include <algorithm>
 #include <utility>
 
 namespace {
-
-std::string DeterministicBytes(
-    const google::protobuf::MessageLite& message) {
-    std::string output(message.ByteSizeLong(), '\0');
-    google::protobuf::io::ArrayOutputStream array(
-        output.data(), static_cast<int>(output.size()));
-    google::protobuf::io::CodedOutputStream coded(&array);
-    coded.SetSerializationDeterministic(true);
-    if (!message.SerializeToCodedStream(&coded) || coded.HadError()) {
-        return "";
-    }
-    output.resize(static_cast<std::size_t>(coded.ByteCount()));
-    return output;
-}
-
-std::string Sha256(const std::string& payload) {
-    EVP_MD_CTX* context = EVP_MD_CTX_new();
-    if (!context) return "";
-    bool ok = EVP_DigestInit_ex(context, EVP_sha256(), nullptr) == 1 &&
-              EVP_DigestUpdate(
-                  context, payload.data(), payload.size()) == 1;
-    unsigned char digest[EVP_MAX_MD_SIZE];
-    unsigned int size = 0;
-    if (ok) ok = EVP_DigestFinal_ex(context, digest, &size) == 1;
-    EVP_MD_CTX_free(context);
-    if (!ok) return "";
-    static constexpr char kHex[] = "0123456789abcdef";
-    std::string output(size * 2, '0');
-    for (unsigned int index = 0; index < size; ++index) {
-        output[index * 2] = kHex[digest[index] >> 4];
-        output[index * 2 + 1] = kHex[digest[index] & 0x0f];
-    }
-    return output;
-}
 
 bool SameIdentity(const common::ServiceInstanceIdentity& left,
                   const common::ServiceInstanceIdentity& right) {
@@ -50,24 +12,14 @@ bool SameIdentity(const common::ServiceInstanceIdentity& left,
            left.lifecycle_epoch() == right.lifecycle_epoch();
 }
 
-bool SameDigest(const common::ContentDigest& left,
-                const common::ContentDigest& right) {
-    return left.algorithm() == right.algorithm() &&
-           left.hex() == right.hex();
-}
-
 }  // namespace
 
 MetricEventJournal::MetricEventJournal(
-    common::ContractIdentity contract,
-    common::SchemaIdentity schema,
     common::ServiceInstanceIdentity source,
     std::size_t capacity,
     std::size_t byte_capacity,
     std::chrono::milliseconds flush_interval)
-    : contract_(std::move(contract)),
-      schema_(std::move(schema)),
-      source_(std::move(source)),
+    : source_(std::move(source)),
       capacity_(capacity),
       byte_capacity_(byte_capacity),
       flush_interval_(flush_interval),
@@ -93,6 +45,7 @@ MetricEventJournal::AppendResult MetricEventJournal::AppendFact(
     }
     event.set_event_sequence(next_event_sequence_++);
     event.set_observed_at_unix_ms(observed_at_unix_ms);
+    event.set_fact_kind(training::METRIC_FACT_KIND_MAZE_EPISODE);
     event.set_fact_payload(std::move(fact_payload));
     last_event_observed_at_unix_ms_ = observed_at_unix_ms;
     event_bytes_ += event.ByteSizeLong();
@@ -128,12 +81,6 @@ bool MetricEventJournal::WaitForFinalAcknowledgement(
     });
 }
 
-bool MetricEventJournal::ValidContract(
-    const common::ContractIdentity& contract) const {
-    return contract.package_name() == contract_.package_name() &&
-           contract.package_version() == contract_.package_version();
-}
-
 bool MetricEventJournal::ValidConsumer(
     const common::ServiceInstanceIdentity& consumer) const {
     return !consumer.component().empty() &&
@@ -155,11 +102,7 @@ bool MetricEventJournal::CursorMatchesCommitted(
             committed_cursor_.acknowledged_event_sequence()) {
         return false;
     }
-    if (cursor.acknowledged_batch_sequence() == 0) {
-        return cursor.acknowledged_batch_digest().hex().empty();
-    }
-    return SameDigest(cursor.acknowledged_batch_digest(),
-                      committed_cursor_.acknowledged_batch_digest());
+    return true;
 }
 
 bool MetricEventJournal::ReadyToSeal(
@@ -221,20 +164,11 @@ void MetricEventJournal::FillAvailability(
     response.set_latest_available_event_sequence(next_event_sequence_ - 1);
 }
 
-std::string MetricEventJournal::BatchDigest(
-    const training::MetricBatch& batch) {
-    training::MetricBatch canonical = batch;
-    canonical.clear_batch_digest();
-    return Sha256(DeterministicBytes(canonical));
-}
-
 bool MetricEventJournal::BuildPendingBatch(
     const training::GetMetricBatchReq& request,
     int64_t now_unix_ms,
     std::string& error) {
     training::MetricBatch batch;
-    *batch.mutable_contract() = contract_;
-    *batch.mutable_schema_identity() = schema_;
     *batch.mutable_source() = source_;
     batch.set_batch_sequence(next_batch_sequence_);
     batch.set_created_at_unix_ms(now_unix_ms);
@@ -293,9 +227,6 @@ bool MetricEventJournal::BuildPendingBatch(
         batch.set_source_final(true);
         batch.set_final_event_sequence(final_event_sequence_);
     }
-    batch.mutable_batch_digest()->set_algorithm(
-        common::DIGEST_ALGORITHM_SHA256);
-    batch.mutable_batch_digest()->set_hex(BatchDigest(batch));
     if (batch.ByteSizeLong() > static_cast<std::size_t>(request.max_bytes())) {
         error = "max_bytes is smaller than the next metric batch";
         return false;
@@ -313,16 +244,13 @@ void MetricEventJournal::Get(
     std::unique_lock<std::mutex> lock(mutex_);
     response.Clear();
     FillAvailability(response);
-    if (!ValidContract(request.contract()) ||
-        !ValidConsumer(request.consumer())) {
-        response.set_result(
-            training::METRIC_BATCH_RESULT_REJECTED_IDENTITY);
-        response.set_message("metric consumer contract or identity is invalid");
+    if (!ValidConsumer(request.consumer())) {
+        response.set_result(training::METRIC_BATCH_RESULT_REJECTED_INVALID);
+        response.set_message("metric consumer lifecycle identity is invalid");
         return;
     }
     if (consumer_ && !SameConsumer(request.consumer())) {
-        response.set_result(
-            training::METRIC_BATCH_RESULT_REJECTED_IDENTITY);
+        response.set_result(training::METRIC_BATCH_RESULT_REJECTED_INVALID);
         response.set_message("metric journal is pinned to another consumer");
         return;
     }
@@ -403,12 +331,10 @@ void MetricEventJournal::Ack(
     response.Clear();
     FillAvailability(response);
     *response.mutable_committed_cursor() = committed_cursor_;
-    if (!ValidContract(request.contract()) ||
-        !ValidConsumer(request.consumer()) ||
+    if (!ValidConsumer(request.consumer()) ||
         !SameConsumer(request.consumer())) {
-        response.set_result(
-            training::METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY);
-        response.set_message("metric ACK contract or consumer is invalid");
+        response.set_result(training::METRIC_BATCH_ACK_RESULT_REJECTED_INVALID);
+        response.set_message("metric ACK consumer lifecycle is invalid");
         return;
     }
     const auto& cursor = request.cursor();
@@ -420,9 +346,7 @@ void MetricEventJournal::Ack(
     }
     if (!pending_batch_ || !SameIdentity(cursor.source(), source_) ||
         cursor.acknowledged_batch_sequence() !=
-            pending_batch_->batch_sequence() ||
-        !SameDigest(cursor.acknowledged_batch_digest(),
-                    pending_batch_->batch_digest())) {
+            pending_batch_->batch_sequence()) {
         response.set_result(
             training::METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR);
         response.set_message("metric ACK does not identify the pending batch");

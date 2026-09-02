@@ -90,22 +90,24 @@ interprets business arguments.
 The default workload is `server.run_mode` in `configs/server_config.yaml`, and
 `--workload` only overrides that field. Reward formulas and numeric values are
 compiled in `src/ai/maze_reward.cpp`; runtime YAML must not contain a `reward:`
-tuning section. The training contract and its observation/action/reward schema
-identities come only from the artifact selected by
-`contract.training_contract_path`.
+tuning section. Model I/O dimensions come from `model.expected_obs_dim` and
+`model.expected_action_dim`, rollout values come from `rollout`, and action
+sampling plus the optional mask mode come from `policy`. These are owned by the
+current AIServer task implementation and are not derived from an external contract
+file.
 
-Training uses the `RolloutEstimatorProfile` embedded in the model manifest.
+Training uses `rollout.gamma`, `rollout.gae_lambda`, and `rollout.tmax`.
 AIServer pins a behavior model independently for each Agent, closes the segment
-after at most 128 completed transitions by default, computes unnormalised
+at the configured TMax, computes unnormalised
 GAE/value targets, and submits the resulting items in batches through its
 in-process SampleDistributor. The only authority for the actual Agent count is
 `environment.agent_count/RL_AISERVER_AGENT_COUNT`; `server.max_agents` is only
 a capacity limit. Client, task configuration, Learner, and SamplePool expose no
 second Agent-count authority.
 
-The Training Contract and
-`OpenSessionRsp.environment.action_mask_mode` explicitly select `disabled` or
-`required`. With masks disabled, Client state and training samples carry none.
+`policy.action_mask_mode` selects `disabled` or `required`, and AIServer reports
+that choice to Client through `OpenSessionRsp.environment.action_mask_mode`. With
+masks disabled, Client state and training samples carry none.
 When required, AIServer validates the action dimension, masks unavailable logits,
 and carries the same mask into the transition consumed by Learner. It is not a
 mandatory default capability.
@@ -121,11 +123,13 @@ and finite-inference checks:
 
 ```bash
 /opt/rl/aiserver/bin/maze_aiserver \
-  --inspect-model /absolute/path/model.onnx
+  --inspect-model /absolute/path/model.onnx \
+  --observation-dim 17 \
+  --action-count 9
 ```
 
-The inspector emits only tensor identity; it loads no service configuration and
-opens no port.
+The inspector validates explicit dimensions and emits tensor information. It loads
+no service configuration, opens no port, and hard-codes no task dimensions.
 
 ## 3. Training cache
 
@@ -135,14 +139,19 @@ two AIServers from concurrently using the same directory. Startup does not scan,
 recover, or backfill historical cache entries. Only model steps requested from
 the Distributor and validated by the current process enter its in-memory index
 and pruning scope. If a requested step's destination already exists, AIServer
-accepts it only when it exactly matches the current protobuf manifest; all other
+accepts it only when its lineage/step and declared size match the current model;
+all other
 existing directories are neither startup facts nor migration/deletion targets:
 
 ```bash
 bash ./run.sh --config configs/server_config.yaml --workload training
 ```
 
-Models always come from the isolated training invocation's Learner Model Distributor. AIServer discovers the internal model lineage from Distributor status and pins the first lineage; a different lineage in the same service lifetime fails closed. AIServer never starts training from a local savepoint and never removes its cache on a normal stop.
+Models always come from the isolated training invocation's Learner Model
+Distributor. AIServer discovers the current training run's model lineage from
+Distributor status and tracks switches by lineage/step during that service
+lifecycle. AIServer never starts training from a local savepoint and never removes
+its cache on a normal stop.
 
 ## 4. Build the runtime image
 
@@ -163,10 +172,11 @@ RL_PROJECT_IMAGE_TAG=maze-tag-001 bash build_image.sh
 ```
 
 The build never consumes development artifacts or a development-container build
-directory. AIServer still validates model/training tensor semantics against the
-fields and digest in its repository-owned Training Contract, but it does not use
-a central manifest package, platform, or cross-repository hash to lock Client
-communication. The full image reference is `rl-training/aiserver:maze-tag-001`,
+directory. AIServer uses its configured model dimensions, rollout and policy values
+plus the Proto fields directly. It reads no Training Contract file and uses no
+central manifest, platform, package version, or cross-repository hash to lock Client
+or Learner-side components. The full image reference is
+`rl-training/aiserver:maze-tag-001`,
 and a later tuning build may overwrite the same tag.
 
 ## 5. Refresh or remove the development container

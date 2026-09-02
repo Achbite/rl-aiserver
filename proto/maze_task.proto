@@ -85,7 +85,8 @@ enum MazeTerminationReason {
     MAZE_TERMINATION_REASON_TIME_LIMIT = 3;
     MAZE_TERMINATION_REASON_CLIENT_ABORT = 4;
     MAZE_TERMINATION_REASON_CHAIN_FAILURE = 5;
-    MAZE_TERMINATION_REASON_TASK_STOP = 6;
+    reserved 6;
+    reserved "MAZE_TERMINATION_REASON_TASK_STOP";
 }
 
 // Runtime facts that the Environment needs in order to execute the assigned
@@ -134,7 +135,8 @@ message OpenSessionReq {
     rl.common.v1.ServiceInstanceIdentity client = 1;
     string environment_instance_id = 2;
     string request_id = 3;
-    rl.common.v1.ProtocolIdentity task_protocol = 4;
+    reserved 4;
+    reserved "task_protocol";
 }
 
 message OpenSessionRsp {
@@ -144,7 +146,8 @@ message OpenSessionRsp {
     rl.common.v1.ServiceInstanceIdentity aiserver = 4;
     WorkloadMode workload_mode = 5;
     EnvironmentSpec environment = 6;
-    rl.common.v1.ProtocolIdentity task_protocol = 7;
+    reserved 7;
+    reserved "task_protocol";
 }
 
 message InitReq {
@@ -218,17 +221,13 @@ message WaitControl {
     int32 retry_after_ms = 1;
 }
 
-message StopControl {
-    MazeTerminationReason reason = 1;
-    string message = 2;
-}
-
 message UpdateRsp {
     CommandReply reply = 1;
+    reserved 4;
+    reserved "stop";
     oneof control {
         ActionBatch action_batch = 2;
         WaitControl wait = 3;
-        StopControl stop = 4;
     }
 }
 
@@ -262,6 +261,8 @@ message AbortEpisodeReq {
 
 message AbortEpisodeRsp {
     CommandReply reply = 1;
+    // Present only when reply.result is WAIT.
+    WaitControl wait = 2;
 }
 
 message CloseSessionReq {

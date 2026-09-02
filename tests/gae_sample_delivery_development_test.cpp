@@ -27,29 +27,13 @@ bool Near(float actual, double expected) {
     return std::fabs(static_cast<double>(actual) - expected) <= 1e-6;
 }
 
-void SetDigest(const std::string& hex, common::ContentDigest* digest) {
-    digest->set_algorithm(common::DIGEST_ALGORITHM_SHA256);
-    digest->set_hex(hex);
-}
-
-void FillContract(const ContractConfig& source,
-                  common::ContractIdentity* destination) {
-    destination->set_package_name(source.package_name);
-    destination->set_package_version(source.package_version);
-    destination->set_platform(source.platform);
-}
-
 class CapturingSamplePool final
     : public training::SamplePoolIngressService::Service {
 public:
-    explicit CapturingSamplePool(ContractConfig contract)
-        : contract_(std::move(contract)) {}
-
     grpc::Status GetStatus(
         grpc::ServerContext*,
         const training::SamplePoolStatusReq*,
         training::SamplePoolStatusRsp* response) override {
-        FillContract(contract_, response->mutable_contract());
         FillAuthority(response->mutable_sample_pool());
         response->set_ready(true);
         response->set_ingress_ready(true);
@@ -69,8 +53,6 @@ public:
         }
         response->set_result(training::PUSH_RESULT_ACCEPTED);
         response->set_envelope_id(request->envelope().envelope_id());
-        response->mutable_payload_digest()->CopyFrom(
-            request->envelope().payload_digest());
         response->set_pressure_state(training::PRESSURE_STATE_NORMAL);
         FillAuthority(response->mutable_sample_pool());
         condition_.notify_all();
@@ -96,7 +78,6 @@ private:
         identity->set_lifecycle_epoch(1);
     }
 
-    ContractConfig contract_;
     mutable std::mutex mutex_;
     std::condition_variable condition_;
     std::vector<training::ProcessedTransitionEnvelope> envelopes_;
@@ -106,43 +87,10 @@ AIServerConfig MakeConfig(int sample_pool_port) {
     AIServerConfig config;
     const int action_count = static_cast<int>(maze::MazeAction_MAX) + 1;
     config.server.run_mode = aiserver_mode::kTraining;
-    config.training_contract.training_contract_id = "maze.training";
-    config.training_contract.observation_schema = {
-        "maze.observation", 1, {"sha256", std::string(64, '4')}};
-    config.training_contract.action_schema = {
-        "maze.action", 1, {"sha256", std::string(64, '5')}};
-    config.training_contract.reward_schema = {
-        "maze.reward", 1, {"sha256", std::string(64, '6')}};
-    config.training_contract.model_architecture_id =
-        "actor-critic.independent-mlp";
-    config.training_contract.canonical_digest.hex = std::string(64, '7');
-    config.training_contract.observation_dimension =
-        MazeObservation::kDimension;
-    config.training_contract.action_count = action_count;
-    config.training_contract.hidden_dimension =
-        config.training_contract.observation_dimension;
-    config.training_contract.tensor_dtype = "float32";
-    config.training_contract.gae_formula_id = "gae.backward";
-    config.training_contract.terminal_bootstrap_semantics_id =
-        "maze.timeout-keep-and-cut-bootstrap";
-    config.training_contract.value_target_formula_id =
-        "advantage-plus-behavior-value";
-    config.training_contract.value_head_abi_id = "scalar-value.float32";
-    config.training_contract.numeric_dtype = "float32";
-    config.training_contract.finite_rule_id = "reject-nonfinite";
-    config.training_contract.model_pin_semantics_id =
-        "per-agent-segment-pin";
-    config.training_contract.action_mask_mode = "disabled";
     config.policy.training_temperature = 1.0;
-    config.model.expected_obs_dim =
-        config.training_contract.observation_dimension;
-    config.model.expected_action_dim =
-        config.training_contract.action_count;
-    config.model.observation_schema_id = "maze.observation";
-    config.model.action_schema_id = "maze.action";
-    config.model.model_architecture_id =
-        config.training_contract.model_architecture_id;
-    config.model.tensor_dtype = "float32";
+    config.policy.action_mask_mode = "disabled";
+    config.model.expected_obs_dim = MazeObservation::kDimension;
+    config.model.expected_action_dim = action_count;
     config.sample_distributor.host = "127.0.0.1";
     config.sample_distributor.port = sample_pool_port;
     config.sample_distributor.envelope_max_transitions = 128;
@@ -178,7 +126,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     config.environment.agent_count = 1;
     config.observation.ray_max_range = 2;
     config.model.evaluation_model_path = fixture_path;
-    config.training_contract.action_mask_mode = "required";
+    config.policy.action_mask_mode = "required";
     config.task.fixed_map_id = map.map_id();
     config.task.episode_max_steps = 10;
     MazeServiceImpl service(config);
@@ -191,10 +139,6 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     open_request.mutable_client()->set_lifecycle_epoch(1);
     open_request.set_environment_instance_id("environment-fixed");
     open_request.set_request_id("open-fixed");
-    open_request.mutable_task_protocol()->set_protocol_id(
-        config.task.task_protocol_id);
-    open_request.mutable_task_protocol()->set_protocol_version(
-        config.task.task_protocol_version);
     maze::OpenSessionRsp open_response;
     service.OpenSession(nullptr, &open_request, &open_response);
     Require(open_response.reply().result() ==
@@ -313,10 +257,6 @@ training::ProcessedTransitionEnvelope BuildSegment(
     training::ModelIdentity behavior_model;
     behavior_model.set_model_lineage_id("lineage-test");
     behavior_model.set_model_step(0);
-    SetDigest(std::string(64, '9'),
-              behavior_model.mutable_artifact_digest());
-    SetDigest(std::string(64, 'a'),
-              behavior_model.mutable_manifest_digest());
     std::vector<training::ProcessedTransition> processed;
     Require(ProjectProcessedSegment(
                 segment, advantages, value_targets, segment_id,
@@ -332,20 +272,16 @@ training::ProcessedTransitionEnvelope BuildSegment(
     envelope.mutable_producer()->set_component("rl-aiserver");
     envelope.mutable_producer()->set_instance_id("aiserver-test");
     envelope.mutable_producer()->set_lifecycle_epoch(1);
-    SetDigest(std::string(64, '7'),
-              envelope.mutable_training_contract_digest());
     envelope.mutable_behavior_model()->CopyFrom(behavior_model);
     for (const auto& item : processed) {
         envelope.add_samples()->CopyFrom(item);
     }
-    SetDigest(std::string(64, 'c'), envelope.mutable_payload_digest());
     return envelope;
 }
 
 void TestGaeAndSampleDelivery(const std::string& fixture_path) {
     TestModelOutputActionResponse(fixture_path);
-    AIServerConfig seed = MakeConfig(1);
-    CapturingSamplePool sample_pool(seed.contract);
+    CapturingSamplePool sample_pool;
     int port = 0;
     grpc::ServerBuilder builder;
     builder.AddListeningPort(
@@ -392,7 +328,7 @@ int main(int argc, char** argv) {
     Require(argc == 2,
             "usage: gae_sample_delivery_development_test MODEL");
     TestGaeAndSampleDelivery(argv[1]);
-    std::cout << "aiserver_gae_sample_delivery_development_contract: PASS"
+    std::cout << "aiserver_gae_sample_delivery_data_path: PASS"
               << std::endl;
     return 0;
 }

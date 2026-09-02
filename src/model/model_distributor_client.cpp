@@ -1,12 +1,9 @@
 #include "model/model_distributor_client.h"
 
-#include <openssl/evp.h>
-
 #include <fcntl.h>
 #include <unistd.h>
 
 #include <algorithm>
-#include <array>
 #include <atomic>
 #include <cctype>
 #include <chrono>
@@ -21,38 +18,19 @@ namespace {
 constexpr char kCacheDirectory[] = "cache";
 constexpr char kLineagesDirectory[] = "lineages";
 
-bool IsLowercaseSha256(const std::string& value) {
-    if (value.size() != 64) return false;
-    return std::all_of(value.begin(), value.end(), [](unsigned char item) {
-        return (item >= '0' && item <= '9') ||
-               (item >= 'a' && item <= 'f');
-    });
-}
-
-std::string Sha256Bytes(const std::string& payload) {
-    EVP_MD_CTX* context = EVP_MD_CTX_new();
-    if (!context) return "";
-    bool ok = EVP_DigestInit_ex(context, EVP_sha256(), nullptr) == 1 &&
-              EVP_DigestUpdate(
-                  context, payload.data(), payload.size()) == 1;
-    std::array<unsigned char, EVP_MAX_MD_SIZE> digest{};
-    unsigned int size = 0;
-    if (ok) ok = EVP_DigestFinal_ex(context, digest.data(), &size) == 1;
-    EVP_MD_CTX_free(context);
-    if (!ok) return "";
+std::string EncodeLineageKey(const std::string& value) {
+    if (value.empty()) return "";
     std::ostringstream output;
     output << std::hex << std::setfill('0');
-    for (unsigned int index = 0; index < size; ++index) {
-        output << std::setw(2)
-               << static_cast<unsigned int>(digest[index]);
+    for (const unsigned char character : value) {
+        output << std::setw(2) << static_cast<unsigned int>(character);
     }
     return output.str();
 }
 
 bool ValidModelDistributorAuthority(
     const common::ServiceInstanceIdentity& identity) {
-    return identity.component() == "model-distributor" &&
-           !identity.instance_id().empty() &&
+    return !identity.component().empty() && !identity.instance_id().empty() &&
            identity.lifecycle_epoch() > 0;
 }
 
@@ -77,12 +55,6 @@ bool IsRetryableAuthorityTransport(const grpc::Status& status) {
         default:
             return false;
     }
-}
-
-bool ContractMatchesConfig(const common::ContractIdentity& actual,
-                           const ContractConfig& expected) {
-    return actual.package_name() == expected.package_name &&
-           actual.package_version() == expected.package_version;
 }
 
 bool WriteAll(int descriptor, const char* data, std::size_t size) {
@@ -204,8 +176,7 @@ bool OpenOrCreateLineageCache(
     std::filesystem::path& active_root,
     std::string& error) {
     namespace fs = std::filesystem;
-    if (lineage_id.empty() || !IsLowercaseSha256(lineage_key) ||
-        Sha256Bytes(lineage_id) != lineage_key) {
+    if (lineage_id.empty() || EncodeLineageKey(lineage_id) != lineage_key) {
         error = "selected model lineage identity is invalid";
         return false;
     }
@@ -345,8 +316,8 @@ bool ModelDistributorClient::PinModelLineage(
         error = "Model Distributor latest model lineage is missing";
         return false;
     }
-    const std::string lineage_key = Sha256Bytes(lineage_id);
-    if (!IsLowercaseSha256(lineage_key)) {
+    const std::string lineage_key = EncodeLineageKey(lineage_id);
+    if (lineage_key.empty()) {
         error = "cannot derive model lineage cache key";
         return false;
     }
@@ -379,8 +350,7 @@ bool ModelDistributorClient::GetPinnedModelLineage(
     }
     lineage_id = *pinned_model_lineage_id_;
     lineage_key = *pinned_model_lineage_key_;
-    if (lineage_id.empty() || !IsLowercaseSha256(lineage_key) ||
-        Sha256Bytes(lineage_id) != lineage_key) {
+    if (lineage_id.empty() || EncodeLineageKey(lineage_id) != lineage_key) {
         error = "pinned model lineage identity is invalid";
         return false;
     }
@@ -458,17 +428,6 @@ bool ModelDistributorClient::DownloadToTemporary(
                     : "model download failed: " + status.error_message();
         return false;
     }
-    std::string checksum;
-    if (!ComputeFileSha256(temporary_model.string(), checksum, error)) {
-        fs::remove_all(temporary_dir, fs_error);
-        return false;
-    }
-    if (checksum != source.identity().artifact_digest().hex()) {
-        fs::remove_all(temporary_dir, fs_error);
-        error = "downloaded model checksum mismatch";
-        return false;
-    }
-
     const fs::path manifest_path =
         temporary_dir / kModelManifestFile;
     if (!WriteModelManifestFile(source, manifest_path.string(), error) ||
@@ -536,11 +495,7 @@ bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
     if (!DownloadToTemporary(source, aiserver_id, local_path, error)) {
         return false;
     }
-    const std::filesystem::path manifest_path =
-        std::filesystem::path(local_path).parent_path() /
-        kModelManifestFile;
     AssignModelManifest(source, local_path, manifest);
-    manifest.manifest_path = manifest_path.string();
     error.clear();
     return true;
 }
@@ -559,18 +514,6 @@ bool ModelDistributorClient::FetchStep(
     std::string& error) {
     return Fetch(
         aiserver_id, model_step, false, manifest, error);
-}
-
-bool ModelDistributorClient::GetLatestIdentity(
-    const std::string& aiserver_id,
-    ModelStep& model_step,
-    std::string& checksum,
-    std::string& error) {
-    AvailableRange range;
-    if (!GetAvailableRange(aiserver_id, range, error)) return false;
-    model_step = range.latest_model_step;
-    checksum = range.latest_checksum;
-    return true;
 }
 
 bool ModelDistributorClient::GetAvailableRange(
@@ -600,14 +543,9 @@ bool ModelDistributorClient::GetAvailableRange(
         error = "Model Distributor status authority is invalid";
         return false;
     }
-    if (!ContractMatchesConfig(response.contract(), config_.contract)) {
-        error = "Model Distributor status contract does not match the configured rl-contract";
-        return false;
-    }
     if (!response.has_latest_model() ||
         response.latest_model().model_lineage_id().empty() ||
-        !IsLowercaseSha256(response.latest_model().artifact_digest().hex()) ||
-        !IsLowercaseSha256(response.latest_model().manifest_digest().hex())) {
+        !response.latest_model().has_model_step()) {
         error = "Model Distributor latest model identity is missing or invalid";
         return false;
     }
@@ -630,8 +568,6 @@ bool ModelDistributorClient::GetAvailableRange(
     range.floor_model_step = floor_step;
     range.latest_model_step = latest_step;
     range.model_lineage_id = latest.model_lineage_id();
-    range.latest_checksum = latest.artifact_digest().hex();
-    range.latest_manifest_digest = latest.manifest_digest().hex();
     error.clear();
     return true;
 }
@@ -680,12 +616,6 @@ ModelDistributorClient::ProbeAckAuthorityDisposition(
     }
     if (!ValidModelDistributorAuthority(response.distributor())) {
         error = "model ACK authority identity is invalid";
-        authority.Clear();
-        return AuthorityProbeDisposition::Rejected;
-    }
-    if (!ContractMatchesConfig(response.contract(), config_.contract)) {
-        error = "model ACK authority contract does not match the configured "
-                "rl-contract";
         authority.Clear();
         return AuthorityProbeDisposition::Rejected;
     }
@@ -912,8 +842,6 @@ bool ModelDistributorClient::PublishPrepared(
     if (!FsyncDirectory(cache_root, error)) return false;
     manifest = std::move(validated);
     manifest.model_path = (final_dir / kCachedModelFile).string();
-    manifest.manifest_path =
-        (final_dir / kModelManifestFile).string();
     {
         std::lock_guard<std::mutex> lock(cache_mutex_);
         cached_steps_.insert(manifest.model_step());

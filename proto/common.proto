@@ -14,40 +14,6 @@ enum OperationResult {
     OPERATION_RESULT_REJECTED = 3;
 }
 
-enum DigestAlgorithm {
-    DIGEST_ALGORITHM_UNSPECIFIED = 0;
-    DIGEST_ALGORITHM_SHA256 = 1;
-}
-
-message ContentDigest {
-    DigestAlgorithm algorithm = 1;
-    // Lower-case hexadecimal. SHA-256 values therefore contain 64 chars.
-    string hex = 2;
-}
-
-message ContractIdentity {
-    string package_name = 1;
-    string package_version = 2;
-    ContentDigest source_digest = 3;
-    ContentDigest artifact_digest = 4;
-    string platform = 5;
-    string generator_identity = 6;
-}
-
-message SchemaIdentity {
-    string schema_id = 1;
-    uint32 schema_version = 2;
-    ContentDigest canonical_digest = 3;
-}
-
-// Public wire-protocol identity. It describes the task contract that two
-// independently built components speak; it is deliberately unrelated to
-// source-tree, build, generator or platform identity.
-message ProtocolIdentity {
-    string protocol_id = 1;
-    uint32 protocol_version = 2;
-}
-
 message ServiceInstanceIdentity {
     string component = 1;
     string instance_id = 2;

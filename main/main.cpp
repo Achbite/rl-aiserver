@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <limits>
 #include <sstream>
 #include <thread>
 #include <filesystem>
@@ -34,8 +35,6 @@ static const char* kManagedReadyMarker =
 
 static bool PublishManagedReadyMarker(
     const common::ServiceInstanceIdentity& source,
-    const common::SchemaIdentity& schema,
-    const ContractConfig& contract,
     int container_port,
     std::string& error) {
     const char* managed = std::getenv("RL_INFRA_MANAGED");
@@ -60,14 +59,7 @@ static bool PublishManagedReadyMarker(
         output << "component=" << source.component() << "\n"
                << "instance_id=" << source.instance_id() << "\n"
                << "lifecycle_epoch=" << source.lifecycle_epoch() << "\n"
-               << "container_port=" << container_port << "\n"
-               << "schema_id=" << schema.schema_id() << "\n"
-               << "schema_version=" << schema.schema_version() << "\n"
-               << "schema_digest=" << schema.canonical_digest().hex()
-               << "\n"
-               << "contract_package=" << contract.package_name << "\n"
-               << "contract_version=" << contract.package_version << "\n"
-               << "contract_platform=" << contract.platform << "\n";
+               << "container_port=" << container_port << "\n";
         output.flush();
         if (!output) {
             fs::remove(temporary, filesystem_error);
@@ -111,8 +103,8 @@ static void PrintUsage() {
         "sample_distributor.host/port\n"
         "  --model-distributor HOST:PORT    -> "
         "model_distribution.host/port\n"
-        "  --inspect-model PATH             validate one SaveModel.onnx and "
-        "exit\n"
+        "  --inspect-model PATH --observation-dim N --action-count N\n"
+        "                                   validate one SaveModel.onnx and exit\n"
         "  --help, -h                       show this help and exit\n",
         stdout);
 }
@@ -128,7 +120,24 @@ static std::string ShapeJson(const std::vector<int64_t>& shape) {
     return output.str();
 }
 
-static int InspectModel(const std::filesystem::path& model_path) {
+static bool ParsePositiveDimension(const std::string& value, int& result) {
+    try {
+        std::size_t consumed = 0;
+        const long long candidate = std::stoll(value, &consumed);
+        if (consumed != value.size() || candidate <= 0 ||
+            candidate > std::numeric_limits<int>::max()) {
+            return false;
+        }
+        result = static_cast<int>(candidate);
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
+static int InspectModel(const std::filesystem::path& model_path,
+                        int observation_dimension,
+                        int action_count) {
     std::error_code filesystem_error;
     if (std::filesystem::is_symlink(model_path, filesystem_error) ||
         filesystem_error ||
@@ -145,7 +154,8 @@ static int InspectModel(const std::filesystem::path& model_path) {
     OnnxInferencer::PreparedModel prepared;
     std::string error;
     if (!inferencer.PrepareModel(
-            model_path.string(), 17, 9, prepared, &error)) {
+            model_path.string(), observation_dimension, action_count,
+            prepared, &error)) {
         std::fprintf(stderr, "model inspection failed: %s\n", error.c_str());
         return 2;
     }
@@ -161,15 +171,16 @@ static int InspectModel(const std::filesystem::path& model_path) {
                                  .GetTensorTypeAndShapeInfo()
                                  .GetShape();
     std::cout
-        << "{\"schema_version\":1,\"contract\":\"maze-policy\","
-        << "\"input\":{\"name\":\"observation\",\"dtype\":\"float32\","
+        << "{\"observation_dimension\":" << observation_dimension
+        << ",\"action_count\":" << action_count
+        << ",\"input\":{\"name\":\"observation\",\"dtype\":\"float32\","
         << "\"shape\":" << ShapeJson(input_shape) << "},"
         << "\"action_output\":{\"name\":\"action_logits\","
         << "\"dtype\":\"float32\",\"shape\":"
         << ShapeJson(action_shape) << "},"
         << "\"value_output\":{\"name\":\"value\","
         << "\"dtype\":\"float32\",\"shape\":"
-        << ShapeJson(value_shape) << "},\"metadata_valid\":true}"
+        << ShapeJson(value_shape) << "}}"
         << std::endl;
     return 0;
 }
@@ -319,8 +330,41 @@ int main(int argc, char* argv[]) {
         PrintUsage();
         return 0;
     }
-    if (argc == 3 && std::string(argv[1]) == "--inspect-model") {
-        return InspectModel(argv[2]);
+    if (argc >= 2 && std::string(argv[1]) == "--inspect-model") {
+        if (argc < 3 || (argc - 3) % 2 != 0) {
+            std::fputs(
+                "--inspect-model requires PATH, --observation-dim N, and "
+                "--action-count N\n",
+                stderr);
+            return 2;
+        }
+        int observation_dimension = 0;
+        int action_count = 0;
+        for (int index = 3; index < argc; index += 2) {
+            const std::string option(argv[index]);
+            const std::string value(argv[index + 1]);
+            if (option == "--observation-dim" &&
+                observation_dimension == 0 &&
+                ParsePositiveDimension(value, observation_dimension)) {
+                continue;
+            }
+            if (option == "--action-count" && action_count == 0 &&
+                ParsePositiveDimension(value, action_count)) {
+                continue;
+            }
+            std::fprintf(stderr, "invalid model inspection option: %s\n",
+                         option.c_str());
+            return 2;
+        }
+        if (observation_dimension <= 0 || action_count <= 0) {
+            std::fputs(
+                "--inspect-model requires --observation-dim N and "
+                "--action-count N\n",
+                stderr);
+            return 2;
+        }
+        return InspectModel(
+            argv[2], observation_dimension, action_count);
     }
 
     std::printf("============================================\n");
@@ -349,7 +393,7 @@ int main(int argc, char* argv[]) {
     std::string config_error;
     if (!LoadServerConfig(parsed.config_path, parsed.overrides, cfg,
                           load_report, config_error)) {
-        LOG_ERROR("Main", "配置加载或当前合同身份校验失败: %s (%s)",
+        LOG_ERROR("Main", "配置加载或校验失败: %s (%s)",
                   parsed.config_path.c_str(),
                   config_error.empty() ? "see config diagnostics"
                                        : config_error.c_str());
@@ -378,7 +422,7 @@ int main(int argc, char* argv[]) {
         "最终配置: workload=%s, listen=0.0.0.0:%d, "
         "evaluation_model=%s, local_train=%s, "
         "model_distributor=%s:%d, sample_distributor=%s:%d, "
-        "max_agents=%d, agent_count=%d, map=%s, task_protocol=%s/%u",
+        "max_agents=%d, agent_count=%d, map=%s",
         aiserver_mode::Workload(cfg.server.run_mode),
         cfg.server.listen_port,
         cfg.model.evaluation_model_path.c_str(),
@@ -387,9 +431,7 @@ int main(int argc, char* argv[]) {
         cfg.model_distribution.port,
         cfg.sample_distributor.host.c_str(),
         cfg.sample_distributor.port, cfg.server.max_agents,
-        cfg.environment.agent_count, cfg.task.fixed_map_id.c_str(),
-        cfg.task.task_protocol_id.c_str(),
-        cfg.task.task_protocol_version);
+        cfg.environment.agent_count, cfg.task.fixed_map_id.c_str());
 
     // ---- 3. 创建 gRPC 服务 ----
     MazeServiceImpl service(cfg);
@@ -422,8 +464,8 @@ int main(int argc, char* argv[]) {
 
     std::string readiness_error;
     if (!PublishManagedReadyMarker(
-            service.MetricSourceIdentity(), service.MetricSchemaIdentity(),
-            cfg.contract, cfg.server.listen_port, readiness_error)) {
+            service.MetricSourceIdentity(), cfg.server.listen_port,
+            readiness_error)) {
         LOG_ERROR("Main", "AIServer managed readiness 发布失败: %s",
                   readiness_error.c_str());
         service.BeginShutdown();

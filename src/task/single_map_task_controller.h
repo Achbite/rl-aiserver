@@ -8,13 +8,11 @@
 
 struct SingleMapModelIdentity {
     ModelStep model_step = 0;
-    std::string model_checksum;
-    int64_t train_updates = 0;
+    std::string model_lineage_id;
     int64_t trained_samples = 0;
 };
 
 struct SingleMapEpisodePlan {
-    bool continue_task = true;
     maze::EpisodeMode episode_mode = maze::EPISODE_MODE_TRAINING;
     int max_steps = 0;
     SingleMapModelIdentity model;
@@ -23,8 +21,7 @@ struct SingleMapEpisodePlan {
 struct SingleMapTaskSnapshot {
     bool initialized = false;
     ModelStep baseline_model_step = 0;
-    std::string baseline_model_checksum;
-    int64_t baseline_train_updates = 0;
+    std::string baseline_model_lineage_id;
     int64_t baseline_trained_samples = 0;
     int64_t produced_transitions = 0;
     int episode_max_steps = 0;
@@ -59,7 +56,6 @@ private:
                        std::string& error) const;
     bool ValidateTrainingProgress(const SingleMapModelIdentity& model,
                                   int64_t produced_transitions,
-                                  int64_t& trained_samples_delta,
                                   std::string& error) const;
     bool initialized_ = false;
     SingleMapModelIdentity baseline_model_;

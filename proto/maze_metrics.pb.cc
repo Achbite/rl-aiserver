@@ -58,7 +58,6 @@ PROTOBUF_CONSTEXPR EpisodeMetricFact::EpisodeMetricFact(
     /*decltype(_impl_.agents_)*/{}
   , /*decltype(_impl_.environment_instance_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.episode_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.training_contract_digest_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct EpisodeMetricFactDefaultTypeInternal {
   PROTOBUF_CONSTEXPR EpisodeMetricFactDefaultTypeInternal()
@@ -123,7 +122,6 @@ const uint32_t TableStruct_maze_5fmetrics_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::metrics::v1::EpisodeMetricFact, _impl_.environment_instance_id_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::metrics::v1::EpisodeMetricFact, _impl_.episode_id_),
-  PROTOBUF_FIELD_OFFSET(::rl::task::maze::metrics::v1::EpisodeMetricFact, _impl_.training_contract_digest_),
   PROTOBUF_FIELD_OFFSET(::rl::task::maze::metrics::v1::EpisodeMetricFact, _impl_.agents_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -138,40 +136,38 @@ static const ::_pb::Message* const file_default_instances[] = {
 
 const char descriptor_table_protodef_maze_5fmetrics_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\022maze_metrics.proto\022\027rl.task.maze.metri"
-  "cs.v1\032\014common.proto\032\016training.proto\"\222\005\n\026"
-  "AgentEpisodeMetricFact\022\020\n\010agent_id\030\001 \001(\r"
-  "\022\026\n\016episode_return\030\002 \001(\001\022\030\n\020transition_c"
-  "ount\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\022\032\n\022terminati"
-  "on_reason\030\005 \001(\t\022\035\n\025shortest_action_steps"
-  "\030\006 \001(\r\022\031\n\021unique_cell_count\030\007 \001(\004\022\032\n\022blo"
-  "cked_move_count\030\010 \001(\004\022\034\n\024attempted_move_"
-  "count\030\t \001(\004\022<\n\021reward_components\030\n \003(\0132!"
-  ".rl.training.v1.RawMetricSumCount\022(\n\033min"
-  "imum_behavior_model_step\030\013 \001(\004H\000\210\001\001\022(\n\033m"
-  "aximum_behavior_model_step\030\014 \001(\004H\001\210\001\001\022!\n"
-  "\031behavior_model_lineage_id\030\r \001(\t\022\036\n\021term"
-  "inal_frame_id\030\016 \001(\004H\002\210\001\001\022\034\n\017goal_rank_gr"
-  "oup\030\017 \001(\rH\003\210\001\001B\036\n\034_minimum_behavior_mode"
-  "l_stepB\036\n\034_maximum_behavior_model_stepB\024"
-  "\n\022_terminal_frame_idB\022\n\020_goal_rank_group"
-  "R\032behavior_model_version_minR\032behavior_m"
-  "odel_version_max\"\327\001\n\021EpisodeMetricFact\022\037"
-  "\n\027environment_instance_id\030\002 \001(\t\022\022\n\nepiso"
-  "de_id\030\003 \001(\t\022=\n\030training_contract_digest\030"
-  "\004 \001(\0132\033.rl.common.v1.ContentDigest\022\?\n\006ag"
-  "ents\030\005 \003(\0132/.rl.task.maze.metrics.v1.Age"
-  "ntEpisodeMetricFactJ\004\010\001\020\002R\007task_idB\003\200\001\000b"
-  "\006proto3"
+  "cs.v1\032\016training.proto\"\222\005\n\026AgentEpisodeMe"
+  "tricFact\022\020\n\010agent_id\030\001 \001(\r\022\026\n\016episode_re"
+  "turn\030\002 \001(\001\022\030\n\020transition_count\030\003 \001(\004\022\017\n\007"
+  "success\030\004 \001(\010\022\032\n\022termination_reason\030\005 \001("
+  "\t\022\035\n\025shortest_action_steps\030\006 \001(\r\022\031\n\021uniq"
+  "ue_cell_count\030\007 \001(\004\022\032\n\022blocked_move_coun"
+  "t\030\010 \001(\004\022\034\n\024attempted_move_count\030\t \001(\004\022<\n"
+  "\021reward_components\030\n \003(\0132!.rl.training.v"
+  "1.RawMetricSumCount\022(\n\033minimum_behavior_"
+  "model_step\030\013 \001(\004H\000\210\001\001\022(\n\033maximum_behavio"
+  "r_model_step\030\014 \001(\004H\001\210\001\001\022!\n\031behavior_mode"
+  "l_lineage_id\030\r \001(\t\022\036\n\021terminal_frame_id\030"
+  "\016 \001(\004H\002\210\001\001\022\034\n\017goal_rank_group\030\017 \001(\rH\003\210\001\001"
+  "B\036\n\034_minimum_behavior_model_stepB\036\n\034_max"
+  "imum_behavior_model_stepB\024\n\022_terminal_fr"
+  "ame_idB\022\n\020_goal_rank_groupR\032behavior_mod"
+  "el_version_minR\032behavior_model_version_m"
+  "ax\"\270\001\n\021EpisodeMetricFact\022\037\n\027environment_"
+  "instance_id\030\002 \001(\t\022\022\n\nepisode_id\030\003 \001(\t\022\?\n"
+  "\006agents\030\005 \003(\0132/.rl.task.maze.metrics.v1."
+  "AgentEpisodeMetricFactJ\004\010\001\020\002J\004\010\004\020\005R\007task"
+  "_idR\030training_contract_digestB\003\200\001\000b\006prot"
+  "o3"
   ;
-static const ::_pbi::DescriptorTable* const descriptor_table_maze_5fmetrics_2eproto_deps[2] = {
-  &::descriptor_table_common_2eproto,
+static const ::_pbi::DescriptorTable* const descriptor_table_maze_5fmetrics_2eproto_deps[1] = {
   &::descriptor_table_training_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_maze_5fmetrics_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_maze_5fmetrics_2eproto = {
-    false, false, 967, descriptor_table_protodef_maze_5fmetrics_2eproto,
+    false, false, 922, descriptor_table_protodef_maze_5fmetrics_2eproto,
     "maze_metrics.proto",
-    &descriptor_table_maze_5fmetrics_2eproto_once, descriptor_table_maze_5fmetrics_2eproto_deps, 2, 2,
+    &descriptor_table_maze_5fmetrics_2eproto_once, descriptor_table_maze_5fmetrics_2eproto_deps, 1, 2,
     schemas, file_default_instances, TableStruct_maze_5fmetrics_2eproto::offsets,
     file_level_metadata_maze_5fmetrics_2eproto, file_level_enum_descriptors_maze_5fmetrics_2eproto,
     file_level_service_descriptors_maze_5fmetrics_2eproto,
@@ -830,19 +826,8 @@ void AgentEpisodeMetricFact::InternalSwap(AgentEpisodeMetricFact* other) {
 
 class EpisodeMetricFact::_Internal {
  public:
-  static const ::rl::common::v1::ContentDigest& training_contract_digest(const EpisodeMetricFact* msg);
 };
 
-const ::rl::common::v1::ContentDigest&
-EpisodeMetricFact::_Internal::training_contract_digest(const EpisodeMetricFact* msg) {
-  return *msg->_impl_.training_contract_digest_;
-}
-void EpisodeMetricFact::clear_training_contract_digest() {
-  if (GetArenaForAllocation() == nullptr && _impl_.training_contract_digest_ != nullptr) {
-    delete _impl_.training_contract_digest_;
-  }
-  _impl_.training_contract_digest_ = nullptr;
-}
 EpisodeMetricFact::EpisodeMetricFact(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -856,7 +841,6 @@ EpisodeMetricFact::EpisodeMetricFact(const EpisodeMetricFact& from)
       decltype(_impl_.agents_){from._impl_.agents_}
     , decltype(_impl_.environment_instance_id_){}
     , decltype(_impl_.episode_id_){}
-    , decltype(_impl_.training_contract_digest_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -876,9 +860,6 @@ EpisodeMetricFact::EpisodeMetricFact(const EpisodeMetricFact& from)
     _this->_impl_.episode_id_.Set(from._internal_episode_id(), 
       _this->GetArenaForAllocation());
   }
-  if (from._internal_has_training_contract_digest()) {
-    _this->_impl_.training_contract_digest_ = new ::rl::common::v1::ContentDigest(*from._impl_.training_contract_digest_);
-  }
   // @@protoc_insertion_point(copy_constructor:rl.task.maze.metrics.v1.EpisodeMetricFact)
 }
 
@@ -890,7 +871,6 @@ inline void EpisodeMetricFact::SharedCtor(
       decltype(_impl_.agents_){arena}
     , decltype(_impl_.environment_instance_id_){}
     , decltype(_impl_.episode_id_){}
-    , decltype(_impl_.training_contract_digest_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.environment_instance_id_.InitDefault();
@@ -917,7 +897,6 @@ inline void EpisodeMetricFact::SharedDtor() {
   _impl_.agents_.~RepeatedPtrField();
   _impl_.environment_instance_id_.Destroy();
   _impl_.episode_id_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.training_contract_digest_;
 }
 
 void EpisodeMetricFact::SetCachedSize(int size) const {
@@ -933,10 +912,6 @@ void EpisodeMetricFact::Clear() {
   _impl_.agents_.Clear();
   _impl_.environment_instance_id_.ClearToEmpty();
   _impl_.episode_id_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.training_contract_digest_ != nullptr) {
-    delete _impl_.training_contract_digest_;
-  }
-  _impl_.training_contract_digest_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -963,14 +938,6 @@ const char* EpisodeMetricFact::_InternalParse(const char* ptr, ::_pbi::ParseCont
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "rl.task.maze.metrics.v1.EpisodeMetricFact.episode_id"));
-        } else
-          goto handle_unusual;
-        continue;
-      // .rl.common.v1.ContentDigest training_contract_digest = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_training_contract_digest(), ptr);
-          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -1036,13 +1003,6 @@ uint8_t* EpisodeMetricFact::_InternalSerialize(
         3, this->_internal_episode_id(), target);
   }
 
-  // .rl.common.v1.ContentDigest training_contract_digest = 4;
-  if (this->_internal_has_training_contract_digest()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::training_contract_digest(this),
-        _Internal::training_contract_digest(this).GetCachedSize(), target, stream);
-  }
-
   // repeated .rl.task.maze.metrics.v1.AgentEpisodeMetricFact agents = 5;
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_agents_size()); i < n; i++) {
@@ -1088,13 +1048,6 @@ size_t EpisodeMetricFact::ByteSizeLong() const {
         this->_internal_episode_id());
   }
 
-  // .rl.common.v1.ContentDigest training_contract_digest = 4;
-  if (this->_internal_has_training_contract_digest()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.training_contract_digest_);
-  }
-
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -1119,10 +1072,6 @@ void EpisodeMetricFact::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   }
   if (!from._internal_episode_id().empty()) {
     _this->_internal_set_episode_id(from._internal_episode_id());
-  }
-  if (from._internal_has_training_contract_digest()) {
-    _this->_internal_mutable_training_contract_digest()->::rl::common::v1::ContentDigest::MergeFrom(
-        from._internal_training_contract_digest());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1152,7 +1101,6 @@ void EpisodeMetricFact::InternalSwap(EpisodeMetricFact* other) {
       &_impl_.episode_id_, lhs_arena,
       &other->_impl_.episode_id_, rhs_arena
   );
-  swap(_impl_.training_contract_digest_, other->_impl_.training_contract_digest_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata EpisodeMetricFact::GetMetadata() const {

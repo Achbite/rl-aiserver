@@ -15,10 +15,6 @@ workspace_root="${RL_TRAINING_WORKSPACE:-$(cd "${repo_dir}/.." && pwd -P)}"
 context_root="${workspace_root}/.workspace/build-contexts/rl-aiserver-$$"
 contract_dir="${repo_dir}/proto"
 
-bash "${repo_dir}/scripts/verify_source_inventory.sh"
-python3 "${repo_dir}/scripts/verify_contract_snapshot.py" \
-    "${contract_dir}"
-
 trap 'rm -rf "${context_root}"' EXIT
 python3 - "${repo_dir}" "${context_root}" <<'PY'
 import pathlib
