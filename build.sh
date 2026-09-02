@@ -11,11 +11,6 @@ if [ "$#" -ne 0 ]; then
     exit 2
 fi
 
-bash "${repo_dir}/scripts/verify_source_inventory.sh"
-
-python3 "${repo_dir}/scripts/verify_contract_snapshot.py" \
-    "${repo_dir}/proto"
-
 cmake_args=(
     -S "${repo_dir}"
     -B "${build_dir}"

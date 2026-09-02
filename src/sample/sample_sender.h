@@ -149,7 +149,6 @@ private:
     void SetDeliveryStateLocked(DeliveryState state);
 
     SampleDistributorConfig config_;
-    ContractConfig contract_;
     std::shared_ptr<grpc::Channel> channel_;
     std::unique_ptr<training::SamplePoolIngressService::Stub> stub_;
 

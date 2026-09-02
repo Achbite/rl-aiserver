@@ -57,19 +57,10 @@ container_uses_current_image() {
       "$(docker image inspect --format '{{.Id}}' "${dev_image}")" ]
 }
 
-container_has_legacy_contract_mount() {
-    [ "$(docker inspect \
-        --format '{{range .Mounts}}{{if eq .Destination "/workspace/dev-artifacts/rl-contracts"}}yes{{end}}{{end}}' \
-        "${container_name}")" = "yes" ]
-}
-
 warn_container_drift() {
     if docker image inspect "${dev_image}" >/dev/null 2>&1 &&
        ! container_uses_current_image; then
         echo "aiserver-dev uses an older local image; run make dev-refresh when ready" >&2
-    fi
-    if container_has_legacy_contract_mount; then
-        echo "aiserver-dev still has the retired Contracts mount; run make dev-refresh to remove it" >&2
     fi
 }
 

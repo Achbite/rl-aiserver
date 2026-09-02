@@ -30,7 +30,6 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
-#include "common.pb.h"
 #include "training.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
@@ -536,7 +535,6 @@ class EpisodeMetricFact final :
     kAgentsFieldNumber = 5,
     kEnvironmentInstanceIdFieldNumber = 2,
     kEpisodeIdFieldNumber = 3,
-    kTrainingContractDigestFieldNumber = 4,
   };
   // repeated .rl.task.maze.metrics.v1.AgentEpisodeMetricFact agents = 5;
   int agents_size() const;
@@ -584,24 +582,6 @@ class EpisodeMetricFact final :
   std::string* _internal_mutable_episode_id();
   public:
 
-  // .rl.common.v1.ContentDigest training_contract_digest = 4;
-  bool has_training_contract_digest() const;
-  private:
-  bool _internal_has_training_contract_digest() const;
-  public:
-  void clear_training_contract_digest();
-  const ::rl::common::v1::ContentDigest& training_contract_digest() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ContentDigest* release_training_contract_digest();
-  ::rl::common::v1::ContentDigest* mutable_training_contract_digest();
-  void set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest);
-  private:
-  const ::rl::common::v1::ContentDigest& _internal_training_contract_digest() const;
-  ::rl::common::v1::ContentDigest* _internal_mutable_training_contract_digest();
-  public:
-  void unsafe_arena_set_allocated_training_contract_digest(
-      ::rl::common::v1::ContentDigest* training_contract_digest);
-  ::rl::common::v1::ContentDigest* unsafe_arena_release_training_contract_digest();
-
   // @@protoc_insertion_point(class_scope:rl.task.maze.metrics.v1.EpisodeMetricFact)
  private:
   class _Internal;
@@ -613,7 +593,6 @@ class EpisodeMetricFact final :
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::task::maze::metrics::v1::AgentEpisodeMetricFact > agents_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr episode_id_;
-    ::rl::common::v1::ContentDigest* training_contract_digest_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1141,91 +1120,6 @@ inline void EpisodeMetricFact::set_allocated_episode_id(std::string* episode_id)
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.metrics.v1.EpisodeMetricFact.episode_id)
-}
-
-// .rl.common.v1.ContentDigest training_contract_digest = 4;
-inline bool EpisodeMetricFact::_internal_has_training_contract_digest() const {
-  return this != internal_default_instance() && _impl_.training_contract_digest_ != nullptr;
-}
-inline bool EpisodeMetricFact::has_training_contract_digest() const {
-  return _internal_has_training_contract_digest();
-}
-inline const ::rl::common::v1::ContentDigest& EpisodeMetricFact::_internal_training_contract_digest() const {
-  const ::rl::common::v1::ContentDigest* p = _impl_.training_contract_digest_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ContentDigest&>(
-      ::rl::common::v1::_ContentDigest_default_instance_);
-}
-inline const ::rl::common::v1::ContentDigest& EpisodeMetricFact::training_contract_digest() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.metrics.v1.EpisodeMetricFact.training_contract_digest)
-  return _internal_training_contract_digest();
-}
-inline void EpisodeMetricFact::unsafe_arena_set_allocated_training_contract_digest(
-    ::rl::common::v1::ContentDigest* training_contract_digest) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  if (training_contract_digest) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.metrics.v1.EpisodeMetricFact.training_contract_digest)
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::release_training_contract_digest() {
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::unsafe_arena_release_training_contract_digest() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.metrics.v1.EpisodeMetricFact.training_contract_digest)
-  
-  ::rl::common::v1::ContentDigest* temp = _impl_.training_contract_digest_;
-  _impl_.training_contract_digest_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::_internal_mutable_training_contract_digest() {
-  
-  if (_impl_.training_contract_digest_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ContentDigest>(GetArenaForAllocation());
-    _impl_.training_contract_digest_ = p;
-  }
-  return _impl_.training_contract_digest_;
-}
-inline ::rl::common::v1::ContentDigest* EpisodeMetricFact::mutable_training_contract_digest() {
-  ::rl::common::v1::ContentDigest* _msg = _internal_mutable_training_contract_digest();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.metrics.v1.EpisodeMetricFact.training_contract_digest)
-  return _msg;
-}
-inline void EpisodeMetricFact::set_allocated_training_contract_digest(::rl::common::v1::ContentDigest* training_contract_digest) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.training_contract_digest_);
-  }
-  if (training_contract_digest) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(training_contract_digest));
-    if (message_arena != submessage_arena) {
-      training_contract_digest = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, training_contract_digest, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.training_contract_digest_ = training_contract_digest;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.metrics.v1.EpisodeMetricFact.training_contract_digest)
 }
 
 // repeated .rl.task.maze.metrics.v1.AgentEpisodeMetricFact agents = 5;

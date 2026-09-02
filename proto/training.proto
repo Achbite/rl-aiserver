@@ -24,7 +24,8 @@ enum PushResult {
     PUSH_RESULT_DUPLICATE = 2;
     PUSH_RESULT_REJECTED_CAPACITY = 3;
     PUSH_RESULT_REJECTED_INVALID = 4;
-    PUSH_RESULT_REJECTED_IDENTITY = 5;
+    reserved 5;
+    reserved "PUSH_RESULT_REJECTED_IDENTITY";
     PUSH_RESULT_REJECTED_CONFLICT = 6;
     PUSH_RESULT_REJECTED_FINALIZED = 7;
 }
@@ -104,7 +105,8 @@ enum ModelLookupResult {
     MODEL_LOOKUP_RESULT_UNSPECIFIED = 0;
     MODEL_LOOKUP_RESULT_FOUND = 1;
     MODEL_LOOKUP_RESULT_NOT_FOUND = 2;
-    MODEL_LOOKUP_RESULT_REJECTED_IDENTITY = 3;
+    reserved 3;
+    reserved "MODEL_LOOKUP_RESULT_REJECTED_IDENTITY";
 }
 
 enum SampleBackendType {
@@ -117,7 +119,8 @@ enum SamplePoolFinalizeResult {
     SAMPLE_POOL_FINALIZE_RESULT_FINALIZED = 1;
     SAMPLE_POOL_FINALIZE_RESULT_ALREADY_FINALIZED = 2;
     SAMPLE_POOL_FINALIZE_RESULT_REJECTED_ACTIVE_LEASE = 3;
-    SAMPLE_POOL_FINALIZE_RESULT_REJECTED_IDENTITY = 4;
+    reserved 4;
+    reserved "SAMPLE_POOL_FINALIZE_RESULT_REJECTED_IDENTITY";
     SAMPLE_POOL_FINALIZE_RESULT_REJECTED_CONFLICT = 5;
 }
 
@@ -126,7 +129,8 @@ enum MetricBatchResult {
     METRIC_BATCH_RESULT_DELIVERED = 1;
     METRIC_BATCH_RESULT_WAIT = 2;
     METRIC_BATCH_RESULT_FINAL = 3;
-    METRIC_BATCH_RESULT_REJECTED_IDENTITY = 4;
+    reserved 4;
+    reserved "METRIC_BATCH_RESULT_REJECTED_IDENTITY";
     METRIC_BATCH_RESULT_REJECTED_CURSOR = 5;
     METRIC_BATCH_RESULT_REJECTED_INVALID = 6;
 }
@@ -136,7 +140,8 @@ enum MetricBatchAckResult {
     METRIC_BATCH_ACK_RESULT_APPLIED = 1;
     METRIC_BATCH_ACK_RESULT_ALREADY_APPLIED = 2;
     METRIC_BATCH_ACK_RESULT_NOT_FOUND = 3;
-    METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY = 4;
+    reserved 4;
+    reserved "METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY";
     METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR = 5;
     METRIC_BATCH_ACK_RESULT_REJECTED_INVALID = 6;
 }
@@ -146,21 +151,8 @@ message ModelIdentity {
     reserved "model_version";
     // Explicit presence distinguishes bootstrap step 0 from a missing step.
     optional uint64 model_step = 2;
-    rl.common.v1.ContentDigest artifact_digest = 3;
-    rl.common.v1.ContentDigest manifest_digest = 4;
-}
-
-message RolloutEstimatorProfile {
-    reserved 1, 5 to 12;
-    reserved "profile_schema_version", "gae_formula_id",
-             "terminal_bootstrap_semantics_id", "value_target_formula_id",
-             "value_head_abi_id", "reward_semantics_digest",
-             "numeric_dtype", "finite_rule_id", "model_pin_semantics_id";
-    double gamma = 2;
-    double gae_lambda = 3;
-    uint32 tmax = 4;
-    // SHA-256 over deterministic profile bytes with this field cleared.
-    rl.common.v1.ContentDigest profile_digest = 13;
+    reserved 3, 4;
+    reserved "artifact_digest", "manifest_digest";
 }
 
 // One immutable PPO item after AIServer has closed a pinned-model segment and
@@ -178,17 +170,18 @@ message ProcessedTransition {
     optional uint64 behavior_model_step = 8;
     int64 created_at_unix_ms = 9;
     // Task-defined action availability captured at behavior inference time.
-    // Empty means action masking is disabled by the immutable TrainingContract.
+    // Empty means action masking is disabled for this producer/consumer path.
     repeated bool action_mask = 10;
 }
 
-// Transport envelope and the sole identity boundary for one immutable set of
-// PPO items. A retry preserves the exact bytes, envelope_id and digest.
+// Transport envelope for one immutable set of PPO items. The Pool owns only
+// object identity and delivery lifecycle; it does not interpret task or model
+// compatibility.
 message ProcessedTransitionEnvelope {
     string envelope_id = 1;
-    rl.common.v1.ContentDigest payload_digest = 2;
+    reserved 2, 4;
+    reserved "payload_digest", "training_contract_digest";
     rl.common.v1.ServiceInstanceIdentity producer = 3;
-    rl.common.v1.ContentDigest training_contract_digest = 4;
     ModelIdentity behavior_model = 5;
     repeated ProcessedTransition samples = 6;
 }
@@ -215,9 +208,8 @@ message PushSamplesRsp {
     string envelope_id = 3;
     PressureState pressure_state = 4;
     rl.common.v1.ServiceInstanceIdentity sample_pool = 5;
-    // Present for ACCEPTED and DUPLICATE so the producer can prove that the
-    // acknowledged immutable payload is exactly the one it sent.
-    rl.common.v1.ContentDigest payload_digest = 6;
+    reserved 6;
+    reserved "payload_digest";
 }
 
 message GetBatchReq {
@@ -225,7 +217,8 @@ message GetBatchReq {
     int32 timeout_ms = 2;
     rl.common.v1.ServiceInstanceIdentity consumer = 3;
     int32 lease_timeout_ms = 4;
-    rl.common.v1.ContentDigest required_training_contract_digest = 5;
+    reserved 5;
+    reserved "required_training_contract_digest";
 }
 
 message GetBatchRsp {
@@ -283,7 +276,8 @@ message SamplePoolStatusReq {}
 
 message SamplePoolStatusRsp {
     reserved "behavior_versions", "minimum_ready_model_version", "maximum_ready_model_version";
-    rl.common.v1.ContractIdentity contract = 1;
+    reserved 1;
+    reserved "contract";
     rl.common.v1.ServiceInstanceIdentity sample_pool = 2;
     bool ready = 3;
     int64 push_attempt_count = 4;
@@ -360,28 +354,35 @@ message SamplePoolStatusRsp {
 
 // RawMetricSumCount is a mergeable sufficient statistic. Producers must not
 // publish a precomputed mean; consumers derive it as sum / count when count is
-// non-zero. field_id is governed by the enclosing MetricBatch schema identity.
+// non-zero. field_id is governed by the fact kind selected by MetricEvent.
 message RawMetricSumCount {
     string field_id = 1;
     double sum = 2;
     uint64 count = 3;
 }
 
+enum MetricFactKind {
+    METRIC_FACT_KIND_UNSPECIFIED = 0;
+    METRIC_FACT_KIND_MAZE_EPISODE = 1;
+    METRIC_FACT_KIND_TRAIN_UPDATE = 2;
+}
+
 message MetricEvent {
     reserved 1 to 3;
     reserved "contract", "schema_identity", "source",
              "committed_at_unix_ms";
-    // Contract, schema and source identity are owned once by MetricBatch.
+    // Source lifecycle identity is owned once by MetricBatch.
     // Starts at 1 for each source lifecycle. Zero is never a valid event and
     // is reserved for a consumer cursor that has acknowledged no event.
     uint64 event_sequence = 4;
     // Raw producer wall-clock observation. Presence is required, but this value
     // is not an ordering key and may repeat or regress after clock adjustment.
     optional int64 observed_at_unix_ms = 5;
-    // The schema identified by MetricBatch.schema_identity owns these bytes.
-    // Transport, persistence, cursor and ACK layers keep them opaque.
+    // The fact kind selects the Proto payload owner. Transport, persistence,
+    // cursor and ACK layers keep these bytes opaque.
     bytes fact_payload = 6;
-    reserved 7;
+    MetricFactKind fact_kind = 7;
+    reserved 8, 9;
     reserved "episode", "train_update";
 }
 
@@ -396,16 +397,13 @@ message MetricSequenceGap {
 }
 
 message MetricBatch {
-    reserved 13;
-    reserved "event_time_watermark_unix_ms";
+    reserved 1, 2, 5, 13;
+    reserved "contract", "schema_identity", "batch_digest",
+             "event_time_watermark_unix_ms";
     // Starts at 1 for each source lifecycle. Zero is reserved for an initial
-    // consumer cursor. These identities govern every contained event.
-    rl.common.v1.ContractIdentity contract = 1;
-    rl.common.v1.SchemaIdentity schema_identity = 2;
+    // consumer cursor.
     rl.common.v1.ServiceInstanceIdentity source = 3;
     uint64 batch_sequence = 4;
-    // Computed over deterministic MetricBatch bytes with this field cleared.
-    rl.common.v1.ContentDigest batch_digest = 5;
     int64 created_at_unix_ms = 6;
     // For an event batch these equal the first and last strictly increasing,
     // non-zero event sequences. For a gap batch they equal the unavailable
@@ -414,7 +412,7 @@ message MetricBatch {
     uint64 last_event_sequence = 8;
     repeated MetricEvent events = 9;
     // A heartbeat has no events and no gap. It still has a non-zero batch
-    // sequence and digest and must be acknowledged.
+    // sequence and must be acknowledged.
     bool heartbeat = 10;
     // May accompany the last event, gap or heartbeat batch. A source that
     // committed no events terminates with a final heartbeat whose
@@ -434,11 +432,13 @@ message MetricBatchCursor {
     // for a heartbeat it remains the previous cursor event sequence.
     uint64 acknowledged_batch_sequence = 2;
     uint64 acknowledged_event_sequence = 3;
-    rl.common.v1.ContentDigest acknowledged_batch_digest = 4;
+    reserved 4;
+    reserved "acknowledged_batch_digest";
 }
 
 message GetMetricBatchReq {
-    rl.common.v1.ContractIdentity contract = 1;
+    reserved 1;
+    reserved "contract";
     rl.common.v1.ServiceInstanceIdentity consumer = 2;
     MetricBatchCursor cursor = 3;
     uint32 max_events = 4;
@@ -459,7 +459,8 @@ message GetMetricBatchRsp {
 }
 
 message AckMetricBatchReq {
-    rl.common.v1.ContractIdentity contract = 1;
+    reserved 1;
+    reserved "contract";
     rl.common.v1.ServiceInstanceIdentity consumer = 2;
     MetricBatchCursor cursor = 3;
 }
@@ -477,7 +478,8 @@ message AckMetricBatchRsp {
 message AIServerStatusReq {}
 
 message AIServerStatusRsp {
-    rl.common.v1.ContractIdentity contract = 1;
+    reserved 1, 34;
+    reserved "contract", "rollout_estimator_profile_digest";
     rl.common.v1.ServiceInstanceIdentity aiserver = 2;
     AIServerState state = 3;
     bool ready = 4;
@@ -510,7 +512,6 @@ message AIServerStatusRsp {
     int64 quarantined_envelope_count = 31;
     string last_error = 32;
     int64 timestamp_unix_ms = 33;
-    rl.common.v1.ContentDigest rollout_estimator_profile_digest = 34;
     int64 closed_segment_count = 35;
     int64 pending_action_excluded_count = 36;
     int64 rollout_estimator_failure_count = 37;
@@ -529,27 +530,23 @@ message SegmentCloseCount {
 }
 
 message ModelArtifactManifest {
-    reserved 1, 2, 4 to 12, 14, 15, 20;
+    reserved 1, 2, 4 to 12, 14, 15, 17, 18, 20, 21;
     reserved "manifest_schema_version", "contract", "observation_schema",
              "action_schema", "model_architecture_id", "tensor_dtype",
              "input_shape", "action_shape", "value_shape", "artifact_uri",
-             "model_file", "seed", "train_updates", "ready";
-    // identity.manifest_digest is computed over deterministic manifest bytes
-    // with that nested digest cleared, avoiding a self-referential hash.
+             "model_file", "seed", "train_updates", "ready",
+             "training_config_digest", "training_contract_digest",
+             "rollout_estimator_profile";
     ModelIdentity identity = 3;
     int64 size_bytes = 13;
     uint64 trained_samples = 16;
-    rl.common.v1.ContentDigest training_config_digest = 17;
-    rl.common.v1.ContentDigest training_contract_digest = 18;
     int64 published_at_unix_ms = 19;
-    RolloutEstimatorProfile rollout_estimator_profile = 21;
 }
 
 message RegisterModelReq {
     ModelArtifactManifest manifest = 1;
-    // The caller's exact contract artifact identity is validated at the
-    // registration boundary and is not duplicated in the persisted manifest.
-    rl.common.v1.ContractIdentity contract = 2;
+    reserved 2;
+    reserved "contract";
     // Registration-only local input. It is never persisted in or forwarded
     // with the public model manifest.
     string local_artifact_path = 3;
@@ -609,7 +606,8 @@ message ModelDistributorStatusReq {}
 
 message ModelDistributorStatusRsp {
     reserved "available_floor_model_version", "latest_available_model_version";
-    rl.common.v1.ContractIdentity contract = 1;
+    reserved 1;
+    reserved "contract";
     rl.common.v1.ServiceInstanceIdentity distributor = 2;
     bool ready = 3;
     int64 registered_model_count = 4;
@@ -639,7 +637,7 @@ service AIServerTrainingStatusService {
 }
 
 // Implemented independently by each metric-event owner (AIServer and Learner).
-// A retry with the same cursor returns the same batch identity and digest until
+// A retry with the same cursor returns the same batch identity until
 // it is acknowledged or an explicit gap proves the requested event unavailable.
 service MetricEventService {
     rpc GetMetricBatch(GetMetricBatchReq) returns (GetMetricBatchRsp);

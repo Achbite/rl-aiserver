@@ -5,24 +5,24 @@
 
 # --- 服务参数：启动模式在这里配置，CLI --workload 可显式覆盖 ---
 server:
-  run_mode: "training"          # exact values: training | evaluation
+  run_mode: "evaluation"          # exact values: training | evaluation
   listen_port: 9002               # gRPC 监听端口，Client 通过此端口连接
   max_agents: 10                  # 最大支持的 Agent 数量
 
-# --- 当前 rl-contracts 类型选择与唯一训练合同 ---
-contract:
-  package_name: "rl-contracts"
-  package_version: "0.15.0"
-  platform: "linux/arm64"
-  training_contract_path: "../proto/schemas/training-contract.json"
-
 policy:
+  training_temperature: 1.0       # stochastic policy temperature, finite and >0
   sampling_seed: 0               # behavior-policy RNG seed, integer >=0
+  action_mask_mode: "disabled"   # disabled | required; mask is opt-in
+
+rollout:
+  gamma: 0.99
+  gae_lambda: 0.95
+  tmax: 128
 
 observation:
   ray_max_range: 10              # local ray maximum, grid cells, >0
 
-# Reward 公式与数值由 src/ai/maze_reward.cpp 持有，身份来自训练合同。
+# Reward 公式与数值由 src/ai/maze_reward.cpp 持有。
 
 # --- 网格参数（A* 测试 + 训练共用）---
 strategy:
@@ -34,6 +34,8 @@ model:
   evaluation_model_path: "../models/eval/0000000/SaveModel.onnx"
   local_train_dir: "../models/train"
   startup_timeout_ms: 30000
+  expected_obs_dim: 17
+  expected_action_dim: 9
 
 # --- Environment 运行 assignment（实际 Agent 数唯一权威）---
 environment:
@@ -41,8 +43,6 @@ environment:
 
 # --- Maze 任务语义（Client 只能执行，不能覆盖）---
 task:
-  task_protocol_id: "rl.task.maze"
-  task_protocol_version: 1
   fixed_map_id: "maze_117436372"
   episode_max_steps: 1504
 
@@ -74,6 +74,3 @@ sample_distributor:
   outbound_max_estimated_bytes: 67108864
   aiserver_id: "aiserver-0"
   env_id: "env-0"
-
-metrics:
-  event_schema_catalog: "../proto/schemas/maze.episode.metrics.json"

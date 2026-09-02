@@ -4,11 +4,10 @@ package rl.task.maze.metrics.v1;
 
 option cc_generic_services = false;
 
-import "common.proto";
 import "training.proto";
 
 // Maze-owned Episode facts. The generic MetricBatch transport carries their
-// deterministic serialized bytes under the maze.episode.metrics schema.
+// serialized bytes under METRIC_FACT_KIND_MAZE_EPISODE.
 message AgentEpisodeMetricFact {
     reserved "behavior_model_version_min", "behavior_model_version_max";
     uint32 agent_id = 1;
@@ -33,6 +32,7 @@ message EpisodeMetricFact {
     reserved "task_id";
     string environment_instance_id = 2;
     string episode_id = 3;
-    rl.common.v1.ContentDigest training_contract_digest = 4;
+    reserved 4;
+    reserved "training_contract_digest";
     repeated AgentEpisodeMetricFact agents = 5;
 }

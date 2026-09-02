@@ -34,8 +34,6 @@ public:
         ModelStep floor_model_step = 0;
         ModelStep latest_model_step = 0;
         std::string model_lineage_id;
-        std::string latest_checksum;
-        std::string latest_manifest_digest;
     };
 
     ModelDistributorClient(const AIServerConfig& config,
@@ -51,10 +49,6 @@ public:
                    ModelManifest& manifest,
                    std::string& error);
 
-    bool GetLatestIdentity(const std::string& aiserver_id,
-                           ModelStep& model_step,
-                           std::string& checksum,
-                           std::string& error);
     bool GetAvailableRange(const std::string& aiserver_id,
                            AvailableRange& range,
                            std::string& error);

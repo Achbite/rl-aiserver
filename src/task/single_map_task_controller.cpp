@@ -8,8 +8,7 @@ namespace {
 bool SameModel(const SingleMapModelIdentity& lhs,
                const SingleMapModelIdentity& rhs) {
     return lhs.model_step == rhs.model_step &&
-           lhs.model_checksum == rhs.model_checksum &&
-           lhs.train_updates == rhs.train_updates &&
+           lhs.model_lineage_id == rhs.model_lineage_id &&
            lhs.trained_samples == rhs.trained_samples;
 }
 
@@ -18,8 +17,7 @@ bool SameModel(const SingleMapModelIdentity& lhs,
 bool SingleMapTaskController::ValidateModel(
     const SingleMapModelIdentity& model,
     std::string& error) const {
-    if (model.model_checksum.size() != 64 ||
-        model.train_updates < 0 || model.trained_samples < 0) {
+    if (model.model_lineage_id.empty() || model.trained_samples < 0) {
         error = "single-map model identity is invalid";
         return false;
     }
@@ -29,9 +27,7 @@ bool SingleMapTaskController::ValidateModel(
 bool SingleMapTaskController::ValidateTrainingProgress(
     const SingleMapModelIdentity& model,
     int64_t produced_transitions,
-    int64_t& trained_samples_delta,
     std::string& error) const {
-    trained_samples_delta = 0;
     if (!ValidateModel(model, error)) return false;
     if (produced_transitions < 0 ||
         produced_transitions < latest_produced_transitions_) {
@@ -39,14 +35,12 @@ bool SingleMapTaskController::ValidateTrainingProgress(
         return false;
     }
     if (model.model_step < baseline_model_.model_step ||
-        model.train_updates < baseline_model_.train_updates ||
         model.trained_samples < baseline_model_.trained_samples) {
         error = "single-map model counters moved behind the resume baseline";
         return false;
     }
 
     if (model.model_step < latest_model_.model_step ||
-        model.train_updates < latest_model_.train_updates ||
         model.trained_samples < latest_model_.trained_samples) {
         error = "single-map active model counters moved backwards";
         return false;
@@ -57,8 +51,6 @@ bool SingleMapTaskController::ValidateTrainingProgress(
         return false;
     }
 
-    trained_samples_delta =
-        model.trained_samples - baseline_model_.trained_samples;
     // model.trained_samples is Learner-global, while produced_transitions is
     // local to this AIServer. With multiple ServerPods, the global counter can
     // legitimately exceed any one producer's local counter. Keep both ledgers
@@ -83,9 +75,7 @@ bool SingleMapTaskController::Initialize(
         error = "single-map training must start with zero produced transitions";
         return false;
     }
-    if (initial_model.model_step != 0 ||
-        initial_model.train_updates != 0 ||
-        initial_model.trained_samples != 0) {
+    if (initial_model.model_step != 0 || initial_model.trained_samples != 0) {
         error = "single-map training must start at model step 0 with zero counters";
         return false;
     }
@@ -108,13 +98,10 @@ bool SingleMapTaskController::PlanNextEpisode(
         error = "single-map task controller is not initialized";
         return false;
     }
-    int64_t trained_samples_delta = 0;
-    if (!ValidateTrainingProgress(active_model, produced_transitions,
-                                  trained_samples_delta, error)) {
+    if (!ValidateTrainingProgress(active_model, produced_transitions, error)) {
         return false;
     }
 
-    plan.continue_task = true;
     plan.max_steps = episode_max_steps_;
     plan.episode_mode = maze::EPISODE_MODE_TRAINING;
     plan.model = active_model;
@@ -132,9 +119,7 @@ bool SingleMapTaskController::ObserveTrainingProgress(
         error = "single-map task controller is not initialized";
         return false;
     }
-    int64_t trained_samples_delta = 0;
-    if (!ValidateTrainingProgress(active_model, produced_transitions,
-                                  trained_samples_delta, error)) {
+    if (!ValidateTrainingProgress(active_model, produced_transitions, error)) {
         return false;
     }
     // This method only advances the monotonic training ledger. Capacity and
@@ -150,8 +135,7 @@ SingleMapTaskSnapshot SingleMapTaskController::GetSnapshot() const {
     SingleMapTaskSnapshot snapshot;
     snapshot.initialized = initialized_;
     snapshot.baseline_model_step = baseline_model_.model_step;
-    snapshot.baseline_model_checksum = baseline_model_.model_checksum;
-    snapshot.baseline_train_updates = baseline_model_.train_updates;
+    snapshot.baseline_model_lineage_id = baseline_model_.model_lineage_id;
     snapshot.baseline_trained_samples = baseline_model_.trained_samples;
     snapshot.produced_transitions = latest_produced_transitions_;
     snapshot.episode_max_steps = episode_max_steps_;
@@ -164,11 +148,9 @@ std::string SingleMapTaskController::ToJson() const {
     output << std::setprecision(17)
            << "{\"baseline\":{\"model_step\":"
            << snapshot.baseline_model_step
-           << ",\"model_checksum\":\""
-           << snapshot.baseline_model_checksum
-           << "\",\"train_updates\":"
-           << snapshot.baseline_train_updates
-           << ",\"trained_samples\":"
+           << ",\"model_lineage_id\":\""
+           << snapshot.baseline_model_lineage_id
+           << "\",\"trained_samples\":"
            << snapshot.baseline_trained_samples << '}'
            << ",\"produced_transitions\":"
            << snapshot.produced_transitions

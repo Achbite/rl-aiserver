@@ -28,8 +28,8 @@ public:
     // 加载 ONNX 模型（线程安全，内部互斥）
     // 返回 true 表示候选模型已激活；失败时当前模型保持不变。
     bool LoadModel(const std::string& model_path,
-                   int expected_obs_dim = 17,
-                   int expected_action_dim = 9,
+                   int expected_obs_dim,
+                   int expected_action_dim,
                    std::string* error = nullptr);
     bool PrepareModel(const std::string& model_path,
                       int expected_obs_dim,

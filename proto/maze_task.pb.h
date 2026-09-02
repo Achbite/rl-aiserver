@@ -116,9 +116,6 @@ extern OpenSessionReqDefaultTypeInternal _OpenSessionReq_default_instance_;
 class OpenSessionRsp;
 struct OpenSessionRspDefaultTypeInternal;
 extern OpenSessionRspDefaultTypeInternal _OpenSessionRsp_default_instance_;
-class StopControl;
-struct StopControlDefaultTypeInternal;
-extern StopControlDefaultTypeInternal _StopControl_default_instance_;
 class TaskComplete;
 struct TaskCompleteDefaultTypeInternal;
 extern TaskCompleteDefaultTypeInternal _TaskComplete_default_instance_;
@@ -161,7 +158,6 @@ template<> ::rl::task::maze::v1::InitRsp* Arena::CreateMaybeMessage<::rl::task::
 template<> ::rl::task::maze::v1::MapDescriptor* Arena::CreateMaybeMessage<::rl::task::maze::v1::MapDescriptor>(Arena*);
 template<> ::rl::task::maze::v1::OpenSessionReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::OpenSessionReq>(Arena*);
 template<> ::rl::task::maze::v1::OpenSessionRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::OpenSessionRsp>(Arena*);
-template<> ::rl::task::maze::v1::StopControl* Arena::CreateMaybeMessage<::rl::task::maze::v1::StopControl>(Arena*);
 template<> ::rl::task::maze::v1::TaskComplete* Arena::CreateMaybeMessage<::rl::task::maze::v1::TaskComplete>(Arena*);
 template<> ::rl::task::maze::v1::UpdateReq* Arena::CreateMaybeMessage<::rl::task::maze::v1::UpdateReq>(Arena*);
 template<> ::rl::task::maze::v1::UpdateRsp* Arena::CreateMaybeMessage<::rl::task::maze::v1::UpdateRsp>(Arena*);
@@ -380,13 +376,12 @@ enum MazeTerminationReason : int {
   MAZE_TERMINATION_REASON_TIME_LIMIT = 3,
   MAZE_TERMINATION_REASON_CLIENT_ABORT = 4,
   MAZE_TERMINATION_REASON_CHAIN_FAILURE = 5,
-  MAZE_TERMINATION_REASON_TASK_STOP = 6,
   MazeTerminationReason_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MazeTerminationReason_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MazeTerminationReason_IsValid(int value);
 constexpr MazeTerminationReason MazeTerminationReason_MIN = MAZE_TERMINATION_REASON_UNSPECIFIED;
-constexpr MazeTerminationReason MazeTerminationReason_MAX = MAZE_TERMINATION_REASON_TASK_STOP;
+constexpr MazeTerminationReason MazeTerminationReason_MAX = MAZE_TERMINATION_REASON_CHAIN_FAILURE;
 constexpr int MazeTerminationReason_ARRAYSIZE = MazeTerminationReason_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MazeTerminationReason_descriptor();
@@ -1349,7 +1344,6 @@ class OpenSessionReq final :
     kEnvironmentInstanceIdFieldNumber = 2,
     kRequestIdFieldNumber = 3,
     kClientFieldNumber = 1,
-    kTaskProtocolFieldNumber = 4,
   };
   // string environment_instance_id = 2;
   void clear_environment_instance_id();
@@ -1397,24 +1391,6 @@ class OpenSessionReq final :
       ::rl::common::v1::ServiceInstanceIdentity* client);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_client();
 
-  // .rl.common.v1.ProtocolIdentity task_protocol = 4;
-  bool has_task_protocol() const;
-  private:
-  bool _internal_has_task_protocol() const;
-  public:
-  void clear_task_protocol();
-  const ::rl::common::v1::ProtocolIdentity& task_protocol() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ProtocolIdentity* release_task_protocol();
-  ::rl::common::v1::ProtocolIdentity* mutable_task_protocol();
-  void set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol);
-  private:
-  const ::rl::common::v1::ProtocolIdentity& _internal_task_protocol() const;
-  ::rl::common::v1::ProtocolIdentity* _internal_mutable_task_protocol();
-  public:
-  void unsafe_arena_set_allocated_task_protocol(
-      ::rl::common::v1::ProtocolIdentity* task_protocol);
-  ::rl::common::v1::ProtocolIdentity* unsafe_arena_release_task_protocol();
-
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.OpenSessionReq)
  private:
   class _Internal;
@@ -1426,7 +1402,6 @@ class OpenSessionReq final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr environment_instance_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr request_id_;
     ::rl::common::v1::ServiceInstanceIdentity* client_;
-    ::rl::common::v1::ProtocolIdentity* task_protocol_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1559,7 +1534,6 @@ class OpenSessionRsp final :
     kReplyFieldNumber = 1,
     kAiserverFieldNumber = 4,
     kEnvironmentFieldNumber = 6,
-    kTaskProtocolFieldNumber = 7,
     kSessionEpochFieldNumber = 3,
     kWorkloadModeFieldNumber = 5,
   };
@@ -1631,24 +1605,6 @@ class OpenSessionRsp final :
       ::rl::task::maze::v1::EnvironmentSpec* environment);
   ::rl::task::maze::v1::EnvironmentSpec* unsafe_arena_release_environment();
 
-  // .rl.common.v1.ProtocolIdentity task_protocol = 7;
-  bool has_task_protocol() const;
-  private:
-  bool _internal_has_task_protocol() const;
-  public:
-  void clear_task_protocol();
-  const ::rl::common::v1::ProtocolIdentity& task_protocol() const;
-  PROTOBUF_NODISCARD ::rl::common::v1::ProtocolIdentity* release_task_protocol();
-  ::rl::common::v1::ProtocolIdentity* mutable_task_protocol();
-  void set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol);
-  private:
-  const ::rl::common::v1::ProtocolIdentity& _internal_task_protocol() const;
-  ::rl::common::v1::ProtocolIdentity* _internal_mutable_task_protocol();
-  public:
-  void unsafe_arena_set_allocated_task_protocol(
-      ::rl::common::v1::ProtocolIdentity* task_protocol);
-  ::rl::common::v1::ProtocolIdentity* unsafe_arena_release_task_protocol();
-
   // uint64 session_epoch = 3;
   void clear_session_epoch();
   uint64_t session_epoch() const;
@@ -1679,7 +1635,6 @@ class OpenSessionRsp final :
     ::rl::task::maze::v1::CommandReply* reply_;
     ::rl::common::v1::ServiceInstanceIdentity* aiserver_;
     ::rl::task::maze::v1::EnvironmentSpec* environment_;
-    ::rl::common::v1::ProtocolIdentity* task_protocol_;
     uint64_t session_epoch_;
     int workload_mode_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3776,170 +3731,6 @@ class WaitControl final :
 };
 // -------------------------------------------------------------------
 
-class StopControl final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.StopControl) */ {
- public:
-  inline StopControl() : StopControl(nullptr) {}
-  ~StopControl() override;
-  explicit PROTOBUF_CONSTEXPR StopControl(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  StopControl(const StopControl& from);
-  StopControl(StopControl&& from) noexcept
-    : StopControl() {
-    *this = ::std::move(from);
-  }
-
-  inline StopControl& operator=(const StopControl& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline StopControl& operator=(StopControl&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const StopControl& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const StopControl* internal_default_instance() {
-    return reinterpret_cast<const StopControl*>(
-               &_StopControl_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    18;
-
-  friend void swap(StopControl& a, StopControl& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(StopControl* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(StopControl* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  StopControl* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<StopControl>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const StopControl& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom( const StopControl& from) {
-    StopControl::MergeImpl(*this, from);
-  }
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(StopControl* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "rl.task.maze.v1.StopControl";
-  }
-  protected:
-  explicit StopControl(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kMessageFieldNumber = 2,
-    kReasonFieldNumber = 1,
-  };
-  // string message = 2;
-  void clear_message();
-  const std::string& message() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_message(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_message();
-  PROTOBUF_NODISCARD std::string* release_message();
-  void set_allocated_message(std::string* message);
-  private:
-  const std::string& _internal_message() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
-  std::string* _internal_mutable_message();
-  public:
-
-  // .rl.task.maze.v1.MazeTerminationReason reason = 1;
-  void clear_reason();
-  ::rl::task::maze::v1::MazeTerminationReason reason() const;
-  void set_reason(::rl::task::maze::v1::MazeTerminationReason value);
-  private:
-  ::rl::task::maze::v1::MazeTerminationReason _internal_reason() const;
-  void _internal_set_reason(::rl::task::maze::v1::MazeTerminationReason value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:rl.task.maze.v1.StopControl)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
-    int reason_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_maze_5ftask_2eproto;
-};
-// -------------------------------------------------------------------
-
 class UpdateRsp final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.task.maze.v1.UpdateRsp) */ {
  public:
@@ -3986,7 +3777,6 @@ class UpdateRsp final :
   enum ControlCase {
     kActionBatch = 2,
     kWait = 3,
-    kStop = 4,
     CONTROL_NOT_SET = 0,
   };
 
@@ -3995,7 +3785,7 @@ class UpdateRsp final :
                &_UpdateRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    18;
 
   friend void swap(UpdateRsp& a, UpdateRsp& b) {
     a.Swap(&b);
@@ -4071,7 +3861,6 @@ class UpdateRsp final :
     kReplyFieldNumber = 1,
     kActionBatchFieldNumber = 2,
     kWaitFieldNumber = 3,
-    kStopFieldNumber = 4,
   };
   // .rl.task.maze.v1.CommandReply reply = 1;
   bool has_reply() const;
@@ -4127,24 +3916,6 @@ class UpdateRsp final :
       ::rl::task::maze::v1::WaitControl* wait);
   ::rl::task::maze::v1::WaitControl* unsafe_arena_release_wait();
 
-  // .rl.task.maze.v1.StopControl stop = 4;
-  bool has_stop() const;
-  private:
-  bool _internal_has_stop() const;
-  public:
-  void clear_stop();
-  const ::rl::task::maze::v1::StopControl& stop() const;
-  PROTOBUF_NODISCARD ::rl::task::maze::v1::StopControl* release_stop();
-  ::rl::task::maze::v1::StopControl* mutable_stop();
-  void set_allocated_stop(::rl::task::maze::v1::StopControl* stop);
-  private:
-  const ::rl::task::maze::v1::StopControl& _internal_stop() const;
-  ::rl::task::maze::v1::StopControl* _internal_mutable_stop();
-  public:
-  void unsafe_arena_set_allocated_stop(
-      ::rl::task::maze::v1::StopControl* stop);
-  ::rl::task::maze::v1::StopControl* unsafe_arena_release_stop();
-
   void clear_control();
   ControlCase control_case() const;
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.UpdateRsp)
@@ -4152,7 +3923,6 @@ class UpdateRsp final :
   class _Internal;
   void set_has_action_batch();
   void set_has_wait();
-  void set_has_stop();
 
   inline bool has_control() const;
   inline void clear_has_control();
@@ -4167,7 +3937,6 @@ class UpdateRsp final :
         ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
       ::rl::task::maze::v1::ActionBatch* action_batch_;
       ::rl::task::maze::v1::WaitControl* wait_;
-      ::rl::task::maze::v1::StopControl* stop_;
     } control_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     uint32_t _oneof_case_[1];
@@ -4226,7 +3995,7 @@ class EndEpisodeReq final :
                &_EndEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    19;
 
   friend void swap(EndEpisodeReq& a, EndEpisodeReq& b) {
     a.Swap(&b);
@@ -4383,7 +4152,7 @@ class AgentEpisodeOutcome final :
                &_AgentEpisodeOutcome_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    20;
 
   friend void swap(AgentEpisodeOutcome& a, AgentEpisodeOutcome& b) {
     a.Swap(&b);
@@ -4589,7 +4358,7 @@ class EpisodeOutcome final :
                &_EpisodeOutcome_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    21;
 
   friend void swap(EpisodeOutcome& a, EpisodeOutcome& b) {
     a.Swap(&b);
@@ -4762,7 +4531,7 @@ class EndEpisodeRsp final :
                &_EndEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    22;
 
   friend void swap(EndEpisodeRsp& a, EndEpisodeRsp& b) {
     a.Swap(&b);
@@ -4939,7 +4708,7 @@ class AbortEpisodeReq final :
                &_AbortEpisodeReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    23;
 
   friend void swap(AbortEpisodeReq& a, AbortEpisodeReq& b) {
     a.Swap(&b);
@@ -5123,7 +4892,7 @@ class AbortEpisodeRsp final :
                &_AbortEpisodeRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    24;
 
   friend void swap(AbortEpisodeRsp& a, AbortEpisodeRsp& b) {
     a.Swap(&b);
@@ -5197,6 +4966,7 @@ class AbortEpisodeRsp final :
 
   enum : int {
     kReplyFieldNumber = 1,
+    kWaitFieldNumber = 2,
   };
   // .rl.task.maze.v1.CommandReply reply = 1;
   bool has_reply() const;
@@ -5216,6 +4986,24 @@ class AbortEpisodeRsp final :
       ::rl::task::maze::v1::CommandReply* reply);
   ::rl::task::maze::v1::CommandReply* unsafe_arena_release_reply();
 
+  // .rl.task.maze.v1.WaitControl wait = 2;
+  bool has_wait() const;
+  private:
+  bool _internal_has_wait() const;
+  public:
+  void clear_wait();
+  const ::rl::task::maze::v1::WaitControl& wait() const;
+  PROTOBUF_NODISCARD ::rl::task::maze::v1::WaitControl* release_wait();
+  ::rl::task::maze::v1::WaitControl* mutable_wait();
+  void set_allocated_wait(::rl::task::maze::v1::WaitControl* wait);
+  private:
+  const ::rl::task::maze::v1::WaitControl& _internal_wait() const;
+  ::rl::task::maze::v1::WaitControl* _internal_mutable_wait();
+  public:
+  void unsafe_arena_set_allocated_wait(
+      ::rl::task::maze::v1::WaitControl* wait);
+  ::rl::task::maze::v1::WaitControl* unsafe_arena_release_wait();
+
   // @@protoc_insertion_point(class_scope:rl.task.maze.v1.AbortEpisodeRsp)
  private:
   class _Internal;
@@ -5225,6 +5013,7 @@ class AbortEpisodeRsp final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::rl::task::maze::v1::CommandReply* reply_;
+    ::rl::task::maze::v1::WaitControl* wait_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5280,7 +5069,7 @@ class CloseSessionReq final :
                &_CloseSessionReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    25;
 
   friend void swap(CloseSessionReq& a, CloseSessionReq& b) {
     a.Swap(&b);
@@ -5437,7 +5226,7 @@ class CloseSessionRsp final :
                &_CloseSessionRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    26;
 
   friend void swap(CloseSessionRsp& a, CloseSessionRsp& b) {
     a.Swap(&b);
@@ -6376,91 +6165,6 @@ inline void OpenSessionReq::set_allocated_request_id(std::string* request_id) {
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.request_id)
 }
 
-// .rl.common.v1.ProtocolIdentity task_protocol = 4;
-inline bool OpenSessionReq::_internal_has_task_protocol() const {
-  return this != internal_default_instance() && _impl_.task_protocol_ != nullptr;
-}
-inline bool OpenSessionReq::has_task_protocol() const {
-  return _internal_has_task_protocol();
-}
-inline const ::rl::common::v1::ProtocolIdentity& OpenSessionReq::_internal_task_protocol() const {
-  const ::rl::common::v1::ProtocolIdentity* p = _impl_.task_protocol_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ProtocolIdentity&>(
-      ::rl::common::v1::_ProtocolIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ProtocolIdentity& OpenSessionReq::task_protocol() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionReq.task_protocol)
-  return _internal_task_protocol();
-}
-inline void OpenSessionReq::unsafe_arena_set_allocated_task_protocol(
-    ::rl::common::v1::ProtocolIdentity* task_protocol) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
-  }
-  _impl_.task_protocol_ = task_protocol;
-  if (task_protocol) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionReq.task_protocol)
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::release_task_protocol() {
-  
-  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
-  _impl_.task_protocol_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::unsafe_arena_release_task_protocol() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionReq.task_protocol)
-  
-  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
-  _impl_.task_protocol_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::_internal_mutable_task_protocol() {
-  
-  if (_impl_.task_protocol_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ProtocolIdentity>(GetArenaForAllocation());
-    _impl_.task_protocol_ = p;
-  }
-  return _impl_.task_protocol_;
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionReq::mutable_task_protocol() {
-  ::rl::common::v1::ProtocolIdentity* _msg = _internal_mutable_task_protocol();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionReq.task_protocol)
-  return _msg;
-}
-inline void OpenSessionReq::set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
-  }
-  if (task_protocol) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(task_protocol));
-    if (message_arena != submessage_arena) {
-      task_protocol = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, task_protocol, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.task_protocol_ = task_protocol;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionReq.task_protocol)
-}
-
 // -------------------------------------------------------------------
 
 // OpenSessionRsp
@@ -6818,91 +6522,6 @@ inline void OpenSessionRsp::set_allocated_environment(::rl::task::maze::v1::Envi
   }
   _impl_.environment_ = environment;
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.environment)
-}
-
-// .rl.common.v1.ProtocolIdentity task_protocol = 7;
-inline bool OpenSessionRsp::_internal_has_task_protocol() const {
-  return this != internal_default_instance() && _impl_.task_protocol_ != nullptr;
-}
-inline bool OpenSessionRsp::has_task_protocol() const {
-  return _internal_has_task_protocol();
-}
-inline const ::rl::common::v1::ProtocolIdentity& OpenSessionRsp::_internal_task_protocol() const {
-  const ::rl::common::v1::ProtocolIdentity* p = _impl_.task_protocol_;
-  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ProtocolIdentity&>(
-      ::rl::common::v1::_ProtocolIdentity_default_instance_);
-}
-inline const ::rl::common::v1::ProtocolIdentity& OpenSessionRsp::task_protocol() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.OpenSessionRsp.task_protocol)
-  return _internal_task_protocol();
-}
-inline void OpenSessionRsp::unsafe_arena_set_allocated_task_protocol(
-    ::rl::common::v1::ProtocolIdentity* task_protocol) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
-  }
-  _impl_.task_protocol_ = task_protocol;
-  if (task_protocol) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_protocol)
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::release_task_protocol() {
-  
-  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
-  _impl_.task_protocol_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::unsafe_arena_release_task_protocol() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.OpenSessionRsp.task_protocol)
-  
-  ::rl::common::v1::ProtocolIdentity* temp = _impl_.task_protocol_;
-  _impl_.task_protocol_ = nullptr;
-  return temp;
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::_internal_mutable_task_protocol() {
-  
-  if (_impl_.task_protocol_ == nullptr) {
-    auto* p = CreateMaybeMessage<::rl::common::v1::ProtocolIdentity>(GetArenaForAllocation());
-    _impl_.task_protocol_ = p;
-  }
-  return _impl_.task_protocol_;
-}
-inline ::rl::common::v1::ProtocolIdentity* OpenSessionRsp::mutable_task_protocol() {
-  ::rl::common::v1::ProtocolIdentity* _msg = _internal_mutable_task_protocol();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.OpenSessionRsp.task_protocol)
-  return _msg;
-}
-inline void OpenSessionRsp::set_allocated_task_protocol(::rl::common::v1::ProtocolIdentity* task_protocol) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_protocol_);
-  }
-  if (task_protocol) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(task_protocol));
-    if (message_arena != submessage_arena) {
-      task_protocol = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, task_protocol, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  _impl_.task_protocol_ = task_protocol;
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.OpenSessionRsp.task_protocol)
 }
 
 // -------------------------------------------------------------------
@@ -8237,80 +7856,6 @@ inline void WaitControl::set_retry_after_ms(int32_t value) {
 
 // -------------------------------------------------------------------
 
-// StopControl
-
-// .rl.task.maze.v1.MazeTerminationReason reason = 1;
-inline void StopControl::clear_reason() {
-  _impl_.reason_ = 0;
-}
-inline ::rl::task::maze::v1::MazeTerminationReason StopControl::_internal_reason() const {
-  return static_cast< ::rl::task::maze::v1::MazeTerminationReason >(_impl_.reason_);
-}
-inline ::rl::task::maze::v1::MazeTerminationReason StopControl::reason() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.StopControl.reason)
-  return _internal_reason();
-}
-inline void StopControl::_internal_set_reason(::rl::task::maze::v1::MazeTerminationReason value) {
-  
-  _impl_.reason_ = value;
-}
-inline void StopControl::set_reason(::rl::task::maze::v1::MazeTerminationReason value) {
-  _internal_set_reason(value);
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.StopControl.reason)
-}
-
-// string message = 2;
-inline void StopControl::clear_message() {
-  _impl_.message_.ClearToEmpty();
-}
-inline const std::string& StopControl::message() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.StopControl.message)
-  return _internal_message();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void StopControl::set_message(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:rl.task.maze.v1.StopControl.message)
-}
-inline std::string* StopControl::mutable_message() {
-  std::string* _s = _internal_mutable_message();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.StopControl.message)
-  return _s;
-}
-inline const std::string& StopControl::_internal_message() const {
-  return _impl_.message_.Get();
-}
-inline void StopControl::_internal_set_message(const std::string& value) {
-  
-  _impl_.message_.Set(value, GetArenaForAllocation());
-}
-inline std::string* StopControl::_internal_mutable_message() {
-  
-  return _impl_.message_.Mutable(GetArenaForAllocation());
-}
-inline std::string* StopControl::release_message() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.StopControl.message)
-  return _impl_.message_.Release();
-}
-inline void StopControl::set_allocated_message(std::string* message) {
-  if (message != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.message_.IsDefault()) {
-    _impl_.message_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.StopControl.message)
-}
-
-// -------------------------------------------------------------------
-
 // UpdateRsp
 
 // .rl.task.maze.v1.CommandReply reply = 1;
@@ -8548,80 +8093,6 @@ inline ::rl::task::maze::v1::WaitControl* UpdateRsp::_internal_mutable_wait() {
 inline ::rl::task::maze::v1::WaitControl* UpdateRsp::mutable_wait() {
   ::rl::task::maze::v1::WaitControl* _msg = _internal_mutable_wait();
   // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.wait)
-  return _msg;
-}
-
-// .rl.task.maze.v1.StopControl stop = 4;
-inline bool UpdateRsp::_internal_has_stop() const {
-  return control_case() == kStop;
-}
-inline bool UpdateRsp::has_stop() const {
-  return _internal_has_stop();
-}
-inline void UpdateRsp::set_has_stop() {
-  _impl_._oneof_case_[0] = kStop;
-}
-inline void UpdateRsp::clear_stop() {
-  if (_internal_has_stop()) {
-    if (GetArenaForAllocation() == nullptr) {
-      delete _impl_.control_.stop_;
-    }
-    clear_has_control();
-  }
-}
-inline ::rl::task::maze::v1::StopControl* UpdateRsp::release_stop() {
-  // @@protoc_insertion_point(field_release:rl.task.maze.v1.UpdateRsp.stop)
-  if (_internal_has_stop()) {
-    clear_has_control();
-    ::rl::task::maze::v1::StopControl* temp = _impl_.control_.stop_;
-    if (GetArenaForAllocation() != nullptr) {
-      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-    }
-    _impl_.control_.stop_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline const ::rl::task::maze::v1::StopControl& UpdateRsp::_internal_stop() const {
-  return _internal_has_stop()
-      ? *_impl_.control_.stop_
-      : reinterpret_cast< ::rl::task::maze::v1::StopControl&>(::rl::task::maze::v1::_StopControl_default_instance_);
-}
-inline const ::rl::task::maze::v1::StopControl& UpdateRsp::stop() const {
-  // @@protoc_insertion_point(field_get:rl.task.maze.v1.UpdateRsp.stop)
-  return _internal_stop();
-}
-inline ::rl::task::maze::v1::StopControl* UpdateRsp::unsafe_arena_release_stop() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:rl.task.maze.v1.UpdateRsp.stop)
-  if (_internal_has_stop()) {
-    clear_has_control();
-    ::rl::task::maze::v1::StopControl* temp = _impl_.control_.stop_;
-    _impl_.control_.stop_ = nullptr;
-    return temp;
-  } else {
-    return nullptr;
-  }
-}
-inline void UpdateRsp::unsafe_arena_set_allocated_stop(::rl::task::maze::v1::StopControl* stop) {
-  clear_control();
-  if (stop) {
-    set_has_stop();
-    _impl_.control_.stop_ = stop;
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.UpdateRsp.stop)
-}
-inline ::rl::task::maze::v1::StopControl* UpdateRsp::_internal_mutable_stop() {
-  if (!_internal_has_stop()) {
-    clear_control();
-    set_has_stop();
-    _impl_.control_.stop_ = CreateMaybeMessage< ::rl::task::maze::v1::StopControl >(GetArenaForAllocation());
-  }
-  return _impl_.control_.stop_;
-}
-inline ::rl::task::maze::v1::StopControl* UpdateRsp::mutable_stop() {
-  ::rl::task::maze::v1::StopControl* _msg = _internal_mutable_stop();
-  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.UpdateRsp.stop)
   return _msg;
 }
 
@@ -9446,6 +8917,96 @@ inline void AbortEpisodeRsp::set_allocated_reply(::rl::task::maze::v1::CommandRe
   // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.reply)
 }
 
+// .rl.task.maze.v1.WaitControl wait = 2;
+inline bool AbortEpisodeRsp::_internal_has_wait() const {
+  return this != internal_default_instance() && _impl_.wait_ != nullptr;
+}
+inline bool AbortEpisodeRsp::has_wait() const {
+  return _internal_has_wait();
+}
+inline void AbortEpisodeRsp::clear_wait() {
+  if (GetArenaForAllocation() == nullptr && _impl_.wait_ != nullptr) {
+    delete _impl_.wait_;
+  }
+  _impl_.wait_ = nullptr;
+}
+inline const ::rl::task::maze::v1::WaitControl& AbortEpisodeRsp::_internal_wait() const {
+  const ::rl::task::maze::v1::WaitControl* p = _impl_.wait_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::task::maze::v1::WaitControl&>(
+      ::rl::task::maze::v1::_WaitControl_default_instance_);
+}
+inline const ::rl::task::maze::v1::WaitControl& AbortEpisodeRsp::wait() const {
+  // @@protoc_insertion_point(field_get:rl.task.maze.v1.AbortEpisodeRsp.wait)
+  return _internal_wait();
+}
+inline void AbortEpisodeRsp::unsafe_arena_set_allocated_wait(
+    ::rl::task::maze::v1::WaitControl* wait) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.wait_);
+  }
+  _impl_.wait_ = wait;
+  if (wait) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.wait)
+}
+inline ::rl::task::maze::v1::WaitControl* AbortEpisodeRsp::release_wait() {
+  
+  ::rl::task::maze::v1::WaitControl* temp = _impl_.wait_;
+  _impl_.wait_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::task::maze::v1::WaitControl* AbortEpisodeRsp::unsafe_arena_release_wait() {
+  // @@protoc_insertion_point(field_release:rl.task.maze.v1.AbortEpisodeRsp.wait)
+  
+  ::rl::task::maze::v1::WaitControl* temp = _impl_.wait_;
+  _impl_.wait_ = nullptr;
+  return temp;
+}
+inline ::rl::task::maze::v1::WaitControl* AbortEpisodeRsp::_internal_mutable_wait() {
+  
+  if (_impl_.wait_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::task::maze::v1::WaitControl>(GetArenaForAllocation());
+    _impl_.wait_ = p;
+  }
+  return _impl_.wait_;
+}
+inline ::rl::task::maze::v1::WaitControl* AbortEpisodeRsp::mutable_wait() {
+  ::rl::task::maze::v1::WaitControl* _msg = _internal_mutable_wait();
+  // @@protoc_insertion_point(field_mutable:rl.task.maze.v1.AbortEpisodeRsp.wait)
+  return _msg;
+}
+inline void AbortEpisodeRsp::set_allocated_wait(::rl::task::maze::v1::WaitControl* wait) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.wait_;
+  }
+  if (wait) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(wait);
+    if (message_arena != submessage_arena) {
+      wait = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, wait, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.wait_ = wait;
+  // @@protoc_insertion_point(field_set_allocated:rl.task.maze.v1.AbortEpisodeRsp.wait)
+}
+
 // -------------------------------------------------------------------
 
 // CloseSessionReq
@@ -9637,8 +9198,6 @@ inline void CloseSessionRsp::set_allocated_reply(::rl::task::maze::v1::CommandRe
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

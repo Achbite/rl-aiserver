@@ -19,26 +19,6 @@ double ElapsedMs(std::chrono::steady_clock::time_point start) {
         .count();
 }
 
-bool IsLowerSha256(const std::string& value) {
-    if (value.size() != 64) return false;
-    return std::all_of(value.begin(), value.end(), [](char character) {
-        return (character >= '0' && character <= '9') ||
-               (character >= 'a' && character <= 'f');
-    });
-}
-
-void FillDigest(const DigestConfig& source, common::ContentDigest* target) {
-    target->set_algorithm(common::DIGEST_ALGORITHM_SHA256);
-    target->set_hex(source.hex);
-}
-
-void FillContract(const AIServerConfig& config,
-                  common::ContractIdentity* target) {
-    target->set_package_name(config.contract.package_name);
-    target->set_package_version(config.contract.package_version);
-    target->set_platform(config.contract.platform);
-}
-
 void FillServiceIdentity(const std::string& component,
                          const std::string& instance_id,
                          std::uint64_t lifecycle_epoch,
@@ -233,14 +213,10 @@ grpc::Status MazeServiceImpl::OpenSession(
         return grpc::Status::OK;
     }
     if (req->request_id().empty() ||
-        req->client().component() != "maze-client" ||
+        req->client().component().empty() ||
         req->client().instance_id().empty() ||
         req->client().lifecycle_epoch() == 0 ||
-        req->environment_instance_id().empty() ||
-        req->task_protocol().protocol_id() !=
-            config_.task.task_protocol_id ||
-        req->task_protocol().protocol_version() !=
-            config_.task.task_protocol_version) {
+        req->environment_instance_id().empty()) {
         FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "Client or environment identity is invalid",
                          rsp->mutable_reply());
@@ -275,13 +251,9 @@ grpc::Status MazeServiceImpl::OpenSession(
     environment->set_episode_max_steps(
         static_cast<std::uint32_t>(config_.task.episode_max_steps));
     environment->set_action_mask_mode(
-        config_.training_contract.action_mask_mode == "required"
+        config_.policy.action_mask_mode == "required"
             ? maze::ACTION_MASK_MODE_REQUIRED
             : maze::ACTION_MASK_MODE_DISABLED);
-    rsp->mutable_task_protocol()->set_protocol_id(
-        config_.task.task_protocol_id);
-    rsp->mutable_task_protocol()->set_protocol_version(
-        config_.task.task_protocol_version);
     rsp->set_workload_mode(session->workload_mode);
     FillReply(*session, 0, maze::COMMAND_RESULT_APPLIED,
               maze::COMMAND_ERROR_CODE_UNSPECIFIED,
@@ -327,7 +299,7 @@ grpc::Status MazeServiceImpl::Init(
     if (!ValidateMazeMapDescriptor(req->map(), config_.task.fixed_map_id,
                                    validated, error)) {
         RejectCommand(*session, maze::COMMAND_ERROR_CODE_MAP_INVALID,
-                      error.empty() ? "map contract identity does not match"
+                      error.empty() ? "map descriptor does not match assignment"
                                     : error,
                       rsp->mutable_reply());
         return grpc::Status::OK;
@@ -431,10 +403,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     ModelManifest planned_model = model_manifest_;
     SingleMapModelIdentity planned_model_identity = ActiveModelIdentity();
     std::string error;
-    if (task_stop_requested_) {
-        plan.continue_task = false;
-        plan.model = ActiveModelIdentity();
-    } else if (config_.server.run_mode == aiserver_mode::kTraining) {
+    if (config_.server.run_mode == aiserver_mode::kTraining) {
         if (!candidate_task_controller.PlanNextEpisode(
                 planned_model_identity, produced_unique_transitions_,
                 plan, error)) {
@@ -444,8 +413,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
                           last_error_, rsp->mutable_reply());
             return grpc::Status::OK;
         }
-        if (plan.continue_task &&
-            plan.episode_mode != maze::EPISODE_MODE_TRAINING) {
+        if (plan.episode_mode != maze::EPISODE_MODE_TRAINING) {
             MarkDegraded(
                 "training TaskController attempted to schedule evaluation");
             RejectCommand(*session,
@@ -461,30 +429,15 @@ grpc::Status MazeServiceImpl::BeginEpisode(
 
     SessionManager::Session candidate = *session;
     maze::EpisodeAssignment assignment;
-    if (!plan.continue_task) {
-        candidate.phase = maze::SESSION_PHASE_TASK_COMPLETE;
-        rsp->mutable_task_complete()->set_message(
-            "task has no further episodes");
-        CommitCommand(candidate, req->command(), *req, rsp,
-                      "task has no further episodes");
-        if (config_.server.run_mode == aiserver_mode::kTraining) {
-            task_controller_ = std::move(candidate_task_controller);
-        }
-        *session = std::move(candidate);
-        return grpc::Status::OK;
-    }
     const bool training_workload =
         config_.server.run_mode == aiserver_mode::kTraining;
     const bool training_identity_matches =
         !training_workload ||
         (plan.model.model_step == planned_model.model_step() &&
-         plan.model.train_updates == planned_model.train_updates() &&
          plan.model.trained_samples == planned_model.trained_samples() &&
-         !planned_model.model_lineage_id().empty() &&
-         IsLowerSha256(planned_model.manifest_digest()));
+         plan.model.model_lineage_id == planned_model.model_lineage_id() &&
+         !planned_model.model_lineage_id().empty());
     if (plan.max_steps <= 0 ||
-        plan.model.model_checksum != planned_model.artifact_digest() ||
-        !IsLowerSha256(planned_model.artifact_digest()) ||
         !training_identity_matches) {
         RejectCommand(*session,
                       maze::COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
@@ -504,9 +457,12 @@ grpc::Status MazeServiceImpl::BeginEpisode(
         training_episode
             ? BehaviorPolicyScope::TrainingAgentSegment
             : BehaviorPolicyScope::EvaluationEpisode;
-    candidate.evaluation_pinned_model_checksum.clear();
+    candidate.evaluation_pinned_model_lineage_id.clear();
+    candidate.evaluation_pinned_model_step = 0;
     if (!training_episode) {
-        candidate.evaluation_pinned_model_checksum = plan.model.model_checksum;
+        candidate.evaluation_pinned_model_lineage_id =
+            plan.model.model_lineage_id;
+        candidate.evaluation_pinned_model_step = plan.model.model_step;
     }
     ResetEpisodeState(candidate, episode_id);
     candidate.phase = maze::SESSION_PHASE_EPISODE_RUNNING;
@@ -609,8 +565,10 @@ grpc::Status MazeServiceImpl::Update(
         return grpc::Status::OK;
     }
     if (!training_episode &&
-        session->evaluation_pinned_model_checksum !=
-            model_manifest_.artifact_digest()) {
+        (session->evaluation_pinned_model_lineage_id !=
+             model_manifest_.model_lineage_id() ||
+         session->evaluation_pinned_model_step !=
+             model_manifest_.model_step())) {
         RejectCommand(*session,
                       maze::COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
                       "evaluation behavior policy identity changed",
@@ -707,7 +665,7 @@ grpc::Status MazeServiceImpl::Update(
         }
 
         const bool mask_required =
-            config_.training_contract.action_mask_mode == "required";
+            config_.policy.action_mask_mode == "required";
         const bool mask_has_available =
             std::any_of(state.action_mask().begin(),
                         state.action_mask().end(),
@@ -715,13 +673,13 @@ grpc::Status MazeServiceImpl::Update(
         if ((state.is_done() && state.action_mask_size() != 0) ||
             (!state.is_done() && mask_required &&
              (state.action_mask_size() !=
-                  config_.training_contract.action_count ||
+                  config_.model.expected_action_dim ||
               !mask_has_available)) ||
             (!state.is_done() && !mask_required &&
              state.action_mask_size() != 0)) {
             RejectCommand(*session,
                           maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
-                          "Agent action mask contradicts the TrainingContract",
+                          "Agent action mask contradicts the session mode",
                           rsp->mutable_reply());
             finish();
             return grpc::Status::OK;
@@ -827,8 +785,7 @@ grpc::Status MazeServiceImpl::Update(
                         ? training::SEGMENT_CLOSE_REASON_GOAL
                         : training::SEGMENT_CLOSE_REASON_TIME_LIMIT;
             } else {
-                const auto tmax =
-                    agent.pinned_model.wire.rollout_estimator_profile().tmax();
+                const auto tmax = config_.rollout.tmax;
                 if (agent.segment_transitions.size() >
                     static_cast<std::size_t>(tmax)) {
                     ++rollout_estimator_failure_count_;
@@ -888,11 +845,6 @@ grpc::Status MazeServiceImpl::Update(
         candidate.phase = maze::SESSION_PHASE_EPISODE_TERMINAL;
         rsp->mutable_action_batch();
         commit_message = "terminal Agent states accepted";
-    } else if (task_stop_requested_) {
-        auto* stop = rsp->mutable_stop();
-        stop->set_reason(maze::MAZE_TERMINATION_REASON_TASK_STOP);
-        stop->set_message("AIServer requested task stop");
-        commit_message = "Agent states accepted and task stop requested";
     } else {
         for (const auto& state : req->agents()) {
             const int agent_id = static_cast<int>(state.agent_id());
@@ -1189,7 +1141,6 @@ grpc::Status MazeServiceImpl::EndEpisode(
             goal_frames.begin() + 1);
     }
     SessionManager::Session candidate = *session;
-    bool candidate_task_stop_requested = task_stop_requested_;
     if (config_.server.run_mode == aiserver_mode::kTraining &&
         session->current_episode_mode != maze::EPISODE_MODE_TRAINING) {
         RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
@@ -1198,11 +1149,10 @@ grpc::Status MazeServiceImpl::EndEpisode(
         return grpc::Status::OK;
     }
 
-    candidate.phase = candidate_task_stop_requested
-                          ? maze::SESSION_PHASE_TASK_COMPLETE
-                          : maze::SESSION_PHASE_READY;
+    candidate.phase = maze::SESSION_PHASE_READY;
     candidate.behavior_policy_scope = BehaviorPolicyScope::Unspecified;
-    candidate.evaluation_pinned_model_checksum.clear();
+    candidate.evaluation_pinned_model_lineage_id.clear();
+    candidate.evaluation_pinned_model_step = 0;
     const auto episode_outcome =
         BuildEpisodeOutcome(*session, metric_agents);
     maze_metrics::EpisodeMetricFact metric_fact;
@@ -1241,7 +1191,6 @@ grpc::Status MazeServiceImpl::EndEpisode(
     CommitCommand(candidate, req->command(), *req, rsp,
                   "Episode outcome and metrics committed");
     *session = std::move(candidate);
-    task_stop_requested_ = candidate_task_stop_requested;
     return grpc::Status::OK;
 }
 
@@ -1283,13 +1232,10 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     }
     const bool valid_reason =
         req->reason() == maze::MAZE_TERMINATION_REASON_CLIENT_ABORT ||
-        req->reason() == maze::MAZE_TERMINATION_REASON_CHAIN_FAILURE ||
-        req->reason() == maze::MAZE_TERMINATION_REASON_TASK_STOP;
+        req->reason() == maze::MAZE_TERMINATION_REASON_CHAIN_FAILURE;
     if (!valid_reason ||
         session->phase != maze::SESSION_PHASE_EPISODE_RUNNING ||
-        req->command().episode_id() != session->current_episode_id ||
-        (req->reason() == maze::MAZE_TERMINATION_REASON_TASK_STOP &&
-         !task_stop_requested_)) {
+        req->command().episode_id() != session->current_episode_id) {
         RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "AbortEpisode reason or identity is invalid",
                       rsp->mutable_reply());
@@ -1315,9 +1261,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
         config_.server.run_mode == aiserver_mode::kTraining &&
         candidate.current_episode_mode == maze::EPISODE_MODE_TRAINING;
     const auto close_reason =
-        req->reason() == maze::MAZE_TERMINATION_REASON_TASK_STOP
-            ? training::SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN
-            : training::SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE;
+        training::SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE;
     for (auto& item : candidate.agents) {
         auto& agent = item.second;
         if (!training_episode) {
@@ -1401,6 +1345,8 @@ grpc::Status MazeServiceImpl::AbortEpisode(
                 ? "SampleDistributor cannot reserve controlled-close output"
                 : error,
             rsp->mutable_reply());
+        rsp->mutable_wait()->set_retry_after_ms(
+            sample_distributor_.PauseRetryAfterMs());
         return grpc::Status::OK;
     }
     if (reservation ==
@@ -1423,6 +1369,8 @@ grpc::Status MazeServiceImpl::AbortEpisode(
                 ? "SampleDistributor changed before controlled-close seal"
                 : error,
             rsp->mutable_reply());
+        rsp->mutable_wait()->set_retry_after_ms(
+            sample_distributor_.PauseRetryAfterMs());
         return grpc::Status::OK;
     }
     if (seal == SampleDistributor::SealResult::kTerminalFault) {
@@ -1433,12 +1381,10 @@ grpc::Status MazeServiceImpl::AbortEpisode(
         return grpc::Status::OK;
     }
 
-    candidate.phase =
-        req->reason() == maze::MAZE_TERMINATION_REASON_TASK_STOP
-            ? maze::SESSION_PHASE_TASK_COMPLETE
-            : maze::SESSION_PHASE_ABORTED;
+    candidate.phase = maze::SESSION_PHASE_ABORTED;
     candidate.behavior_policy_scope = BehaviorPolicyScope::Unspecified;
-    candidate.evaluation_pinned_model_checksum.clear();
+    candidate.evaluation_pinned_model_lineage_id.clear();
+    candidate.evaluation_pinned_model_step = 0;
     CommitCommand(candidate, req->command(), *req, rsp,
                   "Episode aborted after controlled Agent segment close");
 
@@ -1531,7 +1477,6 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     std::lock_guard<std::mutex> lock(mutex_);
     const auto sender = sample_distributor_.GetSnapshot();
     const int64_t timestamp = NowMs();
-    FillContract(config_, rsp->mutable_contract());
     FillServiceIdentity("rl-aiserver", producer_instance_id_,
                         producer_lifecycle_epoch_,
                         rsp->mutable_aiserver());
@@ -1545,11 +1490,6 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
     if (model_manifest_.HasModelIdentity()) {
         rsp->mutable_loaded_model()->CopyFrom(
             model_manifest_.wire.identity());
-        if (config_.server.run_mode == aiserver_mode::kTraining) {
-            rsp->mutable_rollout_estimator_profile_digest()->CopyFrom(
-                model_manifest_.wire.rollout_estimator_profile()
-                    .profile_digest());
-        }
     }
     if (staged_model_manifest_.HasModelIdentity()) {
         rsp->mutable_staged_model()->CopyFrom(

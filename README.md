@@ -77,17 +77,19 @@ bash ./run.sh --config configs/server_config.yaml --workload training \
 
 默认 workload 明确配置在 `configs/server_config.yaml` 的 `server.run_mode`；
 `--workload` 只是覆盖它。Reward 公式和数值由 `src/ai/maze_reward.cpp` 固定持有，
-YAML 中不提供 `reward:` 调参段；若出现 `reward.*`，配置加载会失败关闭。训练合同及其
-observation/action/reward schema 身份只从 `contract.training_contract_path` 指向的制品读取。
+YAML 中不提供 `reward:` 调参段；若出现 `reward.*`，配置加载会失败关闭。模型输入/输出维度来自
+`model.expected_obs_dim` 与 `model.expected_action_dim`，rollout 参数来自 `rollout`，动作采样与可选
+mask 模式来自 `policy`；这些都是 AIServer 当前任务实现自身的配置，不从外部合同文件派生。
 
-Training 使用模型 manifest 中的 `RolloutEstimatorProfile`。AIServer 为每个 Agent 独立 pin
-behavior model，默认最多累计 128 条 completed transition 后封口，计算未归一化 GAE/Value Target，
+Training 使用 `rollout.gamma`、`rollout.gae_lambda` 与 `rollout.tmax`。AIServer 为每个 Agent 独立 pin
+behavior model，累计到配置的 TMax 后封口，计算未归一化 GAE/Value Target，
 再由进程内 SampleDistributor 批量提交。实际 Agent 数唯一来自
 `environment.agent_count/RL_AISERVER_AGENT_COUNT`；`server.max_agents` 只是容量上限。Client、
 任务配置、Learner 和 SamplePool 不提供第二个 Agent 数权威入口。
 
-Action mask 由 Training Contract 与 `OpenSessionRsp.environment.action_mask_mode` 共同明确为
-`disabled` 或 `required`。关闭时 Client state 和训练样本不带 mask；开启时 AIServer 校验动作维度、
+Action mask 由 `policy.action_mask_mode` 配置为 `disabled` 或 `required`，并通过
+`OpenSessionRsp.environment.action_mask_mode` 告知 Client。关闭时 Client state 和训练样本不带 mask；
+开启时 AIServer 校验动作维度、
 屏蔽不可用 logits，并把同一 mask 随 transition 交给 Learner。它不作为默认必选能力。
 
 segment 连续性、close reason、终止语义和 bootstrap 由 AIServer 在封口时一次性校验；
@@ -99,24 +101,29 @@ PPO observation/action/log-probability/value/advantage/value-target。已 Prepar
 
 ```bash
 /opt/rl/aiserver/bin/maze_aiserver \
-  --inspect-model /absolute/path/model.onnx
+  --inspect-model /absolute/path/model.onnx \
+  --observation-dim 17 \
+  --action-count 9
 ```
 
-探针只输出模型张量身份，不加载服务配置，也不启动端口。
+探针按显式维度验证并输出模型张量信息，不加载服务配置，也不启动端口；切换任务时维度不再被探针
+硬编码。
 
 ## 3. Training 缓存
 
 AIServer 只使用 `model.local_train_dir` 下的私有 `cache`，不接收也不理解平台
 `task_id/run_id`。同一目录由 `.aiserver.lock` 防止两个 AIServer 并发使用。启动时不扫描、恢复或
 回填历史 cache；只有当前进程从 Distributor 请求并成功校验的模型 step 才进入内存索引和淘汰范围。
-若该 step 的目标目录已经存在，只接受与本次 protobuf manifest 完全一致的内容；其他既有目录既不
+若该 step 的目标目录已经存在，只接受与本次 lineage/step 和声明大小一致的模型；其他既有目录既不
 作为启动事实读取，也不由当前进程迁移或删除：
 
 ```bash
 bash ./run.sh --config configs/server_config.yaml --workload training
 ```
 
-模型始终从本次隔离训练的 Learner Model Distributor 拉取。AIServer 从 Distributor 状态发现内部模型 lineage，首次发现后固定；同一生命周期出现另一 lineage 会失败关闭。AIServer 不从本地保存点开始训练，也不会在正常停止时删除缓存。
+模型始终从本次隔离训练的 Learner Model Distributor 拉取。AIServer 从 Distributor 状态发现当前
+训练运行的模型 lineage，并在该服务生命周期内按 lineage/step 跟踪模型切换。AIServer 不从本地
+保存点开始训练，也不会在正常停止时删除缓存。
 
 ## 4. 构建运行镜像
 
@@ -134,8 +141,9 @@ Client/AIServer 的源码、生成器、哈希或平台。只有明确决定采�
 RL_PROJECT_IMAGE_TAG=maze-tag-001 bash build_image.sh
 ```
 
-正式构建不读取开发 artifact 或开发容器 build 目录。AIServer 仍按本仓 Training Contract 字段与
-digest 校验模型/训练张量语义，但不会用中央 manifest 的包名、平台或跨仓哈希锁定 Client 通信。
+正式构建不读取开发 artifact 或开发容器 build 目录。AIServer 直接按配置的模型维度、rollout、
+policy 和 Proto 字段处理训练数据；它不读取 Training Contract 文件，也不用中央 manifest、平台、
+包版本或跨仓哈希锁定 Client 或 Learner 侧组件。
 完整镜像引用为 `rl-training/aiserver:maze-tag-001`；同名 tag 允许由后续微调构建直接覆盖。
 
 ## 5. 刷新与清理开发容器

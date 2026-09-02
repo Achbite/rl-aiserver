@@ -26,10 +26,8 @@ struct MazeRewardParameters {
     double wasted_action_penalty;
 };
 
-// Reward is a compiled algorithm contract, not a runtime configuration.
-// The canonical JSON is also used by the effective Maze task digest.
+// Reward parameters are owned by the AIServer reward implementation.
 const MazeRewardParameters& GetMazeRewardParameters();
-std::string MazeRewardCanonicalParametersJson();
 
 // ---- 迷宫奖励计算器 ----
 // 独立模块，负责所有奖励函数的计算和分项记录。

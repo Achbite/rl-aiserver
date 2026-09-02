@@ -137,7 +137,8 @@ public:
         BehaviorPolicyScope behavior_policy_scope =
             BehaviorPolicyScope::Unspecified;
         int current_max_steps = 0;
-        std::string evaluation_pinned_model_checksum;
+        std::string evaluation_pinned_model_lineage_id;
+        ModelStep evaluation_pinned_model_step = 0;
 
         // 网格是否可通行（越界视为不可通行）
         bool IsWalkable(int gx, int gy) const {

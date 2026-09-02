@@ -2,8 +2,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iomanip>
-#include <sstream>
 
 namespace {
 
@@ -35,17 +33,6 @@ static_assert(kReward.timeout_penalty + kReward.progress_budget +
                   0.0,
               "Reward maximum failure budget must remain negative");
 
-std::string CanonicalDecimal(double value) {
-    std::ostringstream output;
-    output << std::fixed << std::setprecision(6) << value;
-    std::string result = output.str();
-    while (result.size() > 2 && result.back() == '0' &&
-           result[result.size() - 2] != '.') {
-        result.pop_back();
-    }
-    return result;
-}
-
 bool IsTaskTerminal(maze::MazeTerminationReason reason) {
     return reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED ||
            reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
@@ -75,24 +62,6 @@ RewardDetail Invalid(std::string error) {
 
 const MazeRewardParameters& GetMazeRewardParameters() {
     return kReward;
-}
-
-std::string MazeRewardCanonicalParametersJson() {
-    std::ostringstream output;
-    output << "{\"goal_reward\":" << CanonicalDecimal(kReward.goal_reward)
-           << ",\"progress_budget\":"
-           << CanonicalDecimal(kReward.progress_budget)
-           << ",\"stage_2x_first_visit_budget\":"
-           << CanonicalDecimal(kReward.stage_2x_first_visit_budget)
-           << ",\"stage_4x_first_visit_budget\":"
-           << CanonicalDecimal(kReward.stage_4x_first_visit_budget)
-           << ",\"stage_8x_first_visit_budget\":"
-           << CanonicalDecimal(kReward.stage_8x_first_visit_budget)
-           << ",\"timeout_penalty\":"
-           << CanonicalDecimal(kReward.timeout_penalty)
-           << ",\"wasted_action_penalty\":"
-           << CanonicalDecimal(kReward.wasted_action_penalty) << '}';
-    return output.str();
 }
 
 RewardDetail MazeReward::Calculate(
@@ -138,8 +107,7 @@ RewardDetail MazeReward::Calculate(
         static_cast<float>(previous_distance - current_distance) /
         distance_normalizer;
 
-    // The reward contract fixes first-visit shaping to this budget. Changing it
-    // or adding curriculum behavior requires a new reward contract identity.
+    // The AIServer reward implementation owns this first-visit budget.
     const float first_visit_budget =
         static_cast<float>(config.stage_8x_first_visit_budget);
     const float first_visit_scale =
