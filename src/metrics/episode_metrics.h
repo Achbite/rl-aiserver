@@ -1,6 +1,6 @@
 #pragma once
 
-#include "contracts/contract_namespaces.h"
+#include "contracts/training_namespaces.h"
 
 #include <cstdint>
 #include <chrono>
@@ -11,27 +11,6 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-struct AgentEpisodeResult {
-    uint32_t agent_id = 0;
-    double episode_return = 0.0;
-    bool success = false;
-    maze::MazeTerminationReason termination_reason =
-        maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
-    int64_t transition_count = 0;
-    int64_t shortest_action_steps = 0;
-    int64_t unique_cell_count = 0;
-    int64_t blocked_move_count = 0;
-    int64_t attempted_move_count = 0;
-    uint64_t minimum_behavior_model_step = 0;
-    uint64_t maximum_behavior_model_step = 0;
-    std::string behavior_model_lineage_id;
-    uint64_t terminal_frame_id = 0;
-    int final_grid_x = 0;
-    int final_grid_y = 0;
-    std::optional<uint32_t> goal_rank_group;
-    std::unordered_map<std::string, double> reward_component_sums;
-};
 
 class MetricEventJournal {
 public:

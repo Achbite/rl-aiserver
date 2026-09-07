@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config/config_loader.h"
-#include "contracts/contract_namespaces.h"
+#include "contracts/training_namespaces.h"
 #include "training.grpc.pb.h"
 
 #include <grpcpp/grpcpp.h>

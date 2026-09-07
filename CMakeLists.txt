@@ -29,6 +29,7 @@ set(SOURCES
     src/metrics/episode_metrics.cpp
     src/sample/sample_sender.cpp
     src/sample/training_transition_builder.cpp
+    src/task/maze_transition_builder.cpp
     src/task/maze_map_contract.cpp
     src/task/episode_action_policy.cpp
     src/task/single_map_task_controller.cpp
@@ -111,6 +112,7 @@ if(BUILD_TESTING)
         src/metrics/episode_metrics.cpp
         src/sample/sample_sender.cpp
         src/sample/training_transition_builder.cpp
+        src/task/maze_transition_builder.cpp
         src/task/maze_map_contract.cpp
         src/task/episode_action_policy.cpp
         src/task/single_map_task_controller.cpp

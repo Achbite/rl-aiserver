@@ -363,8 +363,63 @@ message RawMetricSumCount {
 
 enum MetricFactKind {
     METRIC_FACT_KIND_UNSPECIFIED = 0;
-    METRIC_FACT_KIND_MAZE_EPISODE = 1;
-    METRIC_FACT_KIND_TRAIN_UPDATE = 2;
+    reserved 1, 2;
+    reserved "METRIC_FACT_KIND_MAZE_EPISODE", "METRIC_FACT_KIND_TRAIN_UPDATE";
+    METRIC_FACT_KIND_REGISTERED_METRICS = 3;
+}
+
+enum MetricValueType {
+    METRIC_VALUE_TYPE_UNSPECIFIED = 0;
+    METRIC_VALUE_TYPE_SCALAR = 1;
+    METRIC_VALUE_TYPE_UNSIGNED = 2;
+    METRIC_VALUE_TYPE_SUM_COUNT = 3;
+}
+
+enum MetricAggregation {
+    METRIC_AGGREGATION_UNSPECIFIED = 0;
+    METRIC_AGGREGATION_LATEST = 1;
+    METRIC_AGGREGATION_SUM = 2;
+    METRIC_AGGREGATION_MIN = 3;
+    METRIC_AGGREGATION_MAX = 4;
+    METRIC_AGGREGATION_MEAN = 5;
+}
+
+// Registered by the producing task/algorithm, immutable within a source
+// lifecycle. Readers interpret only these generic types and operations.
+message MetricDefinition {
+    string metric_id = 1;
+    string display_name = 2;
+    string unit = 3;
+    string scope = 4;
+    MetricValueType value_type = 5;
+    MetricAggregation aggregation = 6;
+    // Required for MEAN: e.g. agent_episode, transition, sample_evaluation,
+    // optimizer_step. Counts with different meanings must use different IDs.
+    string denominator = 7;
+}
+
+message MetricSumCount {
+    double sum = 1;
+    uint64 count = 2;
+}
+
+message MetricPoint {
+    string metric_id = 1;
+    oneof value {
+        double scalar = 2;
+        uint64 unsigned_value = 3;
+        MetricSumCount sum_count = 4;
+    }
+    // Producer-owned context retained in raw history, never inferred by readers.
+    map<string, string> attributes = 5;
+}
+
+message RegisteredMetricRecord {
+    // Every record includes the definitions it uses, so a retention gap never
+    // forces a reader to guess a missing registration or contact the producer.
+    repeated MetricDefinition definitions = 1;
+    repeated MetricPoint points = 2;
+    map<string, string> attributes = 3;
 }
 
 message MetricEvent {
@@ -378,8 +433,9 @@ message MetricEvent {
     // Raw producer wall-clock observation. Presence is required, but this value
     // is not an ordering key and may repeat or regress after clock adjustment.
     optional int64 observed_at_unix_ms = 5;
-    // The fact kind selects the Proto payload owner. Transport, persistence,
-    // cursor and ACK layers keep these bytes opaque.
+    // REGISTERED_METRICS selects RegisteredMetricRecord. Transport, persistence,
+    // cursor and ACK layers keep these bytes opaque. ACK proves persistence,
+    // not successful metric interpretation; readers expose content errors.
     bytes fact_payload = 6;
     MetricFactKind fact_kind = 7;
     reserved 8, 9;
@@ -477,6 +533,15 @@ message AckMetricBatchRsp {
 
 message AIServerStatusReq {}
 
+// Independent of loaded_model readiness: an active model can remain valid
+// while a newer candidate fails to download or prepare. This is an observed
+// result, not a request to switch models or substitute another artifact.
+message ModelFeedbackStatus {
+    ModelIdentity candidate_model = 1;
+    string stage = 2;
+    string last_error = 3;
+}
+
 message AIServerStatusRsp {
     reserved 1, 34;
     reserved "contract", "rollout_estimator_profile_digest";
@@ -518,6 +583,7 @@ message AIServerStatusRsp {
     int64 per_agent_model_activation_count = 38;
     int64 superseded_without_agent_activation_count = 39;
     repeated SegmentCloseCount segment_close_counts = 40;
+    ModelFeedbackStatus model_feedback = 41;
     reserved "credit_request_count", "credit_grant_count",
              "credit_wait_count", "credit_reacquire_count",
              "producer_stale_count", "capacity_wait_ms",

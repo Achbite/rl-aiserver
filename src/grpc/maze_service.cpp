@@ -3,6 +3,7 @@
 #include "log/logger.h"
 #include "ai/maze_observation.h"
 #include "sample/training_transition_builder.h"
+#include "task/maze_transition_builder.h"
 #include "task/maze_map_contract.h"
 #include "task/episode_action_policy.h"
 
@@ -309,7 +310,7 @@ bool MazeServiceImpl::LoadInitialModel() {
             std::string load_error;
             OnnxInferencer::PreparedModel prepared;
             if (!FetchPrepareAndPublishModel(
-                    range.latest_model_step, candidate, prepared,
+                    range.latest_model_step, range.model_lineage_id, candidate, prepared,
                     load_error)) {
                 error = load_error;
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -406,51 +407,11 @@ bool MazeServiceImpl::PrepareModelArtifact(
         config_.model.expected_action_dim, prepared, &error);
 }
 
-maze_metrics::EpisodeMetricFact MazeServiceImpl::BuildEpisodeMetricFact(
+training::RegisteredMetricRecord MazeServiceImpl::BuildEpisodeMetricFact(
     const SessionManager::Session& session,
-    const std::vector<AgentEpisodeResult>& agents) const {
-    maze_metrics::EpisodeMetricFact fact;
-    fact.set_environment_instance_id(session.environment_instance_id);
-    fact.set_episode_id(session.current_episode_id);
-    for (const auto& agent : agents) {
-        auto* target = fact.add_agents();
-        target->set_agent_id(agent.agent_id);
-        target->set_episode_return(agent.episode_return);
-        target->set_transition_count(
-            static_cast<uint64_t>(agent.transition_count));
-        target->set_success(agent.success);
-        target->set_termination_reason(
-            maze::MazeTerminationReason_Name(agent.termination_reason));
-        target->set_shortest_action_steps(
-            static_cast<uint32_t>(agent.shortest_action_steps));
-        target->set_unique_cell_count(
-            static_cast<uint64_t>(agent.unique_cell_count));
-        target->set_blocked_move_count(
-            static_cast<uint64_t>(agent.blocked_move_count));
-        target->set_attempted_move_count(
-            static_cast<uint64_t>(agent.attempted_move_count));
-        target->set_minimum_behavior_model_step(
-            agent.minimum_behavior_model_step);
-        target->set_maximum_behavior_model_step(
-            agent.maximum_behavior_model_step);
-        target->set_behavior_model_lineage_id(
-            agent.behavior_model_lineage_id);
-        target->set_terminal_frame_id(agent.terminal_frame_id);
-        if (agent.goal_rank_group) {
-            target->set_goal_rank_group(*agent.goal_rank_group);
-        }
-        std::vector<std::pair<std::string, double>> components(
-            agent.reward_component_sums.begin(),
-            agent.reward_component_sums.end());
-        std::sort(components.begin(), components.end());
-        for (const auto& component : components) {
-            auto* raw = target->add_reward_components();
-            raw->set_field_id(component.first);
-            raw->set_sum(component.second);
-            raw->set_count(target->transition_count());
-        }
-    }
-    return fact;
+    const std::vector<AgentEpisodeResult>& agents) {
+    return BuildMazeEpisodeMetrics(metric_registry_, session.environment_instance_id,
+                                   session.current_episode_id, agents);
 }
 
 maze::EpisodeOutcome MazeServiceImpl::BuildEpisodeOutcome(
@@ -474,21 +435,36 @@ maze::EpisodeOutcome MazeServiceImpl::BuildEpisodeOutcome(
     return outcome;
 }
 
+void MazeServiceImpl::RecordModelFeedback(
+    const training::ModelIdentity& candidate, const std::string& stage,
+    const std::string& error) {
+    std::lock_guard<std::mutex> lock(model_feedback_mutex_);
+    *model_feedback_.mutable_candidate_model() = candidate;
+    model_feedback_.set_stage(stage);
+    model_feedback_.set_last_error(error);
+}
+
 bool MazeServiceImpl::FetchPrepareAndPublishModel(
     ModelStep model_step,
+    const std::string& lineage_id,
     ModelManifest& manifest,
     OnnxInferencer::PreparedModel& prepared,
     std::string& error) {
+    training::ModelIdentity target;
+    target.set_model_lineage_id(lineage_id);
+    target.set_model_step(model_step);
     ModelManifest downloaded;
     if (!model_distributor_.FetchStep(
             config_.sample_distributor.aiserver_id, model_step,
             downloaded, error)) {
+        RecordModelFeedback(target, "download", error);
         return false;
     }
     if (!PrepareModelArtifact(downloaded, prepared, error)) {
         std::string discard_error;
         model_distributor_.DiscardTemporary(downloaded, discard_error);
         if (!discard_error.empty()) error += "; " + discard_error;
+        RecordModelFeedback(target, "prepare", error);
         return false;
     }
     if (!model_distributor_.PublishPrepared(downloaded, error)) {
@@ -496,8 +472,10 @@ bool MazeServiceImpl::FetchPrepareAndPublishModel(
         model_distributor_.DiscardTemporary(downloaded, discard_error);
         if (!discard_error.empty()) error += "; " + discard_error;
         prepared = OnnxInferencer::PreparedModel{};
+        RecordModelFeedback(target, "cache_publish", error);
         return false;
     }
+    RecordModelFeedback(target, "prepared", "");
     prepared.model_path = downloaded.model_path;
     manifest = std::move(downloaded);
     return true;
@@ -878,6 +856,17 @@ void MazeServiceImpl::ModelWatchLoop() {
         std::string cycle_error;
         bool range_ready = model_distributor_.GetAvailableRange(
             config_.sample_distributor.aiserver_id, range, error);
+        if (!range_ready) {
+            RecordModelFeedback({}, "discover", error);
+        } else {
+            std::lock_guard<std::mutex> feedback_lock(model_feedback_mutex_);
+            if (model_feedback_.stage() == "discover") {
+                model_feedback_.set_stage("available");
+                model_feedback_.clear_last_error();
+                model_feedback_.mutable_candidate_model()->set_model_lineage_id(range.model_lineage_id);
+                model_feedback_.mutable_candidate_model()->set_model_step(range.latest_model_step);
+            }
+        }
         bool latest_ready = range_ready;
         if (range_ready &&
             ShouldFetchModelCandidate(
@@ -886,11 +875,12 @@ void MazeServiceImpl::ModelWatchLoop() {
             ModelManifest candidate;
             OnnxInferencer::PreparedModel prepared;
             latest_ready = FetchPrepareAndPublishModel(
-                range.latest_model_step, candidate, prepared,
+                range.latest_model_step, range.model_lineage_id, candidate, prepared,
                 error);
             if (latest_ready &&
                 candidate.model_lineage_id() != range.model_lineage_id) {
                 error = "staged model range identity changed during fetch";
+                RecordModelFeedback(candidate.wire.identity(), "range_identity", error);
                 latest_ready = false;
             }
             if (latest_ready) {
@@ -1677,7 +1667,7 @@ bool MazeServiceImpl::FinalizePendingTransition(
     auto& agent = agent_it->second;
     if (!agent.has_pending_action) return true;
     RewardDetail reward;
-    SessionManager::RawRolloutTransition transition;
+    RawRolloutTransition transition;
     if (collect_training_sample) {
         if (!agent.segment_open ||
             !agent.pinned_model.HasModelIdentity() ||

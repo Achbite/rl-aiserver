@@ -2,6 +2,7 @@
 #include "ai/maze_observation.h"
 #include "model/model_distributor_client.h"
 #include "model/model_manifest.h"
+#include "model_distributor_fixture.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -18,19 +19,12 @@
 
 namespace {
 
+using namespace model_fixture;
+
 void Require(bool condition, const std::string& message) {
     if (condition) return;
     std::cerr << "FAIL: " << message << std::endl;
     std::exit(1);
-}
-
-std::string ReadFile(const std::filesystem::path& path) {
-    std::ifstream input(path, std::ios::binary);
-    Require(input.is_open(), "open fixed ONNX fixture");
-    std::ostringstream output;
-    output << input.rdbuf();
-    Require(!input.bad(), "read fixed ONNX fixture");
-    return output.str();
 }
 
 AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
@@ -46,118 +40,6 @@ AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
     config.model_distribution.rpc_timeout_ms = 1000;
     return config;
 }
-
-training::ModelArtifactManifest MakeManifest(
-    const std::string& model_bytes) {
-    training::ModelArtifactManifest manifest;
-    auto* identity = manifest.mutable_identity();
-    identity->set_model_lineage_id("lineage-fixed");
-    identity->set_model_step(0);
-    manifest.set_size_bytes(static_cast<int64_t>(model_bytes.size()));
-    manifest.set_trained_samples(0);
-    manifest.set_published_at_unix_ms(1700000000000);
-    return manifest;
-}
-
-class FixedModelDistributor final
-    : public training::ModelDistributorService::Service {
-public:
-    FixedModelDistributor(training::ModelArtifactManifest manifest,
-                          std::string model_bytes)
-        : manifest_(std::move(manifest)),
-          model_bytes_(std::move(model_bytes)) {}
-
-    grpc::Status GetModelDistributorStatus(
-        grpc::ServerContext*,
-        const training::ModelDistributorStatusReq*,
-        training::ModelDistributorStatusRsp* response) override {
-        response->set_ready(true);
-        FillAuthority(response->mutable_distributor());
-        *response->mutable_latest_model() = manifest_.identity();
-        response->set_available_floor_model_step(0);
-        response->set_latest_available_model_step(0);
-        return grpc::Status::OK;
-    }
-
-    grpc::Status GetModelManifest(
-        grpc::ServerContext*,
-        const training::GetModelManifestReq* request,
-        training::GetModelManifestRsp* response) override {
-        if (request->requested_model().model_lineage_id() !=
-                manifest_.identity().model_lineage_id() ||
-            !request->requested_model().has_model_step() ||
-            request->requested_model().model_step() != 0) {
-            response->set_result(training::MODEL_LOOKUP_RESULT_NOT_FOUND);
-            response->set_message("fixed model not found");
-            return grpc::Status::OK;
-        }
-        response->set_result(training::MODEL_LOOKUP_RESULT_FOUND);
-        *response->mutable_manifest() = manifest_;
-        FillAuthority(response->mutable_distributor());
-        response->set_available_floor_model_step(0);
-        response->set_latest_available_model_step(0);
-        return grpc::Status::OK;
-    }
-
-    grpc::Status DownloadModel(
-        grpc::ServerContext*,
-        const training::DownloadModelReq* request,
-        grpc::ServerWriter<training::ModelChunk>* writer) override {
-        if (request->requested_model().SerializeAsString() !=
-            manifest_.identity().SerializeAsString()) {
-            return grpc::Status(
-                grpc::StatusCode::NOT_FOUND, "fixed model not found");
-        }
-        training::ModelChunk chunk;
-        *chunk.mutable_model() = manifest_.identity();
-        chunk.set_offset(0);
-        chunk.set_data(model_bytes_);
-        writer->Write(chunk);
-        return grpc::Status::OK;
-    }
-
-    grpc::Status AckModel(grpc::ServerContext*,
-                          const training::AckModelReq* request,
-                          training::AckModelRsp* response) override {
-        std::lock_guard<std::mutex> lock(mutex_);
-        ack_ = *request;
-        response->set_result(training::MODEL_ACK_RESULT_APPLIED);
-        FillAuthority(response->mutable_distributor());
-        return grpc::Status::OK;
-    }
-
-    training::AckModelReq ack() const {
-        std::lock_guard<std::mutex> lock(mutex_);
-        return ack_;
-    }
-
-private:
-    static void FillAuthority(common::ServiceInstanceIdentity* identity) {
-        identity->set_component("model-distributor");
-        identity->set_instance_id("model-distributor-fixed");
-        identity->set_lifecycle_epoch(1);
-    }
-
-    training::ModelArtifactManifest manifest_;
-    std::string model_bytes_;
-    mutable std::mutex mutex_;
-    training::AckModelReq ack_;
-};
-
-class TemporaryRoot {
-public:
-    TemporaryRoot()
-        : path_(std::filesystem::temp_directory_path() /
-                ("aiserver-model-update-" + std::to_string(::getpid()))) {
-        std::filesystem::remove_all(path_);
-        std::filesystem::create_directories(path_);
-    }
-    ~TemporaryRoot() { std::filesystem::remove_all(path_); }
-    const std::filesystem::path& path() const { return path_; }
-
-private:
-    std::filesystem::path path_;
-};
 
 void TestModelUpdate(const std::string& fixture_path) {
     TemporaryRoot root;
