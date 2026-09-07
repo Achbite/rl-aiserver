@@ -2,7 +2,11 @@
 #include "ai/maze_observation.h"
 #include "sample/sample_sender.h"
 #include "sample/training_transition_builder.h"
+#include "task/maze_transition_builder.h"
 #include "task/maze_map_contract.h"
+#include "model_distributor_fixture.h"
+#include <future>
+#include <thread>
 
 #include <chrono>
 #include <cmath>
@@ -209,10 +213,10 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
             "the model-selected action commits through the public Update");
 }
 
-SessionManager::RawRolloutTransition MakeRawTransition(
+RawRolloutTransition MakeRawTransition(
     uint64_t action_step,
     float behavior_value) {
-    SessionManager::RawRolloutTransition transition;
+    RawRolloutTransition transition;
     transition.observation.assign(
         MazeObservation::kDimension, static_cast<float>(action_step));
     transition.next_observation.assign(
@@ -236,7 +240,7 @@ training::ProcessedTransitionEnvelope BuildSegment(
     double expected_advantage_1,
     double expected_target_0,
     double expected_target_1) {
-    std::vector<SessionManager::RawRolloutTransition> segment{
+    std::vector<RawRolloutTransition> segment{
         MakeRawTransition(0, 0.2f),
         MakeRawTransition(1, 0.3f),
     };
@@ -322,12 +326,153 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
     server->Wait();
 }
 
+
+void TestRegisteredEpisodeMetrics() {
+    MetricRegistry registry;
+    AgentEpisodeResult first;
+    first.agent_id = 0;
+    first.episode_return = 3.0;
+    first.transition_count = 4;
+    first.success = true;
+    first.termination_reason = maze::MAZE_TERMINATION_REASON_GOAL_REACHED;
+    first.shortest_action_steps = 2;
+    first.unique_cell_count = 3;
+    first.blocked_move_count = 1;
+    first.attempted_move_count = 4;
+    first.behavior_model_lineage_id = "lineage";
+    first.reward_component_sums["changed_reward"] = 3.0;
+    auto second = first;
+    second.agent_id = 1;
+    second.episode_return = -1.0;
+    second.transition_count = 2;
+    second.success = false;
+    second.reward_component_sums["changed_reward"] = -1.0;
+    const auto record = BuildMazeEpisodeMetrics(registry, "environment", "episode", {first, second});
+    double sum = 0.0;
+    double total_reward = 0.0;
+    uint64_t total_transitions = 0;
+    uint64_t transitions = 0;
+    for (const auto& point : record.points()) {
+        if (point.metric_id() == "task.maze.reward.total.per_transition") {
+            total_reward += point.sum_count().sum();
+            total_transitions += point.sum_count().count();
+        }
+        if (point.metric_id() == "task.maze.reward.changed_reward.per_transition") {
+            sum += point.sum_count().sum();
+            transitions += point.sum_count().count();
+        }
+    }
+    Require(sum == 2.0 && transitions == 6, "task producer registers raw reward sums and actual transition denominators");
+    Require(total_reward == 2.0 && total_transitions == 6,
+            "Total Reward uses raw reward sums and actual transition counts, independently of Episode Return");
+    for (const auto& definition : record.definitions()) {
+        if (definition.metric_id() == "task.maze.reward.total.per_transition") {
+            Require(definition.display_name() == "Total Reward" && definition.denominator() == "transition",
+                    "task registration owns the readable name and statistical denominator");
+        }
+    }
+    common::ServiceInstanceIdentity producer;
+    producer.set_component("aiserver");
+    producer.set_instance_id("metric-producer");
+    producer.set_lifecycle_epoch(1);
+    MetricEventJournal journal(producer, 4096, 1024 * 1024, std::chrono::milliseconds(0));
+    Require(journal.AppendFact(record.SerializeAsString(), 1700000000000).applied(),
+            "generic metric journal accepts a registered task record");
+    training::GetMetricBatchReq get;
+    get.mutable_consumer()->set_component("learner");
+    get.mutable_consumer()->set_instance_id("metric-reader");
+    get.mutable_consumer()->set_lifecycle_epoch(1);
+    *get.mutable_cursor()->mutable_source() = producer;
+    get.set_max_events(10);
+    get.set_max_bytes(1024 * 1024);
+    training::GetMetricBatchRsp response;
+    journal.Get(get, response);
+    Require(response.has_batch() && response.batch().events_size() == 1 &&
+                response.batch().events(0).fact_kind() == training::METRIC_FACT_KIND_REGISTERED_METRICS &&
+                response.batch().events(0).fact_payload() == record.SerializeAsString(),
+            "public journal Get preserves registered metric payload and current kind");
+}
+
+void TestModelFeedbackVisibility(const std::string& fixture_path) {
+    model_fixture::TemporaryRoot root;
+    const auto bytes = model_fixture::ReadFile(fixture_path);
+    model_fixture::FixedModelDistributor model_sink(model_fixture::MakeManifest(bytes), bytes);
+    CapturingSamplePool pool_sink;
+    int port = 0;
+    grpc::ServerBuilder builder;
+    builder.AddListeningPort("127.0.0.1:0", grpc::InsecureServerCredentials(), &port);
+    builder.RegisterService(&model_sink);
+    builder.RegisterService(&pool_sink);
+    auto server = builder.BuildAndStart();
+    Require(server != nullptr && port > 0, "start adjacent model and sample sinks");
+    auto config = MakeConfig(port);
+    config.model.local_train_dir = (root.path() / "train").string();
+    config.model_distribution.port = port;
+    config.model_distribution.poll_interval_ms = 50;
+    config.model_distribution.rpc_timeout_ms = 500;
+    config.model.startup_timeout_ms = 2000;
+    MazeServiceImpl service(config);
+    Require(service.Start(), "start AIServer with an actual prepared ONNX model");
+    model_sink.SetCandidate(1, "invalid ONNX candidate");
+    training::AIServerStatusReq request;
+    training::AIServerStatusRsp status;
+    const auto failed_deadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    do {
+        service.GetAIServerStatus(nullptr, &request, &status);
+        if (!status.model_feedback().last_error().empty()) break;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    } while (std::chrono::steady_clock::now() < failed_deadline);
+    Require(status.ready() && status.loaded_model().model_step() == 0 &&
+                status.model_feedback().candidate_model().model_step() == 1 &&
+                status.model_feedback().stage() == "prepare" &&
+                !status.model_feedback().last_error().empty(),
+            "active model readiness and failed candidate preparation are independently observable");
+    model_sink.SetCandidate(2, bytes);
+    const auto recovered_deadline = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    do {
+        service.GetAIServerStatus(nullptr, &request, &status);
+        if (status.loaded_model().model_step() == 2) break;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    } while (std::chrono::steady_clock::now() < recovered_deadline);
+    Require(status.loaded_model().model_step() == 2 && status.model_feedback().last_error().empty(),
+            "a later successfully prepared publication clears the observed candidate failure");
+    // Settle the real source-final ACK while shutdown waits for its consumer.
+    auto shutdown = std::async(std::launch::async, [&] { return service.BeginShutdown(); });
+    training::GetMetricBatchReq get;
+    get.mutable_consumer()->set_component("learner");
+    get.mutable_consumer()->set_instance_id("metric-test-consumer");
+    get.mutable_consumer()->set_lifecycle_epoch(1);
+    *get.mutable_cursor()->mutable_source() = service.MetricSourceIdentity();
+    get.set_max_events(10);
+    get.set_max_bytes(1024 * 1024);
+    get.set_wait_timeout_ms(100);
+    while (shutdown.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready) {
+        training::GetMetricBatchRsp response;
+        service.GetMetricBatch(nullptr, &get, &response);
+        if (response.has_batch()) {
+            training::AckMetricBatchReq ack;
+            *ack.mutable_consumer() = get.consumer();
+            *ack.mutable_cursor()->mutable_source() = response.producer();
+            ack.mutable_cursor()->set_acknowledged_batch_sequence(response.batch().batch_sequence());
+            ack.mutable_cursor()->set_acknowledged_event_sequence(response.batch().final_event_sequence());
+            training::AckMetricBatchRsp ack_response;
+            service.AckMetricBatch(nullptr, &ack, &ack_response);
+            *get.mutable_cursor() = ack_response.committed_cursor();
+        }
+    }
+    Require(shutdown.get(), "shutdown drains and settles actual final metric ACK");
+    server->Shutdown();
+    server->Wait();
+}
+
 }  // namespace
 
 int main(int argc, char** argv) {
     Require(argc == 2,
             "usage: gae_sample_delivery_development_test MODEL");
     TestGaeAndSampleDelivery(argv[1]);
+    TestRegisteredEpisodeMetrics();
+    TestModelFeedbackVisibility(argv[1]);
     std::cout << "aiserver_gae_sample_delivery_data_path: PASS"
               << std::endl;
     return 0;

@@ -7,6 +7,7 @@
 #include "model/model_manifest.h"
 #include "model/model_step.h"
 #include "session/lifecycle_replay_window.h"
+#include "sample/rollout_types.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -24,21 +25,6 @@
 
 class SessionManager {
 public:
-    // One complete, trusted Environment transition before the AIServer closes
-    // the Agent segment and computes GAE/value targets. Pending actions are not
-    // represented here because they have no trusted result or next state yet.
-    struct RawRolloutTransition {
-        std::vector<float> observation;
-        std::vector<float> next_observation;
-        int action = 0;
-        float reward = 0.0f;
-        float behavior_log_probability = 0.0f;
-        float behavior_value = 0.0f;
-        std::vector<bool> action_mask;
-        uint64_t action_step = 0;
-        int64_t created_at_unix_ms = 0;
-    };
-
     // ---- Agent 运行时状态（每个 session 内独立）----
     struct AgentRuntime {
         AStarSolver solver;             // 独立寻路器

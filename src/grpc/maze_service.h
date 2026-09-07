@@ -8,6 +8,7 @@
 #include "maze_task.grpc.pb.h"
 #include "training.grpc.pb.h"
 #include "metrics/episode_metrics.h"
+#include "task/maze_episode_metrics.h"
 #include "model/model_manifest.h"
 #include "model/model_distributor_client.h"
 #include "sample/sample_sender.h"
@@ -89,6 +90,7 @@ private:
         std::string& error);
     bool FetchPrepareAndPublishModel(
         ModelStep model_step,
+        const std::string& lineage_id,
         ModelManifest& manifest,
         OnnxInferencer::PreparedModel& prepared,
         std::string& error);
@@ -97,6 +99,11 @@ private:
     void StartModelWatcher();
     void StopModelWatcher();
     void ModelWatchLoop();
+    void RecordModelFeedback(const training::ModelIdentity& candidate,
+                             const std::string& stage, const std::string& error);
+    // Watcher I/O runs outside mutex_; status reads take only this short lock.
+    std::mutex model_feedback_mutex_;
+    training::ModelFeedbackStatus model_feedback_;
     void RecordPendingModelAck(
         const ModelManifest& manifest,
         const common::ServiceInstanceIdentity& authority,
@@ -110,9 +117,9 @@ private:
                                      std::string& error) const;
     void InitAgentSolver(SessionManager::AgentRuntime& agent,
                          const SessionManager::Session& session);
-    maze_metrics::EpisodeMetricFact BuildEpisodeMetricFact(
+    training::RegisteredMetricRecord BuildEpisodeMetricFact(
         const SessionManager::Session& session,
-        const std::vector<AgentEpisodeResult>& agents) const;
+        const std::vector<AgentEpisodeResult>& agents);
     maze::EpisodeOutcome BuildEpisodeOutcome(
         const SessionManager::Session& session,
         const std::vector<AgentEpisodeResult>& agents) const;
@@ -218,6 +225,7 @@ private:
     std::unordered_map<std::string, std::string> open_payloads_;
     std::unordered_map<std::string, std::string> open_responses_;
     MetricEventJournal metric_events_;
+    MetricRegistry metric_registry_;
     SingleMapTaskController task_controller_;
     bool started_ = false;
     bool shutdown_started_ = false;

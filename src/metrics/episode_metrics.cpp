@@ -45,7 +45,7 @@ MetricEventJournal::AppendResult MetricEventJournal::AppendFact(
     }
     event.set_event_sequence(next_event_sequence_++);
     event.set_observed_at_unix_ms(observed_at_unix_ms);
-    event.set_fact_kind(training::METRIC_FACT_KIND_MAZE_EPISODE);
+    event.set_fact_kind(training::METRIC_FACT_KIND_REGISTERED_METRICS);
     event.set_fact_payload(std::move(fact_payload));
     last_event_observed_at_unix_ms_ = observed_at_unix_ms;
     event_bytes_ += event.ByteSizeLong();

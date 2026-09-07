@@ -344,6 +344,92 @@ struct RawMetricSumCountDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RawMetricSumCountDefaultTypeInternal _RawMetricSumCount_default_instance_;
+PROTOBUF_CONSTEXPR MetricDefinition::MetricDefinition(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.metric_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.display_name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.unit_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.scope_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.denominator_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.value_type_)*/0
+  , /*decltype(_impl_.aggregation_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct MetricDefinitionDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricDefinitionDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricDefinitionDefaultTypeInternal() {}
+  union {
+    MetricDefinition _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricDefinitionDefaultTypeInternal _MetricDefinition_default_instance_;
+PROTOBUF_CONSTEXPR MetricSumCount::MetricSumCount(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.sum_)*/0
+  , /*decltype(_impl_.count_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct MetricSumCountDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricSumCountDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricSumCountDefaultTypeInternal() {}
+  union {
+    MetricSumCount _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricSumCountDefaultTypeInternal _MetricSumCount_default_instance_;
+PROTOBUF_CONSTEXPR MetricPoint_AttributesEntry_DoNotUse::MetricPoint_AttributesEntry_DoNotUse(
+    ::_pbi::ConstantInitialized) {}
+struct MetricPoint_AttributesEntry_DoNotUseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricPoint_AttributesEntry_DoNotUseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricPoint_AttributesEntry_DoNotUseDefaultTypeInternal() {}
+  union {
+    MetricPoint_AttributesEntry_DoNotUse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricPoint_AttributesEntry_DoNotUseDefaultTypeInternal _MetricPoint_AttributesEntry_DoNotUse_default_instance_;
+PROTOBUF_CONSTEXPR MetricPoint::MetricPoint(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.attributes_)*/{::_pbi::ConstantInitialized()}
+  , /*decltype(_impl_.metric_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.value_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_._oneof_case_)*/{}} {}
+struct MetricPointDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR MetricPointDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~MetricPointDefaultTypeInternal() {}
+  union {
+    MetricPoint _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MetricPointDefaultTypeInternal _MetricPoint_default_instance_;
+PROTOBUF_CONSTEXPR RegisteredMetricRecord_AttributesEntry_DoNotUse::RegisteredMetricRecord_AttributesEntry_DoNotUse(
+    ::_pbi::ConstantInitialized) {}
+struct RegisteredMetricRecord_AttributesEntry_DoNotUseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RegisteredMetricRecord_AttributesEntry_DoNotUseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RegisteredMetricRecord_AttributesEntry_DoNotUseDefaultTypeInternal() {}
+  union {
+    RegisteredMetricRecord_AttributesEntry_DoNotUse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RegisteredMetricRecord_AttributesEntry_DoNotUseDefaultTypeInternal _RegisteredMetricRecord_AttributesEntry_DoNotUse_default_instance_;
+PROTOBUF_CONSTEXPR RegisteredMetricRecord::RegisteredMetricRecord(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.definitions_)*/{}
+  , /*decltype(_impl_.points_)*/{}
+  , /*decltype(_impl_.attributes_)*/{::_pbi::ConstantInitialized()}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RegisteredMetricRecordDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RegisteredMetricRecordDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RegisteredMetricRecordDefaultTypeInternal() {}
+  union {
+    RegisteredMetricRecord _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RegisteredMetricRecordDefaultTypeInternal _RegisteredMetricRecord_default_instance_;
 PROTOBUF_CONSTEXPR MetricEvent::MetricEvent(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_._has_bits_)*/{}
@@ -492,6 +578,21 @@ struct AIServerStatusReqDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AIServerStatusReqDefaultTypeInternal _AIServerStatusReq_default_instance_;
+PROTOBUF_CONSTEXPR ModelFeedbackStatus::ModelFeedbackStatus(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.stage_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.last_error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.candidate_model_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ModelFeedbackStatusDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ModelFeedbackStatusDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ModelFeedbackStatusDefaultTypeInternal() {}
+  union {
+    ModelFeedbackStatus _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ModelFeedbackStatusDefaultTypeInternal _ModelFeedbackStatus_default_instance_;
 PROTOBUF_CONSTEXPR AIServerStatusRsp::AIServerStatusRsp(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.segment_close_counts_)*/{}
@@ -499,6 +600,7 @@ PROTOBUF_CONSTEXPR AIServerStatusRsp::AIServerStatusRsp(
   , /*decltype(_impl_.aiserver_)*/nullptr
   , /*decltype(_impl_.loaded_model_)*/nullptr
   , /*decltype(_impl_.staged_model_)*/nullptr
+  , /*decltype(_impl_.model_feedback_)*/nullptr
   , /*decltype(_impl_.state_)*/0
   , /*decltype(_impl_.ready_)*/false
   , /*decltype(_impl_.distributor_ready_)*/false
@@ -744,8 +846,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace v1
 }  // namespace training
 }  // namespace rl
-static ::_pb::Metadata file_level_metadata_training_2eproto[39];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_training_2eproto[17];
+static ::_pb::Metadata file_level_metadata_training_2eproto[46];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_training_2eproto[19];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_training_2eproto = nullptr;
 
 const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -1033,6 +1135,68 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.field_id_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.sum_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::RawMetricSumCount, _impl_.count_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _impl_.metric_id_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _impl_.display_name_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _impl_.unit_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _impl_.scope_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _impl_.value_type_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _impl_.aggregation_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricDefinition, _impl_.denominator_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSumCount, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSumCount, _impl_.sum_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricSumCount, _impl_.count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse, value_),
+  0,
+  1,
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint, _internal_metadata_),
+  ~0u,  // no _extensions_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint, _impl_._oneof_case_[0]),
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint, _impl_.metric_id_),
+  ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint, _impl_.attributes_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricPoint, _impl_.value_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse, value_),
+  0,
+  1,
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord, _impl_.definitions_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord, _impl_.points_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::RegisteredMetricRecord, _impl_.attributes_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _impl_._has_bits_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::MetricEvent, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1132,6 +1296,15 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelFeedbackStatus, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelFeedbackStatus, _impl_.candidate_model_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelFeedbackStatus, _impl_.stage_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ModelFeedbackStatus, _impl_.last_error_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::AIServerStatusRsp, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -1175,6 +1348,7 @@ const uint32_t TableStruct_training_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::AIServerStatusRsp, _impl_.per_agent_model_activation_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::AIServerStatusRsp, _impl_.superseded_without_agent_activation_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::AIServerStatusRsp, _impl_.segment_close_counts_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::AIServerStatusRsp, _impl_.model_feedback_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SegmentCloseCount, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1346,28 +1520,35 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 161, -1, -1, sizeof(::rl::training::v1::SamplePoolStatusReq)},
   { 167, 224, -1, sizeof(::rl::training::v1::SamplePoolStatusRsp)},
   { 275, -1, -1, sizeof(::rl::training::v1::RawMetricSumCount)},
-  { 284, 294, -1, sizeof(::rl::training::v1::MetricEvent)},
-  { 298, -1, -1, sizeof(::rl::training::v1::MetricSequenceGap)},
-  { 308, -1, -1, sizeof(::rl::training::v1::MetricBatch)},
-  { 324, -1, -1, sizeof(::rl::training::v1::MetricBatchCursor)},
-  { 333, -1, -1, sizeof(::rl::training::v1::GetMetricBatchReq)},
-  { 344, -1, -1, sizeof(::rl::training::v1::GetMetricBatchRsp)},
-  { 356, -1, -1, sizeof(::rl::training::v1::AckMetricBatchReq)},
-  { 364, -1, -1, sizeof(::rl::training::v1::AckMetricBatchRsp)},
-  { 376, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
-  { 382, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
-  { 426, -1, -1, sizeof(::rl::training::v1::SegmentCloseCount)},
-  { 434, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
-  { 444, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
-  { 452, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
-  { 462, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
-  { 471, 483, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
-  { 489, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
-  { 497, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
-  { 506, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
-  { 517, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
-  { 526, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
-  { 532, 558, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
+  { 284, -1, -1, sizeof(::rl::training::v1::MetricDefinition)},
+  { 297, -1, -1, sizeof(::rl::training::v1::MetricSumCount)},
+  { 305, 313, -1, sizeof(::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse)},
+  { 315, -1, -1, sizeof(::rl::training::v1::MetricPoint)},
+  { 327, 335, -1, sizeof(::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse)},
+  { 337, -1, -1, sizeof(::rl::training::v1::RegisteredMetricRecord)},
+  { 346, 356, -1, sizeof(::rl::training::v1::MetricEvent)},
+  { 360, -1, -1, sizeof(::rl::training::v1::MetricSequenceGap)},
+  { 370, -1, -1, sizeof(::rl::training::v1::MetricBatch)},
+  { 386, -1, -1, sizeof(::rl::training::v1::MetricBatchCursor)},
+  { 395, -1, -1, sizeof(::rl::training::v1::GetMetricBatchReq)},
+  { 406, -1, -1, sizeof(::rl::training::v1::GetMetricBatchRsp)},
+  { 418, -1, -1, sizeof(::rl::training::v1::AckMetricBatchReq)},
+  { 426, -1, -1, sizeof(::rl::training::v1::AckMetricBatchRsp)},
+  { 438, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
+  { 444, -1, -1, sizeof(::rl::training::v1::ModelFeedbackStatus)},
+  { 453, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
+  { 498, -1, -1, sizeof(::rl::training::v1::SegmentCloseCount)},
+  { 506, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
+  { 516, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
+  { 524, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
+  { 534, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
+  { 543, 555, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
+  { 561, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
+  { 569, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
+  { 578, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
+  { 589, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
+  { 598, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
+  { 604, 630, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1388,6 +1569,12 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::rl::training::v1::_SamplePoolStatusReq_default_instance_._instance,
   &::rl::training::v1::_SamplePoolStatusRsp_default_instance_._instance,
   &::rl::training::v1::_RawMetricSumCount_default_instance_._instance,
+  &::rl::training::v1::_MetricDefinition_default_instance_._instance,
+  &::rl::training::v1::_MetricSumCount_default_instance_._instance,
+  &::rl::training::v1::_MetricPoint_AttributesEntry_DoNotUse_default_instance_._instance,
+  &::rl::training::v1::_MetricPoint_default_instance_._instance,
+  &::rl::training::v1::_RegisteredMetricRecord_AttributesEntry_DoNotUse_default_instance_._instance,
+  &::rl::training::v1::_RegisteredMetricRecord_default_instance_._instance,
   &::rl::training::v1::_MetricEvent_default_instance_._instance,
   &::rl::training::v1::_MetricSequenceGap_default_instance_._instance,
   &::rl::training::v1::_MetricBatch_default_instance_._instance,
@@ -1397,6 +1584,7 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::rl::training::v1::_AckMetricBatchReq_default_instance_._instance,
   &::rl::training::v1::_AckMetricBatchRsp_default_instance_._instance,
   &::rl::training::v1::_AIServerStatusReq_default_instance_._instance,
+  &::rl::training::v1::_ModelFeedbackStatus_default_instance_._instance,
   &::rl::training::v1::_AIServerStatusRsp_default_instance_._instance,
   &::rl::training::v1::_SegmentCloseCount_default_instance_._instance,
   &::rl::training::v1::_ModelArtifactManifest_default_instance_._instance,
@@ -1546,303 +1734,337 @@ const char descriptor_table_protodef_training_2eproto[] PROTOBUF_SECTION_VARIABL
   "sert_countR\024demand_release_countR\030finali"
   "zed_fragment_count\"A\n\021RawMetricSumCount\022"
   "\020\n\010field_id\030\001 \001(\t\022\013\n\003sum\030\002 \001(\001\022\r\n\005count\030"
-  "\003 \001(\004\"\212\002\n\013MetricEvent\022\026\n\016event_sequence\030"
-  "\004 \001(\004\022 \n\023observed_at_unix_ms\030\005 \001(\003H\000\210\001\001\022"
-  "\024\n\014fact_payload\030\006 \001(\014\0221\n\tfact_kind\030\007 \001(\016"
-  "2\036.rl.training.v1.MetricFactKindB\026\n\024_obs"
-  "erved_at_unix_msJ\004\010\001\020\004J\004\010\010\020\tJ\004\010\t\020\nR\010cont"
-  "ractR\017schema_identityR\006sourceR\024committed"
-  "_at_unix_msR\007episodeR\014train_update\"\237\001\n\021M"
-  "etricSequenceGap\022(\n first_unavailable_ev"
-  "ent_sequence\030\001 \001(\004\022\'\n\037last_unavailable_e"
-  "vent_sequence\030\002 \001(\004\022\'\n\037oldest_available_"
-  "event_sequence\030\003 \001(\004\022\016\n\006reason\030\004 \001(\t\"\266\003\n"
-  "\013MetricBatch\0225\n\006source\030\003 \001(\0132%.rl.common"
-  ".v1.ServiceInstanceIdentity\022\026\n\016batch_seq"
-  "uence\030\004 \001(\004\022\032\n\022created_at_unix_ms\030\006 \001(\003\022"
-  "\034\n\024first_event_sequence\030\007 \001(\004\022\033\n\023last_ev"
-  "ent_sequence\030\010 \001(\004\022+\n\006events\030\t \003(\0132\033.rl."
-  "training.v1.MetricEvent\022\021\n\theartbeat\030\n \001"
-  "(\010\022\024\n\014source_final\030\013 \001(\010\022\034\n\024final_event_"
-  "sequence\030\014 \001(\004\022.\n\003gap\030\016 \001(\0132!.rl.trainin"
-  "g.v1.MetricSequenceGapJ\004\010\001\020\002J\004\010\002\020\003J\004\010\005\020\006"
-  "J\004\010\r\020\016R\010contractR\017schema_identityR\014batch"
-  "_digestR\034event_time_watermark_unix_ms\"\265\001"
-  "\n\021MetricBatchCursor\0225\n\006source\030\001 \001(\0132%.rl"
-  ".common.v1.ServiceInstanceIdentity\022#\n\033ac"
-  "knowledged_batch_sequence\030\002 \001(\004\022#\n\033ackno"
-  "wledged_event_sequence\030\003 \001(\004J\004\010\004\020\005R\031ackn"
-  "owledged_batch_digest\"\317\001\n\021GetMetricBatch"
-  "Req\0227\n\010consumer\030\002 \001(\0132%.rl.common.v1.Ser"
-  "viceInstanceIdentity\0221\n\006cursor\030\003 \001(\0132!.r"
-  "l.training.v1.MetricBatchCursor\022\022\n\nmax_e"
-  "vents\030\004 \001(\r\022\021\n\tmax_bytes\030\005 \001(\003\022\027\n\017wait_t"
-  "imeout_ms\030\006 \001(\005J\004\010\001\020\002R\010contract\"\216\002\n\021GetM"
-  "etricBatchRsp\0221\n\006result\030\001 \001(\0162!.rl.train"
-  "ing.v1.MetricBatchResult\022\017\n\007message\030\002 \001("
-  "\t\022*\n\005batch\030\003 \001(\0132\033.rl.training.v1.Metric"
-  "Batch\0227\n\010producer\030\004 \001(\0132%.rl.common.v1.S"
-  "erviceInstanceIdentity\022\'\n\037oldest_availab"
-  "le_event_sequence\030\005 \001(\004\022\'\n\037latest_availa"
-  "ble_event_sequence\030\006 \001(\004\"\217\001\n\021AckMetricBa"
-  "tchReq\0227\n\010consumer\030\002 \001(\0132%.rl.common.v1."
-  "ServiceInstanceIdentity\0221\n\006cursor\030\003 \001(\0132"
-  "!.rl.training.v1.MetricBatchCursorJ\004\010\001\020\002"
-  "R\010contract\"\242\002\n\021AckMetricBatchRsp\0224\n\006resu"
-  "lt\030\001 \001(\0162$.rl.training.v1.MetricBatchAck"
-  "Result\022\017\n\007message\030\002 \001(\t\0227\n\010producer\030\003 \001("
+  "\003 \001(\004\"\332\001\n\020MetricDefinition\022\021\n\tmetric_id\030"
+  "\001 \001(\t\022\024\n\014display_name\030\002 \001(\t\022\014\n\004unit\030\003 \001("
+  "\t\022\r\n\005scope\030\004 \001(\t\0223\n\nvalue_type\030\005 \001(\0162\037.r"
+  "l.training.v1.MetricValueType\0226\n\013aggrega"
+  "tion\030\006 \001(\0162!.rl.training.v1.MetricAggreg"
+  "ation\022\023\n\013denominator\030\007 \001(\t\",\n\016MetricSumC"
+  "ount\022\013\n\003sum\030\001 \001(\001\022\r\n\005count\030\002 \001(\004\"\376\001\n\013Met"
+  "ricPoint\022\021\n\tmetric_id\030\001 \001(\t\022\020\n\006scalar\030\002 "
+  "\001(\001H\000\022\030\n\016unsigned_value\030\003 \001(\004H\000\0223\n\tsum_c"
+  "ount\030\004 \001(\0132\036.rl.training.v1.MetricSumCou"
+  "ntH\000\022\?\n\nattributes\030\005 \003(\0132+.rl.training.v"
+  "1.MetricPoint.AttributesEntry\0321\n\017Attribu"
+  "tesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001"
+  "B\007\n\005value\"\373\001\n\026RegisteredMetricRecord\0225\n\013"
+  "definitions\030\001 \003(\0132 .rl.training.v1.Metri"
+  "cDefinition\022+\n\006points\030\002 \003(\0132\033.rl.trainin"
+  "g.v1.MetricPoint\022J\n\nattributes\030\003 \003(\01326.r"
+  "l.training.v1.RegisteredMetricRecord.Att"
+  "ributesEntry\0321\n\017AttributesEntry\022\013\n\003key\030\001"
+  " \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\212\002\n\013MetricEvent\022"
+  "\026\n\016event_sequence\030\004 \001(\004\022 \n\023observed_at_u"
+  "nix_ms\030\005 \001(\003H\000\210\001\001\022\024\n\014fact_payload\030\006 \001(\014\022"
+  "1\n\tfact_kind\030\007 \001(\0162\036.rl.training.v1.Metr"
+  "icFactKindB\026\n\024_observed_at_unix_msJ\004\010\001\020\004"
+  "J\004\010\010\020\tJ\004\010\t\020\nR\010contractR\017schema_identityR"
+  "\006sourceR\024committed_at_unix_msR\007episodeR\014"
+  "train_update\"\237\001\n\021MetricSequenceGap\022(\n fi"
+  "rst_unavailable_event_sequence\030\001 \001(\004\022\'\n\037"
+  "last_unavailable_event_sequence\030\002 \001(\004\022\'\n"
+  "\037oldest_available_event_sequence\030\003 \001(\004\022\016"
+  "\n\006reason\030\004 \001(\t\"\266\003\n\013MetricBatch\0225\n\006source"
+  "\030\003 \001(\0132%.rl.common.v1.ServiceInstanceIde"
+  "ntity\022\026\n\016batch_sequence\030\004 \001(\004\022\032\n\022created"
+  "_at_unix_ms\030\006 \001(\003\022\034\n\024first_event_sequenc"
+  "e\030\007 \001(\004\022\033\n\023last_event_sequence\030\010 \001(\004\022+\n\006"
+  "events\030\t \003(\0132\033.rl.training.v1.MetricEven"
+  "t\022\021\n\theartbeat\030\n \001(\010\022\024\n\014source_final\030\013 \001"
+  "(\010\022\034\n\024final_event_sequence\030\014 \001(\004\022.\n\003gap\030"
+  "\016 \001(\0132!.rl.training.v1.MetricSequenceGap"
+  "J\004\010\001\020\002J\004\010\002\020\003J\004\010\005\020\006J\004\010\r\020\016R\010contractR\017sche"
+  "ma_identityR\014batch_digestR\034event_time_wa"
+  "termark_unix_ms\"\265\001\n\021MetricBatchCursor\0225\n"
+  "\006source\030\001 \001(\0132%.rl.common.v1.ServiceInst"
+  "anceIdentity\022#\n\033acknowledged_batch_seque"
+  "nce\030\002 \001(\004\022#\n\033acknowledged_event_sequence"
+  "\030\003 \001(\004J\004\010\004\020\005R\031acknowledged_batch_digest\""
+  "\317\001\n\021GetMetricBatchReq\0227\n\010consumer\030\002 \001(\0132"
+  "%.rl.common.v1.ServiceInstanceIdentity\0221"
+  "\n\006cursor\030\003 \001(\0132!.rl.training.v1.MetricBa"
+  "tchCursor\022\022\n\nmax_events\030\004 \001(\r\022\021\n\tmax_byt"
+  "es\030\005 \001(\003\022\027\n\017wait_timeout_ms\030\006 \001(\005J\004\010\001\020\002R"
+  "\010contract\"\216\002\n\021GetMetricBatchRsp\0221\n\006resul"
+  "t\030\001 \001(\0162!.rl.training.v1.MetricBatchResu"
+  "lt\022\017\n\007message\030\002 \001(\t\022*\n\005batch\030\003 \001(\0132\033.rl."
+  "training.v1.MetricBatch\0227\n\010producer\030\004 \001("
   "\0132%.rl.common.v1.ServiceInstanceIdentity"
-  "\022\'\n\037oldest_available_event_sequence\030\004 \001("
-  "\004\022\'\n\037latest_available_event_sequence\030\005 \001"
-  "(\004\022;\n\020committed_cursor\030\006 \001(\0132!.rl.traini"
-  "ng.v1.MetricBatchCursor\"\023\n\021AIServerStatu"
-  "sReq\"\323\014\n\021AIServerStatusRsp\0227\n\010aiserver\030\002"
-  " \001(\0132%.rl.common.v1.ServiceInstanceIdent"
-  "ity\022,\n\005state\030\003 \001(\0162\035.rl.training.v1.AISe"
-  "rverState\022\r\n\005ready\030\004 \001(\010\022\031\n\021distributor_"
-  "ready\030\005 \001(\010\022/\n\013model_state\030\006 \001(\0162\032.rl.tr"
-  "aining.v1.ModelState\0223\n\014loaded_model\030\007 \001"
-  "(\0132\035.rl.training.v1.ModelIdentity\0223\n\014sta"
-  "ged_model\030\010 \001(\0132\035.rl.training.v1.ModelId"
-  "entity\022 \n\030outbound_queue_envelopes\030\t \001(\003"
-  "\022\"\n\032outbound_queue_transitions\030\n \001(\003\022&\n\036"
-  "outbound_queue_estimated_bytes\030\013 \001(\003\022%\n\035"
-  "outbound_queue_high_watermark\030\014 \001(\003\022#\n\033p"
-  "roduced_unique_transitions\030\r \001(\003\022!\n\031prod"
-  "uced_unique_envelopes\030\016 \001(\003\022\032\n\022push_atte"
-  "mpt_count\030\017 \001(\003\022#\n\033accepted_unique_trans"
-  "itions\030\020 \001(\003\022$\n\034duplicate_push_attempt_c"
-  "ount\030\021 \001(\003\022#\n\033rejected_push_attempt_coun"
-  "t\030\022 \001(\003\022\033\n\023retry_attempt_count\030\023 \001(\003\022%\n\035"
-  "final_drop_unique_transitions\030\024 \001(\003\022\"\n\032a"
-  "ctive_actor_session_count\030\025 \001(\003\022\034\n\024activ"
-  "e_segment_count\030\026 \001(\003\022\027\n\017inference_count"
-  "\030\027 \001(\003\022 \n\030inference_latency_sum_ms\030\030 \001(\001"
-  "\022 \n\030inference_latency_max_ms\030\031 \001(\001\022\026\n\016pu"
-  "sh_rpc_count\030\032 \001(\003\022\037\n\027push_rpc_latency_s"
-  "um_ms\030\033 \001(\001\022\037\n\027push_rpc_latency_max_ms\030\034"
-  " \001(\001\022\032\n\022model_switch_count\030\035 \001(\003\022$\n\034quar"
-  "antined_transition_count\030\036 \001(\003\022\"\n\032quaran"
-  "tined_envelope_count\030\037 \001(\003\022\022\n\nlast_error"
-  "\030  \001(\t\022\031\n\021timestamp_unix_ms\030! \001(\003\022\034\n\024clo"
-  "sed_segment_count\030# \001(\003\022%\n\035pending_actio"
-  "n_excluded_count\030$ \001(\003\022\'\n\037rollout_estima"
-  "tor_failure_count\030% \001(\003\022(\n per_agent_mod"
-  "el_activation_count\030& \001(\003\0221\n)superseded_"
-  "without_agent_activation_count\030\' \001(\003\022\?\n\024"
-  "segment_close_counts\030( \003(\0132!.rl.training"
-  ".v1.SegmentCloseCountJ\004\010\001\020\002J\004\010\"\020#R\010contr"
-  "actR rollout_estimator_profile_digestR\024c"
-  "redit_request_countR\022credit_grant_countR"
-  "\021credit_wait_countR\026credit_reacquire_cou"
-  "ntR\024producer_stale_countR\020capacity_wait_"
-  "msR\026training_capacity_wait\"V\n\021SegmentClo"
-  "seCount\0222\n\006reason\030\001 \001(\0162\".rl.training.v1"
-  ".SegmentCloseReason\022\r\n\005count\030\002 \001(\003\"\337\003\n\025M"
-  "odelArtifactManifest\022/\n\010identity\030\003 \001(\0132\035"
-  ".rl.training.v1.ModelIdentity\022\022\n\nsize_by"
-  "tes\030\r \001(\003\022\027\n\017trained_samples\030\020 \001(\004\022\034\n\024pu"
-  "blished_at_unix_ms\030\023 \001(\003J\004\010\001\020\002J\004\010\002\020\003J\004\010\004"
-  "\020\rJ\004\010\016\020\017J\004\010\017\020\020J\004\010\021\020\022J\004\010\022\020\023J\004\010\024\020\025J\004\010\025\020\026R\027"
-  "manifest_schema_versionR\010contractR\022obser"
-  "vation_schemaR\raction_schemaR\025model_arch"
-  "itecture_idR\014tensor_dtypeR\013input_shapeR\014"
-  "action_shapeR\013value_shapeR\014artifact_uriR"
-  "\nmodel_fileR\004seedR\rtrain_updatesR\005readyR"
-  "\026training_config_digestR\030training_contra"
-  "ct_digestR\031rollout_estimator_profile\"x\n\020"
-  "RegisterModelReq\0227\n\010manifest\030\001 \001(\0132%.rl."
-  "training.v1.ModelArtifactManifest\022\033\n\023loc"
-  "al_artifact_path\030\003 \001(\tJ\004\010\002\020\003R\010contract\"\315"
-  "\001\n\020RegisterModelRsp\0223\n\006result\030\001 \001(\0162#.rl"
-  ".training.v1.ModelRegisterResult\022\017\n\007mess"
-  "age\030\002 \001(\t\0227\n\010manifest\030\003 \001(\0132%.rl.trainin"
-  "g.v1.ModelArtifactManifest\022:\n\013distributo"
-  "r\030\004 \001(\0132%.rl.common.v1.ServiceInstanceId"
-  "entity\"\242\001\n\023GetModelManifestReq\0226\n\017reques"
-  "ted_model\030\001 \001(\0132\035.rl.training.v1.ModelId"
-  "entity\0228\n\trequester\030\002 \001(\0132%.rl.common.v1"
-  ".ServiceInstanceIdentity\022\031\n\021latest_in_li"
-  "neage\030\003 \001(\010\"\340\002\n\023GetModelManifestRsp\0221\n\006r"
-  "esult\030\001 \001(\0162!.rl.training.v1.ModelLookup"
-  "Result\022\017\n\007message\030\002 \001(\t\0227\n\010manifest\030\003 \001("
-  "\0132%.rl.training.v1.ModelArtifactManifest"
-  "\022:\n\013distributor\030\004 \001(\0132%.rl.common.v1.Ser"
-  "viceInstanceIdentity\022\'\n\032available_floor_"
-  "model_step\030\005 \001(\004H\000\210\001\001\022(\n\033latest_availabl"
-  "e_model_step\030\006 \001(\004H\001\210\001\001B\035\n\033_available_fl"
-  "oor_model_stepB\036\n\034_latest_available_mode"
-  "l_step\"\204\001\n\020DownloadModelReq\0226\n\017requested"
-  "_model\030\001 \001(\0132\035.rl.training.v1.ModelIdent"
-  "ity\0228\n\trequester\030\002 \001(\0132%.rl.common.v1.Se"
-  "rviceInstanceIdentity\"X\n\nModelChunk\022,\n\005m"
-  "odel\030\001 \001(\0132\035.rl.training.v1.ModelIdentit"
-  "y\022\016\n\006offset\030\002 \001(\003\022\014\n\004data\030\003 \001(\014\"\325\001\n\013AckM"
-  "odelReq\0227\n\010aiserver\030\001 \001(\0132%.rl.common.v1"
-  ".ServiceInstanceIdentity\022,\n\005model\030\002 \001(\0132"
-  "\035.rl.training.v1.ModelIdentity\022\030\n\020load_i"
-  "nstance_id\030\003 \001(\t\0224\n\013load_status\030\004 \001(\0162\037."
-  "rl.training.v1.ModelLoadStatus\022\017\n\007messag"
-  "e\030\005 \001(\t\"\212\001\n\013AckModelRsp\022.\n\006result\030\001 \001(\0162"
-  "\036.rl.training.v1.ModelAckResult\022\017\n\007messa"
-  "ge\030\002 \001(\t\022:\n\013distributor\030\003 \001(\0132%.rl.commo"
-  "n.v1.ServiceInstanceIdentity\"\033\n\031ModelDis"
-  "tributorStatusReq\"\221\007\n\031ModelDistributorSt"
-  "atusRsp\022:\n\013distributor\030\002 \001(\0132%.rl.common"
-  ".v1.ServiceInstanceIdentity\022\r\n\005ready\030\003 \001"
-  "(\010\022\036\n\026registered_model_count\030\004 \001(\003\0223\n\014la"
-  "test_model\030\005 \001(\0132\035.rl.training.v1.ModelI"
-  "dentity\022\036\n\026register_attempt_count\030\006 \001(\003\022"
-  " \n\030duplicate_register_count\030\007 \001(\003\022\037\n\027rej"
-  "ected_register_count\030\010 \001(\003\022\036\n\026download_r"
-  "equest_count\030\t \001(\003\022\036\n\026download_success_c"
-  "ount\030\n \001(\003\022\036\n\026download_failure_count\030\013 \001"
-  "(\003\022\024\n\014bytes_served\030\014 \001(\003\022\030\n\020loaded_ack_c"
-  "ount\030\r \001(\003\022\030\n\020failed_ack_count\030\016 \001(\003\022B\n\023"
-  "latest_ack_aiserver\030\017 \001(\0132%.rl.common.v1"
-  ".ServiceInstanceIdentity\0227\n\020latest_ack_m"
-  "odel\030\020 \001(\0132\035.rl.training.v1.ModelIdentit"
-  "y\022:\n\021latest_ack_status\030\021 \001(\0162\037.rl.traini"
-  "ng.v1.ModelLoadStatus\022\022\n\nlast_error\030\022 \001("
-  "\t\022\031\n\021timestamp_unix_ms\030\023 \001(\003\022\'\n\032availabl"
-  "e_floor_model_step\030\024 \001(\004H\000\210\001\001\022(\n\033latest_"
-  "available_model_step\030\025 \001(\004H\001\210\001\001B\035\n\033_avai"
-  "lable_floor_model_stepB\036\n\034_latest_availa"
-  "ble_model_stepJ\004\010\001\020\002R\035available_floor_mo"
-  "del_versionR\036latest_available_model_vers"
-  "ionR\010contract*\270\002\n\022SegmentCloseReason\022$\n "
-  "SEGMENT_CLOSE_REASON_UNSPECIFIED\020\000\022\035\n\031SE"
-  "GMENT_CLOSE_REASON_GOAL\020\001\022#\n\037SEGMENT_CLO"
-  "SE_REASON_TIME_LIMIT\020\002\022\035\n\031SEGMENT_CLOSE_"
-  "REASON_TMAX\020\003\0220\n,SEGMENT_CLOSE_REASON_CL"
-  "IENT_CONTROLLED_CLOSE\020\004\0220\n,SEGMENT_CLOSE"
-  "_REASON_CLIENT_RECOVERY_TIMEOUT\020\005\0225\n1SEG"
-  "MENT_CLOSE_REASON_AISERVER_CONTROLLED_SH"
-  "UTDOWN\020\006*\217\002\n\nPushResult\022\033\n\027PUSH_RESULT_U"
-  "NSPECIFIED\020\000\022\030\n\024PUSH_RESULT_ACCEPTED\020\001\022\031"
-  "\n\025PUSH_RESULT_DUPLICATE\020\002\022!\n\035PUSH_RESULT"
-  "_REJECTED_CAPACITY\020\003\022 \n\034PUSH_RESULT_REJE"
-  "CTED_INVALID\020\004\022!\n\035PUSH_RESULT_REJECTED_C"
-  "ONFLICT\020\006\022\"\n\036PUSH_RESULT_REJECTED_FINALI"
-  "ZED\020\007\"\004\010\005\020\005*\035PUSH_RESULT_REJECTED_IDENTI"
-  "TY*|\n\rPressureState\022\036\n\032PRESSURE_STATE_UN"
-  "SPECIFIED\020\000\022\031\n\025PRESSURE_STATE_NORMAL\020\001\022\027"
-  "\n\023PRESSURE_STATE_HIGH\020\002\022\027\n\023PRESSURE_STAT"
-  "E_FULL\020\003*\247\001\n\016GetBatchResult\022 \n\034GET_BATCH"
-  "_RESULT_UNSPECIFIED\020\000\022\033\n\027GET_BATCH_RESUL"
-  "T_LEASED\020\001\022\034\n\030GET_BATCH_RESULT_TIMEOUT\020\002"
-  "\022\031\n\025GET_BATCH_RESULT_BUSY\020\003\022\035\n\031GET_BATCH"
-  "_RESULT_REJECTED\020\004*\315\001\n\016DeliveryResult\022\037\n"
-  "\033DELIVERY_RESULT_UNSPECIFIED\020\000\022\033\n\027DELIVE"
-  "RY_RESULT_APPLIED\020\001\022#\n\037DELIVERY_RESULT_A"
-  "LREADY_APPLIED\020\002\022\033\n\027DELIVERY_RESULT_EXPI"
-  "RED\020\003\022\035\n\031DELIVERY_RESULT_NOT_FOUND\020\004\022\034\n\030"
-  "DELIVERY_RESULT_REJECTED\020\005*\260\001\n\016AckDispos"
-  "ition\022\037\n\033ACK_DISPOSITION_UNSPECIFIED\020\000\022\033"
-  "\n\027ACK_DISPOSITION_TRAINED\020\001\022\033\n\027ACK_DISPO"
-  "SITION_INVALID\020\003\022&\n\"ACK_DISPOSITION_SHUT"
-  "DOWN_UNTRAINED\020\004\"\004\010\002\020\002*\025ACK_DISPOSITION_"
-  "STALE*\274\001\n\rAIServerState\022\036\n\032AISERVER_STAT"
-  "E_UNSPECIFIED\020\000\022\033\n\027AISERVER_STATE_STARTI"
-  "NG\020\001\022\030\n\024AISERVER_STATE_READY\020\002\022\033\n\027AISERV"
-  "ER_STATE_DEGRADED\020\003\022\033\n\027AISERVER_STATE_DR"
-  "AINING\020\004\022\032\n\026AISERVER_STATE_STOPPED\020\005*q\n\n"
-  "ModelState\022\033\n\027MODEL_STATE_UNSPECIFIED\020\000\022"
-  "\027\n\023MODEL_STATE_WAITING\020\001\022\025\n\021MODEL_STATE_"
-  "READY\020\002\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001\n\023Mode"
-  "lRegisterResult\022%\n!MODEL_REGISTER_RESULT"
-  "_UNSPECIFIED\020\000\022$\n MODEL_REGISTER_RESULT_"
-  "REGISTERED\020\001\022,\n(MODEL_REGISTER_RESULT_AL"
-  "READY_REGISTERED\020\002\022*\n&MODEL_REGISTER_RES"
-  "ULT_REJECTED_INVALID\020\003\022+\n\'MODEL_REGISTER"
-  "_RESULT_REJECTED_CONFLICT\020\004*p\n\017ModelLoad"
-  "Status\022!\n\035MODEL_LOAD_STATUS_UNSPECIFIED\020"
-  "\000\022\034\n\030MODEL_LOAD_STATUS_LOADED\020\001\022\034\n\030MODEL"
-  "_LOAD_STATUS_FAILED\020\002*\265\001\n\016ModelAckResult"
-  "\022 \n\034MODEL_ACK_RESULT_UNSPECIFIED\020\000\022\034\n\030MO"
-  "DEL_ACK_RESULT_APPLIED\020\001\022$\n MODEL_ACK_RE"
-  "SULT_ALREADY_APPLIED\020\002\022\036\n\032MODEL_ACK_RESU"
-  "LT_NOT_FOUND\020\003\022\035\n\031MODEL_ACK_RESULT_REJEC"
-  "TED\020\004*\247\001\n\021ModelLookupResult\022#\n\037MODEL_LOO"
-  "KUP_RESULT_UNSPECIFIED\020\000\022\035\n\031MODEL_LOOKUP"
-  "_RESULT_FOUND\020\001\022!\n\035MODEL_LOOKUP_RESULT_N"
-  "OT_FOUND\020\002\"\004\010\003\020\003*%MODEL_LOOKUP_RESULT_RE"
-  "JECTED_IDENTITY*^\n\021SampleBackendType\022#\n\037"
-  "SAMPLE_BACKEND_TYPE_UNSPECIFIED\020\000\022$\n SAM"
-  "PLE_BACKEND_TYPE_LOCAL_MEMORY\020\001*\304\002\n\030Samp"
-  "lePoolFinalizeResult\022+\n\'SAMPLE_POOL_FINA"
-  "LIZE_RESULT_UNSPECIFIED\020\000\022)\n%SAMPLE_POOL"
-  "_FINALIZE_RESULT_FINALIZED\020\001\0221\n-SAMPLE_P"
-  "OOL_FINALIZE_RESULT_ALREADY_FINALIZED\020\002\022"
-  "5\n1SAMPLE_POOL_FINALIZE_RESULT_REJECTED_"
-  "ACTIVE_LEASE\020\003\0221\n-SAMPLE_POOL_FINALIZE_R"
-  "ESULT_REJECTED_CONFLICT\020\005\"\004\010\004\020\004*-SAMPLE_"
-  "POOL_FINALIZE_RESULT_REJECTED_IDENTITY*\230"
-  "\002\n\021MetricBatchResult\022#\n\037METRIC_BATCH_RES"
-  "ULT_UNSPECIFIED\020\000\022!\n\035METRIC_BATCH_RESULT"
-  "_DELIVERED\020\001\022\034\n\030METRIC_BATCH_RESULT_WAIT"
-  "\020\002\022\035\n\031METRIC_BATCH_RESULT_FINAL\020\003\022\'\n#MET"
-  "RIC_BATCH_RESULT_REJECTED_CURSOR\020\005\022(\n$ME"
-  "TRIC_BATCH_RESULT_REJECTED_INVALID\020\006\"\004\010\004"
-  "\020\004*%METRIC_BATCH_RESULT_REJECTED_IDENTIT"
-  "Y*\304\002\n\024MetricBatchAckResult\022\'\n#METRIC_BAT"
-  "CH_ACK_RESULT_UNSPECIFIED\020\000\022#\n\037METRIC_BA"
-  "TCH_ACK_RESULT_APPLIED\020\001\022+\n\'METRIC_BATCH"
-  "_ACK_RESULT_ALREADY_APPLIED\020\002\022%\n!METRIC_"
-  "BATCH_ACK_RESULT_NOT_FOUND\020\003\022+\n\'METRIC_B"
-  "ATCH_ACK_RESULT_REJECTED_CURSOR\020\005\022,\n(MET"
-  "RIC_BATCH_ACK_RESULT_REJECTED_INVALID\020\006\""
-  "\004\010\004\020\004*)METRIC_BATCH_ACK_RESULT_REJECTED_"
-  "IDENTITY*x\n\016MetricFactKind\022 \n\034METRIC_FAC"
-  "T_KIND_UNSPECIFIED\020\000\022!\n\035METRIC_FACT_KIND"
-  "_MAZE_EPISODE\020\001\022!\n\035METRIC_FACT_KIND_TRAI"
-  "N_UPDATE\020\0022z\n\035AIServerTrainingStatusServ"
-  "ice\022Y\n\021GetAIServerStatus\022!.rl.training.v"
-  "1.AIServerStatusReq\032!.rl.training.v1.AIS"
-  "erverStatusRsp2\304\001\n\022MetricEventService\022V\n"
-  "\016GetMetricBatch\022!.rl.training.v1.GetMetr"
-  "icBatchReq\032!.rl.training.v1.GetMetricBat"
-  "chRsp\022V\n\016AckMetricBatch\022!.rl.training.v1"
-  ".AckMetricBatchReq\032!.rl.training.v1.AckM"
-  "etricBatchRsp2\300\001\n\030SamplePoolIngressServi"
-  "ce\022M\n\013PushSamples\022\036.rl.training.v1.PushS"
-  "amplesReq\032\036.rl.training.v1.PushSamplesRs"
-  "p\022U\n\tGetStatus\022#.rl.training.v1.SamplePo"
-  "olStatusReq\032#.rl.training.v1.SamplePoolS"
-  "tatusRsp2\364\003\n\031SamplePoolConsumerService\022D"
-  "\n\010GetBatch\022\033.rl.training.v1.GetBatchReq\032"
-  "\033.rl.training.v1.GetBatchRsp\022D\n\010AckBatch"
-  "\022\033.rl.training.v1.AckBatchReq\032\033.rl.train"
-  "ing.v1.DeliveryRsp\022F\n\tNackBatch\022\034.rl.tra"
-  "ining.v1.NackBatchReq\032\033.rl.training.v1.D"
-  "eliveryRsp\022H\n\nRenewLease\022\035.rl.training.v"
-  "1.RenewLeaseReq\032\033.rl.training.v1.Deliver"
-  "yRsp\022b\n\022FinalizeSamplePool\022%.rl.training"
-  ".v1.FinalizeSamplePoolReq\032%.rl.training."
-  "v1.FinalizeSamplePoolRsp\022U\n\tGetStatus\022#."
-  "rl.training.v1.SamplePoolStatusReq\032#.rl."
-  "training.v1.SamplePoolStatusRsp2\326\003\n\027Mode"
-  "lDistributorService\022S\n\rRegisterModel\022 .r"
-  "l.training.v1.RegisterModelReq\032 .rl.trai"
-  "ning.v1.RegisterModelRsp\022\\\n\020GetModelMani"
-  "fest\022#.rl.training.v1.GetModelManifestRe"
-  "q\032#.rl.training.v1.GetModelManifestRsp\022O"
-  "\n\rDownloadModel\022 .rl.training.v1.Downloa"
-  "dModelReq\032\032.rl.training.v1.ModelChunk0\001\022"
-  "D\n\010AckModel\022\033.rl.training.v1.AckModelReq"
-  "\032\033.rl.training.v1.AckModelRsp\022q\n\031GetMode"
-  "lDistributorStatus\022).rl.training.v1.Mode"
-  "lDistributorStatusReq\032).rl.training.v1.M"
-  "odelDistributorStatusRspB\003\200\001\000b\006proto3"
+  "\022\'\n\037oldest_available_event_sequence\030\005 \001("
+  "\004\022\'\n\037latest_available_event_sequence\030\006 \001"
+  "(\004\"\217\001\n\021AckMetricBatchReq\0227\n\010consumer\030\002 \001"
+  "(\0132%.rl.common.v1.ServiceInstanceIdentit"
+  "y\0221\n\006cursor\030\003 \001(\0132!.rl.training.v1.Metri"
+  "cBatchCursorJ\004\010\001\020\002R\010contract\"\242\002\n\021AckMetr"
+  "icBatchRsp\0224\n\006result\030\001 \001(\0162$.rl.training"
+  ".v1.MetricBatchAckResult\022\017\n\007message\030\002 \001("
+  "\t\0227\n\010producer\030\003 \001(\0132%.rl.common.v1.Servi"
+  "ceInstanceIdentity\022\'\n\037oldest_available_e"
+  "vent_sequence\030\004 \001(\004\022\'\n\037latest_available_"
+  "event_sequence\030\005 \001(\004\022;\n\020committed_cursor"
+  "\030\006 \001(\0132!.rl.training.v1.MetricBatchCurso"
+  "r\"\023\n\021AIServerStatusReq\"p\n\023ModelFeedbackS"
+  "tatus\0226\n\017candidate_model\030\001 \001(\0132\035.rl.trai"
+  "ning.v1.ModelIdentity\022\r\n\005stage\030\002 \001(\t\022\022\n\n"
+  "last_error\030\003 \001(\t\"\220\r\n\021AIServerStatusRsp\0227"
+  "\n\010aiserver\030\002 \001(\0132%.rl.common.v1.ServiceI"
+  "nstanceIdentity\022,\n\005state\030\003 \001(\0162\035.rl.trai"
+  "ning.v1.AIServerState\022\r\n\005ready\030\004 \001(\010\022\031\n\021"
+  "distributor_ready\030\005 \001(\010\022/\n\013model_state\030\006"
+  " \001(\0162\032.rl.training.v1.ModelState\0223\n\014load"
+  "ed_model\030\007 \001(\0132\035.rl.training.v1.ModelIde"
+  "ntity\0223\n\014staged_model\030\010 \001(\0132\035.rl.trainin"
+  "g.v1.ModelIdentity\022 \n\030outbound_queue_env"
+  "elopes\030\t \001(\003\022\"\n\032outbound_queue_transitio"
+  "ns\030\n \001(\003\022&\n\036outbound_queue_estimated_byt"
+  "es\030\013 \001(\003\022%\n\035outbound_queue_high_watermar"
+  "k\030\014 \001(\003\022#\n\033produced_unique_transitions\030\r"
+  " \001(\003\022!\n\031produced_unique_envelopes\030\016 \001(\003\022"
+  "\032\n\022push_attempt_count\030\017 \001(\003\022#\n\033accepted_"
+  "unique_transitions\030\020 \001(\003\022$\n\034duplicate_pu"
+  "sh_attempt_count\030\021 \001(\003\022#\n\033rejected_push_"
+  "attempt_count\030\022 \001(\003\022\033\n\023retry_attempt_cou"
+  "nt\030\023 \001(\003\022%\n\035final_drop_unique_transition"
+  "s\030\024 \001(\003\022\"\n\032active_actor_session_count\030\025 "
+  "\001(\003\022\034\n\024active_segment_count\030\026 \001(\003\022\027\n\017inf"
+  "erence_count\030\027 \001(\003\022 \n\030inference_latency_"
+  "sum_ms\030\030 \001(\001\022 \n\030inference_latency_max_ms"
+  "\030\031 \001(\001\022\026\n\016push_rpc_count\030\032 \001(\003\022\037\n\027push_r"
+  "pc_latency_sum_ms\030\033 \001(\001\022\037\n\027push_rpc_late"
+  "ncy_max_ms\030\034 \001(\001\022\032\n\022model_switch_count\030\035"
+  " \001(\003\022$\n\034quarantined_transition_count\030\036 \001"
+  "(\003\022\"\n\032quarantined_envelope_count\030\037 \001(\003\022\022"
+  "\n\nlast_error\030  \001(\t\022\031\n\021timestamp_unix_ms\030"
+  "! \001(\003\022\034\n\024closed_segment_count\030# \001(\003\022%\n\035p"
+  "ending_action_excluded_count\030$ \001(\003\022\'\n\037ro"
+  "llout_estimator_failure_count\030% \001(\003\022(\n p"
+  "er_agent_model_activation_count\030& \001(\003\0221\n"
+  ")superseded_without_agent_activation_cou"
+  "nt\030\' \001(\003\022\?\n\024segment_close_counts\030( \003(\0132!"
+  ".rl.training.v1.SegmentCloseCount\022;\n\016mod"
+  "el_feedback\030) \001(\0132#.rl.training.v1.Model"
+  "FeedbackStatusJ\004\010\001\020\002J\004\010\"\020#R\010contractR ro"
+  "llout_estimator_profile_digestR\024credit_r"
+  "equest_countR\022credit_grant_countR\021credit"
+  "_wait_countR\026credit_reacquire_countR\024pro"
+  "ducer_stale_countR\020capacity_wait_msR\026tra"
+  "ining_capacity_wait\"V\n\021SegmentCloseCount"
+  "\0222\n\006reason\030\001 \001(\0162\".rl.training.v1.Segmen"
+  "tCloseReason\022\r\n\005count\030\002 \001(\003\"\337\003\n\025ModelArt"
+  "ifactManifest\022/\n\010identity\030\003 \001(\0132\035.rl.tra"
+  "ining.v1.ModelIdentity\022\022\n\nsize_bytes\030\r \001"
+  "(\003\022\027\n\017trained_samples\030\020 \001(\004\022\034\n\024published"
+  "_at_unix_ms\030\023 \001(\003J\004\010\001\020\002J\004\010\002\020\003J\004\010\004\020\rJ\004\010\016\020"
+  "\017J\004\010\017\020\020J\004\010\021\020\022J\004\010\022\020\023J\004\010\024\020\025J\004\010\025\020\026R\027manifes"
+  "t_schema_versionR\010contractR\022observation_"
+  "schemaR\raction_schemaR\025model_architectur"
+  "e_idR\014tensor_dtypeR\013input_shapeR\014action_"
+  "shapeR\013value_shapeR\014artifact_uriR\nmodel_"
+  "fileR\004seedR\rtrain_updatesR\005readyR\026traini"
+  "ng_config_digestR\030training_contract_dige"
+  "stR\031rollout_estimator_profile\"x\n\020Registe"
+  "rModelReq\0227\n\010manifest\030\001 \001(\0132%.rl.trainin"
+  "g.v1.ModelArtifactManifest\022\033\n\023local_arti"
+  "fact_path\030\003 \001(\tJ\004\010\002\020\003R\010contract\"\315\001\n\020Regi"
+  "sterModelRsp\0223\n\006result\030\001 \001(\0162#.rl.traini"
+  "ng.v1.ModelRegisterResult\022\017\n\007message\030\002 \001"
+  "(\t\0227\n\010manifest\030\003 \001(\0132%.rl.training.v1.Mo"
+  "delArtifactManifest\022:\n\013distributor\030\004 \001(\013"
+  "2%.rl.common.v1.ServiceInstanceIdentity\""
+  "\242\001\n\023GetModelManifestReq\0226\n\017requested_mod"
+  "el\030\001 \001(\0132\035.rl.training.v1.ModelIdentity\022"
+  "8\n\trequester\030\002 \001(\0132%.rl.common.v1.Servic"
+  "eInstanceIdentity\022\031\n\021latest_in_lineage\030\003"
+  " \001(\010\"\340\002\n\023GetModelManifestRsp\0221\n\006result\030\001"
+  " \001(\0162!.rl.training.v1.ModelLookupResult\022"
+  "\017\n\007message\030\002 \001(\t\0227\n\010manifest\030\003 \001(\0132%.rl."
+  "training.v1.ModelArtifactManifest\022:\n\013dis"
+  "tributor\030\004 \001(\0132%.rl.common.v1.ServiceIns"
+  "tanceIdentity\022\'\n\032available_floor_model_s"
+  "tep\030\005 \001(\004H\000\210\001\001\022(\n\033latest_available_model"
+  "_step\030\006 \001(\004H\001\210\001\001B\035\n\033_available_floor_mod"
+  "el_stepB\036\n\034_latest_available_model_step\""
+  "\204\001\n\020DownloadModelReq\0226\n\017requested_model\030"
+  "\001 \001(\0132\035.rl.training.v1.ModelIdentity\0228\n\t"
+  "requester\030\002 \001(\0132%.rl.common.v1.ServiceIn"
+  "stanceIdentity\"X\n\nModelChunk\022,\n\005model\030\001 "
+  "\001(\0132\035.rl.training.v1.ModelIdentity\022\016\n\006of"
+  "fset\030\002 \001(\003\022\014\n\004data\030\003 \001(\014\"\325\001\n\013AckModelReq"
+  "\0227\n\010aiserver\030\001 \001(\0132%.rl.common.v1.Servic"
+  "eInstanceIdentity\022,\n\005model\030\002 \001(\0132\035.rl.tr"
+  "aining.v1.ModelIdentity\022\030\n\020load_instance"
+  "_id\030\003 \001(\t\0224\n\013load_status\030\004 \001(\0162\037.rl.trai"
+  "ning.v1.ModelLoadStatus\022\017\n\007message\030\005 \001(\t"
+  "\"\212\001\n\013AckModelRsp\022.\n\006result\030\001 \001(\0162\036.rl.tr"
+  "aining.v1.ModelAckResult\022\017\n\007message\030\002 \001("
+  "\t\022:\n\013distributor\030\003 \001(\0132%.rl.common.v1.Se"
+  "rviceInstanceIdentity\"\033\n\031ModelDistributo"
+  "rStatusReq\"\221\007\n\031ModelDistributorStatusRsp"
+  "\022:\n\013distributor\030\002 \001(\0132%.rl.common.v1.Ser"
+  "viceInstanceIdentity\022\r\n\005ready\030\003 \001(\010\022\036\n\026r"
+  "egistered_model_count\030\004 \001(\003\0223\n\014latest_mo"
+  "del\030\005 \001(\0132\035.rl.training.v1.ModelIdentity"
+  "\022\036\n\026register_attempt_count\030\006 \001(\003\022 \n\030dupl"
+  "icate_register_count\030\007 \001(\003\022\037\n\027rejected_r"
+  "egister_count\030\010 \001(\003\022\036\n\026download_request_"
+  "count\030\t \001(\003\022\036\n\026download_success_count\030\n "
+  "\001(\003\022\036\n\026download_failure_count\030\013 \001(\003\022\024\n\014b"
+  "ytes_served\030\014 \001(\003\022\030\n\020loaded_ack_count\030\r "
+  "\001(\003\022\030\n\020failed_ack_count\030\016 \001(\003\022B\n\023latest_"
+  "ack_aiserver\030\017 \001(\0132%.rl.common.v1.Servic"
+  "eInstanceIdentity\0227\n\020latest_ack_model\030\020 "
+  "\001(\0132\035.rl.training.v1.ModelIdentity\022:\n\021la"
+  "test_ack_status\030\021 \001(\0162\037.rl.training.v1.M"
+  "odelLoadStatus\022\022\n\nlast_error\030\022 \001(\t\022\031\n\021ti"
+  "mestamp_unix_ms\030\023 \001(\003\022\'\n\032available_floor"
+  "_model_step\030\024 \001(\004H\000\210\001\001\022(\n\033latest_availab"
+  "le_model_step\030\025 \001(\004H\001\210\001\001B\035\n\033_available_f"
+  "loor_model_stepB\036\n\034_latest_available_mod"
+  "el_stepJ\004\010\001\020\002R\035available_floor_model_ver"
+  "sionR\036latest_available_model_versionR\010co"
+  "ntract*\270\002\n\022SegmentCloseReason\022$\n SEGMENT"
+  "_CLOSE_REASON_UNSPECIFIED\020\000\022\035\n\031SEGMENT_C"
+  "LOSE_REASON_GOAL\020\001\022#\n\037SEGMENT_CLOSE_REAS"
+  "ON_TIME_LIMIT\020\002\022\035\n\031SEGMENT_CLOSE_REASON_"
+  "TMAX\020\003\0220\n,SEGMENT_CLOSE_REASON_CLIENT_CO"
+  "NTROLLED_CLOSE\020\004\0220\n,SEGMENT_CLOSE_REASON"
+  "_CLIENT_RECOVERY_TIMEOUT\020\005\0225\n1SEGMENT_CL"
+  "OSE_REASON_AISERVER_CONTROLLED_SHUTDOWN\020"
+  "\006*\217\002\n\nPushResult\022\033\n\027PUSH_RESULT_UNSPECIF"
+  "IED\020\000\022\030\n\024PUSH_RESULT_ACCEPTED\020\001\022\031\n\025PUSH_"
+  "RESULT_DUPLICATE\020\002\022!\n\035PUSH_RESULT_REJECT"
+  "ED_CAPACITY\020\003\022 \n\034PUSH_RESULT_REJECTED_IN"
+  "VALID\020\004\022!\n\035PUSH_RESULT_REJECTED_CONFLICT"
+  "\020\006\022\"\n\036PUSH_RESULT_REJECTED_FINALIZED\020\007\"\004"
+  "\010\005\020\005*\035PUSH_RESULT_REJECTED_IDENTITY*|\n\rP"
+  "ressureState\022\036\n\032PRESSURE_STATE_UNSPECIFI"
+  "ED\020\000\022\031\n\025PRESSURE_STATE_NORMAL\020\001\022\027\n\023PRESS"
+  "URE_STATE_HIGH\020\002\022\027\n\023PRESSURE_STATE_FULL\020"
+  "\003*\247\001\n\016GetBatchResult\022 \n\034GET_BATCH_RESULT"
+  "_UNSPECIFIED\020\000\022\033\n\027GET_BATCH_RESULT_LEASE"
+  "D\020\001\022\034\n\030GET_BATCH_RESULT_TIMEOUT\020\002\022\031\n\025GET"
+  "_BATCH_RESULT_BUSY\020\003\022\035\n\031GET_BATCH_RESULT"
+  "_REJECTED\020\004*\315\001\n\016DeliveryResult\022\037\n\033DELIVE"
+  "RY_RESULT_UNSPECIFIED\020\000\022\033\n\027DELIVERY_RESU"
+  "LT_APPLIED\020\001\022#\n\037DELIVERY_RESULT_ALREADY_"
+  "APPLIED\020\002\022\033\n\027DELIVERY_RESULT_EXPIRED\020\003\022\035"
+  "\n\031DELIVERY_RESULT_NOT_FOUND\020\004\022\034\n\030DELIVER"
+  "Y_RESULT_REJECTED\020\005*\260\001\n\016AckDisposition\022\037"
+  "\n\033ACK_DISPOSITION_UNSPECIFIED\020\000\022\033\n\027ACK_D"
+  "ISPOSITION_TRAINED\020\001\022\033\n\027ACK_DISPOSITION_"
+  "INVALID\020\003\022&\n\"ACK_DISPOSITION_SHUTDOWN_UN"
+  "TRAINED\020\004\"\004\010\002\020\002*\025ACK_DISPOSITION_STALE*\274"
+  "\001\n\rAIServerState\022\036\n\032AISERVER_STATE_UNSPE"
+  "CIFIED\020\000\022\033\n\027AISERVER_STATE_STARTING\020\001\022\030\n"
+  "\024AISERVER_STATE_READY\020\002\022\033\n\027AISERVER_STAT"
+  "E_DEGRADED\020\003\022\033\n\027AISERVER_STATE_DRAINING\020"
+  "\004\022\032\n\026AISERVER_STATE_STOPPED\020\005*q\n\nModelSt"
+  "ate\022\033\n\027MODEL_STATE_UNSPECIFIED\020\000\022\027\n\023MODE"
+  "L_STATE_WAITING\020\001\022\025\n\021MODEL_STATE_READY\020\002"
+  "\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001\n\023ModelRegist"
+  "erResult\022%\n!MODEL_REGISTER_RESULT_UNSPEC"
+  "IFIED\020\000\022$\n MODEL_REGISTER_RESULT_REGISTE"
+  "RED\020\001\022,\n(MODEL_REGISTER_RESULT_ALREADY_R"
+  "EGISTERED\020\002\022*\n&MODEL_REGISTER_RESULT_REJ"
+  "ECTED_INVALID\020\003\022+\n\'MODEL_REGISTER_RESULT"
+  "_REJECTED_CONFLICT\020\004*p\n\017ModelLoadStatus\022"
+  "!\n\035MODEL_LOAD_STATUS_UNSPECIFIED\020\000\022\034\n\030MO"
+  "DEL_LOAD_STATUS_LOADED\020\001\022\034\n\030MODEL_LOAD_S"
+  "TATUS_FAILED\020\002*\265\001\n\016ModelAckResult\022 \n\034MOD"
+  "EL_ACK_RESULT_UNSPECIFIED\020\000\022\034\n\030MODEL_ACK"
+  "_RESULT_APPLIED\020\001\022$\n MODEL_ACK_RESULT_AL"
+  "READY_APPLIED\020\002\022\036\n\032MODEL_ACK_RESULT_NOT_"
+  "FOUND\020\003\022\035\n\031MODEL_ACK_RESULT_REJECTED\020\004*\247"
+  "\001\n\021ModelLookupResult\022#\n\037MODEL_LOOKUP_RES"
+  "ULT_UNSPECIFIED\020\000\022\035\n\031MODEL_LOOKUP_RESULT"
+  "_FOUND\020\001\022!\n\035MODEL_LOOKUP_RESULT_NOT_FOUN"
+  "D\020\002\"\004\010\003\020\003*%MODEL_LOOKUP_RESULT_REJECTED_"
+  "IDENTITY*^\n\021SampleBackendType\022#\n\037SAMPLE_"
+  "BACKEND_TYPE_UNSPECIFIED\020\000\022$\n SAMPLE_BAC"
+  "KEND_TYPE_LOCAL_MEMORY\020\001*\304\002\n\030SamplePoolF"
+  "inalizeResult\022+\n\'SAMPLE_POOL_FINALIZE_RE"
+  "SULT_UNSPECIFIED\020\000\022)\n%SAMPLE_POOL_FINALI"
+  "ZE_RESULT_FINALIZED\020\001\0221\n-SAMPLE_POOL_FIN"
+  "ALIZE_RESULT_ALREADY_FINALIZED\020\002\0225\n1SAMP"
+  "LE_POOL_FINALIZE_RESULT_REJECTED_ACTIVE_"
+  "LEASE\020\003\0221\n-SAMPLE_POOL_FINALIZE_RESULT_R"
+  "EJECTED_CONFLICT\020\005\"\004\010\004\020\004*-SAMPLE_POOL_FI"
+  "NALIZE_RESULT_REJECTED_IDENTITY*\230\002\n\021Metr"
+  "icBatchResult\022#\n\037METRIC_BATCH_RESULT_UNS"
+  "PECIFIED\020\000\022!\n\035METRIC_BATCH_RESULT_DELIVE"
+  "RED\020\001\022\034\n\030METRIC_BATCH_RESULT_WAIT\020\002\022\035\n\031M"
+  "ETRIC_BATCH_RESULT_FINAL\020\003\022\'\n#METRIC_BAT"
+  "CH_RESULT_REJECTED_CURSOR\020\005\022(\n$METRIC_BA"
+  "TCH_RESULT_REJECTED_INVALID\020\006\"\004\010\004\020\004*%MET"
+  "RIC_BATCH_RESULT_REJECTED_IDENTITY*\304\002\n\024M"
+  "etricBatchAckResult\022\'\n#METRIC_BATCH_ACK_"
+  "RESULT_UNSPECIFIED\020\000\022#\n\037METRIC_BATCH_ACK"
+  "_RESULT_APPLIED\020\001\022+\n\'METRIC_BATCH_ACK_RE"
+  "SULT_ALREADY_APPLIED\020\002\022%\n!METRIC_BATCH_A"
+  "CK_RESULT_NOT_FOUND\020\003\022+\n\'METRIC_BATCH_AC"
+  "K_RESULT_REJECTED_CURSOR\020\005\022,\n(METRIC_BAT"
+  "CH_ACK_RESULT_REJECTED_INVALID\020\006\"\004\010\004\020\004*)"
+  "METRIC_BATCH_ACK_RESULT_REJECTED_IDENTIT"
+  "Y*\245\001\n\016MetricFactKind\022 \n\034METRIC_FACT_KIND"
+  "_UNSPECIFIED\020\000\022\'\n#METRIC_FACT_KIND_REGIS"
+  "TERED_METRICS\020\003\"\004\010\001\020\001\"\004\010\002\020\002*\035METRIC_FACT"
+  "_KIND_MAZE_EPISODE*\035METRIC_FACT_KIND_TRA"
+  "IN_UPDATE*\223\001\n\017MetricValueType\022!\n\035METRIC_"
+  "VALUE_TYPE_UNSPECIFIED\020\000\022\034\n\030METRIC_VALUE"
+  "_TYPE_SCALAR\020\001\022\036\n\032METRIC_VALUE_TYPE_UNSI"
+  "GNED\020\002\022\037\n\033METRIC_VALUE_TYPE_SUM_COUNT\020\003*"
+  "\307\001\n\021MetricAggregation\022\"\n\036METRIC_AGGREGAT"
+  "ION_UNSPECIFIED\020\000\022\035\n\031METRIC_AGGREGATION_"
+  "LATEST\020\001\022\032\n\026METRIC_AGGREGATION_SUM\020\002\022\032\n\026"
+  "METRIC_AGGREGATION_MIN\020\003\022\032\n\026METRIC_AGGRE"
+  "GATION_MAX\020\004\022\033\n\027METRIC_AGGREGATION_MEAN\020"
+  "\0052z\n\035AIServerTrainingStatusService\022Y\n\021Ge"
+  "tAIServerStatus\022!.rl.training.v1.AIServe"
+  "rStatusReq\032!.rl.training.v1.AIServerStat"
+  "usRsp2\304\001\n\022MetricEventService\022V\n\016GetMetri"
+  "cBatch\022!.rl.training.v1.GetMetricBatchRe"
+  "q\032!.rl.training.v1.GetMetricBatchRsp\022V\n\016"
+  "AckMetricBatch\022!.rl.training.v1.AckMetri"
+  "cBatchReq\032!.rl.training.v1.AckMetricBatc"
+  "hRsp2\300\001\n\030SamplePoolIngressService\022M\n\013Pus"
+  "hSamples\022\036.rl.training.v1.PushSamplesReq"
+  "\032\036.rl.training.v1.PushSamplesRsp\022U\n\tGetS"
+  "tatus\022#.rl.training.v1.SamplePoolStatusR"
+  "eq\032#.rl.training.v1.SamplePoolStatusRsp2"
+  "\364\003\n\031SamplePoolConsumerService\022D\n\010GetBatc"
+  "h\022\033.rl.training.v1.GetBatchReq\032\033.rl.trai"
+  "ning.v1.GetBatchRsp\022D\n\010AckBatch\022\033.rl.tra"
+  "ining.v1.AckBatchReq\032\033.rl.training.v1.De"
+  "liveryRsp\022F\n\tNackBatch\022\034.rl.training.v1."
+  "NackBatchReq\032\033.rl.training.v1.DeliveryRs"
+  "p\022H\n\nRenewLease\022\035.rl.training.v1.RenewLe"
+  "aseReq\032\033.rl.training.v1.DeliveryRsp\022b\n\022F"
+  "inalizeSamplePool\022%.rl.training.v1.Final"
+  "izeSamplePoolReq\032%.rl.training.v1.Finali"
+  "zeSamplePoolRsp\022U\n\tGetStatus\022#.rl.traini"
+  "ng.v1.SamplePoolStatusReq\032#.rl.training."
+  "v1.SamplePoolStatusRsp2\326\003\n\027ModelDistribu"
+  "torService\022S\n\rRegisterModel\022 .rl.trainin"
+  "g.v1.RegisterModelReq\032 .rl.training.v1.R"
+  "egisterModelRsp\022\\\n\020GetModelManifest\022#.rl"
+  ".training.v1.GetModelManifestReq\032#.rl.tr"
+  "aining.v1.GetModelManifestRsp\022O\n\rDownloa"
+  "dModel\022 .rl.training.v1.DownloadModelReq"
+  "\032\032.rl.training.v1.ModelChunk0\001\022D\n\010AckMod"
+  "el\022\033.rl.training.v1.AckModelReq\032\033.rl.tra"
+  "ining.v1.AckModelRsp\022q\n\031GetModelDistribu"
+  "torStatus\022).rl.training.v1.ModelDistribu"
+  "torStatusReq\032).rl.training.v1.ModelDistr"
+  "ibutorStatusRspB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_training_2eproto_deps[1] = {
   &::descriptor_table_common_2eproto,
 };
 static ::_pbi::once_flag descriptor_table_training_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_training_2eproto = {
-    false, false, 16837, descriptor_table_protodef_training_2eproto,
+    false, false, 18188, descriptor_table_protodef_training_2eproto,
     "training.proto",
-    &descriptor_table_training_2eproto_once, descriptor_table_training_2eproto_deps, 1, 39,
+    &descriptor_table_training_2eproto_once, descriptor_table_training_2eproto_deps, 1, 46,
     schemas, file_default_instances, TableStruct_training_2eproto::offsets,
     file_level_metadata_training_2eproto, file_level_enum_descriptors_training_2eproto,
     file_level_service_descriptors_training_2eproto,
@@ -2133,8 +2355,41 @@ const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricFactKind_descriptor() {
 bool MetricFactKind_IsValid(int value) {
   switch (value) {
     case 0:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricValueType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_training_2eproto);
+  return file_level_enum_descriptors_training_2eproto[17];
+}
+bool MetricValueType_IsValid(int value) {
+  switch (value) {
+    case 0:
     case 1:
     case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MetricAggregation_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_training_2eproto);
+  return file_level_enum_descriptors_training_2eproto[18];
+}
+bool MetricAggregation_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
       return true;
     default:
       return false;
@@ -8630,6 +8885,1442 @@ void RawMetricSumCount::InternalSwap(RawMetricSumCount* other) {
 
 // ===================================================================
 
+class MetricDefinition::_Internal {
+ public:
+};
+
+MetricDefinition::MetricDefinition(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.MetricDefinition)
+}
+MetricDefinition::MetricDefinition(const MetricDefinition& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MetricDefinition* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.metric_id_){}
+    , decltype(_impl_.display_name_){}
+    , decltype(_impl_.unit_){}
+    , decltype(_impl_.scope_){}
+    , decltype(_impl_.denominator_){}
+    , decltype(_impl_.value_type_){}
+    , decltype(_impl_.aggregation_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.metric_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.metric_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_metric_id().empty()) {
+    _this->_impl_.metric_id_.Set(from._internal_metric_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.display_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.display_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_display_name().empty()) {
+    _this->_impl_.display_name_.Set(from._internal_display_name(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.unit_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.unit_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_unit().empty()) {
+    _this->_impl_.unit_.Set(from._internal_unit(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.scope_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.scope_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_scope().empty()) {
+    _this->_impl_.scope_.Set(from._internal_scope(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.denominator_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.denominator_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_denominator().empty()) {
+    _this->_impl_.denominator_.Set(from._internal_denominator(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.value_type_, &from._impl_.value_type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.aggregation_) -
+    reinterpret_cast<char*>(&_impl_.value_type_)) + sizeof(_impl_.aggregation_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricDefinition)
+}
+
+inline void MetricDefinition::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.metric_id_){}
+    , decltype(_impl_.display_name_){}
+    , decltype(_impl_.unit_){}
+    , decltype(_impl_.scope_){}
+    , decltype(_impl_.denominator_){}
+    , decltype(_impl_.value_type_){0}
+    , decltype(_impl_.aggregation_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.metric_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.metric_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.display_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.display_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.unit_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.unit_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.scope_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.scope_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.denominator_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.denominator_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+MetricDefinition::~MetricDefinition() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.MetricDefinition)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MetricDefinition::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.metric_id_.Destroy();
+  _impl_.display_name_.Destroy();
+  _impl_.unit_.Destroy();
+  _impl_.scope_.Destroy();
+  _impl_.denominator_.Destroy();
+}
+
+void MetricDefinition::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MetricDefinition::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricDefinition)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.metric_id_.ClearToEmpty();
+  _impl_.display_name_.ClearToEmpty();
+  _impl_.unit_.ClearToEmpty();
+  _impl_.scope_.ClearToEmpty();
+  _impl_.denominator_.ClearToEmpty();
+  ::memset(&_impl_.value_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.aggregation_) -
+      reinterpret_cast<char*>(&_impl_.value_type_)) + sizeof(_impl_.aggregation_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MetricDefinition::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string metric_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_metric_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.MetricDefinition.metric_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string display_name = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_display_name();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.MetricDefinition.display_name"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string unit = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_unit();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.MetricDefinition.unit"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string scope = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_scope();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.MetricDefinition.scope"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricValueType value_type = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_value_type(static_cast<::rl::training::v1::MetricValueType>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricAggregation aggregation = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_aggregation(static_cast<::rl::training::v1::MetricAggregation>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // string denominator = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          auto str = _internal_mutable_denominator();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.MetricDefinition.denominator"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MetricDefinition::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.MetricDefinition)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string metric_id = 1;
+  if (!this->_internal_metric_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_metric_id().data(), static_cast<int>(this->_internal_metric_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.MetricDefinition.metric_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_metric_id(), target);
+  }
+
+  // string display_name = 2;
+  if (!this->_internal_display_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_display_name().data(), static_cast<int>(this->_internal_display_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.MetricDefinition.display_name");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_display_name(), target);
+  }
+
+  // string unit = 3;
+  if (!this->_internal_unit().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_unit().data(), static_cast<int>(this->_internal_unit().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.MetricDefinition.unit");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_unit(), target);
+  }
+
+  // string scope = 4;
+  if (!this->_internal_scope().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_scope().data(), static_cast<int>(this->_internal_scope().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.MetricDefinition.scope");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_scope(), target);
+  }
+
+  // .rl.training.v1.MetricValueType value_type = 5;
+  if (this->_internal_value_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      5, this->_internal_value_type(), target);
+  }
+
+  // .rl.training.v1.MetricAggregation aggregation = 6;
+  if (this->_internal_aggregation() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      6, this->_internal_aggregation(), target);
+  }
+
+  // string denominator = 7;
+  if (!this->_internal_denominator().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_denominator().data(), static_cast<int>(this->_internal_denominator().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.MetricDefinition.denominator");
+    target = stream->WriteStringMaybeAliased(
+        7, this->_internal_denominator(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.MetricDefinition)
+  return target;
+}
+
+size_t MetricDefinition::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.MetricDefinition)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string metric_id = 1;
+  if (!this->_internal_metric_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_metric_id());
+  }
+
+  // string display_name = 2;
+  if (!this->_internal_display_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_display_name());
+  }
+
+  // string unit = 3;
+  if (!this->_internal_unit().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_unit());
+  }
+
+  // string scope = 4;
+  if (!this->_internal_scope().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_scope());
+  }
+
+  // string denominator = 7;
+  if (!this->_internal_denominator().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_denominator());
+  }
+
+  // .rl.training.v1.MetricValueType value_type = 5;
+  if (this->_internal_value_type() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_value_type());
+  }
+
+  // .rl.training.v1.MetricAggregation aggregation = 6;
+  if (this->_internal_aggregation() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_aggregation());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MetricDefinition::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MetricDefinition::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MetricDefinition::GetClassData() const { return &_class_data_; }
+
+
+void MetricDefinition::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MetricDefinition*>(&to_msg);
+  auto& from = static_cast<const MetricDefinition&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.MetricDefinition)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_metric_id().empty()) {
+    _this->_internal_set_metric_id(from._internal_metric_id());
+  }
+  if (!from._internal_display_name().empty()) {
+    _this->_internal_set_display_name(from._internal_display_name());
+  }
+  if (!from._internal_unit().empty()) {
+    _this->_internal_set_unit(from._internal_unit());
+  }
+  if (!from._internal_scope().empty()) {
+    _this->_internal_set_scope(from._internal_scope());
+  }
+  if (!from._internal_denominator().empty()) {
+    _this->_internal_set_denominator(from._internal_denominator());
+  }
+  if (from._internal_value_type() != 0) {
+    _this->_internal_set_value_type(from._internal_value_type());
+  }
+  if (from._internal_aggregation() != 0) {
+    _this->_internal_set_aggregation(from._internal_aggregation());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MetricDefinition::CopyFrom(const MetricDefinition& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.MetricDefinition)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetricDefinition::IsInitialized() const {
+  return true;
+}
+
+void MetricDefinition::InternalSwap(MetricDefinition* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.metric_id_, lhs_arena,
+      &other->_impl_.metric_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.display_name_, lhs_arena,
+      &other->_impl_.display_name_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.unit_, lhs_arena,
+      &other->_impl_.unit_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.scope_, lhs_arena,
+      &other->_impl_.scope_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.denominator_, lhs_arena,
+      &other->_impl_.denominator_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MetricDefinition, _impl_.aggregation_)
+      + sizeof(MetricDefinition::_impl_.aggregation_)
+      - PROTOBUF_FIELD_OFFSET(MetricDefinition, _impl_.value_type_)>(
+          reinterpret_cast<char*>(&_impl_.value_type_),
+          reinterpret_cast<char*>(&other->_impl_.value_type_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MetricDefinition::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[17]);
+}
+
+// ===================================================================
+
+class MetricSumCount::_Internal {
+ public:
+};
+
+MetricSumCount::MetricSumCount(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.MetricSumCount)
+}
+MetricSumCount::MetricSumCount(const MetricSumCount& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MetricSumCount* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.sum_){}
+    , decltype(_impl_.count_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.sum_, &from._impl_.sum_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.count_) -
+    reinterpret_cast<char*>(&_impl_.sum_)) + sizeof(_impl_.count_));
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricSumCount)
+}
+
+inline void MetricSumCount::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.sum_){0}
+    , decltype(_impl_.count_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+MetricSumCount::~MetricSumCount() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.MetricSumCount)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MetricSumCount::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void MetricSumCount::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MetricSumCount::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricSumCount)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&_impl_.sum_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.count_) -
+      reinterpret_cast<char*>(&_impl_.sum_)) + sizeof(_impl_.count_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MetricSumCount::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // double sum = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 9)) {
+          _impl_.sum_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 count = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MetricSumCount::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.MetricSumCount)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // double sum = 1;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_sum = this->_internal_sum();
+  uint64_t raw_sum;
+  memcpy(&raw_sum, &tmp_sum, sizeof(tmp_sum));
+  if (raw_sum != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(1, this->_internal_sum(), target);
+  }
+
+  // uint64 count = 2;
+  if (this->_internal_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_count(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.MetricSumCount)
+  return target;
+}
+
+size_t MetricSumCount::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.MetricSumCount)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // double sum = 1;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_sum = this->_internal_sum();
+  uint64_t raw_sum;
+  memcpy(&raw_sum, &tmp_sum, sizeof(tmp_sum));
+  if (raw_sum != 0) {
+    total_size += 1 + 8;
+  }
+
+  // uint64 count = 2;
+  if (this->_internal_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_count());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MetricSumCount::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MetricSumCount::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MetricSumCount::GetClassData() const { return &_class_data_; }
+
+
+void MetricSumCount::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MetricSumCount*>(&to_msg);
+  auto& from = static_cast<const MetricSumCount&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.MetricSumCount)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_sum = from._internal_sum();
+  uint64_t raw_sum;
+  memcpy(&raw_sum, &tmp_sum, sizeof(tmp_sum));
+  if (raw_sum != 0) {
+    _this->_internal_set_sum(from._internal_sum());
+  }
+  if (from._internal_count() != 0) {
+    _this->_internal_set_count(from._internal_count());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MetricSumCount::CopyFrom(const MetricSumCount& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.MetricSumCount)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetricSumCount::IsInitialized() const {
+  return true;
+}
+
+void MetricSumCount::InternalSwap(MetricSumCount* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(MetricSumCount, _impl_.count_)
+      + sizeof(MetricSumCount::_impl_.count_)
+      - PROTOBUF_FIELD_OFFSET(MetricSumCount, _impl_.sum_)>(
+          reinterpret_cast<char*>(&_impl_.sum_),
+          reinterpret_cast<char*>(&other->_impl_.sum_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MetricSumCount::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[18]);
+}
+
+// ===================================================================
+
+MetricPoint_AttributesEntry_DoNotUse::MetricPoint_AttributesEntry_DoNotUse() {}
+MetricPoint_AttributesEntry_DoNotUse::MetricPoint_AttributesEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+    : SuperType(arena) {}
+void MetricPoint_AttributesEntry_DoNotUse::MergeFrom(const MetricPoint_AttributesEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::PROTOBUF_NAMESPACE_ID::Metadata MetricPoint_AttributesEntry_DoNotUse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[19]);
+}
+
+// ===================================================================
+
+class MetricPoint::_Internal {
+ public:
+  static const ::rl::training::v1::MetricSumCount& sum_count(const MetricPoint* msg);
+};
+
+const ::rl::training::v1::MetricSumCount&
+MetricPoint::_Internal::sum_count(const MetricPoint* msg) {
+  return *msg->_impl_.value_.sum_count_;
+}
+void MetricPoint::set_allocated_sum_count(::rl::training::v1::MetricSumCount* sum_count) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_value();
+  if (sum_count) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(sum_count);
+    if (message_arena != submessage_arena) {
+      sum_count = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, sum_count, submessage_arena);
+    }
+    set_has_sum_count();
+    _impl_.value_.sum_count_ = sum_count;
+  }
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.MetricPoint.sum_count)
+}
+MetricPoint::MetricPoint(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  if (arena != nullptr && !is_message_owned) {
+    arena->OwnCustomDestructor(this, &MetricPoint::ArenaDtor);
+  }
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.MetricPoint)
+}
+MetricPoint::MetricPoint(const MetricPoint& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  MetricPoint* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      /*decltype(_impl_.attributes_)*/{}
+    , decltype(_impl_.metric_id_){}
+    , decltype(_impl_.value_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , /*decltype(_impl_._oneof_case_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.attributes_.MergeFrom(from._impl_.attributes_);
+  _impl_.metric_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.metric_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_metric_id().empty()) {
+    _this->_impl_.metric_id_.Set(from._internal_metric_id(), 
+      _this->GetArenaForAllocation());
+  }
+  clear_has_value();
+  switch (from.value_case()) {
+    case kScalar: {
+      _this->_internal_set_scalar(from._internal_scalar());
+      break;
+    }
+    case kUnsignedValue: {
+      _this->_internal_set_unsigned_value(from._internal_unsigned_value());
+      break;
+    }
+    case kSumCount: {
+      _this->_internal_mutable_sum_count()->::rl::training::v1::MetricSumCount::MergeFrom(
+          from._internal_sum_count());
+      break;
+    }
+    case VALUE_NOT_SET: {
+      break;
+    }
+  }
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.MetricPoint)
+}
+
+inline void MetricPoint::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      /*decltype(_impl_.attributes_)*/{::_pbi::ArenaInitialized(), arena}
+    , decltype(_impl_.metric_id_){}
+    , decltype(_impl_.value_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , /*decltype(_impl_._oneof_case_)*/{}
+  };
+  _impl_.metric_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.metric_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  clear_has_value();
+}
+
+MetricPoint::~MetricPoint() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.MetricPoint)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    ArenaDtor(this);
+    return;
+  }
+  SharedDtor();
+}
+
+inline void MetricPoint::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.attributes_.Destruct();
+  _impl_.attributes_.~MapField();
+  _impl_.metric_id_.Destroy();
+  if (has_value()) {
+    clear_value();
+  }
+}
+
+void MetricPoint::ArenaDtor(void* object) {
+  MetricPoint* _this = reinterpret_cast< MetricPoint* >(object);
+  _this->_impl_.attributes_.Destruct();
+}
+void MetricPoint::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void MetricPoint::clear_value() {
+// @@protoc_insertion_point(one_of_clear_start:rl.training.v1.MetricPoint)
+  switch (value_case()) {
+    case kScalar: {
+      // No need to clear
+      break;
+    }
+    case kUnsignedValue: {
+      // No need to clear
+      break;
+    }
+    case kSumCount: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.value_.sum_count_;
+      }
+      break;
+    }
+    case VALUE_NOT_SET: {
+      break;
+    }
+  }
+  _impl_._oneof_case_[0] = VALUE_NOT_SET;
+}
+
+
+void MetricPoint::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.MetricPoint)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.attributes_.Clear();
+  _impl_.metric_id_.ClearToEmpty();
+  clear_value();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* MetricPoint::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string metric_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_metric_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.MetricPoint.metric_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // double scalar = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 17)) {
+          _internal_set_scalar(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr));
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 unsigned_value = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _internal_set_unsigned_value(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.MetricSumCount sum_count = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_sum_count(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // map<string, string> attributes = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(&_impl_.attributes_, ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* MetricPoint::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.MetricPoint)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string metric_id = 1;
+  if (!this->_internal_metric_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_metric_id().data(), static_cast<int>(this->_internal_metric_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.MetricPoint.metric_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_metric_id(), target);
+  }
+
+  // double scalar = 2;
+  if (_internal_has_scalar()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(2, this->_internal_scalar(), target);
+  }
+
+  // uint64 unsigned_value = 3;
+  if (_internal_has_unsigned_value()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(3, this->_internal_unsigned_value(), target);
+  }
+
+  // .rl.training.v1.MetricSumCount sum_count = 4;
+  if (_internal_has_sum_count()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::sum_count(this),
+        _Internal::sum_count(this).GetCachedSize(), target, stream);
+  }
+
+  // map<string, string> attributes = 5;
+  if (!this->_internal_attributes().empty()) {
+    using MapType = ::_pb::Map<std::string, std::string>;
+    using WireHelper = MetricPoint_AttributesEntry_DoNotUse::Funcs;
+    const auto& map_field = this->_internal_attributes();
+    auto check_utf8 = [](const MapType::value_type& entry) {
+      (void)entry;
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.first.data(), static_cast<int>(entry.first.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "rl.training.v1.MetricPoint.AttributesEntry.key");
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.second.data(), static_cast<int>(entry.second.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "rl.training.v1.MetricPoint.AttributesEntry.value");
+    };
+
+    if (stream->IsSerializationDeterministic() && map_field.size() > 1) {
+      for (const auto& entry : ::_pbi::MapSorterPtr<MapType>(map_field)) {
+        target = WireHelper::InternalSerialize(5, entry.first, entry.second, target, stream);
+        check_utf8(entry);
+      }
+    } else {
+      for (const auto& entry : map_field) {
+        target = WireHelper::InternalSerialize(5, entry.first, entry.second, target, stream);
+        check_utf8(entry);
+      }
+    }
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.MetricPoint)
+  return target;
+}
+
+size_t MetricPoint::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.MetricPoint)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // map<string, string> attributes = 5;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_attributes_size());
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >::const_iterator
+      it = this->_internal_attributes().begin();
+      it != this->_internal_attributes().end(); ++it) {
+    total_size += MetricPoint_AttributesEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+  }
+
+  // string metric_id = 1;
+  if (!this->_internal_metric_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_metric_id());
+  }
+
+  switch (value_case()) {
+    // double scalar = 2;
+    case kScalar: {
+      total_size += 1 + 8;
+      break;
+    }
+    // uint64 unsigned_value = 3;
+    case kUnsignedValue: {
+      total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_unsigned_value());
+      break;
+    }
+    // .rl.training.v1.MetricSumCount sum_count = 4;
+    case kSumCount: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *_impl_.value_.sum_count_);
+      break;
+    }
+    case VALUE_NOT_SET: {
+      break;
+    }
+  }
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MetricPoint::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    MetricPoint::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*MetricPoint::GetClassData() const { return &_class_data_; }
+
+
+void MetricPoint::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<MetricPoint*>(&to_msg);
+  auto& from = static_cast<const MetricPoint&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.MetricPoint)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.attributes_.MergeFrom(from._impl_.attributes_);
+  if (!from._internal_metric_id().empty()) {
+    _this->_internal_set_metric_id(from._internal_metric_id());
+  }
+  switch (from.value_case()) {
+    case kScalar: {
+      _this->_internal_set_scalar(from._internal_scalar());
+      break;
+    }
+    case kUnsignedValue: {
+      _this->_internal_set_unsigned_value(from._internal_unsigned_value());
+      break;
+    }
+    case kSumCount: {
+      _this->_internal_mutable_sum_count()->::rl::training::v1::MetricSumCount::MergeFrom(
+          from._internal_sum_count());
+      break;
+    }
+    case VALUE_NOT_SET: {
+      break;
+    }
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void MetricPoint::CopyFrom(const MetricPoint& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.MetricPoint)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetricPoint::IsInitialized() const {
+  return true;
+}
+
+void MetricPoint::InternalSwap(MetricPoint* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.attributes_.InternalSwap(&other->_impl_.attributes_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.metric_id_, lhs_arena,
+      &other->_impl_.metric_id_, rhs_arena
+  );
+  swap(_impl_.value_, other->_impl_.value_);
+  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MetricPoint::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[20]);
+}
+
+// ===================================================================
+
+RegisteredMetricRecord_AttributesEntry_DoNotUse::RegisteredMetricRecord_AttributesEntry_DoNotUse() {}
+RegisteredMetricRecord_AttributesEntry_DoNotUse::RegisteredMetricRecord_AttributesEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+    : SuperType(arena) {}
+void RegisteredMetricRecord_AttributesEntry_DoNotUse::MergeFrom(const RegisteredMetricRecord_AttributesEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::PROTOBUF_NAMESPACE_ID::Metadata RegisteredMetricRecord_AttributesEntry_DoNotUse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[21]);
+}
+
+// ===================================================================
+
+class RegisteredMetricRecord::_Internal {
+ public:
+};
+
+RegisteredMetricRecord::RegisteredMetricRecord(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  if (arena != nullptr && !is_message_owned) {
+    arena->OwnCustomDestructor(this, &RegisteredMetricRecord::ArenaDtor);
+  }
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.RegisteredMetricRecord)
+}
+RegisteredMetricRecord::RegisteredMetricRecord(const RegisteredMetricRecord& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RegisteredMetricRecord* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.definitions_){from._impl_.definitions_}
+    , decltype(_impl_.points_){from._impl_.points_}
+    , /*decltype(_impl_.attributes_)*/{}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.attributes_.MergeFrom(from._impl_.attributes_);
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.RegisteredMetricRecord)
+}
+
+inline void RegisteredMetricRecord::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.definitions_){arena}
+    , decltype(_impl_.points_){arena}
+    , /*decltype(_impl_.attributes_)*/{::_pbi::ArenaInitialized(), arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+RegisteredMetricRecord::~RegisteredMetricRecord() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.RegisteredMetricRecord)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    ArenaDtor(this);
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RegisteredMetricRecord::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.definitions_.~RepeatedPtrField();
+  _impl_.points_.~RepeatedPtrField();
+  _impl_.attributes_.Destruct();
+  _impl_.attributes_.~MapField();
+}
+
+void RegisteredMetricRecord::ArenaDtor(void* object) {
+  RegisteredMetricRecord* _this = reinterpret_cast< RegisteredMetricRecord* >(object);
+  _this->_impl_.attributes_.Destruct();
+}
+void RegisteredMetricRecord::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RegisteredMetricRecord::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.RegisteredMetricRecord)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.definitions_.Clear();
+  _impl_.points_.Clear();
+  _impl_.attributes_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RegisteredMetricRecord::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .rl.training.v1.MetricDefinition definitions = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_definitions(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .rl.training.v1.MetricPoint points = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_points(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // map<string, string> attributes = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(&_impl_.attributes_, ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RegisteredMetricRecord::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.RegisteredMetricRecord)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .rl.training.v1.MetricDefinition definitions = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_definitions_size()); i < n; i++) {
+    const auto& repfield = this->_internal_definitions(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // repeated .rl.training.v1.MetricPoint points = 2;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_points_size()); i < n; i++) {
+    const auto& repfield = this->_internal_points(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // map<string, string> attributes = 3;
+  if (!this->_internal_attributes().empty()) {
+    using MapType = ::_pb::Map<std::string, std::string>;
+    using WireHelper = RegisteredMetricRecord_AttributesEntry_DoNotUse::Funcs;
+    const auto& map_field = this->_internal_attributes();
+    auto check_utf8 = [](const MapType::value_type& entry) {
+      (void)entry;
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.first.data(), static_cast<int>(entry.first.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "rl.training.v1.RegisteredMetricRecord.AttributesEntry.key");
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.second.data(), static_cast<int>(entry.second.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "rl.training.v1.RegisteredMetricRecord.AttributesEntry.value");
+    };
+
+    if (stream->IsSerializationDeterministic() && map_field.size() > 1) {
+      for (const auto& entry : ::_pbi::MapSorterPtr<MapType>(map_field)) {
+        target = WireHelper::InternalSerialize(3, entry.first, entry.second, target, stream);
+        check_utf8(entry);
+      }
+    } else {
+      for (const auto& entry : map_field) {
+        target = WireHelper::InternalSerialize(3, entry.first, entry.second, target, stream);
+        check_utf8(entry);
+      }
+    }
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.RegisteredMetricRecord)
+  return target;
+}
+
+size_t RegisteredMetricRecord::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.RegisteredMetricRecord)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .rl.training.v1.MetricDefinition definitions = 1;
+  total_size += 1UL * this->_internal_definitions_size();
+  for (const auto& msg : this->_impl_.definitions_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // repeated .rl.training.v1.MetricPoint points = 2;
+  total_size += 1UL * this->_internal_points_size();
+  for (const auto& msg : this->_impl_.points_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // map<string, string> attributes = 3;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_attributes_size());
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >::const_iterator
+      it = this->_internal_attributes().begin();
+      it != this->_internal_attributes().end(); ++it) {
+    total_size += RegisteredMetricRecord_AttributesEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RegisteredMetricRecord::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RegisteredMetricRecord::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RegisteredMetricRecord::GetClassData() const { return &_class_data_; }
+
+
+void RegisteredMetricRecord::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RegisteredMetricRecord*>(&to_msg);
+  auto& from = static_cast<const RegisteredMetricRecord&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.RegisteredMetricRecord)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.definitions_.MergeFrom(from._impl_.definitions_);
+  _this->_impl_.points_.MergeFrom(from._impl_.points_);
+  _this->_impl_.attributes_.MergeFrom(from._impl_.attributes_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RegisteredMetricRecord::CopyFrom(const RegisteredMetricRecord& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.RegisteredMetricRecord)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RegisteredMetricRecord::IsInitialized() const {
+  return true;
+}
+
+void RegisteredMetricRecord::InternalSwap(RegisteredMetricRecord* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.definitions_.InternalSwap(&other->_impl_.definitions_);
+  _impl_.points_.InternalSwap(&other->_impl_.points_);
+  _impl_.attributes_.InternalSwap(&other->_impl_.attributes_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RegisteredMetricRecord::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[22]);
+}
+
+// ===================================================================
+
 class MetricEvent::_Internal {
  public:
   using HasBits = decltype(std::declval<MetricEvent>()._impl_._has_bits_);
@@ -8922,7 +10613,7 @@ void MetricEvent::InternalSwap(MetricEvent* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricEvent::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[17]);
+      file_level_metadata_training_2eproto[23]);
 }
 
 // ===================================================================
@@ -9209,7 +10900,7 @@ void MetricSequenceGap::InternalSwap(MetricSequenceGap* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricSequenceGap::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[18]);
+      file_level_metadata_training_2eproto[24]);
 }
 
 // ===================================================================
@@ -9662,7 +11353,7 @@ void MetricBatch::InternalSwap(MetricBatch* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricBatch::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[19]);
+      file_level_metadata_training_2eproto[25]);
 }
 
 // ===================================================================
@@ -9920,7 +11611,7 @@ void MetricBatchCursor::InternalSwap(MetricBatchCursor* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata MetricBatchCursor::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[20]);
+      file_level_metadata_training_2eproto[26]);
 }
 
 // ===================================================================
@@ -10243,7 +11934,7 @@ void GetMetricBatchReq::InternalSwap(GetMetricBatchReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetMetricBatchReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[21]);
+      file_level_metadata_training_2eproto[27]);
 }
 
 // ===================================================================
@@ -10621,7 +12312,7 @@ void GetMetricBatchRsp::InternalSwap(GetMetricBatchRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetMetricBatchRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[22]);
+      file_level_metadata_training_2eproto[28]);
 }
 
 // ===================================================================
@@ -10866,7 +12557,7 @@ void AckMetricBatchReq::InternalSwap(AckMetricBatchReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckMetricBatchReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[23]);
+      file_level_metadata_training_2eproto[29]);
 }
 
 // ===================================================================
@@ -11244,7 +12935,7 @@ void AckMetricBatchRsp::InternalSwap(AckMetricBatchRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckMetricBatchRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[24]);
+      file_level_metadata_training_2eproto[30]);
 }
 
 // ===================================================================
@@ -11284,7 +12975,302 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*AIServerStatusReq::GetClassDat
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[25]);
+      file_level_metadata_training_2eproto[31]);
+}
+
+// ===================================================================
+
+class ModelFeedbackStatus::_Internal {
+ public:
+  static const ::rl::training::v1::ModelIdentity& candidate_model(const ModelFeedbackStatus* msg);
+};
+
+const ::rl::training::v1::ModelIdentity&
+ModelFeedbackStatus::_Internal::candidate_model(const ModelFeedbackStatus* msg) {
+  return *msg->_impl_.candidate_model_;
+}
+ModelFeedbackStatus::ModelFeedbackStatus(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:rl.training.v1.ModelFeedbackStatus)
+}
+ModelFeedbackStatus::ModelFeedbackStatus(const ModelFeedbackStatus& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ModelFeedbackStatus* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.stage_){}
+    , decltype(_impl_.last_error_){}
+    , decltype(_impl_.candidate_model_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.stage_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.stage_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_stage().empty()) {
+    _this->_impl_.stage_.Set(from._internal_stage(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.last_error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.last_error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_last_error().empty()) {
+    _this->_impl_.last_error_.Set(from._internal_last_error(), 
+      _this->GetArenaForAllocation());
+  }
+  if (from._internal_has_candidate_model()) {
+    _this->_impl_.candidate_model_ = new ::rl::training::v1::ModelIdentity(*from._impl_.candidate_model_);
+  }
+  // @@protoc_insertion_point(copy_constructor:rl.training.v1.ModelFeedbackStatus)
+}
+
+inline void ModelFeedbackStatus::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.stage_){}
+    , decltype(_impl_.last_error_){}
+    , decltype(_impl_.candidate_model_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.stage_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.stage_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.last_error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.last_error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ModelFeedbackStatus::~ModelFeedbackStatus() {
+  // @@protoc_insertion_point(destructor:rl.training.v1.ModelFeedbackStatus)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ModelFeedbackStatus::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.stage_.Destroy();
+  _impl_.last_error_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.candidate_model_;
+}
+
+void ModelFeedbackStatus::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ModelFeedbackStatus::Clear() {
+// @@protoc_insertion_point(message_clear_start:rl.training.v1.ModelFeedbackStatus)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.stage_.ClearToEmpty();
+  _impl_.last_error_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.candidate_model_ != nullptr) {
+    delete _impl_.candidate_model_;
+  }
+  _impl_.candidate_model_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ModelFeedbackStatus::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .rl.training.v1.ModelIdentity candidate_model = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_candidate_model(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string stage = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_stage();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.ModelFeedbackStatus.stage"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string last_error = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_last_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "rl.training.v1.ModelFeedbackStatus.last_error"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ModelFeedbackStatus::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rl.training.v1.ModelFeedbackStatus)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .rl.training.v1.ModelIdentity candidate_model = 1;
+  if (this->_internal_has_candidate_model()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::candidate_model(this),
+        _Internal::candidate_model(this).GetCachedSize(), target, stream);
+  }
+
+  // string stage = 2;
+  if (!this->_internal_stage().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_stage().data(), static_cast<int>(this->_internal_stage().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.ModelFeedbackStatus.stage");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_stage(), target);
+  }
+
+  // string last_error = 3;
+  if (!this->_internal_last_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_last_error().data(), static_cast<int>(this->_internal_last_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rl.training.v1.ModelFeedbackStatus.last_error");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_last_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rl.training.v1.ModelFeedbackStatus)
+  return target;
+}
+
+size_t ModelFeedbackStatus::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rl.training.v1.ModelFeedbackStatus)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string stage = 2;
+  if (!this->_internal_stage().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_stage());
+  }
+
+  // string last_error = 3;
+  if (!this->_internal_last_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_last_error());
+  }
+
+  // .rl.training.v1.ModelIdentity candidate_model = 1;
+  if (this->_internal_has_candidate_model()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.candidate_model_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ModelFeedbackStatus::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ModelFeedbackStatus::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ModelFeedbackStatus::GetClassData() const { return &_class_data_; }
+
+
+void ModelFeedbackStatus::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ModelFeedbackStatus*>(&to_msg);
+  auto& from = static_cast<const ModelFeedbackStatus&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:rl.training.v1.ModelFeedbackStatus)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_stage().empty()) {
+    _this->_internal_set_stage(from._internal_stage());
+  }
+  if (!from._internal_last_error().empty()) {
+    _this->_internal_set_last_error(from._internal_last_error());
+  }
+  if (from._internal_has_candidate_model()) {
+    _this->_internal_mutable_candidate_model()->::rl::training::v1::ModelIdentity::MergeFrom(
+        from._internal_candidate_model());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ModelFeedbackStatus::CopyFrom(const ModelFeedbackStatus& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rl.training.v1.ModelFeedbackStatus)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ModelFeedbackStatus::IsInitialized() const {
+  return true;
+}
+
+void ModelFeedbackStatus::InternalSwap(ModelFeedbackStatus* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.stage_, lhs_arena,
+      &other->_impl_.stage_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.last_error_, lhs_arena,
+      &other->_impl_.last_error_, rhs_arena
+  );
+  swap(_impl_.candidate_model_, other->_impl_.candidate_model_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ModelFeedbackStatus::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
+      file_level_metadata_training_2eproto[32]);
 }
 
 // ===================================================================
@@ -11294,6 +13280,7 @@ class AIServerStatusRsp::_Internal {
   static const ::rl::common::v1::ServiceInstanceIdentity& aiserver(const AIServerStatusRsp* msg);
   static const ::rl::training::v1::ModelIdentity& loaded_model(const AIServerStatusRsp* msg);
   static const ::rl::training::v1::ModelIdentity& staged_model(const AIServerStatusRsp* msg);
+  static const ::rl::training::v1::ModelFeedbackStatus& model_feedback(const AIServerStatusRsp* msg);
 };
 
 const ::rl::common::v1::ServiceInstanceIdentity&
@@ -11307,6 +13294,10 @@ AIServerStatusRsp::_Internal::loaded_model(const AIServerStatusRsp* msg) {
 const ::rl::training::v1::ModelIdentity&
 AIServerStatusRsp::_Internal::staged_model(const AIServerStatusRsp* msg) {
   return *msg->_impl_.staged_model_;
+}
+const ::rl::training::v1::ModelFeedbackStatus&
+AIServerStatusRsp::_Internal::model_feedback(const AIServerStatusRsp* msg) {
+  return *msg->_impl_.model_feedback_;
 }
 void AIServerStatusRsp::clear_aiserver() {
   if (GetArenaForAllocation() == nullptr && _impl_.aiserver_ != nullptr) {
@@ -11329,6 +13320,7 @@ AIServerStatusRsp::AIServerStatusRsp(const AIServerStatusRsp& from)
     , decltype(_impl_.aiserver_){nullptr}
     , decltype(_impl_.loaded_model_){nullptr}
     , decltype(_impl_.staged_model_){nullptr}
+    , decltype(_impl_.model_feedback_){nullptr}
     , decltype(_impl_.state_){}
     , decltype(_impl_.ready_){}
     , decltype(_impl_.distributor_ready_){}
@@ -11382,6 +13374,9 @@ AIServerStatusRsp::AIServerStatusRsp(const AIServerStatusRsp& from)
   if (from._internal_has_staged_model()) {
     _this->_impl_.staged_model_ = new ::rl::training::v1::ModelIdentity(*from._impl_.staged_model_);
   }
+  if (from._internal_has_model_feedback()) {
+    _this->_impl_.model_feedback_ = new ::rl::training::v1::ModelFeedbackStatus(*from._impl_.model_feedback_);
+  }
   ::memcpy(&_impl_.state_, &from._impl_.state_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.model_state_) -
     reinterpret_cast<char*>(&_impl_.state_)) + sizeof(_impl_.model_state_));
@@ -11398,6 +13393,7 @@ inline void AIServerStatusRsp::SharedCtor(
     , decltype(_impl_.aiserver_){nullptr}
     , decltype(_impl_.loaded_model_){nullptr}
     , decltype(_impl_.staged_model_){nullptr}
+    , decltype(_impl_.model_feedback_){nullptr}
     , decltype(_impl_.state_){0}
     , decltype(_impl_.ready_){false}
     , decltype(_impl_.distributor_ready_){false}
@@ -11455,6 +13451,7 @@ inline void AIServerStatusRsp::SharedDtor() {
   if (this != internal_default_instance()) delete _impl_.aiserver_;
   if (this != internal_default_instance()) delete _impl_.loaded_model_;
   if (this != internal_default_instance()) delete _impl_.staged_model_;
+  if (this != internal_default_instance()) delete _impl_.model_feedback_;
 }
 
 void AIServerStatusRsp::SetCachedSize(int size) const {
@@ -11481,6 +13478,10 @@ void AIServerStatusRsp::Clear() {
     delete _impl_.staged_model_;
   }
   _impl_.staged_model_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.model_feedback_ != nullptr) {
+    delete _impl_.model_feedback_;
+  }
+  _impl_.model_feedback_ = nullptr;
   ::memset(&_impl_.state_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.model_state_) -
       reinterpret_cast<char*>(&_impl_.state_)) + sizeof(_impl_.model_state_));
@@ -11806,6 +13807,14 @@ const char* AIServerStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseCont
         } else
           goto handle_unusual;
         continue;
+      // .rl.training.v1.ModelFeedbackStatus model_feedback = 41;
+      case 41:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
+          ptr = ctx->ParseMessage(_internal_mutable_model_feedback(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -12090,6 +14099,13 @@ uint8_t* AIServerStatusRsp::_InternalSerialize(
         InternalWriteMessage(40, repfield, repfield.GetCachedSize(), target, stream);
   }
 
+  // .rl.training.v1.ModelFeedbackStatus model_feedback = 41;
+  if (this->_internal_has_model_feedback()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(41, _Internal::model_feedback(this),
+        _Internal::model_feedback(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -12139,6 +14155,13 @@ size_t AIServerStatusRsp::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.staged_model_);
+  }
+
+  // .rl.training.v1.ModelFeedbackStatus model_feedback = 41;
+  if (this->_internal_has_model_feedback()) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.model_feedback_);
   }
 
   // .rl.training.v1.AIServerState state = 3;
@@ -12394,6 +14417,10 @@ void AIServerStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
     _this->_internal_mutable_staged_model()->::rl::training::v1::ModelIdentity::MergeFrom(
         from._internal_staged_model());
   }
+  if (from._internal_has_model_feedback()) {
+    _this->_internal_mutable_model_feedback()->::rl::training::v1::ModelFeedbackStatus::MergeFrom(
+        from._internal_model_feedback());
+  }
   if (from._internal_state() != 0) {
     _this->_internal_set_state(from._internal_state());
   }
@@ -12544,7 +14571,7 @@ void AIServerStatusRsp::InternalSwap(AIServerStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AIServerStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[26]);
+      file_level_metadata_training_2eproto[33]);
 }
 
 // ===================================================================
@@ -12758,7 +14785,7 @@ void SegmentCloseCount::InternalSwap(SegmentCloseCount* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SegmentCloseCount::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[27]);
+      file_level_metadata_training_2eproto[34]);
 }
 
 // ===================================================================
@@ -13038,7 +15065,7 @@ void ModelArtifactManifest::InternalSwap(ModelArtifactManifest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelArtifactManifest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[28]);
+      file_level_metadata_training_2eproto[35]);
 }
 
 // ===================================================================
@@ -13283,7 +15310,7 @@ void RegisterModelReq::InternalSwap(RegisterModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[29]);
+      file_level_metadata_training_2eproto[36]);
 }
 
 // ===================================================================
@@ -13609,7 +15636,7 @@ void RegisterModelRsp::InternalSwap(RegisterModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RegisterModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[30]);
+      file_level_metadata_training_2eproto[37]);
 }
 
 // ===================================================================
@@ -13880,7 +15907,7 @@ void GetModelManifestReq::InternalSwap(GetModelManifestReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[31]);
+      file_level_metadata_training_2eproto[38]);
 }
 
 // ===================================================================
@@ -14284,7 +16311,7 @@ void GetModelManifestRsp::InternalSwap(GetModelManifestRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetModelManifestRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[32]);
+      file_level_metadata_training_2eproto[39]);
 }
 
 // ===================================================================
@@ -14529,7 +16556,7 @@ void DownloadModelReq::InternalSwap(DownloadModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata DownloadModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[33]);
+      file_level_metadata_training_2eproto[40]);
 }
 
 // ===================================================================
@@ -14800,7 +16827,7 @@ void ModelChunk::InternalSwap(ModelChunk* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelChunk::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[34]);
+      file_level_metadata_training_2eproto[41]);
 }
 
 // ===================================================================
@@ -15176,7 +17203,7 @@ void AckModelReq::InternalSwap(AckModelReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[35]);
+      file_level_metadata_training_2eproto[42]);
 }
 
 // ===================================================================
@@ -15461,7 +17488,7 @@ void AckModelRsp::InternalSwap(AckModelRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AckModelRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[36]);
+      file_level_metadata_training_2eproto[43]);
 }
 
 // ===================================================================
@@ -15501,7 +17528,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ModelDistributorStatusReq::Get
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusReq::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[37]);
+      file_level_metadata_training_2eproto[44]);
 }
 
 // ===================================================================
@@ -16289,7 +18316,7 @@ void ModelDistributorStatusRsp::InternalSwap(ModelDistributorStatusRsp* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ModelDistributorStatusRsp::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_training_2eproto_getter, &descriptor_table_training_2eproto_once,
-      file_level_metadata_training_2eproto[38]);
+      file_level_metadata_training_2eproto[45]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -16365,6 +18392,30 @@ template<> PROTOBUF_NOINLINE ::rl::training::v1::RawMetricSumCount*
 Arena::CreateMaybeMessage< ::rl::training::v1::RawMetricSumCount >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::training::v1::RawMetricSumCount >(arena);
 }
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricDefinition*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricDefinition >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricDefinition >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricSumCount*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricSumCount >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricSumCount >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricPoint_AttributesEntry_DoNotUse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricPoint*
+Arena::CreateMaybeMessage< ::rl::training::v1::MetricPoint >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::MetricPoint >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse*
+Arena::CreateMaybeMessage< ::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::RegisteredMetricRecord_AttributesEntry_DoNotUse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::RegisteredMetricRecord*
+Arena::CreateMaybeMessage< ::rl::training::v1::RegisteredMetricRecord >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::RegisteredMetricRecord >(arena);
+}
 template<> PROTOBUF_NOINLINE ::rl::training::v1::MetricEvent*
 Arena::CreateMaybeMessage< ::rl::training::v1::MetricEvent >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::training::v1::MetricEvent >(arena);
@@ -16400,6 +18451,10 @@ Arena::CreateMaybeMessage< ::rl::training::v1::AckMetricBatchRsp >(Arena* arena)
 template<> PROTOBUF_NOINLINE ::rl::training::v1::AIServerStatusReq*
 Arena::CreateMaybeMessage< ::rl::training::v1::AIServerStatusReq >(Arena* arena) {
   return Arena::CreateMessageInternal< ::rl::training::v1::AIServerStatusReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rl::training::v1::ModelFeedbackStatus*
+Arena::CreateMaybeMessage< ::rl::training::v1::ModelFeedbackStatus >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::rl::training::v1::ModelFeedbackStatus >(arena);
 }
 template<> PROTOBUF_NOINLINE ::rl::training::v1::AIServerStatusRsp*
 Arena::CreateMaybeMessage< ::rl::training::v1::AIServerStatusRsp >(Arena* arena) {

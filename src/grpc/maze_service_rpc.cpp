@@ -1155,9 +1155,16 @@ grpc::Status MazeServiceImpl::EndEpisode(
     candidate.evaluation_pinned_model_step = 0;
     const auto episode_outcome =
         BuildEpisodeOutcome(*session, metric_agents);
-    maze_metrics::EpisodeMetricFact metric_fact;
+    training::RegisteredMetricRecord metric_fact;
     if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING) {
-        metric_fact = BuildEpisodeMetricFact(*session, metric_agents);
+        try {
+            metric_fact = BuildEpisodeMetricFact(*session, metric_agents);
+        } catch (const std::invalid_argument& error) {
+            RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          std::string("episode metric producer failed: ") + error.what(),
+                          rsp->mutable_reply());
+            return grpc::Status::OK;
+        }
         std::string metric_payload;
         if (!metric_fact.SerializeToString(&metric_payload)) {
             RejectCommand(*session,
@@ -1487,6 +1494,10 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
         (sender.ready && !sender.transient_retry &&
          !sender.terminal_fault));
     rsp->set_model_state(model_state_.load());
+    {
+        std::lock_guard<std::mutex> feedback_lock(model_feedback_mutex_);
+        *rsp->mutable_model_feedback() = model_feedback_;
+    }
     if (model_manifest_.HasModelIdentity()) {
         rsp->mutable_loaded_model()->CopyFrom(
             model_manifest_.wire.identity());
