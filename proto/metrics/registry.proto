@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package rl.training.v1;
+
+option cc_generic_services = false;
+
+// RawMetricSumCount is a mergeable sufficient statistic. Producers must not
+// publish a precomputed mean; consumers derive it as sum / count when count is
+// non-zero. field_id is governed by the fact kind selected by MetricEvent.
+message RawMetricSumCount {
+    string field_id = 1;
+    double sum = 2;
+    uint64 count = 3;
+}
+
+enum MetricValueType {
+    METRIC_VALUE_TYPE_UNSPECIFIED = 0;
+    METRIC_VALUE_TYPE_SCALAR = 1;
+    METRIC_VALUE_TYPE_UNSIGNED = 2;
+    METRIC_VALUE_TYPE_SUM_COUNT = 3;
+}
+
+enum MetricAggregation {
+    METRIC_AGGREGATION_UNSPECIFIED = 0;
+    METRIC_AGGREGATION_LATEST = 1;
+    METRIC_AGGREGATION_SUM = 2;
+    METRIC_AGGREGATION_MIN = 3;
+    METRIC_AGGREGATION_MAX = 4;
+    METRIC_AGGREGATION_MEAN = 5;
+}
+
+// Registered by the producing task/algorithm, immutable within a source
+// lifecycle. Readers interpret only these generic types and operations.
+message MetricDefinition {
+    string metric_id = 1;
+    string display_name = 2;
+    string unit = 3;
+    string scope = 4;
+    MetricValueType value_type = 5;
+    MetricAggregation aggregation = 6;
+    // Required for MEAN: e.g. agent_episode, transition, sample_evaluation,
+    // optimizer_step. Counts with different meanings must use different IDs.
+    string denominator = 7;
+    string category = 8;
+    string description = 9;
+}
+
+message MetricSumCount {
+    double sum = 1;
+    uint64 count = 2;
+}
+
+message MetricPoint {
+    string metric_id = 1;
+    oneof value {
+        double scalar = 2;
+        uint64 unsigned_value = 3;
+        MetricSumCount sum_count = 4;
+    }
+    // Producer-owned context retained in raw history, never inferred by readers.
+    map<string, string> attributes = 5;
+    // Producer interval for an incremental measurement, never receipt time.
+    optional int64 interval_start_unix_ms = 6;
+    optional int64 interval_end_unix_ms = 7;
+}
+
+message RegisteredMetricRecord {
+    // Every record includes the definitions it uses, so a retention gap never
+    // forces a reader to guess a missing registration or contact the producer.
+    repeated MetricDefinition definitions = 1;
+    repeated MetricPoint points = 2;
+    map<string, string> attributes = 3;
+}

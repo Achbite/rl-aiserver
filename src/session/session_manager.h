@@ -6,7 +6,7 @@
 #include "model/behavior_policy_scope.h"
 #include "model/model_manifest.h"
 #include "model/model_step.h"
-#include "session/lifecycle_replay_window.h"
+#include "rl_sdk/replay_window.h"
 #include "sample/rollout_types.h"
 
 #include <unordered_map>
@@ -18,6 +18,7 @@
 #include <cmath>
 #include <algorithm>
 #include <string>
+#include "metrics/reward_metrics.h"
 
 // ---- 会话管理器（并行 Episode 隔离）----
 // 每个 session 维护独立的 Agent 运行时状态和样本缓存，
@@ -81,13 +82,14 @@ public:
 
     // ---- 单个会话 ----
     struct Session {
+        RewardMetricWindow reward_metrics;
         std::string session_id;
         common::ServiceInstanceIdentity client;
         std::string environment_instance_id;
         int64_t last_valid_client_activity_unix_ms = 0;
         uint64_t session_epoch = 0;
         uint64_t last_command_sequence = 0;
-        maze::SessionPhase phase = maze::SESSION_PHASE_OPEN;
+        rl::session::v1::SessionPhase phase = rl::session::v1::SESSION_PHASE_OPEN;
         LifecycleReplayWindow command_replay;
         std::string map_id;
         int shortest_action_steps = 0;

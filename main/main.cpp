@@ -1,3 +1,4 @@
+#include "rl_sdk/metric_catalog.h"
 #include "grpc/maze_service.h"
 #include "ai/onnx_inferencer.h"
 #include "config/config_loader.h"
@@ -19,6 +20,7 @@
 #include <filesystem>
 #include <vector>
 #include <unistd.h>
+#include "proto/metrics/catalog.grpc.pb.h"
 
 // --- 全局信号标志 ---
 static std::atomic<bool> g_running{true};
@@ -443,16 +445,18 @@ int main(int argc, char* argv[]) {
 
     std::string listen_addr = "0.0.0.0:" + std::to_string(cfg.server.listen_port);
 
+    rl_sdk::MetricCatalogService metric_catalog([&] { return service.MetricCatalog(); });
     grpc::ServerBuilder builder;
     builder.AddListeningPort(listen_addr, grpc::InsecureServerCredentials());
     builder.RegisterService(
         static_cast<maze::MazeTaskService::Service*>(&service));
     if (aiserver_mode::ExposesTrainingStatus(cfg.server.run_mode)) {
+        builder.RegisterService(&metric_catalog);
         builder.RegisterService(
             static_cast<training::AIServerTrainingStatusService::Service*>(
                 &service));
         builder.RegisterService(
-            static_cast<training::MetricEventService::Service*>(&service));
+            &service.Metrics());
     }
 
     std::unique_ptr<grpc::Server> server = builder.BuildAndStart();

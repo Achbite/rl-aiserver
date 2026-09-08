@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include "proto/metrics/registry.pb.h"
 
 namespace {
 
@@ -38,16 +39,16 @@ bool IsTaskTerminal(maze::MazeTerminationReason reason) {
            reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
 }
 
-bool DistanceAt(const SessionManager::Session& session,
+bool DistanceAt(const MazeRewardContext& context,
                 int gx, int gy, int& distance) {
-    if (gx < 0 || gx >= session.grid_cols ||
-        gy < 0 || gy >= session.grid_rows) {
+    if (gx < 0 || gx >= context.grid_cols ||
+        gy < 0 || gy >= context.grid_rows) {
         return false;
     }
     const std::size_t index =
-        static_cast<std::size_t>(gy * session.grid_cols + gx);
-    if (index >= session.geodesic_distance.size()) return false;
-    distance = session.geodesic_distance[index];
+        static_cast<std::size_t>(gy * context.grid_cols + gx);
+    if (index >= context.geodesic_distance.size()) return false;
+    distance = context.geodesic_distance[index];
     return distance >= 0;
 }
 
@@ -65,20 +66,15 @@ const MazeRewardParameters& GetMazeRewardParameters() {
 }
 
 RewardDetail MazeReward::Calculate(
-    const SessionManager::Session& session,
-    int agent_id, int gx, int gy, bool is_done,
+    const MazeRewardContext& context,
+    int gx, int gy, bool is_done,
     maze::MazeTerminationReason reason) {
     const auto& config = GetMazeRewardParameters();
-    const auto agent_it = session.agents.find(agent_id);
-    if (agent_it == session.agents.end()) {
-        return Invalid("reward agent identity is unknown");
-    }
-    const auto& agent = agent_it->second;
-    if (agent.prev_grid_x < 0 || agent.prev_grid_y < 0) {
+    if (context.prev_grid_x < 0 || context.prev_grid_y < 0) {
         return Invalid("reward transition has no previous state");
     }
-    if (session.shortest_action_steps <= 0 ||
-        agent.episode_start_geodesic_distance <= 0) {
+    if (context.shortest_action_steps <= 0 ||
+        context.episode_start_geodesic_distance <= 0) {
         return Invalid("Reward episode distance is invalid");
     }
     if (is_done != IsTaskTerminal(reason)) {
@@ -86,9 +82,9 @@ RewardDetail MazeReward::Calculate(
     }
     int previous_distance = -1;
     int current_distance = -1;
-    if (!DistanceAt(session, agent.prev_grid_x, agent.prev_grid_y,
+    if (!DistanceAt(context, context.prev_grid_x, context.prev_grid_y,
                     previous_distance) ||
-        !DistanceAt(session, gx, gy, current_distance)) {
+        !DistanceAt(context, gx, gy, current_distance)) {
         return Invalid("reward transition entered an unreachable map cell");
     }
     RewardDetail detail;
@@ -101,7 +97,7 @@ RewardDetail MazeReward::Calculate(
     const float timeout_penalty =
         timeout ? static_cast<float>(config.timeout_penalty) : 0.0f;
     const float distance_normalizer = static_cast<float>(
-        agent.episode_start_geodesic_distance);
+        context.episode_start_geodesic_distance);
     const float geodesic_progress =
         static_cast<float>(config.progress_budget) *
         static_cast<float>(previous_distance - current_distance) /
@@ -113,13 +109,13 @@ RewardDetail MazeReward::Calculate(
     const float first_visit_scale =
         first_visit_budget / distance_normalizer;
     float first_visit_bonus = 0.0f;
-    const bool moved = gx != agent.prev_grid_x || gy != agent.prev_grid_y;
-    if (moved && agent.current_state_first_visit &&
+    const bool moved = gx != context.prev_grid_x || gy != context.prev_grid_y;
+    if (moved && context.current_state_first_visit &&
         first_visit_scale > 0.0f) {
         first_visit_bonus = std::min(
             first_visit_scale,
             std::max(0.0f,
-                     first_visit_budget - agent.first_visit_bonus_total));
+                     first_visit_budget - context.first_visit_bonus_total));
     }
     const float wasted_action_penalty =
         moved ? 0.0f : static_cast<float>(config.wasted_action_penalty);
@@ -145,4 +141,20 @@ RewardDetail MazeReward::Calculate(
         }
     }
     return detail;
+}
+
+void MazeReward::RegisterMetrics(MetricRegistry& registry) {
+    registry.Register("task.maze.reward.total.per_transition", "Total Reward / Transition", "reward", "agent_episode",
+        training::METRIC_VALUE_TYPE_SUM_COUNT, training::METRIC_AGGREGATION_MEAN, "transition", "reward");
+    for (const auto& item : std::vector<std::pair<std::string, std::string>>{
+        {"goal_reward", "Goal Reward"}, {"timeout_penalty", "Timeout Penalty"},
+        {"geodesic_progress", "Geodesic Progress"}, {"first_visit_bonus", "First Visit Bonus"},
+        {"wasted_action_penalty", "Wasted Action Penalty"}}) {
+        registry.Register("task.maze.reward." + item.first + ".per_transition", item.second + " / Transition",
+            "reward", "agent_episode", training::METRIC_VALUE_TYPE_SUM_COUNT,
+            training::METRIC_AGGREGATION_MEAN, "transition", "reward");
+        registry.Register("task.maze.reward." + item.first + ".per_episode", item.second + " / Agent Episode",
+            "reward", "agent_episode", training::METRIC_VALUE_TYPE_SUM_COUNT,
+            training::METRIC_AGGREGATION_MEAN, "agent_episode", "reward");
+    }
 }

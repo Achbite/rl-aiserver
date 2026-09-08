@@ -4,7 +4,8 @@ package rl.training.v1;
 
 option cc_generic_services = false;
 
-import "common.proto";
+import "proto/common/identity.proto";
+import "proto/training/model_identity.proto";
 
 // Task-neutral sample, delivery, model and observability contracts.
 
@@ -122,37 +123,6 @@ enum SamplePoolFinalizeResult {
     reserved 4;
     reserved "SAMPLE_POOL_FINALIZE_RESULT_REJECTED_IDENTITY";
     SAMPLE_POOL_FINALIZE_RESULT_REJECTED_CONFLICT = 5;
-}
-
-enum MetricBatchResult {
-    METRIC_BATCH_RESULT_UNSPECIFIED = 0;
-    METRIC_BATCH_RESULT_DELIVERED = 1;
-    METRIC_BATCH_RESULT_WAIT = 2;
-    METRIC_BATCH_RESULT_FINAL = 3;
-    reserved 4;
-    reserved "METRIC_BATCH_RESULT_REJECTED_IDENTITY";
-    METRIC_BATCH_RESULT_REJECTED_CURSOR = 5;
-    METRIC_BATCH_RESULT_REJECTED_INVALID = 6;
-}
-
-enum MetricBatchAckResult {
-    METRIC_BATCH_ACK_RESULT_UNSPECIFIED = 0;
-    METRIC_BATCH_ACK_RESULT_APPLIED = 1;
-    METRIC_BATCH_ACK_RESULT_ALREADY_APPLIED = 2;
-    METRIC_BATCH_ACK_RESULT_NOT_FOUND = 3;
-    reserved 4;
-    reserved "METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY";
-    METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR = 5;
-    METRIC_BATCH_ACK_RESULT_REJECTED_INVALID = 6;
-}
-
-message ModelIdentity {
-    string model_lineage_id = 1;
-    reserved "model_version";
-    // Explicit presence distinguishes bootstrap step 0 from a missing step.
-    optional uint64 model_step = 2;
-    reserved 3, 4;
-    reserved "artifact_digest", "manifest_digest";
 }
 
 // One immutable PPO item after AIServer has closed a pinned-model segment and
@@ -352,185 +322,6 @@ message SamplePoolStatusRsp {
     int64 previously_drawn_evicted_transition_count = 76;
 }
 
-// RawMetricSumCount is a mergeable sufficient statistic. Producers must not
-// publish a precomputed mean; consumers derive it as sum / count when count is
-// non-zero. field_id is governed by the fact kind selected by MetricEvent.
-message RawMetricSumCount {
-    string field_id = 1;
-    double sum = 2;
-    uint64 count = 3;
-}
-
-enum MetricFactKind {
-    METRIC_FACT_KIND_UNSPECIFIED = 0;
-    reserved 1, 2;
-    reserved "METRIC_FACT_KIND_MAZE_EPISODE", "METRIC_FACT_KIND_TRAIN_UPDATE";
-    METRIC_FACT_KIND_REGISTERED_METRICS = 3;
-}
-
-enum MetricValueType {
-    METRIC_VALUE_TYPE_UNSPECIFIED = 0;
-    METRIC_VALUE_TYPE_SCALAR = 1;
-    METRIC_VALUE_TYPE_UNSIGNED = 2;
-    METRIC_VALUE_TYPE_SUM_COUNT = 3;
-}
-
-enum MetricAggregation {
-    METRIC_AGGREGATION_UNSPECIFIED = 0;
-    METRIC_AGGREGATION_LATEST = 1;
-    METRIC_AGGREGATION_SUM = 2;
-    METRIC_AGGREGATION_MIN = 3;
-    METRIC_AGGREGATION_MAX = 4;
-    METRIC_AGGREGATION_MEAN = 5;
-}
-
-// Registered by the producing task/algorithm, immutable within a source
-// lifecycle. Readers interpret only these generic types and operations.
-message MetricDefinition {
-    string metric_id = 1;
-    string display_name = 2;
-    string unit = 3;
-    string scope = 4;
-    MetricValueType value_type = 5;
-    MetricAggregation aggregation = 6;
-    // Required for MEAN: e.g. agent_episode, transition, sample_evaluation,
-    // optimizer_step. Counts with different meanings must use different IDs.
-    string denominator = 7;
-}
-
-message MetricSumCount {
-    double sum = 1;
-    uint64 count = 2;
-}
-
-message MetricPoint {
-    string metric_id = 1;
-    oneof value {
-        double scalar = 2;
-        uint64 unsigned_value = 3;
-        MetricSumCount sum_count = 4;
-    }
-    // Producer-owned context retained in raw history, never inferred by readers.
-    map<string, string> attributes = 5;
-}
-
-message RegisteredMetricRecord {
-    // Every record includes the definitions it uses, so a retention gap never
-    // forces a reader to guess a missing registration or contact the producer.
-    repeated MetricDefinition definitions = 1;
-    repeated MetricPoint points = 2;
-    map<string, string> attributes = 3;
-}
-
-message MetricEvent {
-    reserved 1 to 3;
-    reserved "contract", "schema_identity", "source",
-             "committed_at_unix_ms";
-    // Source lifecycle identity is owned once by MetricBatch.
-    // Starts at 1 for each source lifecycle. Zero is never a valid event and
-    // is reserved for a consumer cursor that has acknowledged no event.
-    uint64 event_sequence = 4;
-    // Raw producer wall-clock observation. Presence is required, but this value
-    // is not an ordering key and may repeat or regress after clock adjustment.
-    optional int64 observed_at_unix_ms = 5;
-    // REGISTERED_METRICS selects RegisteredMetricRecord. Transport, persistence,
-    // cursor and ACK layers keep these bytes opaque. ACK proves persistence,
-    // not successful metric interpretation; readers expose content errors.
-    bytes fact_payload = 6;
-    MetricFactKind fact_kind = 7;
-    reserved 8, 9;
-    reserved "episode", "train_update";
-}
-
-message MetricSequenceGap {
-    // The inclusive unavailable interval. A valid gap satisfies
-    // first <= last < oldest_available. It is an explicit incomplete-history
-    // fact, not a heartbeat and not an empty event batch.
-    uint64 first_unavailable_event_sequence = 1;
-    uint64 last_unavailable_event_sequence = 2;
-    uint64 oldest_available_event_sequence = 3;
-    string reason = 4;
-}
-
-message MetricBatch {
-    reserved 1, 2, 5, 13;
-    reserved "contract", "schema_identity", "batch_digest",
-             "event_time_watermark_unix_ms";
-    // Starts at 1 for each source lifecycle. Zero is reserved for an initial
-    // consumer cursor.
-    rl.common.v1.ServiceInstanceIdentity source = 3;
-    uint64 batch_sequence = 4;
-    int64 created_at_unix_ms = 6;
-    // For an event batch these equal the first and last strictly increasing,
-    // non-zero event sequences. For a gap batch they equal the unavailable
-    // interval. For a heartbeat they are both zero.
-    uint64 first_event_sequence = 7;
-    uint64 last_event_sequence = 8;
-    repeated MetricEvent events = 9;
-    // A heartbeat has no events and no gap. It still has a non-zero batch
-    // sequence and must be acknowledged.
-    bool heartbeat = 10;
-    // May accompany the last event, gap or heartbeat batch. A source that
-    // committed no events terminates with a final heartbeat whose
-    // final_event_sequence is zero. Otherwise final_event_sequence equals the
-    // last committed event sequence. Once that exact batch is acknowledged,
-    // the producer emits no later batch in this source lifecycle and
-    // GetMetricBatch returns METRIC_BATCH_RESULT_FINAL without a batch payload.
-    bool source_final = 11;
-    uint64 final_event_sequence = 12;
-    MetricSequenceGap gap = 14;
-}
-
-message MetricBatchCursor {
-    rl.common.v1.ServiceInstanceIdentity source = 1;
-    // Both zero identify a new consumer. For events, acknowledged_event is the
-    // batch last event; for a gap it is the unavailable interval last event;
-    // for a heartbeat it remains the previous cursor event sequence.
-    uint64 acknowledged_batch_sequence = 2;
-    uint64 acknowledged_event_sequence = 3;
-    reserved 4;
-    reserved "acknowledged_batch_digest";
-}
-
-message GetMetricBatchReq {
-    reserved 1;
-    reserved "contract";
-    rl.common.v1.ServiceInstanceIdentity consumer = 2;
-    MetricBatchCursor cursor = 3;
-    uint32 max_events = 4;
-    int64 max_bytes = 5;
-    int32 wait_timeout_ms = 6;
-}
-
-message GetMetricBatchRsp {
-    // DELIVERED always contains one batch that requires AckMetricBatch. WAIT
-    // and every rejection contain no batch. FINAL contains no batch and is
-    // returned only after the request cursor has acknowledged source_final.
-    MetricBatchResult result = 1;
-    string message = 2;
-    MetricBatch batch = 3;
-    rl.common.v1.ServiceInstanceIdentity producer = 4;
-    uint64 oldest_available_event_sequence = 5;
-    uint64 latest_available_event_sequence = 6;
-}
-
-message AckMetricBatchReq {
-    reserved 1;
-    reserved "contract";
-    rl.common.v1.ServiceInstanceIdentity consumer = 2;
-    MetricBatchCursor cursor = 3;
-}
-
-message AckMetricBatchRsp {
-    MetricBatchAckResult result = 1;
-    string message = 2;
-    rl.common.v1.ServiceInstanceIdentity producer = 3;
-    uint64 oldest_available_event_sequence = 4;
-    uint64 latest_available_event_sequence = 5;
-    // The durable producer-side cursor after APPLIED or ALREADY_APPLIED.
-    MetricBatchCursor committed_cursor = 6;
-}
-
 message AIServerStatusReq {}
 
 // Independent of loaded_model readiness: an active model can remain valid
@@ -584,6 +375,9 @@ message AIServerStatusRsp {
     int64 superseded_without_agent_activation_count = 39;
     repeated SegmentCloseCount segment_close_counts = 40;
     ModelFeedbackStatus model_feedback = 41;
+    int64 update_rpc_count = 42;
+    double update_rpc_latency_sum_ms = 43;
+    double update_rpc_latency_max_ms = 44;
     reserved "credit_request_count", "credit_grant_count",
              "credit_wait_count", "credit_reacquire_count",
              "producer_stale_count", "capacity_wait_ms",
@@ -702,12 +496,36 @@ service AIServerTrainingStatusService {
     rpc GetAIServerStatus(AIServerStatusReq) returns (AIServerStatusRsp);
 }
 
-// Implemented independently by each metric-event owner (AIServer and Learner).
-// A retry with the same cursor returns the same batch identity until
-// it is acknowledged or an explicit gap proves the requested event unavailable.
-service MetricEventService {
-    rpc GetMetricBatch(GetMetricBatchReq) returns (GetMetricBatchRsp);
-    rpc AckMetricBatch(AckMetricBatchReq) returns (AckMetricBatchRsp);
+// Learner-owned committed status; independent of a dashboard collector.
+message LearnerStatusReq {}
+
+message LearnerStatusRsp {
+  rl.common.v1.ServiceInstanceIdentity learner = 1;
+  int64 timestamp_unix_ms = 2;
+  ModelIdentity model = 3;
+  uint64 model_step = 4;
+  uint64 train_updates = 5;
+  uint64 trained_samples = 6;
+  uint64 run_train_updates = 7;
+  uint64 run_trained_samples = 8;
+  uint64 initial_model_step = 9;
+  uint64 train_batch_size = 10;
+  optional uint64 actual_batch_size = 11;
+  optional uint64 requested_train_batch_size = 12;
+  optional uint64 pool_draw_slot_count = 13;
+  optional uint64 unique_item_count = 14;
+  optional uint64 duplicate_item_slot_count = 15;
+  optional uint64 sample_evaluation_count = 16;
+  optional uint64 optimizer_step_count = 17;
+  optional double max_importance_ratio = 18;
+  optional double explained_variance = 19;
+  string disposition = 20;
+  string last_error = 21;
+  string train_update_id = 22;
+}
+
+service LearnerStatusService {
+  rpc GetLearnerStatus(LearnerStatusReq) returns (LearnerStatusRsp);
 }
 
 service SamplePoolIngressService {

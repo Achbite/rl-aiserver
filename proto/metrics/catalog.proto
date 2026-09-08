@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package rl.training.v1;
+
+option cc_generic_services = false;
+
+import "proto/common/identity.proto";
+import "proto/metrics/registry.proto";
+
+// Discovery does not bind a consumer, move a cursor, or generate measurements.
+message GetMetricCatalogReq {}
+
+message MetricCatalogEntry {
+    MetricDefinition definition = 1;
+    // Empty for MetricEventService measurements. Otherwise the producing
+    // component names its status RPC and scalar response path.
+    string status_method = 2;
+    string status_field = 3;
+  // SUM_COUNT numerator is status_field; count also declares measurement availability.
+  string status_count_field = 4;
+}
+
+message GetMetricCatalogRsp {
+    rl.common.v1.ServiceInstanceIdentity source = 1;
+    repeated MetricCatalogEntry entries = 2;
+}
+
+service MetricCatalogService {
+    rpc GetMetricCatalog(GetMetricCatalogReq) returns (GetMetricCatalogRsp);
+}

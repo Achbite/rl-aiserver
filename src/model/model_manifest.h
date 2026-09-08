@@ -3,7 +3,7 @@
 #include "config/config_loader.h"
 #include "contracts/contract_namespaces.h"
 #include "model/model_step.h"
-#include "training.pb.h"
+#include "proto/training/training.pb.h"
 
 #include <cstdint>
 #include <optional>

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package rl.training.v1;
+
+option cc_generic_services = false;
+
+message ModelIdentity {
+    string model_lineage_id = 1;
+    reserved "model_version";
+    // Explicit presence distinguishes bootstrap step 0 from a missing step.
+    optional uint64 model_step = 2;
+    reserved 3, 4;
+    reserved "artifact_digest", "manifest_digest";
+}

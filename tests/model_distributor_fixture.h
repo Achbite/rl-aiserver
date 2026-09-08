@@ -1,5 +1,5 @@
 #pragma once
-#include "training.grpc.pb.h"
+#include "proto/training/training.grpc.pb.h"
 #include "contracts/training_namespaces.h"
 #include <filesystem>
 #include <fstream>

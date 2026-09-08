@@ -4,44 +4,16 @@ package rl.task.maze.v1;
 
 option cc_generic_services = false;
 
-import "common.proto";
+import "proto/common/identity.proto";
+import "proto/communication/session.proto";
 
 // The only Client <-> AIServer wire contract. The Client owns Environment
 // execution; AIServer owns task, observation, reward, policy and lifecycle
 // decisions. A command is identified only by Session epoch and sequence, and
 // an exact retry must preserve the complete request bytes.
 
-enum CommandResult {
-    COMMAND_RESULT_UNSPECIFIED = 0;
-    COMMAND_RESULT_APPLIED = 1;
-    COMMAND_RESULT_ALREADY_APPLIED = 2;
-    COMMAND_RESULT_WAIT = 3;
-    COMMAND_RESULT_REJECTED = 4;
-}
-
-enum CommandErrorCode {
-    COMMAND_ERROR_CODE_UNSPECIFIED = 0;
-    COMMAND_ERROR_CODE_INVALID_IDENTITY = 1;
-    COMMAND_ERROR_CODE_STALE_EPOCH = 2;
-    COMMAND_ERROR_CODE_OUT_OF_ORDER = 3;
-    COMMAND_ERROR_CODE_PAYLOAD_CONFLICT = 4;
-    COMMAND_ERROR_CODE_STATE_CONFLICT = 5;
-    COMMAND_ERROR_CODE_MAP_INVALID = 6;
-    COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH = 7;
-}
-
 // One authoritative externally visible phase replaces the former task,
 // Session and Episode state triplet.
-enum SessionPhase {
-    SESSION_PHASE_UNSPECIFIED = 0;
-    SESSION_PHASE_OPEN = 1;
-    SESSION_PHASE_READY = 2;
-    SESSION_PHASE_EPISODE_RUNNING = 3;
-    SESSION_PHASE_EPISODE_TERMINAL = 4;
-    SESSION_PHASE_TASK_COMPLETE = 5;
-    SESSION_PHASE_CLOSED = 6;
-    SESSION_PHASE_ABORTED = 7;
-}
 
 enum EpisodeMode {
     EPISODE_MODE_UNSPECIFIED = 0;
@@ -115,22 +87,6 @@ message MapDescriptor {
     reserved "canonical_digest", "shortest_action_steps", "action_rule_id";
 }
 
-message CommandIdentity {
-    string session_id = 1;
-    uint64 session_epoch = 2;
-    uint64 sequence = 3;
-    // Empty for Session-level commands and required for Episode commands.
-    string episode_id = 4;
-}
-
-message CommandReply {
-    CommandResult result = 1;
-    CommandErrorCode error_code = 2;
-    string message = 3;
-    uint64 applied_sequence = 4;
-    SessionPhase phase = 5;
-}
-
 message OpenSessionReq {
     rl.common.v1.ServiceInstanceIdentity client = 1;
     string environment_instance_id = 2;
@@ -140,7 +96,7 @@ message OpenSessionReq {
 }
 
 message OpenSessionRsp {
-    CommandReply reply = 1;
+    rl.session.v1.CommandReply reply = 1;
     string session_id = 2;
     uint64 session_epoch = 3;
     rl.common.v1.ServiceInstanceIdentity aiserver = 4;
@@ -151,12 +107,12 @@ message OpenSessionRsp {
 }
 
 message InitReq {
-    CommandIdentity command = 1;
+    rl.session.v1.CommandIdentity command = 1;
     MapDescriptor map = 2;
 }
 
 message InitRsp {
-    CommandReply reply = 1;
+    rl.session.v1.CommandReply reply = 1;
     reserved 2, 3;
     reserved "accepted_map_digest", "verified_shortest_action_steps";
 }
@@ -174,11 +130,11 @@ message TaskComplete {
 }
 
 message BeginEpisodeReq {
-    CommandIdentity command = 1;
+    rl.session.v1.CommandIdentity command = 1;
 }
 
 message BeginEpisodeRsp {
-    CommandReply reply = 1;
+    rl.session.v1.CommandReply reply = 1;
     oneof outcome {
         EpisodeAssignment assignment = 2;
         TaskComplete task_complete = 3;
@@ -203,7 +159,7 @@ message AgentState {
 }
 
 message UpdateReq {
-    CommandIdentity command = 1;
+    rl.session.v1.CommandIdentity command = 1;
     uint64 frame_id = 2;
     repeated AgentState agents = 3;
 }
@@ -222,7 +178,7 @@ message WaitControl {
 }
 
 message UpdateRsp {
-    CommandReply reply = 1;
+    rl.session.v1.CommandReply reply = 1;
     reserved 4;
     reserved "stop";
     oneof control {
@@ -232,7 +188,7 @@ message UpdateRsp {
 }
 
 message EndEpisodeReq {
-    CommandIdentity command = 1;
+    rl.session.v1.CommandIdentity command = 1;
 }
 
 message AgentEpisodeOutcome {
@@ -249,28 +205,28 @@ message EpisodeOutcome {
 }
 
 message EndEpisodeRsp {
-    CommandReply reply = 1;
+    rl.session.v1.CommandReply reply = 1;
     EpisodeOutcome outcome = 2;
 }
 
 message AbortEpisodeReq {
-    CommandIdentity command = 1;
+    rl.session.v1.CommandIdentity command = 1;
     MazeTerminationReason reason = 2;
     string message = 3;
 }
 
 message AbortEpisodeRsp {
-    CommandReply reply = 1;
+    rl.session.v1.CommandReply reply = 1;
     // Present only when reply.result is WAIT.
     WaitControl wait = 2;
 }
 
 message CloseSessionReq {
-    CommandIdentity command = 1;
+    rl.session.v1.CommandIdentity command = 1;
 }
 
 message CloseSessionRsp {
-    CommandReply reply = 1;
+    rl.session.v1.CommandReply reply = 1;
 }
 
 service MazeTaskService {

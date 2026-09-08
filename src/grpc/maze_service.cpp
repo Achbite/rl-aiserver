@@ -1,4 +1,5 @@
 #include "grpc/maze_service.h"
+#include "rl_sdk/metric_catalog.h"
 
 #include "log/logger.h"
 #include "ai/maze_observation.h"
@@ -23,6 +24,9 @@
 #include <stdexcept>
 #include <thread>
 #include <unistd.h>
+#include "proto/metrics/catalog.pb.h"
+#include "proto/metrics/registry.pb.h"
+#include "proto/metrics/transport.pb.h"
 
 namespace {
 
@@ -78,7 +82,10 @@ MazeServiceImpl::MazeServiceImpl(const AIServerConfig& config)
       next_lifecycle_epoch_(producer_lifecycle_epoch_ + 1),
       action_rng_(config.policy.sampling_seed),
       metric_events_(MetricEventSource(producer_instance_id_,
-                                       producer_lifecycle_epoch_)) {}
+                                       producer_lifecycle_epoch_)) {
+    MazeReward::RegisterMetrics(metric_registry_);
+    RegisterMazeEpisodeMetrics(metric_registry_);
+}
 
 MazeServiceImpl::~MazeServiceImpl() {
     BeginShutdown();
@@ -639,8 +646,8 @@ bool MazeServiceImpl::RecoverExpiredClientSessions() {
     for (const auto& session_id : session_mgr_.GetSessionIds()) {
         auto* session = session_mgr_.GetSession(session_id);
         if (!session ||
-            (session->phase != maze::SESSION_PHASE_EPISODE_RUNNING &&
-             session->phase != maze::SESSION_PHASE_EPISODE_TERMINAL) ||
+            (session->phase != rl::session::v1::SESSION_PHASE_EPISODE_RUNNING &&
+             session->phase != rl::session::v1::SESSION_PHASE_EPISODE_TERMINAL) ||
             session->last_valid_client_activity_unix_ms <= 0 ||
             now < session->last_valid_client_activity_unix_ms ||
             now - session->last_valid_client_activity_unix_ms <
@@ -738,7 +745,7 @@ bool MazeServiceImpl::RecoverExpiredClientSessions() {
                     pending_action_excluded_count_,
                     closed_segment_count_, segment_close_counts_);
             }
-            session->phase = maze::SESSION_PHASE_ABORTED;
+            session->phase = rl::session::v1::SESSION_PHASE_ABORTED;
             session->behavior_policy_scope =
                 BehaviorPolicyScope::Unspecified;
             MarkDegraded(
@@ -790,7 +797,7 @@ bool MazeServiceImpl::RecoverExpiredClientSessions() {
             return false;
         }
 
-        candidate.phase = maze::SESSION_PHASE_ABORTED;
+        candidate.phase = rl::session::v1::SESSION_PHASE_ABORTED;
         candidate.behavior_policy_scope =
             BehaviorPolicyScope::Unspecified;
         candidate.evaluation_pinned_model_lineage_id.clear();
@@ -1001,6 +1008,12 @@ bool MazeServiceImpl::Start() {
         }
     }
     StartModelWatcher();
+    if (config_.server.run_mode == aiserver_mode::kTraining) {
+        metric_flush_.Start(std::chrono::milliseconds(config_.reward_metric_interval_ms), [this] {
+            std::lock_guard<std::mutex> lock(mutex_);
+            return FlushRewardMetricsLocked();
+        });
+    }
     return true;
 }
 
@@ -1016,6 +1029,7 @@ bool MazeServiceImpl::IsCoreInferenceReady() const {
 }
 
 bool MazeServiceImpl::BeginShutdown() {
+    metric_flush_.Stop();
     StopModelWatcher();
 
     bool preexisting_service_fault = false;
@@ -1138,9 +1152,9 @@ bool MazeServiceImpl::BeginShutdown() {
                 }
             }
             if (!close_preparation_ok) break;
-            if (candidate.phase == maze::SESSION_PHASE_EPISODE_RUNNING ||
-                candidate.phase == maze::SESSION_PHASE_EPISODE_TERMINAL) {
-                candidate.phase = maze::SESSION_PHASE_ABORTED;
+            if (candidate.phase == rl::session::v1::SESSION_PHASE_EPISODE_RUNNING ||
+                candidate.phase == rl::session::v1::SESSION_PHASE_EPISODE_TERMINAL) {
+                candidate.phase = rl::session::v1::SESSION_PHASE_ABORTED;
                 candidate.behavior_policy_scope =
                     BehaviorPolicyScope::Unspecified;
                 candidate.evaluation_pinned_model_lineage_id.clear();
@@ -1265,6 +1279,11 @@ bool MazeServiceImpl::BeginShutdown() {
             if (!close_preparation_error.empty()) {
                 last_error_ = close_preparation_error;
             }
+        }
+        if (!FlushRewardMetricsLocked()) {
+            close_preparation_ok = false;
+            close_preparation_error = "reward tail was not accepted by the local journal";
+            last_error_ = close_preparation_error;
         }
         metric_events_.Finalize();
     }
@@ -1676,7 +1695,10 @@ bool MazeServiceImpl::FinalizePendingTransition(
             return false;
         }
         reward = MazeReward::Calculate(
-            session, agent_id, gx, gy, is_done, reason);
+            {session.grid_cols, session.grid_rows, session.geodesic_distance,
+             session.shortest_action_steps, agent.prev_grid_x, agent.prev_grid_y,
+             agent.episode_start_geodesic_distance, agent.current_state_first_visit,
+             agent.first_visit_bonus_total}, gx, gy, is_done, reason);
         if (!reward.valid) {
             error = reward.error;
             return false;
@@ -1733,6 +1755,7 @@ bool MazeServiceImpl::FinalizePendingTransition(
     }
     ++agent.episode_transition_count;
     if (collect_training_sample) {
+        session.reward_metrics.Observe(reward.total, reward.items);
         agent.episode_return += reward.total;
         for (const auto& item : reward.items) {
             agent.reward_component_sums[item.first] += item.second;
@@ -1915,4 +1938,39 @@ void MazeServiceImpl::DiscardAgentSegment(
     agent.pinned_model = ModelManifest{};
     agent.pinned_prepared_model = OnnxInferencer::PreparedModel{};
     agent.segment_transitions.clear();
+}
+
+training::GetMetricCatalogRsp MazeServiceImpl::MetricCatalog() const {
+    auto catalog = metric_registry_.Catalog(MetricSourceIdentity());
+    const std::string method = "rl.training.v1.AIServerTrainingStatusService/GetAIServerStatus";
+    using namespace rl::training::v1;
+    rl_sdk::AddStatusMetric(catalog, "sample.flow.produced.total", "Produced Samples", "sample_flow", "count", "aiserver", method, "produced_unique_transitions");
+    rl_sdk::AddStatusMetric(catalog, "sample.flow.outbound_pending.total", "Outbound Pending", "sample_flow", "count", "aiserver", method, "outbound_queue_transitions");
+    rl_sdk::AddStatusMetric(catalog, "sample.flow.final_drop.total", "Final Drop", "sample_flow", "count", "aiserver", method, "final_drop_unique_transitions");
+    rl_sdk::AddStatusMetric(catalog, "server.latency.sample_send.mean_ms", "Sample Send Latency", "latency", "ms", "push_rpc", method, "push_rpc_latency_sum_ms", METRIC_VALUE_TYPE_SUM_COUNT, "push_rpc_count");
+    rl_sdk::AddStatusMetric(catalog, "server.latency.inference.mean_ms", "Inference Latency Mean", "latency", "ms", "inference", method, "inference_latency_sum_ms", METRIC_VALUE_TYPE_SUM_COUNT, "inference_count");
+    rl_sdk::AddStatusMetric(catalog, "server.latency.inference.max_ms", "Inference Latency Max", "latency", "ms", "inference", method, "inference_latency_max_ms", METRIC_VALUE_TYPE_SCALAR, "inference_count");
+    rl_sdk::AddStatusMetric(catalog, "server.latency.update_rpc.mean_ms", "Update RPC Latency Mean", "latency", "ms", "update_rpc", method, "update_rpc_latency_sum_ms", METRIC_VALUE_TYPE_SUM_COUNT, "update_rpc_count");
+    rl_sdk::AddStatusMetric(catalog, "server.latency.update_rpc.max_ms", "Update RPC Latency Max", "latency", "ms", "update_rpc", method, "update_rpc_latency_max_ms", METRIC_VALUE_TYPE_SCALAR, "update_rpc_count");
+    return catalog;
+}
+
+bool MazeServiceImpl::FlushRewardMetricsLocked() {
+    const auto ended_at = std::chrono::steady_clock::now();
+    const int64_t end = NowMs();
+    for (const auto& id : session_mgr_.GetSessionIds()) {
+        auto* session = session_mgr_.GetSession(id);
+        if (!session || !session->reward_metrics.count) continue;
+        training::RegisteredMetricRecord record;
+        (*record.mutable_attributes())["environment_instance_id"] = session->environment_instance_id;
+        (*record.mutable_attributes())["episode_id"] = session->current_episode_id;
+        session->reward_metrics.AppendTo(record, metric_registry_, "task.maze.reward.", end, ended_at);
+        std::string payload;
+        if (!record.SerializeToString(&payload) || !metric_events_.AppendFact(std::move(payload), end).applied()) {
+            LOG_ERROR("MetricEvent", "reward interval could not enter local journal: session=%s", id.c_str());
+            return false; // Stop periodic output and retain the unaccepted increment.
+        }
+        session->reward_metrics = {};
+    }
+    return true;
 }

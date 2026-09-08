@@ -252,7 +252,7 @@ bool LoadServerConfig(const std::string& yaml_path,
         "server.run_mode", "server.listen_port", "server.max_agents",
         "policy.training_temperature", "policy.sampling_seed",
         "policy.action_mask_mode",
-        "rollout.gamma", "rollout.gae_lambda", "rollout.tmax",
+        "rollout.gamma", "rollout.gae_lambda", "rollout.tmax", "metrics.reward_interval_ms",
         "observation.ray_max_range", "strategy.grid_size",
         "strategy.replan_interval", "model.evaluation_model_path",
         "model.local_train_dir", "model.startup_timeout_ms",
@@ -318,6 +318,7 @@ bool LoadServerConfig(const std::string& yaml_path,
     }
 
     const std::pair<const char*, const char*> integer_fields[] = {
+        {"metrics", "reward_interval_ms"},
         {"policy", "sampling_seed"},
         {"rollout", "tmax"},
         {"observation", "ray_max_range"},
@@ -364,6 +365,11 @@ bool LoadServerConfig(const std::string& yaml_path,
         return false;
     }
 
+    out_config.reward_metric_interval_ms = SafeInt(FindValue(entries, "metrics", "reward_interval_ms"), 5000);
+    if (out_config.reward_metric_interval_ms <= 0) {
+        error = "metrics.reward_interval_ms must be positive";
+        return false;
+    }
     out_config.policy.training_temperature = SafeDouble(
         FindValue(entries, "policy", "training_temperature"), -1.0);
     out_config.policy.sampling_seed = static_cast<uint32_t>(SafeSize(

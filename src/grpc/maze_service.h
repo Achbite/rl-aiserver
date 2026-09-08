@@ -5,9 +5,11 @@
 #include "ai/onnx_inferencer.h"
 #include "config/config_loader.h"
 #include "contracts/contract_namespaces.h"
-#include "maze_task.grpc.pb.h"
-#include "training.grpc.pb.h"
+#include "proto/tasks/maze/task.grpc.pb.h"
+#include "proto/training/training.grpc.pb.h"
 #include "metrics/episode_metrics.h"
+#include "metrics/metric_event_service.h"
+#include "metrics/periodic_flush.h"
 #include "task/maze_episode_metrics.h"
 #include "model/model_manifest.h"
 #include "model/model_distributor_client.h"
@@ -25,10 +27,12 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include "proto/metrics/catalog.pb.h"
+#include "proto/metrics/registry.pb.h"
+#include "proto/metrics/transport.grpc.pb.h"
 
 class MazeServiceImpl final : public maze::MazeTaskService::Service,
-                              public training::AIServerTrainingStatusService::Service,
-                              public training::MetricEventService::Service {
+                              public training::AIServerTrainingStatusService::Service {
 public:
     explicit MazeServiceImpl(const AIServerConfig& config);
     ~MazeServiceImpl();
@@ -69,16 +73,10 @@ public:
                                    const training::AIServerStatusReq* req,
                                    training::AIServerStatusRsp* rsp) override;
 
-    grpc::Status GetMetricBatch(
-        grpc::ServerContext* ctx,
-        const training::GetMetricBatchReq* req,
-        training::GetMetricBatchRsp* rsp) override;
-    grpc::Status AckMetricBatch(
-        grpc::ServerContext* ctx,
-        const training::AckMetricBatchReq* req,
-        training::AckMetricBatchRsp* rsp) override;
+    MetricEventService& Metrics() { return metric_service_; }
 
     common::ServiceInstanceIdentity MetricSourceIdentity() const;
+    training::GetMetricCatalogRsp MetricCatalog() const;
 
 private:
     bool LoadInitialModel();
@@ -226,6 +224,9 @@ private:
     std::unordered_map<std::string, std::string> open_responses_;
     MetricEventJournal metric_events_;
     MetricRegistry metric_registry_;
+    MetricEventService metric_service_{metric_events_};
+    PeriodicMetricFlush metric_flush_;
+    bool FlushRewardMetricsLocked();
     SingleMapTaskController task_controller_;
     bool started_ = false;
     bool shutdown_started_ = false;
