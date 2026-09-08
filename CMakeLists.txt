@@ -37,12 +37,19 @@ set(SOURCES
 
 set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
 set(PROTO_SOURCES
-    ${PROTO_GEN_DIR}/common.pb.cc
-    ${PROTO_GEN_DIR}/training.pb.cc
-    ${PROTO_GEN_DIR}/training.grpc.pb.cc
-    ${PROTO_GEN_DIR}/maze_task.pb.cc
-    ${PROTO_GEN_DIR}/maze_task.grpc.pb.cc
-    ${PROTO_GEN_DIR}/maze_metrics.pb.cc
+    ${PROTO_GEN_DIR}/common/identity.pb.cc
+    ${PROTO_GEN_DIR}/training/model_identity.pb.cc
+    ${PROTO_GEN_DIR}/training/training.pb.cc
+    ${PROTO_GEN_DIR}/training/training.grpc.pb.cc
+    ${PROTO_GEN_DIR}/metrics/registry.pb.cc
+    ${PROTO_GEN_DIR}/metrics/catalog.pb.cc
+    ${PROTO_GEN_DIR}/metrics/catalog.grpc.pb.cc
+    ${PROTO_GEN_DIR}/metrics/transport.pb.cc
+    ${PROTO_GEN_DIR}/metrics/transport.grpc.pb.cc
+    ${PROTO_GEN_DIR}/communication/session.pb.cc
+    ${PROTO_GEN_DIR}/tasks/maze/task.pb.cc
+    ${PROTO_GEN_DIR}/tasks/maze/task.grpc.pb.cc
+    ${PROTO_GEN_DIR}/tasks/maze/metrics.pb.cc
 )
 
 # --- 可执行文件 ---
@@ -51,6 +58,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${PROTO_SOURCES})
 # --- 头文件搜索路径 ---
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${PROTO_GEN_DIR}
     ${Protobuf_INCLUDE_DIRS}
     ${GRPC_INCLUDE_DIRS}
@@ -73,12 +81,19 @@ if(BUILD_TESTING)
         src/ai/onnx_inferencer.cpp
         src/model/model_manifest.cpp
         src/model/model_distributor_client.cpp
-        ${PROTO_GEN_DIR}/common.pb.cc
-        ${PROTO_GEN_DIR}/training.pb.cc
-        ${PROTO_GEN_DIR}/training.grpc.pb.cc
+        ${PROTO_GEN_DIR}/common/identity.pb.cc
+        ${PROTO_GEN_DIR}/training/model_identity.pb.cc
+        ${PROTO_GEN_DIR}/training/training.pb.cc
+        ${PROTO_GEN_DIR}/training/training.grpc.pb.cc
+        ${PROTO_GEN_DIR}/metrics/registry.pb.cc
+        ${PROTO_GEN_DIR}/metrics/catalog.pb.cc
+        ${PROTO_GEN_DIR}/metrics/catalog.grpc.pb.cc
+        ${PROTO_GEN_DIR}/metrics/transport.pb.cc
+        ${PROTO_GEN_DIR}/metrics/transport.grpc.pb.cc
     )
     target_include_directories(aiserver_model_update_development_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}
         ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
         ${GRPC_INCLUDE_DIRS}
@@ -121,6 +136,7 @@ if(BUILD_TESTING)
     target_include_directories(
         aiserver_gae_sample_delivery_development_test PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}
         ${PROTO_GEN_DIR}
         ${Protobuf_INCLUDE_DIRS}
         ${GRPC_INCLUDE_DIRS}

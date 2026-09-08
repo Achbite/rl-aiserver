@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include "proto/metrics/catalog.pb.h"
+#include "proto/metrics/registry.pb.h"
 
 // One registry per producer lifecycle. Definitions travel with the points that
 // use them; retention does not require replaying a separate registration event.
@@ -16,11 +18,14 @@ public:
                   const std::string& unit, const std::string& scope,
                   training::MetricValueType type,
                   training::MetricAggregation aggregation,
-                  const std::string& denominator = {}) {
+                  const std::string& denominator = {},
+                  const std::string& category = "custom",
+                  const std::string& description = {}) {
         const auto existing = definitions_.find(id);
         if (existing != definitions_.end()) {
             const auto& definition = existing->second;
             if (definition.display_name() != label || definition.unit() != unit ||
+                definition.category() != category || definition.description() != description ||
                 definition.scope() != scope || definition.value_type() != type ||
                 definition.aggregation() != aggregation || definition.denominator() != denominator) {
                 throw std::invalid_argument("metric definition changed: " + id);
@@ -43,6 +48,8 @@ public:
         definition.set_value_type(type);
         definition.set_aggregation(aggregation);
         definition.set_denominator(denominator);
+        definition.set_category(category);
+        definition.set_description(description);
         definitions_.emplace(id, std::move(definition));
         return id;
     }
@@ -71,6 +78,14 @@ public:
         auto& point = Add(record, id, training::METRIC_VALUE_TYPE_UNSIGNED);
         point.set_unsigned_value(value);
         return point;
+    }
+
+    training::GetMetricCatalogRsp Catalog(const common::ServiceInstanceIdentity& source) const {
+        training::GetMetricCatalogRsp result;
+        *result.mutable_source() = source;
+        for (const auto& item : definitions_)
+            *result.add_entries()->mutable_definition() = item.second;
+        return result;
     }
 
 private:

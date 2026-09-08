@@ -6,6 +6,7 @@
 #include <optional>
 #include <unordered_map>
 #include <vector>
+#include "proto/metrics/registry.pb.h"
 
 struct AgentEpisodeResult {
     uint32_t agent_id = 0;
@@ -29,6 +30,38 @@ struct AgentEpisodeResult {
 };
 
 
+inline void RegisterMazeEpisodeMetrics(MetricRegistry& registry) {
+    auto mean = [&](const std::string& id, const std::string& label, const std::string& unit,
+                    const std::string& scope, const std::string& denominator, const std::string& category) {
+        registry.Register(id, label, unit, scope, training::METRIC_VALUE_TYPE_SUM_COUNT,
+                          training::METRIC_AGGREGATION_MEAN, denominator, category);
+    };
+    auto count = [&](const std::string& id, const std::string& label, const std::string& scope) {
+        registry.Register(id, label, "count", scope, training::METRIC_VALUE_TYPE_UNSIGNED,
+                          training::METRIC_AGGREGATION_SUM, {}, "episode");
+    };
+    count("task.maze.environment_episodes", "Environment Episodes", "environment_episode");
+    count("task.maze.agent_episodes", "Agent Episodes", "agent_episode");
+    mean("task.maze.any_success", "Any Agent Success Rate", "ratio", "environment_episode", "environment_episode", "success");
+    mean("task.maze.all_success", "All Agents Success Rate", "ratio", "environment_episode", "environment_episode", "success");
+    mean("task.maze.return", "Mean Episode Return", "reward", "agent_episode", "agent_episode", "reward");
+    mean("task.maze.success", "Agent Success Rate", "ratio", "agent_episode", "agent_episode", "success");
+    mean("task.maze.episode_length", "Episode Length", "transition", "agent_episode", "agent_episode", "episode");
+    mean("task.maze.unique_cells", "Unique Cells", "cell", "agent_episode", "agent_episode", "episode");
+    mean("task.maze.blocked_move_rate", "Blocked Move Rate", "ratio", "agent_episode", "attempted_move", "episode");
+    mean("task.maze.path_ratio", "Successful Path Ratio", "ratio", "agent_episode", "successful_agent_episode", "episode");
+    for (const auto& item : std::vector<std::pair<std::string, training::MetricAggregation>>{
+            {"min", training::METRIC_AGGREGATION_MIN}, {"max", training::METRIC_AGGREGATION_MAX}})
+        registry.Register("task.maze.return_" + item.first,
+            item.first == "min" ? "Episode Return Min" : "Episode Return Max", "reward", "agent_episode",
+            training::METRIC_VALUE_TYPE_SCALAR, item.second, {}, "episode");
+    for (int value = maze::MazeTerminationReason_MIN; value <= maze::MazeTerminationReason_MAX; ++value) {
+        if (!maze::MazeTerminationReason_IsValid(value)) continue;
+        const auto name = maze::MazeTerminationReason_Name(static_cast<maze::MazeTerminationReason>(value));
+        count("task.maze.termination." + name, name, "agent_episode");
+    }
+}
+
 inline training::RegisteredMetricRecord BuildMazeEpisodeMetrics(
     MetricRegistry& registry, const std::string& environment_id,
     const std::string& episode_id, const std::vector<AgentEpisodeResult>& agents) {
@@ -41,14 +74,10 @@ inline training::RegisteredMetricRecord BuildMazeEpisodeMetrics(
     auto mean = [&](const std::string& id, const std::string& label, const std::string& unit,
                     const std::string& scope, const std::string& denominator,
                     double sum, uint64_t count) {
-        const auto field = registry.Register(id, label, unit, scope, training::METRIC_VALUE_TYPE_SUM_COUNT,
-                          training::METRIC_AGGREGATION_MEAN, denominator);
-        registry.Mean(record, field, sum, count);
+        registry.Mean(record, id, sum, count);
     };
     auto count = [&](const std::string& id, const std::string& label, const std::string& scope, uint64_t value) {
-        const auto field = registry.Register(id, label, "count", scope, training::METRIC_VALUE_TYPE_UNSIGNED,
-                          training::METRIC_AGGREGATION_SUM);
-        registry.Unsigned(record, field, value);
+        registry.Unsigned(record, id, value);
     };
     count("task.maze.environment_episodes", "Environment Episodes", "environment_episode", 1);
     const auto successes = std::count_if(agents.begin(), agents.end(),
@@ -74,7 +103,7 @@ inline training::RegisteredMetricRecord BuildMazeEpisodeMetrics(
             throw std::invalid_argument("reward components do not conserve episode return");
         }
         count("task.maze.agent_episodes", "Agent Episodes", "agent_episode", 1);
-        mean("task.maze.return", "Episode Return", "reward", "agent_episode", "agent_episode", agent.episode_return, 1);
+        mean("task.maze.return", "Mean Episode Return", "reward", "agent_episode", "agent_episode", agent.episode_return, 1);
         mean("task.maze.success", "Agent Success Rate", "ratio", "agent_episode", "agent_episode", agent.success ? 1.0 : 0.0, 1);
         mean("task.maze.episode_length", "Episode Length", "transition", "agent_episode", "agent_episode", agent.transition_count, 1);
         mean("task.maze.unique_cells", "Unique Cells", "cell", "agent_episode", "agent_episode", agent.unique_cell_count, 1);
@@ -89,8 +118,6 @@ inline training::RegisteredMetricRecord BuildMazeEpisodeMetrics(
         for (const auto& item : std::vector<std::pair<std::string, training::MetricAggregation>>{
                 {"min", training::METRIC_AGGREGATION_MIN}, {"max", training::METRIC_AGGREGATION_MAX}}) {
             const auto id = "task.maze.return_" + item.first;
-            registry.Register(id, item.first == "min" ? "Episode Return Min" : "Episode Return Max", "reward", "agent_episode",
-                              training::METRIC_VALUE_TYPE_SCALAR, item.second);
             registry.Scalar(record, id, agent.episode_return);
         }
         count("task.maze.termination." + maze::MazeTerminationReason_Name(agent.termination_reason),
@@ -98,21 +125,12 @@ inline training::RegisteredMetricRecord BuildMazeEpisodeMetrics(
         std::vector<std::pair<std::string, double>> components(
             agent.reward_component_sums.begin(), agent.reward_component_sums.end());
         std::sort(components.begin(), components.end());
-        // Total Reward is the sum of reward components per transition. Keep
-        // the raw denominator here; readers merge sums/counts across episodes.
-        if (agent.transition_count > 0) {
-            mean("task.maze.reward.total.per_transition", "Total Reward", "reward",
-                 "agent_episode", "transition", agent.episode_return, agent.transition_count);
-        }
         for (const auto& component : components) {
             auto label = component.first;
             std::replace(label.begin(), label.end(), '_', ' ');
-            mean("task.maze.reward." + component.first + ".per_episode", label + " / Episode", "reward",
+            mean("task.maze.reward." + component.first + ".per_episode", label + " / Agent Episode", "reward",
                  "agent_episode", "agent_episode", component.second, 1);
-            if (agent.transition_count > 0) {
-                mean("task.maze.reward." + component.first + ".per_transition", label + " / Transition", "reward",
-                     "agent_episode", "transition", component.second, agent.transition_count);
-            }
+
         }
         for (int i = first_point; i < record.points_size(); ++i) {
             auto& attributes = *record.mutable_points(i)->mutable_attributes();

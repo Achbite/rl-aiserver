@@ -23,6 +23,8 @@ observation:
   ray_max_range: 10              # local ray maximum, grid cells, >0
 
 # Reward 公式与数值由 src/ai/maze_reward.cpp 持有。
+metrics:
+  reward_interval_ms: 5000       # confirmed transition sum/count flush interval
 
 # --- 网格参数（A* 测试 + 训练共用）---
 strategy:

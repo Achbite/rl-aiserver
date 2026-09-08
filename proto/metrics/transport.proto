@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package rl.training.v1;
+
+option cc_generic_services = false;
+
+import "proto/common/identity.proto";
+
+enum MetricBatchResult {
+    METRIC_BATCH_RESULT_UNSPECIFIED = 0;
+    METRIC_BATCH_RESULT_DELIVERED = 1;
+    METRIC_BATCH_RESULT_WAIT = 2;
+    METRIC_BATCH_RESULT_FINAL = 3;
+    reserved 4;
+    reserved "METRIC_BATCH_RESULT_REJECTED_IDENTITY";
+    METRIC_BATCH_RESULT_REJECTED_CURSOR = 5;
+    METRIC_BATCH_RESULT_REJECTED_INVALID = 6;
+}
+
+enum MetricBatchAckResult {
+    METRIC_BATCH_ACK_RESULT_UNSPECIFIED = 0;
+    METRIC_BATCH_ACK_RESULT_APPLIED = 1;
+    METRIC_BATCH_ACK_RESULT_ALREADY_APPLIED = 2;
+    METRIC_BATCH_ACK_RESULT_NOT_FOUND = 3;
+    reserved 4;
+    reserved "METRIC_BATCH_ACK_RESULT_REJECTED_IDENTITY";
+    METRIC_BATCH_ACK_RESULT_REJECTED_CURSOR = 5;
+    METRIC_BATCH_ACK_RESULT_REJECTED_INVALID = 6;
+}
+
+enum MetricFactKind {
+    METRIC_FACT_KIND_UNSPECIFIED = 0;
+    reserved 1, 2;
+    reserved "METRIC_FACT_KIND_MAZE_EPISODE", "METRIC_FACT_KIND_TRAIN_UPDATE";
+    METRIC_FACT_KIND_REGISTERED_METRICS = 3;
+}
+
+message MetricEvent {
+    reserved 1 to 3;
+    reserved "contract", "schema_identity", "source",
+             "committed_at_unix_ms";
+    // Source lifecycle identity is owned once by MetricBatch.
+    // Starts at 1 for each source lifecycle. Zero is never a valid event and
+    // is reserved for a consumer cursor that has acknowledged no event.
+    uint64 event_sequence = 4;
+    // Raw producer wall-clock observation. Presence is required, but this value
+    // is not an ordering key and may repeat or regress after clock adjustment.
+    optional int64 observed_at_unix_ms = 5;
+    // REGISTERED_METRICS selects RegisteredMetricRecord. Transport, persistence,
+    // cursor and ACK layers keep these bytes opaque. ACK proves persistence,
+    // not successful metric interpretation; readers expose content errors.
+    bytes fact_payload = 6;
+    MetricFactKind fact_kind = 7;
+    reserved 8, 9;
+    reserved "episode", "train_update";
+}
+
+message MetricSequenceGap {
+    // The inclusive unavailable interval. A valid gap satisfies
+    // first <= last < oldest_available. It is an explicit incomplete-history
+    // fact, not a heartbeat and not an empty event batch.
+    uint64 first_unavailable_event_sequence = 1;
+    uint64 last_unavailable_event_sequence = 2;
+    uint64 oldest_available_event_sequence = 3;
+    string reason = 4;
+}
+
+message MetricBatch {
+    reserved 1, 2, 5, 13;
+    reserved "contract", "schema_identity", "batch_digest",
+             "event_time_watermark_unix_ms";
+    // Starts at 1 for each source lifecycle. Zero is reserved for an initial
+    // consumer cursor.
+    rl.common.v1.ServiceInstanceIdentity source = 3;
+    uint64 batch_sequence = 4;
+    int64 created_at_unix_ms = 6;
+    // For an event batch these equal the first and last strictly increasing,
+    // non-zero event sequences. For a gap batch they equal the unavailable
+    // interval. For a heartbeat they are both zero.
+    uint64 first_event_sequence = 7;
+    uint64 last_event_sequence = 8;
+    repeated MetricEvent events = 9;
+    // A heartbeat has no events and no gap. It still has a non-zero batch
+    // sequence and must be acknowledged.
+    bool heartbeat = 10;
+    // May accompany the last event, gap or heartbeat batch. A source that
+    // committed no events terminates with a final heartbeat whose
+    // final_event_sequence is zero. Otherwise final_event_sequence equals the
+    // last committed event sequence. Once that exact batch is acknowledged,
+    // the producer emits no later batch in this source lifecycle and
+    // GetMetricBatch returns METRIC_BATCH_RESULT_FINAL without a batch payload.
+    bool source_final = 11;
+    uint64 final_event_sequence = 12;
+    MetricSequenceGap gap = 14;
+}
+
+message MetricBatchCursor {
+    rl.common.v1.ServiceInstanceIdentity source = 1;
+    // Both zero identify a new consumer. For events, acknowledged_event is the
+    // batch last event; for a gap it is the unavailable interval last event;
+    // for a heartbeat it remains the previous cursor event sequence.
+    uint64 acknowledged_batch_sequence = 2;
+    uint64 acknowledged_event_sequence = 3;
+    reserved 4;
+    reserved "acknowledged_batch_digest";
+}
+
+message GetMetricBatchReq {
+    reserved 1;
+    reserved "contract";
+    rl.common.v1.ServiceInstanceIdentity consumer = 2;
+    MetricBatchCursor cursor = 3;
+    uint32 max_events = 4;
+    int64 max_bytes = 5;
+    int32 wait_timeout_ms = 6;
+}
+
+message GetMetricBatchRsp {
+    // DELIVERED always contains one batch that requires AckMetricBatch. WAIT
+    // and every rejection contain no batch. FINAL contains no batch and is
+    // returned only after the request cursor has acknowledged source_final.
+    MetricBatchResult result = 1;
+    string message = 2;
+    MetricBatch batch = 3;
+    rl.common.v1.ServiceInstanceIdentity producer = 4;
+    uint64 oldest_available_event_sequence = 5;
+    uint64 latest_available_event_sequence = 6;
+}
+
+message AckMetricBatchReq {
+    reserved 1;
+    reserved "contract";
+    rl.common.v1.ServiceInstanceIdentity consumer = 2;
+    MetricBatchCursor cursor = 3;
+}
+
+message AckMetricBatchRsp {
+    MetricBatchAckResult result = 1;
+    string message = 2;
+    rl.common.v1.ServiceInstanceIdentity producer = 3;
+    uint64 oldest_available_event_sequence = 4;
+    uint64 latest_available_event_sequence = 5;
+    // The durable producer-side cursor after APPLIED or ALREADY_APPLIED.
+    MetricBatchCursor committed_cursor = 6;
+}
+
+// Implemented independently by each metric-event owner (AIServer and Learner).
+// A retry with the same cursor returns the same batch identity until
+// it is acknowledged or an explicit gap proves the requested event unavailable.
+service MetricEventService {
+    rpc GetMetricBatch(GetMetricBatchReq) returns (GetMetricBatchRsp);
+    rpc AckMetricBatch(AckMetricBatchReq) returns (AckMetricBatchRsp);
+}

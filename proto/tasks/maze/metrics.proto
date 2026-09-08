@@ -4,10 +4,10 @@ package rl.task.maze.metrics.v1;
 
 option cc_generic_services = false;
 
-import "training.proto";
+import "proto/metrics/registry.proto";
 
-// Maze-owned Episode facts. The generic MetricBatch transport carries their
-// serialized bytes under METRIC_FACT_KIND_MAZE_EPISODE.
+// Maze-owned Episode calculation facts. Publication uses the registered metric
+// record; the shared transport does not depend on these task-specific messages.
 message AgentEpisodeMetricFact {
     reserved "behavior_model_version_min", "behavior_model_version_max";
     uint32 agent_id = 1;

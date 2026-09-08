@@ -1,4 +1,5 @@
 #include "grpc/maze_service.h"
+#include "rl_sdk/server_command.h"
 
 #include "ai/maze_observation.h"
 #include "log/logger.h"
@@ -10,8 +11,15 @@
 #include <limits>
 #include <sstream>
 #include <unordered_set>
+#include "proto/metrics/registry.pb.h"
+#include "proto/metrics/transport.pb.h"
 
 namespace {
+using rl_sdk::FillReply;
+using rl_sdk::CheckCommand;
+using rl_sdk::CommitCommand;
+using rl_sdk::RejectCommand;
+using rl_sdk::CommandCheck;
 
 double ElapsedMs(std::chrono::steady_clock::time_point start) {
     return std::chrono::duration<double, std::milli>(
@@ -44,115 +52,16 @@ bool IsEnvironmentTerminal(maze::MazeTerminationReason reason) {
            reason == maze::MAZE_TERMINATION_REASON_TIME_LIMIT;
 }
 
-void FillReply(const SessionManager::Session& session,
-               std::uint64_t applied_sequence,
-               maze::CommandResult result,
-               maze::CommandErrorCode error_code,
-               const std::string& message,
-               maze::CommandReply* reply) {
-    reply->set_result(result);
-    reply->set_error_code(error_code);
-    reply->set_message(message);
-    reply->set_applied_sequence(applied_sequence);
-    reply->set_phase(session.phase);
-}
-
-void FillOpenRejected(maze::CommandErrorCode error_code,
+void FillOpenRejected(rl::session::v1::CommandErrorCode error_code,
                       const std::string& message,
-                      maze::CommandReply* reply) {
-    reply->set_result(maze::COMMAND_RESULT_REJECTED);
+                      rl::session::v1::CommandReply* reply) {
+    reply->set_result(rl::session::v1::COMMAND_RESULT_REJECTED);
     reply->set_error_code(error_code);
     reply->set_message(message);
     reply->set_applied_sequence(0);
-    reply->set_phase(maze::SESSION_PHASE_UNSPECIFIED);
+    reply->set_phase(rl::session::v1::SESSION_PHASE_UNSPECIFIED);
 }
 
-enum class CommandCheck {
-    Proceed,
-    Replayed,
-    Rejected,
-};
-
-template <typename Request, typename Response>
-CommandCheck CheckCommand(SessionManager::Session& session,
-                          const maze::CommandIdentity& command,
-                          const Request& request,
-                          Response* response) {
-    auto* reply = response->mutable_reply();
-    const std::string payload = request.SerializeAsString();
-    const auto replay_decision = session.command_replay.Classify(
-        command.sequence(), session.last_command_sequence, payload);
-    if (replay_decision ==
-        LifecycleReplayDecision::PayloadConflict) {
-            FillReply(session, session.last_command_sequence,
-                          maze::COMMAND_RESULT_REJECTED,
-                          maze::COMMAND_ERROR_CODE_PAYLOAD_CONFLICT,
-                          "command sequence was reused with a different payload",
-                          reply);
-            return CommandCheck::Rejected;
-    }
-    if (replay_decision == LifecycleReplayDecision::Replay) {
-        if (!response->ParseFromString(session.command_replay.response())) {
-            FillReply(session, session.last_command_sequence,
-                          maze::COMMAND_RESULT_REJECTED,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
-                          "idempotent response is unavailable", reply);
-            return CommandCheck::Rejected;
-        }
-        response->mutable_reply()->set_result(
-            maze::COMMAND_RESULT_ALREADY_APPLIED);
-        response->mutable_reply()->set_message(
-            "command was already applied");
-        return CommandCheck::Replayed;
-    }
-    if (replay_decision == LifecycleReplayDecision::OutOfOrder) {
-        FillReply(session, session.last_command_sequence,
-                      maze::COMMAND_RESULT_REJECTED,
-                      maze::COMMAND_ERROR_CODE_OUT_OF_ORDER,
-                      "command sequence is not contiguous", reply);
-        return CommandCheck::Rejected;
-    }
-    if (command.session_id() != session.session_id) {
-        FillReply(session, session.last_command_sequence,
-                      maze::COMMAND_RESULT_REJECTED,
-                      maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
-                      "session identity does not match", reply);
-        return CommandCheck::Rejected;
-    }
-    if (command.session_epoch() != session.session_epoch) {
-        FillReply(session, session.last_command_sequence,
-                      maze::COMMAND_RESULT_REJECTED,
-                      maze::COMMAND_ERROR_CODE_STALE_EPOCH,
-                      "Session epoch does not match", reply);
-        return CommandCheck::Rejected;
-    }
-    return CommandCheck::Proceed;
-}
-
-template <typename Request, typename Response>
-void CommitCommand(SessionManager::Session& session,
-                   const maze::CommandIdentity& command,
-                   const Request& request,
-                   Response* response,
-                   const std::string& message) {
-    session.last_command_sequence = command.sequence();
-    FillReply(session, command.sequence(),
-                  maze::COMMAND_RESULT_APPLIED,
-                  maze::COMMAND_ERROR_CODE_UNSPECIFIED,
-                  message, response->mutable_reply());
-    session.command_replay.Store(
-        command.sequence(), request.SerializeAsString(),
-        response->SerializeAsString());
-}
-
-void RejectCommand(const SessionManager::Session& session,
-                   maze::CommandErrorCode error_code,
-                   const std::string& message,
-                   maze::CommandReply* reply) {
-    FillReply(session, session.last_command_sequence,
-                  maze::COMMAND_RESULT_REJECTED, error_code,
-                  message, reply);
-}
 
 }  // namespace
 
@@ -184,7 +93,7 @@ grpc::Status MazeServiceImpl::OpenSession(
     if (prior != open_payloads_.end()) {
         if (prior->second != payload) {
             FillOpenRejected(
-                maze::COMMAND_ERROR_CODE_PAYLOAD_CONFLICT,
+                rl::session::v1::COMMAND_ERROR_CODE_PAYLOAD_CONFLICT,
                 "OpenSession request_id conflicts", rsp->mutable_reply());
             return grpc::Status::OK;
         }
@@ -196,19 +105,19 @@ grpc::Status MazeServiceImpl::OpenSession(
                 session->last_valid_client_activity_unix_ms = NowMs();
             }
             rsp->mutable_reply()->set_result(
-                maze::COMMAND_RESULT_ALREADY_APPLIED);
+                rl::session::v1::COMMAND_RESULT_ALREADY_APPLIED);
             rsp->mutable_reply()->set_message(
                 "session was already opened");
             return grpc::Status::OK;
         }
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                          "OpenSession response is unavailable",
                          rsp->mutable_reply());
         return grpc::Status::OK;
     }
 
     if (!IsReady()) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                          "AIServer is not ready", rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -217,7 +126,7 @@ grpc::Status MazeServiceImpl::OpenSession(
         req->client().instance_id().empty() ||
         req->client().lifecycle_epoch() == 0 ||
         req->environment_instance_id().empty()) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "Client or environment identity is invalid",
                          rsp->mutable_reply());
         return grpc::Status::OK;
@@ -226,7 +135,7 @@ grpc::Status MazeServiceImpl::OpenSession(
     const std::string session_id = session_mgr_.CreateSession();
     auto* session = session_mgr_.GetSession(session_id);
     if (!session) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                          "AIServer could not allocate a session",
                          rsp->mutable_reply());
         return grpc::Status::OK;
@@ -237,7 +146,7 @@ grpc::Status MazeServiceImpl::OpenSession(
     session->session_epoch = next_lifecycle_epoch_.fetch_add(1);
     session->map_id = config_.task.fixed_map_id;
     session->workload_mode = WorkloadModeForRunMode(config_.server.run_mode);
-    session->phase = maze::SESSION_PHASE_OPEN;
+    session->phase = rl::session::v1::SESSION_PHASE_OPEN;
 
     rsp->set_session_id(session_id);
     rsp->set_session_epoch(session->session_epoch);
@@ -255,8 +164,8 @@ grpc::Status MazeServiceImpl::OpenSession(
             ? maze::ACTION_MASK_MODE_REQUIRED
             : maze::ACTION_MASK_MODE_DISABLED);
     rsp->set_workload_mode(session->workload_mode);
-    FillReply(*session, 0, maze::COMMAND_RESULT_APPLIED,
-              maze::COMMAND_ERROR_CODE_UNSPECIFIED,
+    FillReply(*session, 0, rl::session::v1::COMMAND_RESULT_APPLIED,
+              rl::session::v1::COMMAND_ERROR_CODE_UNSPECIFIED,
               "session opened", rsp->mutable_reply());
     open_payloads_[req->request_id()] = payload;
     open_responses_[req->request_id()] = rsp->SerializeAsString();
@@ -271,7 +180,7 @@ grpc::Status MazeServiceImpl::Init(
     std::lock_guard<std::mutex> lock(mutex_);
     auto* session = session_mgr_.GetSession(req->command().session_id());
     if (!session) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "session does not exist", rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -280,15 +189,15 @@ grpc::Status MazeServiceImpl::Init(
         session->last_valid_client_activity_unix_ms = NowMs();
     }
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
-    if (session->phase != maze::SESSION_PHASE_OPEN ||
+    if (session->phase != rl::session::v1::SESSION_PHASE_OPEN ||
         !req->command().episode_id().empty()) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "Init is not valid in the current session state",
                       rsp->mutable_reply());
         return grpc::Status::OK;
     }
     if (!IsReady() || model_ack_pending_) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "AIServer is not ready to initialize the assigned task",
                       rsp->mutable_reply());
         return grpc::Status::OK;
@@ -298,7 +207,7 @@ grpc::Status MazeServiceImpl::Init(
     std::string error;
     if (!ValidateMazeMapDescriptor(req->map(), config_.task.fixed_map_id,
                                    validated, error)) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_MAP_INVALID,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_TASK_INPUT_INVALID,
                       error.empty() ? "map descriptor does not match assignment"
                                     : error,
                       rsp->mutable_reply());
@@ -329,13 +238,13 @@ grpc::Status MazeServiceImpl::Init(
                 config_.task.episode_max_steps, ActiveModelIdentity(),
                 produced_unique_transitions_, error) ||
             !WriteTaskControllerReceipt(candidate_task_controller, error)) {
-            RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+            RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "TaskController initialization failed: " + error,
                           rsp->mutable_reply());
             return grpc::Status::OK;
         }
     }
-    candidate.phase = maze::SESSION_PHASE_READY;
+    candidate.phase = rl::session::v1::SESSION_PHASE_READY;
     CommitCommand(candidate, req->command(), *req, rsp,
                   "map accepted and session initialized");
     if (config_.server.run_mode == aiserver_mode::kTraining) {
@@ -353,7 +262,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     std::lock_guard<std::mutex> lock(mutex_);
     auto* session = session_mgr_.GetSession(req->command().session_id());
     if (!session) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "session does not exist", rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -363,14 +272,14 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     }
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
     if (!IsCoreInferenceReady()) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "AIServer core inference is not ready to begin an episode",
                       rsp->mutable_reply());
         return grpc::Status::OK;
     }
-    if (session->phase != maze::SESSION_PHASE_READY ||
+    if (session->phase != rl::session::v1::SESSION_PHASE_READY ||
         !req->command().episode_id().empty()) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "BeginEpisode is not valid in the current state",
                       rsp->mutable_reply());
         return grpc::Status::OK;
@@ -388,7 +297,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
         if (sender.terminal_fault || sender.degraded || !sender.ready ||
             !recoverable_delivery_state) {
             RejectCommand(
-                *session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                *session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                 sender.last_error.empty()
                     ? "sample delivery cannot begin an episode"
                     : "sample delivery cannot begin an episode: " +
@@ -409,7 +318,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
                 plan, error)) {
             MarkDegraded("TaskController planning failed: " + error);
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           last_error_, rsp->mutable_reply());
             return grpc::Status::OK;
         }
@@ -417,7 +326,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
             MarkDegraded(
                 "training TaskController attempted to schedule evaluation");
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           last_error_, rsp->mutable_reply());
             return grpc::Status::OK;
         }
@@ -440,7 +349,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
     if (plan.max_steps <= 0 ||
         !training_identity_matches) {
         RejectCommand(*session,
-                      maze::COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
+                      rl::session::v1::COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
                       "Episode plan does not match the loaded model identity",
                       rsp->mutable_reply());
         return grpc::Status::OK;
@@ -465,7 +374,7 @@ grpc::Status MazeServiceImpl::BeginEpisode(
         candidate.evaluation_pinned_model_step = plan.model.model_step;
     }
     ResetEpisodeState(candidate, episode_id);
-    candidate.phase = maze::SESSION_PHASE_EPISODE_RUNNING;
+    candidate.phase = rl::session::v1::SESSION_PHASE_EPISODE_RUNNING;
     assignment.set_episode_id(episode_id);
     assignment.set_mode(plan.episode_mode);
     assignment.set_max_steps(static_cast<std::uint32_t>(plan.max_steps));
@@ -494,7 +403,7 @@ grpc::Status MazeServiceImpl::Update(
     auto finish = [&]() { RecordUpdateLatency(rpc_start); };
     auto* session = session_mgr_.GetSession(req->command().session_id());
     if (!session) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "session does not exist", rsp->mutable_reply());
         finish();
         return grpc::Status::OK;
@@ -507,15 +416,15 @@ grpc::Status MazeServiceImpl::Update(
         finish();
         return grpc::Status::OK;
     }
-    if (session->phase != maze::SESSION_PHASE_EPISODE_RUNNING) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+    if (session->phase != rl::session::v1::SESSION_PHASE_EPISODE_RUNNING) {
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "Update requires a running active Episode",
                       rsp->mutable_reply());
         finish();
         return grpc::Status::OK;
     }
     if (req->command().episode_id() != session->current_episode_id) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                       "Update Episode identity does not match",
                       rsp->mutable_reply());
         finish();
@@ -527,7 +436,7 @@ grpc::Status MazeServiceImpl::Update(
     if (req->frame_id() !=
             static_cast<std::uint64_t>(session->last_frame_id + 1) ||
         req->agents_size() != active_agent_count) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_OUT_OF_ORDER,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_OUT_OF_ORDER,
                       "frame is not contiguous or does not contain every "
                       "active Agent exactly once",
                       rsp->mutable_reply());
@@ -537,14 +446,14 @@ grpc::Status MazeServiceImpl::Update(
     if (session->current_max_steps <= 0 ||
         req->frame_id() >
             static_cast<std::uint64_t>(session->current_max_steps)) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_OUT_OF_ORDER,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_OUT_OF_ORDER,
                       "frame exceeds the assigned Episode horizon",
                       rsp->mutable_reply());
         finish();
         return grpc::Status::OK;
     }
     if (!IsCoreInferenceReady()) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "AIServer core inference is not ready",
                       rsp->mutable_reply());
         finish();
@@ -558,7 +467,7 @@ grpc::Status MazeServiceImpl::Update(
             ? BehaviorPolicyScope::TrainingAgentSegment
             : BehaviorPolicyScope::EvaluationEpisode;
     if (session->behavior_policy_scope != expected_policy_scope) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "Episode mode and behavior policy scope disagree",
                       rsp->mutable_reply());
         finish();
@@ -570,7 +479,7 @@ grpc::Status MazeServiceImpl::Update(
          session->evaluation_pinned_model_step !=
              model_manifest_.model_step())) {
         RejectCommand(*session,
-                      maze::COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
+                      rl::session::v1::COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH,
                       "evaluation behavior policy identity changed",
                       rsp->mutable_reply());
         finish();
@@ -584,7 +493,7 @@ grpc::Status MazeServiceImpl::Update(
         const auto sender = sample_distributor_.GetSnapshot();
         if (sender.terminal_fault || sender.degraded) {
             RejectCommand(
-                *session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                *session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                 sender.last_error.empty()
                     ? "SampleDistributor has a terminal fault"
                     : "SampleDistributor has a terminal fault: " +
@@ -600,8 +509,8 @@ grpc::Status MazeServiceImpl::Update(
                 sample_distributor_.PauseRetryAfterMs());
             FillReply(
                 *session, session->last_command_sequence,
-                maze::COMMAND_RESULT_WAIT,
-                maze::COMMAND_ERROR_CODE_UNSPECIFIED,
+                rl::session::v1::COMMAND_RESULT_WAIT,
+                rl::session::v1::COMMAND_ERROR_CODE_UNSPECIFIED,
                 sender.transient_retry
                     ? "SampleDistributor is recovering its ingress transport"
                     : "SampleDistributor local outbound queue is full",
@@ -611,7 +520,7 @@ grpc::Status MazeServiceImpl::Update(
         }
         if (!sender.ready) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "SampleDistributor is not ready",
                           rsp->mutable_reply());
             finish();
@@ -649,7 +558,7 @@ grpc::Status MazeServiceImpl::Update(
             std::trunc(state.position().x()) != state.position().x() ||
             std::trunc(state.position().y()) != state.position().y()) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+                          rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                           "Agent identity or position is invalid",
                           rsp->mutable_reply());
             finish();
@@ -657,7 +566,7 @@ grpc::Status MazeServiceImpl::Update(
         }
         auto& agent = agent_it->second;
         if (agent.done_collected) {
-            RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+            RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "terminal Agent cannot be reported again",
                           rsp->mutable_reply());
             finish();
@@ -678,7 +587,7 @@ grpc::Status MazeServiceImpl::Update(
             (!state.is_done() && !mask_required &&
              state.action_mask_size() != 0)) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Agent action mask contradicts the session mode",
                           rsp->mutable_reply());
             finish();
@@ -694,7 +603,7 @@ grpc::Status MazeServiceImpl::Update(
               !agent.has_pending_action ||
               state.executed_action_id() != agent.pending_action))) {
             RejectCommand(
-                *session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                *session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                 initial_observation
                     ? "initial Agent state cannot report an executed action"
                     : "executed action receipt does not match the pending "
@@ -726,7 +635,7 @@ grpc::Status MazeServiceImpl::Update(
                                         candidate.current_max_steps)) ||
             (!agent.has_pending_action &&
              agent.last_observation_frame_id < 0 && state.is_done())) {
-            RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+            RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Agent state or termination reason is invalid",
                           rsp->mutable_reply());
             finish();
@@ -737,7 +646,7 @@ grpc::Status MazeServiceImpl::Update(
                 candidate, agent, gx, gy,
                 static_cast<int64_t>(req->frame_id()), state.is_done(),
                 state.last_move_blocked(), observation_error)) {
-            RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+            RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           observation_error, rsp->mutable_reply());
             finish();
             return grpc::Status::OK;
@@ -751,7 +660,7 @@ grpc::Status MazeServiceImpl::Update(
             MarkDegraded("Episode transition preparation failed: " +
                          transition_error);
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           last_error_, rsp->mutable_reply());
             finish();
             return grpc::Status::OK;
@@ -792,7 +701,7 @@ grpc::Status MazeServiceImpl::Update(
                     MarkDegraded(
                         "Agent segment exceeded its configured TMax");
                     RejectCommand(*session,
-                                  maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                                  rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                                   last_error_, rsp->mutable_reply());
                     finish();
                     return grpc::Status::OK;
@@ -809,7 +718,7 @@ grpc::Status MazeServiceImpl::Update(
                         bootstrap_value)) {
                     ++rollout_estimator_failure_count_;
                     RejectCommand(*session,
-                                  maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                                  rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                                   last_error_, rsp->mutable_reply());
                     finish();
                     return grpc::Status::OK;
@@ -826,7 +735,7 @@ grpc::Status MazeServiceImpl::Update(
                 ++rollout_estimator_failure_count_;
                 MarkDegraded("Agent segment close failed: " + prepare_error);
                 RejectCommand(*session,
-                              maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                              rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                               last_error_, rsp->mutable_reply());
                 finish();
                 return grpc::Status::OK;
@@ -842,7 +751,7 @@ grpc::Status MazeServiceImpl::Update(
     candidate.last_actions.clear();
     std::string commit_message;
     if (all_done) {
-        candidate.phase = maze::SESSION_PHASE_EPISODE_TERMINAL;
+        candidate.phase = rl::session::v1::SESSION_PHASE_EPISODE_TERMINAL;
         rsp->mutable_action_batch();
         commit_message = "terminal Agent states accepted";
     } else {
@@ -867,7 +776,7 @@ grpc::Status MazeServiceImpl::Update(
                     candidate_action_rng, action,
                     log_probability, value)) {
                 RejectCommand(*session,
-                              maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                              rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                               last_error_, rsp->mutable_reply());
                 finish();
                 return grpc::Status::OK;
@@ -896,7 +805,7 @@ grpc::Status MazeServiceImpl::Update(
             MarkDegraded("TaskController collection check failed: " +
                          controller_error);
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           last_error_, rsp->mutable_reply());
             finish();
             return grpc::Status::OK;
@@ -910,14 +819,14 @@ grpc::Status MazeServiceImpl::Update(
         rsp->mutable_wait()->set_retry_after_ms(
             sample_distributor_.PauseRetryAfterMs());
         FillReply(*session, session->last_command_sequence,
-                      maze::COMMAND_RESULT_WAIT,
-                      maze::COMMAND_ERROR_CODE_UNSPECIFIED,
+                      rl::session::v1::COMMAND_RESULT_WAIT,
+                      rl::session::v1::COMMAND_ERROR_CODE_UNSPECIFIED,
                       message, rsp->mutable_reply());
     };
     const auto reject_prepared = [&](const std::string& message) {
         rsp->Clear();
         RejectCommand(*session,
-                      maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                      rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       message, rsp->mutable_reply());
     };
 
@@ -1009,7 +918,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
     std::lock_guard<std::mutex> lock(mutex_);
     auto* session = session_mgr_.GetSession(req->command().session_id());
     if (!session) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "session does not exist", rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -1019,14 +928,14 @@ grpc::Status MazeServiceImpl::EndEpisode(
     }
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
     if (shutdown_started_) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "AIServer is draining and no longer accepts EndEpisode",
                       rsp->mutable_reply());
         return grpc::Status::OK;
     }
-    if (session->phase != maze::SESSION_PHASE_EPISODE_TERMINAL ||
+    if (session->phase != rl::session::v1::SESSION_PHASE_EPISODE_TERMINAL ||
         req->command().episode_id() != session->current_episode_id) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "EndEpisode requires a terminal report",
                       rsp->mutable_reply());
         return grpc::Status::OK;
@@ -1041,7 +950,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
             agent.has_pending_action ||
             agent.segment_open || !agent.segment_id.empty() ||
             !agent.segment_transitions.empty()) {
-            RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+            RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Episode has an uncommitted Agent segment",
                           rsp->mutable_reply());
             return grpc::Status::OK;
@@ -1064,7 +973,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
             metric.attempted_move_count < 0 ||
             metric.blocked_move_count > metric.attempted_move_count) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Episode metric source facts are invalid",
                           rsp->mutable_reply());
             return grpc::Status::OK;
@@ -1073,7 +982,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
             (!agent.episode_behavior_model_seen ||
              agent.episode_behavior_model_lineage_id.empty())) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "training Episode has no behavior model facts",
                           rsp->mutable_reply());
             return grpc::Status::OK;
@@ -1086,7 +995,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
             agent.episode_behavior_model_lineage_id;
         if (agent.terminal_frame_id < 0) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Episode terminal frame is missing",
                           rsp->mutable_reply());
             return grpc::Status::OK;
@@ -1113,7 +1022,7 @@ grpc::Status MazeServiceImpl::EndEpisode(
                 metric.minimum_behavior_model_step >
                     metric.maximum_behavior_model_step) {
                 RejectCommand(*session,
-                              maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                              rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                               "training Episode metric facts are inconsistent",
                               rsp->mutable_reply());
                 return grpc::Status::OK;
@@ -1143,13 +1052,13 @@ grpc::Status MazeServiceImpl::EndEpisode(
     SessionManager::Session candidate = *session;
     if (config_.server.run_mode == aiserver_mode::kTraining &&
         session->current_episode_mode != maze::EPISODE_MODE_TRAINING) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "training sessions cannot commit evaluation episodes",
                       rsp->mutable_reply());
         return grpc::Status::OK;
     }
 
-    candidate.phase = maze::SESSION_PHASE_READY;
+    candidate.phase = rl::session::v1::SESSION_PHASE_READY;
     candidate.behavior_policy_scope = BehaviorPolicyScope::Unspecified;
     candidate.evaluation_pinned_model_lineage_id.clear();
     candidate.evaluation_pinned_model_step = 0;
@@ -1157,10 +1066,13 @@ grpc::Status MazeServiceImpl::EndEpisode(
         BuildEpisodeOutcome(*session, metric_agents);
     training::RegisteredMetricRecord metric_fact;
     if (session->current_episode_mode == maze::EPISODE_MODE_TRAINING) {
+        const auto ended_at = std::chrono::steady_clock::now();
+        const int64_t observed_at_unix_ms = NowMs();
         try {
             metric_fact = BuildEpisodeMetricFact(*session, metric_agents);
+            session->reward_metrics.AppendTo(metric_fact, metric_registry_, "task.maze.reward.", observed_at_unix_ms, ended_at);
         } catch (const std::invalid_argument& error) {
-            RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+            RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           std::string("episode metric producer failed: ") + error.what(),
                           rsp->mutable_reply());
             return grpc::Status::OK;
@@ -1168,17 +1080,16 @@ grpc::Status MazeServiceImpl::EndEpisode(
         std::string metric_payload;
         if (!metric_fact.SerializeToString(&metric_payload)) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Episode metric payload serialization failed",
                           rsp->mutable_reply());
             return grpc::Status::OK;
         }
-        const int64_t observed_at_unix_ms = NowMs();
         const auto append_result = metric_events_.AppendFact(
             std::move(metric_payload), observed_at_unix_ms);
         if (!append_result.applied()) {
             RejectCommand(*session,
-                          maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                          rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Episode metric journal is already final",
                           rsp->mutable_reply());
             return grpc::Status::OK;
@@ -1194,24 +1105,11 @@ grpc::Status MazeServiceImpl::EndEpisode(
                 session->current_episode_id.c_str());
         }
     }
+    candidate.reward_metrics = {};
     *rsp->mutable_outcome() = episode_outcome;
     CommitCommand(candidate, req->command(), *req, rsp,
                   "Episode outcome and metrics committed");
     *session = std::move(candidate);
-    return grpc::Status::OK;
-}
-
-grpc::Status MazeServiceImpl::GetMetricBatch(
-    grpc::ServerContext*, const training::GetMetricBatchReq* req,
-    training::GetMetricBatchRsp* rsp) {
-    metric_events_.Get(*req, *rsp);
-    return grpc::Status::OK;
-}
-
-grpc::Status MazeServiceImpl::AckMetricBatch(
-    grpc::ServerContext*, const training::AckMetricBatchReq* req,
-    training::AckMetricBatchRsp* rsp) {
-    metric_events_.Ack(*req, *rsp);
     return grpc::Status::OK;
 }
 
@@ -1222,7 +1120,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     std::lock_guard<std::mutex> lock(mutex_);
     auto* session = session_mgr_.GetSession(req->command().session_id());
     if (!session) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "session does not exist", rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -1232,7 +1130,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     }
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
     if (shutdown_started_) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "AIServer is draining and no longer accepts AbortEpisode",
                       rsp->mutable_reply());
         return grpc::Status::OK;
@@ -1241,9 +1139,9 @@ grpc::Status MazeServiceImpl::AbortEpisode(
         req->reason() == maze::MAZE_TERMINATION_REASON_CLIENT_ABORT ||
         req->reason() == maze::MAZE_TERMINATION_REASON_CHAIN_FAILURE;
     if (!valid_reason ||
-        session->phase != maze::SESSION_PHASE_EPISODE_RUNNING ||
+        session->phase != rl::session::v1::SESSION_PHASE_EPISODE_RUNNING ||
         req->command().episode_id() != session->current_episode_id) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "AbortEpisode reason or identity is invalid",
                       rsp->mutable_reply());
         return grpc::Status::OK;
@@ -1292,7 +1190,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
                     MarkDegraded(
                         "controlled close pending bootstrap is non-finite");
                     RejectCommand(*session,
-                                  maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                                  rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                                   last_error_, rsp->mutable_reply());
                     return grpc::Status::OK;
                 }
@@ -1302,7 +1200,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
                            bootstrap_value)) {
                 ++rollout_estimator_failure_count_;
                 RejectCommand(*session,
-                              maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                              rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                               last_error_, rsp->mutable_reply());
                 return grpc::Status::OK;
             }
@@ -1317,7 +1215,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
                 MarkDegraded("controlled Agent segment close failed: " +
                              error);
                 RejectCommand(*session,
-                              maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                              rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                               last_error_, rsp->mutable_reply());
                 return grpc::Status::OK;
             }
@@ -1346,8 +1244,8 @@ grpc::Status MazeServiceImpl::AbortEpisode(
         SampleDistributor::ReservationResult::kRetryableUnavailable) {
         FillReply(
             *session, session->last_command_sequence,
-            maze::COMMAND_RESULT_WAIT,
-            maze::COMMAND_ERROR_CODE_UNSPECIFIED,
+            rl::session::v1::COMMAND_RESULT_WAIT,
+            rl::session::v1::COMMAND_ERROR_CODE_UNSPECIFIED,
             error.empty()
                 ? "SampleDistributor cannot reserve controlled-close output"
                 : error,
@@ -1361,7 +1259,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
         MarkDegraded("controlled-close envelope reservation failed: " +
                      error);
         RejectCommand(*session,
-                      maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                      rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       last_error_, rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -1370,8 +1268,8 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     if (seal == SampleDistributor::SealResult::kRetryableUnavailable) {
         FillReply(
             *session, session->last_command_sequence,
-            maze::COMMAND_RESULT_WAIT,
-            maze::COMMAND_ERROR_CODE_UNSPECIFIED,
+            rl::session::v1::COMMAND_RESULT_WAIT,
+            rl::session::v1::COMMAND_ERROR_CODE_UNSPECIFIED,
             error.empty()
                 ? "SampleDistributor changed before controlled-close seal"
                 : error,
@@ -1383,12 +1281,12 @@ grpc::Status MazeServiceImpl::AbortEpisode(
     if (seal == SampleDistributor::SealResult::kTerminalFault) {
         MarkDegraded("controlled-close envelope seal failed: " + error);
         RejectCommand(*session,
-                      maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                      rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       last_error_, rsp->mutable_reply());
         return grpc::Status::OK;
     }
 
-    candidate.phase = maze::SESSION_PHASE_ABORTED;
+    candidate.phase = rl::session::v1::SESSION_PHASE_ABORTED;
     candidate.behavior_policy_scope = BehaviorPolicyScope::Unspecified;
     candidate.evaluation_pinned_model_lineage_id.clear();
     candidate.evaluation_pinned_model_step = 0;
@@ -1401,7 +1299,7 @@ grpc::Status MazeServiceImpl::AbortEpisode(
         MarkDegraded(
             "controlled-close sealed envelope commit failed: " + error);
         RejectCommand(*session,
-                      maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                      rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       last_error_, rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -1426,7 +1324,7 @@ grpc::Status MazeServiceImpl::CloseSession(
     std::lock_guard<std::mutex> lock(mutex_);
     auto* session = session_mgr_.GetSession(req->command().session_id());
     if (!session) {
-        FillOpenRejected(maze::COMMAND_ERROR_CODE_INVALID_IDENTITY,
+        FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_INVALID_IDENTITY,
                          "session does not exist", rsp->mutable_reply());
         return grpc::Status::OK;
     }
@@ -1436,17 +1334,17 @@ grpc::Status MazeServiceImpl::CloseSession(
     }
     if (check != CommandCheck::Proceed) return grpc::Status::OK;
     const bool closeable =
-        session->phase == maze::SESSION_PHASE_OPEN ||
-        session->phase == maze::SESSION_PHASE_READY ||
-        session->phase == maze::SESSION_PHASE_ABORTED ||
-        session->phase == maze::SESSION_PHASE_TASK_COMPLETE;
+        session->phase == rl::session::v1::SESSION_PHASE_OPEN ||
+        session->phase == rl::session::v1::SESSION_PHASE_READY ||
+        session->phase == rl::session::v1::SESSION_PHASE_ABORTED ||
+        session->phase == rl::session::v1::SESSION_PHASE_TASK_COMPLETE;
     if (!closeable) {
-        RejectCommand(*session, maze::COMMAND_ERROR_CODE_STATE_CONFLICT,
+        RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                       "Session close requires no active Episode",
                       rsp->mutable_reply());
         return grpc::Status::OK;
     }
-    session->phase = maze::SESSION_PHASE_CLOSED;
+    session->phase = rl::session::v1::SESSION_PHASE_CLOSED;
     CommitCommand(*session, req->command(), *req, rsp,
                   "Session closed without live resources");
     return grpc::Status::OK;
@@ -1538,6 +1436,9 @@ grpc::Status MazeServiceImpl::GetAIServerStatus(
         client_activity.active_session_count;
     rsp->set_active_actor_session_count(active_session_count);
     rsp->set_active_segment_count(CountCachedSegments());
+    rsp->set_update_rpc_count(update_rpc_count_);
+    rsp->set_update_rpc_latency_sum_ms(update_rpc_latency_sum_ms_);
+    rsp->set_update_rpc_latency_max_ms(update_rpc_latency_max_ms_);
     rsp->set_inference_count(inference_count_);
     rsp->set_inference_latency_sum_ms(
         inference_latency_sum_ms_);

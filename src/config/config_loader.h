@@ -94,6 +94,7 @@ struct SampleDistributorConfig {
 
 // ---- AIServer 完整配置 ----
 struct AIServerConfig {
+    int reward_metric_interval_ms = 5000;
     ServerConfig   server;
     StrategyConfig strategy;
     PolicyConfig policy;

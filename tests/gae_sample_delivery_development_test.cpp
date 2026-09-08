@@ -18,6 +18,8 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include "proto/metrics/registry.pb.h"
+#include "proto/metrics/transport.pb.h"
 
 namespace {
 
@@ -146,7 +148,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     maze::OpenSessionRsp open_response;
     service.OpenSession(nullptr, &open_request, &open_response);
     Require(open_response.reply().result() ==
-                maze::COMMAND_RESULT_APPLIED &&
+                rl::session::v1::COMMAND_RESULT_APPLIED &&
                 !open_response.session_id().empty(),
             "open the public evaluation Session");
 
@@ -160,7 +162,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     maze::InitRsp init_response;
     service.Init(nullptr, &init_request, &init_response);
     Require(init_response.reply().result() ==
-                maze::COMMAND_RESULT_APPLIED,
+                rl::session::v1::COMMAND_RESULT_APPLIED,
             "initialize the public Session with the fixed map");
 
     maze::BeginEpisodeReq begin_request;
@@ -172,7 +174,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     maze::BeginEpisodeRsp begin_response;
     service.BeginEpisode(nullptr, &begin_request, &begin_response);
     Require(begin_response.reply().result() ==
-                maze::COMMAND_RESULT_APPLIED &&
+                rl::session::v1::COMMAND_RESULT_APPLIED &&
                 begin_response.has_assignment() &&
                 begin_response.assignment().mode() ==
                     maze::EPISODE_MODE_EVALUATION,
@@ -201,7 +203,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     maze::UpdateRsp response;
     service.Update(nullptr, &request, &response);
 
-    Require(response.reply().result() == maze::COMMAND_RESULT_APPLIED &&
+    Require(response.reply().result() == rl::session::v1::COMMAND_RESULT_APPLIED &&
                 response.reply().applied_sequence() == 3 &&
                 response.action_batch().actions_size() == 1 &&
                 response.action_batch().actions(0).agent_id() == 0 &&
@@ -209,7 +211,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
                     maze::MAZE_ACTION_NOOP,
             "production Update applies the Client-owned action mask");
     Require(response.reply().phase() ==
-                maze::SESSION_PHASE_EPISODE_RUNNING,
+                rl::session::v1::SESSION_PHASE_EPISODE_RUNNING,
             "the model-selected action commits through the public Update");
 }
 
@@ -329,6 +331,12 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
 
 void TestRegisteredEpisodeMetrics() {
     MetricRegistry registry;
+    MazeReward::RegisterMetrics(registry);
+    RegisterMazeEpisodeMetrics(registry);
+    registry.Register("task.maze.reward.changed_reward.per_transition", "Changed Reward", "reward", "agent_episode",
+        training::METRIC_VALUE_TYPE_SUM_COUNT, training::METRIC_AGGREGATION_MEAN, "transition", "reward");
+    registry.Register("task.maze.reward.changed_reward.per_episode", "Changed Reward / Agent Episode", "reward", "agent_episode",
+        training::METRIC_VALUE_TYPE_SUM_COUNT, training::METRIC_AGGREGATION_MEAN, "agent_episode", "reward");
     AgentEpisodeResult first;
     first.agent_id = 0;
     first.episode_return = 3.0;
@@ -347,13 +355,29 @@ void TestRegisteredEpisodeMetrics() {
     second.transition_count = 2;
     second.success = false;
     second.reward_component_sums["changed_reward"] = -1.0;
-    const auto record = BuildMazeEpisodeMetrics(registry, "environment", "episode", {first, second});
+    auto record = BuildMazeEpisodeMetrics(registry, "environment", "episode", {first, second});
+    Require(std::none_of(record.points().begin(), record.points().end(), [](const auto& point) {
+        return point.metric_id() == "task.maze.reward.total.per_transition";
+    }), "Episode summary does not repeat per-transition rewards");
+    RewardMetricWindow window;
+    const auto started_at = std::chrono::steady_clock::time_point(std::chrono::milliseconds(10000));
+    // A sparse component still counts the zero-reward transitions.
+    for (double value : {3.0, 0.0, 0.0, 0.0, -1.0, 0.0})
+        window.Observe(value, std::vector<std::pair<std::string, double>>{{"changed_reward", value}}, started_at);
+    const auto ended_at = started_at + std::chrono::milliseconds(2500);
+    window.AppendTo(record, registry, "task.maze.reward.", 1700000002500, ended_at);
     double sum = 0.0;
     double total_reward = 0.0;
     uint64_t total_transitions = 0;
     uint64_t transitions = 0;
+    double episode_return_sum = 0.0;
+    double component_episode_sum = 0.0;
+    uint64_t agent_episodes = 0;
+    uint64_t component_agent_episodes = 0;
     for (const auto& point : record.points()) {
         if (point.metric_id() == "task.maze.reward.total.per_transition") {
+            Require(point.interval_start_unix_ms() == 1700000000000 &&
+                    point.interval_end_unix_ms() == 1700000002500, "short tail retains its actual interval");
             total_reward += point.sum_count().sum();
             total_transitions += point.sum_count().count();
         }
@@ -361,14 +385,41 @@ void TestRegisteredEpisodeMetrics() {
             sum += point.sum_count().sum();
             transitions += point.sum_count().count();
         }
+        if (point.metric_id() == "task.maze.return") {
+            episode_return_sum += point.sum_count().sum();
+            agent_episodes += point.sum_count().count();
+        }
+        if (point.metric_id() == "task.maze.reward.changed_reward.per_episode") {
+            component_episode_sum += point.sum_count().sum();
+            component_agent_episodes += point.sum_count().count();
+        }
     }
     Require(sum == 2.0 && transitions == 6, "task producer registers raw reward sums and actual transition denominators");
     Require(total_reward == 2.0 && total_transitions == 6,
             "Total Reward uses raw reward sums and actual transition counts, independently of Episode Return");
+    Require(episode_return_sum == 2.0 && agent_episodes == 2 &&
+            component_episode_sum == 2.0 && component_agent_episodes == 2,
+            "completed agent episodes contribute one full return each, including failures and unequal lengths");
+    // The closing wall clock moves behind the original opening wall time.
+    // Raw rewards and elapsed duration must still reach the public journal.
+    auto regressed = BuildMazeEpisodeMetrics(registry, "environment", "episode", {first, second});
+    window.AppendTo(regressed, registry, "task.maze.reward.", 1699999999945, ended_at);
+    for (const auto& point : regressed.points()) {
+        if (point.metric_id() != "task.maze.reward.total.per_transition") continue;
+        Require(point.interval_start_unix_ms() == 1699999997445 &&
+                point.interval_end_unix_ms() == 1699999999945 &&
+                point.sum_count().sum() == 2.0 && point.sum_count().count() == 6,
+                "wall-clock regression preserves the elapsed interval and reward sum/count");
+    }
     for (const auto& definition : record.definitions()) {
         if (definition.metric_id() == "task.maze.reward.total.per_transition") {
-            Require(definition.display_name() == "Total Reward" && definition.denominator() == "transition",
+            Require(definition.display_name() == "Total Reward / Transition" && definition.denominator() == "transition",
                     "task registration owns the readable name and statistical denominator");
+        }
+        if (definition.metric_id() == "task.maze.return") {
+            Require(definition.display_name() == "Mean Episode Return" &&
+                    definition.category() == "reward" && definition.denominator() == "agent_episode",
+                    "episode return is a registered reward field with an agent-episode denominator");
         }
     }
     common::ServiceInstanceIdentity producer;
@@ -376,7 +427,7 @@ void TestRegisteredEpisodeMetrics() {
     producer.set_instance_id("metric-producer");
     producer.set_lifecycle_epoch(1);
     MetricEventJournal journal(producer, 4096, 1024 * 1024, std::chrono::milliseconds(0));
-    Require(journal.AppendFact(record.SerializeAsString(), 1700000000000).applied(),
+    Require(journal.AppendFact(regressed.SerializeAsString(), 1699999999945).applied(),
             "generic metric journal accepts a registered task record");
     training::GetMetricBatchReq get;
     get.mutable_consumer()->set_component("learner");
@@ -389,7 +440,7 @@ void TestRegisteredEpisodeMetrics() {
     journal.Get(get, response);
     Require(response.has_batch() && response.batch().events_size() == 1 &&
                 response.batch().events(0).fact_kind() == training::METRIC_FACT_KIND_REGISTERED_METRICS &&
-                response.batch().events(0).fact_payload() == record.SerializeAsString(),
+                response.batch().events(0).fact_payload() == regressed.SerializeAsString(),
             "public journal Get preserves registered metric payload and current kind");
 }
 
@@ -448,7 +499,7 @@ void TestModelFeedbackVisibility(const std::string& fixture_path) {
     get.set_wait_timeout_ms(100);
     while (shutdown.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready) {
         training::GetMetricBatchRsp response;
-        service.GetMetricBatch(nullptr, &get, &response);
+        service.Metrics().GetMetricBatch(nullptr, &get, &response);
         if (response.has_batch()) {
             training::AckMetricBatchReq ack;
             *ack.mutable_consumer() = get.consumer();
@@ -456,7 +507,7 @@ void TestModelFeedbackVisibility(const std::string& fixture_path) {
             ack.mutable_cursor()->set_acknowledged_batch_sequence(response.batch().batch_sequence());
             ack.mutable_cursor()->set_acknowledged_event_sequence(response.batch().final_event_sequence());
             training::AckMetricBatchRsp ack_response;
-            service.AckMetricBatch(nullptr, &ack, &ack_response);
+            service.Metrics().AckMetricBatch(nullptr, &ack, &ack_response);
             *get.mutable_cursor() = ack_response.committed_cursor();
         }
     }

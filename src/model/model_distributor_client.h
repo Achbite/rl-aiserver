@@ -2,7 +2,7 @@
 
 #include "config/config_loader.h"
 #include "contracts/contract_namespaces.h"
-#include "training.grpc.pb.h"
+#include "proto/training/training.grpc.pb.h"
 #include "model/model_manifest.h"
 
 #include <grpcpp/grpcpp.h>
