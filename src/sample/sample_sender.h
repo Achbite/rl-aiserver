@@ -1,6 +1,6 @@
 #pragma once
 
-#include "config/config_loader.h"
+#include "config/training_runtime_config.h"
 #include "contracts/training_namespaces.h"
 #include "proto/training/training.grpc.pb.h"
 
@@ -82,7 +82,7 @@ public:
         std::string last_error;
     };
 
-    explicit SampleDistributor(const AIServerConfig& config);
+    explicit SampleDistributor(const SampleDistributorConfig& config);
     ~SampleDistributor();
 
     bool Start();

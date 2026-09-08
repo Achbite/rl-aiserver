@@ -2,19 +2,16 @@
 
 #include "contracts/contract_namespaces.h"
 #include "metrics/metric_registry.h"
+#include "sample/reward_result.h"
 
 #include <vector>
 #include <string>
 #include <utility>
 
 // ---- 奖励计算结果（含分项明细）----
-struct RewardDetail {
-    bool valid = true;
-    std::string error;
-    float total = 0.0f;                                 // 总奖励
+struct MazeRewardDetail : RewardResult {
     float task_total = 0.0f;                            // Goal/Timeout
     float shaping_total = 0.0f;                         // Geodesic/First-Visit
-    std::vector<std::pair<std::string, float>> items;   // 分项明细：<奖励名, 值>
 };
 
 struct MazeRewardParameters {
@@ -49,7 +46,7 @@ class MazeReward {
 public:
     static void RegisterMetrics(MetricRegistry& registry);
     // 计算单帧总奖励（含分项明细）
-    static RewardDetail Calculate(const MazeRewardContext& context,
+    static MazeRewardDetail Calculate(const MazeRewardContext& context,
                                   int gx, int gy, bool is_done,
                                   maze::MazeTerminationReason reason);
 };

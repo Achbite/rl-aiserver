@@ -147,12 +147,12 @@ bool ParsePrivateCacheDirectory(const std::string& name,
            IsUnsignedDecimal(remainder.substr(last_separator + 1));
 }
 
-bool EnsureCacheRoot(const AIServerConfig& config,
+bool EnsureCacheRoot(const ModelConfig& config,
                      std::filesystem::path& cache_root,
                      std::string& error) {
     namespace fs = std::filesystem;
     cache_root =
-        fs::path(config.model.local_train_dir) / kCacheDirectory;
+        fs::path(config.local_train_dir) / kCacheDirectory;
     std::error_code fs_error;
     fs::create_directories(cache_root, fs_error);
     if (fs_error) {
@@ -170,7 +170,7 @@ bool EnsureCacheRoot(const AIServerConfig& config,
 }
 
 bool OpenOrCreateLineageCache(
-    const AIServerConfig& config,
+    const ModelConfig& config,
     const std::string& lineage_id,
     const std::string& lineage_key,
     std::filesystem::path& active_root,
@@ -277,16 +277,16 @@ std::filesystem::path AllocatePrivateCacheDirectory(
 }  // namespace
 
 ModelDistributorClient::ModelDistributorClient(
-    const AIServerConfig& config,
+    const ModelDistributionConfig& config,
+    const ModelConfig& model_config,
     std::string producer_instance_id,
     uint64_t producer_lifecycle_epoch)
-    : config_(config) {
+    : config_(config), model_config_(model_config) {
     requester_identity_.set_component("rl-aiserver");
     requester_identity_.set_instance_id(std::move(producer_instance_id));
     requester_identity_.set_lifecycle_epoch(producer_lifecycle_epoch);
     const std::string address =
-        config_.model_distribution.host + ":" +
-        std::to_string(config_.model_distribution.port);
+        config_.host + ":" + std::to_string(config_.port);
     channel_ = grpc::CreateChannel(
         address, grpc::InsecureChannelCredentials());
     stub_ = training::ModelDistributorService::NewStub(channel_);
@@ -296,7 +296,7 @@ bool ModelDistributorClient::ValidateManifest(
     const training::ModelArtifactManifest& source,
     std::optional<ModelStep> expected_step,
     std::string& error) const {
-    if (!ValidateModelManifest(config_, source, expected_step, error)) {
+    if (!ValidateModelManifest(source, expected_step, error)) {
         return false;
     }
     std::lock_guard<std::mutex> lock(lineage_mutex_);
@@ -370,7 +370,7 @@ bool ModelDistributorClient::DownloadToTemporary(
     if (!GetPinnedModelLineage(lineage_id, lineage_key, error) ||
         source.identity().model_lineage_id() != lineage_id ||
         !OpenOrCreateLineageCache(
-            config_, lineage_id, lineage_key, cache_root, error)) {
+            model_config_, lineage_id, lineage_key, cache_root, error)) {
         if (error.empty()) {
             error = "distributed model does not match the active lineage cache";
         }
@@ -400,7 +400,7 @@ bool ModelDistributorClient::DownloadToTemporary(
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
+        std::chrono::milliseconds(config_.rpc_timeout_ms));
     std::unique_ptr<grpc::ClientReader<training::ModelChunk>> reader =
         stub_->DownloadModel(&context, request);
     int64_t expected_offset = 0;
@@ -474,7 +474,7 @@ bool ModelDistributorClient::Fetch(const std::string& aiserver_id,
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
+        std::chrono::milliseconds(config_.rpc_timeout_ms));
     const grpc::Status status =
         stub_->GetModelManifest(&context, request, &response);
     if (!status.ok() ||
@@ -527,7 +527,7 @@ bool ModelDistributorClient::GetAvailableRange(
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
+        std::chrono::milliseconds(config_.rpc_timeout_ms));
     const grpc::Status status =
         stub_->GetModelDistributorStatus(&context, request, &response);
     if (!status.ok()) {
@@ -598,7 +598,7 @@ ModelDistributorClient::ProbeAckAuthorityDisposition(
     grpc::ClientContext context;
     context.set_deadline(
         std::chrono::system_clock::now() +
-        std::chrono::milliseconds(config_.model_distribution.rpc_timeout_ms));
+        std::chrono::milliseconds(config_.rpc_timeout_ms));
     const grpc::Status status =
         stub_->GetModelDistributorStatus(&context, request, &response);
     if (!status.ok()) {
@@ -655,7 +655,7 @@ ModelDistributorClient::AckIdempotently(
         context.set_deadline(
             std::chrono::system_clock::now() +
             std::chrono::milliseconds(
-                config_.model_distribution.rpc_timeout_ms));
+                config_.rpc_timeout_ms));
         const grpc::Status rpc_status =
             stub_->AckModel(&context, request, &response);
         if (rpc_status.ok()) {
@@ -710,7 +710,7 @@ bool ModelDistributorClient::LoadCachedStep(
     fs::path cache_root;
     if (!GetPinnedModelLineage(lineage_id, lineage_key, error) ||
         !OpenOrCreateLineageCache(
-            config_, lineage_id, lineage_key, cache_root, error)) {
+            model_config_, lineage_id, lineage_key, cache_root, error)) {
         return false;
     }
     const fs::path directory =
@@ -741,7 +741,6 @@ bool ModelDistributorClient::LoadCachedStep(
         return false;
     }
     if (!LoadModelManifestFile(
-            config_,
             (directory / kModelManifestFile).string(),
             manifest, error)) {
         return false;
@@ -777,7 +776,7 @@ bool ModelDistributorClient::PublishPrepared(
     if (!GetPinnedModelLineage(lineage_id, lineage_key, error) ||
         manifest.model_lineage_id() != lineage_id ||
         !OpenOrCreateLineageCache(
-            config_, lineage_id, lineage_key, cache_root, error)) {
+            model_config_, lineage_id, lineage_key, cache_root, error)) {
         if (error.empty()) {
             error = "prepared model does not match the active lineage cache";
         }
@@ -797,7 +796,6 @@ bool ModelDistributorClient::PublishPrepared(
     }
     ModelManifest validated;
     if (!LoadModelManifestFile(
-            config_,
             (temporary_dir / kModelManifestFile).string(),
             validated, error) ||
         !SameWireManifest(validated, manifest) ||
@@ -860,7 +858,7 @@ bool ModelDistributorClient::DiscardTemporary(
     if (!GetPinnedModelLineage(lineage_id, lineage_key, error) ||
         manifest.model_lineage_id() != lineage_id ||
         !OpenOrCreateLineageCache(
-            config_, lineage_id, lineage_key, cache_root, error)) {
+            model_config_, lineage_id, lineage_key, cache_root, error)) {
         if (error.empty()) {
             error = "temporary model does not match the active lineage cache";
         }
@@ -886,7 +884,7 @@ bool ModelDistributorClient::PruneCache(
     fs::path cache_root;
     if (!GetPinnedModelLineage(lineage_id, lineage_key, error) ||
         !OpenOrCreateLineageCache(
-            config_, lineage_id, lineage_key, cache_root, error)) {
+            model_config_, lineage_id, lineage_key, cache_root, error)) {
         return false;
     }
     std::set<ModelStep> cached_steps;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "contracts/contract_namespaces.h"
+#include "policy/episode_mode.h"
 
 #include <random>
 #include <string>
@@ -13,7 +13,7 @@ bool ValidateEpisodeModelOutput(const std::vector<float>& logits,
 
 bool SelectEpisodeAction(const std::vector<float>& logits,
                          const std::vector<bool>& action_mask,
-                         maze::EpisodeMode mode,
+                         PolicyMode mode,
                          double temperature,
                          std::mt19937& generator,
                          int& action,

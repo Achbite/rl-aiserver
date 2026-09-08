@@ -20,18 +20,17 @@ set(SOURCES
     src/grpc/maze_service_rpc.cpp
     src/ai/maze_reward.cpp
     src/ai/maze_observation.cpp
-    src/ai/astar_solver.cpp
-    src/config/config_loader.cpp
-    src/session/session_manager.cpp
+    src/task/maze_config.cpp
     src/ai/onnx_inferencer.cpp
     src/model/model_manifest.cpp
     src/model/model_distributor_client.cpp
     src/metrics/episode_metrics.cpp
     src/sample/sample_sender.cpp
     src/sample/training_transition_builder.cpp
-    src/task/maze_transition_builder.cpp
+    src/sample/rollout_transition_builder.cpp
     src/task/maze_map_contract.cpp
-    src/task/episode_action_policy.cpp
+    src/task/maze_task_adapter.cpp
+    src/policy/episode_action_policy.cpp
     src/task/single_map_task_controller.cpp
 )
 
@@ -118,18 +117,17 @@ if(BUILD_TESTING)
         src/grpc/maze_service_rpc.cpp
         src/ai/maze_reward.cpp
         src/ai/maze_observation.cpp
-        src/ai/astar_solver.cpp
-        src/config/config_loader.cpp
-        src/session/session_manager.cpp
+        src/task/maze_config.cpp
         src/ai/onnx_inferencer.cpp
         src/model/model_manifest.cpp
         src/model/model_distributor_client.cpp
         src/metrics/episode_metrics.cpp
         src/sample/sample_sender.cpp
         src/sample/training_transition_builder.cpp
-        src/task/maze_transition_builder.cpp
+        src/sample/rollout_transition_builder.cpp
         src/task/maze_map_contract.cpp
-        src/task/episode_action_policy.cpp
+        src/task/maze_task_adapter.cpp
+        src/policy/episode_action_policy.cpp
         src/task/single_map_task_controller.cpp
         ${PROTO_SOURCES}
     )

@@ -2,7 +2,7 @@
 #include "ai/maze_observation.h"
 #include "sample/sample_sender.h"
 #include "sample/training_transition_builder.h"
-#include "task/maze_transition_builder.h"
+#include "sample/rollout_transition_builder.h"
 #include "task/maze_map_contract.h"
 #include "model_distributor_fixture.h"
 #include <future>
@@ -306,7 +306,7 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
         "segment-tmax", 0.4,
         0.187288, 0.096, 0.387288, 0.396);
 
-    SampleDistributor distributor(config);
+    SampleDistributor distributor(config.sample_distributor);
     Require(distributor.Start(),
             "SampleDistributor connects to the in-process test sink");
     Require(distributor.Enqueue(terminal) && distributor.Enqueue(tmax),

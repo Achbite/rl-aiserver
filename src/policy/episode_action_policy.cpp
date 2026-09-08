@@ -1,4 +1,4 @@
-#include "task/episode_action_policy.h"
+#include "policy/episode_action_policy.h"
 
 #include <algorithm>
 #include <cmath>
@@ -30,7 +30,7 @@ bool ValidateEpisodeModelOutput(const std::vector<float>& logits,
 
 bool SelectEpisodeAction(const std::vector<float>& logits,
                          const std::vector<bool>& action_mask,
-                         maze::EpisodeMode mode,
+                         PolicyMode mode,
                          double temperature,
                          std::mt19937& generator,
                          int& action,
@@ -58,7 +58,7 @@ bool SelectEpisodeAction(const std::vector<float>& logits,
         return action_mask.empty() || action_mask[index];
     };
 
-    if (mode == maze::EPISODE_MODE_EVALUATION) {
+    if (mode == PolicyMode::Evaluation) {
         std::size_t selected = logits.size();
         for (std::size_t index = 0; index < logits.size(); ++index) {
             if (available(index) &&
@@ -71,7 +71,7 @@ bool SelectEpisodeAction(const std::vector<float>& logits,
         log_probability = 0.0f;
         return true;
     }
-    if (mode == maze::EPISODE_MODE_TRAINING) {
+    if (mode == PolicyMode::Training) {
         double maximum = -std::numeric_limits<double>::infinity();
         for (std::size_t index = 0; index < logits.size(); ++index) {
             if (available(index)) {

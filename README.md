@@ -23,6 +23,17 @@ workspace/
 Maze Task Proto 只有在开发者显式执行协议同步时才会更新 Client/AIServer。完整启动顺序参阅
 [rl-framework](https://github.com/Achbite/rl-framework)。
 
+任务协议与公共训练逻辑通过组合连接。`src/grpc/maze_service*` 保留 Maze 强类型 RPC，
+`src/task/maze_task_adapter*` 负责观测、奖励、Episode 结果与指标注册；Maze 配置解析和任务状态也在
+`src/task/`。`src/runtime/training_runtime*`、`src/session/`、`src/policy/`、`src/sample/`
+持有公共会话、推理采样、模型 pin、GAE 和样本发送。Runtime 接收编码后的 observation、action mask
+及 `RewardResult`，不读取地图、Goal 或 Maze Proto。Episode 公共 reset 保留跨 Episode 的模型激活历史。
+
+早期 A* solver 已删除。Maze 观测和 Reward 使用的 geodesic BFS 仍属于任务实现；奖励公式未改变。
+公共 segment 结束分类为 `ENVIRONMENT_TERMINATED`，Maze Goal / TimeLimit 的任务原因留在任务协议和
+指标中，两者保持 bootstrap 0；TMax 使用 pinned next value。本轮只运行既有 Maze 任务，其他任务接入
+与稳定性验收另行进行。
+
 ## 1. 开发容器、增量构建与测试
 
 ```bash

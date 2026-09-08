@@ -1,5 +1,18 @@
 # RL AIServer
 
+Task RPCs compose the shared training runtime. `src/grpc/maze_service*` retains the typed Maze RPCs;
+`src/task/maze_task_adapter*` owns observation encoding, reward calculation, episode outcomes and metric
+registration. Maze configuration parsing and task state also live in `src/task/`. The shared runtime,
+session, policy and sample modules own pending actions, model pins, inference, GAE and sample delivery.
+They consume encoded observations, action masks and `RewardResult`, without interpreting Maze protobuf
+messages or map/goal facts. Episode reset preserves model activation history across episodes.
+
+The obsolete A* solver has been removed. Task-specific geodesic BFS remains in the current Maze
+observation and reward implementation. Both Maze Goal and TimeLimit still close a training segment as
+`ENVIRONMENT_TERMINATED` with zero bootstrap; TMax still bootstraps from the pinned next-state value.
+This change retains the existing Maze task. Other-task integration and runtime stability acceptance
+are separate steps.
+
 [简体中文](README.md) | English
 
 AIServer provides static model evaluation plus training inference, per-Agent
