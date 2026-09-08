@@ -89,8 +89,8 @@ bool ValidatePushResponse(
 
 }  // namespace
 
-SampleDistributor::SampleDistributor(const AIServerConfig& config)
-    : config_(config.sample_distributor) {}
+SampleDistributor::SampleDistributor(const SampleDistributorConfig& config)
+    : config_(config) {}
 
 SampleDistributor::~SampleDistributor() {
     StopAndDrain();

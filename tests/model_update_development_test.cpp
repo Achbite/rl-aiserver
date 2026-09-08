@@ -27,8 +27,8 @@ void Require(bool condition, const std::string& message) {
     std::exit(1);
 }
 
-AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
-    AIServerConfig config;
+TrainingRuntimeConfig MakeConfig(const std::filesystem::path& root, int port) {
+    TrainingRuntimeConfig config;
     const int action_count = static_cast<int>(maze::MazeAction_MAX) + 1;
     config.policy.training_temperature = 1.0;
     config.policy.action_mask_mode = "disabled";
@@ -44,7 +44,7 @@ AIServerConfig MakeConfig(const std::filesystem::path& root, int port) {
 void TestModelUpdate(const std::string& fixture_path) {
     TemporaryRoot root;
     const std::string model_bytes = ReadFile(fixture_path);
-    AIServerConfig config = MakeConfig(root.path(), 0);
+    TrainingRuntimeConfig config = MakeConfig(root.path(), 0);
     const auto wire_manifest = MakeManifest(model_bytes);
     FixedModelDistributor distributor(wire_manifest, model_bytes);
 
@@ -58,7 +58,8 @@ void TestModelUpdate(const std::string& fixture_path) {
             "start local ModelDistributor test service");
     config.model_distribution.port = port;
 
-    ModelDistributorClient client(config, "aiserver-fixed", 1);
+    ModelDistributorClient client(
+        config.model_distribution, config.model, "aiserver-fixed", 1);
     std::string error;
     ModelDistributorClient::AvailableRange range;
     Require(client.GetAvailableRange("aiserver-fixed", range, error) &&

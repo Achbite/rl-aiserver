@@ -26,11 +26,6 @@ observation:
 metrics:
   reward_interval_ms: 5000       # confirmed transition sum/count flush interval
 
-# --- 网格参数（A* 测试 + 训练共用）---
-strategy:
-  grid_size: 500                  # 网格大小 (cm)，将连续坐标离散化为网格
-  replan_interval: 10             # A* 模式下重新规划路径的帧间隔（0=仅初始规划一次）
-
 # --- 模型参数 ---
 model:
   evaluation_model_path: "../models/eval/0000000/SaveModel.onnx"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "config/config_loader.h"
-#include "contracts/contract_namespaces.h"
+#include "config/training_runtime_config.h"
+#include "contracts/training_namespaces.h"
 #include "model/model_step.h"
 #include "proto/training/training.pb.h"
 
@@ -26,8 +26,7 @@ struct ModelManifest {
     uint64_t trained_samples() const { return wire.trained_samples(); }
 };
 
-bool ValidateModelManifest(const AIServerConfig& config,
-                           const training::ModelArtifactManifest& source,
+bool ValidateModelManifest(const training::ModelArtifactManifest& source,
                            std::optional<ModelStep> expected_step,
                            std::string& error);
 
@@ -35,8 +34,7 @@ void AssignModelManifest(const training::ModelArtifactManifest& source,
                          const std::string& model_path,
                          ModelManifest& destination);
 
-bool LoadModelManifestFile(const AIServerConfig& config,
-                           const std::string& manifest_path,
+bool LoadModelManifestFile(const std::string& manifest_path,
                            ModelManifest& manifest,
                            std::string& error);
 

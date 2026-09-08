@@ -5,7 +5,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <cmath>
 #include <filesystem>
 #include <fstream>
 
@@ -38,8 +37,7 @@ bool WriteAll(int descriptor, const char* data, std::size_t size) {
 
 }  // namespace
 
-bool ValidateModelManifest(const AIServerConfig& config,
-                           const training::ModelArtifactManifest& source,
+bool ValidateModelManifest(const training::ModelArtifactManifest& source,
                            std::optional<ModelStep> expected_step,
                            std::string& error) {
     if (source.identity().model_lineage_id().empty() ||
@@ -49,14 +47,6 @@ bool ValidateModelManifest(const AIServerConfig& config,
         source.size_bytes() <= 0 ||
         source.published_at_unix_ms() <= 0) {
         error = "model manifest identity or artifact metadata is invalid";
-        return false;
-    }
-    if (!std::isfinite(config.rollout.gamma) ||
-        config.rollout.gamma < 0.0 || config.rollout.gamma > 1.0 ||
-        !std::isfinite(config.rollout.gae_lambda) ||
-        config.rollout.gae_lambda < 0.0 ||
-        config.rollout.gae_lambda > 1.0 || config.rollout.tmax == 0) {
-        error = "AIServer rollout configuration is invalid";
         return false;
     }
     error.clear();
@@ -71,8 +61,7 @@ void AssignModelManifest(const training::ModelArtifactManifest& source,
     destination.model_path = model_path;
 }
 
-bool LoadModelManifestFile(const AIServerConfig& config,
-                           const std::string& manifest_file_path,
+bool LoadModelManifestFile(const std::string& manifest_file_path,
                            ModelManifest& manifest,
                            std::string& error) {
     const std::filesystem::path manifest_path = manifest_file_path;
@@ -87,7 +76,7 @@ bool LoadModelManifestFile(const AIServerConfig& config,
     }
     training::ModelArtifactManifest wire;
     if (!wire.ParseFromIstream(&stream) || stream.bad() ||
-        !ValidateModelManifest(config, wire, std::nullopt, error)) {
+        !ValidateModelManifest(wire, std::nullopt, error)) {
         if (error.empty()) error = "invalid protobuf model manifest";
         return false;
     }

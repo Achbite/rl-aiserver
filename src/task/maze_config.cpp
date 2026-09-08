@@ -1,4 +1,4 @@
-#include "config/config_loader.h"
+#include "task/maze_config.h"
 
 #include "log/logger.h"
 
@@ -253,8 +253,7 @@ bool LoadServerConfig(const std::string& yaml_path,
         "policy.training_temperature", "policy.sampling_seed",
         "policy.action_mask_mode",
         "rollout.gamma", "rollout.gae_lambda", "rollout.tmax", "metrics.reward_interval_ms",
-        "observation.ray_max_range", "strategy.grid_size",
-        "strategy.replan_interval", "model.evaluation_model_path",
+        "observation.ray_max_range", "model.evaluation_model_path",
         "model.local_train_dir", "model.startup_timeout_ms",
         "model.expected_obs_dim", "model.expected_action_dim",
         "environment.agent_count", "task.fixed_map_id",
@@ -325,8 +324,6 @@ bool LoadServerConfig(const std::string& yaml_path,
         {"server", "listen_port"},
         {"server", "max_agents"},
         {"environment", "agent_count"},
-        {"strategy", "grid_size"},
-        {"strategy", "replan_interval"},
         {"model", "startup_timeout_ms"},
         {"model", "expected_obs_dim"},
         {"model", "expected_action_dim"},
@@ -400,10 +397,6 @@ bool LoadServerConfig(const std::string& yaml_path,
             return false;
         }
     }
-
-    // --- strategy ---
-    out_config.strategy.grid_size        = SafeInt(FindValue(entries, "strategy", "grid_size"),        500);
-    out_config.strategy.replan_interval  = SafeInt(FindValue(entries, "strategy", "replan_interval"),  10);
 
     // --- model ---
     out_config.model.evaluation_model_path =
@@ -649,8 +642,6 @@ bool LoadServerConfig(const std::string& yaml_path,
         out_config.environment.agent_count > 0 &&
         out_config.server.max_agents >= out_config.environment.agent_count &&
         aiserver_mode::IsValid(out_config.server.run_mode) &&
-        out_config.strategy.grid_size > 0 &&
-        out_config.strategy.replan_interval >= 0 &&
         std::isfinite(out_config.rollout.gamma) &&
         out_config.rollout.gamma >= 0.0 &&
         out_config.rollout.gamma <= 1.0 &&
@@ -684,9 +675,6 @@ bool LoadServerConfig(const std::string& yaml_path,
              out_config.server.listen_port, out_config.server.max_agents,
              out_config.server.run_mode,
              aiserver_mode::Workload(out_config.server.run_mode));
-    LOG_INFO("Config", "strategy: grid=%d, replan=%d",
-             out_config.strategy.grid_size,
-             out_config.strategy.replan_interval);
     LOG_INFO("Config", "model: evaluation_model=%s, local_train=%s, startup_timeout_ms=%d, shape=[%d]->[%d], mask=%s",
              out_config.model.evaluation_model_path.c_str(),
              out_config.model.local_train_dir.c_str(),

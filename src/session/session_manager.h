@@ -1,140 +1,21 @@
 #pragma once
 
-#include "ai/astar_solver.h"
-#include "ai/onnx_inferencer.h"
-#include "contracts/contract_namespaces.h"
-#include "model/behavior_policy_scope.h"
-#include "model/model_manifest.h"
-#include "model/model_step.h"
-#include "rl_sdk/replay_window.h"
-#include "sample/rollout_types.h"
+#include "log/logger.h"
+#include "proto/communication/session.pb.h"
 
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
-#include <mutex>
-#include <optional>
-#include <cstdint>
-#include <cmath>
 #include <algorithm>
+#include <cstdint>
+#include <mutex>
 #include <string>
-#include "metrics/reward_metrics.h"
+#include <unordered_map>
+#include <vector>
 
-// ---- 会话管理器（并行 Episode 隔离）----
-// 每个 session 维护独立的 Agent 运行时状态和样本缓存，
-// 不同 session 之间互不干扰，支持多 Episode 并行采集。
-
+// Task state remains strongly typed while session storage owns its lifecycle.
+template <class SessionType>
 class SessionManager {
 public:
-    // ---- Agent 运行时状态（每个 session 内独立）----
-    struct AgentRuntime {
-        AStarSolver solver;             // 独立寻路器
-        int         last_action = 0;    // 上一帧动作
-        bool        path_valid  = false;
-
-        // 训练模式：帧样本缓存
-        int   prev_grid_x  = -1;       // 待结算动作对应的前一环境状态
-        int   prev_grid_y  = -1;
-        bool  reached_goal = false;     // 本 Episode 是否到达终点
-        bool  done_collected = false;   // 终止帧样本是否已收集（防止重复收集）
-        bool  has_pending_action = false;
-        int   pending_action = 0;
-        int64_t pending_action_frame_id = -1;
-        float pending_log_prob = 0.0f;
-        float pending_value = 0.0f;
-        std::vector<float> pending_obs;
-        std::vector<bool> pending_action_mask;
-
-        // R-PIN segment state. The prepared ORT session is copied as a shared
-        // owner so model-cache pruning cannot invalidate in-flight inference.
-        bool segment_open = false;
-        std::string segment_id;
-        ModelManifest pinned_model;
-        OnnxInferencer::PreparedModel pinned_prepared_model;
-        std::vector<RawRolloutTransition> segment_transitions;
-        bool activated_model_seen = false;
-        ModelStep last_activated_model_step = 0;
-        std::string last_activated_model_lineage_id;
-        int64_t last_completed_transition_at_unix_ms = 0;
-
-        // --- 奖励与 observation 辅助状态 ---
-        std::unordered_set<int> visited;
-        bool current_state_first_visit = false;
-        float first_visit_bonus_total = 0.0f;
-        int episode_start_geodesic_distance = -1;
-        int observation_grid_x = -1;
-        int observation_grid_y = -1;
-        bool last_move_blocked = false;
-        int64_t blocked_move_count = 0;
-        bool observation_done = false;
-        int64_t last_observation_frame_id = -1;
-        int64_t terminal_frame_id = -1;
-        double episode_return = 0.0;
-        int64_t episode_transition_count = 0;
-        bool episode_behavior_model_seen = false;
-        uint64_t minimum_episode_behavior_model_step = 0;
-        uint64_t maximum_episode_behavior_model_step = 0;
-        std::string episode_behavior_model_lineage_id;
-        maze::MazeTerminationReason final_termination_reason =
-            maze::MAZE_TERMINATION_REASON_UNSPECIFIED;
-        std::unordered_map<std::string, double> reward_component_sums;
-    };
-
-    // ---- 单个会话 ----
-    struct Session {
-        RewardMetricWindow reward_metrics;
-        std::string session_id;
-        common::ServiceInstanceIdentity client;
-        std::string environment_instance_id;
-        int64_t last_valid_client_activity_unix_ms = 0;
-        uint64_t session_epoch = 0;
-        uint64_t last_command_sequence = 0;
-        rl::session::v1::SessionPhase phase = rl::session::v1::SESSION_PHASE_OPEN;
-        LifecycleReplayWindow command_replay;
-        std::string map_id;
-        int shortest_action_steps = 0;
-        maze::WorkloadMode workload_mode =
-            maze::WORKLOAD_MODE_UNSPECIFIED;
-        std::unordered_map<int, AgentRuntime> agents;   // agent_id → 运行时状态
-        std::string current_episode_id;
-        int64_t last_frame_id = -1;
-        std::vector<maze::AgentAction> last_actions;
-        // 地图参数（每个 session 独立，支持不同地图配置）
-        float map_width  = 0.0f;
-        float map_height = 0.0f;
-        float start_x    = 0.0f;
-        float start_y    = 0.0f;
-        float end_x      = 0.0f;
-        float end_y      = 0.0f;
-
-        // 网格参数（Init 时计算）
-        int start_gx  = 0;
-        int start_gy  = 0;
-        int end_gx    = 0;              // 终点网格坐标
-        int end_gy    = 0;
-        int grid_cols = 0;              // 网格列数
-        int grid_rows = 0;              // 网格行数
-        uint32_t grid_size_microunits = 0;
-
-        // --- AIServer 校验后的 authoritative 网格与 geodesic 距离 ---
-        std::vector<bool> blocked;
-        std::vector<int> geodesic_distance;
-        int max_finite_geodesic_distance = -1;
-        maze::EpisodeMode current_episode_mode =
-            maze::EPISODE_MODE_UNSPECIFIED;
-        BehaviorPolicyScope behavior_policy_scope =
-            BehaviorPolicyScope::Unspecified;
-        int current_max_steps = 0;
-        std::string evaluation_pinned_model_lineage_id;
-        ModelStep evaluation_pinned_model_step = 0;
-
-        // 网格是否可通行（越界视为不可通行）
-        bool IsWalkable(int gx, int gy) const {
-            if (gx < 0 || gx >= grid_cols || gy < 0 || gy >= grid_rows) return false;
-            return !blocked[gy * grid_cols + gx];
-        }
-
-    };
+    using Session = SessionType;
+    using AgentRuntime = typename Session::AgentRuntime;
 
     struct ClientActivitySnapshot {
         int active_session_count = 0;
@@ -142,24 +23,82 @@ public:
         int64_t latest_active_activity_unix_ms = 0;
     };
 
-    SessionManager() = default;
-    ~SessionManager() = default;
+    std::string CreateSession() {
+        std::lock_guard<std::mutex> lock(mutex_);
+        const std::string sid = "session-" + std::to_string(next_session_id_++);
+        sessions_[sid] = Session{};
+        sessions_[sid].session_id = sid;
+        LOG_INFO("SessionManager", "创建会话 session_id=%s, 活跃会话数=%zu",
+                 sid.c_str(), sessions_.size());
+        return sid;
+    }
 
-    // Session ID 只由 AIServer 分配。
-    std::string CreateSession();
+    Session* GetSession(const std::string& session_id) {
+        std::lock_guard<std::mutex> lock(mutex_);
+        const auto it = sessions_.find(session_id);
+        return it == sessions_.end() ? nullptr : &it->second;
+    }
 
-    // 获取指定会话（不存在则返回 nullptr）
-    Session* GetSession(const std::string& session_id);
+    void DestroySession(const std::string& session_id) {
+        std::lock_guard<std::mutex> lock(mutex_);
+        const auto it = sessions_.find(session_id);
+        if (it != sessions_.end()) {
+            sessions_.erase(it);
+            LOG_INFO("SessionManager", "销毁会话 session_id=%s, 剩余会话数=%zu",
+                     session_id.c_str(), sessions_.size());
+        }
+    }
 
-    // 销毁指定会话
-    void DestroySession(const std::string& session_id);
+    int GetActiveSessionCount() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        int count = 0;
+        for (const auto& item : sessions_) {
+            if (item.second.phase != rl::session::v1::SESSION_PHASE_CLOSED) {
+                ++count;
+            }
+        }
+        return count;
+    }
 
-    // 获取当前活跃会话数
-    int GetActiveSessionCount() const;
     ClientActivitySnapshot GetClientActivitySnapshot(
-        int64_t now_unix_ms, int64_t lease_ms) const;
-    int GetActiveEpisodeCount() const;
-    std::vector<std::string> GetSessionIds() const;
+        int64_t now_unix_ms, int64_t lease_ms) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        ClientActivitySnapshot snapshot;
+        for (const auto& item : sessions_) {
+            const auto& session = item.second;
+            if (session.phase == rl::session::v1::SESSION_PHASE_CLOSED) continue;
+            ++snapshot.active_session_count;
+            snapshot.latest_active_activity_unix_ms = std::max(
+                snapshot.latest_active_activity_unix_ms,
+                session.last_valid_client_activity_unix_ms);
+            if (lease_ms >= 0 && session.last_valid_client_activity_unix_ms > 0 &&
+                now_unix_ms >= session.last_valid_client_activity_unix_ms &&
+                now_unix_ms - session.last_valid_client_activity_unix_ms <= lease_ms) {
+                ++snapshot.recent_active_session_count;
+            }
+        }
+        return snapshot;
+    }
+
+    int GetActiveEpisodeCount() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        int count = 0;
+        for (const auto& item : sessions_) {
+            if (item.second.phase == rl::session::v1::SESSION_PHASE_EPISODE_RUNNING ||
+                item.second.phase == rl::session::v1::SESSION_PHASE_EPISODE_TERMINAL) {
+                ++count;
+            }
+        }
+        return count;
+    }
+
+    std::vector<std::string> GetSessionIds() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        std::vector<std::string> result;
+        result.reserve(sessions_.size());
+        for (const auto& item : sessions_) result.push_back(item.first);
+        return result;
+    }
 
 private:
     std::unordered_map<std::string, Session> sessions_;

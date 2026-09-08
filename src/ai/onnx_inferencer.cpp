@@ -33,7 +33,7 @@ std::string ShapeText(const std::vector<int64_t>& shape) {
 
 // ---- 构造函数 ----
 OnnxInferencer::OnnxInferencer()
-    : env_(ORT_LOGGING_LEVEL_WARNING, "MazeInferencer") {
+    : env_(ORT_LOGGING_LEVEL_WARNING, "AIServerInference") {
     // 单线程推理即可（每次推理 batch=1）
     session_options_.SetIntraOpNumThreads(1);
     session_options_.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_BASIC);

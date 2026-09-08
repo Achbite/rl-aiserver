@@ -1,4 +1,4 @@
-#include "task/maze_transition_builder.h"
+#include "sample/rollout_transition_builder.h"
 
 #include <algorithm>
 #include <chrono>
@@ -16,9 +16,9 @@ bool FiniteVector(const std::vector<float>& values) {
 }  // namespace
 
 bool BuildRawRolloutTransition(
-    const SessionManager::AgentRuntime& agent,
+    const AgentTrainingState& agent,
     const std::vector<float>& next_observation,
-    const RewardDetail& reward,
+    const RewardResult& reward,
     int expected_obs_dim,
     int expected_action_dim,
     const std::string& action_mask_mode,

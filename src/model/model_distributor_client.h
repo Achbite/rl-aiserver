@@ -1,7 +1,7 @@
 #pragma once
 
-#include "config/config_loader.h"
-#include "contracts/contract_namespaces.h"
+#include "config/training_runtime_config.h"
+#include "contracts/training_namespaces.h"
 #include "proto/training/training.grpc.pb.h"
 #include "model/model_manifest.h"
 
@@ -36,7 +36,8 @@ public:
         std::string model_lineage_id;
     };
 
-    ModelDistributorClient(const AIServerConfig& config,
+    ModelDistributorClient(const ModelDistributionConfig& config,
+                           const ModelConfig& model_config,
                            std::string producer_instance_id,
                            uint64_t producer_lifecycle_epoch);
 
@@ -104,7 +105,8 @@ private:
                                std::string& lineage_key,
                                std::string& error) const;
 
-    AIServerConfig config_;
+    ModelDistributionConfig config_;
+    ModelConfig model_config_;
     common::ServiceInstanceIdentity requester_identity_;
     std::shared_ptr<grpc::Channel> channel_;
     std::unique_ptr<training::ModelDistributorService::Stub> stub_;

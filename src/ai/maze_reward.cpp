@@ -52,8 +52,8 @@ bool DistanceAt(const MazeRewardContext& context,
     return distance >= 0;
 }
 
-RewardDetail Invalid(std::string error) {
-    RewardDetail detail;
+MazeRewardDetail Invalid(std::string error) {
+    MazeRewardDetail detail;
     detail.valid = false;
     detail.error = std::move(error);
     return detail;
@@ -65,7 +65,7 @@ const MazeRewardParameters& GetMazeRewardParameters() {
     return kReward;
 }
 
-RewardDetail MazeReward::Calculate(
+MazeRewardDetail MazeReward::Calculate(
     const MazeRewardContext& context,
     int gx, int gy, bool is_done,
     maze::MazeTerminationReason reason) {
@@ -87,7 +87,7 @@ RewardDetail MazeReward::Calculate(
         !DistanceAt(context, gx, gy, current_distance)) {
         return Invalid("reward transition entered an unreachable map cell");
     }
-    RewardDetail detail;
+    MazeRewardDetail detail;
     const bool goal =
         reason == maze::MAZE_TERMINATION_REASON_GOAL_REACHED;
     const bool timeout =
