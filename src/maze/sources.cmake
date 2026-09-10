@@ -1,0 +1,14 @@
+set(AISERVER_MAZE_SOURCES
+    src/maze/protocol/protocol_adapter.cpp
+    src/maze/reward/reward.cpp
+    src/maze/observation/observation.cpp
+    src/maze/config/config.cpp
+    src/maze/environment/map.cpp
+    src/maze/protocol/adapter.cpp
+    src/maze/episode/episode_controller.cpp
+)
+set(AISERVER_MAZE_PROTO_SOURCES
+    proto/maze/maze.pb.cc
+    proto/maze/maze.grpc.pb.cc
+    proto/maze/metrics.pb.cc
+)

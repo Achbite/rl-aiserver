@@ -23,11 +23,34 @@ workspace/
 Maze Task Proto 只有在开发者显式执行协议同步时才会更新 Client/AIServer。完整启动顺序参阅
 [rl-framework](https://github.com/Achbite/rl-framework)。
 
-任务协议与公共训练逻辑通过组合连接。`src/grpc/maze_service*` 保留 Maze 强类型 RPC，
-`src/task/maze_task_adapter*` 负责观测、奖励、Episode 结果与指标注册；Maze 配置解析和任务状态也在
-`src/task/`。`src/runtime/training_runtime*`、`src/session/`、`src/policy/`、`src/sample/`
-持有公共会话、推理采样、模型 pin、GAE 和样本发送。Runtime 接收编码后的 observation、action mask
-及 `RewardResult`，不读取地图、Goal 或 Maze Proto。Episode 公共 reset 保留跨 Episode 的模型激活历史。
+Proto 与其编译产物是 AIServer↔Client 唯一的通信合同。公共
+`src/task/protocol/training_task_service.h` 统一实现任务 RPC，生成的 `maze.sdk.pb.h` 提供类型绑定。
+源码按是否依赖具体任务分为同级的 `src/task/` 和 `src/maze/`。`task/` 只放通用组件，按功能分类：
+
+| 目录 | 职责 |
+| --- | --- |
+| `protocol/` | 公共 RPC 生命周期与训练协议类型 |
+| `config/` | 通用训练配置类型 |
+| `runtime/` | 训练运行时与事务 |
+| `session/` | Session 管理与通用训练状态 |
+| `inference/` | ONNX 推理 |
+| `policy/` | 动作采样 |
+| `reward/` | `RewardResult` 通用奖励结果接口 |
+| `sample/` | Transition、GAE 与样本发送 |
+| `model/` | 模型拉取、激活与版本边界 |
+| `metrics/` | 通用指标注册、窗口统计与传输 |
+
+`src/maze/` 持有 Maze 业务，内部按 `protocol/`、`config/`、`observation/`、`reward/`、
+`environment/`、`episode/`、`metrics/` 分类。Maze 的网格、射线、通关原因、奖励公式、指标字段和
+默认部署地址归这里所有；公共 `task/` 不包含 Maze 类型或导入 Maze Proto。
+
+`main/main.cpp` 通过 `maze/task_entry.h` 装配当前任务，Maze 源文件和生成 Proto 源文件在
+`src/maze/sources.cmake` 登记，应用二进制为 `rl_aiserver`。任务 Proto 及编译产物仍在
+`proto/maze/`。依赖方向为 Maze 适配层调用通用任务组件；通用层通过模板参数接收任务实现。
+
+Runtime 接收编码后的 observation、action mask 及
+`RewardResult`；Episode reset 保留跨 Episode 的模型激活历史。正常新一局通过 BeginEpisode
+assignment 驱动 Client 的环境 Reset，不增加中途重置或进程重启操作。
 
 早期 A* solver 已删除。Maze 观测和 Reward 使用的 geodesic BFS 仍属于任务实现；奖励公式未改变。
 公共 segment 结束分类为 `ENVIRONMENT_TERMINATED`，Maze Goal / TimeLimit 的任务原因留在任务协议和
@@ -87,7 +110,7 @@ bash ./run.sh --config configs/server_config.yaml --workload training \
 `run.sh` 只监督进程和传播退出码，业务参数只由 C++ 的 config/CLI 层解释。
 
 默认 workload 明确配置在 `configs/server_config.yaml` 的 `server.run_mode`；
-`--workload` 只是覆盖它。Reward 公式和数值由 `src/ai/maze_reward.cpp` 固定持有，
+`--workload` 只是覆盖它。Reward 公式和数值由 `src/maze/reward/reward.cpp` 固定持有，
 YAML 中不提供 `reward:` 调参段；若出现 `reward.*`，配置加载会失败关闭。模型输入/输出维度来自
 `model.expected_obs_dim` 与 `model.expected_action_dim`，rollout 参数来自 `rollout`，动作采样与可选
 mask 模式来自 `policy`；这些都是 AIServer 当前任务实现自身的配置，不从外部合同文件派生。
@@ -111,7 +134,7 @@ PPO observation/action/log-probability/value/advantage/value-target。已 Prepar
 同一运行镜像提供只读模型诊断，用于验证张量合约和有限值推理：
 
 ```bash
-/opt/rl/aiserver/bin/maze_aiserver \
+/opt/rl/aiserver/bin/rl_aiserver \
   --inspect-model /absolute/path/model.onnx \
   --observation-dim 17 \
   --action-count 9

@@ -1,7 +1,7 @@
-#include "ai/onnx_inferencer.h"
-#include "ai/maze_observation.h"
-#include "model/model_distributor_client.h"
-#include "model/model_manifest.h"
+#include "task/inference/onnx_inferencer.h"
+#include "maze/observation/observation.h"
+#include "task/model/model_distributor_client.h"
+#include "task/model/model_manifest.h"
 #include "model_distributor_fixture.h"
 
 #include <cmath>

@@ -12,11 +12,11 @@ Sources and generated `.pb.*` / `.grpc.pb.*` files share categorized paths:
 | `communication/` | Shared Session and command lifecycle. |
 | `training/` | Model identity and task-neutral training services. |
 | `metrics/` | Registry, catalog and opaque event transport. |
-| `tasks/maze/` | Maze typed RPC and Maze Episode calculation facts. |
+| `maze/` | Maze typed RPC and Maze Episode calculation facts. |
 | `rl_sdk/` | SDK header snapshot supplied by Contracts. |
 
 The repository root is the include root for `proto/...` generated headers.
-Shared protocols do not import `tasks/maze`; the task and training snapshots are
+Shared protocols do not import `maze`; the task and training snapshots are
 combined only at AIServer assembly. The flat generated files have been replaced.
 
 Run `bash ../scripts/sync_contract_snapshot.sh` only when you explicitly choose

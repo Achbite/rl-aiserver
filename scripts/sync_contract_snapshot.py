@@ -16,18 +16,15 @@ SNAPSHOT_FILES = {'task-maze': {'proto/common/identity.proto': 'common/identity.
                'proto/communication/session.proto': 'communication/session.proto',
                'cpp/proto/communication/session.pb.cc': 'communication/session.pb.cc',
                'cpp/proto/communication/session.pb.h': 'communication/session.pb.h',
-               'proto/tasks/maze/task.proto': 'tasks/maze/task.proto',
-               'cpp/proto/tasks/maze/task.pb.cc': 'tasks/maze/task.pb.cc',
-               'cpp/proto/tasks/maze/task.pb.h': 'tasks/maze/task.pb.h',
-               'proto/tasks/maze/metrics.proto': 'tasks/maze/metrics.proto',
-               'cpp/proto/tasks/maze/metrics.pb.cc': 'tasks/maze/metrics.pb.cc',
-               'cpp/proto/tasks/maze/metrics.pb.h': 'tasks/maze/metrics.pb.h',
-               'cpp/proto/tasks/maze/task.grpc.pb.cc': 'tasks/maze/task.grpc.pb.cc',
-               'cpp/proto/tasks/maze/task.grpc.pb.h': 'tasks/maze/task.grpc.pb.h',
-               'cpp/rl_sdk/session.h': 'rl_sdk/session.h',
-               'cpp/rl_sdk/transport.h': 'rl_sdk/transport.h',
-               'cpp/rl_sdk/replay_window.h': 'rl_sdk/replay_window.h',
-               'cpp/rl_sdk/server_command.h': 'rl_sdk/server_command.h'},
+               'proto/maze/maze.proto': 'maze/maze.proto',
+               'cpp/proto/maze/maze.pb.cc': 'maze/maze.pb.cc',
+               'cpp/proto/maze/maze.pb.h': 'maze/maze.pb.h',
+               'proto/maze/metrics.proto': 'maze/metrics.proto',
+               'cpp/proto/maze/metrics.pb.cc': 'maze/metrics.pb.cc',
+               'cpp/proto/maze/metrics.pb.h': 'maze/metrics.pb.h',
+               'cpp/proto/maze/maze.grpc.pb.cc': 'maze/maze.grpc.pb.cc',
+               'cpp/proto/maze/maze.grpc.pb.h': 'maze/maze.grpc.pb.h',
+               'cpp/proto/maze/maze.sdk.pb.h': 'maze/maze.sdk.pb.h'},
  'training': {'proto/common/identity.proto': 'common/identity.proto',
               'cpp/proto/common/identity.pb.cc': 'common/identity.pb.cc',
               'cpp/proto/common/identity.pb.h': 'common/identity.pb.h',
@@ -51,8 +48,7 @@ SNAPSHOT_FILES = {'task-maze': {'proto/common/identity.proto': 'common/identity.
               'cpp/proto/metrics/catalog.grpc.pb.cc': 'metrics/catalog.grpc.pb.cc',
               'cpp/proto/metrics/catalog.grpc.pb.h': 'metrics/catalog.grpc.pb.h',
               'cpp/proto/metrics/transport.grpc.pb.cc': 'metrics/transport.grpc.pb.cc',
-              'cpp/proto/metrics/transport.grpc.pb.h': 'metrics/transport.grpc.pb.h',
-              'cpp/rl_sdk/metric_catalog.h': 'rl_sdk/metric_catalog.h'}}
+              'cpp/proto/metrics/transport.grpc.pb.h': 'metrics/transport.grpc.pb.h'}}
 
 
 def require_regular_file(path: Path) -> None:
@@ -80,6 +76,17 @@ def sync_snapshot(artifact_root: Path, target_root: Path, profile: str) -> None:
             os.replace(stage / local_name, target)
 
 
+def sync_sdk(artifact_root: Path, target_root: Path) -> None:
+    source = artifact_root / "sdk"
+    require_regular_file(source / "CMakeLists.txt")
+    require_regular_file(source / "include/rl_sdk/task_client.h")
+    target = target_root / "rl_sdk"
+    shutil.copytree(source, target, dirs_exist_ok=True)
+    # The SDK now has one independent CMake target and include tree.
+    for name in ("session.h", "transport.h", "server_command.h", "replay_window.h", "metric_catalog.h"):
+        (target / name).unlink(missing_ok=True)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Explicitly synchronize the Maze task protocol files"
@@ -97,7 +104,8 @@ def main() -> None:
         args.target_dir.resolve(),
         args.profile,
     )
-    print(f"{args.profile} protocol files synchronized")
+    sync_sdk(args.artifact_dir.resolve(), args.target_dir.resolve())
+    print(f"{args.profile} protocol files and SDK synchronized")
 
 
 if __name__ == "__main__":

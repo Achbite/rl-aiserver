@@ -22,4 +22,4 @@ if command -v ccache >/dev/null 2>&1; then
     cmake_args+=("-DCMAKE_CXX_COMPILER_LAUNCHER=$(command -v ccache)")
 fi
 cmake "${cmake_args[@]}"
-cmake --build "${build_dir}" --parallel --target maze_aiserver
+cmake --build "${build_dir}" --parallel --target rl_aiserver

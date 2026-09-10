@@ -1,9 +1,9 @@
-#include "grpc/maze_service.h"
-#include "ai/maze_observation.h"
-#include "sample/sample_sender.h"
-#include "sample/training_transition_builder.h"
-#include "sample/rollout_transition_builder.h"
-#include "task/maze_map_contract.h"
+#include "maze/protocol/service.h"
+#include "maze/observation/observation.h"
+#include "task/sample/sample_sender.h"
+#include "task/sample/training_transition_builder.h"
+#include "task/sample/rollout_transition_builder.h"
+#include "maze/environment/map.h"
 #include "model_distributor_fixture.h"
 #include <future>
 #include <thread>
@@ -89,8 +89,8 @@ private:
     std::vector<training::ProcessedTransitionEnvelope> envelopes_;
 };
 
-AIServerConfig MakeConfig(int sample_pool_port) {
-    AIServerConfig config;
+MazeConfig MakeConfig(int sample_pool_port) {
+    MazeConfig config;
     const int action_count = static_cast<int>(maze::MazeAction_MAX) + 1;
     config.server.run_mode = aiserver_mode::kTraining;
     config.policy.training_temperature = 1.0;
@@ -127,7 +127,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     map.set_goal_grid_x(2);
     map.set_goal_grid_y(2);
     map.set_blocked_bitmap(std::string(9, '\0'));
-    AIServerConfig config = MakeConfig(1);
+    MazeConfig config = MakeConfig(1);
     config.server.run_mode = aiserver_mode::kEvaluation;
     config.environment.agent_count = 1;
     config.observation.ray_max_range = 2;
@@ -135,7 +135,7 @@ void TestModelOutputActionResponse(const std::string& fixture_path) {
     config.policy.action_mask_mode = "required";
     config.task.fixed_map_id = map.map_id();
     config.task.episode_max_steps = 10;
-    MazeServiceImpl service(config);
+    MazeTaskService service(config);
     Require(service.Start(),
             "start the public evaluation inference service");
 
@@ -297,7 +297,7 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
     Require(server != nullptr && port > 0,
             "start the in-process SamplePool test sink");
 
-    AIServerConfig config = MakeConfig(port);
+    MazeConfig config = MakeConfig(port);
     auto terminal = BuildSegment(
         "segment-terminal", 0.0,
         -0.18515, -0.3, 0.01485, 0.0);
@@ -462,7 +462,7 @@ void TestModelFeedbackVisibility(const std::string& fixture_path) {
     config.model_distribution.poll_interval_ms = 50;
     config.model_distribution.rpc_timeout_ms = 500;
     config.model.startup_timeout_ms = 2000;
-    MazeServiceImpl service(config);
+    MazeTaskService service(config);
     Require(service.Start(), "start AIServer with an actual prepared ONNX model");
     model_sink.SetCandidate(1, "invalid ONNX candidate");
     training::AIServerStatusReq request;

@@ -1,19 +1,31 @@
 # RL AIServer
 
-Task RPCs compose the shared training runtime. `src/grpc/maze_service*` retains the typed Maze RPCs;
-`src/task/maze_task_adapter*` owns observation encoding, reward calculation, episode outcomes and metric
-registration. Maze configuration parsing and task state also live in `src/task/`. The shared runtime,
-session, policy and sample modules own pending actions, model pins, inference, GAE and sample delivery.
-They consume encoded observations, action masks and `RewardResult`, without interpreting Maze protobuf
-messages or map/goal facts. Episode reset preserves model activation history across episodes.
+Proto and its generated artifacts are the only shared Client–AIServer communication contract.
+`TrainingTaskService` implements the common RPC lifecycle; `maze.sdk.pb.h` is generated from the Proto
+service descriptor. Shared task components live in `src/task/`, while Maze-specific implementations
+live in the sibling `src/maze/` directory. Shared components are organized by function:
 
-The obsolete A* solver has been removed. Task-specific geodesic BFS remains in the current Maze
-observation and reward implementation. Both Maze Goal and TimeLimit still close a training segment as
-`ENVIRONMENT_TERMINATED` with zero bootstrap; TMax still bootstraps from the pinned next-state value.
-This change retains the existing Maze task. Other-task integration and runtime stability acceptance
-are separate steps.
+| Directory | Responsibility |
+| --- | --- |
+| `protocol/` | Shared RPC lifecycle and training protocol types |
+| `config/` | Shared training configuration types |
+| `runtime/` | Training runtime and transactions |
+| `session/` | Session management and shared training state |
+| `inference/` | ONNX inference |
+| `policy/` | Action sampling |
+| `reward/` | Shared `RewardResult` interface |
+| `sample/` | Transitions, GAE and sample delivery |
+| `model/` | Model retrieval, activation and version boundaries |
+| `metrics/` | Shared metric registration, window statistics and transport |
 
-[简体中文](README.md) | English
+`src/maze/` contains `protocol/`, `config/`, `observation/`, `reward/`, `environment/`, `episode/` and
+`metrics/`. Maze grids, rays, terminal reasons, reward formulas, metric fields and deployment defaults
+belong there. Shared `task/` code does not name Maze types or import Maze Proto.
+
+`main/main.cpp` composes the current task through `maze/task_entry.h`; `src/maze/sources.cmake` lists
+its sources and generated Proto sources. Task Proto and generated artifacts remain in
+`proto/maze/`. The application is `rl_aiserver`. Maze adapters call shared task components, which
+receive task implementations through template parameters.
 
 AIServer provides static model evaluation plus training inference, per-Agent
 R-PIN segments, GAE/value targets, and processed-transition delivery. For local
@@ -102,7 +114,7 @@ interprets business arguments.
 
 The default workload is `server.run_mode` in `configs/server_config.yaml`, and
 `--workload` only overrides that field. Reward formulas and numeric values are
-compiled in `src/ai/maze_reward.cpp`; runtime YAML must not contain a `reward:`
+compiled in `src/maze/reward/reward.cpp`; runtime YAML must not contain a `reward:`
 tuning section. Model I/O dimensions come from `model.expected_obs_dim` and
 `model.expected_action_dim`, rollout values come from `rollout`, and action
 sampling plus the optional mask mode come from `policy`. These are owned by the
@@ -135,7 +147,7 @@ The same runtime image exposes a read-only model diagnostic for tensor-contract
 and finite-inference checks:
 
 ```bash
-/opt/rl/aiserver/bin/maze_aiserver \
+/opt/rl/aiserver/bin/rl_aiserver \
   --inspect-model /absolute/path/model.onnx \
   --observation-dim 17 \
   --action-count 9

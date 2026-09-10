@@ -3,9 +3,9 @@
 set -u
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-default_aiserver_bin="${repo_dir}/build/maze_aiserver"
-if [ -x "${repo_dir}/bin/maze_aiserver" ]; then
-    default_aiserver_bin="${repo_dir}/bin/maze_aiserver"
+default_aiserver_bin="${repo_dir}/build/rl_aiserver"
+if [ -x "${repo_dir}/bin/rl_aiserver" ]; then
+    default_aiserver_bin="${repo_dir}/bin/rl_aiserver"
 fi
 aiserver_bin="${AISERVER_BIN:-${default_aiserver_bin}}"
 managed=0
