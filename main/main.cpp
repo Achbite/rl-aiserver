@@ -1,7 +1,6 @@
 #include "rl_sdk/metric_catalog.h"
-#include "grpc/maze_service.h"
-#include "ai/onnx_inferencer.h"
-#include "task/maze_config.h"
+#include "maze/task_entry.h"
+#include "task/inference/onnx_inferencer.h"
 #include "log/logger.h"
 
 #include <grpcpp/grpcpp.h>
@@ -88,7 +87,7 @@ static void RemoveManagedReadyMarker() {
 
 static void PrintUsage() {
     std::fputs(
-        "Usage: maze_aiserver [options]\n"
+        "Usage: rl_aiserver [options]\n"
         "\n"
         "Configuration is resolved once as CLI > allowlisted environment > "
         "config.\n"
@@ -233,7 +232,7 @@ static bool ParseNonNegativeInt64(const std::string& value,
 
 struct ParsedCommandLine {
     std::string config_path = kDefaultConfigPath;
-    AIServerConfigOverrides overrides;
+    aiserver::TaskEntry::Overrides overrides;
 };
 
 static bool ParseCommandLine(int argc,
@@ -370,7 +369,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::printf("============================================\n");
-    std::printf("  迷宫训练框架 - AIServer\n");
+    std::printf("  RL Training Framework - AIServer\n");
     std::printf("============================================\n\n");
 
     // ---- 0. 初始化日志系统 ----
@@ -390,10 +389,10 @@ int main(int argc, char* argv[]) {
         return 2;
     }
 
-    AIServerConfig cfg;
-    AIServerConfigLoadReport load_report;
+    aiserver::TaskEntry::Config cfg;
+    aiserver::TaskEntry::LoadReport load_report;
     std::string config_error;
-    if (!LoadServerConfig(parsed.config_path, parsed.overrides, cfg,
+    if (!aiserver::TaskEntry::LoadConfig(parsed.config_path, parsed.overrides, cfg,
                           load_report, config_error)) {
         LOG_ERROR("Main", "配置加载或校验失败: %s (%s)",
                   parsed.config_path.c_str(),
@@ -424,7 +423,7 @@ int main(int argc, char* argv[]) {
         "最终配置: workload=%s, listen=0.0.0.0:%d, "
         "evaluation_model=%s, local_train=%s, "
         "model_distributor=%s:%d, sample_distributor=%s:%d, "
-        "max_agents=%d, agent_count=%d, map=%s",
+        "max_agents=%d",
         aiserver_mode::Workload(cfg.server.run_mode),
         cfg.server.listen_port,
         cfg.model.evaluation_model_path.c_str(),
@@ -432,11 +431,11 @@ int main(int argc, char* argv[]) {
         cfg.model_distribution.host.c_str(),
         cfg.model_distribution.port,
         cfg.sample_distributor.host.c_str(),
-        cfg.sample_distributor.port, cfg.server.max_agents,
-        cfg.environment.agent_count, cfg.task.fixed_map_id.c_str());
+        cfg.sample_distributor.port, cfg.server.max_agents);
+    aiserver::TaskEntry::LogConfig(cfg);
 
     // ---- 3. 创建 gRPC 服务 ----
-    MazeServiceImpl service(cfg);
+    aiserver::TaskEntry::Service service(cfg);
     if (!service.Start()) {
         LOG_ERROR("Main", "AIServer 启动失败，详见上方错误");
         Logger::Instance().Close();
@@ -449,7 +448,7 @@ int main(int argc, char* argv[]) {
     grpc::ServerBuilder builder;
     builder.AddListeningPort(listen_addr, grpc::InsecureServerCredentials());
     builder.RegisterService(
-        static_cast<maze::MazeTaskService::Service*>(&service));
+        static_cast<aiserver::TaskEntry::Service::RpcService*>(&service));
     if (aiserver_mode::ExposesTrainingStatus(cfg.server.run_mode)) {
         builder.RegisterService(&metric_catalog);
         builder.RegisterService(
@@ -500,7 +499,7 @@ int main(int argc, char* argv[]) {
     } else {
         LOG_ERROR(
             "Main",
-            "AIServer 停止失败: 样本处置未收敛，详见 MazeService 错误日志");
+            "AIServer 停止失败: 样本处置未收敛，详见 TrainingTaskService 错误日志");
     }
     Logger::Instance().Close();
     return shutdown_clean ? 0 : 1;

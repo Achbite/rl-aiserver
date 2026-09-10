@@ -1,6 +1,6 @@
 #pragma once
 #include "proto/training/training.grpc.pb.h"
-#include "contracts/training_namespaces.h"
+#include "task/protocol/training_namespaces.h"
 #include <filesystem>
 #include <fstream>
 #include <mutex>

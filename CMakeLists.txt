@@ -3,7 +3,7 @@
 # ============================================================================
 
 cmake_minimum_required(VERSION 3.16)
-project(maze_aiserver LANGUAGES CXX)
+project(rl_aiserver LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,26 +12,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Protobuf REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GRPC REQUIRED grpc++)
+add_subdirectory(proto/rl_sdk)
+
+include("${CMAKE_CURRENT_SOURCE_DIR}/src/maze/sources.cmake")
 
 # --- 源文件 ---
 set(SOURCES
     main/main.cpp
-    src/grpc/maze_service.cpp
-    src/grpc/maze_service_rpc.cpp
-    src/ai/maze_reward.cpp
-    src/ai/maze_observation.cpp
-    src/task/maze_config.cpp
-    src/ai/onnx_inferencer.cpp
-    src/model/model_manifest.cpp
-    src/model/model_distributor_client.cpp
-    src/metrics/episode_metrics.cpp
-    src/sample/sample_sender.cpp
-    src/sample/training_transition_builder.cpp
-    src/sample/rollout_transition_builder.cpp
-    src/task/maze_map_contract.cpp
-    src/task/maze_task_adapter.cpp
-    src/policy/episode_action_policy.cpp
-    src/task/single_map_task_controller.cpp
+    ${AISERVER_MAZE_SOURCES}
+    src/task/inference/onnx_inferencer.cpp
+    src/task/model/model_manifest.cpp
+    src/task/model/model_distributor_client.cpp
+    src/task/metrics/episode_metrics.cpp
+    src/task/sample/sample_sender.cpp
+    src/task/sample/training_transition_builder.cpp
+    src/task/sample/rollout_transition_builder.cpp
+    src/task/policy/episode_action_policy.cpp
 )
 
 set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
@@ -46,9 +42,7 @@ set(PROTO_SOURCES
     ${PROTO_GEN_DIR}/metrics/transport.pb.cc
     ${PROTO_GEN_DIR}/metrics/transport.grpc.pb.cc
     ${PROTO_GEN_DIR}/communication/session.pb.cc
-    ${PROTO_GEN_DIR}/tasks/maze/task.pb.cc
-    ${PROTO_GEN_DIR}/tasks/maze/task.grpc.pb.cc
-    ${PROTO_GEN_DIR}/tasks/maze/metrics.pb.cc
+    ${AISERVER_MAZE_PROTO_SOURCES}
 )
 
 # --- 可执行文件 ---
@@ -66,6 +60,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # --- 链接库 ---
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    rl_sdk::sdk
     protobuf::libprotobuf
     ${GRPC_LIBRARIES}
     pthread
@@ -77,9 +72,9 @@ include(CTest)
 if(BUILD_TESTING)
     add_executable(aiserver_model_update_development_test
         tests/model_update_development_test.cpp
-        src/ai/onnx_inferencer.cpp
-        src/model/model_manifest.cpp
-        src/model/model_distributor_client.cpp
+        src/task/inference/onnx_inferencer.cpp
+        src/task/model/model_manifest.cpp
+        src/task/model/model_distributor_client.cpp
         ${PROTO_GEN_DIR}/common/identity.pb.cc
         ${PROTO_GEN_DIR}/training/model_identity.pb.cc
         ${PROTO_GEN_DIR}/training/training.pb.cc
@@ -99,6 +94,7 @@ if(BUILD_TESTING)
         /usr/local/include/onnxruntime
     )
     target_link_libraries(aiserver_model_update_development_test PRIVATE
+        rl_sdk::sdk
         protobuf::libprotobuf
         ${GRPC_LIBRARIES}
         pthread
@@ -113,22 +109,15 @@ if(BUILD_TESTING)
 
     add_executable(aiserver_gae_sample_delivery_development_test
         tests/gae_sample_delivery_development_test.cpp
-        src/grpc/maze_service.cpp
-        src/grpc/maze_service_rpc.cpp
-        src/ai/maze_reward.cpp
-        src/ai/maze_observation.cpp
-        src/task/maze_config.cpp
-        src/ai/onnx_inferencer.cpp
-        src/model/model_manifest.cpp
-        src/model/model_distributor_client.cpp
-        src/metrics/episode_metrics.cpp
-        src/sample/sample_sender.cpp
-        src/sample/training_transition_builder.cpp
-        src/sample/rollout_transition_builder.cpp
-        src/task/maze_map_contract.cpp
-        src/task/maze_task_adapter.cpp
-        src/policy/episode_action_policy.cpp
-        src/task/single_map_task_controller.cpp
+        ${AISERVER_MAZE_SOURCES}
+        src/task/inference/onnx_inferencer.cpp
+        src/task/model/model_manifest.cpp
+        src/task/model/model_distributor_client.cpp
+        src/task/metrics/episode_metrics.cpp
+        src/task/sample/sample_sender.cpp
+        src/task/sample/training_transition_builder.cpp
+        src/task/sample/rollout_transition_builder.cpp
+        src/task/policy/episode_action_policy.cpp
         ${PROTO_SOURCES}
     )
     target_include_directories(
@@ -142,6 +131,7 @@ if(BUILD_TESTING)
     )
     target_link_libraries(
         aiserver_gae_sample_delivery_development_test PRIVATE
+        rl_sdk::sdk
         protobuf::libprotobuf
         ${GRPC_LIBRARIES}
         pthread

@@ -38,7 +38,7 @@ COPY . /source
 RUN cmake -S /source -B /source/build -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_TESTING=OFF && \
-    cmake --build /source/build --parallel --target maze_aiserver
+    cmake --build /source/build --parallel --target rl_aiserver
 
 FROM python:3.11-slim
 
@@ -53,13 +53,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /usr/local/lib/libonnxruntime.so* /usr/local/lib/
-COPY --from=build /source/build/maze_aiserver /opt/rl/aiserver/bin/maze_aiserver
+COPY --from=build /source/build/rl_aiserver /opt/rl/aiserver/bin/rl_aiserver
 COPY configs /opt/rl/aiserver/configs
 COPY run.sh /opt/rl/aiserver/run.sh
 COPY scripts /opt/rl/aiserver/scripts
 COPY proto/schemas /opt/rl/aiserver/proto/schemas
 RUN ldconfig && \
-    chmod +x /opt/rl/aiserver/bin/maze_aiserver \
+    chmod +x /opt/rl/aiserver/bin/rl_aiserver \
         /opt/rl/aiserver/run.sh \
         /opt/rl/aiserver/scripts/entrypoint.sh
 
