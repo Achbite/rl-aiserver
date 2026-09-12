@@ -156,14 +156,17 @@ message ProcessedTransitionEnvelope {
     repeated ProcessedTransition samples = 6;
 }
 
-// Pool-owned facts attached to a leased transition. insert_sequence and
-// inserted_at_unix_ms are raw storage facts; draw_count is never corrected or
-// inferred by the consumer.
+// A leased transition retains the producer and behavior model from its accepted
+// envelope. The Pool transports these facts without interpreting compatibility.
+// insert_sequence and inserted_at_unix_ms are raw storage facts; draw_count is
+// never corrected or inferred by the consumer.
 message SamplePoolItem {
     ProcessedTransition transition = 1;
     uint64 insert_sequence = 2;
     int64 inserted_at_unix_ms = 3;
     uint32 draw_count = 4;
+    ModelIdentity behavior_model = 5;
+    rl.common.v1.ServiceInstanceIdentity producer = 6;
 }
 
 message PushSamplesReq {

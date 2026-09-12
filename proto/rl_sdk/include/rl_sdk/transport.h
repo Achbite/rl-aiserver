@@ -30,7 +30,8 @@ public:
             const auto status = invoke(context, candidate);
             if (status.ok()) { outcome_unknown_ = false; error_.clear(); response.Swap(&candidate); return true; }
             outcome_unknown_ = true;
-            error_ = status.error_message();
+            error_ = "gRPC status " + std::to_string(static_cast<int>(status.error_code())) +
+                ": " + status.error_message();
             const auto code = status.error_code();
             const bool retryable = code == grpc::StatusCode::ABORTED ||
                 code == grpc::StatusCode::CANCELLED || code == grpc::StatusCode::DEADLINE_EXCEEDED ||

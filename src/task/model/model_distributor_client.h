@@ -8,6 +8,7 @@
 #include <grpcpp/grpcpp.h>
 
 #include <memory>
+#include <chrono>
 #include <mutex>
 #include <optional>
 #include <set>
@@ -71,7 +72,8 @@ public:
         training::ModelLoadStatus status,
         const std::string& message,
         std::string& error,
-        common::ServiceInstanceIdentity* pinned_authority = nullptr);
+        common::ServiceInstanceIdentity* pinned_authority = nullptr,
+        std::optional<std::chrono::steady_clock::time_point> deadline = std::nullopt);
 
     bool PublishPrepared(ModelManifest& manifest,
                          std::string& error);

@@ -40,14 +40,16 @@ public:
                        const std::vector<float>& obs,
                        int obs_dim,
                        std::vector<float>& action_logits,
-                       float& value);
+                       float& value,
+                       std::string* error = nullptr);
     void ActivatePreparedModel(PreparedModel prepared);
     PreparedModel SnapshotPreparedModel() const;
 
     // 推理：输入 observation，输出 categorical logits 和状态价值
     // 线程安全，多线程可同时调用
     bool Infer(const std::vector<float>& obs, int obs_dim,
-               std::vector<float>& action_logits, float& value);
+               std::vector<float>& action_logits, float& value,
+               std::string* error = nullptr);
 
     // 是否已加载模型
     bool IsLoaded() const;
@@ -60,7 +62,8 @@ private:
                              const std::vector<float>& obs,
                              int obs_dim,
                              std::vector<float>& action_logits,
-                             float& value);
+                             float& value,
+                             std::string* error);
     Ort::Env env_;                                  // ONNX Runtime 环境（全局唯一）
     Ort::SessionOptions session_options_;            // 会话选项
 

@@ -30,7 +30,7 @@ metrics:
 model:
   evaluation_model_path: "../models/eval/0000000/SaveModel.onnx"
   local_train_dir: "../models/train"
-  startup_timeout_ms: 30000
+  startup_timeout_ms: 30000      # startup wait and each candidate's ACK recovery budget
   expected_obs_dim: 17
   expected_action_dim: 9
 

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package rl.common.v1;
+
+option cc_generic_services = false;
+
+// Common is intentionally limited to stable cross-domain value objects. It
+// must not contain services, samples, models, tasks, rewards or metrics.
+
+enum OperationResult {
+    OPERATION_RESULT_UNSPECIFIED = 0;
+    OPERATION_RESULT_APPLIED = 1;
+    OPERATION_RESULT_ALREADY_APPLIED = 2;
+    OPERATION_RESULT_REJECTED = 3;
+}
+
+message ServiceInstanceIdentity {
+    string component = 1;
+    string instance_id = 2;
+    uint64 lifecycle_epoch = 3;
+}

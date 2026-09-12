@@ -17,6 +17,7 @@ cmake_args=(
     -G Ninja
     -DCMAKE_BUILD_TYPE=Release
     -DBUILD_TESTING=ON
+    "-DRL_CLIENT_SOURCE_DIR=${RL_CLIENT_SOURCE_DIR:?Set RL_CLIENT_SOURCE_DIR to the Client source repository}"
 )
 if command -v ccache >/dev/null 2>&1; then
     cmake_args+=("-DCMAKE_CXX_COMPILER_LAUNCHER=$(command -v ccache)")
@@ -25,6 +26,7 @@ fi
 cmake "${cmake_args[@]}"
 cmake --build "${build_dir}" --parallel --target \
     aiserver_model_update_development_test \
-    aiserver_gae_sample_delivery_development_test
+    aiserver_gae_sample_delivery_development_test \
+    aiserver_sdk_rpc_test
 ctest --test-dir "${build_dir}" --output-on-failure \
-    -R '^(aiserver_model_update_data_path|aiserver_gae_sample_delivery_data_path)$'
+    -R '^(aiserver_model_update_data_path|aiserver_gae_sample_delivery_data_path|aiserver_sdk_action_data_path)$'

@@ -631,7 +631,8 @@ ModelDistributorClient::AckIdempotently(
     training::ModelLoadStatus load_status,
     const std::string& message,
     std::string& error,
-    common::ServiceInstanceIdentity* pinned_authority) {
+    common::ServiceInstanceIdentity* pinned_authority,
+    std::optional<std::chrono::steady_clock::time_point> deadline) {
     common::ServiceInstanceIdentity local_authority;
     auto* authority = pinned_authority ? pinned_authority : &local_authority;
     if (!ValidModelDistributorAuthority(*authority)) {
@@ -650,12 +651,20 @@ ModelDistributorClient::AckIdempotently(
     request.set_message(message);
     constexpr int kMaxAttempts = 3;
     for (int attempt = 0; attempt < kMaxAttempts; ++attempt) {
+        auto rpc_budget = std::chrono::milliseconds(config_.rpc_timeout_ms);
+        if (deadline) {
+            const auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(
+                *deadline - std::chrono::steady_clock::now());
+            if (remaining.count() <= 0) {
+                if (error.empty()) error = "model ACK deadline elapsed";
+                return AckDisposition::Uncertain;
+            }
+            rpc_budget = std::min(rpc_budget, remaining);
+        }
         training::AckModelRsp response;
         grpc::ClientContext context;
         context.set_deadline(
-            std::chrono::system_clock::now() +
-            std::chrono::milliseconds(
-                config_.rpc_timeout_ms));
+            std::chrono::system_clock::now() + rpc_budget);
         const grpc::Status rpc_status =
             stub_->AckModel(&context, request, &response);
         if (rpc_status.ok()) {
@@ -686,8 +695,15 @@ ModelDistributorClient::AckIdempotently(
         error = "model ACK RPC outcome is uncertain: " +
                 rpc_status.error_message();
         if (attempt + 1 < kMaxAttempts) {
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(50 * (attempt + 1)));
+            auto retry_delay = std::chrono::milliseconds(50 * (attempt + 1));
+            if (deadline) {
+                retry_delay = std::min(retry_delay,
+                    std::chrono::duration_cast<std::chrono::milliseconds>(
+                        *deadline - std::chrono::steady_clock::now()));
+            }
+            if (retry_delay.count() > 0) {
+                std::this_thread::sleep_for(retry_delay);
+            }
         }
     }
     return AckDisposition::Uncertain;

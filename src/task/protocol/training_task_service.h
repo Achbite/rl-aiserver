@@ -98,7 +98,10 @@ public:
 
         if (!runtime_.IsReady()) {
             training_service_detail::FillOpenRejected(rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
-                             "AIServer is not ready", rsp->mutable_reply());
+                             runtime_.last_error_.empty()
+                                 ? "AIServer is not ready"
+                                 : "AIServer is not ready: " + runtime_.last_error_,
+                             rsp->mutable_reply());
             return grpc::Status::OK;
         }
         if (req->request_id().empty() ||
@@ -158,8 +161,12 @@ public:
             return grpc::Status::OK;
         }
         if (!runtime_.IsReady() || runtime_.model_ack_pending_) {
+            const auto& cause = runtime_.last_error_.empty()
+                ? runtime_.pending_model_ack_cause_ : runtime_.last_error_;
             training_service_detail::RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
-                          "AIServer is not ready to initialize the assigned task",
+                          cause.empty()
+                              ? "AIServer is not ready to initialize the assigned task"
+                              : "AIServer cannot initialize the assigned task: " + cause,
                           rsp->mutable_reply());
             return grpc::Status::OK;
         }
@@ -193,7 +200,9 @@ public:
         if (!session) { return grpc::Status::OK; }
         if (!runtime_.IsCoreInferenceReady()) {
             training_service_detail::RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
-                          "AIServer core inference is not ready to begin an episode",
+                          runtime_.last_error_.empty()
+                              ? "AIServer core inference is not ready to begin an episode"
+                              : "AIServer cannot begin an episode: " + runtime_.last_error_,
                           rsp->mutable_reply());
             return grpc::Status::OK;
         }
@@ -286,7 +295,9 @@ public:
         }
         if (!runtime_.IsCoreInferenceReady()) {
             training_service_detail::RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
-                          "AIServer core inference is not ready",
+                          runtime_.last_error_.empty()
+                              ? "AIServer core inference is not ready"
+                              : "AIServer core inference is not ready: " + runtime_.last_error_,
                           rsp->mutable_reply());
             finish();
             return grpc::Status::OK;

@@ -47,6 +47,8 @@ Proto 与其编译产物是 AIServer↔Client 唯一的通信合同。公共
 `main/main.cpp` 通过 `maze/task_entry.h` 装配当前任务，Maze 源文件和生成 Proto 源文件在
 `src/maze/sources.cmake` 登记，应用二进制为 `rl_aiserver`。任务 Proto 及编译产物仍在
 `proto/maze/`。依赖方向为 Maze 适配层调用通用任务组件；通用层通过模板参数接收任务实现。
+生产构建通过 RL-SDK 的 `rl_sdk_generate_task` 从本地任务 Proto 及其 import 生成协议代码到
+`build/`，与 Client 各自编译相同约定；不覆盖已同步快照。Python Protobuf 只参与构建阶段的类型绑定生成。
 
 Runtime 接收编码后的 observation、action mask 及
 `RewardResult`；Episode reset 保留跨 Episode 的模型激活历史。正常新一局通过 BeginEpisode
@@ -65,7 +67,7 @@ make shell
 
 # 容器内：构建与测试是两个显式入口
 ./build.sh
-bash ./test.sh
+RL_CLIENT_SOURCE_DIR=/workspace/maze-client bash ./test.sh
 
 # 宿主机也可复用同一容器执行构建
 make build
@@ -73,6 +75,8 @@ make build
 # Dockerfile.dev、工具链、环境变量或挂载变化后显式刷新
 make dev-refresh
 ```
+
+`RL_CLIENT_SOURCE_DIR` 指向测试容器内只读挂载的 Client 源码，供具名 RPC 用例调用实际环境与动作回执函数；仅测试 target 使用它，生产构建没有此依赖。测试使用固定 ONNX 验证通信、动作、GAE 数值与错误传播，不保障训练效果。
 
 开发容器不继承旧 runtime image，使用持久 ccache。`ninja: no work to do.` 表示源码未变化，
 不会自动重复运行测试。测试只能在仓库根通过 `bash ./test.sh` 启动；`build.sh`、Docker image
@@ -142,6 +146,18 @@ PPO observation/action/log-probability/value/advantage/value-target。已 Prepar
 
 探针按显式维度验证并输出模型张量信息，不加载服务配置，也不启动端口；切换任务时维度不再被探针
 硬编码。
+
+训练启动发现 Distributor 和首个模型时仍使用 `model.startup_timeout_ms` 等待预算。
+选定模型后，下载、ONNX Prepare 或缓存发布失败会发送包含原始阶段和原因的 `FAILED` ACK，
+并结束本次启动；不会反复加载同一失败候选。ACK 无法确认时，本地错误会同时保留上报未确认事实。
+
+运行期间，每个候选模型从首次 LOADED ACK 开始，复用 `model.startup_timeout_ms` 作为总恢复预算；
+单次 RPC 和重试不会越过该预算。恢复始终固定原模型和 Distributor authority。
+`model_feedback` 区分 `ack_pending`、`ack_rejected` 和 `ack_unconfirmed`。预算耗尽后保留 ACK
+结果未知的事实，AIServer 进入 `DEGRADED`、模型状态为 `FAILED`、停止模型 I/O 并拒绝新的推理请求。
+同一维护线程继续处理 Client Session 超时；SampleDistributor 继续负责已提交样本的发送与排空，
+不把模型或推理错误转换成样本传输故障。
+它不会发送 FAILED 覆盖可能已生效的 LOADED ACK，也不会将未知结果当作拒绝或切换到其他模型。
 
 ## 3. Training 缓存
 

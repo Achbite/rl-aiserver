@@ -133,25 +133,36 @@ public:
 
     CommandOutcome AbortEpisode(typename Protocol::AbortEpisodeReq request,
                                 typename Protocol::AbortEpisodeRsp& response) {
+        const std::string original_error = error_;
         const auto result = Exchange(std::move(request), response, &Stub::AbortEpisode,
             options_.command_timeout, [](const auto&, const auto& rsp) {
                 return rsp.reply().phase() == rl::session::v1::SESSION_PHASE_ABORTED;
             }, WaitDelay<typename Protocol::AbortEpisodeRsp>,
             [] { return false; }, options_.abort_wait_budget);
         if (result == CommandOutcome::Applied) session_.SetEpisode({});
+        PreserveFailure(original_error, "AbortEpisode", result);
         return result;
     }
 
     CommandOutcome CloseSession(typename Protocol::CloseSessionRsp& response) {
+        const std::string original_error = error_;
         typename Protocol::CloseSessionReq request;
-        return Exchange(std::move(request), response, &Stub::CloseSession,
+        const auto result = Exchange(std::move(request), response, &Stub::CloseSession,
             options_.command_timeout, [](const auto&, const auto& rsp) {
                 return rsp.reply().phase() == rl::session::v1::SESSION_PHASE_CLOSED;
             }, [](const auto&) { return 0; }, [] { return false; });
+        PreserveFailure(original_error, "CloseSession", result);
+        return result;
     }
 
 private:
     using Stub = typename Protocol::Service::Stub;
+    void PreserveFailure(const std::string& original, const char* cleanup,
+                         CommandOutcome outcome) {
+        if (original.empty()) return;
+        error_ = original + (outcome == CommandOutcome::Applied ? "" :
+            "; " + std::string(cleanup) + " cleanup failed: " + error_);
+    }
     template<class Response> static int64_t WaitDelay(const Response& response) {
         if (!response.has_wait()) return 0;
         return response.wait().retry_after_ms() > 0 ? response.wait().retry_after_ms() : -1;
@@ -172,11 +183,22 @@ private:
         std::chrono::milliseconds budget = std::chrono::milliseconds::max()) {
         error_.clear();
         session_.Prepare(request);
+        bool invalid_payload = false;
         const auto result = session_.Exchange(request, response,
             [&](const auto& req, auto& rsp) { return Invoke(req, rsp, method, timeout); },
-            validate, wait, stopped, budget);
-        if (result != CommandOutcome::Applied && error_.empty())
-            error_ = response.reply().message().empty() ? "command was not confirmed" : response.reply().message();
+            [&](const auto& req, const auto& rsp) {
+                const bool valid = validate(req, rsp);
+                invalid_payload = !valid && CommandAccepted(rsp.reply());
+                return valid;
+            }, wait, stopped, budget);
+        if (result != CommandOutcome::Applied && error_.empty()) {
+            if (invalid_payload) error_ = "task response payload or lifecycle phase is invalid";
+            else if (result == CommandOutcome::WaitExpired) error_ = "command WAIT budget expired";
+            else if (result == CommandOutcome::Stopped) error_ = "command stopped by caller";
+            else if (result == CommandOutcome::Unknown && CommandAccepted(response.reply()))
+                error_ = "command receipt does not match the requested lifecycle sequence";
+            else error_ = response.reply().message().empty() ? "command was not confirmed" : response.reply().message();
+        }
         return result;
     }
     ClientOptions options_;

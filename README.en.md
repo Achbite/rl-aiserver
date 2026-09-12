@@ -24,7 +24,11 @@ belong there. Shared `task/` code does not name Maze types or import Maze Proto.
 
 `main/main.cpp` composes the current task through `maze/task_entry.h`; `src/maze/sources.cmake` lists
 its sources and generated Proto sources. Task Proto and generated artifacts remain in
-`proto/maze/`. The application is `rl_aiserver`. Maze adapters call shared task components, which
+`proto/maze/`. The production build uses RL-SDK's `rl_sdk_generate_task` to compile
+the local task Proto and its imports into `build/`, independently from the Client's
+compilation of the same contract. It does not overwrite the synchronized snapshot;
+Python Protobuf is a build-time generator dependency. The application is
+`rl_aiserver`. Maze adapters call shared task components, which
 receive task implementations through template parameters.
 
 AIServer provides static model evaluation plus training inference, per-Agent
@@ -61,7 +65,7 @@ make shell
 
 # Inside the container: build and test are explicit, separate entrypoints
 ./build.sh
-bash ./test.sh
+RL_CLIENT_SOURCE_DIR=/workspace/maze-client bash ./test.sh
 
 # The host can also reuse the same container for a build
 make build
@@ -69,6 +73,8 @@ make build
 # Explicitly refresh after Dockerfile.dev, toolchain, environment, or mount changes
 make dev-refresh
 ```
+
+`RL_CLIENT_SOURCE_DIR` points to Client sources mounted read-only in the test container. Only the registered RPC test links the actual environment and action receipts; production builds have no such dependency. Fixed ONNX fixtures verify communication, actions, GAE values and error propagation, not training outcomes.
 
 The development image does not inherit an old runtime image and uses a
 persistent ccache volume. `ninja: no work to do.` means no source changed; it
@@ -155,6 +161,24 @@ and finite-inference checks:
 
 The inspector validates explicit dimensions and emits tensor information. It loads
 no service configuration, opens no port, and hard-codes no task dimensions.
+
+Startup discovery waits for the Distributor and the first model within
+`model.startup_timeout_ms`. Once a model is selected, a download, ONNX preparation,
+or cache publication failure sends a `FAILED` ACK with the original stage and
+cause, then ends this startup. It does not repeatedly load the failed candidate.
+An unconfirmed failure ACK is also retained in the local error.
+
+During model updates, each candidate uses `model.startup_timeout_ms` as its total
+recovery budget starting with the first LOADED ACK; RPC deadlines and retries
+respect the remaining budget. Recovery keeps the exact model and Distributor
+authority. `model_feedback` distinguishes `ack_pending`, `ack_rejected`, and
+`ack_unconfirmed`. When the budget expires, AIServer preserves the unknown ACK
+outcome, enters `DEGRADED` with model state `FAILED`, stops model I/O, and
+rejects new inference requests. The same maintenance thread still handles Client
+Session expiry. SampleDistributor retains ownership of sending and draining
+committed samples; model or inference failures do not become sample transport faults.
+AIServer never overwrites a possibly applied LOADED
+ACK with FAILED, treats an unknown outcome as rejection, or selects a substitute model.
 
 ## 3. Training cache
 

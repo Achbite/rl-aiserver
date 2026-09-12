@@ -1195,6 +1195,8 @@ class SamplePoolItem final :
 
   enum : int {
     kTransitionFieldNumber = 1,
+    kBehaviorModelFieldNumber = 5,
+    kProducerFieldNumber = 6,
     kInsertSequenceFieldNumber = 2,
     kInsertedAtUnixMsFieldNumber = 3,
     kDrawCountFieldNumber = 4,
@@ -1216,6 +1218,42 @@ class SamplePoolItem final :
   void unsafe_arena_set_allocated_transition(
       ::rl::training::v1::ProcessedTransition* transition);
   ::rl::training::v1::ProcessedTransition* unsafe_arena_release_transition();
+
+  // .rl.training.v1.ModelIdentity behavior_model = 5;
+  bool has_behavior_model() const;
+  private:
+  bool _internal_has_behavior_model() const;
+  public:
+  void clear_behavior_model();
+  const ::rl::training::v1::ModelIdentity& behavior_model() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::ModelIdentity* release_behavior_model();
+  ::rl::training::v1::ModelIdentity* mutable_behavior_model();
+  void set_allocated_behavior_model(::rl::training::v1::ModelIdentity* behavior_model);
+  private:
+  const ::rl::training::v1::ModelIdentity& _internal_behavior_model() const;
+  ::rl::training::v1::ModelIdentity* _internal_mutable_behavior_model();
+  public:
+  void unsafe_arena_set_allocated_behavior_model(
+      ::rl::training::v1::ModelIdentity* behavior_model);
+  ::rl::training::v1::ModelIdentity* unsafe_arena_release_behavior_model();
+
+  // .rl.common.v1.ServiceInstanceIdentity producer = 6;
+  bool has_producer() const;
+  private:
+  bool _internal_has_producer() const;
+  public:
+  void clear_producer();
+  const ::rl::common::v1::ServiceInstanceIdentity& producer() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_producer();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_producer();
+  void set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_producer() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_producer();
+  public:
+  void unsafe_arena_set_allocated_producer(
+      ::rl::common::v1::ServiceInstanceIdentity* producer);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_producer();
 
   // uint64 insert_sequence = 2;
   void clear_insert_sequence();
@@ -1253,6 +1291,8 @@ class SamplePoolItem final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::rl::training::v1::ProcessedTransition* transition_;
+    ::rl::training::v1::ModelIdentity* behavior_model_;
+    ::rl::common::v1::ServiceInstanceIdentity* producer_;
     uint64_t insert_sequence_;
     int64_t inserted_at_unix_ms_;
     uint32_t draw_count_;
@@ -8787,6 +8827,176 @@ inline void SamplePoolItem::_internal_set_draw_count(uint32_t value) {
 inline void SamplePoolItem::set_draw_count(uint32_t value) {
   _internal_set_draw_count(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolItem.draw_count)
+}
+
+// .rl.training.v1.ModelIdentity behavior_model = 5;
+inline bool SamplePoolItem::_internal_has_behavior_model() const {
+  return this != internal_default_instance() && _impl_.behavior_model_ != nullptr;
+}
+inline bool SamplePoolItem::has_behavior_model() const {
+  return _internal_has_behavior_model();
+}
+inline const ::rl::training::v1::ModelIdentity& SamplePoolItem::_internal_behavior_model() const {
+  const ::rl::training::v1::ModelIdentity* p = _impl_.behavior_model_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::ModelIdentity&>(
+      ::rl::training::v1::_ModelIdentity_default_instance_);
+}
+inline const ::rl::training::v1::ModelIdentity& SamplePoolItem::behavior_model() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolItem.behavior_model)
+  return _internal_behavior_model();
+}
+inline void SamplePoolItem::unsafe_arena_set_allocated_behavior_model(
+    ::rl::training::v1::ModelIdentity* behavior_model) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_model_);
+  }
+  _impl_.behavior_model_ = behavior_model;
+  if (behavior_model) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SamplePoolItem.behavior_model)
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolItem::release_behavior_model() {
+  
+  ::rl::training::v1::ModelIdentity* temp = _impl_.behavior_model_;
+  _impl_.behavior_model_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolItem::unsafe_arena_release_behavior_model() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SamplePoolItem.behavior_model)
+  
+  ::rl::training::v1::ModelIdentity* temp = _impl_.behavior_model_;
+  _impl_.behavior_model_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolItem::_internal_mutable_behavior_model() {
+  
+  if (_impl_.behavior_model_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::ModelIdentity>(GetArenaForAllocation());
+    _impl_.behavior_model_ = p;
+  }
+  return _impl_.behavior_model_;
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolItem::mutable_behavior_model() {
+  ::rl::training::v1::ModelIdentity* _msg = _internal_mutable_behavior_model();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SamplePoolItem.behavior_model)
+  return _msg;
+}
+inline void SamplePoolItem::set_allocated_behavior_model(::rl::training::v1::ModelIdentity* behavior_model) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.behavior_model_);
+  }
+  if (behavior_model) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(behavior_model));
+    if (message_arena != submessage_arena) {
+      behavior_model = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, behavior_model, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.behavior_model_ = behavior_model;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SamplePoolItem.behavior_model)
+}
+
+// .rl.common.v1.ServiceInstanceIdentity producer = 6;
+inline bool SamplePoolItem::_internal_has_producer() const {
+  return this != internal_default_instance() && _impl_.producer_ != nullptr;
+}
+inline bool SamplePoolItem::has_producer() const {
+  return _internal_has_producer();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SamplePoolItem::_internal_producer() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.producer_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& SamplePoolItem::producer() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolItem.producer)
+  return _internal_producer();
+}
+inline void SamplePoolItem::unsafe_arena_set_allocated_producer(
+    ::rl::common::v1::ServiceInstanceIdentity* producer) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
+  }
+  _impl_.producer_ = producer;
+  if (producer) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SamplePoolItem.producer)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SamplePoolItem::release_producer() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
+  _impl_.producer_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SamplePoolItem::unsafe_arena_release_producer() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SamplePoolItem.producer)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.producer_;
+  _impl_.producer_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SamplePoolItem::_internal_mutable_producer() {
+  
+  if (_impl_.producer_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.producer_ = p;
+  }
+  return _impl_.producer_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* SamplePoolItem::mutable_producer() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_producer();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SamplePoolItem.producer)
+  return _msg;
+}
+inline void SamplePoolItem::set_allocated_producer(::rl::common::v1::ServiceInstanceIdentity* producer) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.producer_);
+  }
+  if (producer) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(producer));
+    if (message_arena != submessage_arena) {
+      producer = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, producer, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.producer_ = producer;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SamplePoolItem.producer)
 }
 
 // -------------------------------------------------------------------

@@ -1,4 +1,6 @@
 #include "maze/protocol/service.h"
+#include "task/runtime/training_transaction.h"
+#include "task/session/session_manager.h"
 #include "maze/observation/observation.h"
 #include "task/sample/sample_sender.h"
 #include "task/sample/training_transition_builder.h"
@@ -33,61 +35,7 @@ bool Near(float actual, double expected) {
     return std::fabs(static_cast<double>(actual) - expected) <= 1e-6;
 }
 
-class CapturingSamplePool final
-    : public training::SamplePoolIngressService::Service {
-public:
-    grpc::Status GetStatus(
-        grpc::ServerContext*,
-        const training::SamplePoolStatusReq*,
-        training::SamplePoolStatusRsp* response) override {
-        FillAuthority(response->mutable_sample_pool());
-        response->set_ready(true);
-        response->set_ingress_ready(true);
-        response->set_pool_ready(true);
-        response->set_backend_type(
-            training::SAMPLE_BACKEND_TYPE_LOCAL_MEMORY);
-        return grpc::Status::OK;
-    }
-
-    grpc::Status PushSamples(
-        grpc::ServerContext*,
-        const training::PushSamplesReq* request,
-        training::PushSamplesRsp* response) override {
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            envelopes_.push_back(request->envelope());
-        }
-        response->set_result(training::PUSH_RESULT_ACCEPTED);
-        response->set_envelope_id(request->envelope().envelope_id());
-        response->set_pressure_state(training::PRESSURE_STATE_NORMAL);
-        FillAuthority(response->mutable_sample_pool());
-        condition_.notify_all();
-        return grpc::Status::OK;
-    }
-
-    bool WaitForEnvelopeCount(std::size_t expected) {
-        std::unique_lock<std::mutex> lock(mutex_);
-        return condition_.wait_for(
-            lock, std::chrono::seconds(2),
-            [&] { return envelopes_.size() >= expected; });
-    }
-
-    std::vector<training::ProcessedTransitionEnvelope> envelopes() const {
-        std::lock_guard<std::mutex> lock(mutex_);
-        return envelopes_;
-    }
-
-private:
-    static void FillAuthority(common::ServiceInstanceIdentity* identity) {
-        identity->set_component("sample-pool");
-        identity->set_instance_id("sample-pool-fixed");
-        identity->set_lifecycle_epoch(1);
-    }
-
-    mutable std::mutex mutex_;
-    std::condition_variable condition_;
-    std::vector<training::ProcessedTransitionEnvelope> envelopes_;
-};
+using model_fixture::CapturingSamplePool;
 
 MazeConfig MakeConfig(int sample_pool_port) {
     MazeConfig config;
@@ -116,105 +64,6 @@ MazeConfig MakeConfig(int sample_pool_port) {
     return config;
 }
 
-void TestModelOutputActionResponse(const std::string& fixture_path) {
-    maze::MapDescriptor map;
-    map.set_map_id("map-fixed");
-    map.set_grid_columns(3);
-    map.set_grid_rows(3);
-    map.set_grid_size_microunits(1'000'000);
-    map.set_start_grid_x(0);
-    map.set_start_grid_y(0);
-    map.set_goal_grid_x(2);
-    map.set_goal_grid_y(2);
-    map.set_blocked_bitmap(std::string(9, '\0'));
-    MazeConfig config = MakeConfig(1);
-    config.server.run_mode = aiserver_mode::kEvaluation;
-    config.environment.agent_count = 1;
-    config.observation.ray_max_range = 2;
-    config.model.evaluation_model_path = fixture_path;
-    config.policy.action_mask_mode = "required";
-    config.task.fixed_map_id = map.map_id();
-    config.task.episode_max_steps = 10;
-    MazeTaskService service(config);
-    Require(service.Start(),
-            "start the public evaluation inference service");
-
-    maze::OpenSessionReq open_request;
-    open_request.mutable_client()->set_component("maze-client");
-    open_request.mutable_client()->set_instance_id("client-fixed");
-    open_request.mutable_client()->set_lifecycle_epoch(1);
-    open_request.set_environment_instance_id("environment-fixed");
-    open_request.set_request_id("open-fixed");
-    maze::OpenSessionRsp open_response;
-    service.OpenSession(nullptr, &open_request, &open_response);
-    Require(open_response.reply().result() ==
-                rl::session::v1::COMMAND_RESULT_APPLIED &&
-                !open_response.session_id().empty(),
-            "open the public evaluation Session");
-
-    maze::InitReq init_request;
-    init_request.mutable_command()->set_session_id(
-        open_response.session_id());
-    init_request.mutable_command()->set_session_epoch(
-        open_response.session_epoch());
-    init_request.mutable_command()->set_sequence(1);
-    init_request.mutable_map()->CopyFrom(map);
-    maze::InitRsp init_response;
-    service.Init(nullptr, &init_request, &init_response);
-    Require(init_response.reply().result() ==
-                rl::session::v1::COMMAND_RESULT_APPLIED,
-            "initialize the public Session with the fixed map");
-
-    maze::BeginEpisodeReq begin_request;
-    begin_request.mutable_command()->set_session_id(
-        open_response.session_id());
-    begin_request.mutable_command()->set_session_epoch(
-        open_response.session_epoch());
-    begin_request.mutable_command()->set_sequence(2);
-    maze::BeginEpisodeRsp begin_response;
-    service.BeginEpisode(nullptr, &begin_request, &begin_response);
-    Require(begin_response.reply().result() ==
-                rl::session::v1::COMMAND_RESULT_APPLIED &&
-                begin_response.has_assignment() &&
-                begin_response.assignment().mode() ==
-                    maze::EPISODE_MODE_EVALUATION,
-            "begin the public evaluation Episode");
-
-    maze::UpdateReq request;
-    request.mutable_command()->set_session_id(open_response.session_id());
-    request.mutable_command()->set_session_epoch(
-        open_response.session_epoch());
-    request.mutable_command()->set_sequence(3);
-    request.mutable_command()->set_episode_id(
-        begin_response.assignment().episode_id());
-    request.set_frame_id(0);
-    auto* state = request.add_agents();
-    state->set_agent_id(0);
-    state->mutable_position()->set_x(0.0f);
-    state->mutable_position()->set_y(0.0f);
-    state->set_is_done(false);
-    state->set_termination_reason(
-        maze::MAZE_TERMINATION_REASON_ACTIVE);
-    for (int action_id = maze::MazeAction_MIN;
-         action_id <= maze::MazeAction_MAX; ++action_id) {
-        state->add_action_mask(action_id == maze::MAZE_ACTION_NOOP);
-    }
-
-    maze::UpdateRsp response;
-    service.Update(nullptr, &request, &response);
-
-    Require(response.reply().result() == rl::session::v1::COMMAND_RESULT_APPLIED &&
-                response.reply().applied_sequence() == 3 &&
-                response.action_batch().actions_size() == 1 &&
-                response.action_batch().actions(0).agent_id() == 0 &&
-                response.action_batch().actions(0).action_id() ==
-                    maze::MAZE_ACTION_NOOP,
-            "production Update applies the Client-owned action mask");
-    Require(response.reply().phase() ==
-                rl::session::v1::SESSION_PHASE_EPISODE_RUNNING,
-            "the model-selected action commits through the public Update");
-}
-
 RawRolloutTransition MakeRawTransition(
     uint64_t action_step,
     float behavior_value) {
@@ -227,7 +76,7 @@ RawRolloutTransition MakeRawTransition(
     const auto action_count =
         static_cast<uint64_t>(maze::MazeAction_MAX) + 1;
     transition.action = static_cast<int>(action_step % action_count);
-    transition.reward = 0.0f;
+    transition.reward = action_step == 0 ? 1.0f : -0.5f;
     transition.behavior_log_probability = -0.5f;
     transition.behavior_value = behavior_value;
     transition.action_step = action_step;
@@ -250,7 +99,7 @@ training::ProcessedTransitionEnvelope BuildSegment(
     std::vector<float> value_targets;
     std::string error;
     Require(EstimateRolloutSegment(
-                segment, 0.99, 0.95, final_next_value,
+                segment, 0.9, 0.8, final_next_value,
                 advantages, value_targets, error) &&
                 advantages.size() == 2 && value_targets.size() == 2 &&
                 Near(advantages[0], expected_advantage_0) &&
@@ -275,7 +124,7 @@ training::ProcessedTransitionEnvelope BuildSegment(
 
     training::ProcessedTransitionEnvelope envelope;
     envelope.set_envelope_id(segment_id + "/envelope-0");
-    envelope.mutable_producer()->set_component("rl-aiserver");
+    envelope.mutable_producer()->set_component("aiserver");
     envelope.mutable_producer()->set_instance_id("aiserver-test");
     envelope.mutable_producer()->set_lifecycle_epoch(1);
     envelope.mutable_behavior_model()->CopyFrom(behavior_model);
@@ -285,8 +134,7 @@ training::ProcessedTransitionEnvelope BuildSegment(
     return envelope;
 }
 
-void TestGaeAndSampleDelivery(const std::string& fixture_path) {
-    TestModelOutputActionResponse(fixture_path);
+void TestGaeAndSampleDelivery() {
     CapturingSamplePool sample_pool;
     int port = 0;
     grpc::ServerBuilder builder;
@@ -300,11 +148,11 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
     MazeConfig config = MakeConfig(port);
     auto terminal = BuildSegment(
         "segment-terminal", 0.0,
-        -0.18515, -0.3, 0.01485, 0.0);
+        0.494, -0.8, 0.694, -0.5);
 
     auto tmax = BuildSegment(
         "segment-tmax", 0.4,
-        0.187288, 0.096, 0.387288, 0.396);
+        0.7532, -0.44, 0.9532, -0.14);
 
     SampleDistributor distributor(config.sample_distributor);
     Require(distributor.Start(),
@@ -328,6 +176,79 @@ void TestGaeAndSampleDelivery(const std::string& fixture_path) {
     server->Wait();
 }
 
+
+// Only normalized task inputs are controlled here. Pending actions, model pins,
+// bootstrap selection, GAE, projection and outbound RPC are all production code.
+void TestTransactionBootstrap(const std::string& model_path, bool terminal) {
+    using Sessions = SessionManager<TrainingSession<AgentTrainingState>>;
+    using Runtime = TrainingRuntime<Sessions>;
+    model_fixture::TemporaryRoot root;
+    const auto bytes = model_fixture::ReadFile(model_path);
+    model_fixture::FixedModelDistributor models(model_fixture::MakeManifest(bytes), bytes);
+    CapturingSamplePool pool;
+    model_fixture::LocalServer server({&models, &pool});
+    auto config = MakeConfig(server.port);
+    config.model_distribution.port = server.port;
+    config.model.local_train_dir = (root.path() / "train").string();
+    config.rollout.gamma = .9;
+    config.rollout.gae_lambda = .8;
+    config.rollout.tmax = 2;
+    Runtime runtime(config, "test.reward.");
+    runtime.metric_registry_.Register("test.reward.total.per_transition", "Total", "reward", "agent_episode",
+        training::METRIC_VALUE_TYPE_SUM_COUNT, training::METRIC_AGGREGATION_MEAN, "transition", "reward");
+    Require(runtime.Start(), "actual training runtime loads model and connects Pool");
+    Sessions::Session session;
+    session.session_id = "transaction-session";
+    session.current_episode_id = terminal ? "terminal" : "tmax";
+    session.current_episode_mode = PolicyMode::Training;
+    session.behavior_policy_scope = BehaviorPolicyScope::TrainingAgentSegment;
+    session.phase = rl::session::v1::SESSION_PHASE_EPISODE_RUNNING;
+    session.agents.emplace(7, AgentTrainingState{});
+    std::string closed_segment;
+    for (int frame = 0; frame <= 2; ++frame) {
+        AgentTaskInput input;
+        input.agent_id = 7;
+        input.observation.assign(17, 0.0f);
+        input.observation[0] = frame == 0 ? .2f : frame == 1 ? .3f : .4f;
+        input.reward.total = frame == 1 ? 1.0f : frame == 2 ? -.5f : 0.0f;
+        input.terminal = terminal && frame == 2;
+        std::lock_guard<std::mutex> lock(runtime.mutex_);
+        TrainingTransaction<Sessions> transaction(runtime, session);
+        std::vector<ModelTaskAction> actions;
+        std::string error;
+        Require(transaction.PrepareFrame({input}, frame, true, actions, error), error);
+        Require(transaction.Admit(error, true) == SampleDistributor::ReservationResult::kReserved, error);
+        transaction.Commit(session);
+        if (frame == 1) closed_segment = session.agents.at(7).segment_id;
+        Require(actions.size() == (input.terminal ? 0 : 1), "transaction emits only active-agent actions");
+        if (frame < 2) Require(Near(session.agents.at(7).pending_value, frame == 0 ? .2 : .3),
+                               "behavior value comes from the actual fixed ONNX model");
+    }
+    Require(pool.WaitForEnvelopeCount(1), "actual transaction reaches Pool ingress");
+    const auto received = pool.envelopes();
+    Require(received.size() == 1 && received[0].samples_size() == 2, "one closed segment has exactly two transitions");
+    const auto& envelope = received[0];
+    Require(envelope.behavior_model().SerializeAsString() == model_fixture::MakeManifest(bytes).identity().SerializeAsString() &&
+            !envelope.producer().component().empty() &&
+            envelope.producer().instance_id() == runtime.MetricSourceIdentity().instance_id() &&
+            envelope.producer().lifecycle_epoch() == runtime.MetricSourceIdentity().lifecycle_epoch(),
+            "actual pinned model and producer survive the outbound envelope");
+    const double advantages[] = {terminal ? .494 : .7532, terminal ? -.8 : -.44};
+    const double targets[] = {terminal ? .694 : .9532, terminal ? -.5 : -.14};
+    for (int i = 0; i < 2; ++i) {
+        const auto& sample = envelope.samples(i);
+        Require(Near(sample.advantage(), advantages[i]) && Near(sample.value_target(), targets[i]) &&
+                sample.behavior_model_step() == 0,
+                "real transaction terminal/TMax bootstrap matches independent nonzero GAE oracle");
+    }
+    if (!terminal) {
+        Require(session.agents.at(7).segment_transitions.empty() && session.agents.at(7).has_pending_action &&
+                session.agents.at(7).segment_id != closed_segment,
+                "TMax starts a new segment without carrying the previous advantage");
+    }
+    Require(model_fixture::FinishMetrics([&] { return runtime.BeginShutdown(); }, runtime.metric_service_,
+                                        runtime.MetricSourceIdentity()), "training test drains source-final ACK");
+}
 
 void TestRegisteredEpisodeMetrics() {
     MetricRegistry registry;
@@ -521,7 +442,9 @@ void TestModelFeedbackVisibility(const std::string& fixture_path) {
 int main(int argc, char** argv) {
     Require(argc == 2,
             "usage: gae_sample_delivery_development_test MODEL");
-    TestGaeAndSampleDelivery(argv[1]);
+    TestGaeAndSampleDelivery();
+    TestTransactionBootstrap(argv[1], true);
+    TestTransactionBootstrap(argv[1], false);
     TestRegisteredEpisodeMetrics();
     TestModelFeedbackVisibility(argv[1]);
     std::cout << "aiserver_gae_sample_delivery_data_path: PASS"

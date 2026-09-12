@@ -1,25 +1,41 @@
-# C++ Client SDK
+# RL-SDK
 
 训练组维护公共源码，随 `rl-contracts` artifact 的 `sdk/` 交付。环境项目直接链接 `rl_sdk::sdk`，通过 `TaskClient<Protocol>` 调用任务 RPC。环境代码负责初始化、生成 Proto 状态、执行动作和处理任务结果；channel、Stub、deadline、命令序号、WAIT 与回执确认由库持有。
 
 ## 依赖与构建
 
-依赖 C++17、Protobuf、gRPC、pthread。生成当前开发制品：
+依赖 C++17、Protobuf、gRPC、pthread；本地代码生成使用 Python 3.9 或更高版本及其 Protobuf 包、`protoc` 与 `grpc_cpp_plugin`。`generate-task` 和它启动的 SDK 插件使用同一个 Python 解释器；通过 CMake 调用时沿用 `Python3_EXECUTABLE`，Protobuf 包须安装在该解释器环境中。从 Contracts 仓库导出独立源码包：
 
 ```sh
-bash ./build_dev_artifact.sh task-maze
+bash sdk/build_artifact.sh /path/to/output
+# 输出 /path/to/output/RL-SDK.tar.gz，解压后顶层目录为 RL-SDK/
 ```
 
-任意 CMake 项目可直接消费制品，不依赖 Maze Client 源码：
+包内包含 SDK headers、CMake 入口、生成器、公共 `proto/common/identity.proto` 和 `proto/communication/session.proto`。这两份公共 Proto 源由 Contracts 维护，打包时复制；任务 Proto 由任务双方约定并各自放进自己的项目。新增任务无需修改 Contracts 的任务 profile，也不需要在本地安装 Maze Client。
+
+Client 与 AIServer 可以分别从相同的任务 Proto，在各自的编译环境生成 `.pb.cc/.pb.h`、`.grpc.pb.cc/.grpc.pb.h` 与 `.sdk.pb.h`：
 
 ```cmake
-add_subdirectory("${CONTRACT_ARTIFACT}/sdk" rl-sdk)
-rl_sdk_add_task(task_protocol "${CONTRACT_ARTIFACT}/cpp" proto/maze/maze)
+add_subdirectory("${RL_SDK_DIR}" rl-sdk)
+rl_sdk_generate_task(task_protocol
+    PROTO proto/my_task/task.proto
+    IMPORT_DIRS "${CMAKE_CURRENT_SOURCE_DIR}")
 add_executable(environment_client main.cpp)
 target_link_libraries(environment_client PRIVATE task_protocol)
 ```
 
-`rl_sdk_add_task` 组装公共 communication、identity 和指定任务生成代码，并传递库依赖；消费端无需重复列出 gRPC 生成源码或链接库。仓内开发示例见 `maze-client/CMakeLists.txt`：`maze_environment` 不依赖通信，`maze_client_adapter` 链接环境库和任务协议库。
+`PROTO` 是相对 import root 的协议路径，也可以是某个 import root 内的绝对路径。`IMPORT_DIRS` 可指定多个任务依赖目录。生成器使用 Protobuf descriptor 解析 import 闭包，自动生成和链接任务导入的消息，并跟踪这些源码的构建依赖；Protobuf well-known types 由 `libprotobuf` 提供。输出只进入构建目录，不改写项目保存的 Proto 或生成快照。
+
+也可以在任意构建系统中直接调用：
+
+```sh
+python3 /path/to/RL-SDK/tools/generate-task \
+  --task-proto proto/my_task/task.proto \
+  --import-dir /path/to/environment-project \
+  --output-dir /path/to/build/generated
+```
+
+`rl_sdk_add_task(target protocol_root task_stem)` 仍用于显式链接已经生成的协议产物。`build_dev_artifact.sh task-maze` 是本仓现有任务的预生成打包入口，独立任务不依赖它。仓内实际接入见 `maze-client/CMakeLists.txt`：`maze_environment` 不依赖通信，`maze_client_adapter` 链接环境库和通过 `rl_sdk_generate_task` 在本地生成的任务协议库。
 
 ## 类型绑定与调用
 
@@ -31,6 +47,7 @@ Proto 及其编译产物是 Client 与 AIServer 唯一共同维护的通信合�
 Contracts 的构建入口自动调用它；独立协议工程也可使用
 `protoc --plugin=protoc-gen-rl_sdk=/path/to/sdk/tools/protoc-gen-rl-sdk --rl_sdk_out=cpp .../task.proto`，
 与同一次构建的 C++ / gRPC 产物一起交付。
+直接调用上述 protoc 插件时，PATH 中的 `python3` 需满足前述 Python 与 Protobuf 依赖。
 
 ```cpp
 #include "rl_sdk/task_client.h"
@@ -60,13 +77,15 @@ rl_sdk::TaskClient<rl::task::maze::v1::MazeTaskServiceProtocol> client(options);
 
 验证回调只处理任务 payload；公共回执的结果、序号、phase 由 SDK 校验后提交。`cursor()` 只读，调用者不用填充或推进序号。调用返回 `Applied`、`Rejected`、`Unknown`、`Stopped` 或 `WaitExpired`，`error()` 保留失败信息。
 
-`RunEpisode` 接收当前事实、提交、判断终止、执行动作四个回调：初始状态先上报，动作执行后再上报，最后一次终止状态仍须 Update，终局不执行额外动作。`RunSession` 是可选的完整应用驱动；Maze 示例用它组织环境初始化、Episode 循环和退出，Binding 内调用上述公共方法。
+`RunEpisode` 接收当前事实、提交、判断终止、执行动作四个回调：初始状态先上报，动作执行后再上报，最后一次终止状态仍须 Update，终局不执行额外动作。`RunSession` 是可选的完整应用驱动；Maze 示例用它组织环境初始化、Episode 循环和退出，Binding 内调用上述公共方法。已失败的操作不会被后续 Abort / Close 的结果覆盖；SDK 的 `error()` 保留原始失败，并在清理也失败时追加该清理错误。Transport 错误保留 gRPC 状态码与原始消息，任务 Adapter 不应读取失败 RPC 的空 response 来替代它。
 
 ## 生命周期与责任边界
 
 每个 `TaskClient` 用于一个同步 Session，不跨线程共享。Request 在一次调用中保持不变，只有 APPLIED / ALREADY_APPLIED 经过确认才推进 cursor。WAIT 不推进环境，也不重新生成事实。Transport 沿用原合同指定 gRPC 状态最多两次尝试及 50 ms 间隔；Update、普通命令和 Abort WAIT 的预算由 `ClientOptions` 声明。Unknown 不转为替代 Abort / Close，不提供跨进程会话恢复。
 
-`session.h`、`transport.h` 是公共实现；环境接入优先使用 `task_client.h`。`server_command.h` / `replay_window.h` 提供服务侧命令提交，`metric_catalog.h` 提供独立指标目录服务。
+`session.h`、`transport.h` 是公共实现；环境接入优先使用 `task_client.h`。`server_command.h` / `replay_window.h` 提供服务侧命令提交。
+
+`metric_catalog.h` 是可选的指标目录服务 helper，任务通信不依赖它。使用时需要另行取得同一 Contracts 的 `proto/metrics/catalog.proto` 与 `proto/metrics/registry.proto`，生成并链接 `catalog.pb.cc`、`catalog.grpc.pb.cc` 和 `registry.pb.cc` 及其头文件。公共 identity 复用已经生成的协议库，不重复链接。独立任务 SDK 源码包不包含这些指标 Proto。
 
 AIServer 的 `TrainingTaskService<Protocol, Task>` 在训练侧统一七个 RPC 的生命周期和样本事务。Task Adapter 根据环境 Proto 编码 Observation、计算 Reward、映射 Action 与生成任务指标；`TrainingTransaction` 负责 pending transition、GAE 分段、采样动作和样本队列提交。Client SDK 不计算奖励或 GAE，也不连接 Learner、Pool 或 Model Distributor。Learner 的算法与任务 Proto 没有依赖关系。
 

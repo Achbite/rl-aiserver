@@ -60,6 +60,7 @@ bool OnnxInferencer::PrepareModel(const std::string& model_path,
                                  std::string* error) {
     std::lock_guard<std::mutex> lock(load_mutex_);
     prepared = PreparedModel{};
+    if (error) error->clear();
 
     try {
         // 创建候选 Session；只有完整加载成功后才替换当前 Session。
@@ -145,10 +146,11 @@ OnnxInferencer::PreparedModel OnnxInferencer::SnapshotPreparedModel() const {
 
 // ---- 推理（线程安全，无锁读取）----
 bool OnnxInferencer::Infer(const std::vector<float>& obs, int obs_dim,
-                           std::vector<float>& action_logits, float& value) {
+                           std::vector<float>& action_logits, float& value,
+                           std::string* error) {
     // 原子读取 shared_ptr（与 LoadModel 端 atomic_store 配合，保证线程安全）
     auto session = std::atomic_load(&session_);
-    return InferSession(session, obs, obs_dim, action_logits, value);
+    return InferSession(session, obs, obs_dim, action_logits, value, error);
 }
 
 bool OnnxInferencer::InferPrepared(
@@ -156,9 +158,10 @@ bool OnnxInferencer::InferPrepared(
     const std::vector<float>& obs,
     int obs_dim,
     std::vector<float>& action_logits,
-    float& value) {
+    float& value,
+    std::string* error) {
     return InferSession(
-        prepared.session, obs, obs_dim, action_logits, value);
+        prepared.session, obs, obs_dim, action_logits, value, error);
 }
 
 bool OnnxInferencer::InferSession(
@@ -166,8 +169,13 @@ bool OnnxInferencer::InferSession(
     const std::vector<float>& obs,
     int obs_dim,
     std::vector<float>& action_logits,
-    float& value) {
-    if (!session) return false;
+    float& value,
+    std::string* error) {
+    if (error) error->clear();
+    if (!session) {
+        if (error) *error = "ONNX session is not loaded";
+        return false;
+    }
 
     try {
         // ---- 构建输入 Tensor ----
@@ -204,6 +212,7 @@ bool OnnxInferencer::InferSession(
 
         return true;
     } catch (const Ort::Exception& e) {
+        if (error) *error = e.what();
         LOG_ERROR("OnnxInferencer", "推理失败: %s", e.what());
         return false;
     }
