@@ -154,13 +154,15 @@ CommandOutcome RunSession(Binding& binding) {
     if (result != CommandOutcome::Applied) return result;
     auto finish = [&](CommandOutcome outcome) {
         if (outcome == CommandOutcome::Unknown) return outcome;
+        const bool failed = outcome == CommandOutcome::Rejected ||
+                            outcome == CommandOutcome::WaitExpired;
         if (binding.Active()) {
             const auto aborted = binding.Abort();
-            if (aborted != CommandOutcome::Applied) return aborted;
+            if (aborted != CommandOutcome::Applied) return failed ? outcome : aborted;
         }
         if (binding.CanClose()) {
             const auto closed = binding.Close();
-            if (closed != CommandOutcome::Applied) return closed;
+            if (closed != CommandOutcome::Applied) return failed ? outcome : closed;
         }
         return outcome;
     };

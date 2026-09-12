@@ -273,9 +273,19 @@ bool TrainingRuntime<Sessions>::LoadInitialModel() {
             if (!FetchPrepareAndPublishModel(
                     range.latest_model_step, range.model_lineage_id, candidate, prepared,
                     load_error)) {
-                error = load_error;
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                continue;
+                model_state_.store(training::MODEL_STATE_FAILED);
+                last_error_ = "initial model load failed: lineage=" +
+                    range.model_lineage_id + " model_step=" +
+                    std::to_string(range.latest_model_step) + ": " + load_error;
+                std::string ack_error;
+                const auto ack = model_distributor_.AckIdempotently(
+                    candidate, config_.sample_distributor.aiserver_id,
+                    training::MODEL_LOAD_STATUS_FAILED, last_error_, ack_error);
+                if (ack != ModelDistributorClient::AckDisposition::Applied) {
+                    last_error_ += "; FAILED acknowledgement was not confirmed: " +
+                                   ack_error;
+                }
+                return false;
             }
             if (candidate.model_lineage_id() != range.model_lineage_id ||
                 !prepared.valid()) {
@@ -302,7 +312,7 @@ bool TrainingRuntime<Sessions>::LoadInitialModel() {
             auto ack = model_distributor_.AckIdempotently(
                 candidate, config_.sample_distributor.aiserver_id,
                 training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
-                &ack_authority);
+                &ack_authority, deadline);
             if (ack == ModelDistributorClient::AckDisposition::Rejected ||
                 ack == ModelDistributorClient::AckDisposition::NotApplied) {
                 model_state_.store(training::MODEL_STATE_FAILED);
@@ -316,7 +326,7 @@ bool TrainingRuntime<Sessions>::LoadInitialModel() {
                 ack = model_distributor_.AckIdempotently(
                     candidate, config_.sample_distributor.aiserver_id,
                     training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
-                    &ack_authority);
+                    &ack_authority, deadline);
             }
             if (ack == ModelDistributorClient::AckDisposition::Rejected ||
                 ack == ModelDistributorClient::AckDisposition::NotApplied) {
@@ -389,11 +399,14 @@ bool TrainingRuntime<Sessions>::FetchPrepareAndPublishModel(
     training::ModelIdentity target;
     target.set_model_lineage_id(lineage_id);
     target.set_model_step(model_step);
+    manifest = ModelManifest{};
+    *manifest.wire.mutable_identity() = target;
     ModelManifest downloaded;
     if (!model_distributor_.FetchStep(
             config_.sample_distributor.aiserver_id, model_step,
             downloaded, error)) {
         RecordModelFeedback(target, "download", error);
+        error = "download: " + error;
         return false;
     }
     if (!PrepareModelArtifact(downloaded, prepared, error)) {
@@ -401,6 +414,7 @@ bool TrainingRuntime<Sessions>::FetchPrepareAndPublishModel(
         model_distributor_.DiscardTemporary(downloaded, discard_error);
         if (!discard_error.empty()) error += "; " + discard_error;
         RecordModelFeedback(target, "prepare", error);
+        error = "prepare: " + error;
         return false;
     }
     if (!model_distributor_.PublishPrepared(downloaded, error)) {
@@ -409,6 +423,7 @@ bool TrainingRuntime<Sessions>::FetchPrepareAndPublishModel(
         if (!discard_error.empty()) error += "; " + discard_error;
         prepared = OnnxInferencer::PreparedModel{};
         RecordModelFeedback(target, "cache_publish", error);
+        error = "cache_publish: " + error;
         return false;
     }
     RecordModelFeedback(target, "prepared", "");
@@ -468,14 +483,18 @@ template <class Sessions>
 void TrainingRuntime<Sessions>::RecordPendingModelAck(
     const ModelManifest& manifest,
     const common::ServiceInstanceIdentity& authority,
+    std::chrono::steady_clock::time_point deadline,
     const std::string& error) {
     model_ack_pending_ = true;
     pending_model_ack_manifest_ = manifest;
     pending_model_ack_authority_ = authority;
+    pending_model_ack_deadline_ = deadline;
     pending_model_ack_error_ = error;
     pending_model_ack_cause_ =
         "model ACK remains outcome-uncertain before latest-prepared publish: " +
         error;
+    RecordModelFeedback(manifest.wire.identity(), "ack_pending",
+                        pending_model_ack_cause_);
     LOG_WARN("TrainingRuntime", "%s", pending_model_ack_cause_.c_str());
 }
 
@@ -483,18 +502,22 @@ template <class Sessions>
 bool TrainingRuntime<Sessions>::RetryPendingModelAck() {
     ModelManifest pending;
     common::ServiceInstanceIdentity authority;
+    std::chrono::steady_clock::time_point deadline;
+    std::string ack_error;
     {
         std::lock_guard<std::mutex> lock(mutex_);
         if (!model_ack_pending_) return true;
+        if (model_state_.load() == training::MODEL_STATE_FAILED) return false;
         pending = pending_model_ack_manifest_;
         authority = pending_model_ack_authority_;
+        deadline = pending_model_ack_deadline_;
+        ack_error = pending_model_ack_error_;
     }
 
-    std::string ack_error;
     const auto ack = model_distributor_.AckIdempotently(
         pending, config_.sample_distributor.aiserver_id,
         training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
-        &authority);
+        &authority, deadline);
     std::lock_guard<std::mutex> lock(mutex_);
     if (!model_ack_pending_ ||
         pending_model_ack_manifest_.model_step() != pending.model_step() ||
@@ -532,6 +555,7 @@ bool TrainingRuntime<Sessions>::RetryPendingModelAck() {
         pending_model_ack_authority_.Clear();
         pending_model_ack_error_.clear();
         pending_model_ack_cause_.clear();
+        RecordModelFeedback(model_manifest_.wire.identity(), "loaded", "");
         model_state_.store(training::MODEL_STATE_READY);
         LOG_INFO("TrainingRuntime",
                  "模型已成为 latest-prepared: lineage=%s model_step=%llu",
@@ -547,15 +571,27 @@ bool TrainingRuntime<Sessions>::RetryPendingModelAck() {
         state_.store(training::AISERVER_STATE_DEGRADED);
         last_error_ = "pending model ACK was explicitly rejected: " +
                       ack_error;
+        RecordModelFeedback(pending.wire.identity(), "ack_rejected", last_error_);
         return false;
     }
-    const std::string prior_ack_cause = pending_model_ack_cause_;
-    pending_model_ack_error_ = ack_error;
-    pending_model_ack_cause_ =
-        "pending model ACK remains outcome-uncertain: " + ack_error;
-    if (last_error_ == prior_ack_cause) {
+    if (!ack_error.empty()) pending_model_ack_error_ = ack_error;
+    if (std::chrono::steady_clock::now() >= deadline) {
+        model_state_.store(training::MODEL_STATE_FAILED);
+        pending_model_ack_cause_ =
+            "model ACK recovery deadline elapsed with outcome unknown: lineage=" +
+            pending.model_lineage_id() + " model_step=" +
+            std::to_string(pending.model_step()) + " authority=" +
+            authority.instance_id() + ": " + pending_model_ack_error_;
+        state_.store(training::AISERVER_STATE_DEGRADED);
         last_error_ = pending_model_ack_cause_;
+        LOG_ERROR("TrainingRuntime", "%s", last_error_.c_str());
+        RecordModelFeedback(pending.wire.identity(), "ack_unconfirmed", last_error_);
+        return false;
     }
+    pending_model_ack_cause_ =
+        "pending model ACK remains outcome-uncertain: " + pending_model_ack_error_;
+    RecordModelFeedback(pending.wire.identity(), "ack_pending",
+                        pending_model_ack_cause_);
     return false;
 }
 
@@ -773,112 +809,106 @@ void TrainingRuntime<Sessions>::ModelWatchLoop() {
             std::lock_guard<std::mutex> lock(mutex_);
             has_pending_ack = model_ack_pending_;
         }
-        if (has_pending_ack) {
+        if (model_state_.load() != training::MODEL_STATE_FAILED && has_pending_ack) {
             RetryPendingModelAck();
-            auto remaining = poll_interval;
-            while (!model_watch_stop_.load() && remaining.count() > 0) {
-                const auto slice =
-                    std::min(remaining, std::chrono::milliseconds(50));
-                std::this_thread::sleep_for(slice);
-                remaining -= slice;
-            }
-            continue;
-        }
-
-        ModelStep active_step = 0;
-        std::optional<ModelStep> staged_step;
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            active_step = model_manifest_.model_step();
-            if (staged_model_manifest_.HasModelIdentity()) {
-                staged_step = staged_model_manifest_.model_step();
-            }
-        }
-
-        ModelDistributorClient::AvailableRange range;
-        std::string error;
-        std::string cycle_error;
-        bool range_ready = model_distributor_.GetAvailableRange(
-            config_.sample_distributor.aiserver_id, range, error);
-        if (!range_ready) {
-            RecordModelFeedback({}, "discover", error);
-        } else {
-            std::lock_guard<std::mutex> feedback_lock(model_feedback_mutex_);
-            if (model_feedback_.stage() == "discover") {
-                model_feedback_.set_stage("available");
-                model_feedback_.clear_last_error();
-                model_feedback_.mutable_candidate_model()->set_model_lineage_id(range.model_lineage_id);
-                model_feedback_.mutable_candidate_model()->set_model_step(range.latest_model_step);
-            }
-        }
-        bool latest_ready = range_ready;
-        if (range_ready &&
-            training_runtime_detail::ShouldFetchModelCandidate(
-                active_step, staged_step,
-                range.latest_model_step)) {
-            ModelManifest candidate;
-            OnnxInferencer::PreparedModel prepared;
-            latest_ready = FetchPrepareAndPublishModel(
-                range.latest_model_step, range.model_lineage_id, candidate, prepared,
-                error);
-            if (latest_ready &&
-                candidate.model_lineage_id() != range.model_lineage_id) {
-                error = "staged model range identity changed during fetch";
-                RecordModelFeedback(candidate.wire.identity(), "range_identity", error);
-                latest_ready = false;
-            }
-            if (latest_ready) {
+        } else if (model_state_.load() != training::MODEL_STATE_FAILED) {
+            ModelStep active_step = 0;
+            std::optional<ModelStep> staged_step;
+            {
                 std::lock_guard<std::mutex> lock(mutex_);
-                const std::optional<ModelStep> current_staged =
-                    staged_model_manifest_.HasModelIdentity()
-                        ? std::optional<ModelStep>(
-                              staged_model_manifest_.model_step())
-                        : std::nullopt;
-                if (training_runtime_detail::ShouldFetchModelCandidate(
-                        model_manifest_.model_step(),
-                        current_staged,
-                        candidate.model_step())) {
-                    staged_model_manifest_ = std::move(candidate);
-                    staged_prepared_model_ = std::move(prepared);
-                    LOG_INFO(
-                        "TrainingRuntime",
-                        "模型已暂存: lineage=%s model_step=%llu",
-                        staged_model_manifest_.model_lineage_id().c_str(),
-                        static_cast<unsigned long long>(
-                            staged_model_manifest_.model_step()));
+                active_step = model_manifest_.model_step();
+                if (staged_model_manifest_.HasModelIdentity()) {
+                    staged_step = staged_model_manifest_.model_step();
                 }
             }
-        }
-        TryPromoteStagedModelForWatcher();
-        bool has_pending_ack_after_activation = false;
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            has_pending_ack_after_activation = model_ack_pending_;
-        }
-        if ((!range_ready || !latest_ready ||
-             has_pending_ack_after_activation) &&
-            !error.empty()) {
-            cycle_error = "model refresh delayed: " + error;
-        }
-        std::set<ModelStep> protected_steps;
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            protected_steps = ProtectedCachedModelStepsLocked();
-        }
-        std::string prune_error;
-        if (!model_distributor_.PruneCache(
-                protected_steps, prune_error)) {
-            if (!cycle_error.empty()) cycle_error += "; ";
-            cycle_error += "model cache pruning delayed: " + prune_error;
-        }
-        if (!cycle_error.empty() &&
-            cycle_error != last_reported_watch_error) {
-            LOG_ERROR("TrainingRuntime", "%s", cycle_error.c_str());
-            last_reported_watch_error = cycle_error;
-        } else if (cycle_error.empty() &&
-                   !last_reported_watch_error.empty()) {
-            LOG_INFO("TrainingRuntime", "模型刷新与缓存维护已恢复");
-            last_reported_watch_error.clear();
+
+            ModelDistributorClient::AvailableRange range;
+            std::string error;
+            std::string cycle_error;
+            bool range_ready = model_distributor_.GetAvailableRange(
+                config_.sample_distributor.aiserver_id, range, error);
+            if (!range_ready) {
+                RecordModelFeedback({}, "discover", error);
+            } else {
+                std::lock_guard<std::mutex> feedback_lock(model_feedback_mutex_);
+                if (model_feedback_.stage() == "discover") {
+                    model_feedback_.set_stage("available");
+                    model_feedback_.clear_last_error();
+                    model_feedback_.mutable_candidate_model()->set_model_lineage_id(range.model_lineage_id);
+                    model_feedback_.mutable_candidate_model()->set_model_step(range.latest_model_step);
+                }
+            }
+            bool latest_ready = range_ready;
+            if (range_ready &&
+                training_runtime_detail::ShouldFetchModelCandidate(
+                    active_step, staged_step,
+                    range.latest_model_step)) {
+                ModelManifest candidate;
+                OnnxInferencer::PreparedModel prepared;
+                latest_ready = FetchPrepareAndPublishModel(
+                    range.latest_model_step, range.model_lineage_id, candidate, prepared,
+                    error);
+                if (latest_ready &&
+                    candidate.model_lineage_id() != range.model_lineage_id) {
+                    error = "staged model range identity changed during fetch";
+                    RecordModelFeedback(candidate.wire.identity(), "range_identity", error);
+                    latest_ready = false;
+                }
+                if (latest_ready) {
+                    std::lock_guard<std::mutex> lock(mutex_);
+                    const std::optional<ModelStep> current_staged =
+                        staged_model_manifest_.HasModelIdentity()
+                            ? std::optional<ModelStep>(
+                                  staged_model_manifest_.model_step())
+                            : std::nullopt;
+                    if (training_runtime_detail::ShouldFetchModelCandidate(
+                            model_manifest_.model_step(),
+                            current_staged,
+                            candidate.model_step())) {
+                        staged_model_manifest_ = std::move(candidate);
+                        staged_prepared_model_ = std::move(prepared);
+                        LOG_INFO(
+                            "TrainingRuntime",
+                            "模型已暂存: lineage=%s model_step=%llu",
+                            staged_model_manifest_.model_lineage_id().c_str(),
+                            static_cast<unsigned long long>(
+                                staged_model_manifest_.model_step()));
+                    }
+                }
+            }
+            TryPromoteStagedModelForWatcher();
+            if (model_state_.load() != training::MODEL_STATE_FAILED) {
+                bool has_pending_ack_after_activation = false;
+                {
+                    std::lock_guard<std::mutex> lock(mutex_);
+                    has_pending_ack_after_activation = model_ack_pending_;
+                }
+                if ((!range_ready || !latest_ready ||
+                     has_pending_ack_after_activation) &&
+                    !error.empty()) {
+                    cycle_error = "model refresh delayed: " + error;
+                }
+                std::set<ModelStep> protected_steps;
+                {
+                    std::lock_guard<std::mutex> lock(mutex_);
+                    protected_steps = ProtectedCachedModelStepsLocked();
+                }
+                std::string prune_error;
+                if (!model_distributor_.PruneCache(
+                        protected_steps, prune_error)) {
+                    if (!cycle_error.empty()) cycle_error += "; ";
+                    cycle_error += "model cache pruning delayed: " + prune_error;
+                }
+                if (!cycle_error.empty() &&
+                    cycle_error != last_reported_watch_error) {
+                    LOG_ERROR("TrainingRuntime", "%s", cycle_error.c_str());
+                    last_reported_watch_error = cycle_error;
+                } else if (cycle_error.empty() &&
+                           !last_reported_watch_error.empty()) {
+                    LOG_INFO("TrainingRuntime", "模型刷新与缓存维护已恢复");
+                    last_reported_watch_error.clear();
+                }
+            }
         }
 
         auto remaining = poll_interval;
@@ -1382,16 +1412,16 @@ bool TrainingRuntime<Sessions>::InferPinnedValue(
         return false;
     }
     std::vector<float> logits;
+    std::string output_error;
     const auto start = std::chrono::steady_clock::now();
     const bool inferred = onnx_inferencer_.InferPrepared(
         agent.pinned_prepared_model, observation,
-        static_cast<int>(observation.size()), logits, value);
+        static_cast<int>(observation.size()), logits, value, &output_error);
     const double latency_ms = training_runtime_detail::ElapsedMs(start);
     ++inference_count_;
     inference_latency_sum_ms_ += latency_ms;
     inference_latency_max_ms_ =
         std::max(inference_latency_max_ms_, latency_ms);
-    std::string output_error;
     if (!inferred || !ValidateEpisodeModelOutput(
                          logits, config_.model.expected_action_dim, value,
                          output_error)) {
@@ -1426,24 +1456,33 @@ bool TrainingRuntime<Sessions>::ActivateStagedModel() {
     }
     if (authority_probe ==
         ModelDistributorClient::AuthorityProbeDisposition::Rejected) {
+        model_state_.store(training::MODEL_STATE_FAILED);
         MarkDegraded("model ACK authority probe was rejected: " + error);
+        RecordModelFeedback(staged_model_manifest_.wire.identity(),
+                            "ack_rejected", last_error_);
         return false;
     }
     ModelManifest candidate = staged_model_manifest_;
 
+    const auto ack_deadline = std::chrono::steady_clock::now() +
+        std::chrono::milliseconds(config_.model.startup_timeout_ms);
     std::string ack_error;
     const auto ack = model_distributor_.AckIdempotently(
         candidate, config_.sample_distributor.aiserver_id,
         training::MODEL_LOAD_STATUS_LOADED, "loaded", ack_error,
-        &ack_authority);
+        &ack_authority, ack_deadline);
     if (ack == ModelDistributorClient::AckDisposition::Rejected ||
         ack == ModelDistributorClient::AckDisposition::NotApplied) {
-        MarkDegraded("model ACK was rejected: " + ack_error);
+        model_state_.store(training::MODEL_STATE_FAILED);
+        state_.store(training::AISERVER_STATE_DEGRADED);
+        last_error_ = "model ACK was rejected: " + ack_error;
+        RecordModelFeedback(candidate.wire.identity(), "ack_rejected", last_error_);
+        LOG_ERROR("TrainingRuntime", "%s", last_error_.c_str());
         return false;
     }
 
     if (ack == ModelDistributorClient::AckDisposition::Uncertain) {
-        RecordPendingModelAck(candidate, ack_authority, ack_error);
+        RecordPendingModelAck(candidate, ack_authority, ack_deadline, ack_error);
         return false;
     }
     if (model_manifest_.HasModelIdentity() &&
@@ -1493,14 +1532,14 @@ bool TrainingRuntime<Sessions>::PrepareModelAction(
     }
 
     std::vector<float> logits;
-
+    std::string inference_error;
     const auto start = std::chrono::steady_clock::now();
     const bool inferred = training_episode
         ? onnx_inferencer_.InferPrepared(
               agent.pinned_prepared_model, obs,
-              static_cast<int>(obs.size()), logits, value)
+              static_cast<int>(obs.size()), logits, value, &inference_error)
         : onnx_inferencer_.Infer(
-              obs, static_cast<int>(obs.size()), logits, value);
+              obs, static_cast<int>(obs.size()), logits, value, &inference_error);
     const double latency_ms = training_runtime_detail::ElapsedMs(start);
     ++inference_count_;
     inference_latency_sum_ms_ += latency_ms;
@@ -1508,7 +1547,7 @@ bool TrainingRuntime<Sessions>::PrepareModelAction(
         std::max(inference_latency_max_ms_, latency_ms);
 
     if (!inferred) {
-        MarkDegraded("ONNX inference failed");
+        MarkDegraded("ONNX inference failed: " + inference_error);
         return false;
     }
     std::string model_output_error;
@@ -1841,9 +1880,6 @@ void TrainingRuntime<Sessions>::MarkDegraded(const std::string& error) {
     state_.store(training::AISERVER_STATE_DEGRADED);
     last_error_ = error;
     LOG_ERROR("TrainingRuntime", "进入 DEGRADED: %s", error.c_str());
-    if (config_.server.run_mode == aiserver_mode::kTraining) {
-        sample_distributor_.MarkDegraded(error);
-    }
 }
 
 template <class Sessions>

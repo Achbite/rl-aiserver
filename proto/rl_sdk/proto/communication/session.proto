@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package rl.session.v1;
+
+option cc_generic_services = false;
+
+// Shared lifecycle values for task-specific typed RPC services.
+enum CommandResult {
+    COMMAND_RESULT_UNSPECIFIED = 0;
+    COMMAND_RESULT_APPLIED = 1;
+    COMMAND_RESULT_ALREADY_APPLIED = 2;
+    COMMAND_RESULT_WAIT = 3;
+    COMMAND_RESULT_REJECTED = 4;
+}
+
+enum CommandErrorCode {
+    COMMAND_ERROR_CODE_UNSPECIFIED = 0;
+    COMMAND_ERROR_CODE_INVALID_IDENTITY = 1;
+    COMMAND_ERROR_CODE_STALE_EPOCH = 2;
+    COMMAND_ERROR_CODE_OUT_OF_ORDER = 3;
+    COMMAND_ERROR_CODE_PAYLOAD_CONFLICT = 4;
+    COMMAND_ERROR_CODE_STATE_CONFLICT = 5;
+    COMMAND_ERROR_CODE_TASK_INPUT_INVALID = 6;
+    COMMAND_ERROR_CODE_MODEL_IDENTITY_MISMATCH = 7;
+}
+
+enum SessionPhase {
+    SESSION_PHASE_UNSPECIFIED = 0;
+    SESSION_PHASE_OPEN = 1;
+    SESSION_PHASE_READY = 2;
+    SESSION_PHASE_EPISODE_RUNNING = 3;
+    SESSION_PHASE_EPISODE_TERMINAL = 4;
+    SESSION_PHASE_TASK_COMPLETE = 5;
+    SESSION_PHASE_CLOSED = 6;
+    SESSION_PHASE_ABORTED = 7;
+}
+
+message CommandIdentity {
+    string session_id = 1;
+    uint64 session_epoch = 2;
+    uint64 sequence = 3;
+    // Empty for Session-level commands and required for Episode commands.
+    string episode_id = 4;
+}
+
+message CommandReply {
+    CommandResult result = 1;
+    CommandErrorCode error_code = 2;
+    string message = 3;
+    uint64 applied_sequence = 4;
+    SessionPhase phase = 5;
+}

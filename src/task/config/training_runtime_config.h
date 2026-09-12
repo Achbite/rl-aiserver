@@ -19,6 +19,7 @@ struct ModelConfig {
     std::string evaluation_model_path =
         "../models/eval/0000000/SaveModel.onnx";
     std::string local_train_dir = "../models/train";
+    // Startup discovery/load budget and each candidate's ACK recovery budget.
     int startup_timeout_ms = 30000;
     int expected_obs_dim = 0;
     int expected_action_dim = 0;

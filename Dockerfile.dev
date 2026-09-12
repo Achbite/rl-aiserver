@@ -35,6 +35,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ldconfig && \
     rm -rf "${ORT_PACKAGE}" "${ORT_PACKAGE}.tgz"
 
+RUN pip install --no-cache-dir protobuf==7.35.1
+
 LABEL org.rl-training.dev-toolchain="cpp17-debian13-onnxruntime-1.17.0"
 WORKDIR /workspace/rl-aiserver
 ENTRYPOINT []

@@ -64,6 +64,7 @@ public:
     void RecordPendingModelAck(
         const ModelManifest& manifest,
         const common::ServiceInstanceIdentity& authority,
+        std::chrono::steady_clock::time_point deadline,
         const std::string& error);
     bool RetryPendingModelAck();
     bool TryPromoteStagedModelForWatcher();
@@ -150,6 +151,7 @@ public:
     bool model_ack_pending_ = false;
     ModelManifest pending_model_ack_manifest_;
     common::ServiceInstanceIdentity pending_model_ack_authority_;
+    std::chrono::steady_clock::time_point pending_model_ack_deadline_;
     std::string pending_model_ack_error_;
     std::string pending_model_ack_cause_;
     std::string training_workspace_lock_path_;
