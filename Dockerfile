@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    ccache \
     cmake \
     ninja-build \
     protobuf-compiler \
@@ -36,10 +37,16 @@ RUN case "${TARGETARCH:-$(dpkg --print-architecture)}" in \
     cp -R "${ORT_PACKAGE}"/include/* /usr/local/include/ && \
     ldconfig
 
-COPY . /source
-RUN cmake -S /source -B /source/build -G Ninja \
+COPY CMakeLists.txt /source/CMakeLists.txt
+COPY main /source/main
+COPY src /source/src
+COPY proto /source/proto
+RUN --mount=type=cache,id=rl-aiserver-image-ccache-${TARGETARCH},target=/var/cache/ccache,sharing=locked \
+    export CCACHE_DIR=/var/cache/ccache && \
+    cmake -S /source -B /source/build -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
-        -DBUILD_TESTING=OFF && \
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache && \
     cmake --build /source/build --parallel --target rl_aiserver
 
 FROM python:3.11-slim
@@ -59,7 +66,6 @@ COPY --from=build /source/build/rl_aiserver /opt/rl/aiserver/bin/rl_aiserver
 COPY configs /opt/rl/aiserver/configs
 COPY run.sh /opt/rl/aiserver/run.sh
 COPY scripts /opt/rl/aiserver/scripts
-COPY proto/schemas /opt/rl/aiserver/proto/schemas
 RUN ldconfig && \
     chmod +x /opt/rl/aiserver/bin/rl_aiserver \
         /opt/rl/aiserver/run.sh \

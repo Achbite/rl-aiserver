@@ -1,28 +1,14 @@
-# Protocol Snapshots
+# Protocol inputs
 
-This directory owns the task and training protocol inputs used by this AIServer
-checkout. AIServer always compiles these repository-local files and never
-discovers or mounts an external Contracts artifact.
+`maze/maze.proto` and the independent `rl_sdk/` are the task compiler inputs.
+Shared identity and Session sources live only in `rl_sdk/proto/`; task/common/
+session bindings are generated in the build tree. Production and the registered
+tests share the same core library and generated protocol target.
 
-Sources and generated `.pb.*` / `.grpc.pb.*` files share categorized paths:
+`training/`, `metrics/` and `maze/metrics.pb.*` retain explicitly adopted generated
+training and metric inputs. They use the common identity header from the task
+generation target. Shared protocols do not import Maze.
 
-| Directory | Contents |
-| --- | --- |
-| `common/` | Component identity. |
-| `communication/` | Shared Session and command lifecycle. |
-| `training/` | Model identity and task-neutral training services. |
-| `metrics/` | Registry, catalog and opaque event transport. |
-| `maze/` | Maze typed RPC and Maze Episode calculation facts. |
-| `rl_sdk/` | SDK header snapshot supplied by Contracts. |
-
-The repository root is the include root for `proto/...` generated headers.
-Shared protocols do not import `maze`; the task and training snapshots are
-combined only at AIServer assembly. The flat generated files have been replaced.
-
-Run `bash ../scripts/sync_contract_snapshot.sh` only when you explicitly choose
-to replace the Maze task protocol files with the current `rl-contracts` checkout.
-Run `bash ../scripts/sync_training_snapshot.sh` separately when adopting its
-task-neutral Training Proto. Normal builds, `make shell`, and runtime-artifact
-synchronization never run either command. Client/AIServer communication is
-determined by their protobuf wire fields, not a protocol ID, source hash, package
-version, generator, or platform identity.
+Adopt Task and Training inputs separately with `scripts/sync_contract_snapshot.sh /path/to/task-maze-artifact`
+and `scripts/sync_training_snapshot.sh /path/to/training-artifact` from the repository root. Both preserve
+unchanged file timestamps. Normal builds never synchronize upstream source.

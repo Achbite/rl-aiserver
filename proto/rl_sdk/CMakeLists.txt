@@ -71,6 +71,7 @@ function(rl_sdk_generate_task target)
     add_custom_command(OUTPUT ${outputs}
         COMMAND "${Python3_EXECUTABLE}" "${generator}" ${arguments}
         DEPENDS ${inputs} "${generator}" "${sdk_root}/tools/protoc-gen-rl-sdk"
+            "${Protobuf_PROTOC_EXECUTABLE}" "${RL_SDK_GRPC_CPP_PLUGIN}"
         COMMENT "RL-SDK: compile ${TASK_PROTO} and its imports" VERBATIM)
     add_library(${target} STATIC ${sources})
     target_include_directories(${target} BEFORE PUBLIC "${output_dir}")

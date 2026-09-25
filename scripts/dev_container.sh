@@ -28,7 +28,7 @@ if ! platform="$(docker version --format '{{.Server.Os}}/{{.Server.Arch}}' 2>/de
 fi
 
 build_image() {
-    docker build \
+    docker build --provenance=false \
         --file "${repo_dir}/Dockerfile.dev" \
         --build-arg "CPP_DEV_BASE_IMAGE=${cpp_dev_base_image}" \
         --build-arg "ONNXRUNTIME_VERSION=${onnxruntime_version}" \
@@ -45,6 +45,15 @@ ensure_dev_image() {
 
 container_exists() {
     docker container inspect "${container_name}" >/dev/null 2>&1
+}
+
+require_checkout_mount() {
+    local mounted_source
+    mounted_source="$(docker inspect --format '{{range .Mounts}}{{if eq .Destination "/workspace/rl-aiserver"}}{{.Source}}{{end}}{{end}}' "${container_name}")"
+    if [ "${mounted_source}" != "${repo_dir}" ]; then
+        echo "${container_name} is bound to ${mounted_source}, not ${repo_dir}; use its owning checkout to refresh or remove it" >&2
+        return 1
+    fi
 }
 
 container_running() {
@@ -69,7 +78,7 @@ container_has_business_processes() {
     container_running || return 1
     set +e
     docker exec "${container_name}" sh -lc \
-        "pgrep -f '[m]aze_aiserver|[/]run.sh|[c]make --build|[c]test' >/dev/null"
+        "pgrep -f '[r]l_aiserver|[/]run.sh|[c]make --build|[c]test' >/dev/null"
     process_status=$?
     set -e
     if [ "${process_status}" -eq 0 ]; then
@@ -92,12 +101,15 @@ ensure_container_resources() {
 }
 
 create_container() {
+    local image_id
+    image_id="$(docker image inspect --format '{{.Id}}' "${dev_image}")"
     docker run --detach \
         --name "${container_name}" \
         --network "${network_name}" \
         --network-alias "${container_name}" \
         --network-alias "maze-aiserver" \
         --env "CCACHE_DIR=${ccache_dir}" \
+        --env "RL_BUILD_TOOLCHAIN=${platform//\//-}/${image_id#sha256:}" \
         --volume "${repo_dir}:/workspace/rl-aiserver" \
         --volume "${ccache_volume}:${ccache_dir}" \
         "${dev_image}" >/dev/null
@@ -105,6 +117,7 @@ create_container() {
 
 ensure_container() {
     if container_exists; then
+        require_checkout_mount
         if ! container_running; then
             docker start "${container_name}" >/dev/null
         fi
@@ -119,6 +132,9 @@ ensure_container() {
 
 refresh_container() {
     local process_state
+    if container_exists; then
+        require_checkout_mount
+    fi
     if container_exists && container_running; then
         process_state=0
         container_has_business_processes || process_state=$?
@@ -161,6 +177,7 @@ case "${action}" in
         ;;
     clean)
         if container_exists; then
+            require_checkout_mount
             if container_running; then
                 process_state=0
                 container_has_business_processes || process_state=$?

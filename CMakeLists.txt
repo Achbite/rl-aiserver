@@ -18,7 +18,6 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/src/maze/sources.cmake")
 
 # --- 源文件 ---
 set(SOURCES
-    main/main.cpp
     ${AISERVER_MAZE_SOURCES}
     src/task/inference/onnx_inferencer.cpp
     src/task/model/model_manifest.cpp
@@ -32,7 +31,6 @@ set(SOURCES
 
 set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
 set(PROTO_SOURCES
-    ${PROTO_GEN_DIR}/common/identity.pb.cc
     ${PROTO_GEN_DIR}/training/model_identity.pb.cc
     ${PROTO_GEN_DIR}/training/training.pb.cc
     ${PROTO_GEN_DIR}/training/training.grpc.pb.cc
@@ -41,23 +39,18 @@ set(PROTO_SOURCES
     ${PROTO_GEN_DIR}/metrics/catalog.grpc.pb.cc
     ${PROTO_GEN_DIR}/metrics/transport.pb.cc
     ${PROTO_GEN_DIR}/metrics/transport.grpc.pb.cc
-    ${PROTO_GEN_DIR}/communication/session.pb.cc
     ${AISERVER_MAZE_PROTO_SOURCES}
 )
 
 # --- 可执行文件 ---
 rl_sdk_generate_task(aiserver_task_protocol
     PROTO proto/maze/maze.proto IMPORT_DIRS "${CMAKE_CURRENT_SOURCE_DIR}")
-set(PRODUCTION_PROTO_SOURCES ${PROTO_SOURCES})
-list(REMOVE_ITEM PRODUCTION_PROTO_SOURCES
-    "${PROTO_GEN_DIR}/common/identity.pb.cc"
-    "${PROTO_GEN_DIR}/communication/session.pb.cc"
-    "proto/maze/maze.pb.cc"
-    "proto/maze/maze.grpc.pb.cc")
-add_executable(${PROJECT_NAME} ${SOURCES} ${PRODUCTION_PROTO_SOURCES})
+add_library(aiserver_core STATIC ${SOURCES} ${PROTO_SOURCES})
+add_executable(${PROJECT_NAME} main/main.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE aiserver_core)
 
 # --- 头文件搜索路径 ---
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(aiserver_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${PROTO_GEN_DIR}
@@ -66,10 +59,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     /usr/local/include/onnxruntime      # ONNX Runtime 头文件
 )
 get_target_property(TASK_GENERATED_INCLUDE_DIRS aiserver_task_protocol INTERFACE_INCLUDE_DIRECTORIES)
-target_include_directories(${PROJECT_NAME} BEFORE PRIVATE ${TASK_GENERATED_INCLUDE_DIRS})
+target_include_directories(aiserver_core BEFORE PUBLIC ${TASK_GENERATED_INCLUDE_DIRS})
 
 # --- 链接库 ---
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(aiserver_core PUBLIC
     aiserver_task_protocol
     rl_sdk::sdk
     protobuf::libprotobuf
@@ -85,22 +78,13 @@ if(BUILD_TESTING)
     if(NOT EXISTS "${RL_CLIENT_SOURCE_DIR}/src/maze/environment/maze_env.cpp")
         message(FATAL_ERROR "Tests require RL_CLIENT_SOURCE_DIR pointing to the Client source repository")
     endif()
-    set(TEST_PRODUCTION_SOURCES ${SOURCES})
-    list(REMOVE_ITEM TEST_PRODUCTION_SOURCES main/main.cpp)
-    add_library(aiserver_test_production STATIC ${TEST_PRODUCTION_SOURCES} ${PROTO_SOURCES})
-    target_include_directories(aiserver_test_production PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}
-        ${PROTO_GEN_DIR} ${Protobuf_INCLUDE_DIRS} ${GRPC_INCLUDE_DIRS}
-        /usr/local/include/onnxruntime)
-    target_link_libraries(aiserver_test_production PUBLIC
-        rl_sdk::sdk protobuf::libprotobuf ${GRPC_LIBRARIES} pthread onnxruntime crypto)
     add_executable(aiserver_model_update_development_test tests/model_update_development_test.cpp)
     add_executable(aiserver_gae_sample_delivery_development_test tests/gae_sample_delivery_development_test.cpp)
     add_executable(aiserver_sdk_rpc_test tests/sdk_aiserver_rpc_test.cpp
         ${RL_CLIENT_SOURCE_DIR}/src/maze/environment/maze_env.cpp)
     target_include_directories(aiserver_sdk_rpc_test PRIVATE ${RL_CLIENT_SOURCE_DIR}/src)
     foreach(target aiserver_model_update_development_test aiserver_gae_sample_delivery_development_test aiserver_sdk_rpc_test)
-        target_link_libraries(${target} PRIVATE aiserver_test_production)
+        target_link_libraries(${target} PRIVATE aiserver_core)
         target_compile_options(${target} PRIVATE -UNDEBUG)
     endforeach()
     add_test(NAME aiserver_model_update_data_path COMMAND aiserver_model_update_development_test

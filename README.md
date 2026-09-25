@@ -217,3 +217,13 @@ make dev-clean
 ## License
 
 [MIT License](LICENSE)
+
+## 增量构建与协议输入
+
+`make dev-refresh` 创建开发容器时记录其实际工具链镜像身份。`build.sh` 使用 `build/<toolchain>/Release/` 持久构建目录，并把成功输出链接为 `build/rl_aiserver`；`run.sh` 消费该路径。Ninja 与持久 ccache 负责增量复用，不通过源码总哈希跳过构建。开发容器复用/刷新前核对本次 checkout 挂载。
+
+生产程序与三个注册测试共用 `aiserver_core` 和本地生成的任务协议 target。任务 Proto 在 `proto/maze/maze.proto`，公共 identity/session 只由 `proto/rl_sdk/proto/` 提供；生成物只写入构建目录。训练与指标绑定仍是显式采纳的仓内输入。更新上游仍执行独立同步命令。
+
+运行镜像直接使用仓库与 `.dockerignore`，C++ 编译层只接收 CMake/main/src/proto，并通过 BuildKit 持久 ccache 复用编译。配置、文档及运行产物不会作为 C++ 编译输入。
+
+Linux 容器构建前用 `stat --cached=never` 刷新实际输入的文件属性，避免 virtiofs 暂存旧 mtime 导致刚保存的宿主源码被误判为 no-op；不会修改源码时间戳或同步上游制品。

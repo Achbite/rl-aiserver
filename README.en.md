@@ -23,8 +23,7 @@ live in the sibling `src/maze/` directory. Shared components are organized by fu
 belong there. Shared `task/` code does not name Maze types or import Maze Proto.
 
 `main/main.cpp` composes the current task through `maze/task_entry.h`; `src/maze/sources.cmake` lists
-its sources and generated Proto sources. Task Proto and generated artifacts remain in
-`proto/maze/`. The production build uses RL-SDK's `rl_sdk_generate_task` to compile
+its sources and generated Proto sources. Task Proto sources remain in `proto/maze/`; generated artifacts live in the build tree. The production build uses RL-SDK's `rl_sdk_generate_task` to compile
 the local task Proto and its imports into `build/`, independently from the Client's
 compilation of the same contract. It does not overwrite the synchronized snapshot;
 Python Protobuf is a build-time generator dependency. The application is
@@ -250,3 +249,15 @@ container. Neither command synchronizes protocols.
 ## License
 
 [MIT License](LICENSE)
+
+## Build input and cache ownership
+
+This repository builds its current checkout and its explicitly adopted protocol sources.
+Task and shared identity/session bindings are generated in the build tree using the single SDK
+under `proto/rl_sdk/`; no duplicate checked-in task bindings are compiled. Production and C++ tests
+link the same protocol target. Development builds persist by toolchain and use ccache; successful
+builds select the local run output. Runtime-image compilation uses a BuildKit compiler cache.
+Builds never synchronize protocols. Development-container reuse checks the checkout mount.
+Tests run explicitly through the root `test.sh`.
+
+Linux container builds refresh input attributes with `stat --cached=never` before CMake/Ninja, so a host edit is not hidden by virtiofs metadata caching. This neither changes source timestamps nor synchronizes upstream artifacts.

@@ -7,28 +7,14 @@ import tempfile
 from pathlib import Path
 
 
-SNAPSHOT_FILES = {'task-maze': {'proto/common/identity.proto': 'common/identity.proto',
-               'cpp/proto/common/identity.pb.cc': 'common/identity.pb.cc',
-               'cpp/proto/common/identity.pb.h': 'common/identity.pb.h',
-               'proto/metrics/registry.proto': 'metrics/registry.proto',
+SNAPSHOT_FILES = {'task-maze': {'proto/metrics/registry.proto': 'metrics/registry.proto',
                'cpp/proto/metrics/registry.pb.cc': 'metrics/registry.pb.cc',
                'cpp/proto/metrics/registry.pb.h': 'metrics/registry.pb.h',
-               'proto/communication/session.proto': 'communication/session.proto',
-               'cpp/proto/communication/session.pb.cc': 'communication/session.pb.cc',
-               'cpp/proto/communication/session.pb.h': 'communication/session.pb.h',
                'proto/maze/maze.proto': 'maze/maze.proto',
-               'cpp/proto/maze/maze.pb.cc': 'maze/maze.pb.cc',
-               'cpp/proto/maze/maze.pb.h': 'maze/maze.pb.h',
                'proto/maze/metrics.proto': 'maze/metrics.proto',
                'cpp/proto/maze/metrics.pb.cc': 'maze/metrics.pb.cc',
-               'cpp/proto/maze/metrics.pb.h': 'maze/metrics.pb.h',
-               'cpp/proto/maze/maze.grpc.pb.cc': 'maze/maze.grpc.pb.cc',
-               'cpp/proto/maze/maze.grpc.pb.h': 'maze/maze.grpc.pb.h',
-               'cpp/proto/maze/maze.sdk.pb.h': 'maze/maze.sdk.pb.h'},
- 'training': {'proto/common/identity.proto': 'common/identity.proto',
-              'cpp/proto/common/identity.pb.cc': 'common/identity.pb.cc',
-              'cpp/proto/common/identity.pb.h': 'common/identity.pb.h',
-              'proto/training/model_identity.proto': 'training/model_identity.proto',
+               'cpp/proto/maze/metrics.pb.h': 'maze/metrics.pb.h'},
+ 'training': {'proto/training/model_identity.proto': 'training/model_identity.proto',
               'cpp/proto/training/model_identity.pb.cc': 'training/model_identity.pb.cc',
               'cpp/proto/training/model_identity.pb.h': 'training/model_identity.pb.h',
               'proto/training/training.proto': 'training/training.proto',
@@ -73,7 +59,17 @@ def sync_snapshot(artifact_root: Path, target_root: Path, profile: str) -> None:
         for local_name in files.values():
             target = target_root / local_name
             target.parent.mkdir(parents=True, exist_ok=True)
-            os.replace(stage / local_name, target)
+            staged = stage / local_name
+            if not target.is_file() or target.read_bytes() != staged.read_bytes():
+                os.replace(staged, target)
+
+
+def copy_if_changed(source, target):
+    source, target = Path(source), Path(target)
+    if not target.is_file() or target.read_bytes() != source.read_bytes():
+        shutil.copyfile(source, target)
+    shutil.copymode(source, target)
+    return str(target)
 
 
 def sync_sdk(artifact_root: Path, target_root: Path) -> None:
@@ -81,10 +77,8 @@ def sync_sdk(artifact_root: Path, target_root: Path) -> None:
     require_regular_file(source / "CMakeLists.txt")
     require_regular_file(source / "include/rl_sdk/task_client.h")
     target = target_root / "rl_sdk"
-    shutil.copytree(source, target, dirs_exist_ok=True)
-    # The SDK now has one independent CMake target and include tree.
-    for name in ("session.h", "transport.h", "server_command.h", "replay_window.h", "metric_catalog.h"):
-        (target / name).unlink(missing_ok=True)
+    shutil.copytree(source, target, dirs_exist_ok=True, copy_function=copy_if_changed)
+
 
 
 def main() -> None:

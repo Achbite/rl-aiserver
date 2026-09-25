@@ -1,9 +1,11 @@
 .git
+.workspace
+.DS_Store
+build*
 _deps
-build
 log
 logs
 models
-sample-distributor
+replays
 __pycache__
 *.pyc

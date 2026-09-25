@@ -8,7 +8,5 @@ set(AISERVER_MAZE_SOURCES
     src/maze/episode/episode_controller.cpp
 )
 set(AISERVER_MAZE_PROTO_SOURCES
-    proto/maze/maze.pb.cc
-    proto/maze/maze.grpc.pb.cc
     proto/maze/metrics.pb.cc
 )
