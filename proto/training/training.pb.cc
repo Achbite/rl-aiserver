@@ -266,7 +266,7 @@ PROTOBUF_CONSTEXPR SamplePoolStatusRsp::SamplePoolStatusRsp(
   , /*decltype(_impl_.duplicate_transition_attempts_)*/int64_t{0}
   , /*decltype(_impl_.rejected_push_attempt_count_)*/int64_t{0}
   , /*decltype(_impl_.rejected_transition_attempts_)*/int64_t{0}
-  , /*decltype(_impl_.acked_unique_transitions_)*/int64_t{0}
+  , /*decltype(_impl_.acknowledged_transition_slot_count_)*/int64_t{0}
   , /*decltype(_impl_.acked_unique_deliveries_)*/int64_t{0}
   , /*decltype(_impl_.ready_transitions_)*/int64_t{0}
   , /*decltype(_impl_.leased_transitions_)*/int64_t{0}
@@ -275,7 +275,7 @@ PROTOBUF_CONSTEXPR SamplePoolStatusRsp::SamplePoolStatusRsp(
   , /*decltype(_impl_.resident_estimated_bytes_)*/int64_t{0}
   , /*decltype(_impl_.capacity_transitions_)*/int64_t{0}
   , /*decltype(_impl_.capacity_bytes_)*/int64_t{0}
-  , /*decltype(_impl_.redelivery_count_)*/int64_t{0}
+  , /*decltype(_impl_.released_transition_slot_count_)*/int64_t{0}
   , /*decltype(_impl_.nack_count_)*/int64_t{0}
   , /*decltype(_impl_.expired_lease_count_)*/int64_t{0}
   , /*decltype(_impl_.latest_ack_at_unix_ms_)*/int64_t{0}
@@ -823,7 +823,7 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.duplicate_transition_attempts_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.rejected_push_attempt_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.rejected_transition_attempts_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.acked_unique_transitions_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.acknowledged_transition_slot_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.acked_unique_deliveries_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.ready_transitions_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.leased_transitions_),
@@ -833,7 +833,7 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.capacity_transitions_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.capacity_bytes_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.pressure_state_),
-  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.redelivery_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.released_transition_slot_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.nack_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.expired_lease_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.latest_ack_at_unix_ms_),
@@ -1328,7 +1328,7 @@ const char descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto[] PROTO
   "%.rl.common.v1.ServiceInstanceIdentity\022!"
   "\n\024finalized_at_unix_ms\030\005 \001(\003H\000\210\001\001B\027\n\025_fi"
   "nalized_at_unix_ms\"\025\n\023SamplePoolStatusRe"
-  "q\"\340\023\n\023SamplePoolStatusRsp\022:\n\013sample_pool"
+  "q\"\370\023\n\023SamplePoolStatusRsp\022:\n\013sample_pool"
   "\030\002 \001(\0132%.rl.common.v1.ServiceInstanceIde"
   "ntity\022\r\n\005ready\030\003 \001(\010\022\032\n\022push_attempt_cou"
   "nt\030\004 \001(\003\022#\n\033accepted_unique_transitions\030"
@@ -1336,310 +1336,311 @@ const char descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto[] PROTO
   "\022$\n\034duplicate_push_attempt_count\030\007 \001(\003\022%"
   "\n\035duplicate_transition_attempts\030\010 \001(\003\022#\n"
   "\033rejected_push_attempt_count\030\t \001(\003\022$\n\034re"
-  "jected_transition_attempts\030\n \001(\003\022 \n\030acke"
-  "d_unique_transitions\030\013 \001(\003\022\037\n\027acked_uniq"
-  "ue_deliveries\030\014 \001(\003\022\031\n\021ready_transitions"
-  "\030\r \001(\003\022\032\n\022leased_transitions\030\017 \001(\003\022\034\n\024re"
-  "sident_transitions\030\021 \001(\003\022\032\n\022resident_env"
-  "elopes\030\022 \001(\003\022 \n\030resident_estimated_bytes"
-  "\030\023 \001(\003\022\034\n\024capacity_transitions\030\024 \001(\003\022\026\n\016"
-  "capacity_bytes\030\026 \001(\003\0225\n\016pressure_state\030\027"
-  " \001(\0162\035.rl.training.v1.PressureState\022\030\n\020r"
-  "edelivery_count\030\030 \001(\003\022\022\n\nnack_count\030\031 \001("
-  "\003\022\033\n\023expired_lease_count\030\032 \001(\003\022\"\n\025latest"
-  "_ack_at_unix_ms\030\033 \001(\003H\000\210\001\001\022\030\n\020target_hit"
-  "_count\030\034 \001(\003\022\031\n\021partial_get_count\030\035 \001(\003\022"
-  "\033\n\023empty_timeout_count\030\036 \001(\003\022\022\n\nlast_err"
-  "or\030\037 \001(\t\022 \n\030trained_transition_count\030! \001"
-  "(\003\022 \n\030invalid_transition_count\030# \001(\003\022+\n#"
-  "shutdown_untrained_transition_count\030$ \001("
-  "\003\022\031\n\021lease_renew_count\030% \001(\003\0227\n\014backend_"
-  "type\030& \001(\0162!.rl.training.v1.SampleBacken"
-  "dType\022 \n\030max_concurrent_consumers\030\' \001(\005\022"
-  "\035\n\025active_consumer_count\030( \001(\005\022\033\n\023consum"
-  "er_busy_count\030) \001(\003\022\025\n\ringress_ready\030* \001"
-  "(\010\022\022\n\npool_ready\030+ \001(\010\022\031\n\021timestamp_unix"
-  "_ms\030, \001(\003\022+\n\036oldest_ready_transition_age"
-  "_ms\030- \001(\003H\001\210\001\001\022%\n\030minimum_ready_model_st"
-  "ep\030. \001(\004H\002\210\001\001\022%\n\030maximum_ready_model_ste"
-  "p\030/ \001(\004H\003\210\001\001\022 \n\030evicted_transition_count"
-  "\030B \001(\003\022\036\n\026evicted_envelope_count\030C \001(\003\022\021"
-  "\n\tfinalized\030D \001(\010\022\027\n\017finalization_id\030E \001"
-  "(\t\022!\n\024finalized_at_unix_ms\030F \001(\003H\004\210\001\001\022\"\n"
-  "\032finalized_transition_count\030G \001(\003\022\032\n\022dra"
-  "w_attempt_count\030I \001(\003\022#\n\033drawn_transitio"
-  "n_slot_count\030J \001(\003\022*\n\"unsampled_evicted_"
-  "transition_count\030K \001(\003\0221\n)previously_dra"
-  "wn_evicted_transition_count\030L \001(\003B\030\n\026_la"
-  "test_ack_at_unix_msB!\n\037_oldest_ready_tra"
-  "nsition_age_msB\033\n\031_minimum_ready_model_s"
-  "tepB\033\n\031_maximum_ready_model_stepB\027\n\025_fin"
-  "alized_at_unix_msJ\004\010\001\020\002J\004\010\016\020\017J\004\010\020\020\021J\004\010\025\020"
-  "\026J\004\010 \020!J\004\010\"\020#J\004\0100\020BJ\004\010H\020IR\021behavior_vers"
-  "ionsR\033minimum_ready_model_versionR\033maxim"
-  "um_ready_model_versionR\010contractR\025ready_"
-  "queue_fragmentsR\020leased_fragmentsR\022capac"
-  "ity_fragmentsR\016behavior_stepsR\022stale_sam"
-  "ple_countR\023active_demand_countR\023active_d"
-  "emand_epochR\024active_demand_age_msR\020reser"
-  "ved_samplesR\022reserved_fragmentsR\030reserve"
-  "d_estimated_bytesR\024credit_request_countR"
-  "\022credit_grant_countR\023credit_commit_count"
-  "R\024credit_release_countR\023credit_expire_co"
-  "untR\023credit_revoke_countR\033credit_wait_no"
-  "_demand_countR credit_wait_inflight_limi"
-  "t_countR\032credit_wait_capacity_countR\032cre"
-  "dit_wait_draining_countR\023demand_upsert_c"
-  "ountR\024demand_release_countR\030finalized_fr"
-  "agment_count\"\023\n\021AIServerStatusReq\"p\n\023Mod"
-  "elFeedbackStatus\0226\n\017candidate_model\030\001 \001("
-  "\0132\035.rl.training.v1.ModelIdentity\022\r\n\005stag"
-  "e\030\002 \001(\t\022\022\n\nlast_error\030\003 \001(\t\"\360\r\n\021AIServer"
-  "StatusRsp\0227\n\010aiserver\030\002 \001(\0132%.rl.common."
-  "v1.ServiceInstanceIdentity\022,\n\005state\030\003 \001("
-  "\0162\035.rl.training.v1.AIServerState\022\r\n\005read"
-  "y\030\004 \001(\010\022\031\n\021distributor_ready\030\005 \001(\010\022/\n\013mo"
-  "del_state\030\006 \001(\0162\032.rl.training.v1.ModelSt"
-  "ate\0223\n\014loaded_model\030\007 \001(\0132\035.rl.training."
-  "v1.ModelIdentity\0223\n\014staged_model\030\010 \001(\0132\035"
-  ".rl.training.v1.ModelIdentity\022 \n\030outboun"
-  "d_queue_envelopes\030\t \001(\003\022\"\n\032outbound_queu"
-  "e_transitions\030\n \001(\003\022&\n\036outbound_queue_es"
-  "timated_bytes\030\013 \001(\003\022%\n\035outbound_queue_hi"
-  "gh_watermark\030\014 \001(\003\022#\n\033produced_unique_tr"
-  "ansitions\030\r \001(\003\022!\n\031produced_unique_envel"
-  "opes\030\016 \001(\003\022\032\n\022push_attempt_count\030\017 \001(\003\022#"
-  "\n\033accepted_unique_transitions\030\020 \001(\003\022$\n\034d"
-  "uplicate_push_attempt_count\030\021 \001(\003\022#\n\033rej"
-  "ected_push_attempt_count\030\022 \001(\003\022\033\n\023retry_"
-  "attempt_count\030\023 \001(\003\022%\n\035final_drop_unique"
-  "_transitions\030\024 \001(\003\022\"\n\032active_actor_sessi"
-  "on_count\030\025 \001(\003\022\034\n\024active_segment_count\030\026"
-  " \001(\003\022\027\n\017inference_count\030\027 \001(\003\022 \n\030inferen"
-  "ce_latency_sum_ms\030\030 \001(\001\022 \n\030inference_lat"
-  "ency_max_ms\030\031 \001(\001\022\026\n\016push_rpc_count\030\032 \001("
-  "\003\022\037\n\027push_rpc_latency_sum_ms\030\033 \001(\001\022\037\n\027pu"
-  "sh_rpc_latency_max_ms\030\034 \001(\001\022\032\n\022model_swi"
-  "tch_count\030\035 \001(\003\022$\n\034quarantined_transitio"
-  "n_count\030\036 \001(\003\022\"\n\032quarantined_envelope_co"
-  "unt\030\037 \001(\003\022\022\n\nlast_error\030  \001(\t\022\031\n\021timesta"
-  "mp_unix_ms\030! \001(\003\022\034\n\024closed_segment_count"
-  "\030# \001(\003\022%\n\035pending_action_excluded_count\030"
-  "$ \001(\003\022\'\n\037rollout_estimator_failure_count"
-  "\030% \001(\003\022(\n per_agent_model_activation_cou"
-  "nt\030& \001(\003\0221\n)superseded_without_agent_act"
-  "ivation_count\030\' \001(\003\022\?\n\024segment_close_cou"
-  "nts\030( \003(\0132!.rl.training.v1.SegmentCloseC"
-  "ount\022;\n\016model_feedback\030) \001(\0132#.rl.traini"
-  "ng.v1.ModelFeedbackStatus\022\030\n\020update_rpc_"
-  "count\030* \001(\003\022!\n\031update_rpc_latency_sum_ms"
-  "\030+ \001(\001\022!\n\031update_rpc_latency_max_ms\030, \001("
-  "\001J\004\010\001\020\002J\004\010\"\020#R\010contractR rollout_estimat"
-  "or_profile_digestR\024credit_request_countR"
-  "\022credit_grant_countR\021credit_wait_countR\026"
-  "credit_reacquire_countR\024producer_stale_c"
-  "ountR\020capacity_wait_msR\026training_capacit"
-  "y_wait\"V\n\021SegmentCloseCount\0222\n\006reason\030\001 "
-  "\001(\0162\".rl.training.v1.SegmentCloseReason\022"
-  "\r\n\005count\030\002 \001(\003\"\337\003\n\025ModelArtifactManifest"
-  "\022/\n\010identity\030\003 \001(\0132\035.rl.training.v1.Mode"
-  "lIdentity\022\022\n\nsize_bytes\030\r \001(\003\022\027\n\017trained"
-  "_samples\030\020 \001(\004\022\034\n\024published_at_unix_ms\030\023"
-  " \001(\003J\004\010\001\020\002J\004\010\002\020\003J\004\010\004\020\rJ\004\010\016\020\017J\004\010\017\020\020J\004\010\021\020\022"
-  "J\004\010\022\020\023J\004\010\024\020\025J\004\010\025\020\026R\027manifest_schema_vers"
-  "ionR\010contractR\022observation_schemaR\ractio"
-  "n_schemaR\025model_architecture_idR\014tensor_"
-  "dtypeR\013input_shapeR\014action_shapeR\013value_"
-  "shapeR\014artifact_uriR\nmodel_fileR\004seedR\rt"
-  "rain_updatesR\005readyR\026training_config_dig"
-  "estR\030training_contract_digestR\031rollout_e"
-  "stimator_profile\"x\n\020RegisterModelReq\0227\n\010"
-  "manifest\030\001 \001(\0132%.rl.training.v1.ModelArt"
-  "ifactManifest\022\033\n\023local_artifact_path\030\003 \001"
-  "(\tJ\004\010\002\020\003R\010contract\"\315\001\n\020RegisterModelRsp\022"
-  "3\n\006result\030\001 \001(\0162#.rl.training.v1.ModelRe"
-  "gisterResult\022\017\n\007message\030\002 \001(\t\0227\n\010manifes"
-  "t\030\003 \001(\0132%.rl.training.v1.ModelArtifactMa"
-  "nifest\022:\n\013distributor\030\004 \001(\0132%.rl.common."
-  "v1.ServiceInstanceIdentity\"\242\001\n\023GetModelM"
-  "anifestReq\0226\n\017requested_model\030\001 \001(\0132\035.rl"
-  ".training.v1.ModelIdentity\0228\n\trequester\030"
-  "\002 \001(\0132%.rl.common.v1.ServiceInstanceIden"
-  "tity\022\031\n\021latest_in_lineage\030\003 \001(\010\"\340\002\n\023GetM"
-  "odelManifestRsp\0221\n\006result\030\001 \001(\0162!.rl.tra"
-  "ining.v1.ModelLookupResult\022\017\n\007message\030\002 "
-  "\001(\t\0227\n\010manifest\030\003 \001(\0132%.rl.training.v1.M"
-  "odelArtifactManifest\022:\n\013distributor\030\004 \001("
-  "\0132%.rl.common.v1.ServiceInstanceIdentity"
-  "\022\'\n\032available_floor_model_step\030\005 \001(\004H\000\210\001"
-  "\001\022(\n\033latest_available_model_step\030\006 \001(\004H\001"
-  "\210\001\001B\035\n\033_available_floor_model_stepB\036\n\034_l"
-  "atest_available_model_step\"\204\001\n\020DownloadM"
-  "odelReq\0226\n\017requested_model\030\001 \001(\0132\035.rl.tr"
-  "aining.v1.ModelIdentity\0228\n\trequester\030\002 \001"
-  "(\0132%.rl.common.v1.ServiceInstanceIdentit"
-  "y\"X\n\nModelChunk\022,\n\005model\030\001 \001(\0132\035.rl.trai"
-  "ning.v1.ModelIdentity\022\016\n\006offset\030\002 \001(\003\022\014\n"
-  "\004data\030\003 \001(\014\"\325\001\n\013AckModelReq\0227\n\010aiserver\030"
-  "\001 \001(\0132%.rl.common.v1.ServiceInstanceIden"
-  "tity\022,\n\005model\030\002 \001(\0132\035.rl.training.v1.Mod"
-  "elIdentity\022\030\n\020load_instance_id\030\003 \001(\t\0224\n\013"
-  "load_status\030\004 \001(\0162\037.rl.training.v1.Model"
-  "LoadStatus\022\017\n\007message\030\005 \001(\t\"\212\001\n\013AckModel"
-  "Rsp\022.\n\006result\030\001 \001(\0162\036.rl.training.v1.Mod"
-  "elAckResult\022\017\n\007message\030\002 \001(\t\022:\n\013distribu"
-  "tor\030\003 \001(\0132%.rl.common.v1.ServiceInstance"
-  "Identity\"\033\n\031ModelDistributorStatusReq\"\221\007"
-  "\n\031ModelDistributorStatusRsp\022:\n\013distribut"
-  "or\030\002 \001(\0132%.rl.common.v1.ServiceInstanceI"
-  "dentity\022\r\n\005ready\030\003 \001(\010\022\036\n\026registered_mod"
-  "el_count\030\004 \001(\003\0223\n\014latest_model\030\005 \001(\0132\035.r"
-  "l.training.v1.ModelIdentity\022\036\n\026register_"
-  "attempt_count\030\006 \001(\003\022 \n\030duplicate_registe"
-  "r_count\030\007 \001(\003\022\037\n\027rejected_register_count"
-  "\030\010 \001(\003\022\036\n\026download_request_count\030\t \001(\003\022\036"
-  "\n\026download_success_count\030\n \001(\003\022\036\n\026downlo"
-  "ad_failure_count\030\013 \001(\003\022\024\n\014bytes_served\030\014"
-  " \001(\003\022\030\n\020loaded_ack_count\030\r \001(\003\022\030\n\020failed"
-  "_ack_count\030\016 \001(\003\022B\n\023latest_ack_aiserver\030"
-  "\017 \001(\0132%.rl.common.v1.ServiceInstanceIden"
-  "tity\0227\n\020latest_ack_model\030\020 \001(\0132\035.rl.trai"
-  "ning.v1.ModelIdentity\022:\n\021latest_ack_stat"
-  "us\030\021 \001(\0162\037.rl.training.v1.ModelLoadStatu"
-  "s\022\022\n\nlast_error\030\022 \001(\t\022\031\n\021timestamp_unix_"
-  "ms\030\023 \001(\003\022\'\n\032available_floor_model_step\030\024"
-  " \001(\004H\000\210\001\001\022(\n\033latest_available_model_step"
-  "\030\025 \001(\004H\001\210\001\001B\035\n\033_available_floor_model_st"
-  "epB\036\n\034_latest_available_model_stepJ\004\010\001\020\002"
-  "R\035available_floor_model_versionR\036latest_"
-  "available_model_versionR\010contract\"\022\n\020Lea"
-  "rnerStatusReq\"\257\007\n\020LearnerStatusRsp\0226\n\007le"
-  "arner\030\001 \001(\0132%.rl.common.v1.ServiceInstan"
-  "ceIdentity\022\031\n\021timestamp_unix_ms\030\002 \001(\003\022,\n"
-  "\005model\030\003 \001(\0132\035.rl.training.v1.ModelIdent"
-  "ity\022\022\n\nmodel_step\030\004 \001(\004\022\025\n\rtrain_updates"
-  "\030\005 \001(\004\022\027\n\017trained_samples\030\006 \001(\004\022\031\n\021run_t"
-  "rain_updates\030\007 \001(\004\022\033\n\023run_trained_sample"
-  "s\030\010 \001(\004\022\032\n\022initial_model_step\030\t \001(\004\022\030\n\020t"
-  "rain_batch_size\030\n \001(\004\022\036\n\021actual_batch_si"
-  "ze\030\013 \001(\004H\000\210\001\001\022\'\n\032requested_train_batch_s"
-  "ize\030\014 \001(\004H\001\210\001\001\022!\n\024pool_draw_slot_count\030\r"
-  " \001(\004H\002\210\001\001\022\036\n\021unique_item_count\030\016 \001(\004H\003\210\001"
-  "\001\022&\n\031duplicate_item_slot_count\030\017 \001(\004H\004\210\001"
-  "\001\022$\n\027sample_evaluation_count\030\020 \001(\004H\005\210\001\001\022"
-  "!\n\024optimizer_step_count\030\021 \001(\004H\006\210\001\001\022!\n\024ma"
-  "x_importance_ratio\030\022 \001(\001H\007\210\001\001\022\037\n\022explain"
-  "ed_variance\030\023 \001(\001H\010\210\001\001\022\023\n\013disposition\030\024 "
-  "\001(\t\022\022\n\nlast_error\030\025 \001(\t\022\027\n\017train_update_"
-  "id\030\026 \001(\tB\024\n\022_actual_batch_sizeB\035\n\033_reque"
-  "sted_train_batch_sizeB\027\n\025_pool_draw_slot"
-  "_countB\024\n\022_unique_item_countB\034\n\032_duplica"
-  "te_item_slot_countB\032\n\030_sample_evaluation"
-  "_countB\027\n\025_optimizer_step_countB\027\n\025_max_"
-  "importance_ratioB\025\n\023_explained_variance*"
-  "\253\002\n\022SegmentCloseReason\022$\n SEGMENT_CLOSE_"
-  "REASON_UNSPECIFIED\020\000\022/\n+SEGMENT_CLOSE_RE"
-  "ASON_ENVIRONMENT_TERMINATED\020\001\022\035\n\031SEGMENT"
-  "_CLOSE_REASON_TMAX\020\003\0220\n,SEGMENT_CLOSE_RE"
-  "ASON_CLIENT_CONTROLLED_CLOSE\020\004\0220\n,SEGMEN"
-  "T_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT\020\005"
-  "\0225\n1SEGMENT_CLOSE_REASON_AISERVER_CONTRO"
-  "LLED_SHUTDOWN\020\006\"\004\010\002\020\002*\217\002\n\nPushResult\022\033\n\027"
-  "PUSH_RESULT_UNSPECIFIED\020\000\022\030\n\024PUSH_RESULT"
-  "_ACCEPTED\020\001\022\031\n\025PUSH_RESULT_DUPLICATE\020\002\022!"
-  "\n\035PUSH_RESULT_REJECTED_CAPACITY\020\003\022 \n\034PUS"
-  "H_RESULT_REJECTED_INVALID\020\004\022!\n\035PUSH_RESU"
-  "LT_REJECTED_CONFLICT\020\006\022\"\n\036PUSH_RESULT_RE"
-  "JECTED_FINALIZED\020\007\"\004\010\005\020\005*\035PUSH_RESULT_RE"
-  "JECTED_IDENTITY*|\n\rPressureState\022\036\n\032PRES"
-  "SURE_STATE_UNSPECIFIED\020\000\022\031\n\025PRESSURE_STA"
-  "TE_NORMAL\020\001\022\027\n\023PRESSURE_STATE_HIGH\020\002\022\027\n\023"
-  "PRESSURE_STATE_FULL\020\003*\247\001\n\016GetBatchResult"
-  "\022 \n\034GET_BATCH_RESULT_UNSPECIFIED\020\000\022\033\n\027GE"
-  "T_BATCH_RESULT_LEASED\020\001\022\034\n\030GET_BATCH_RES"
-  "ULT_TIMEOUT\020\002\022\031\n\025GET_BATCH_RESULT_BUSY\020\003"
-  "\022\035\n\031GET_BATCH_RESULT_REJECTED\020\004*\315\001\n\016Deli"
-  "veryResult\022\037\n\033DELIVERY_RESULT_UNSPECIFIE"
-  "D\020\000\022\033\n\027DELIVERY_RESULT_APPLIED\020\001\022#\n\037DELI"
-  "VERY_RESULT_ALREADY_APPLIED\020\002\022\033\n\027DELIVER"
-  "Y_RESULT_EXPIRED\020\003\022\035\n\031DELIVERY_RESULT_NO"
-  "T_FOUND\020\004\022\034\n\030DELIVERY_RESULT_REJECTED\020\005*"
-  "\260\001\n\016AckDisposition\022\037\n\033ACK_DISPOSITION_UN"
-  "SPECIFIED\020\000\022\033\n\027ACK_DISPOSITION_TRAINED\020\001"
-  "\022\033\n\027ACK_DISPOSITION_INVALID\020\003\022&\n\"ACK_DIS"
-  "POSITION_SHUTDOWN_UNTRAINED\020\004\"\004\010\002\020\002*\025ACK"
-  "_DISPOSITION_STALE*\274\001\n\rAIServerState\022\036\n\032"
-  "AISERVER_STATE_UNSPECIFIED\020\000\022\033\n\027AISERVER"
-  "_STATE_STARTING\020\001\022\030\n\024AISERVER_STATE_READ"
-  "Y\020\002\022\033\n\027AISERVER_STATE_DEGRADED\020\003\022\033\n\027AISE"
-  "RVER_STATE_DRAINING\020\004\022\032\n\026AISERVER_STATE_"
-  "STOPPED\020\005*q\n\nModelState\022\033\n\027MODEL_STATE_U"
-  "NSPECIFIED\020\000\022\027\n\023MODEL_STATE_WAITING\020\001\022\025\n"
-  "\021MODEL_STATE_READY\020\002\022\026\n\022MODEL_STATE_FAIL"
-  "ED\020\003*\351\001\n\023ModelRegisterResult\022%\n!MODEL_RE"
-  "GISTER_RESULT_UNSPECIFIED\020\000\022$\n MODEL_REG"
-  "ISTER_RESULT_REGISTERED\020\001\022,\n(MODEL_REGIS"
-  "TER_RESULT_ALREADY_REGISTERED\020\002\022*\n&MODEL"
-  "_REGISTER_RESULT_REJECTED_INVALID\020\003\022+\n\'M"
-  "ODEL_REGISTER_RESULT_REJECTED_CONFLICT\020\004"
-  "*p\n\017ModelLoadStatus\022!\n\035MODEL_LOAD_STATUS"
-  "_UNSPECIFIED\020\000\022\034\n\030MODEL_LOAD_STATUS_LOAD"
-  "ED\020\001\022\034\n\030MODEL_LOAD_STATUS_FAILED\020\002*\265\001\n\016M"
-  "odelAckResult\022 \n\034MODEL_ACK_RESULT_UNSPEC"
-  "IFIED\020\000\022\034\n\030MODEL_ACK_RESULT_APPLIED\020\001\022$\n"
-  " MODEL_ACK_RESULT_ALREADY_APPLIED\020\002\022\036\n\032M"
-  "ODEL_ACK_RESULT_NOT_FOUND\020\003\022\035\n\031MODEL_ACK"
-  "_RESULT_REJECTED\020\004*\247\001\n\021ModelLookupResult"
-  "\022#\n\037MODEL_LOOKUP_RESULT_UNSPECIFIED\020\000\022\035\n"
-  "\031MODEL_LOOKUP_RESULT_FOUND\020\001\022!\n\035MODEL_LO"
-  "OKUP_RESULT_NOT_FOUND\020\002\"\004\010\003\020\003*%MODEL_LOO"
-  "KUP_RESULT_REJECTED_IDENTITY*^\n\021SampleBa"
-  "ckendType\022#\n\037SAMPLE_BACKEND_TYPE_UNSPECI"
-  "FIED\020\000\022$\n SAMPLE_BACKEND_TYPE_LOCAL_MEMO"
-  "RY\020\001*\304\002\n\030SamplePoolFinalizeResult\022+\n\'SAM"
-  "PLE_POOL_FINALIZE_RESULT_UNSPECIFIED\020\000\022)"
-  "\n%SAMPLE_POOL_FINALIZE_RESULT_FINALIZED\020"
-  "\001\0221\n-SAMPLE_POOL_FINALIZE_RESULT_ALREADY"
-  "_FINALIZED\020\002\0225\n1SAMPLE_POOL_FINALIZE_RES"
-  "ULT_REJECTED_ACTIVE_LEASE\020\003\0221\n-SAMPLE_PO"
-  "OL_FINALIZE_RESULT_REJECTED_CONFLICT\020\005\"\004"
-  "\010\004\020\004*-SAMPLE_POOL_FINALIZE_RESULT_REJECT"
-  "ED_IDENTITY2z\n\035AIServerTrainingStatusSer"
-  "vice\022Y\n\021GetAIServerStatus\022!.rl.training."
-  "v1.AIServerStatusReq\032!.rl.training.v1.AI"
-  "ServerStatusRsp2n\n\024LearnerStatusService\022"
-  "V\n\020GetLearnerStatus\022 .rl.training.v1.Lea"
-  "rnerStatusReq\032 .rl.training.v1.LearnerSt"
-  "atusRsp2\300\001\n\030SamplePoolIngressService\022M\n\013"
-  "PushSamples\022\036.rl.training.v1.PushSamples"
-  "Req\032\036.rl.training.v1.PushSamplesRsp\022U\n\tG"
-  "etStatus\022#.rl.training.v1.SamplePoolStat"
-  "usReq\032#.rl.training.v1.SamplePoolStatusR"
-  "sp2\364\003\n\031SamplePoolConsumerService\022D\n\010GetB"
-  "atch\022\033.rl.training.v1.GetBatchReq\032\033.rl.t"
-  "raining.v1.GetBatchRsp\022D\n\010AckBatch\022\033.rl."
-  "training.v1.AckBatchReq\032\033.rl.training.v1"
-  ".DeliveryRsp\022F\n\tNackBatch\022\034.rl.training."
-  "v1.NackBatchReq\032\033.rl.training.v1.Deliver"
-  "yRsp\022H\n\nRenewLease\022\035.rl.training.v1.Rene"
-  "wLeaseReq\032\033.rl.training.v1.DeliveryRsp\022b"
-  "\n\022FinalizeSamplePool\022%.rl.training.v1.Fi"
-  "nalizeSamplePoolReq\032%.rl.training.v1.Fin"
-  "alizeSamplePoolRsp\022U\n\tGetStatus\022#.rl.tra"
-  "ining.v1.SamplePoolStatusReq\032#.rl.traini"
-  "ng.v1.SamplePoolStatusRsp2\326\003\n\027ModelDistr"
-  "ibutorService\022S\n\rRegisterModel\022 .rl.trai"
-  "ning.v1.RegisterModelReq\032 .rl.training.v"
-  "1.RegisterModelRsp\022\\\n\020GetModelManifest\022#"
-  ".rl.training.v1.GetModelManifestReq\032#.rl"
-  ".training.v1.GetModelManifestRsp\022O\n\rDown"
-  "loadModel\022 .rl.training.v1.DownloadModel"
-  "Req\032\032.rl.training.v1.ModelChunk0\001\022D\n\010Ack"
-  "Model\022\033.rl.training.v1.AckModelReq\032\033.rl."
-  "training.v1.AckModelRsp\022q\n\031GetModelDistr"
-  "ibutorStatus\022).rl.training.v1.ModelDistr"
-  "ibutorStatusReq\032).rl.training.v1.ModelDi"
-  "stributorStatusRspB\003\200\001\000b\006proto3"
+  "jected_transition_attempts\030\n \001(\003\022*\n\"ackn"
+  "owledged_transition_slot_count\030\013 \001(\003\022\037\n\027"
+  "acked_unique_deliveries\030\014 \001(\003\022\031\n\021ready_t"
+  "ransitions\030\r \001(\003\022\032\n\022leased_transitions\030\017"
+  " \001(\003\022\034\n\024resident_transitions\030\021 \001(\003\022\032\n\022re"
+  "sident_envelopes\030\022 \001(\003\022 \n\030resident_estim"
+  "ated_bytes\030\023 \001(\003\022\034\n\024capacity_transitions"
+  "\030\024 \001(\003\022\026\n\016capacity_bytes\030\026 \001(\003\0225\n\016pressu"
+  "re_state\030\027 \001(\0162\035.rl.training.v1.Pressure"
+  "State\022&\n\036released_transition_slot_count\030"
+  "\030 \001(\003\022\022\n\nnack_count\030\031 \001(\003\022\033\n\023expired_lea"
+  "se_count\030\032 \001(\003\022\"\n\025latest_ack_at_unix_ms\030"
+  "\033 \001(\003H\000\210\001\001\022\030\n\020target_hit_count\030\034 \001(\003\022\031\n\021"
+  "partial_get_count\030\035 \001(\003\022\033\n\023empty_timeout"
+  "_count\030\036 \001(\003\022\022\n\nlast_error\030\037 \001(\t\022 \n\030trai"
+  "ned_transition_count\030! \001(\003\022 \n\030invalid_tr"
+  "ansition_count\030# \001(\003\022+\n#shutdown_untrain"
+  "ed_transition_count\030$ \001(\003\022\031\n\021lease_renew"
+  "_count\030% \001(\003\0227\n\014backend_type\030& \001(\0162!.rl."
+  "training.v1.SampleBackendType\022 \n\030max_con"
+  "current_consumers\030\' \001(\005\022\035\n\025active_consum"
+  "er_count\030( \001(\005\022\033\n\023consumer_busy_count\030) "
+  "\001(\003\022\025\n\ringress_ready\030* \001(\010\022\022\n\npool_ready"
+  "\030+ \001(\010\022\031\n\021timestamp_unix_ms\030, \001(\003\022+\n\036old"
+  "est_ready_transition_age_ms\030- \001(\003H\001\210\001\001\022%"
+  "\n\030minimum_ready_model_step\030. \001(\004H\002\210\001\001\022%\n"
+  "\030maximum_ready_model_step\030/ \001(\004H\003\210\001\001\022 \n\030"
+  "evicted_transition_count\030B \001(\003\022\036\n\026evicte"
+  "d_envelope_count\030C \001(\003\022\021\n\tfinalized\030D \001("
+  "\010\022\027\n\017finalization_id\030E \001(\t\022!\n\024finalized_"
+  "at_unix_ms\030F \001(\003H\004\210\001\001\022\"\n\032finalized_trans"
+  "ition_count\030G \001(\003\022\032\n\022draw_attempt_count\030"
+  "I \001(\003\022#\n\033drawn_transition_slot_count\030J \001"
+  "(\003\022*\n\"unsampled_evicted_transition_count"
+  "\030K \001(\003\0221\n)previously_drawn_evicted_trans"
+  "ition_count\030L \001(\003B\030\n\026_latest_ack_at_unix"
+  "_msB!\n\037_oldest_ready_transition_age_msB\033"
+  "\n\031_minimum_ready_model_stepB\033\n\031_maximum_"
+  "ready_model_stepB\027\n\025_finalized_at_unix_m"
+  "sJ\004\010\001\020\002J\004\010\016\020\017J\004\010\020\020\021J\004\010\025\020\026J\004\010 \020!J\004\010\"\020#J\004\010"
+  "0\020BJ\004\010H\020IR\021behavior_versionsR\033minimum_re"
+  "ady_model_versionR\033maximum_ready_model_v"
+  "ersionR\010contractR\025ready_queue_fragmentsR"
+  "\020leased_fragmentsR\022capacity_fragmentsR\016b"
+  "ehavior_stepsR\022stale_sample_countR\023activ"
+  "e_demand_countR\023active_demand_epochR\024act"
+  "ive_demand_age_msR\020reserved_samplesR\022res"
+  "erved_fragmentsR\030reserved_estimated_byte"
+  "sR\024credit_request_countR\022credit_grant_co"
+  "untR\023credit_commit_countR\024credit_release"
+  "_countR\023credit_expire_countR\023credit_revo"
+  "ke_countR\033credit_wait_no_demand_countR c"
+  "redit_wait_inflight_limit_countR\032credit_"
+  "wait_capacity_countR\032credit_wait_drainin"
+  "g_countR\023demand_upsert_countR\024demand_rel"
+  "ease_countR\030finalized_fragment_count\"\023\n\021"
+  "AIServerStatusReq\"p\n\023ModelFeedbackStatus"
+  "\0226\n\017candidate_model\030\001 \001(\0132\035.rl.training."
+  "v1.ModelIdentity\022\r\n\005stage\030\002 \001(\t\022\022\n\nlast_"
+  "error\030\003 \001(\t\"\360\r\n\021AIServerStatusRsp\0227\n\010ais"
+  "erver\030\002 \001(\0132%.rl.common.v1.ServiceInstan"
+  "ceIdentity\022,\n\005state\030\003 \001(\0162\035.rl.training."
+  "v1.AIServerState\022\r\n\005ready\030\004 \001(\010\022\031\n\021distr"
+  "ibutor_ready\030\005 \001(\010\022/\n\013model_state\030\006 \001(\0162"
+  "\032.rl.training.v1.ModelState\0223\n\014loaded_mo"
+  "del\030\007 \001(\0132\035.rl.training.v1.ModelIdentity"
+  "\0223\n\014staged_model\030\010 \001(\0132\035.rl.training.v1."
+  "ModelIdentity\022 \n\030outbound_queue_envelope"
+  "s\030\t \001(\003\022\"\n\032outbound_queue_transitions\030\n "
+  "\001(\003\022&\n\036outbound_queue_estimated_bytes\030\013 "
+  "\001(\003\022%\n\035outbound_queue_high_watermark\030\014 \001"
+  "(\003\022#\n\033produced_unique_transitions\030\r \001(\003\022"
+  "!\n\031produced_unique_envelopes\030\016 \001(\003\022\032\n\022pu"
+  "sh_attempt_count\030\017 \001(\003\022#\n\033accepted_uniqu"
+  "e_transitions\030\020 \001(\003\022$\n\034duplicate_push_at"
+  "tempt_count\030\021 \001(\003\022#\n\033rejected_push_attem"
+  "pt_count\030\022 \001(\003\022\033\n\023retry_attempt_count\030\023 "
+  "\001(\003\022%\n\035final_drop_unique_transitions\030\024 \001"
+  "(\003\022\"\n\032active_actor_session_count\030\025 \001(\003\022\034"
+  "\n\024active_segment_count\030\026 \001(\003\022\027\n\017inferenc"
+  "e_count\030\027 \001(\003\022 \n\030inference_latency_sum_m"
+  "s\030\030 \001(\001\022 \n\030inference_latency_max_ms\030\031 \001("
+  "\001\022\026\n\016push_rpc_count\030\032 \001(\003\022\037\n\027push_rpc_la"
+  "tency_sum_ms\030\033 \001(\001\022\037\n\027push_rpc_latency_m"
+  "ax_ms\030\034 \001(\001\022\032\n\022model_switch_count\030\035 \001(\003\022"
+  "$\n\034quarantined_transition_count\030\036 \001(\003\022\"\n"
+  "\032quarantined_envelope_count\030\037 \001(\003\022\022\n\nlas"
+  "t_error\030  \001(\t\022\031\n\021timestamp_unix_ms\030! \001(\003"
+  "\022\034\n\024closed_segment_count\030# \001(\003\022%\n\035pendin"
+  "g_action_excluded_count\030$ \001(\003\022\'\n\037rollout"
+  "_estimator_failure_count\030% \001(\003\022(\n per_ag"
+  "ent_model_activation_count\030& \001(\003\0221\n)supe"
+  "rseded_without_agent_activation_count\030\' "
+  "\001(\003\022\?\n\024segment_close_counts\030( \003(\0132!.rl.t"
+  "raining.v1.SegmentCloseCount\022;\n\016model_fe"
+  "edback\030) \001(\0132#.rl.training.v1.ModelFeedb"
+  "ackStatus\022\030\n\020update_rpc_count\030* \001(\003\022!\n\031u"
+  "pdate_rpc_latency_sum_ms\030+ \001(\001\022!\n\031update"
+  "_rpc_latency_max_ms\030, \001(\001J\004\010\001\020\002J\004\010\"\020#R\010c"
+  "ontractR rollout_estimator_profile_diges"
+  "tR\024credit_request_countR\022credit_grant_co"
+  "untR\021credit_wait_countR\026credit_reacquire"
+  "_countR\024producer_stale_countR\020capacity_w"
+  "ait_msR\026training_capacity_wait\"V\n\021Segmen"
+  "tCloseCount\0222\n\006reason\030\001 \001(\0162\".rl.trainin"
+  "g.v1.SegmentCloseReason\022\r\n\005count\030\002 \001(\003\"\337"
+  "\003\n\025ModelArtifactManifest\022/\n\010identity\030\003 \001"
+  "(\0132\035.rl.training.v1.ModelIdentity\022\022\n\nsiz"
+  "e_bytes\030\r \001(\003\022\027\n\017trained_samples\030\020 \001(\004\022\034"
+  "\n\024published_at_unix_ms\030\023 \001(\003J\004\010\001\020\002J\004\010\002\020\003"
+  "J\004\010\004\020\rJ\004\010\016\020\017J\004\010\017\020\020J\004\010\021\020\022J\004\010\022\020\023J\004\010\024\020\025J\004\010\025"
+  "\020\026R\027manifest_schema_versionR\010contractR\022o"
+  "bservation_schemaR\raction_schemaR\025model_"
+  "architecture_idR\014tensor_dtypeR\013input_sha"
+  "peR\014action_shapeR\013value_shapeR\014artifact_"
+  "uriR\nmodel_fileR\004seedR\rtrain_updatesR\005re"
+  "adyR\026training_config_digestR\030training_co"
+  "ntract_digestR\031rollout_estimator_profile"
+  "\"x\n\020RegisterModelReq\0227\n\010manifest\030\001 \001(\0132%"
+  ".rl.training.v1.ModelArtifactManifest\022\033\n"
+  "\023local_artifact_path\030\003 \001(\tJ\004\010\002\020\003R\010contra"
+  "ct\"\315\001\n\020RegisterModelRsp\0223\n\006result\030\001 \001(\0162"
+  "#.rl.training.v1.ModelRegisterResult\022\017\n\007"
+  "message\030\002 \001(\t\0227\n\010manifest\030\003 \001(\0132%.rl.tra"
+  "ining.v1.ModelArtifactManifest\022:\n\013distri"
+  "butor\030\004 \001(\0132%.rl.common.v1.ServiceInstan"
+  "ceIdentity\"\242\001\n\023GetModelManifestReq\0226\n\017re"
+  "quested_model\030\001 \001(\0132\035.rl.training.v1.Mod"
+  "elIdentity\0228\n\trequester\030\002 \001(\0132%.rl.commo"
+  "n.v1.ServiceInstanceIdentity\022\031\n\021latest_i"
+  "n_lineage\030\003 \001(\010\"\340\002\n\023GetModelManifestRsp\022"
+  "1\n\006result\030\001 \001(\0162!.rl.training.v1.ModelLo"
+  "okupResult\022\017\n\007message\030\002 \001(\t\0227\n\010manifest\030"
+  "\003 \001(\0132%.rl.training.v1.ModelArtifactMani"
+  "fest\022:\n\013distributor\030\004 \001(\0132%.rl.common.v1"
+  ".ServiceInstanceIdentity\022\'\n\032available_fl"
+  "oor_model_step\030\005 \001(\004H\000\210\001\001\022(\n\033latest_avai"
+  "lable_model_step\030\006 \001(\004H\001\210\001\001B\035\n\033_availabl"
+  "e_floor_model_stepB\036\n\034_latest_available_"
+  "model_step\"\204\001\n\020DownloadModelReq\0226\n\017reque"
+  "sted_model\030\001 \001(\0132\035.rl.training.v1.ModelI"
+  "dentity\0228\n\trequester\030\002 \001(\0132%.rl.common.v"
+  "1.ServiceInstanceIdentity\"X\n\nModelChunk\022"
+  ",\n\005model\030\001 \001(\0132\035.rl.training.v1.ModelIde"
+  "ntity\022\016\n\006offset\030\002 \001(\003\022\014\n\004data\030\003 \001(\014\"\325\001\n\013"
+  "AckModelReq\0227\n\010aiserver\030\001 \001(\0132%.rl.commo"
+  "n.v1.ServiceInstanceIdentity\022,\n\005model\030\002 "
+  "\001(\0132\035.rl.training.v1.ModelIdentity\022\030\n\020lo"
+  "ad_instance_id\030\003 \001(\t\0224\n\013load_status\030\004 \001("
+  "\0162\037.rl.training.v1.ModelLoadStatus\022\017\n\007me"
+  "ssage\030\005 \001(\t\"\212\001\n\013AckModelRsp\022.\n\006result\030\001 "
+  "\001(\0162\036.rl.training.v1.ModelAckResult\022\017\n\007m"
+  "essage\030\002 \001(\t\022:\n\013distributor\030\003 \001(\0132%.rl.c"
+  "ommon.v1.ServiceInstanceIdentity\"\033\n\031Mode"
+  "lDistributorStatusReq\"\221\007\n\031ModelDistribut"
+  "orStatusRsp\022:\n\013distributor\030\002 \001(\0132%.rl.co"
+  "mmon.v1.ServiceInstanceIdentity\022\r\n\005ready"
+  "\030\003 \001(\010\022\036\n\026registered_model_count\030\004 \001(\003\0223"
+  "\n\014latest_model\030\005 \001(\0132\035.rl.training.v1.Mo"
+  "delIdentity\022\036\n\026register_attempt_count\030\006 "
+  "\001(\003\022 \n\030duplicate_register_count\030\007 \001(\003\022\037\n"
+  "\027rejected_register_count\030\010 \001(\003\022\036\n\026downlo"
+  "ad_request_count\030\t \001(\003\022\036\n\026download_succe"
+  "ss_count\030\n \001(\003\022\036\n\026download_failure_count"
+  "\030\013 \001(\003\022\024\n\014bytes_served\030\014 \001(\003\022\030\n\020loaded_a"
+  "ck_count\030\r \001(\003\022\030\n\020failed_ack_count\030\016 \001(\003"
+  "\022B\n\023latest_ack_aiserver\030\017 \001(\0132%.rl.commo"
+  "n.v1.ServiceInstanceIdentity\0227\n\020latest_a"
+  "ck_model\030\020 \001(\0132\035.rl.training.v1.ModelIde"
+  "ntity\022:\n\021latest_ack_status\030\021 \001(\0162\037.rl.tr"
+  "aining.v1.ModelLoadStatus\022\022\n\nlast_error\030"
+  "\022 \001(\t\022\031\n\021timestamp_unix_ms\030\023 \001(\003\022\'\n\032avai"
+  "lable_floor_model_step\030\024 \001(\004H\000\210\001\001\022(\n\033lat"
+  "est_available_model_step\030\025 \001(\004H\001\210\001\001B\035\n\033_"
+  "available_floor_model_stepB\036\n\034_latest_av"
+  "ailable_model_stepJ\004\010\001\020\002R\035available_floo"
+  "r_model_versionR\036latest_available_model_"
+  "versionR\010contract\"\022\n\020LearnerStatusReq\"\257\007"
+  "\n\020LearnerStatusRsp\0226\n\007learner\030\001 \001(\0132%.rl"
+  ".common.v1.ServiceInstanceIdentity\022\031\n\021ti"
+  "mestamp_unix_ms\030\002 \001(\003\022,\n\005model\030\003 \001(\0132\035.r"
+  "l.training.v1.ModelIdentity\022\022\n\nmodel_ste"
+  "p\030\004 \001(\004\022\025\n\rtrain_updates\030\005 \001(\004\022\027\n\017traine"
+  "d_samples\030\006 \001(\004\022\031\n\021run_train_updates\030\007 \001"
+  "(\004\022\033\n\023run_trained_samples\030\010 \001(\004\022\032\n\022initi"
+  "al_model_step\030\t \001(\004\022\030\n\020train_batch_size\030"
+  "\n \001(\004\022\036\n\021actual_batch_size\030\013 \001(\004H\000\210\001\001\022\'\n"
+  "\032requested_train_batch_size\030\014 \001(\004H\001\210\001\001\022!"
+  "\n\024pool_draw_slot_count\030\r \001(\004H\002\210\001\001\022\036\n\021uni"
+  "que_item_count\030\016 \001(\004H\003\210\001\001\022&\n\031duplicate_i"
+  "tem_slot_count\030\017 \001(\004H\004\210\001\001\022$\n\027sample_eval"
+  "uation_count\030\020 \001(\004H\005\210\001\001\022!\n\024optimizer_ste"
+  "p_count\030\021 \001(\004H\006\210\001\001\022!\n\024max_importance_rat"
+  "io\030\022 \001(\001H\007\210\001\001\022\037\n\022explained_variance\030\023 \001("
+  "\001H\010\210\001\001\022\023\n\013disposition\030\024 \001(\t\022\022\n\nlast_erro"
+  "r\030\025 \001(\t\022\027\n\017train_update_id\030\026 \001(\tB\024\n\022_act"
+  "ual_batch_sizeB\035\n\033_requested_train_batch"
+  "_sizeB\027\n\025_pool_draw_slot_countB\024\n\022_uniqu"
+  "e_item_countB\034\n\032_duplicate_item_slot_cou"
+  "ntB\032\n\030_sample_evaluation_countB\027\n\025_optim"
+  "izer_step_countB\027\n\025_max_importance_ratio"
+  "B\025\n\023_explained_variance*\253\002\n\022SegmentClose"
+  "Reason\022$\n SEGMENT_CLOSE_REASON_UNSPECIFI"
+  "ED\020\000\022/\n+SEGMENT_CLOSE_REASON_ENVIRONMENT"
+  "_TERMINATED\020\001\022\035\n\031SEGMENT_CLOSE_REASON_TM"
+  "AX\020\003\0220\n,SEGMENT_CLOSE_REASON_CLIENT_CONT"
+  "ROLLED_CLOSE\020\004\0220\n,SEGMENT_CLOSE_REASON_C"
+  "LIENT_RECOVERY_TIMEOUT\020\005\0225\n1SEGMENT_CLOS"
+  "E_REASON_AISERVER_CONTROLLED_SHUTDOWN\020\006\""
+  "\004\010\002\020\002*\217\002\n\nPushResult\022\033\n\027PUSH_RESULT_UNSP"
+  "ECIFIED\020\000\022\030\n\024PUSH_RESULT_ACCEPTED\020\001\022\031\n\025P"
+  "USH_RESULT_DUPLICATE\020\002\022!\n\035PUSH_RESULT_RE"
+  "JECTED_CAPACITY\020\003\022 \n\034PUSH_RESULT_REJECTE"
+  "D_INVALID\020\004\022!\n\035PUSH_RESULT_REJECTED_CONF"
+  "LICT\020\006\022\"\n\036PUSH_RESULT_REJECTED_FINALIZED"
+  "\020\007\"\004\010\005\020\005*\035PUSH_RESULT_REJECTED_IDENTITY*"
+  "|\n\rPressureState\022\036\n\032PRESSURE_STATE_UNSPE"
+  "CIFIED\020\000\022\031\n\025PRESSURE_STATE_NORMAL\020\001\022\027\n\023P"
+  "RESSURE_STATE_HIGH\020\002\022\027\n\023PRESSURE_STATE_F"
+  "ULL\020\003*\247\001\n\016GetBatchResult\022 \n\034GET_BATCH_RE"
+  "SULT_UNSPECIFIED\020\000\022\033\n\027GET_BATCH_RESULT_L"
+  "EASED\020\001\022\034\n\030GET_BATCH_RESULT_TIMEOUT\020\002\022\031\n"
+  "\025GET_BATCH_RESULT_BUSY\020\003\022\035\n\031GET_BATCH_RE"
+  "SULT_REJECTED\020\004*\315\001\n\016DeliveryResult\022\037\n\033DE"
+  "LIVERY_RESULT_UNSPECIFIED\020\000\022\033\n\027DELIVERY_"
+  "RESULT_APPLIED\020\001\022#\n\037DELIVERY_RESULT_ALRE"
+  "ADY_APPLIED\020\002\022\033\n\027DELIVERY_RESULT_EXPIRED"
+  "\020\003\022\035\n\031DELIVERY_RESULT_NOT_FOUND\020\004\022\034\n\030DEL"
+  "IVERY_RESULT_REJECTED\020\005*\260\001\n\016AckDispositi"
+  "on\022\037\n\033ACK_DISPOSITION_UNSPECIFIED\020\000\022\033\n\027A"
+  "CK_DISPOSITION_TRAINED\020\001\022\033\n\027ACK_DISPOSIT"
+  "ION_INVALID\020\003\022&\n\"ACK_DISPOSITION_SHUTDOW"
+  "N_UNTRAINED\020\004\"\004\010\002\020\002*\025ACK_DISPOSITION_STA"
+  "LE*\274\001\n\rAIServerState\022\036\n\032AISERVER_STATE_U"
+  "NSPECIFIED\020\000\022\033\n\027AISERVER_STATE_STARTING\020"
+  "\001\022\030\n\024AISERVER_STATE_READY\020\002\022\033\n\027AISERVER_"
+  "STATE_DEGRADED\020\003\022\033\n\027AISERVER_STATE_DRAIN"
+  "ING\020\004\022\032\n\026AISERVER_STATE_STOPPED\020\005*q\n\nMod"
+  "elState\022\033\n\027MODEL_STATE_UNSPECIFIED\020\000\022\027\n\023"
+  "MODEL_STATE_WAITING\020\001\022\025\n\021MODEL_STATE_REA"
+  "DY\020\002\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001\n\023ModelRe"
+  "gisterResult\022%\n!MODEL_REGISTER_RESULT_UN"
+  "SPECIFIED\020\000\022$\n MODEL_REGISTER_RESULT_REG"
+  "ISTERED\020\001\022,\n(MODEL_REGISTER_RESULT_ALREA"
+  "DY_REGISTERED\020\002\022*\n&MODEL_REGISTER_RESULT"
+  "_REJECTED_INVALID\020\003\022+\n\'MODEL_REGISTER_RE"
+  "SULT_REJECTED_CONFLICT\020\004*p\n\017ModelLoadSta"
+  "tus\022!\n\035MODEL_LOAD_STATUS_UNSPECIFIED\020\000\022\034"
+  "\n\030MODEL_LOAD_STATUS_LOADED\020\001\022\034\n\030MODEL_LO"
+  "AD_STATUS_FAILED\020\002*\265\001\n\016ModelAckResult\022 \n"
+  "\034MODEL_ACK_RESULT_UNSPECIFIED\020\000\022\034\n\030MODEL"
+  "_ACK_RESULT_APPLIED\020\001\022$\n MODEL_ACK_RESUL"
+  "T_ALREADY_APPLIED\020\002\022\036\n\032MODEL_ACK_RESULT_"
+  "NOT_FOUND\020\003\022\035\n\031MODEL_ACK_RESULT_REJECTED"
+  "\020\004*\247\001\n\021ModelLookupResult\022#\n\037MODEL_LOOKUP"
+  "_RESULT_UNSPECIFIED\020\000\022\035\n\031MODEL_LOOKUP_RE"
+  "SULT_FOUND\020\001\022!\n\035MODEL_LOOKUP_RESULT_NOT_"
+  "FOUND\020\002\"\004\010\003\020\003*%MODEL_LOOKUP_RESULT_REJEC"
+  "TED_IDENTITY*^\n\021SampleBackendType\022#\n\037SAM"
+  "PLE_BACKEND_TYPE_UNSPECIFIED\020\000\022$\n SAMPLE"
+  "_BACKEND_TYPE_LOCAL_MEMORY\020\001*\304\002\n\030SampleP"
+  "oolFinalizeResult\022+\n\'SAMPLE_POOL_FINALIZ"
+  "E_RESULT_UNSPECIFIED\020\000\022)\n%SAMPLE_POOL_FI"
+  "NALIZE_RESULT_FINALIZED\020\001\0221\n-SAMPLE_POOL"
+  "_FINALIZE_RESULT_ALREADY_FINALIZED\020\002\0225\n1"
+  "SAMPLE_POOL_FINALIZE_RESULT_REJECTED_ACT"
+  "IVE_LEASE\020\003\0221\n-SAMPLE_POOL_FINALIZE_RESU"
+  "LT_REJECTED_CONFLICT\020\005\"\004\010\004\020\004*-SAMPLE_POO"
+  "L_FINALIZE_RESULT_REJECTED_IDENTITY2z\n\035A"
+  "IServerTrainingStatusService\022Y\n\021GetAISer"
+  "verStatus\022!.rl.training.v1.AIServerStatu"
+  "sReq\032!.rl.training.v1.AIServerStatusRsp2"
+  "n\n\024LearnerStatusService\022V\n\020GetLearnerSta"
+  "tus\022 .rl.training.v1.LearnerStatusReq\032 ."
+  "rl.training.v1.LearnerStatusRsp2\300\001\n\030Samp"
+  "lePoolIngressService\022M\n\013PushSamples\022\036.rl"
+  ".training.v1.PushSamplesReq\032\036.rl.trainin"
+  "g.v1.PushSamplesRsp\022U\n\tGetStatus\022#.rl.tr"
+  "aining.v1.SamplePoolStatusReq\032#.rl.train"
+  "ing.v1.SamplePoolStatusRsp2\364\003\n\031SamplePoo"
+  "lConsumerService\022D\n\010GetBatch\022\033.rl.traini"
+  "ng.v1.GetBatchReq\032\033.rl.training.v1.GetBa"
+  "tchRsp\022D\n\010AckBatch\022\033.rl.training.v1.AckB"
+  "atchReq\032\033.rl.training.v1.DeliveryRsp\022F\n\t"
+  "NackBatch\022\034.rl.training.v1.NackBatchReq\032"
+  "\033.rl.training.v1.DeliveryRsp\022H\n\nRenewLea"
+  "se\022\035.rl.training.v1.RenewLeaseReq\032\033.rl.t"
+  "raining.v1.DeliveryRsp\022b\n\022FinalizeSample"
+  "Pool\022%.rl.training.v1.FinalizeSamplePool"
+  "Req\032%.rl.training.v1.FinalizeSamplePoolR"
+  "sp\022U\n\tGetStatus\022#.rl.training.v1.SampleP"
+  "oolStatusReq\032#.rl.training.v1.SamplePool"
+  "StatusRsp2\326\003\n\027ModelDistributorService\022S\n"
+  "\rRegisterModel\022 .rl.training.v1.Register"
+  "ModelReq\032 .rl.training.v1.RegisterModelR"
+  "sp\022\\\n\020GetModelManifest\022#.rl.training.v1."
+  "GetModelManifestReq\032#.rl.training.v1.Get"
+  "ModelManifestRsp\022O\n\rDownloadModel\022 .rl.t"
+  "raining.v1.DownloadModelReq\032\032.rl.trainin"
+  "g.v1.ModelChunk0\001\022D\n\010AckModel\022\033.rl.train"
+  "ing.v1.AckModelReq\032\033.rl.training.v1.AckM"
+  "odelRsp\022q\n\031GetModelDistributorStatus\022).r"
+  "l.training.v1.ModelDistributorStatusReq\032"
+  ").rl.training.v1.ModelDistributorStatusR"
+  "spB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_proto_2ftraining_2ftraining_2eproto_deps[2] = {
   &::descriptor_table_proto_2fcommon_2fidentity_2eproto,
@@ -1647,7 +1648,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_proto_2ftraining_2f
 };
 static ::_pbi::once_flag descriptor_table_proto_2ftraining_2ftraining_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_proto_2ftraining_2ftraining_2eproto = {
-    false, false, 15231, descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto,
+    false, false, 15255, descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto,
     "proto/training/training.proto",
     &descriptor_table_proto_2ftraining_2ftraining_2eproto_once, descriptor_table_proto_2ftraining_2ftraining_2eproto_deps, 2, 32,
     schemas, file_default_instances, TableStruct_proto_2ftraining_2ftraining_2eproto::offsets,
@@ -6438,7 +6439,7 @@ SamplePoolStatusRsp::SamplePoolStatusRsp(const SamplePoolStatusRsp& from)
     , decltype(_impl_.duplicate_transition_attempts_){}
     , decltype(_impl_.rejected_push_attempt_count_){}
     , decltype(_impl_.rejected_transition_attempts_){}
-    , decltype(_impl_.acked_unique_transitions_){}
+    , decltype(_impl_.acknowledged_transition_slot_count_){}
     , decltype(_impl_.acked_unique_deliveries_){}
     , decltype(_impl_.ready_transitions_){}
     , decltype(_impl_.leased_transitions_){}
@@ -6447,7 +6448,7 @@ SamplePoolStatusRsp::SamplePoolStatusRsp(const SamplePoolStatusRsp& from)
     , decltype(_impl_.resident_estimated_bytes_){}
     , decltype(_impl_.capacity_transitions_){}
     , decltype(_impl_.capacity_bytes_){}
-    , decltype(_impl_.redelivery_count_){}
+    , decltype(_impl_.released_transition_slot_count_){}
     , decltype(_impl_.nack_count_){}
     , decltype(_impl_.expired_lease_count_){}
     , decltype(_impl_.latest_ack_at_unix_ms_){}
@@ -6523,7 +6524,7 @@ inline void SamplePoolStatusRsp::SharedCtor(
     , decltype(_impl_.duplicate_transition_attempts_){int64_t{0}}
     , decltype(_impl_.rejected_push_attempt_count_){int64_t{0}}
     , decltype(_impl_.rejected_transition_attempts_){int64_t{0}}
-    , decltype(_impl_.acked_unique_transitions_){int64_t{0}}
+    , decltype(_impl_.acknowledged_transition_slot_count_){int64_t{0}}
     , decltype(_impl_.acked_unique_deliveries_){int64_t{0}}
     , decltype(_impl_.ready_transitions_){int64_t{0}}
     , decltype(_impl_.leased_transitions_){int64_t{0}}
@@ -6532,7 +6533,7 @@ inline void SamplePoolStatusRsp::SharedCtor(
     , decltype(_impl_.resident_estimated_bytes_){int64_t{0}}
     , decltype(_impl_.capacity_transitions_){int64_t{0}}
     , decltype(_impl_.capacity_bytes_){int64_t{0}}
-    , decltype(_impl_.redelivery_count_){int64_t{0}}
+    , decltype(_impl_.released_transition_slot_count_){int64_t{0}}
     , decltype(_impl_.nack_count_){int64_t{0}}
     , decltype(_impl_.expired_lease_count_){int64_t{0}}
     , decltype(_impl_.latest_ack_at_unix_ms_){int64_t{0}}
@@ -6710,10 +6711,10 @@ const char* SamplePoolStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseCo
         } else
           goto handle_unusual;
         continue;
-      // int64 acked_unique_transitions = 11;
+      // int64 acknowledged_transition_slot_count = 11;
       case 11:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
-          _impl_.acked_unique_transitions_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _impl_.acknowledged_transition_slot_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -6791,10 +6792,10 @@ const char* SamplePoolStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseCo
         } else
           goto handle_unusual;
         continue;
-      // int64 redelivery_count = 24;
+      // int64 released_transition_slot_count = 24;
       case 24:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 192)) {
-          _impl_.redelivery_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          _impl_.released_transition_slot_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -7142,10 +7143,10 @@ uint8_t* SamplePoolStatusRsp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt64ToArray(10, this->_internal_rejected_transition_attempts(), target);
   }
 
-  // int64 acked_unique_transitions = 11;
-  if (this->_internal_acked_unique_transitions() != 0) {
+  // int64 acknowledged_transition_slot_count = 11;
+  if (this->_internal_acknowledged_transition_slot_count() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(11, this->_internal_acked_unique_transitions(), target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(11, this->_internal_acknowledged_transition_slot_count(), target);
   }
 
   // int64 acked_unique_deliveries = 12;
@@ -7203,10 +7204,10 @@ uint8_t* SamplePoolStatusRsp::_InternalSerialize(
       23, this->_internal_pressure_state(), target);
   }
 
-  // int64 redelivery_count = 24;
-  if (this->_internal_redelivery_count() != 0) {
+  // int64 released_transition_slot_count = 24;
+  if (this->_internal_released_transition_slot_count() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(24, this->_internal_redelivery_count(), target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(24, this->_internal_released_transition_slot_count(), target);
   }
 
   // int64 nack_count = 25;
@@ -7476,9 +7477,9 @@ size_t SamplePoolStatusRsp::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_rejected_transition_attempts());
   }
 
-  // int64 acked_unique_transitions = 11;
-  if (this->_internal_acked_unique_transitions() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_acked_unique_transitions());
+  // int64 acknowledged_transition_slot_count = 11;
+  if (this->_internal_acknowledged_transition_slot_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_acknowledged_transition_slot_count());
   }
 
   // int64 acked_unique_deliveries = 12;
@@ -7531,11 +7532,11 @@ size_t SamplePoolStatusRsp::ByteSizeLong() const {
         this->_internal_capacity_bytes());
   }
 
-  // int64 redelivery_count = 24;
-  if (this->_internal_redelivery_count() != 0) {
+  // int64 released_transition_slot_count = 24;
+  if (this->_internal_released_transition_slot_count() != 0) {
     total_size += 2 +
       ::_pbi::WireFormatLite::Int64Size(
-        this->_internal_redelivery_count());
+        this->_internal_released_transition_slot_count());
   }
 
   // int64 nack_count = 25;
@@ -7797,8 +7798,8 @@ void SamplePoolStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   if (from._internal_rejected_transition_attempts() != 0) {
     _this->_internal_set_rejected_transition_attempts(from._internal_rejected_transition_attempts());
   }
-  if (from._internal_acked_unique_transitions() != 0) {
-    _this->_internal_set_acked_unique_transitions(from._internal_acked_unique_transitions());
+  if (from._internal_acknowledged_transition_slot_count() != 0) {
+    _this->_internal_set_acknowledged_transition_slot_count(from._internal_acknowledged_transition_slot_count());
   }
   if (from._internal_acked_unique_deliveries() != 0) {
     _this->_internal_set_acked_unique_deliveries(from._internal_acked_unique_deliveries());
@@ -7824,8 +7825,8 @@ void SamplePoolStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   if (from._internal_capacity_bytes() != 0) {
     _this->_internal_set_capacity_bytes(from._internal_capacity_bytes());
   }
-  if (from._internal_redelivery_count() != 0) {
-    _this->_internal_set_redelivery_count(from._internal_redelivery_count());
+  if (from._internal_released_transition_slot_count() != 0) {
+    _this->_internal_set_released_transition_slot_count(from._internal_released_transition_slot_count());
   }
   if (from._internal_nack_count() != 0) {
     _this->_internal_set_nack_count(from._internal_nack_count());

@@ -3541,7 +3541,7 @@ class SamplePoolStatusRsp final :
     kDuplicateTransitionAttemptsFieldNumber = 8,
     kRejectedPushAttemptCountFieldNumber = 9,
     kRejectedTransitionAttemptsFieldNumber = 10,
-    kAckedUniqueTransitionsFieldNumber = 11,
+    kAcknowledgedTransitionSlotCountFieldNumber = 11,
     kAckedUniqueDeliveriesFieldNumber = 12,
     kReadyTransitionsFieldNumber = 13,
     kLeasedTransitionsFieldNumber = 15,
@@ -3550,7 +3550,7 @@ class SamplePoolStatusRsp final :
     kResidentEstimatedBytesFieldNumber = 19,
     kCapacityTransitionsFieldNumber = 20,
     kCapacityBytesFieldNumber = 22,
-    kRedeliveryCountFieldNumber = 24,
+    kReleasedTransitionSlotCountFieldNumber = 24,
     kNackCountFieldNumber = 25,
     kExpiredLeaseCountFieldNumber = 26,
     kLatestAckAtUnixMsFieldNumber = 27,
@@ -3692,13 +3692,13 @@ class SamplePoolStatusRsp final :
   void _internal_set_rejected_transition_attempts(int64_t value);
   public:
 
-  // int64 acked_unique_transitions = 11;
-  void clear_acked_unique_transitions();
-  int64_t acked_unique_transitions() const;
-  void set_acked_unique_transitions(int64_t value);
+  // int64 acknowledged_transition_slot_count = 11;
+  void clear_acknowledged_transition_slot_count();
+  int64_t acknowledged_transition_slot_count() const;
+  void set_acknowledged_transition_slot_count(int64_t value);
   private:
-  int64_t _internal_acked_unique_transitions() const;
-  void _internal_set_acked_unique_transitions(int64_t value);
+  int64_t _internal_acknowledged_transition_slot_count() const;
+  void _internal_set_acknowledged_transition_slot_count(int64_t value);
   public:
 
   // int64 acked_unique_deliveries = 12;
@@ -3773,13 +3773,13 @@ class SamplePoolStatusRsp final :
   void _internal_set_capacity_bytes(int64_t value);
   public:
 
-  // int64 redelivery_count = 24;
-  void clear_redelivery_count();
-  int64_t redelivery_count() const;
-  void set_redelivery_count(int64_t value);
+  // int64 released_transition_slot_count = 24;
+  void clear_released_transition_slot_count();
+  int64_t released_transition_slot_count() const;
+  void set_released_transition_slot_count(int64_t value);
   private:
-  int64_t _internal_redelivery_count() const;
-  void _internal_set_redelivery_count(int64_t value);
+  int64_t _internal_released_transition_slot_count() const;
+  void _internal_set_released_transition_slot_count(int64_t value);
   public:
 
   // int64 nack_count = 25;
@@ -4101,7 +4101,7 @@ class SamplePoolStatusRsp final :
     int64_t duplicate_transition_attempts_;
     int64_t rejected_push_attempt_count_;
     int64_t rejected_transition_attempts_;
-    int64_t acked_unique_transitions_;
+    int64_t acknowledged_transition_slot_count_;
     int64_t acked_unique_deliveries_;
     int64_t ready_transitions_;
     int64_t leased_transitions_;
@@ -4110,7 +4110,7 @@ class SamplePoolStatusRsp final :
     int64_t resident_estimated_bytes_;
     int64_t capacity_transitions_;
     int64_t capacity_bytes_;
-    int64_t redelivery_count_;
+    int64_t released_transition_slot_count_;
     int64_t nack_count_;
     int64_t expired_lease_count_;
     int64_t latest_ack_at_unix_ms_;
@@ -11225,24 +11225,24 @@ inline void SamplePoolStatusRsp::set_rejected_transition_attempts(int64_t value)
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.rejected_transition_attempts)
 }
 
-// int64 acked_unique_transitions = 11;
-inline void SamplePoolStatusRsp::clear_acked_unique_transitions() {
-  _impl_.acked_unique_transitions_ = int64_t{0};
+// int64 acknowledged_transition_slot_count = 11;
+inline void SamplePoolStatusRsp::clear_acknowledged_transition_slot_count() {
+  _impl_.acknowledged_transition_slot_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_acked_unique_transitions() const {
-  return _impl_.acked_unique_transitions_;
+inline int64_t SamplePoolStatusRsp::_internal_acknowledged_transition_slot_count() const {
+  return _impl_.acknowledged_transition_slot_count_;
 }
-inline int64_t SamplePoolStatusRsp::acked_unique_transitions() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.acked_unique_transitions)
-  return _internal_acked_unique_transitions();
+inline int64_t SamplePoolStatusRsp::acknowledged_transition_slot_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.acknowledged_transition_slot_count)
+  return _internal_acknowledged_transition_slot_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_acked_unique_transitions(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_acknowledged_transition_slot_count(int64_t value) {
   
-  _impl_.acked_unique_transitions_ = value;
+  _impl_.acknowledged_transition_slot_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_acked_unique_transitions(int64_t value) {
-  _internal_set_acked_unique_transitions(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.acked_unique_transitions)
+inline void SamplePoolStatusRsp::set_acknowledged_transition_slot_count(int64_t value) {
+  _internal_set_acknowledged_transition_slot_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.acknowledged_transition_slot_count)
 }
 
 // int64 acked_unique_deliveries = 12;
@@ -11425,24 +11425,24 @@ inline void SamplePoolStatusRsp::set_pressure_state(::rl::training::v1::Pressure
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.pressure_state)
 }
 
-// int64 redelivery_count = 24;
-inline void SamplePoolStatusRsp::clear_redelivery_count() {
-  _impl_.redelivery_count_ = int64_t{0};
+// int64 released_transition_slot_count = 24;
+inline void SamplePoolStatusRsp::clear_released_transition_slot_count() {
+  _impl_.released_transition_slot_count_ = int64_t{0};
 }
-inline int64_t SamplePoolStatusRsp::_internal_redelivery_count() const {
-  return _impl_.redelivery_count_;
+inline int64_t SamplePoolStatusRsp::_internal_released_transition_slot_count() const {
+  return _impl_.released_transition_slot_count_;
 }
-inline int64_t SamplePoolStatusRsp::redelivery_count() const {
-  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.redelivery_count)
-  return _internal_redelivery_count();
+inline int64_t SamplePoolStatusRsp::released_transition_slot_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.released_transition_slot_count)
+  return _internal_released_transition_slot_count();
 }
-inline void SamplePoolStatusRsp::_internal_set_redelivery_count(int64_t value) {
+inline void SamplePoolStatusRsp::_internal_set_released_transition_slot_count(int64_t value) {
   
-  _impl_.redelivery_count_ = value;
+  _impl_.released_transition_slot_count_ = value;
 }
-inline void SamplePoolStatusRsp::set_redelivery_count(int64_t value) {
-  _internal_set_redelivery_count(value);
-  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.redelivery_count)
+inline void SamplePoolStatusRsp::set_released_transition_slot_count(int64_t value) {
+  _internal_set_released_transition_slot_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.released_transition_slot_count)
 }
 
 // int64 nack_count = 25;

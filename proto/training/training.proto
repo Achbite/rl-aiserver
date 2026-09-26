@@ -156,10 +156,11 @@ message ProcessedTransitionEnvelope {
     repeated ProcessedTransition samples = 6;
 }
 
-// A leased transition retains the producer and behavior model from its accepted
-// envelope. The Pool transports these facts without interpreting compatibility.
-// insert_sequence and inserted_at_unix_ms are raw storage facts; draw_count is
-// never corrected or inferred by the consumer.
+// One draw-slot snapshot of a resident replay item, retaining its accepted
+// producer and behavior model. Sampling never removes or pins the resident item.
+// insert_sequence/time do not change on sampling. draw_count is the cumulative
+// committed draw-slot count for this item, including this complete batch; repeated
+// slots in the same batch contain the same snapshot. Consumers do not rewrite it.
 message SamplePoolItem {
     ProcessedTransition transition = 1;
     uint64 insert_sequence = 2;
@@ -186,6 +187,8 @@ message PushSamplesRsp {
 }
 
 message GetBatchReq {
+    // Exact draw-slot count. Both sampling modes wait for this many resident
+    // items; sampling.strategy controls duplicates within this batch only.
     int32 requested_transitions = 1;
     int32 timeout_ms = 2;
     rl.common.v1.ServiceInstanceIdentity consumer = 3;
@@ -199,10 +202,13 @@ message GetBatchRsp {
     string message = 2;
     string delivery_id = 3;
     int64 lease_deadline_unix_ms = 4;
+    // Independent snapshots; duplicates are legal with replacement. The lease
+    // tracks this batch's settlement, not ownership of resident samples.
     repeated SamplePoolItem items = 5;
     rl.common.v1.ServiceInstanceIdentity sample_pool = 6;
 }
 
+// ACK/NACK/expiry settle a batch without removing or reinserting replay items.
 message AckBatchReq {
     rl.common.v1.ServiceInstanceIdentity consumer = 1;
     string delivery_id = 2;
@@ -260,11 +266,14 @@ message SamplePoolStatusRsp {
     int64 duplicate_transition_attempts = 8;
     int64 rejected_push_attempt_count = 9;
     int64 rejected_transition_attempts = 10;
-    int64 acked_unique_transitions = 11;
+    // Counts settled draw slots, not distinct item IDs across replay batches.
+    int64 acknowledged_transition_slot_count = 11;
     int64 acked_unique_deliveries = 12;
+    // All resident items remain eligible, including while a batch is in flight.
     int64 ready_transitions = 13;
     reserved 14;
     reserved "ready_queue_fragments";
+    // In-flight batch slots; these are NOT a partition of resident_transitions.
     int64 leased_transitions = 15;
     reserved 16;
     reserved "leased_fragments";
@@ -276,7 +285,8 @@ message SamplePoolStatusRsp {
     reserved "capacity_fragments";
     int64 capacity_bytes = 22;
     PressureState pressure_state = 23;
-    int64 redelivery_count = 24;
+    // Draw slots released by NACK or expiry, without changing resident items.
+    int64 released_transition_slot_count = 24;
     int64 nack_count = 25;
     int64 expired_lease_count = 26;
     optional int64 latest_ack_at_unix_ms = 27;
@@ -286,8 +296,11 @@ message SamplePoolStatusRsp {
     string last_error = 31;
     reserved 32, 34;
     reserved "behavior_steps", "stale_sample_count";
+    // Disposition counters count acknowledged batch slots, including repeats.
     int64 trained_transition_count = 33;
     int64 invalid_transition_count = 35;
+    // Only explicitly acknowledged SHUTDOWN_UNTRAINED batch slots; not the
+    // resident tail, which can contain samples already trained in other batches.
     int64 shutdown_untrained_transition_count = 36;
     int64 lease_renew_count = 37;
     SampleBackendType backend_type = 38;
@@ -316,10 +329,13 @@ message SamplePoolStatusRsp {
     bool finalized = 68;
     string finalization_id = 69;
     optional int64 finalized_at_unix_ms = 70;
+    // Resident items cleared at finalization, irrespective of training history.
+    // accepted_unique = resident + evicted + finalized.
     int64 finalized_transition_count = 71;
     reserved 72;
     reserved "finalized_fragment_count";
     int64 draw_attempt_count = 73;
+    // drawn = acknowledged slots + released slots + in-flight leased slots.
     int64 drawn_transition_slot_count = 74;
     int64 unsampled_evicted_transition_count = 75;
     int64 previously_drawn_evicted_transition_count = 76;
