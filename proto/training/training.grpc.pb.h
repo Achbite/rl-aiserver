@@ -1837,6 +1837,13 @@ class ModelDistributorService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::AckModelRsp>> PrepareAsyncAckModel(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::AckModelRsp>>(PrepareAsyncAckModelRaw(context, request, cq));
     }
+    virtual ::grpc::Status GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::rl::training::v1::GetModelLoadReceiptRsp* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetModelLoadReceiptRsp>> AsyncGetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetModelLoadReceiptRsp>>(AsyncGetModelLoadReceiptRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetModelLoadReceiptRsp>> PrepareAsyncGetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetModelLoadReceiptRsp>>(PrepareAsyncGetModelLoadReceiptRaw(context, request, cq));
+    }
     virtual ::grpc::Status GetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::rl::training::v1::ModelDistributorStatusRsp* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ModelDistributorStatusRsp>> AsyncGetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ModelDistributorStatusRsp>>(AsyncGetModelDistributorStatusRaw(context, request, cq));
@@ -1854,6 +1861,8 @@ class ModelDistributorService final {
       virtual void DownloadModel(::grpc::ClientContext* context, const ::rl::training::v1::DownloadModelReq* request, ::grpc::ClientReadReactor< ::rl::training::v1::ModelChunk>* reactor) = 0;
       virtual void AckModel(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq* request, ::rl::training::v1::AckModelRsp* response, std::function<void(::grpc::Status)>) = 0;
       virtual void AckModel(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq* request, ::rl::training::v1::AckModelRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void GetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq* request, ::rl::training::v1::ModelDistributorStatusRsp* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq* request, ::rl::training::v1::ModelDistributorStatusRsp* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -1870,6 +1879,8 @@ class ModelDistributorService final {
     virtual ::grpc::ClientAsyncReaderInterface< ::rl::training::v1::ModelChunk>* PrepareAsyncDownloadModelRaw(::grpc::ClientContext* context, const ::rl::training::v1::DownloadModelReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::AckModelRsp>* AsyncAckModelRaw(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::AckModelRsp>* PrepareAsyncAckModelRaw(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetModelLoadReceiptRsp>* AsyncGetModelLoadReceiptRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::GetModelLoadReceiptRsp>* PrepareAsyncGetModelLoadReceiptRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ModelDistributorStatusRsp>* AsyncGetModelDistributorStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::rl::training::v1::ModelDistributorStatusRsp>* PrepareAsyncGetModelDistributorStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::grpc::CompletionQueue* cq) = 0;
   };
@@ -1906,6 +1917,13 @@ class ModelDistributorService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::AckModelRsp>> PrepareAsyncAckModel(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::AckModelRsp>>(PrepareAsyncAckModelRaw(context, request, cq));
     }
+    ::grpc::Status GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::rl::training::v1::GetModelLoadReceiptRsp* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>> AsyncGetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>>(AsyncGetModelLoadReceiptRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>> PrepareAsyncGetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>>(PrepareAsyncGetModelLoadReceiptRaw(context, request, cq));
+    }
     ::grpc::Status GetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::rl::training::v1::ModelDistributorStatusRsp* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ModelDistributorStatusRsp>> AsyncGetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ModelDistributorStatusRsp>>(AsyncGetModelDistributorStatusRaw(context, request, cq));
@@ -1923,6 +1941,8 @@ class ModelDistributorService final {
       void DownloadModel(::grpc::ClientContext* context, const ::rl::training::v1::DownloadModelReq* request, ::grpc::ClientReadReactor< ::rl::training::v1::ModelChunk>* reactor) override;
       void AckModel(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq* request, ::rl::training::v1::AckModelRsp* response, std::function<void(::grpc::Status)>) override;
       void AckModel(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq* request, ::rl::training::v1::AckModelRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response, std::function<void(::grpc::Status)>) override;
+      void GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
       void GetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq* request, ::rl::training::v1::ModelDistributorStatusRsp* response, std::function<void(::grpc::Status)>) override;
       void GetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq* request, ::rl::training::v1::ModelDistributorStatusRsp* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -1945,12 +1965,15 @@ class ModelDistributorService final {
     ::grpc::ClientAsyncReader< ::rl::training::v1::ModelChunk>* PrepareAsyncDownloadModelRaw(::grpc::ClientContext* context, const ::rl::training::v1::DownloadModelReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::AckModelRsp>* AsyncAckModelRaw(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::AckModelRsp>* PrepareAsyncAckModelRaw(::grpc::ClientContext* context, const ::rl::training::v1::AckModelReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>* AsyncGetModelLoadReceiptRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>* PrepareAsyncGetModelLoadReceiptRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ModelDistributorStatusRsp>* AsyncGetModelDistributorStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::rl::training::v1::ModelDistributorStatusRsp>* PrepareAsyncGetModelDistributorStatusRaw(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_RegisterModel_;
     const ::grpc::internal::RpcMethod rpcmethod_GetModelManifest_;
     const ::grpc::internal::RpcMethod rpcmethod_DownloadModel_;
     const ::grpc::internal::RpcMethod rpcmethod_AckModel_;
+    const ::grpc::internal::RpcMethod rpcmethod_GetModelLoadReceipt_;
     const ::grpc::internal::RpcMethod rpcmethod_GetModelDistributorStatus_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -1963,6 +1986,7 @@ class ModelDistributorService final {
     virtual ::grpc::Status GetModelManifest(::grpc::ServerContext* context, const ::rl::training::v1::GetModelManifestReq* request, ::rl::training::v1::GetModelManifestRsp* response);
     virtual ::grpc::Status DownloadModel(::grpc::ServerContext* context, const ::rl::training::v1::DownloadModelReq* request, ::grpc::ServerWriter< ::rl::training::v1::ModelChunk>* writer);
     virtual ::grpc::Status AckModel(::grpc::ServerContext* context, const ::rl::training::v1::AckModelReq* request, ::rl::training::v1::AckModelRsp* response);
+    virtual ::grpc::Status GetModelLoadReceipt(::grpc::ServerContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response);
     virtual ::grpc::Status GetModelDistributorStatus(::grpc::ServerContext* context, const ::rl::training::v1::ModelDistributorStatusReq* request, ::rl::training::v1::ModelDistributorStatusRsp* response);
   };
   template <class BaseClass>
@@ -2046,12 +2070,32 @@ class ModelDistributorService final {
     }
   };
   template <class BaseClass>
+  class WithAsyncMethod_GetModelLoadReceipt : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetModelLoadReceipt() {
+      ::grpc::Service::MarkMethodAsync(4);
+    }
+    ~WithAsyncMethod_GetModelLoadReceipt() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetModelLoadReceipt(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetModelLoadReceiptReq* /*request*/, ::rl::training::v1::GetModelLoadReceiptRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetModelLoadReceipt(::grpc::ServerContext* context, ::rl::training::v1::GetModelLoadReceiptReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::GetModelLoadReceiptRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_GetModelDistributorStatus : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetModelDistributorStatus() {
-      ::grpc::Service::MarkMethodAsync(4);
+      ::grpc::Service::MarkMethodAsync(5);
     }
     ~WithAsyncMethod_GetModelDistributorStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2062,10 +2106,10 @@ class ModelDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetModelDistributorStatus(::grpc::ServerContext* context, ::rl::training::v1::ModelDistributorStatusReq* request, ::grpc::ServerAsyncResponseWriter< ::rl::training::v1::ModelDistributorStatusRsp>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_RegisterModel<WithAsyncMethod_GetModelManifest<WithAsyncMethod_DownloadModel<WithAsyncMethod_AckModel<WithAsyncMethod_GetModelDistributorStatus<Service > > > > > AsyncService;
+  typedef WithAsyncMethod_RegisterModel<WithAsyncMethod_GetModelManifest<WithAsyncMethod_DownloadModel<WithAsyncMethod_AckModel<WithAsyncMethod_GetModelLoadReceipt<WithAsyncMethod_GetModelDistributorStatus<Service > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_RegisterModel : public BaseClass {
    private:
@@ -2170,18 +2214,45 @@ class ModelDistributorService final {
       ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::AckModelReq* /*request*/, ::rl::training::v1::AckModelRsp* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithCallbackMethod_GetModelLoadReceipt : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetModelLoadReceipt() {
+      ::grpc::Service::MarkMethodCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response) { return this->GetModelLoadReceipt(context, request, response); }));}
+    void SetMessageAllocatorFor_GetModelLoadReceipt(
+        ::grpc::MessageAllocator< ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetModelLoadReceipt() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetModelLoadReceipt(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetModelLoadReceiptReq* /*request*/, ::rl::training::v1::GetModelLoadReceiptRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetModelLoadReceipt(
+      ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::GetModelLoadReceiptReq* /*request*/, ::rl::training::v1::GetModelLoadReceiptRsp* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithCallbackMethod_GetModelDistributorStatus : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_GetModelDistributorStatus() {
-      ::grpc::Service::MarkMethodCallback(4,
+      ::grpc::Service::MarkMethodCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::ModelDistributorStatusReq, ::rl::training::v1::ModelDistributorStatusRsp>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::rl::training::v1::ModelDistributorStatusReq* request, ::rl::training::v1::ModelDistributorStatusRsp* response) { return this->GetModelDistributorStatus(context, request, response); }));}
     void SetMessageAllocatorFor_GetModelDistributorStatus(
         ::grpc::MessageAllocator< ::rl::training::v1::ModelDistributorStatusReq, ::rl::training::v1::ModelDistributorStatusRsp>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::rl::training::v1::ModelDistributorStatusReq, ::rl::training::v1::ModelDistributorStatusRsp>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -2196,7 +2267,7 @@ class ModelDistributorService final {
     virtual ::grpc::ServerUnaryReactor* GetModelDistributorStatus(
       ::grpc::CallbackServerContext* /*context*/, const ::rl::training::v1::ModelDistributorStatusReq* /*request*/, ::rl::training::v1::ModelDistributorStatusRsp* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_RegisterModel<WithCallbackMethod_GetModelManifest<WithCallbackMethod_DownloadModel<WithCallbackMethod_AckModel<WithCallbackMethod_GetModelDistributorStatus<Service > > > > > CallbackService;
+  typedef WithCallbackMethod_RegisterModel<WithCallbackMethod_GetModelManifest<WithCallbackMethod_DownloadModel<WithCallbackMethod_AckModel<WithCallbackMethod_GetModelLoadReceipt<WithCallbackMethod_GetModelDistributorStatus<Service > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_RegisterModel : public BaseClass {
@@ -2267,12 +2338,29 @@ class ModelDistributorService final {
     }
   };
   template <class BaseClass>
+  class WithGenericMethod_GetModelLoadReceipt : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetModelLoadReceipt() {
+      ::grpc::Service::MarkMethodGeneric(4);
+    }
+    ~WithGenericMethod_GetModelLoadReceipt() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetModelLoadReceipt(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetModelLoadReceiptReq* /*request*/, ::rl::training::v1::GetModelLoadReceiptRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
   class WithGenericMethod_GetModelDistributorStatus : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetModelDistributorStatus() {
-      ::grpc::Service::MarkMethodGeneric(4);
+      ::grpc::Service::MarkMethodGeneric(5);
     }
     ~WithGenericMethod_GetModelDistributorStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2364,12 +2452,32 @@ class ModelDistributorService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_GetModelLoadReceipt : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetModelLoadReceipt() {
+      ::grpc::Service::MarkMethodRaw(4);
+    }
+    ~WithRawMethod_GetModelLoadReceipt() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetModelLoadReceipt(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetModelLoadReceiptReq* /*request*/, ::rl::training::v1::GetModelLoadReceiptRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetModelLoadReceipt(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_GetModelDistributorStatus : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetModelDistributorStatus() {
-      ::grpc::Service::MarkMethodRaw(4);
+      ::grpc::Service::MarkMethodRaw(5);
     }
     ~WithRawMethod_GetModelDistributorStatus() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2380,7 +2488,7 @@ class ModelDistributorService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetModelDistributorStatus(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2472,12 +2580,34 @@ class ModelDistributorService final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithRawCallbackMethod_GetModelLoadReceipt : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetModelLoadReceipt() {
+      ::grpc::Service::MarkMethodRawCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetModelLoadReceipt(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetModelLoadReceipt() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetModelLoadReceipt(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetModelLoadReceiptReq* /*request*/, ::rl::training::v1::GetModelLoadReceiptRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetModelLoadReceipt(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_GetModelDistributorStatus : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_GetModelDistributorStatus() {
-      ::grpc::Service::MarkMethodRawCallback(4,
+      ::grpc::Service::MarkMethodRawCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetModelDistributorStatus(context, request, response); }));
@@ -2575,12 +2705,39 @@ class ModelDistributorService final {
     virtual ::grpc::Status StreamedAckModel(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::AckModelReq,::rl::training::v1::AckModelRsp>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_GetModelLoadReceipt : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetModelLoadReceipt() {
+      ::grpc::Service::MarkMethodStreamed(4,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp>* streamer) {
+                       return this->StreamedGetModelLoadReceipt(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetModelLoadReceipt() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetModelLoadReceipt(::grpc::ServerContext* /*context*/, const ::rl::training::v1::GetModelLoadReceiptReq* /*request*/, ::rl::training::v1::GetModelLoadReceiptRsp* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetModelLoadReceipt(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::GetModelLoadReceiptReq,::rl::training::v1::GetModelLoadReceiptRsp>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_GetModelDistributorStatus : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetModelDistributorStatus() {
-      ::grpc::Service::MarkMethodStreamed(4,
+      ::grpc::Service::MarkMethodStreamed(5,
         new ::grpc::internal::StreamedUnaryHandler<
           ::rl::training::v1::ModelDistributorStatusReq, ::rl::training::v1::ModelDistributorStatusRsp>(
             [this](::grpc::ServerContext* context,
@@ -2601,7 +2758,7 @@ class ModelDistributorService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedGetModelDistributorStatus(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::rl::training::v1::ModelDistributorStatusReq,::rl::training::v1::ModelDistributorStatusRsp>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_RegisterModel<WithStreamedUnaryMethod_GetModelManifest<WithStreamedUnaryMethod_AckModel<WithStreamedUnaryMethod_GetModelDistributorStatus<Service > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_RegisterModel<WithStreamedUnaryMethod_GetModelManifest<WithStreamedUnaryMethod_AckModel<WithStreamedUnaryMethod_GetModelLoadReceipt<WithStreamedUnaryMethod_GetModelDistributorStatus<Service > > > > > StreamedUnaryService;
   template <class BaseClass>
   class WithSplitStreamingMethod_DownloadModel : public BaseClass {
    private:
@@ -2630,7 +2787,7 @@ class ModelDistributorService final {
     virtual ::grpc::Status StreamedDownloadModel(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::rl::training::v1::DownloadModelReq,::rl::training::v1::ModelChunk>* server_split_streamer) = 0;
   };
   typedef WithSplitStreamingMethod_DownloadModel<Service > SplitStreamedService;
-  typedef WithStreamedUnaryMethod_RegisterModel<WithStreamedUnaryMethod_GetModelManifest<WithSplitStreamingMethod_DownloadModel<WithStreamedUnaryMethod_AckModel<WithStreamedUnaryMethod_GetModelDistributorStatus<Service > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_RegisterModel<WithStreamedUnaryMethod_GetModelManifest<WithSplitStreamingMethod_DownloadModel<WithStreamedUnaryMethod_AckModel<WithStreamedUnaryMethod_GetModelLoadReceipt<WithStreamedUnaryMethod_GetModelDistributorStatus<Service > > > > > > StreamedService;
 };
 
 }  // namespace v1

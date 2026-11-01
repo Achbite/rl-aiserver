@@ -84,6 +84,12 @@ extern GetBatchReqDefaultTypeInternal _GetBatchReq_default_instance_;
 class GetBatchRsp;
 struct GetBatchRspDefaultTypeInternal;
 extern GetBatchRspDefaultTypeInternal _GetBatchRsp_default_instance_;
+class GetModelLoadReceiptReq;
+struct GetModelLoadReceiptReqDefaultTypeInternal;
+extern GetModelLoadReceiptReqDefaultTypeInternal _GetModelLoadReceiptReq_default_instance_;
+class GetModelLoadReceiptRsp;
+struct GetModelLoadReceiptRspDefaultTypeInternal;
+extern GetModelLoadReceiptRspDefaultTypeInternal _GetModelLoadReceiptRsp_default_instance_;
 class GetModelManifestReq;
 struct GetModelManifestReqDefaultTypeInternal;
 extern GetModelManifestReqDefaultTypeInternal _GetModelManifestReq_default_instance_;
@@ -162,6 +168,8 @@ template<> ::rl::training::v1::FinalizeSamplePoolReq* Arena::CreateMaybeMessage<
 template<> ::rl::training::v1::FinalizeSamplePoolRsp* Arena::CreateMaybeMessage<::rl::training::v1::FinalizeSamplePoolRsp>(Arena*);
 template<> ::rl::training::v1::GetBatchReq* Arena::CreateMaybeMessage<::rl::training::v1::GetBatchReq>(Arena*);
 template<> ::rl::training::v1::GetBatchRsp* Arena::CreateMaybeMessage<::rl::training::v1::GetBatchRsp>(Arena*);
+template<> ::rl::training::v1::GetModelLoadReceiptReq* Arena::CreateMaybeMessage<::rl::training::v1::GetModelLoadReceiptReq>(Arena*);
+template<> ::rl::training::v1::GetModelLoadReceiptRsp* Arena::CreateMaybeMessage<::rl::training::v1::GetModelLoadReceiptRsp>(Arena*);
 template<> ::rl::training::v1::GetModelManifestReq* Arena::CreateMaybeMessage<::rl::training::v1::GetModelManifestReq>(Arena*);
 template<> ::rl::training::v1::GetModelManifestRsp* Arena::CreateMaybeMessage<::rl::training::v1::GetModelManifestRsp>(Arena*);
 template<> ::rl::training::v1::LearnerStatusReq* Arena::CreateMaybeMessage<::rl::training::v1::LearnerStatusReq>(Arena*);
@@ -7018,6 +7026,371 @@ class AckModelRsp final :
 };
 // -------------------------------------------------------------------
 
+class GetModelLoadReceiptReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.GetModelLoadReceiptReq) */ {
+ public:
+  inline GetModelLoadReceiptReq() : GetModelLoadReceiptReq(nullptr) {}
+  ~GetModelLoadReceiptReq() override;
+  explicit PROTOBUF_CONSTEXPR GetModelLoadReceiptReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetModelLoadReceiptReq(const GetModelLoadReceiptReq& from);
+  GetModelLoadReceiptReq(GetModelLoadReceiptReq&& from) noexcept
+    : GetModelLoadReceiptReq() {
+    *this = ::std::move(from);
+  }
+
+  inline GetModelLoadReceiptReq& operator=(const GetModelLoadReceiptReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetModelLoadReceiptReq& operator=(GetModelLoadReceiptReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetModelLoadReceiptReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetModelLoadReceiptReq* internal_default_instance() {
+    return reinterpret_cast<const GetModelLoadReceiptReq*>(
+               &_GetModelLoadReceiptReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    28;
+
+  friend void swap(GetModelLoadReceiptReq& a, GetModelLoadReceiptReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetModelLoadReceiptReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetModelLoadReceiptReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetModelLoadReceiptReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetModelLoadReceiptReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetModelLoadReceiptReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const GetModelLoadReceiptReq& from) {
+    GetModelLoadReceiptReq::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetModelLoadReceiptReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.GetModelLoadReceiptReq";
+  }
+  protected:
+  explicit GetModelLoadReceiptReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAiserverFieldNumber = 1,
+    kModelFieldNumber = 2,
+  };
+  // .rl.common.v1.ServiceInstanceIdentity aiserver = 1;
+  bool has_aiserver() const;
+  private:
+  bool _internal_has_aiserver() const;
+  public:
+  void clear_aiserver();
+  const ::rl::common::v1::ServiceInstanceIdentity& aiserver() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_aiserver();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_aiserver();
+  void set_allocated_aiserver(::rl::common::v1::ServiceInstanceIdentity* aiserver);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_aiserver() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_aiserver();
+  public:
+  void unsafe_arena_set_allocated_aiserver(
+      ::rl::common::v1::ServiceInstanceIdentity* aiserver);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_aiserver();
+
+  // .rl.training.v1.ModelIdentity model = 2;
+  bool has_model() const;
+  private:
+  bool _internal_has_model() const;
+  public:
+  void clear_model();
+  const ::rl::training::v1::ModelIdentity& model() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::ModelIdentity* release_model();
+  ::rl::training::v1::ModelIdentity* mutable_model();
+  void set_allocated_model(::rl::training::v1::ModelIdentity* model);
+  private:
+  const ::rl::training::v1::ModelIdentity& _internal_model() const;
+  ::rl::training::v1::ModelIdentity* _internal_mutable_model();
+  public:
+  void unsafe_arena_set_allocated_model(
+      ::rl::training::v1::ModelIdentity* model);
+  ::rl::training::v1::ModelIdentity* unsafe_arena_release_model();
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.GetModelLoadReceiptReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::rl::common::v1::ServiceInstanceIdentity* aiserver_;
+    ::rl::training::v1::ModelIdentity* model_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_proto_2ftraining_2ftraining_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GetModelLoadReceiptRsp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rl.training.v1.GetModelLoadReceiptRsp) */ {
+ public:
+  inline GetModelLoadReceiptRsp() : GetModelLoadReceiptRsp(nullptr) {}
+  ~GetModelLoadReceiptRsp() override;
+  explicit PROTOBUF_CONSTEXPR GetModelLoadReceiptRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetModelLoadReceiptRsp(const GetModelLoadReceiptRsp& from);
+  GetModelLoadReceiptRsp(GetModelLoadReceiptRsp&& from) noexcept
+    : GetModelLoadReceiptRsp() {
+    *this = ::std::move(from);
+  }
+
+  inline GetModelLoadReceiptRsp& operator=(const GetModelLoadReceiptRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetModelLoadReceiptRsp& operator=(GetModelLoadReceiptRsp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetModelLoadReceiptRsp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetModelLoadReceiptRsp* internal_default_instance() {
+    return reinterpret_cast<const GetModelLoadReceiptRsp*>(
+               &_GetModelLoadReceiptRsp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    29;
+
+  friend void swap(GetModelLoadReceiptRsp& a, GetModelLoadReceiptRsp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetModelLoadReceiptRsp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetModelLoadReceiptRsp* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetModelLoadReceiptRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetModelLoadReceiptRsp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetModelLoadReceiptRsp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const GetModelLoadReceiptRsp& from) {
+    GetModelLoadReceiptRsp::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetModelLoadReceiptRsp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rl.training.v1.GetModelLoadReceiptRsp";
+  }
+  protected:
+  explicit GetModelLoadReceiptRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDistributorFieldNumber = 1,
+    kReceiptFieldNumber = 2,
+    kOutsideRetentionFieldNumber = 3,
+  };
+  // .rl.common.v1.ServiceInstanceIdentity distributor = 1;
+  bool has_distributor() const;
+  private:
+  bool _internal_has_distributor() const;
+  public:
+  void clear_distributor();
+  const ::rl::common::v1::ServiceInstanceIdentity& distributor() const;
+  PROTOBUF_NODISCARD ::rl::common::v1::ServiceInstanceIdentity* release_distributor();
+  ::rl::common::v1::ServiceInstanceIdentity* mutable_distributor();
+  void set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor);
+  private:
+  const ::rl::common::v1::ServiceInstanceIdentity& _internal_distributor() const;
+  ::rl::common::v1::ServiceInstanceIdentity* _internal_mutable_distributor();
+  public:
+  void unsafe_arena_set_allocated_distributor(
+      ::rl::common::v1::ServiceInstanceIdentity* distributor);
+  ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_distributor();
+
+  // .rl.training.v1.AckModelReq receipt = 2;
+  bool has_receipt() const;
+  private:
+  bool _internal_has_receipt() const;
+  public:
+  void clear_receipt();
+  const ::rl::training::v1::AckModelReq& receipt() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::AckModelReq* release_receipt();
+  ::rl::training::v1::AckModelReq* mutable_receipt();
+  void set_allocated_receipt(::rl::training::v1::AckModelReq* receipt);
+  private:
+  const ::rl::training::v1::AckModelReq& _internal_receipt() const;
+  ::rl::training::v1::AckModelReq* _internal_mutable_receipt();
+  public:
+  void unsafe_arena_set_allocated_receipt(
+      ::rl::training::v1::AckModelReq* receipt);
+  ::rl::training::v1::AckModelReq* unsafe_arena_release_receipt();
+
+  // bool outside_retention = 3;
+  void clear_outside_retention();
+  bool outside_retention() const;
+  void set_outside_retention(bool value);
+  private:
+  bool _internal_outside_retention() const;
+  void _internal_set_outside_retention(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rl.training.v1.GetModelLoadReceiptRsp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::rl::common::v1::ServiceInstanceIdentity* distributor_;
+    ::rl::training::v1::AckModelReq* receipt_;
+    bool outside_retention_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_proto_2ftraining_2ftraining_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ModelDistributorStatusReq final :
     public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:rl.training.v1.ModelDistributorStatusReq) */ {
  public:
@@ -7065,7 +7438,7 @@ class ModelDistributorStatusReq final :
                &_ModelDistributorStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    30;
 
   friend void swap(ModelDistributorStatusReq& a, ModelDistributorStatusReq& b) {
     a.Swap(&b);
@@ -7184,7 +7557,7 @@ class ModelDistributorStatusRsp final :
                &_ModelDistributorStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    31;
 
   friend void swap(ModelDistributorStatusRsp& a, ModelDistributorStatusRsp& b) {
     a.Swap(&b);
@@ -7590,7 +7963,7 @@ class LearnerStatusReq final :
                &_LearnerStatusReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    32;
 
   friend void swap(LearnerStatusReq& a, LearnerStatusReq& b) {
     a.Swap(&b);
@@ -7709,7 +8082,7 @@ class LearnerStatusRsp final :
                &_LearnerStatusRsp_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    33;
 
   friend void swap(LearnerStatusRsp& a, LearnerStatusRsp& b) {
     a.Swap(&b);
@@ -15390,6 +15763,379 @@ inline void AckModelRsp::set_allocated_distributor(::rl::common::v1::ServiceInst
 
 // -------------------------------------------------------------------
 
+// GetModelLoadReceiptReq
+
+// .rl.common.v1.ServiceInstanceIdentity aiserver = 1;
+inline bool GetModelLoadReceiptReq::_internal_has_aiserver() const {
+  return this != internal_default_instance() && _impl_.aiserver_ != nullptr;
+}
+inline bool GetModelLoadReceiptReq::has_aiserver() const {
+  return _internal_has_aiserver();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& GetModelLoadReceiptReq::_internal_aiserver() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.aiserver_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& GetModelLoadReceiptReq::aiserver() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetModelLoadReceiptReq.aiserver)
+  return _internal_aiserver();
+}
+inline void GetModelLoadReceiptReq::unsafe_arena_set_allocated_aiserver(
+    ::rl::common::v1::ServiceInstanceIdentity* aiserver) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.aiserver_);
+  }
+  _impl_.aiserver_ = aiserver;
+  if (aiserver) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetModelLoadReceiptReq.aiserver)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptReq::release_aiserver() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.aiserver_;
+  _impl_.aiserver_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptReq::unsafe_arena_release_aiserver() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetModelLoadReceiptReq.aiserver)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.aiserver_;
+  _impl_.aiserver_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptReq::_internal_mutable_aiserver() {
+  
+  if (_impl_.aiserver_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.aiserver_ = p;
+  }
+  return _impl_.aiserver_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptReq::mutable_aiserver() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_aiserver();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetModelLoadReceiptReq.aiserver)
+  return _msg;
+}
+inline void GetModelLoadReceiptReq::set_allocated_aiserver(::rl::common::v1::ServiceInstanceIdentity* aiserver) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.aiserver_);
+  }
+  if (aiserver) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(aiserver));
+    if (message_arena != submessage_arena) {
+      aiserver = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, aiserver, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.aiserver_ = aiserver;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetModelLoadReceiptReq.aiserver)
+}
+
+// .rl.training.v1.ModelIdentity model = 2;
+inline bool GetModelLoadReceiptReq::_internal_has_model() const {
+  return this != internal_default_instance() && _impl_.model_ != nullptr;
+}
+inline bool GetModelLoadReceiptReq::has_model() const {
+  return _internal_has_model();
+}
+inline const ::rl::training::v1::ModelIdentity& GetModelLoadReceiptReq::_internal_model() const {
+  const ::rl::training::v1::ModelIdentity* p = _impl_.model_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::ModelIdentity&>(
+      ::rl::training::v1::_ModelIdentity_default_instance_);
+}
+inline const ::rl::training::v1::ModelIdentity& GetModelLoadReceiptReq::model() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetModelLoadReceiptReq.model)
+  return _internal_model();
+}
+inline void GetModelLoadReceiptReq::unsafe_arena_set_allocated_model(
+    ::rl::training::v1::ModelIdentity* model) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.model_);
+  }
+  _impl_.model_ = model;
+  if (model) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetModelLoadReceiptReq.model)
+}
+inline ::rl::training::v1::ModelIdentity* GetModelLoadReceiptReq::release_model() {
+  
+  ::rl::training::v1::ModelIdentity* temp = _impl_.model_;
+  _impl_.model_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::ModelIdentity* GetModelLoadReceiptReq::unsafe_arena_release_model() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetModelLoadReceiptReq.model)
+  
+  ::rl::training::v1::ModelIdentity* temp = _impl_.model_;
+  _impl_.model_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::ModelIdentity* GetModelLoadReceiptReq::_internal_mutable_model() {
+  
+  if (_impl_.model_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::ModelIdentity>(GetArenaForAllocation());
+    _impl_.model_ = p;
+  }
+  return _impl_.model_;
+}
+inline ::rl::training::v1::ModelIdentity* GetModelLoadReceiptReq::mutable_model() {
+  ::rl::training::v1::ModelIdentity* _msg = _internal_mutable_model();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetModelLoadReceiptReq.model)
+  return _msg;
+}
+inline void GetModelLoadReceiptReq::set_allocated_model(::rl::training::v1::ModelIdentity* model) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.model_);
+  }
+  if (model) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(model));
+    if (message_arena != submessage_arena) {
+      model = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, model, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.model_ = model;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetModelLoadReceiptReq.model)
+}
+
+// -------------------------------------------------------------------
+
+// GetModelLoadReceiptRsp
+
+// .rl.common.v1.ServiceInstanceIdentity distributor = 1;
+inline bool GetModelLoadReceiptRsp::_internal_has_distributor() const {
+  return this != internal_default_instance() && _impl_.distributor_ != nullptr;
+}
+inline bool GetModelLoadReceiptRsp::has_distributor() const {
+  return _internal_has_distributor();
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& GetModelLoadReceiptRsp::_internal_distributor() const {
+  const ::rl::common::v1::ServiceInstanceIdentity* p = _impl_.distributor_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::common::v1::ServiceInstanceIdentity&>(
+      ::rl::common::v1::_ServiceInstanceIdentity_default_instance_);
+}
+inline const ::rl::common::v1::ServiceInstanceIdentity& GetModelLoadReceiptRsp::distributor() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetModelLoadReceiptRsp.distributor)
+  return _internal_distributor();
+}
+inline void GetModelLoadReceiptRsp::unsafe_arena_set_allocated_distributor(
+    ::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  _impl_.distributor_ = distributor;
+  if (distributor) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetModelLoadReceiptRsp.distributor)
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptRsp::release_distributor() {
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptRsp::unsafe_arena_release_distributor() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetModelLoadReceiptRsp.distributor)
+  
+  ::rl::common::v1::ServiceInstanceIdentity* temp = _impl_.distributor_;
+  _impl_.distributor_ = nullptr;
+  return temp;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptRsp::_internal_mutable_distributor() {
+  
+  if (_impl_.distributor_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::common::v1::ServiceInstanceIdentity>(GetArenaForAllocation());
+    _impl_.distributor_ = p;
+  }
+  return _impl_.distributor_;
+}
+inline ::rl::common::v1::ServiceInstanceIdentity* GetModelLoadReceiptRsp::mutable_distributor() {
+  ::rl::common::v1::ServiceInstanceIdentity* _msg = _internal_mutable_distributor();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetModelLoadReceiptRsp.distributor)
+  return _msg;
+}
+inline void GetModelLoadReceiptRsp::set_allocated_distributor(::rl::common::v1::ServiceInstanceIdentity* distributor) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.distributor_);
+  }
+  if (distributor) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(distributor));
+    if (message_arena != submessage_arena) {
+      distributor = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, distributor, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.distributor_ = distributor;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetModelLoadReceiptRsp.distributor)
+}
+
+// .rl.training.v1.AckModelReq receipt = 2;
+inline bool GetModelLoadReceiptRsp::_internal_has_receipt() const {
+  return this != internal_default_instance() && _impl_.receipt_ != nullptr;
+}
+inline bool GetModelLoadReceiptRsp::has_receipt() const {
+  return _internal_has_receipt();
+}
+inline void GetModelLoadReceiptRsp::clear_receipt() {
+  if (GetArenaForAllocation() == nullptr && _impl_.receipt_ != nullptr) {
+    delete _impl_.receipt_;
+  }
+  _impl_.receipt_ = nullptr;
+}
+inline const ::rl::training::v1::AckModelReq& GetModelLoadReceiptRsp::_internal_receipt() const {
+  const ::rl::training::v1::AckModelReq* p = _impl_.receipt_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::AckModelReq&>(
+      ::rl::training::v1::_AckModelReq_default_instance_);
+}
+inline const ::rl::training::v1::AckModelReq& GetModelLoadReceiptRsp::receipt() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetModelLoadReceiptRsp.receipt)
+  return _internal_receipt();
+}
+inline void GetModelLoadReceiptRsp::unsafe_arena_set_allocated_receipt(
+    ::rl::training::v1::AckModelReq* receipt) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.receipt_);
+  }
+  _impl_.receipt_ = receipt;
+  if (receipt) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.GetModelLoadReceiptRsp.receipt)
+}
+inline ::rl::training::v1::AckModelReq* GetModelLoadReceiptRsp::release_receipt() {
+  
+  ::rl::training::v1::AckModelReq* temp = _impl_.receipt_;
+  _impl_.receipt_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::AckModelReq* GetModelLoadReceiptRsp::unsafe_arena_release_receipt() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.GetModelLoadReceiptRsp.receipt)
+  
+  ::rl::training::v1::AckModelReq* temp = _impl_.receipt_;
+  _impl_.receipt_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::AckModelReq* GetModelLoadReceiptRsp::_internal_mutable_receipt() {
+  
+  if (_impl_.receipt_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::AckModelReq>(GetArenaForAllocation());
+    _impl_.receipt_ = p;
+  }
+  return _impl_.receipt_;
+}
+inline ::rl::training::v1::AckModelReq* GetModelLoadReceiptRsp::mutable_receipt() {
+  ::rl::training::v1::AckModelReq* _msg = _internal_mutable_receipt();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.GetModelLoadReceiptRsp.receipt)
+  return _msg;
+}
+inline void GetModelLoadReceiptRsp::set_allocated_receipt(::rl::training::v1::AckModelReq* receipt) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.receipt_;
+  }
+  if (receipt) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(receipt);
+    if (message_arena != submessage_arena) {
+      receipt = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, receipt, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.receipt_ = receipt;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetModelLoadReceiptRsp.receipt)
+}
+
+// bool outside_retention = 3;
+inline void GetModelLoadReceiptRsp::clear_outside_retention() {
+  _impl_.outside_retention_ = false;
+}
+inline bool GetModelLoadReceiptRsp::_internal_outside_retention() const {
+  return _impl_.outside_retention_;
+}
+inline bool GetModelLoadReceiptRsp::outside_retention() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetModelLoadReceiptRsp.outside_retention)
+  return _internal_outside_retention();
+}
+inline void GetModelLoadReceiptRsp::_internal_set_outside_retention(bool value) {
+  
+  _impl_.outside_retention_ = value;
+}
+inline void GetModelLoadReceiptRsp::set_outside_retention(bool value) {
+  _internal_set_outside_retention(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetModelLoadReceiptRsp.outside_retention)
+}
+
+// -------------------------------------------------------------------
+
 // ModelDistributorStatusReq
 
 // -------------------------------------------------------------------
@@ -16845,6 +17591,10 @@ inline void LearnerStatusRsp::set_allocated_train_update_id(std::string* train_u
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

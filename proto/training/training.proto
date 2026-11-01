@@ -481,6 +481,20 @@ message AckModelRsp {
     rl.common.v1.ServiceInstanceIdentity distributor = 3;
 }
 
+// Read the most recently applied load receipt for this exact actor lifecycle
+// and model. Replaying an already applied ACK does not change that order.
+message GetModelLoadReceiptReq {
+    rl.common.v1.ServiceInstanceIdentity aiserver = 1;
+    ModelIdentity model = 2;
+}
+
+message GetModelLoadReceiptRsp {
+    rl.common.v1.ServiceInstanceIdentity distributor = 1;
+    // Absent until a matching load was reported, or after its retention window.
+    AckModelReq receipt = 2;
+    bool outside_retention = 3;
+}
+
 message ModelDistributorStatusReq {}
 
 message ModelDistributorStatusRsp {
@@ -567,6 +581,7 @@ service ModelDistributorService {
     rpc GetModelManifest(GetModelManifestReq) returns (GetModelManifestRsp);
     rpc DownloadModel(DownloadModelReq) returns (stream ModelChunk);
     rpc AckModel(AckModelReq) returns (AckModelRsp);
+    rpc GetModelLoadReceipt(GetModelLoadReceiptReq) returns (GetModelLoadReceiptRsp);
     rpc GetModelDistributorStatus(ModelDistributorStatusReq)
         returns (ModelDistributorStatusRsp);
 }

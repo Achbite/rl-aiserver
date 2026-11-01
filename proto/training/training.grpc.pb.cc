@@ -524,6 +524,7 @@ static const char* ModelDistributorService_method_names[] = {
   "/rl.training.v1.ModelDistributorService/GetModelManifest",
   "/rl.training.v1.ModelDistributorService/DownloadModel",
   "/rl.training.v1.ModelDistributorService/AckModel",
+  "/rl.training.v1.ModelDistributorService/GetModelLoadReceipt",
   "/rl.training.v1.ModelDistributorService/GetModelDistributorStatus",
 };
 
@@ -538,7 +539,8 @@ ModelDistributorService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterf
   , rpcmethod_GetModelManifest_(ModelDistributorService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_DownloadModel_(ModelDistributorService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
   , rpcmethod_AckModel_(ModelDistributorService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetModelDistributorStatus_(ModelDistributorService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetModelLoadReceipt_(ModelDistributorService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetModelDistributorStatus_(ModelDistributorService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status ModelDistributorService::Stub::RegisterModel(::grpc::ClientContext* context, const ::rl::training::v1::RegisterModelReq& request, ::rl::training::v1::RegisterModelRsp* response) {
@@ -626,6 +628,29 @@ void ModelDistributorService::Stub::async::AckModel(::grpc::ClientContext* conte
   return result;
 }
 
+::grpc::Status ModelDistributorService::Stub::GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::rl::training::v1::GetModelLoadReceiptRsp* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetModelLoadReceipt_, context, request, response);
+}
+
+void ModelDistributorService::Stub::async::GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetModelLoadReceipt_, context, request, response, std::move(f));
+}
+
+void ModelDistributorService::Stub::async::GetModelLoadReceipt(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetModelLoadReceipt_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>* ModelDistributorService::Stub::PrepareAsyncGetModelLoadReceiptRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::rl::training::v1::GetModelLoadReceiptRsp, ::rl::training::v1::GetModelLoadReceiptReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GetModelLoadReceipt_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::rl::training::v1::GetModelLoadReceiptRsp>* ModelDistributorService::Stub::AsyncGetModelLoadReceiptRaw(::grpc::ClientContext* context, const ::rl::training::v1::GetModelLoadReceiptReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGetModelLoadReceiptRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 ::grpc::Status ModelDistributorService::Stub::GetModelDistributorStatus(::grpc::ClientContext* context, const ::rl::training::v1::ModelDistributorStatusReq& request, ::rl::training::v1::ModelDistributorStatusRsp* response) {
   return ::grpc::internal::BlockingUnaryCall< ::rl::training::v1::ModelDistributorStatusReq, ::rl::training::v1::ModelDistributorStatusRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetModelDistributorStatus_, context, request, response);
 }
@@ -693,6 +718,16 @@ ModelDistributorService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ModelDistributorService_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< ModelDistributorService::Service, ::rl::training::v1::GetModelLoadReceiptReq, ::rl::training::v1::GetModelLoadReceiptRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](ModelDistributorService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::rl::training::v1::GetModelLoadReceiptReq* req,
+             ::rl::training::v1::GetModelLoadReceiptRsp* resp) {
+               return service->GetModelLoadReceipt(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      ModelDistributorService_method_names[5],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ModelDistributorService::Service, ::rl::training::v1::ModelDistributorStatusReq, ::rl::training::v1::ModelDistributorStatusRsp, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](ModelDistributorService::Service* service,
              ::grpc::ServerContext* ctx,
@@ -727,6 +762,13 @@ ModelDistributorService::Service::~Service() {
 }
 
 ::grpc::Status ModelDistributorService::Service::AckModel(::grpc::ServerContext* context, const ::rl::training::v1::AckModelReq* request, ::rl::training::v1::AckModelRsp* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status ModelDistributorService::Service::GetModelLoadReceipt(::grpc::ServerContext* context, const ::rl::training::v1::GetModelLoadReceiptReq* request, ::rl::training::v1::GetModelLoadReceiptRsp* response) {
   (void) context;
   (void) request;
   (void) response;
