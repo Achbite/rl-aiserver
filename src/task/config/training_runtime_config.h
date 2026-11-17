@@ -35,6 +35,9 @@ struct RolloutConfig {
     double gamma = 0.99;
     double gae_lambda = 0.95;
     uint32_t tmax = 128;
+    // Zero retains asynchronous collection. A positive size seals whole-frame
+    // rounds and waits for their TRAINED settlement and the next loaded model.
+    uint32_t collection_batch_size = 0;
 };
 
 struct ModelDistributionConfig {

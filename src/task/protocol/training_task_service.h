@@ -115,6 +115,13 @@ public:
             return grpc::Status::OK;
         }
 
+        if (runtime_.config_.rollout.collection_batch_size > 0 &&
+            !runtime_.session_mgr_.GetSessionIds().empty()) {
+            training_service_detail::FillOpenRejected(
+                rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                "synchronous collection has one Client session per Actor lifecycle", rsp->mutable_reply());
+            return grpc::Status::OK;
+        }
         const std::string session_id = runtime_.session_mgr_.CreateSession();
         auto* session = runtime_.session_mgr_.GetSession(session_id);
         if (!session) {
@@ -279,6 +286,11 @@ public:
         auto finish = [&]() { runtime_.RecordUpdateLatency(rpc_start); };
         auto* session = CheckedSession(*req, *rsp);
         if (!session) { finish(); return grpc::Status::OK; }
+        if (pending_collection_frames_.count(session->session_id)) {
+            ResumeCollectionFrame(*session, *req, *rsp);
+            finish();
+            return grpc::Status::OK;
+        }
         if (session->phase != rl::session::v1::SESSION_PHASE_EPISODE_RUNNING) {
             training_service_detail::RejectCommand(*session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
                           "Update requires a running active Episode",
@@ -392,6 +404,33 @@ public:
                 runtime_.model_manifest_, transaction.ProducedTransitions(), failure)) {
             rsp->Clear();
             RejectTask(*session, failure, rsp->mutable_reply());
+            finish();
+            return grpc::Status::OK;
+        }
+        if (transaction.SealsCollectionRound()) {
+            // The execution results and outbound samples are admitted once. The
+            // command stays pending until its next actions can use the new model;
+            // retries must carry this exact request and never decode it again.
+            if (Admit(transaction, *session, *rsp, true)) {
+                PendingCollectionFrame pending;
+                pending.request_payload = req->SerializeAsString();
+                pending.inputs = std::move(inputs);
+                pending.model = runtime_.model_manifest_.wire.identity();
+                pending.completed_phase = transaction.session.phase;
+                pending.deadline = std::chrono::steady_clock::now() +
+                    std::chrono::milliseconds(runtime_.config_.sample_distributor.recovery_timeout_ms);
+                // WAIT must echo the last committed lifecycle cursor, including
+                // when this result frame made every Agent terminal. Keep that
+                // phase pending until the original Update can be acknowledged.
+                transaction.session.phase = session->phase;
+                transaction.Commit(*session);
+                task_controller_ = std::move(candidate_task_controller);
+                pending_collection_frames_.emplace(session->session_id, std::move(pending));
+                LOG_INFO("CollectionRound", "sealed model_step=%llu transitions=%lld",
+                    static_cast<unsigned long long>(runtime_.model_manifest_.model_step()),
+                    static_cast<long long>(runtime_.collection_round_transitions_));
+                FillCollectionWait(*session, *rsp);
+            }
             finish();
             return grpc::Status::OK;
         }
@@ -541,7 +580,10 @@ public:
         }
         training_service_detail::CommitCommand(transaction.session, req->command(), *req, rsp,
             "Episode aborted after controlled Agent segment close");
-        if (Admit(transaction, *session, *rsp, false)) transaction.Commit(*session);
+        if (Admit(transaction, *session, *rsp, false)) {
+            transaction.Commit(*session);
+            pending_collection_frames_.erase(session->session_id);
+        }
         return grpc::Status::OK;
     }
 
@@ -571,6 +613,67 @@ public:
     }
 
 private:
+    struct PendingCollectionFrame {
+        std::string request_payload;
+        std::vector<AgentTaskInput> inputs;
+        training::ModelIdentity model;
+        rl::session::v1::SessionPhase completed_phase;
+        std::chrono::steady_clock::time_point deadline;
+    };
+    std::unordered_map<std::string, PendingCollectionFrame> pending_collection_frames_;
+
+    void FillCollectionWait(const Session& session, typename Protocol::UpdateRsp& response) {
+        response.Clear();
+        response.mutable_wait()->set_retry_after_ms(runtime_.config_.sample_distributor.status_poll_interval_ms);
+        rl_sdk::FillReply(session, session.last_command_sequence, rl::session::v1::COMMAND_RESULT_WAIT,
+            rl::session::v1::COMMAND_ERROR_CODE_UNSPECIFIED,
+            "collection round awaits TRAINED settlement and the next loaded model", response.mutable_reply());
+    }
+
+    void ResumeCollectionFrame(Session& session, const typename Protocol::UpdateReq& request,
+                               typename Protocol::UpdateRsp& response) {
+        const auto& pending = pending_collection_frames_.at(session.session_id);
+        if (request.SerializeAsString() != pending.request_payload) {
+            rl_sdk::RejectCommand(session, rl::session::v1::COMMAND_ERROR_CODE_PAYLOAD_CONFLICT,
+                "pending collection frame requires its original command payload", response.mutable_reply());
+            return;
+        }
+        const auto sender = runtime_.sample_distributor_.GetSnapshot();
+        std::string error;
+        if (sender.terminal_fault || sender.degraded) error = sender.last_error;
+        else if (!runtime_.IsCoreInferenceReady()) error = runtime_.last_error_;
+        else if (std::chrono::steady_clock::now() >= pending.deadline)
+            error = "collection round did not settle and load its next model within the recovery deadline";
+        if (!error.empty()) {
+            runtime_.MarkDegraded(error);
+            rl_sdk::RejectCommand(session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                error, response.mutable_reply());
+            return;
+        }
+        if (sender.completed_collection_round.SerializeAsString() != pending.model.SerializeAsString() ||
+            runtime_.model_ack_pending_ ||
+            runtime_.model_manifest_.model_step() != pending.model.model_step() + 1) {
+            FillCollectionWait(session, response);
+            return;
+        }
+        TrainingTransaction<typename Task::Sessions> transaction(runtime_, session);
+        transaction.BeginNextCollectionRound();
+        transaction.session.phase = pending.completed_phase;
+        std::vector<ModelTaskAction> actions;
+        if (!transaction.PrepareActions(pending.inputs, request.frame_id(), actions, error)) {
+            rl_sdk::RejectCommand(session, rl::session::v1::COMMAND_ERROR_CODE_STATE_CONFLICT,
+                error, response.mutable_reply());
+            return;
+        }
+        task_adapter_.EncodeActions(transaction.session, actions, response);
+        rl_sdk::CommitCommand(transaction.session, request.command(), request, &response,
+            "collection round settled; next model actions assigned");
+        transaction.Commit(session);
+        pending_collection_frames_.erase(session.session_id);
+        LOG_INFO("CollectionRound", "resumed model_step=%llu",
+            static_cast<unsigned long long>(runtime_.model_manifest_.model_step()));
+    }
+
     template<class Request, class Response>
     Session* CheckedSession(const Request& request, Response& response) {
         auto* session = runtime_.session_mgr_.GetSession(request.command().session_id());

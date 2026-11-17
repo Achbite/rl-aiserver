@@ -117,6 +117,8 @@ bool SampleDistributor::ProbeSamplePool() {
     std::lock_guard<std::mutex> lock(mutex_);
     sample_pool_instance_id_ = response.sample_pool().instance_id();
     sample_pool_lifecycle_epoch_ = response.sample_pool().lifecycle_epoch();
+    reuse_mode_ = response.reuse_mode();
+    completed_collection_round_ = response.completed_collection_round();
     ready_ = true;
     degraded_ = false;
     SetDeliveryStateLocked(DeliveryState::kHealthy);
@@ -189,6 +191,8 @@ SampleDistributor::RefreshSamplePoolStatus() {
                             sample_pool_lifecycle_epoch_)) {
             error = "SamplePool identity changed during training";
         }
+        reuse_mode_ = response.reuse_mode();
+        completed_collection_round_ = response.completed_collection_round();
     }
     if (!error.empty()) {
         MarkDegraded(error);
@@ -974,6 +978,8 @@ SampleDistributor::Snapshot SampleDistributor::GetSnapshot() const {
     snapshot.push_rpc_latency_sum_ms = push_rpc_latency_sum_ms_;
     snapshot.push_rpc_latency_max_ms = push_rpc_latency_max_ms_;
     snapshot.sample_pool_instance_id = sample_pool_instance_id_;
+    snapshot.reuse_mode = reuse_mode_;
+    snapshot.completed_collection_round = completed_collection_round_;
     snapshot.last_error = last_error_;
     return snapshot;
 }

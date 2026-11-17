@@ -17,6 +17,7 @@ enum SegmentCloseReason {
     SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE = 4;
     SEGMENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT = 5;
     SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN = 6;
+    SEGMENT_CLOSE_REASON_COLLECTION_ROUND = 7;
 }
 
 enum PushResult {
@@ -110,6 +111,13 @@ enum ModelLookupResult {
     reserved "MODEL_LOOKUP_RESULT_REJECTED_IDENTITY";
 }
 
+enum SampleReuseMode {
+    SAMPLE_REUSE_MODE_UNSPECIFIED = 0;
+    SAMPLE_REUSE_MODE_REPLAY = 1;
+    SAMPLE_REUSE_MODE_CONSUME_ONCE = 2;
+    SAMPLE_REUSE_MODE_SYNCHRONOUS_ROUND = 3;
+}
+
 enum SampleBackendType {
     SAMPLE_BACKEND_TYPE_UNSPECIFIED = 0;
     SAMPLE_BACKEND_TYPE_LOCAL_MEMORY = 1;
@@ -154,6 +162,11 @@ message ProcessedTransitionEnvelope {
     rl.common.v1.ServiceInstanceIdentity producer = 3;
     ModelIdentity behavior_model = 5;
     repeated ProcessedTransition samples = 6;
+    // Only the final envelope seals a single-producer, single-model collection
+    // round. In SYNCHRONOUS_ROUND no batch is delivered before this exact count
+    // is resident. The Actor pauses before assigning the next frame's actions.
+    optional uint32 collection_round_batch_size = 7;
+    optional uint32 collection_round_transition_count = 8;
 }
 
 // One draw-slot snapshot of a resident replay item, retaining its accepted
@@ -206,9 +219,14 @@ message GetBatchRsp {
     // tracks this batch's settlement, not ownership of resident samples.
     repeated SamplePoolItem items = 5;
     rl.common.v1.ServiceInstanceIdentity sample_pool = 6;
+    // The Pool owns consumption semantics. SYNCHRONOUS_ROUND requires the
+    // Learner to check every behavior model against its pre-update model.
+    SampleReuseMode reuse_mode = 7;
 }
 
-// ACK/NACK/expiry settle a batch without removing or reinserting replay items.
+// In REPLAY, settlement never changes resident items. In CONSUME_ONCE,
+// terminal ACK removes this delivery's still-resident items; NACK/expiry leave
+// them eligible. The single in-flight delivery prevents concurrent reuse.
 message AckBatchReq {
     rl.common.v1.ServiceInstanceIdentity consumer = 1;
     string delivery_id = 2;
@@ -330,7 +348,7 @@ message SamplePoolStatusRsp {
     string finalization_id = 69;
     optional int64 finalized_at_unix_ms = 70;
     // Resident items cleared at finalization, irrespective of training history.
-    // accepted_unique = resident + evicted + finalized.
+    // accepted_unique = resident + evicted + removed_on_ack + unselected_round + finalized.
     int64 finalized_transition_count = 71;
     reserved 72;
     reserved "finalized_fragment_count";
@@ -339,6 +357,15 @@ message SamplePoolStatusRsp {
     int64 drawn_transition_slot_count = 74;
     int64 unsampled_evicted_transition_count = 75;
     int64 previously_drawn_evicted_transition_count = 76;
+    // Unique resident items removed by terminal ACK in CONSUME_ONCE mode.
+    // Items already evicted while their snapshot was in flight remain evictions.
+    int64 removed_on_ack_transition_count = 77;
+    SampleReuseMode reuse_mode = 78;
+    // Tail items not selected for the one batch of a sealed synchronous round.
+    int64 unselected_round_transition_count = 79;
+    // Actual successful TRAINED settlement, not a prediction from publication.
+    ModelIdentity completed_collection_round = 80;
+    bool collection_round_sealed = 81;
 }
 
 message AIServerStatusReq {}

@@ -252,7 +252,7 @@ bool LoadMazeConfig(const std::string& yaml_path,
         "server.run_mode", "server.listen_port", "server.max_agents",
         "policy.training_temperature", "policy.sampling_seed",
         "policy.action_mask_mode",
-        "rollout.gamma", "rollout.gae_lambda", "rollout.tmax", "metrics.reward_interval_ms",
+        "rollout.gamma", "rollout.gae_lambda", "rollout.tmax", "rollout.collection_batch_size", "metrics.reward_interval_ms",
         "observation.ray_max_range", "model.evaluation_model_path",
         "model.local_train_dir", "model.startup_timeout_ms",
         "model.expected_obs_dim", "model.expected_action_dim",
@@ -317,6 +317,7 @@ bool LoadMazeConfig(const std::string& yaml_path,
     }
 
     const std::pair<const char*, const char*> integer_fields[] = {
+        {"rollout", "collection_batch_size"},
         {"metrics", "reward_interval_ms"},
         {"policy", "sampling_seed"},
         {"rollout", "tmax"},
@@ -379,6 +380,13 @@ bool LoadMazeConfig(const std::string& yaml_path,
         SafeDouble(FindValue(entries, "rollout", "gae_lambda"), -1.0);
     out_config.rollout.tmax = static_cast<uint32_t>(SafeSize(
         FindValue(entries, "rollout", "tmax"), 0));
+    const auto collection_batch_size = SafeSize(
+        FindValue(entries, "rollout", "collection_batch_size"), 0);
+    if (collection_batch_size > std::numeric_limits<uint32_t>::max()) {
+        error = "rollout.collection_batch_size exceeds uint32";
+        return false;
+    }
+    out_config.rollout.collection_batch_size = static_cast<uint32_t>(collection_batch_size);
     out_config.observation.ray_max_range = SafeInt(
         FindValue(entries, "observation", "ray_max_range"), 0);
 

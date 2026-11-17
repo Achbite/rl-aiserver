@@ -18,6 +18,7 @@ rollout:
   gamma: 0.99
   gae_lambda: 0.95
   tmax: 128
+  collection_batch_size: 0       # default async; positive = experimental synchronous round
 
 observation:
   ray_max_range: 10              # local ray maximum, grid cells, >0

@@ -171,7 +171,10 @@ public:
         grpc::ServerContext*,
         const training::SamplePoolStatusReq*,
         training::SamplePoolStatusRsp* response) override {
+        std::lock_guard<std::mutex> lock(mutex_);
         FillAuthority(response->mutable_sample_pool());
+        response->set_reuse_mode(reuse_mode_);
+        *response->mutable_completed_collection_round() = completed_round_;
         response->set_ready(true);
         response->set_ingress_ready(true);
         response->set_pool_ready(true);
@@ -208,6 +211,15 @@ public:
         return envelopes_;
     }
 
+    void SetSynchronous() {
+        std::lock_guard<std::mutex> lock(mutex_);
+        reuse_mode_ = training::SAMPLE_REUSE_MODE_SYNCHRONOUS_ROUND;
+    }
+    void CompleteRound(const training::ModelIdentity& model) {
+        std::lock_guard<std::mutex> lock(mutex_);
+        completed_round_ = model;
+    }
+
 private:
     static void FillAuthority(common::ServiceInstanceIdentity* identity) {
         identity->set_component("sample-pool");
@@ -218,6 +230,8 @@ private:
     mutable std::mutex mutex_;
     std::condition_variable condition_;
     std::vector<training::ProcessedTransitionEnvelope> envelopes_;
+    training::SampleReuseMode reuse_mode_ = training::SAMPLE_REUSE_MODE_REPLAY;
+    training::ModelIdentity completed_round_;
 };
 
 class LocalServer {

@@ -48,11 +48,14 @@ struct ProcessedTransitionDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ProcessedTransitionDefaultTypeInternal _ProcessedTransition_default_instance_;
 PROTOBUF_CONSTEXPR ProcessedTransitionEnvelope::ProcessedTransitionEnvelope(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.samples_)*/{}
+    /*decltype(_impl_._has_bits_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_.samples_)*/{}
   , /*decltype(_impl_.envelope_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.producer_)*/nullptr
   , /*decltype(_impl_.behavior_model_)*/nullptr
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+  , /*decltype(_impl_.collection_round_batch_size_)*/0u
+  , /*decltype(_impl_.collection_round_transition_count_)*/0u} {}
 struct ProcessedTransitionEnvelopeDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ProcessedTransitionEnvelopeDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -134,6 +137,7 @@ PROTOBUF_CONSTEXPR GetBatchRsp::GetBatchRsp(
   , /*decltype(_impl_.sample_pool_)*/nullptr
   , /*decltype(_impl_.lease_deadline_unix_ms_)*/int64_t{0}
   , /*decltype(_impl_.result_)*/0
+  , /*decltype(_impl_.reuse_mode_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct GetBatchRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR GetBatchRspDefaultTypeInternal()
@@ -259,6 +263,7 @@ PROTOBUF_CONSTEXPR SamplePoolStatusRsp::SamplePoolStatusRsp(
   , /*decltype(_impl_.last_error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.finalization_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.sample_pool_)*/nullptr
+  , /*decltype(_impl_.completed_collection_round_)*/nullptr
   , /*decltype(_impl_.push_attempt_count_)*/int64_t{0}
   , /*decltype(_impl_.accepted_unique_transitions_)*/int64_t{0}
   , /*decltype(_impl_.accepted_unique_envelopes_)*/int64_t{0}
@@ -298,6 +303,8 @@ PROTOBUF_CONSTEXPR SamplePoolStatusRsp::SamplePoolStatusRsp(
   , /*decltype(_impl_.oldest_ready_transition_age_ms_)*/int64_t{0}
   , /*decltype(_impl_.minimum_ready_model_step_)*/uint64_t{0u}
   , /*decltype(_impl_.maximum_ready_model_step_)*/uint64_t{0u}
+  , /*decltype(_impl_.active_consumer_count_)*/0
+  , /*decltype(_impl_.reuse_mode_)*/0
   , /*decltype(_impl_.evicted_transition_count_)*/int64_t{0}
   , /*decltype(_impl_.evicted_envelope_count_)*/int64_t{0}
   , /*decltype(_impl_.finalized_at_unix_ms_)*/int64_t{0}
@@ -306,7 +313,9 @@ PROTOBUF_CONSTEXPR SamplePoolStatusRsp::SamplePoolStatusRsp(
   , /*decltype(_impl_.drawn_transition_slot_count_)*/int64_t{0}
   , /*decltype(_impl_.unsampled_evicted_transition_count_)*/int64_t{0}
   , /*decltype(_impl_.previously_drawn_evicted_transition_count_)*/int64_t{0}
-  , /*decltype(_impl_.active_consumer_count_)*/0} {}
+  , /*decltype(_impl_.removed_on_ack_transition_count_)*/int64_t{0}
+  , /*decltype(_impl_.unselected_round_transition_count_)*/int64_t{0}
+  , /*decltype(_impl_.collection_round_sealed_)*/false} {}
 struct SamplePoolStatusRspDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SamplePoolStatusRspDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -674,7 +683,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 }  // namespace training
 }  // namespace rl
 static ::_pb::Metadata file_level_metadata_proto_2ftraining_2ftraining_2eproto[34];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_proto_2ftraining_2ftraining_2eproto[14];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_proto_2ftraining_2ftraining_2eproto[15];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_proto_2ftraining_2ftraining_2eproto = nullptr;
 
 const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -704,7 +713,7 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
   0,
   ~0u,
   ~0u,
-  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _impl_._has_bits_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -714,6 +723,14 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _impl_.producer_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _impl_.behavior_model_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _impl_.samples_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _impl_.collection_round_batch_size_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::ProcessedTransitionEnvelope, _impl_.collection_round_transition_count_),
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  0,
+  1,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolItem, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -766,6 +783,7 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetBatchRsp, _impl_.lease_deadline_unix_ms_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetBatchRsp, _impl_.items_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetBatchRsp, _impl_.sample_pool_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::GetBatchRsp, _impl_.reuse_mode_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::AckBatchReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -894,6 +912,11 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.drawn_transition_slot_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.unsampled_evicted_transition_count_),
   PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.previously_drawn_evicted_transition_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.removed_on_ack_transition_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.reuse_mode_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.unselected_round_transition_count_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.completed_collection_round_),
+  PROTOBUF_FIELD_OFFSET(::rl::training::v1::SamplePoolStatusRsp, _impl_.collection_round_sealed_),
   ~0u,
   ~0u,
   ~0u,
@@ -940,6 +963,11 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
   ~0u,
   ~0u,
   4,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
   ~0u,
   ~0u,
   ~0u,
@@ -1236,39 +1264,39 @@ const uint32_t TableStruct_proto_2ftraining_2ftraining_2eproto::offsets[] PROTOB
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 16, -1, sizeof(::rl::training::v1::ProcessedTransition)},
-  { 26, -1, -1, sizeof(::rl::training::v1::ProcessedTransitionEnvelope)},
-  { 36, -1, -1, sizeof(::rl::training::v1::SamplePoolItem)},
-  { 48, -1, -1, sizeof(::rl::training::v1::PushSamplesReq)},
-  { 55, -1, -1, sizeof(::rl::training::v1::PushSamplesRsp)},
-  { 66, -1, -1, sizeof(::rl::training::v1::GetBatchReq)},
-  { 76, -1, -1, sizeof(::rl::training::v1::GetBatchRsp)},
-  { 88, -1, -1, sizeof(::rl::training::v1::AckBatchReq)},
-  { 98, -1, -1, sizeof(::rl::training::v1::NackBatchReq)},
-  { 107, -1, -1, sizeof(::rl::training::v1::RenewLeaseReq)},
-  { 116, -1, -1, sizeof(::rl::training::v1::DeliveryRsp)},
-  { 128, -1, -1, sizeof(::rl::training::v1::FinalizeSamplePoolReq)},
-  { 137, 148, -1, sizeof(::rl::training::v1::FinalizeSamplePoolRsp)},
-  { 153, -1, -1, sizeof(::rl::training::v1::SamplePoolStatusReq)},
-  { 159, 216, -1, sizeof(::rl::training::v1::SamplePoolStatusRsp)},
-  { 267, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
-  { 273, -1, -1, sizeof(::rl::training::v1::ModelFeedbackStatus)},
-  { 282, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
-  { 330, -1, -1, sizeof(::rl::training::v1::SegmentCloseCount)},
-  { 338, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
-  { 348, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
-  { 356, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
-  { 366, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
-  { 375, 387, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
-  { 393, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
-  { 401, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
-  { 410, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
-  { 421, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
-  { 430, -1, -1, sizeof(::rl::training::v1::GetModelLoadReceiptReq)},
-  { 438, -1, -1, sizeof(::rl::training::v1::GetModelLoadReceiptRsp)},
-  { 447, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
-  { 453, 479, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
-  { 499, -1, -1, sizeof(::rl::training::v1::LearnerStatusReq)},
-  { 505, 533, -1, sizeof(::rl::training::v1::LearnerStatusRsp)},
+  { 26, 38, -1, sizeof(::rl::training::v1::ProcessedTransitionEnvelope)},
+  { 44, -1, -1, sizeof(::rl::training::v1::SamplePoolItem)},
+  { 56, -1, -1, sizeof(::rl::training::v1::PushSamplesReq)},
+  { 63, -1, -1, sizeof(::rl::training::v1::PushSamplesRsp)},
+  { 74, -1, -1, sizeof(::rl::training::v1::GetBatchReq)},
+  { 84, -1, -1, sizeof(::rl::training::v1::GetBatchRsp)},
+  { 97, -1, -1, sizeof(::rl::training::v1::AckBatchReq)},
+  { 107, -1, -1, sizeof(::rl::training::v1::NackBatchReq)},
+  { 116, -1, -1, sizeof(::rl::training::v1::RenewLeaseReq)},
+  { 125, -1, -1, sizeof(::rl::training::v1::DeliveryRsp)},
+  { 137, -1, -1, sizeof(::rl::training::v1::FinalizeSamplePoolReq)},
+  { 146, 157, -1, sizeof(::rl::training::v1::FinalizeSamplePoolRsp)},
+  { 162, -1, -1, sizeof(::rl::training::v1::SamplePoolStatusReq)},
+  { 168, 230, -1, sizeof(::rl::training::v1::SamplePoolStatusRsp)},
+  { 286, -1, -1, sizeof(::rl::training::v1::AIServerStatusReq)},
+  { 292, -1, -1, sizeof(::rl::training::v1::ModelFeedbackStatus)},
+  { 301, -1, -1, sizeof(::rl::training::v1::AIServerStatusRsp)},
+  { 349, -1, -1, sizeof(::rl::training::v1::SegmentCloseCount)},
+  { 357, -1, -1, sizeof(::rl::training::v1::ModelArtifactManifest)},
+  { 367, -1, -1, sizeof(::rl::training::v1::RegisterModelReq)},
+  { 375, -1, -1, sizeof(::rl::training::v1::RegisterModelRsp)},
+  { 385, -1, -1, sizeof(::rl::training::v1::GetModelManifestReq)},
+  { 394, 406, -1, sizeof(::rl::training::v1::GetModelManifestRsp)},
+  { 412, -1, -1, sizeof(::rl::training::v1::DownloadModelReq)},
+  { 420, -1, -1, sizeof(::rl::training::v1::ModelChunk)},
+  { 429, -1, -1, sizeof(::rl::training::v1::AckModelReq)},
+  { 440, -1, -1, sizeof(::rl::training::v1::AckModelRsp)},
+  { 449, -1, -1, sizeof(::rl::training::v1::GetModelLoadReceiptReq)},
+  { 457, -1, -1, sizeof(::rl::training::v1::GetModelLoadReceiptRsp)},
+  { 466, -1, -1, sizeof(::rl::training::v1::ModelDistributorStatusReq)},
+  { 472, 498, -1, sizeof(::rl::training::v1::ModelDistributorStatusRsp)},
+  { 518, -1, -1, sizeof(::rl::training::v1::LearnerStatusReq)},
+  { 524, 552, -1, sizeof(::rl::training::v1::LearnerStatusRsp)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1318,13 +1346,17 @@ const char descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto[] PROTO
   "lue\030\005 \001(\002\022\021\n\tadvantage\030\006 \001(\002\022\024\n\014value_ta"
   "rget\030\007 \001(\002\022 \n\023behavior_model_step\030\010 \001(\004H"
   "\000\210\001\001\022\032\n\022created_at_unix_ms\030\t \001(\003\022\023\n\013acti"
-  "on_mask\030\n \003(\010B\026\n\024_behavior_model_step\"\216\002"
+  "on_mask\030\n \003(\010B\026\n\024_behavior_model_step\"\256\003"
   "\n\033ProcessedTransitionEnvelope\022\023\n\013envelop"
   "e_id\030\001 \001(\t\0227\n\010producer\030\003 \001(\0132%.rl.common"
   ".v1.ServiceInstanceIdentity\0225\n\016behavior_"
   "model\030\005 \001(\0132\035.rl.training.v1.ModelIdenti"
   "ty\0224\n\007samples\030\006 \003(\0132#.rl.training.v1.Pro"
-  "cessedTransitionJ\004\010\002\020\003J\004\010\004\020\005R\016payload_di"
+  "cessedTransition\022(\n\033collection_round_bat"
+  "ch_size\030\007 \001(\rH\000\210\001\001\022.\n!collection_round_t"
+  "ransition_count\030\010 \001(\rH\001\210\001\001B\036\n\034_collectio"
+  "n_round_batch_sizeB$\n\"_collection_round_"
+  "transition_countJ\004\010\002\020\003J\004\010\004\020\005R\016payload_di"
   "gestR\030training_contract_digest\"\203\002\n\016Sampl"
   "ePoolItem\0227\n\ntransition\030\001 \001(\0132#.rl.train"
   "ing.v1.ProcessedTransition\022\027\n\017insert_seq"
@@ -1345,362 +1377,374 @@ const char descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto[] PROTO
   "imeout_ms\030\002 \001(\005\0227\n\010consumer\030\003 \001(\0132%.rl.c"
   "ommon.v1.ServiceInstanceIdentity\022\030\n\020leas"
   "e_timeout_ms\030\004 \001(\005J\004\010\005\020\006R!required_train"
-  "ing_contract_digest\"\356\001\n\013GetBatchRsp\022.\n\006r"
+  "ing_contract_digest\"\243\002\n\013GetBatchRsp\022.\n\006r"
   "esult\030\001 \001(\0162\036.rl.training.v1.GetBatchRes"
   "ult\022\017\n\007message\030\002 \001(\t\022\023\n\013delivery_id\030\003 \001("
   "\t\022\036\n\026lease_deadline_unix_ms\030\004 \001(\003\022-\n\005ite"
   "ms\030\005 \003(\0132\036.rl.training.v1.SamplePoolItem"
   "\022:\n\013sample_pool\030\006 \001(\0132%.rl.common.v1.Ser"
-  "viceInstanceIdentity\"\251\001\n\013AckBatchReq\0227\n\010"
-  "consumer\030\001 \001(\0132%.rl.common.v1.ServiceIns"
-  "tanceIdentity\022\023\n\013delivery_id\030\002 \001(\t\0223\n\013di"
-  "sposition\030\003 \001(\0162\036.rl.training.v1.AckDisp"
-  "osition\022\027\n\017train_update_id\030\004 \001(\t\"l\n\014Nack"
-  "BatchReq\0227\n\010consumer\030\001 \001(\0132%.rl.common.v"
-  "1.ServiceInstanceIdentity\022\023\n\013delivery_id"
-  "\030\002 \001(\t\022\016\n\006reason\030\003 \001(\t\"w\n\rRenewLeaseReq\022"
-  "7\n\010consumer\030\001 \001(\0132%.rl.common.v1.Service"
-  "InstanceIdentity\022\023\n\013delivery_id\030\002 \001(\t\022\030\n"
-  "\020lease_timeout_ms\030\003 \001(\005\"\321\001\n\013DeliveryRsp\022"
-  ".\n\006result\030\001 \001(\0162\036.rl.training.v1.Deliver"
-  "yResult\022\017\n\007message\030\002 \001(\t\022\023\n\013delivery_id\030"
-  "\003 \001(\t\022\036\n\026lease_deadline_unix_ms\030\004 \001(\003\0223\n"
-  "\013disposition\030\005 \001(\0162\036.rl.training.v1.AckD"
-  "isposition\022\027\n\017train_update_id\030\006 \001(\t\"\256\001\n\025"
-  "FinalizeSamplePoolReq\0227\n\010consumer\030\001 \001(\0132"
-  "%.rl.common.v1.ServiceInstanceIdentity\022C"
-  "\n\024expected_sample_pool\030\002 \001(\0132%.rl.common"
-  ".v1.ServiceInstanceIdentity\022\027\n\017finalizat"
-  "ion_id\030\003 \001(\t\"\363\001\n\025FinalizeSamplePoolRsp\0228"
-  "\n\006result\030\001 \001(\0162(.rl.training.v1.SamplePo"
-  "olFinalizeResult\022\017\n\007message\030\002 \001(\t\022\027\n\017fin"
-  "alization_id\030\003 \001(\t\022:\n\013sample_pool\030\004 \001(\0132"
-  "%.rl.common.v1.ServiceInstanceIdentity\022!"
-  "\n\024finalized_at_unix_ms\030\005 \001(\003H\000\210\001\001B\027\n\025_fi"
-  "nalized_at_unix_ms\"\025\n\023SamplePoolStatusRe"
-  "q\"\370\023\n\023SamplePoolStatusRsp\022:\n\013sample_pool"
-  "\030\002 \001(\0132%.rl.common.v1.ServiceInstanceIde"
-  "ntity\022\r\n\005ready\030\003 \001(\010\022\032\n\022push_attempt_cou"
-  "nt\030\004 \001(\003\022#\n\033accepted_unique_transitions\030"
-  "\005 \001(\003\022!\n\031accepted_unique_envelopes\030\006 \001(\003"
-  "\022$\n\034duplicate_push_attempt_count\030\007 \001(\003\022%"
-  "\n\035duplicate_transition_attempts\030\010 \001(\003\022#\n"
-  "\033rejected_push_attempt_count\030\t \001(\003\022$\n\034re"
-  "jected_transition_attempts\030\n \001(\003\022*\n\"ackn"
-  "owledged_transition_slot_count\030\013 \001(\003\022\037\n\027"
-  "acked_unique_deliveries\030\014 \001(\003\022\031\n\021ready_t"
-  "ransitions\030\r \001(\003\022\032\n\022leased_transitions\030\017"
-  " \001(\003\022\034\n\024resident_transitions\030\021 \001(\003\022\032\n\022re"
-  "sident_envelopes\030\022 \001(\003\022 \n\030resident_estim"
-  "ated_bytes\030\023 \001(\003\022\034\n\024capacity_transitions"
-  "\030\024 \001(\003\022\026\n\016capacity_bytes\030\026 \001(\003\0225\n\016pressu"
-  "re_state\030\027 \001(\0162\035.rl.training.v1.Pressure"
-  "State\022&\n\036released_transition_slot_count\030"
-  "\030 \001(\003\022\022\n\nnack_count\030\031 \001(\003\022\033\n\023expired_lea"
-  "se_count\030\032 \001(\003\022\"\n\025latest_ack_at_unix_ms\030"
-  "\033 \001(\003H\000\210\001\001\022\030\n\020target_hit_count\030\034 \001(\003\022\031\n\021"
-  "partial_get_count\030\035 \001(\003\022\033\n\023empty_timeout"
-  "_count\030\036 \001(\003\022\022\n\nlast_error\030\037 \001(\t\022 \n\030trai"
-  "ned_transition_count\030! \001(\003\022 \n\030invalid_tr"
-  "ansition_count\030# \001(\003\022+\n#shutdown_untrain"
-  "ed_transition_count\030$ \001(\003\022\031\n\021lease_renew"
-  "_count\030% \001(\003\0227\n\014backend_type\030& \001(\0162!.rl."
-  "training.v1.SampleBackendType\022 \n\030max_con"
-  "current_consumers\030\' \001(\005\022\035\n\025active_consum"
-  "er_count\030( \001(\005\022\033\n\023consumer_busy_count\030) "
-  "\001(\003\022\025\n\ringress_ready\030* \001(\010\022\022\n\npool_ready"
-  "\030+ \001(\010\022\031\n\021timestamp_unix_ms\030, \001(\003\022+\n\036old"
-  "est_ready_transition_age_ms\030- \001(\003H\001\210\001\001\022%"
-  "\n\030minimum_ready_model_step\030. \001(\004H\002\210\001\001\022%\n"
-  "\030maximum_ready_model_step\030/ \001(\004H\003\210\001\001\022 \n\030"
-  "evicted_transition_count\030B \001(\003\022\036\n\026evicte"
-  "d_envelope_count\030C \001(\003\022\021\n\tfinalized\030D \001("
-  "\010\022\027\n\017finalization_id\030E \001(\t\022!\n\024finalized_"
-  "at_unix_ms\030F \001(\003H\004\210\001\001\022\"\n\032finalized_trans"
-  "ition_count\030G \001(\003\022\032\n\022draw_attempt_count\030"
-  "I \001(\003\022#\n\033drawn_transition_slot_count\030J \001"
-  "(\003\022*\n\"unsampled_evicted_transition_count"
-  "\030K \001(\003\0221\n)previously_drawn_evicted_trans"
-  "ition_count\030L \001(\003B\030\n\026_latest_ack_at_unix"
-  "_msB!\n\037_oldest_ready_transition_age_msB\033"
-  "\n\031_minimum_ready_model_stepB\033\n\031_maximum_"
-  "ready_model_stepB\027\n\025_finalized_at_unix_m"
-  "sJ\004\010\001\020\002J\004\010\016\020\017J\004\010\020\020\021J\004\010\025\020\026J\004\010 \020!J\004\010\"\020#J\004\010"
-  "0\020BJ\004\010H\020IR\021behavior_versionsR\033minimum_re"
-  "ady_model_versionR\033maximum_ready_model_v"
-  "ersionR\010contractR\025ready_queue_fragmentsR"
-  "\020leased_fragmentsR\022capacity_fragmentsR\016b"
-  "ehavior_stepsR\022stale_sample_countR\023activ"
-  "e_demand_countR\023active_demand_epochR\024act"
-  "ive_demand_age_msR\020reserved_samplesR\022res"
-  "erved_fragmentsR\030reserved_estimated_byte"
-  "sR\024credit_request_countR\022credit_grant_co"
-  "untR\023credit_commit_countR\024credit_release"
-  "_countR\023credit_expire_countR\023credit_revo"
-  "ke_countR\033credit_wait_no_demand_countR c"
-  "redit_wait_inflight_limit_countR\032credit_"
-  "wait_capacity_countR\032credit_wait_drainin"
-  "g_countR\023demand_upsert_countR\024demand_rel"
-  "ease_countR\030finalized_fragment_count\"\023\n\021"
-  "AIServerStatusReq\"p\n\023ModelFeedbackStatus"
-  "\0226\n\017candidate_model\030\001 \001(\0132\035.rl.training."
-  "v1.ModelIdentity\022\r\n\005stage\030\002 \001(\t\022\022\n\nlast_"
-  "error\030\003 \001(\t\"\360\r\n\021AIServerStatusRsp\0227\n\010ais"
-  "erver\030\002 \001(\0132%.rl.common.v1.ServiceInstan"
-  "ceIdentity\022,\n\005state\030\003 \001(\0162\035.rl.training."
-  "v1.AIServerState\022\r\n\005ready\030\004 \001(\010\022\031\n\021distr"
-  "ibutor_ready\030\005 \001(\010\022/\n\013model_state\030\006 \001(\0162"
-  "\032.rl.training.v1.ModelState\0223\n\014loaded_mo"
-  "del\030\007 \001(\0132\035.rl.training.v1.ModelIdentity"
-  "\0223\n\014staged_model\030\010 \001(\0132\035.rl.training.v1."
-  "ModelIdentity\022 \n\030outbound_queue_envelope"
-  "s\030\t \001(\003\022\"\n\032outbound_queue_transitions\030\n "
-  "\001(\003\022&\n\036outbound_queue_estimated_bytes\030\013 "
-  "\001(\003\022%\n\035outbound_queue_high_watermark\030\014 \001"
-  "(\003\022#\n\033produced_unique_transitions\030\r \001(\003\022"
-  "!\n\031produced_unique_envelopes\030\016 \001(\003\022\032\n\022pu"
-  "sh_attempt_count\030\017 \001(\003\022#\n\033accepted_uniqu"
-  "e_transitions\030\020 \001(\003\022$\n\034duplicate_push_at"
-  "tempt_count\030\021 \001(\003\022#\n\033rejected_push_attem"
-  "pt_count\030\022 \001(\003\022\033\n\023retry_attempt_count\030\023 "
-  "\001(\003\022%\n\035final_drop_unique_transitions\030\024 \001"
-  "(\003\022\"\n\032active_actor_session_count\030\025 \001(\003\022\034"
-  "\n\024active_segment_count\030\026 \001(\003\022\027\n\017inferenc"
-  "e_count\030\027 \001(\003\022 \n\030inference_latency_sum_m"
-  "s\030\030 \001(\001\022 \n\030inference_latency_max_ms\030\031 \001("
-  "\001\022\026\n\016push_rpc_count\030\032 \001(\003\022\037\n\027push_rpc_la"
-  "tency_sum_ms\030\033 \001(\001\022\037\n\027push_rpc_latency_m"
-  "ax_ms\030\034 \001(\001\022\032\n\022model_switch_count\030\035 \001(\003\022"
-  "$\n\034quarantined_transition_count\030\036 \001(\003\022\"\n"
-  "\032quarantined_envelope_count\030\037 \001(\003\022\022\n\nlas"
-  "t_error\030  \001(\t\022\031\n\021timestamp_unix_ms\030! \001(\003"
-  "\022\034\n\024closed_segment_count\030# \001(\003\022%\n\035pendin"
-  "g_action_excluded_count\030$ \001(\003\022\'\n\037rollout"
-  "_estimator_failure_count\030% \001(\003\022(\n per_ag"
-  "ent_model_activation_count\030& \001(\003\0221\n)supe"
-  "rseded_without_agent_activation_count\030\' "
-  "\001(\003\022\?\n\024segment_close_counts\030( \003(\0132!.rl.t"
-  "raining.v1.SegmentCloseCount\022;\n\016model_fe"
-  "edback\030) \001(\0132#.rl.training.v1.ModelFeedb"
-  "ackStatus\022\030\n\020update_rpc_count\030* \001(\003\022!\n\031u"
-  "pdate_rpc_latency_sum_ms\030+ \001(\001\022!\n\031update"
-  "_rpc_latency_max_ms\030, \001(\001J\004\010\001\020\002J\004\010\"\020#R\010c"
-  "ontractR rollout_estimator_profile_diges"
-  "tR\024credit_request_countR\022credit_grant_co"
-  "untR\021credit_wait_countR\026credit_reacquire"
-  "_countR\024producer_stale_countR\020capacity_w"
-  "ait_msR\026training_capacity_wait\"V\n\021Segmen"
-  "tCloseCount\0222\n\006reason\030\001 \001(\0162\".rl.trainin"
-  "g.v1.SegmentCloseReason\022\r\n\005count\030\002 \001(\003\"\337"
-  "\003\n\025ModelArtifactManifest\022/\n\010identity\030\003 \001"
-  "(\0132\035.rl.training.v1.ModelIdentity\022\022\n\nsiz"
-  "e_bytes\030\r \001(\003\022\027\n\017trained_samples\030\020 \001(\004\022\034"
-  "\n\024published_at_unix_ms\030\023 \001(\003J\004\010\001\020\002J\004\010\002\020\003"
-  "J\004\010\004\020\rJ\004\010\016\020\017J\004\010\017\020\020J\004\010\021\020\022J\004\010\022\020\023J\004\010\024\020\025J\004\010\025"
-  "\020\026R\027manifest_schema_versionR\010contractR\022o"
-  "bservation_schemaR\raction_schemaR\025model_"
-  "architecture_idR\014tensor_dtypeR\013input_sha"
-  "peR\014action_shapeR\013value_shapeR\014artifact_"
-  "uriR\nmodel_fileR\004seedR\rtrain_updatesR\005re"
-  "adyR\026training_config_digestR\030training_co"
-  "ntract_digestR\031rollout_estimator_profile"
-  "\"x\n\020RegisterModelReq\0227\n\010manifest\030\001 \001(\0132%"
-  ".rl.training.v1.ModelArtifactManifest\022\033\n"
-  "\023local_artifact_path\030\003 \001(\tJ\004\010\002\020\003R\010contra"
-  "ct\"\315\001\n\020RegisterModelRsp\0223\n\006result\030\001 \001(\0162"
-  "#.rl.training.v1.ModelRegisterResult\022\017\n\007"
-  "message\030\002 \001(\t\0227\n\010manifest\030\003 \001(\0132%.rl.tra"
-  "ining.v1.ModelArtifactManifest\022:\n\013distri"
-  "butor\030\004 \001(\0132%.rl.common.v1.ServiceInstan"
-  "ceIdentity\"\242\001\n\023GetModelManifestReq\0226\n\017re"
-  "quested_model\030\001 \001(\0132\035.rl.training.v1.Mod"
-  "elIdentity\0228\n\trequester\030\002 \001(\0132%.rl.commo"
-  "n.v1.ServiceInstanceIdentity\022\031\n\021latest_i"
-  "n_lineage\030\003 \001(\010\"\340\002\n\023GetModelManifestRsp\022"
-  "1\n\006result\030\001 \001(\0162!.rl.training.v1.ModelLo"
-  "okupResult\022\017\n\007message\030\002 \001(\t\0227\n\010manifest\030"
-  "\003 \001(\0132%.rl.training.v1.ModelArtifactMani"
-  "fest\022:\n\013distributor\030\004 \001(\0132%.rl.common.v1"
-  ".ServiceInstanceIdentity\022\'\n\032available_fl"
-  "oor_model_step\030\005 \001(\004H\000\210\001\001\022(\n\033latest_avai"
-  "lable_model_step\030\006 \001(\004H\001\210\001\001B\035\n\033_availabl"
-  "e_floor_model_stepB\036\n\034_latest_available_"
-  "model_step\"\204\001\n\020DownloadModelReq\0226\n\017reque"
-  "sted_model\030\001 \001(\0132\035.rl.training.v1.ModelI"
-  "dentity\0228\n\trequester\030\002 \001(\0132%.rl.common.v"
-  "1.ServiceInstanceIdentity\"X\n\nModelChunk\022"
-  ",\n\005model\030\001 \001(\0132\035.rl.training.v1.ModelIde"
-  "ntity\022\016\n\006offset\030\002 \001(\003\022\014\n\004data\030\003 \001(\014\"\325\001\n\013"
-  "AckModelReq\0227\n\010aiserver\030\001 \001(\0132%.rl.commo"
-  "n.v1.ServiceInstanceIdentity\022,\n\005model\030\002 "
-  "\001(\0132\035.rl.training.v1.ModelIdentity\022\030\n\020lo"
-  "ad_instance_id\030\003 \001(\t\0224\n\013load_status\030\004 \001("
-  "\0162\037.rl.training.v1.ModelLoadStatus\022\017\n\007me"
-  "ssage\030\005 \001(\t\"\212\001\n\013AckModelRsp\022.\n\006result\030\001 "
-  "\001(\0162\036.rl.training.v1.ModelAckResult\022\017\n\007m"
-  "essage\030\002 \001(\t\022:\n\013distributor\030\003 \001(\0132%.rl.c"
-  "ommon.v1.ServiceInstanceIdentity\"\177\n\026GetM"
-  "odelLoadReceiptReq\0227\n\010aiserver\030\001 \001(\0132%.r"
-  "l.common.v1.ServiceInstanceIdentity\022,\n\005m"
-  "odel\030\002 \001(\0132\035.rl.training.v1.ModelIdentit"
-  "y\"\235\001\n\026GetModelLoadReceiptRsp\022:\n\013distribu"
-  "tor\030\001 \001(\0132%.rl.common.v1.ServiceInstance"
-  "Identity\022,\n\007receipt\030\002 \001(\0132\033.rl.training."
-  "v1.AckModelReq\022\031\n\021outside_retention\030\003 \001("
-  "\010\"\033\n\031ModelDistributorStatusReq\"\221\007\n\031Model"
-  "DistributorStatusRsp\022:\n\013distributor\030\002 \001("
+  "viceInstanceIdentity\0223\n\nreuse_mode\030\007 \001(\016"
+  "2\037.rl.training.v1.SampleReuseMode\"\251\001\n\013Ac"
+  "kBatchReq\0227\n\010consumer\030\001 \001(\0132%.rl.common."
+  "v1.ServiceInstanceIdentity\022\023\n\013delivery_i"
+  "d\030\002 \001(\t\0223\n\013disposition\030\003 \001(\0162\036.rl.traini"
+  "ng.v1.AckDisposition\022\027\n\017train_update_id\030"
+  "\004 \001(\t\"l\n\014NackBatchReq\0227\n\010consumer\030\001 \001(\0132"
+  "%.rl.common.v1.ServiceInstanceIdentity\022\023"
+  "\n\013delivery_id\030\002 \001(\t\022\016\n\006reason\030\003 \001(\t\"w\n\rR"
+  "enewLeaseReq\0227\n\010consumer\030\001 \001(\0132%.rl.comm"
+  "on.v1.ServiceInstanceIdentity\022\023\n\013deliver"
+  "y_id\030\002 \001(\t\022\030\n\020lease_timeout_ms\030\003 \001(\005\"\321\001\n"
+  "\013DeliveryRsp\022.\n\006result\030\001 \001(\0162\036.rl.traini"
+  "ng.v1.DeliveryResult\022\017\n\007message\030\002 \001(\t\022\023\n"
+  "\013delivery_id\030\003 \001(\t\022\036\n\026lease_deadline_uni"
+  "x_ms\030\004 \001(\003\0223\n\013disposition\030\005 \001(\0162\036.rl.tra"
+  "ining.v1.AckDisposition\022\027\n\017train_update_"
+  "id\030\006 \001(\t\"\256\001\n\025FinalizeSamplePoolReq\0227\n\010co"
+  "nsumer\030\001 \001(\0132%.rl.common.v1.ServiceInsta"
+  "nceIdentity\022C\n\024expected_sample_pool\030\002 \001("
   "\0132%.rl.common.v1.ServiceInstanceIdentity"
-  "\022\r\n\005ready\030\003 \001(\010\022\036\n\026registered_model_coun"
-  "t\030\004 \001(\003\0223\n\014latest_model\030\005 \001(\0132\035.rl.train"
-  "ing.v1.ModelIdentity\022\036\n\026register_attempt"
-  "_count\030\006 \001(\003\022 \n\030duplicate_register_count"
-  "\030\007 \001(\003\022\037\n\027rejected_register_count\030\010 \001(\003\022"
-  "\036\n\026download_request_count\030\t \001(\003\022\036\n\026downl"
-  "oad_success_count\030\n \001(\003\022\036\n\026download_fail"
-  "ure_count\030\013 \001(\003\022\024\n\014bytes_served\030\014 \001(\003\022\030\n"
-  "\020loaded_ack_count\030\r \001(\003\022\030\n\020failed_ack_co"
-  "unt\030\016 \001(\003\022B\n\023latest_ack_aiserver\030\017 \001(\0132%"
-  ".rl.common.v1.ServiceInstanceIdentity\0227\n"
-  "\020latest_ack_model\030\020 \001(\0132\035.rl.training.v1"
-  ".ModelIdentity\022:\n\021latest_ack_status\030\021 \001("
-  "\0162\037.rl.training.v1.ModelLoadStatus\022\022\n\nla"
-  "st_error\030\022 \001(\t\022\031\n\021timestamp_unix_ms\030\023 \001("
-  "\003\022\'\n\032available_floor_model_step\030\024 \001(\004H\000\210"
-  "\001\001\022(\n\033latest_available_model_step\030\025 \001(\004H"
-  "\001\210\001\001B\035\n\033_available_floor_model_stepB\036\n\034_"
-  "latest_available_model_stepJ\004\010\001\020\002R\035avail"
-  "able_floor_model_versionR\036latest_availab"
-  "le_model_versionR\010contract\"\022\n\020LearnerSta"
-  "tusReq\"\257\007\n\020LearnerStatusRsp\0226\n\007learner\030\001"
-  " \001(\0132%.rl.common.v1.ServiceInstanceIdent"
-  "ity\022\031\n\021timestamp_unix_ms\030\002 \001(\003\022,\n\005model\030"
-  "\003 \001(\0132\035.rl.training.v1.ModelIdentity\022\022\n\n"
-  "model_step\030\004 \001(\004\022\025\n\rtrain_updates\030\005 \001(\004\022"
-  "\027\n\017trained_samples\030\006 \001(\004\022\031\n\021run_train_up"
-  "dates\030\007 \001(\004\022\033\n\023run_trained_samples\030\010 \001(\004"
-  "\022\032\n\022initial_model_step\030\t \001(\004\022\030\n\020train_ba"
-  "tch_size\030\n \001(\004\022\036\n\021actual_batch_size\030\013 \001("
-  "\004H\000\210\001\001\022\'\n\032requested_train_batch_size\030\014 \001"
-  "(\004H\001\210\001\001\022!\n\024pool_draw_slot_count\030\r \001(\004H\002\210"
-  "\001\001\022\036\n\021unique_item_count\030\016 \001(\004H\003\210\001\001\022&\n\031du"
-  "plicate_item_slot_count\030\017 \001(\004H\004\210\001\001\022$\n\027sa"
-  "mple_evaluation_count\030\020 \001(\004H\005\210\001\001\022!\n\024opti"
-  "mizer_step_count\030\021 \001(\004H\006\210\001\001\022!\n\024max_impor"
-  "tance_ratio\030\022 \001(\001H\007\210\001\001\022\037\n\022explained_vari"
-  "ance\030\023 \001(\001H\010\210\001\001\022\023\n\013disposition\030\024 \001(\t\022\022\n\n"
-  "last_error\030\025 \001(\t\022\027\n\017train_update_id\030\026 \001("
-  "\tB\024\n\022_actual_batch_sizeB\035\n\033_requested_tr"
-  "ain_batch_sizeB\027\n\025_pool_draw_slot_countB"
-  "\024\n\022_unique_item_countB\034\n\032_duplicate_item"
-  "_slot_countB\032\n\030_sample_evaluation_countB"
-  "\027\n\025_optimizer_step_countB\027\n\025_max_importa"
-  "nce_ratioB\025\n\023_explained_variance*\253\002\n\022Seg"
-  "mentCloseReason\022$\n SEGMENT_CLOSE_REASON_"
-  "UNSPECIFIED\020\000\022/\n+SEGMENT_CLOSE_REASON_EN"
-  "VIRONMENT_TERMINATED\020\001\022\035\n\031SEGMENT_CLOSE_"
-  "REASON_TMAX\020\003\0220\n,SEGMENT_CLOSE_REASON_CL"
-  "IENT_CONTROLLED_CLOSE\020\004\0220\n,SEGMENT_CLOSE"
-  "_REASON_CLIENT_RECOVERY_TIMEOUT\020\005\0225\n1SEG"
-  "MENT_CLOSE_REASON_AISERVER_CONTROLLED_SH"
-  "UTDOWN\020\006\"\004\010\002\020\002*\217\002\n\nPushResult\022\033\n\027PUSH_RE"
-  "SULT_UNSPECIFIED\020\000\022\030\n\024PUSH_RESULT_ACCEPT"
-  "ED\020\001\022\031\n\025PUSH_RESULT_DUPLICATE\020\002\022!\n\035PUSH_"
-  "RESULT_REJECTED_CAPACITY\020\003\022 \n\034PUSH_RESUL"
-  "T_REJECTED_INVALID\020\004\022!\n\035PUSH_RESULT_REJE"
-  "CTED_CONFLICT\020\006\022\"\n\036PUSH_RESULT_REJECTED_"
-  "FINALIZED\020\007\"\004\010\005\020\005*\035PUSH_RESULT_REJECTED_"
-  "IDENTITY*|\n\rPressureState\022\036\n\032PRESSURE_ST"
-  "ATE_UNSPECIFIED\020\000\022\031\n\025PRESSURE_STATE_NORM"
-  "AL\020\001\022\027\n\023PRESSURE_STATE_HIGH\020\002\022\027\n\023PRESSUR"
-  "E_STATE_FULL\020\003*\247\001\n\016GetBatchResult\022 \n\034GET"
-  "_BATCH_RESULT_UNSPECIFIED\020\000\022\033\n\027GET_BATCH"
-  "_RESULT_LEASED\020\001\022\034\n\030GET_BATCH_RESULT_TIM"
-  "EOUT\020\002\022\031\n\025GET_BATCH_RESULT_BUSY\020\003\022\035\n\031GET"
-  "_BATCH_RESULT_REJECTED\020\004*\315\001\n\016DeliveryRes"
-  "ult\022\037\n\033DELIVERY_RESULT_UNSPECIFIED\020\000\022\033\n\027"
-  "DELIVERY_RESULT_APPLIED\020\001\022#\n\037DELIVERY_RE"
-  "SULT_ALREADY_APPLIED\020\002\022\033\n\027DELIVERY_RESUL"
-  "T_EXPIRED\020\003\022\035\n\031DELIVERY_RESULT_NOT_FOUND"
-  "\020\004\022\034\n\030DELIVERY_RESULT_REJECTED\020\005*\260\001\n\016Ack"
-  "Disposition\022\037\n\033ACK_DISPOSITION_UNSPECIFI"
-  "ED\020\000\022\033\n\027ACK_DISPOSITION_TRAINED\020\001\022\033\n\027ACK"
-  "_DISPOSITION_INVALID\020\003\022&\n\"ACK_DISPOSITIO"
-  "N_SHUTDOWN_UNTRAINED\020\004\"\004\010\002\020\002*\025ACK_DISPOS"
-  "ITION_STALE*\274\001\n\rAIServerState\022\036\n\032AISERVE"
-  "R_STATE_UNSPECIFIED\020\000\022\033\n\027AISERVER_STATE_"
-  "STARTING\020\001\022\030\n\024AISERVER_STATE_READY\020\002\022\033\n\027"
-  "AISERVER_STATE_DEGRADED\020\003\022\033\n\027AISERVER_ST"
-  "ATE_DRAINING\020\004\022\032\n\026AISERVER_STATE_STOPPED"
-  "\020\005*q\n\nModelState\022\033\n\027MODEL_STATE_UNSPECIF"
-  "IED\020\000\022\027\n\023MODEL_STATE_WAITING\020\001\022\025\n\021MODEL_"
-  "STATE_READY\020\002\022\026\n\022MODEL_STATE_FAILED\020\003*\351\001"
-  "\n\023ModelRegisterResult\022%\n!MODEL_REGISTER_"
-  "RESULT_UNSPECIFIED\020\000\022$\n MODEL_REGISTER_R"
-  "ESULT_REGISTERED\020\001\022,\n(MODEL_REGISTER_RES"
-  "ULT_ALREADY_REGISTERED\020\002\022*\n&MODEL_REGIST"
-  "ER_RESULT_REJECTED_INVALID\020\003\022+\n\'MODEL_RE"
-  "GISTER_RESULT_REJECTED_CONFLICT\020\004*p\n\017Mod"
-  "elLoadStatus\022!\n\035MODEL_LOAD_STATUS_UNSPEC"
-  "IFIED\020\000\022\034\n\030MODEL_LOAD_STATUS_LOADED\020\001\022\034\n"
-  "\030MODEL_LOAD_STATUS_FAILED\020\002*\265\001\n\016ModelAck"
-  "Result\022 \n\034MODEL_ACK_RESULT_UNSPECIFIED\020\000"
-  "\022\034\n\030MODEL_ACK_RESULT_APPLIED\020\001\022$\n MODEL_"
-  "ACK_RESULT_ALREADY_APPLIED\020\002\022\036\n\032MODEL_AC"
-  "K_RESULT_NOT_FOUND\020\003\022\035\n\031MODEL_ACK_RESULT"
-  "_REJECTED\020\004*\247\001\n\021ModelLookupResult\022#\n\037MOD"
-  "EL_LOOKUP_RESULT_UNSPECIFIED\020\000\022\035\n\031MODEL_"
-  "LOOKUP_RESULT_FOUND\020\001\022!\n\035MODEL_LOOKUP_RE"
-  "SULT_NOT_FOUND\020\002\"\004\010\003\020\003*%MODEL_LOOKUP_RES"
-  "ULT_REJECTED_IDENTITY*^\n\021SampleBackendTy"
-  "pe\022#\n\037SAMPLE_BACKEND_TYPE_UNSPECIFIED\020\000\022"
-  "$\n SAMPLE_BACKEND_TYPE_LOCAL_MEMORY\020\001*\304\002"
-  "\n\030SamplePoolFinalizeResult\022+\n\'SAMPLE_POO"
-  "L_FINALIZE_RESULT_UNSPECIFIED\020\000\022)\n%SAMPL"
-  "E_POOL_FINALIZE_RESULT_FINALIZED\020\001\0221\n-SA"
-  "MPLE_POOL_FINALIZE_RESULT_ALREADY_FINALI"
-  "ZED\020\002\0225\n1SAMPLE_POOL_FINALIZE_RESULT_REJ"
-  "ECTED_ACTIVE_LEASE\020\003\0221\n-SAMPLE_POOL_FINA"
-  "LIZE_RESULT_REJECTED_CONFLICT\020\005\"\004\010\004\020\004*-S"
-  "AMPLE_POOL_FINALIZE_RESULT_REJECTED_IDEN"
-  "TITY2z\n\035AIServerTrainingStatusService\022Y\n"
-  "\021GetAIServerStatus\022!.rl.training.v1.AISe"
-  "rverStatusReq\032!.rl.training.v1.AIServerS"
-  "tatusRsp2n\n\024LearnerStatusService\022V\n\020GetL"
-  "earnerStatus\022 .rl.training.v1.LearnerSta"
-  "tusReq\032 .rl.training.v1.LearnerStatusRsp"
-  "2\300\001\n\030SamplePoolIngressService\022M\n\013PushSam"
-  "ples\022\036.rl.training.v1.PushSamplesReq\032\036.r"
-  "l.training.v1.PushSamplesRsp\022U\n\tGetStatu"
-  "s\022#.rl.training.v1.SamplePoolStatusReq\032#"
-  ".rl.training.v1.SamplePoolStatusRsp2\364\003\n\031"
-  "SamplePoolConsumerService\022D\n\010GetBatch\022\033."
-  "rl.training.v1.GetBatchReq\032\033.rl.training"
-  ".v1.GetBatchRsp\022D\n\010AckBatch\022\033.rl.trainin"
-  "g.v1.AckBatchReq\032\033.rl.training.v1.Delive"
-  "ryRsp\022F\n\tNackBatch\022\034.rl.training.v1.Nack"
-  "BatchReq\032\033.rl.training.v1.DeliveryRsp\022H\n"
-  "\nRenewLease\022\035.rl.training.v1.RenewLeaseR"
-  "eq\032\033.rl.training.v1.DeliveryRsp\022b\n\022Final"
-  "izeSamplePool\022%.rl.training.v1.FinalizeS"
-  "amplePoolReq\032%.rl.training.v1.FinalizeSa"
-  "mplePoolRsp\022U\n\tGetStatus\022#.rl.training.v"
-  "1.SamplePoolStatusReq\032#.rl.training.v1.S"
-  "amplePoolStatusRsp2\275\004\n\027ModelDistributorS"
-  "ervice\022S\n\rRegisterModel\022 .rl.training.v1"
-  ".RegisterModelReq\032 .rl.training.v1.Regis"
-  "terModelRsp\022\\\n\020GetModelManifest\022#.rl.tra"
-  "ining.v1.GetModelManifestReq\032#.rl.traini"
-  "ng.v1.GetModelManifestRsp\022O\n\rDownloadMod"
-  "el\022 .rl.training.v1.DownloadModelReq\032\032.r"
-  "l.training.v1.ModelChunk0\001\022D\n\010AckModel\022\033"
-  ".rl.training.v1.AckModelReq\032\033.rl.trainin"
-  "g.v1.AckModelRsp\022e\n\023GetModelLoadReceipt\022"
-  "&.rl.training.v1.GetModelLoadReceiptReq\032"
-  "&.rl.training.v1.GetModelLoadReceiptRsp\022"
-  "q\n\031GetModelDistributorStatus\022).rl.traini"
-  "ng.v1.ModelDistributorStatusReq\032).rl.tra"
-  "ining.v1.ModelDistributorStatusRspB\003\200\001\000b"
-  "\006proto3"
+  "\022\027\n\017finalization_id\030\003 \001(\t\"\363\001\n\025FinalizeSa"
+  "mplePoolRsp\0228\n\006result\030\001 \001(\0162(.rl.trainin"
+  "g.v1.SamplePoolFinalizeResult\022\017\n\007message"
+  "\030\002 \001(\t\022\027\n\017finalization_id\030\003 \001(\t\022:\n\013sampl"
+  "e_pool\030\004 \001(\0132%.rl.common.v1.ServiceInsta"
+  "nceIdentity\022!\n\024finalized_at_unix_ms\030\005 \001("
+  "\003H\000\210\001\001B\027\n\025_finalized_at_unix_ms\"\025\n\023Sampl"
+  "ePoolStatusReq\"\345\025\n\023SamplePoolStatusRsp\022:"
+  "\n\013sample_pool\030\002 \001(\0132%.rl.common.v1.Servi"
+  "ceInstanceIdentity\022\r\n\005ready\030\003 \001(\010\022\032\n\022pus"
+  "h_attempt_count\030\004 \001(\003\022#\n\033accepted_unique"
+  "_transitions\030\005 \001(\003\022!\n\031accepted_unique_en"
+  "velopes\030\006 \001(\003\022$\n\034duplicate_push_attempt_"
+  "count\030\007 \001(\003\022%\n\035duplicate_transition_atte"
+  "mpts\030\010 \001(\003\022#\n\033rejected_push_attempt_coun"
+  "t\030\t \001(\003\022$\n\034rejected_transition_attempts\030"
+  "\n \001(\003\022*\n\"acknowledged_transition_slot_co"
+  "unt\030\013 \001(\003\022\037\n\027acked_unique_deliveries\030\014 \001"
+  "(\003\022\031\n\021ready_transitions\030\r \001(\003\022\032\n\022leased_"
+  "transitions\030\017 \001(\003\022\034\n\024resident_transition"
+  "s\030\021 \001(\003\022\032\n\022resident_envelopes\030\022 \001(\003\022 \n\030r"
+  "esident_estimated_bytes\030\023 \001(\003\022\034\n\024capacit"
+  "y_transitions\030\024 \001(\003\022\026\n\016capacity_bytes\030\026 "
+  "\001(\003\0225\n\016pressure_state\030\027 \001(\0162\035.rl.trainin"
+  "g.v1.PressureState\022&\n\036released_transitio"
+  "n_slot_count\030\030 \001(\003\022\022\n\nnack_count\030\031 \001(\003\022\033"
+  "\n\023expired_lease_count\030\032 \001(\003\022\"\n\025latest_ac"
+  "k_at_unix_ms\030\033 \001(\003H\000\210\001\001\022\030\n\020target_hit_co"
+  "unt\030\034 \001(\003\022\031\n\021partial_get_count\030\035 \001(\003\022\033\n\023"
+  "empty_timeout_count\030\036 \001(\003\022\022\n\nlast_error\030"
+  "\037 \001(\t\022 \n\030trained_transition_count\030! \001(\003\022"
+  " \n\030invalid_transition_count\030# \001(\003\022+\n#shu"
+  "tdown_untrained_transition_count\030$ \001(\003\022\031"
+  "\n\021lease_renew_count\030% \001(\003\0227\n\014backend_typ"
+  "e\030& \001(\0162!.rl.training.v1.SampleBackendTy"
+  "pe\022 \n\030max_concurrent_consumers\030\' \001(\005\022\035\n\025"
+  "active_consumer_count\030( \001(\005\022\033\n\023consumer_"
+  "busy_count\030) \001(\003\022\025\n\ringress_ready\030* \001(\010\022"
+  "\022\n\npool_ready\030+ \001(\010\022\031\n\021timestamp_unix_ms"
+  "\030, \001(\003\022+\n\036oldest_ready_transition_age_ms"
+  "\030- \001(\003H\001\210\001\001\022%\n\030minimum_ready_model_step\030"
+  ". \001(\004H\002\210\001\001\022%\n\030maximum_ready_model_step\030/"
+  " \001(\004H\003\210\001\001\022 \n\030evicted_transition_count\030B "
+  "\001(\003\022\036\n\026evicted_envelope_count\030C \001(\003\022\021\n\tf"
+  "inalized\030D \001(\010\022\027\n\017finalization_id\030E \001(\t\022"
+  "!\n\024finalized_at_unix_ms\030F \001(\003H\004\210\001\001\022\"\n\032fi"
+  "nalized_transition_count\030G \001(\003\022\032\n\022draw_a"
+  "ttempt_count\030I \001(\003\022#\n\033drawn_transition_s"
+  "lot_count\030J \001(\003\022*\n\"unsampled_evicted_tra"
+  "nsition_count\030K \001(\003\0221\n)previously_drawn_"
+  "evicted_transition_count\030L \001(\003\022\'\n\037remove"
+  "d_on_ack_transition_count\030M \001(\003\0223\n\nreuse"
+  "_mode\030N \001(\0162\037.rl.training.v1.SampleReuse"
+  "Mode\022)\n!unselected_round_transition_coun"
+  "t\030O \001(\003\022A\n\032completed_collection_round\030P "
+  "\001(\0132\035.rl.training.v1.ModelIdentity\022\037\n\027co"
+  "llection_round_sealed\030Q \001(\010B\030\n\026_latest_a"
+  "ck_at_unix_msB!\n\037_oldest_ready_transitio"
+  "n_age_msB\033\n\031_minimum_ready_model_stepB\033\n"
+  "\031_maximum_ready_model_stepB\027\n\025_finalized"
+  "_at_unix_msJ\004\010\001\020\002J\004\010\016\020\017J\004\010\020\020\021J\004\010\025\020\026J\004\010 \020"
+  "!J\004\010\"\020#J\004\0100\020BJ\004\010H\020IR\021behavior_versionsR\033"
+  "minimum_ready_model_versionR\033maximum_rea"
+  "dy_model_versionR\010contractR\025ready_queue_"
+  "fragmentsR\020leased_fragmentsR\022capacity_fr"
+  "agmentsR\016behavior_stepsR\022stale_sample_co"
+  "untR\023active_demand_countR\023active_demand_"
+  "epochR\024active_demand_age_msR\020reserved_sa"
+  "mplesR\022reserved_fragmentsR\030reserved_esti"
+  "mated_bytesR\024credit_request_countR\022credi"
+  "t_grant_countR\023credit_commit_countR\024cred"
+  "it_release_countR\023credit_expire_countR\023c"
+  "redit_revoke_countR\033credit_wait_no_deman"
+  "d_countR credit_wait_inflight_limit_coun"
+  "tR\032credit_wait_capacity_countR\032credit_wa"
+  "it_draining_countR\023demand_upsert_countR\024"
+  "demand_release_countR\030finalized_fragment"
+  "_count\"\023\n\021AIServerStatusReq\"p\n\023ModelFeed"
+  "backStatus\0226\n\017candidate_model\030\001 \001(\0132\035.rl"
+  ".training.v1.ModelIdentity\022\r\n\005stage\030\002 \001("
+  "\t\022\022\n\nlast_error\030\003 \001(\t\"\360\r\n\021AIServerStatus"
+  "Rsp\0227\n\010aiserver\030\002 \001(\0132%.rl.common.v1.Ser"
+  "viceInstanceIdentity\022,\n\005state\030\003 \001(\0162\035.rl"
+  ".training.v1.AIServerState\022\r\n\005ready\030\004 \001("
+  "\010\022\031\n\021distributor_ready\030\005 \001(\010\022/\n\013model_st"
+  "ate\030\006 \001(\0162\032.rl.training.v1.ModelState\0223\n"
+  "\014loaded_model\030\007 \001(\0132\035.rl.training.v1.Mod"
+  "elIdentity\0223\n\014staged_model\030\010 \001(\0132\035.rl.tr"
+  "aining.v1.ModelIdentity\022 \n\030outbound_queu"
+  "e_envelopes\030\t \001(\003\022\"\n\032outbound_queue_tran"
+  "sitions\030\n \001(\003\022&\n\036outbound_queue_estimate"
+  "d_bytes\030\013 \001(\003\022%\n\035outbound_queue_high_wat"
+  "ermark\030\014 \001(\003\022#\n\033produced_unique_transiti"
+  "ons\030\r \001(\003\022!\n\031produced_unique_envelopes\030\016"
+  " \001(\003\022\032\n\022push_attempt_count\030\017 \001(\003\022#\n\033acce"
+  "pted_unique_transitions\030\020 \001(\003\022$\n\034duplica"
+  "te_push_attempt_count\030\021 \001(\003\022#\n\033rejected_"
+  "push_attempt_count\030\022 \001(\003\022\033\n\023retry_attemp"
+  "t_count\030\023 \001(\003\022%\n\035final_drop_unique_trans"
+  "itions\030\024 \001(\003\022\"\n\032active_actor_session_cou"
+  "nt\030\025 \001(\003\022\034\n\024active_segment_count\030\026 \001(\003\022\027"
+  "\n\017inference_count\030\027 \001(\003\022 \n\030inference_lat"
+  "ency_sum_ms\030\030 \001(\001\022 \n\030inference_latency_m"
+  "ax_ms\030\031 \001(\001\022\026\n\016push_rpc_count\030\032 \001(\003\022\037\n\027p"
+  "ush_rpc_latency_sum_ms\030\033 \001(\001\022\037\n\027push_rpc"
+  "_latency_max_ms\030\034 \001(\001\022\032\n\022model_switch_co"
+  "unt\030\035 \001(\003\022$\n\034quarantined_transition_coun"
+  "t\030\036 \001(\003\022\"\n\032quarantined_envelope_count\030\037 "
+  "\001(\003\022\022\n\nlast_error\030  \001(\t\022\031\n\021timestamp_uni"
+  "x_ms\030! \001(\003\022\034\n\024closed_segment_count\030# \001(\003"
+  "\022%\n\035pending_action_excluded_count\030$ \001(\003\022"
+  "\'\n\037rollout_estimator_failure_count\030% \001(\003"
+  "\022(\n per_agent_model_activation_count\030& \001"
+  "(\003\0221\n)superseded_without_agent_activatio"
+  "n_count\030\' \001(\003\022\?\n\024segment_close_counts\030( "
+  "\003(\0132!.rl.training.v1.SegmentCloseCount\022;"
+  "\n\016model_feedback\030) \001(\0132#.rl.training.v1."
+  "ModelFeedbackStatus\022\030\n\020update_rpc_count\030"
+  "* \001(\003\022!\n\031update_rpc_latency_sum_ms\030+ \001(\001"
+  "\022!\n\031update_rpc_latency_max_ms\030, \001(\001J\004\010\001\020"
+  "\002J\004\010\"\020#R\010contractR rollout_estimator_pro"
+  "file_digestR\024credit_request_countR\022credi"
+  "t_grant_countR\021credit_wait_countR\026credit"
+  "_reacquire_countR\024producer_stale_countR\020"
+  "capacity_wait_msR\026training_capacity_wait"
+  "\"V\n\021SegmentCloseCount\0222\n\006reason\030\001 \001(\0162\"."
+  "rl.training.v1.SegmentCloseReason\022\r\n\005cou"
+  "nt\030\002 \001(\003\"\337\003\n\025ModelArtifactManifest\022/\n\010id"
+  "entity\030\003 \001(\0132\035.rl.training.v1.ModelIdent"
+  "ity\022\022\n\nsize_bytes\030\r \001(\003\022\027\n\017trained_sampl"
+  "es\030\020 \001(\004\022\034\n\024published_at_unix_ms\030\023 \001(\003J\004"
+  "\010\001\020\002J\004\010\002\020\003J\004\010\004\020\rJ\004\010\016\020\017J\004\010\017\020\020J\004\010\021\020\022J\004\010\022\020\023"
+  "J\004\010\024\020\025J\004\010\025\020\026R\027manifest_schema_versionR\010c"
+  "ontractR\022observation_schemaR\raction_sche"
+  "maR\025model_architecture_idR\014tensor_dtypeR"
+  "\013input_shapeR\014action_shapeR\013value_shapeR"
+  "\014artifact_uriR\nmodel_fileR\004seedR\rtrain_u"
+  "pdatesR\005readyR\026training_config_digestR\030t"
+  "raining_contract_digestR\031rollout_estimat"
+  "or_profile\"x\n\020RegisterModelReq\0227\n\010manife"
+  "st\030\001 \001(\0132%.rl.training.v1.ModelArtifactM"
+  "anifest\022\033\n\023local_artifact_path\030\003 \001(\tJ\004\010\002"
+  "\020\003R\010contract\"\315\001\n\020RegisterModelRsp\0223\n\006res"
+  "ult\030\001 \001(\0162#.rl.training.v1.ModelRegister"
+  "Result\022\017\n\007message\030\002 \001(\t\0227\n\010manifest\030\003 \001("
+  "\0132%.rl.training.v1.ModelArtifactManifest"
+  "\022:\n\013distributor\030\004 \001(\0132%.rl.common.v1.Ser"
+  "viceInstanceIdentity\"\242\001\n\023GetModelManifes"
+  "tReq\0226\n\017requested_model\030\001 \001(\0132\035.rl.train"
+  "ing.v1.ModelIdentity\0228\n\trequester\030\002 \001(\0132"
+  "%.rl.common.v1.ServiceInstanceIdentity\022\031"
+  "\n\021latest_in_lineage\030\003 \001(\010\"\340\002\n\023GetModelMa"
+  "nifestRsp\0221\n\006result\030\001 \001(\0162!.rl.training."
+  "v1.ModelLookupResult\022\017\n\007message\030\002 \001(\t\0227\n"
+  "\010manifest\030\003 \001(\0132%.rl.training.v1.ModelAr"
+  "tifactManifest\022:\n\013distributor\030\004 \001(\0132%.rl"
+  ".common.v1.ServiceInstanceIdentity\022\'\n\032av"
+  "ailable_floor_model_step\030\005 \001(\004H\000\210\001\001\022(\n\033l"
+  "atest_available_model_step\030\006 \001(\004H\001\210\001\001B\035\n"
+  "\033_available_floor_model_stepB\036\n\034_latest_"
+  "available_model_step\"\204\001\n\020DownloadModelRe"
+  "q\0226\n\017requested_model\030\001 \001(\0132\035.rl.training"
+  ".v1.ModelIdentity\0228\n\trequester\030\002 \001(\0132%.r"
+  "l.common.v1.ServiceInstanceIdentity\"X\n\nM"
+  "odelChunk\022,\n\005model\030\001 \001(\0132\035.rl.training.v"
+  "1.ModelIdentity\022\016\n\006offset\030\002 \001(\003\022\014\n\004data\030"
+  "\003 \001(\014\"\325\001\n\013AckModelReq\0227\n\010aiserver\030\001 \001(\0132"
+  "%.rl.common.v1.ServiceInstanceIdentity\022,"
+  "\n\005model\030\002 \001(\0132\035.rl.training.v1.ModelIden"
+  "tity\022\030\n\020load_instance_id\030\003 \001(\t\0224\n\013load_s"
+  "tatus\030\004 \001(\0162\037.rl.training.v1.ModelLoadSt"
+  "atus\022\017\n\007message\030\005 \001(\t\"\212\001\n\013AckModelRsp\022.\n"
+  "\006result\030\001 \001(\0162\036.rl.training.v1.ModelAckR"
+  "esult\022\017\n\007message\030\002 \001(\t\022:\n\013distributor\030\003 "
+  "\001(\0132%.rl.common.v1.ServiceInstanceIdenti"
+  "ty\"\177\n\026GetModelLoadReceiptReq\0227\n\010aiserver"
+  "\030\001 \001(\0132%.rl.common.v1.ServiceInstanceIde"
+  "ntity\022,\n\005model\030\002 \001(\0132\035.rl.training.v1.Mo"
+  "delIdentity\"\235\001\n\026GetModelLoadReceiptRsp\022:"
+  "\n\013distributor\030\001 \001(\0132%.rl.common.v1.Servi"
+  "ceInstanceIdentity\022,\n\007receipt\030\002 \001(\0132\033.rl"
+  ".training.v1.AckModelReq\022\031\n\021outside_rete"
+  "ntion\030\003 \001(\010\"\033\n\031ModelDistributorStatusReq"
+  "\"\221\007\n\031ModelDistributorStatusRsp\022:\n\013distri"
+  "butor\030\002 \001(\0132%.rl.common.v1.ServiceInstan"
+  "ceIdentity\022\r\n\005ready\030\003 \001(\010\022\036\n\026registered_"
+  "model_count\030\004 \001(\003\0223\n\014latest_model\030\005 \001(\0132"
+  "\035.rl.training.v1.ModelIdentity\022\036\n\026regist"
+  "er_attempt_count\030\006 \001(\003\022 \n\030duplicate_regi"
+  "ster_count\030\007 \001(\003\022\037\n\027rejected_register_co"
+  "unt\030\010 \001(\003\022\036\n\026download_request_count\030\t \001("
+  "\003\022\036\n\026download_success_count\030\n \001(\003\022\036\n\026dow"
+  "nload_failure_count\030\013 \001(\003\022\024\n\014bytes_serve"
+  "d\030\014 \001(\003\022\030\n\020loaded_ack_count\030\r \001(\003\022\030\n\020fai"
+  "led_ack_count\030\016 \001(\003\022B\n\023latest_ack_aiserv"
+  "er\030\017 \001(\0132%.rl.common.v1.ServiceInstanceI"
+  "dentity\0227\n\020latest_ack_model\030\020 \001(\0132\035.rl.t"
+  "raining.v1.ModelIdentity\022:\n\021latest_ack_s"
+  "tatus\030\021 \001(\0162\037.rl.training.v1.ModelLoadSt"
+  "atus\022\022\n\nlast_error\030\022 \001(\t\022\031\n\021timestamp_un"
+  "ix_ms\030\023 \001(\003\022\'\n\032available_floor_model_ste"
+  "p\030\024 \001(\004H\000\210\001\001\022(\n\033latest_available_model_s"
+  "tep\030\025 \001(\004H\001\210\001\001B\035\n\033_available_floor_model"
+  "_stepB\036\n\034_latest_available_model_stepJ\004\010"
+  "\001\020\002R\035available_floor_model_versionR\036late"
+  "st_available_model_versionR\010contract\"\022\n\020"
+  "LearnerStatusReq\"\257\007\n\020LearnerStatusRsp\0226\n"
+  "\007learner\030\001 \001(\0132%.rl.common.v1.ServiceIns"
+  "tanceIdentity\022\031\n\021timestamp_unix_ms\030\002 \001(\003"
+  "\022,\n\005model\030\003 \001(\0132\035.rl.training.v1.ModelId"
+  "entity\022\022\n\nmodel_step\030\004 \001(\004\022\025\n\rtrain_upda"
+  "tes\030\005 \001(\004\022\027\n\017trained_samples\030\006 \001(\004\022\031\n\021ru"
+  "n_train_updates\030\007 \001(\004\022\033\n\023run_trained_sam"
+  "ples\030\010 \001(\004\022\032\n\022initial_model_step\030\t \001(\004\022\030"
+  "\n\020train_batch_size\030\n \001(\004\022\036\n\021actual_batch"
+  "_size\030\013 \001(\004H\000\210\001\001\022\'\n\032requested_train_batc"
+  "h_size\030\014 \001(\004H\001\210\001\001\022!\n\024pool_draw_slot_coun"
+  "t\030\r \001(\004H\002\210\001\001\022\036\n\021unique_item_count\030\016 \001(\004H"
+  "\003\210\001\001\022&\n\031duplicate_item_slot_count\030\017 \001(\004H"
+  "\004\210\001\001\022$\n\027sample_evaluation_count\030\020 \001(\004H\005\210"
+  "\001\001\022!\n\024optimizer_step_count\030\021 \001(\004H\006\210\001\001\022!\n"
+  "\024max_importance_ratio\030\022 \001(\001H\007\210\001\001\022\037\n\022expl"
+  "ained_variance\030\023 \001(\001H\010\210\001\001\022\023\n\013disposition"
+  "\030\024 \001(\t\022\022\n\nlast_error\030\025 \001(\t\022\027\n\017train_upda"
+  "te_id\030\026 \001(\tB\024\n\022_actual_batch_sizeB\035\n\033_re"
+  "quested_train_batch_sizeB\027\n\025_pool_draw_s"
+  "lot_countB\024\n\022_unique_item_countB\034\n\032_dupl"
+  "icate_item_slot_countB\032\n\030_sample_evaluat"
+  "ion_countB\027\n\025_optimizer_step_countB\027\n\025_m"
+  "ax_importance_ratioB\025\n\023_explained_varian"
+  "ce*\326\002\n\022SegmentCloseReason\022$\n SEGMENT_CLO"
+  "SE_REASON_UNSPECIFIED\020\000\022/\n+SEGMENT_CLOSE"
+  "_REASON_ENVIRONMENT_TERMINATED\020\001\022\035\n\031SEGM"
+  "ENT_CLOSE_REASON_TMAX\020\003\0220\n,SEGMENT_CLOSE"
+  "_REASON_CLIENT_CONTROLLED_CLOSE\020\004\0220\n,SEG"
+  "MENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOU"
+  "T\020\005\0225\n1SEGMENT_CLOSE_REASON_AISERVER_CON"
+  "TROLLED_SHUTDOWN\020\006\022)\n%SEGMENT_CLOSE_REAS"
+  "ON_COLLECTION_ROUND\020\007\"\004\010\002\020\002*\217\002\n\nPushResu"
+  "lt\022\033\n\027PUSH_RESULT_UNSPECIFIED\020\000\022\030\n\024PUSH_"
+  "RESULT_ACCEPTED\020\001\022\031\n\025PUSH_RESULT_DUPLICA"
+  "TE\020\002\022!\n\035PUSH_RESULT_REJECTED_CAPACITY\020\003\022"
+  " \n\034PUSH_RESULT_REJECTED_INVALID\020\004\022!\n\035PUS"
+  "H_RESULT_REJECTED_CONFLICT\020\006\022\"\n\036PUSH_RES"
+  "ULT_REJECTED_FINALIZED\020\007\"\004\010\005\020\005*\035PUSH_RES"
+  "ULT_REJECTED_IDENTITY*|\n\rPressureState\022\036"
+  "\n\032PRESSURE_STATE_UNSPECIFIED\020\000\022\031\n\025PRESSU"
+  "RE_STATE_NORMAL\020\001\022\027\n\023PRESSURE_STATE_HIGH"
+  "\020\002\022\027\n\023PRESSURE_STATE_FULL\020\003*\247\001\n\016GetBatch"
+  "Result\022 \n\034GET_BATCH_RESULT_UNSPECIFIED\020\000"
+  "\022\033\n\027GET_BATCH_RESULT_LEASED\020\001\022\034\n\030GET_BAT"
+  "CH_RESULT_TIMEOUT\020\002\022\031\n\025GET_BATCH_RESULT_"
+  "BUSY\020\003\022\035\n\031GET_BATCH_RESULT_REJECTED\020\004*\315\001"
+  "\n\016DeliveryResult\022\037\n\033DELIVERY_RESULT_UNSP"
+  "ECIFIED\020\000\022\033\n\027DELIVERY_RESULT_APPLIED\020\001\022#"
+  "\n\037DELIVERY_RESULT_ALREADY_APPLIED\020\002\022\033\n\027D"
+  "ELIVERY_RESULT_EXPIRED\020\003\022\035\n\031DELIVERY_RES"
+  "ULT_NOT_FOUND\020\004\022\034\n\030DELIVERY_RESULT_REJEC"
+  "TED\020\005*\260\001\n\016AckDisposition\022\037\n\033ACK_DISPOSIT"
+  "ION_UNSPECIFIED\020\000\022\033\n\027ACK_DISPOSITION_TRA"
+  "INED\020\001\022\033\n\027ACK_DISPOSITION_INVALID\020\003\022&\n\"A"
+  "CK_DISPOSITION_SHUTDOWN_UNTRAINED\020\004\"\004\010\002\020"
+  "\002*\025ACK_DISPOSITION_STALE*\274\001\n\rAIServerSta"
+  "te\022\036\n\032AISERVER_STATE_UNSPECIFIED\020\000\022\033\n\027AI"
+  "SERVER_STATE_STARTING\020\001\022\030\n\024AISERVER_STAT"
+  "E_READY\020\002\022\033\n\027AISERVER_STATE_DEGRADED\020\003\022\033"
+  "\n\027AISERVER_STATE_DRAINING\020\004\022\032\n\026AISERVER_"
+  "STATE_STOPPED\020\005*q\n\nModelState\022\033\n\027MODEL_S"
+  "TATE_UNSPECIFIED\020\000\022\027\n\023MODEL_STATE_WAITIN"
+  "G\020\001\022\025\n\021MODEL_STATE_READY\020\002\022\026\n\022MODEL_STAT"
+  "E_FAILED\020\003*\351\001\n\023ModelRegisterResult\022%\n!MO"
+  "DEL_REGISTER_RESULT_UNSPECIFIED\020\000\022$\n MOD"
+  "EL_REGISTER_RESULT_REGISTERED\020\001\022,\n(MODEL"
+  "_REGISTER_RESULT_ALREADY_REGISTERED\020\002\022*\n"
+  "&MODEL_REGISTER_RESULT_REJECTED_INVALID\020"
+  "\003\022+\n\'MODEL_REGISTER_RESULT_REJECTED_CONF"
+  "LICT\020\004*p\n\017ModelLoadStatus\022!\n\035MODEL_LOAD_"
+  "STATUS_UNSPECIFIED\020\000\022\034\n\030MODEL_LOAD_STATU"
+  "S_LOADED\020\001\022\034\n\030MODEL_LOAD_STATUS_FAILED\020\002"
+  "*\265\001\n\016ModelAckResult\022 \n\034MODEL_ACK_RESULT_"
+  "UNSPECIFIED\020\000\022\034\n\030MODEL_ACK_RESULT_APPLIE"
+  "D\020\001\022$\n MODEL_ACK_RESULT_ALREADY_APPLIED\020"
+  "\002\022\036\n\032MODEL_ACK_RESULT_NOT_FOUND\020\003\022\035\n\031MOD"
+  "EL_ACK_RESULT_REJECTED\020\004*\247\001\n\021ModelLookup"
+  "Result\022#\n\037MODEL_LOOKUP_RESULT_UNSPECIFIE"
+  "D\020\000\022\035\n\031MODEL_LOOKUP_RESULT_FOUND\020\001\022!\n\035MO"
+  "DEL_LOOKUP_RESULT_NOT_FOUND\020\002\"\004\010\003\020\003*%MOD"
+  "EL_LOOKUP_RESULT_REJECTED_IDENTITY*\237\001\n\017S"
+  "ampleReuseMode\022!\n\035SAMPLE_REUSE_MODE_UNSP"
+  "ECIFIED\020\000\022\034\n\030SAMPLE_REUSE_MODE_REPLAY\020\001\022"
+  "\"\n\036SAMPLE_REUSE_MODE_CONSUME_ONCE\020\002\022\'\n#S"
+  "AMPLE_REUSE_MODE_SYNCHRONOUS_ROUND\020\003*^\n\021"
+  "SampleBackendType\022#\n\037SAMPLE_BACKEND_TYPE"
+  "_UNSPECIFIED\020\000\022$\n SAMPLE_BACKEND_TYPE_LO"
+  "CAL_MEMORY\020\001*\304\002\n\030SamplePoolFinalizeResul"
+  "t\022+\n\'SAMPLE_POOL_FINALIZE_RESULT_UNSPECI"
+  "FIED\020\000\022)\n%SAMPLE_POOL_FINALIZE_RESULT_FI"
+  "NALIZED\020\001\0221\n-SAMPLE_POOL_FINALIZE_RESULT"
+  "_ALREADY_FINALIZED\020\002\0225\n1SAMPLE_POOL_FINA"
+  "LIZE_RESULT_REJECTED_ACTIVE_LEASE\020\003\0221\n-S"
+  "AMPLE_POOL_FINALIZE_RESULT_REJECTED_CONF"
+  "LICT\020\005\"\004\010\004\020\004*-SAMPLE_POOL_FINALIZE_RESUL"
+  "T_REJECTED_IDENTITY2z\n\035AIServerTrainingS"
+  "tatusService\022Y\n\021GetAIServerStatus\022!.rl.t"
+  "raining.v1.AIServerStatusReq\032!.rl.traini"
+  "ng.v1.AIServerStatusRsp2n\n\024LearnerStatus"
+  "Service\022V\n\020GetLearnerStatus\022 .rl.trainin"
+  "g.v1.LearnerStatusReq\032 .rl.training.v1.L"
+  "earnerStatusRsp2\300\001\n\030SamplePoolIngressSer"
+  "vice\022M\n\013PushSamples\022\036.rl.training.v1.Pus"
+  "hSamplesReq\032\036.rl.training.v1.PushSamples"
+  "Rsp\022U\n\tGetStatus\022#.rl.training.v1.Sample"
+  "PoolStatusReq\032#.rl.training.v1.SamplePoo"
+  "lStatusRsp2\364\003\n\031SamplePoolConsumerService"
+  "\022D\n\010GetBatch\022\033.rl.training.v1.GetBatchRe"
+  "q\032\033.rl.training.v1.GetBatchRsp\022D\n\010AckBat"
+  "ch\022\033.rl.training.v1.AckBatchReq\032\033.rl.tra"
+  "ining.v1.DeliveryRsp\022F\n\tNackBatch\022\034.rl.t"
+  "raining.v1.NackBatchReq\032\033.rl.training.v1"
+  ".DeliveryRsp\022H\n\nRenewLease\022\035.rl.training"
+  ".v1.RenewLeaseReq\032\033.rl.training.v1.Deliv"
+  "eryRsp\022b\n\022FinalizeSamplePool\022%.rl.traini"
+  "ng.v1.FinalizeSamplePoolReq\032%.rl.trainin"
+  "g.v1.FinalizeSamplePoolRsp\022U\n\tGetStatus\022"
+  "#.rl.training.v1.SamplePoolStatusReq\032#.r"
+  "l.training.v1.SamplePoolStatusRsp2\275\004\n\027Mo"
+  "delDistributorService\022S\n\rRegisterModel\022 "
+  ".rl.training.v1.RegisterModelReq\032 .rl.tr"
+  "aining.v1.RegisterModelRsp\022\\\n\020GetModelMa"
+  "nifest\022#.rl.training.v1.GetModelManifest"
+  "Req\032#.rl.training.v1.GetModelManifestRsp"
+  "\022O\n\rDownloadModel\022 .rl.training.v1.Downl"
+  "oadModelReq\032\032.rl.training.v1.ModelChunk0"
+  "\001\022D\n\010AckModel\022\033.rl.training.v1.AckModelR"
+  "eq\032\033.rl.training.v1.AckModelRsp\022e\n\023GetMo"
+  "delLoadReceipt\022&.rl.training.v1.GetModel"
+  "LoadReceiptReq\032&.rl.training.v1.GetModel"
+  "LoadReceiptRsp\022q\n\031GetModelDistributorSta"
+  "tus\022).rl.training.v1.ModelDistributorSta"
+  "tusReq\032).rl.training.v1.ModelDistributor"
+  "StatusRspB\003\200\001\000b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_proto_2ftraining_2ftraining_2eproto_deps[2] = {
   &::descriptor_table_proto_2fcommon_2fidentity_2eproto,
@@ -1708,7 +1752,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_proto_2ftraining_2f
 };
 static ::_pbi::once_flag descriptor_table_proto_2ftraining_2ftraining_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_proto_2ftraining_2ftraining_2eproto = {
-    false, false, 15647, descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto,
+    false, false, 16302, descriptor_table_protodef_proto_2ftraining_2ftraining_2eproto,
     "proto/training/training.proto",
     &descriptor_table_proto_2ftraining_2ftraining_2eproto_once, descriptor_table_proto_2ftraining_2ftraining_2eproto_deps, 2, 34,
     schemas, file_default_instances, TableStruct_proto_2ftraining_2ftraining_2eproto::offsets,
@@ -1736,6 +1780,7 @@ bool SegmentCloseReason_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+    case 7:
       return true;
     default:
       return false;
@@ -1926,9 +1971,25 @@ bool ModelLookupResult_IsValid(int value) {
   }
 }
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleBackendType_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleReuseMode_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_proto_2ftraining_2ftraining_2eproto);
   return file_level_enum_descriptors_proto_2ftraining_2ftraining_2eproto[12];
+}
+bool SampleReuseMode_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleBackendType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_proto_2ftraining_2ftraining_2eproto);
+  return file_level_enum_descriptors_proto_2ftraining_2ftraining_2eproto[13];
 }
 bool SampleBackendType_IsValid(int value) {
   switch (value) {
@@ -1942,7 +2003,7 @@ bool SampleBackendType_IsValid(int value) {
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SamplePoolFinalizeResult_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_proto_2ftraining_2ftraining_2eproto);
-  return file_level_enum_descriptors_proto_2ftraining_2ftraining_2eproto[13];
+  return file_level_enum_descriptors_proto_2ftraining_2ftraining_2eproto[14];
 }
 bool SamplePoolFinalizeResult_IsValid(int value) {
   switch (value) {
@@ -2475,8 +2536,15 @@ void ProcessedTransition::InternalSwap(ProcessedTransition* other) {
 
 class ProcessedTransitionEnvelope::_Internal {
  public:
+  using HasBits = decltype(std::declval<ProcessedTransitionEnvelope>()._impl_._has_bits_);
   static const ::rl::common::v1::ServiceInstanceIdentity& producer(const ProcessedTransitionEnvelope* msg);
   static const ::rl::training::v1::ModelIdentity& behavior_model(const ProcessedTransitionEnvelope* msg);
+  static void set_has_collection_round_batch_size(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static void set_has_collection_round_transition_count(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
 };
 
 const ::rl::common::v1::ServiceInstanceIdentity&
@@ -2509,11 +2577,14 @@ ProcessedTransitionEnvelope::ProcessedTransitionEnvelope(const ProcessedTransiti
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   ProcessedTransitionEnvelope* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.samples_){from._impl_.samples_}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.samples_){from._impl_.samples_}
     , decltype(_impl_.envelope_id_){}
     , decltype(_impl_.producer_){nullptr}
     , decltype(_impl_.behavior_model_){nullptr}
-    , /*decltype(_impl_._cached_size_)*/{}};
+    , decltype(_impl_.collection_round_batch_size_){}
+    , decltype(_impl_.collection_round_transition_count_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _impl_.envelope_id_.InitDefault();
@@ -2530,6 +2601,9 @@ ProcessedTransitionEnvelope::ProcessedTransitionEnvelope(const ProcessedTransiti
   if (from._internal_has_behavior_model()) {
     _this->_impl_.behavior_model_ = new ::rl::training::v1::ModelIdentity(*from._impl_.behavior_model_);
   }
+  ::memcpy(&_impl_.collection_round_batch_size_, &from._impl_.collection_round_batch_size_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.collection_round_transition_count_) -
+    reinterpret_cast<char*>(&_impl_.collection_round_batch_size_)) + sizeof(_impl_.collection_round_transition_count_));
   // @@protoc_insertion_point(copy_constructor:rl.training.v1.ProcessedTransitionEnvelope)
 }
 
@@ -2538,11 +2612,14 @@ inline void ProcessedTransitionEnvelope::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.samples_){arena}
+      decltype(_impl_._has_bits_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.samples_){arena}
     , decltype(_impl_.envelope_id_){}
     , decltype(_impl_.producer_){nullptr}
     , decltype(_impl_.behavior_model_){nullptr}
-    , /*decltype(_impl_._cached_size_)*/{}
+    , decltype(_impl_.collection_round_batch_size_){0u}
+    , decltype(_impl_.collection_round_transition_count_){0u}
   };
   _impl_.envelope_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -2587,11 +2664,19 @@ void ProcessedTransitionEnvelope::Clear() {
     delete _impl_.behavior_model_;
   }
   _impl_.behavior_model_ = nullptr;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&_impl_.collection_round_batch_size_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&_impl_.collection_round_transition_count_) -
+        reinterpret_cast<char*>(&_impl_.collection_round_batch_size_)) + sizeof(_impl_.collection_round_transition_count_));
+  }
+  _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* ProcessedTransitionEnvelope::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
@@ -2635,6 +2720,24 @@ const char* ProcessedTransitionEnvelope::_InternalParse(const char* ptr, ::_pbi:
         } else
           goto handle_unusual;
         continue;
+      // optional uint32 collection_round_batch_size = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _Internal::set_has_collection_round_batch_size(&has_bits);
+          _impl_.collection_round_batch_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // optional uint32 collection_round_transition_count = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          _Internal::set_has_collection_round_transition_count(&has_bits);
+          _impl_.collection_round_transition_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -2651,6 +2754,7 @@ const char* ProcessedTransitionEnvelope::_InternalParse(const char* ptr, ::_pbi:
     CHK_(ptr != nullptr);
   }  // while
 message_done:
+  _impl_._has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -2694,6 +2798,18 @@ uint8_t* ProcessedTransitionEnvelope::_InternalSerialize(
     const auto& repfield = this->_internal_samples(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
         InternalWriteMessage(6, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // optional uint32 collection_round_batch_size = 7;
+  if (_internal_has_collection_round_batch_size()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(7, this->_internal_collection_round_batch_size(), target);
+  }
+
+  // optional uint32 collection_round_transition_count = 8;
+  if (_internal_has_collection_round_transition_count()) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(8, this->_internal_collection_round_transition_count(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2740,6 +2856,19 @@ size_t ProcessedTransitionEnvelope::ByteSizeLong() const {
         *_impl_.behavior_model_);
   }
 
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // optional uint32 collection_round_batch_size = 7;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_collection_round_batch_size());
+    }
+
+    // optional uint32 collection_round_transition_count = 8;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_collection_round_transition_count());
+    }
+
+  }
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2770,6 +2899,16 @@ void ProcessedTransitionEnvelope::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to
     _this->_internal_mutable_behavior_model()->::rl::training::v1::ModelIdentity::MergeFrom(
         from._internal_behavior_model());
   }
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_impl_.collection_round_batch_size_ = from._impl_.collection_round_batch_size_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_impl_.collection_round_transition_count_ = from._impl_.collection_round_transition_count_;
+    }
+    _this->_impl_._has_bits_[0] |= cached_has_bits;
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2789,14 +2928,15 @@ void ProcessedTransitionEnvelope::InternalSwap(ProcessedTransitionEnvelope* othe
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.samples_.InternalSwap(&other->_impl_.samples_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.envelope_id_, lhs_arena,
       &other->_impl_.envelope_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ProcessedTransitionEnvelope, _impl_.behavior_model_)
-      + sizeof(ProcessedTransitionEnvelope::_impl_.behavior_model_)
+      PROTOBUF_FIELD_OFFSET(ProcessedTransitionEnvelope, _impl_.collection_round_transition_count_)
+      + sizeof(ProcessedTransitionEnvelope::_impl_.collection_round_transition_count_)
       - PROTOBUF_FIELD_OFFSET(ProcessedTransitionEnvelope, _impl_.producer_)>(
           reinterpret_cast<char*>(&_impl_.producer_),
           reinterpret_cast<char*>(&other->_impl_.producer_));
@@ -4052,6 +4192,7 @@ GetBatchRsp::GetBatchRsp(const GetBatchRsp& from)
     , decltype(_impl_.sample_pool_){nullptr}
     , decltype(_impl_.lease_deadline_unix_ms_){}
     , decltype(_impl_.result_){}
+    , decltype(_impl_.reuse_mode_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -4075,8 +4216,8 @@ GetBatchRsp::GetBatchRsp(const GetBatchRsp& from)
     _this->_impl_.sample_pool_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.sample_pool_);
   }
   ::memcpy(&_impl_.lease_deadline_unix_ms_, &from._impl_.lease_deadline_unix_ms_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.result_) -
-    reinterpret_cast<char*>(&_impl_.lease_deadline_unix_ms_)) + sizeof(_impl_.result_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.reuse_mode_) -
+    reinterpret_cast<char*>(&_impl_.lease_deadline_unix_ms_)) + sizeof(_impl_.reuse_mode_));
   // @@protoc_insertion_point(copy_constructor:rl.training.v1.GetBatchRsp)
 }
 
@@ -4091,6 +4232,7 @@ inline void GetBatchRsp::SharedCtor(
     , decltype(_impl_.sample_pool_){nullptr}
     , decltype(_impl_.lease_deadline_unix_ms_){int64_t{0}}
     , decltype(_impl_.result_){0}
+    , decltype(_impl_.reuse_mode_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.message_.InitDefault();
@@ -4138,8 +4280,8 @@ void GetBatchRsp::Clear() {
   }
   _impl_.sample_pool_ = nullptr;
   ::memset(&_impl_.lease_deadline_unix_ms_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.result_) -
-      reinterpret_cast<char*>(&_impl_.lease_deadline_unix_ms_)) + sizeof(_impl_.result_));
+      reinterpret_cast<char*>(&_impl_.reuse_mode_) -
+      reinterpret_cast<char*>(&_impl_.lease_deadline_unix_ms_)) + sizeof(_impl_.reuse_mode_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -4204,6 +4346,15 @@ const char* GetBatchRsp::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
           ptr = ctx->ParseMessage(_internal_mutable_sample_pool(), ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.SampleReuseMode reuse_mode = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_reuse_mode(static_cast<::rl::training::v1::SampleReuseMode>(val));
         } else
           goto handle_unusual;
         continue;
@@ -4284,6 +4435,13 @@ uint8_t* GetBatchRsp::_InternalSerialize(
         _Internal::sample_pool(this).GetCachedSize(), target, stream);
   }
 
+  // .rl.training.v1.SampleReuseMode reuse_mode = 7;
+  if (this->_internal_reuse_mode() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      7, this->_internal_reuse_mode(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4339,6 +4497,12 @@ size_t GetBatchRsp::ByteSizeLong() const {
       ::_pbi::WireFormatLite::EnumSize(this->_internal_result());
   }
 
+  // .rl.training.v1.SampleReuseMode reuse_mode = 7;
+  if (this->_internal_reuse_mode() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_reuse_mode());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -4374,6 +4538,9 @@ void GetBatchRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
   if (from._internal_result() != 0) {
     _this->_internal_set_result(from._internal_result());
   }
+  if (from._internal_reuse_mode() != 0) {
+    _this->_internal_set_reuse_mode(from._internal_reuse_mode());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -4403,8 +4570,8 @@ void GetBatchRsp::InternalSwap(GetBatchRsp* other) {
       &other->_impl_.delivery_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(GetBatchRsp, _impl_.result_)
-      + sizeof(GetBatchRsp::_impl_.result_)
+      PROTOBUF_FIELD_OFFSET(GetBatchRsp, _impl_.reuse_mode_)
+      + sizeof(GetBatchRsp::_impl_.reuse_mode_)
       - PROTOBUF_FIELD_OFFSET(GetBatchRsp, _impl_.sample_pool_)>(
           reinterpret_cast<char*>(&_impl_.sample_pool_),
           reinterpret_cast<char*>(&other->_impl_.sample_pool_));
@@ -6465,17 +6632,28 @@ class SamplePoolStatusRsp::_Internal {
   static void set_has_finalized_at_unix_ms(HasBits* has_bits) {
     (*has_bits)[0] |= 16u;
   }
+  static const ::rl::training::v1::ModelIdentity& completed_collection_round(const SamplePoolStatusRsp* msg);
 };
 
 const ::rl::common::v1::ServiceInstanceIdentity&
 SamplePoolStatusRsp::_Internal::sample_pool(const SamplePoolStatusRsp* msg) {
   return *msg->_impl_.sample_pool_;
 }
+const ::rl::training::v1::ModelIdentity&
+SamplePoolStatusRsp::_Internal::completed_collection_round(const SamplePoolStatusRsp* msg) {
+  return *msg->_impl_.completed_collection_round_;
+}
 void SamplePoolStatusRsp::clear_sample_pool() {
   if (GetArenaForAllocation() == nullptr && _impl_.sample_pool_ != nullptr) {
     delete _impl_.sample_pool_;
   }
   _impl_.sample_pool_ = nullptr;
+}
+void SamplePoolStatusRsp::clear_completed_collection_round() {
+  if (GetArenaForAllocation() == nullptr && _impl_.completed_collection_round_ != nullptr) {
+    delete _impl_.completed_collection_round_;
+  }
+  _impl_.completed_collection_round_ = nullptr;
 }
 SamplePoolStatusRsp::SamplePoolStatusRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -6492,6 +6670,7 @@ SamplePoolStatusRsp::SamplePoolStatusRsp(const SamplePoolStatusRsp& from)
     , decltype(_impl_.last_error_){}
     , decltype(_impl_.finalization_id_){}
     , decltype(_impl_.sample_pool_){nullptr}
+    , decltype(_impl_.completed_collection_round_){nullptr}
     , decltype(_impl_.push_attempt_count_){}
     , decltype(_impl_.accepted_unique_transitions_){}
     , decltype(_impl_.accepted_unique_envelopes_){}
@@ -6531,6 +6710,8 @@ SamplePoolStatusRsp::SamplePoolStatusRsp(const SamplePoolStatusRsp& from)
     , decltype(_impl_.oldest_ready_transition_age_ms_){}
     , decltype(_impl_.minimum_ready_model_step_){}
     , decltype(_impl_.maximum_ready_model_step_){}
+    , decltype(_impl_.active_consumer_count_){}
+    , decltype(_impl_.reuse_mode_){}
     , decltype(_impl_.evicted_transition_count_){}
     , decltype(_impl_.evicted_envelope_count_){}
     , decltype(_impl_.finalized_at_unix_ms_){}
@@ -6539,7 +6720,9 @@ SamplePoolStatusRsp::SamplePoolStatusRsp(const SamplePoolStatusRsp& from)
     , decltype(_impl_.drawn_transition_slot_count_){}
     , decltype(_impl_.unsampled_evicted_transition_count_){}
     , decltype(_impl_.previously_drawn_evicted_transition_count_){}
-    , decltype(_impl_.active_consumer_count_){}};
+    , decltype(_impl_.removed_on_ack_transition_count_){}
+    , decltype(_impl_.unselected_round_transition_count_){}
+    , decltype(_impl_.collection_round_sealed_){}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   _impl_.last_error_.InitDefault();
@@ -6561,9 +6744,12 @@ SamplePoolStatusRsp::SamplePoolStatusRsp(const SamplePoolStatusRsp& from)
   if (from._internal_has_sample_pool()) {
     _this->_impl_.sample_pool_ = new ::rl::common::v1::ServiceInstanceIdentity(*from._impl_.sample_pool_);
   }
+  if (from._internal_has_completed_collection_round()) {
+    _this->_impl_.completed_collection_round_ = new ::rl::training::v1::ModelIdentity(*from._impl_.completed_collection_round_);
+  }
   ::memcpy(&_impl_.push_attempt_count_, &from._impl_.push_attempt_count_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.active_consumer_count_) -
-    reinterpret_cast<char*>(&_impl_.push_attempt_count_)) + sizeof(_impl_.active_consumer_count_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.collection_round_sealed_) -
+    reinterpret_cast<char*>(&_impl_.push_attempt_count_)) + sizeof(_impl_.collection_round_sealed_));
   // @@protoc_insertion_point(copy_constructor:rl.training.v1.SamplePoolStatusRsp)
 }
 
@@ -6577,6 +6763,7 @@ inline void SamplePoolStatusRsp::SharedCtor(
     , decltype(_impl_.last_error_){}
     , decltype(_impl_.finalization_id_){}
     , decltype(_impl_.sample_pool_){nullptr}
+    , decltype(_impl_.completed_collection_round_){nullptr}
     , decltype(_impl_.push_attempt_count_){int64_t{0}}
     , decltype(_impl_.accepted_unique_transitions_){int64_t{0}}
     , decltype(_impl_.accepted_unique_envelopes_){int64_t{0}}
@@ -6616,6 +6803,8 @@ inline void SamplePoolStatusRsp::SharedCtor(
     , decltype(_impl_.oldest_ready_transition_age_ms_){int64_t{0}}
     , decltype(_impl_.minimum_ready_model_step_){uint64_t{0u}}
     , decltype(_impl_.maximum_ready_model_step_){uint64_t{0u}}
+    , decltype(_impl_.active_consumer_count_){0}
+    , decltype(_impl_.reuse_mode_){0}
     , decltype(_impl_.evicted_transition_count_){int64_t{0}}
     , decltype(_impl_.evicted_envelope_count_){int64_t{0}}
     , decltype(_impl_.finalized_at_unix_ms_){int64_t{0}}
@@ -6624,7 +6813,9 @@ inline void SamplePoolStatusRsp::SharedCtor(
     , decltype(_impl_.drawn_transition_slot_count_){int64_t{0}}
     , decltype(_impl_.unsampled_evicted_transition_count_){int64_t{0}}
     , decltype(_impl_.previously_drawn_evicted_transition_count_){int64_t{0}}
-    , decltype(_impl_.active_consumer_count_){0}
+    , decltype(_impl_.removed_on_ack_transition_count_){int64_t{0}}
+    , decltype(_impl_.unselected_round_transition_count_){int64_t{0}}
+    , decltype(_impl_.collection_round_sealed_){false}
   };
   _impl_.last_error_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -6650,6 +6841,7 @@ inline void SamplePoolStatusRsp::SharedDtor() {
   _impl_.last_error_.Destroy();
   _impl_.finalization_id_.Destroy();
   if (this != internal_default_instance()) delete _impl_.sample_pool_;
+  if (this != internal_default_instance()) delete _impl_.completed_collection_round_;
 }
 
 void SamplePoolStatusRsp::SetCachedSize(int size) const {
@@ -6668,6 +6860,10 @@ void SamplePoolStatusRsp::Clear() {
     delete _impl_.sample_pool_;
   }
   _impl_.sample_pool_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.completed_collection_round_ != nullptr) {
+    delete _impl_.completed_collection_round_;
+  }
+  _impl_.completed_collection_round_ = nullptr;
   ::memset(&_impl_.push_attempt_count_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.expired_lease_count_) -
       reinterpret_cast<char*>(&_impl_.push_attempt_count_)) + sizeof(_impl_.expired_lease_count_));
@@ -6681,13 +6877,13 @@ void SamplePoolStatusRsp::Clear() {
         reinterpret_cast<char*>(&_impl_.maximum_ready_model_step_) -
         reinterpret_cast<char*>(&_impl_.oldest_ready_transition_age_ms_)) + sizeof(_impl_.maximum_ready_model_step_));
   }
-  ::memset(&_impl_.evicted_transition_count_, 0, static_cast<size_t>(
+  ::memset(&_impl_.active_consumer_count_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.evicted_envelope_count_) -
-      reinterpret_cast<char*>(&_impl_.evicted_transition_count_)) + sizeof(_impl_.evicted_envelope_count_));
+      reinterpret_cast<char*>(&_impl_.active_consumer_count_)) + sizeof(_impl_.evicted_envelope_count_));
   _impl_.finalized_at_unix_ms_ = int64_t{0};
   ::memset(&_impl_.finalized_transition_count_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.active_consumer_count_) -
-      reinterpret_cast<char*>(&_impl_.finalized_transition_count_)) + sizeof(_impl_.active_consumer_count_));
+      reinterpret_cast<char*>(&_impl_.collection_round_sealed_) -
+      reinterpret_cast<char*>(&_impl_.finalized_transition_count_)) + sizeof(_impl_.collection_round_sealed_));
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -7118,6 +7314,47 @@ const char* SamplePoolStatusRsp::_InternalParse(const char* ptr, ::_pbi::ParseCo
         } else
           goto handle_unusual;
         continue;
+      // int64 removed_on_ack_transition_count = 77;
+      case 77:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
+          _impl_.removed_on_ack_transition_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.SampleReuseMode reuse_mode = 78;
+      case 78:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 112)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_reuse_mode(static_cast<::rl::training::v1::SampleReuseMode>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 unselected_round_transition_count = 79;
+      case 79:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 120)) {
+          _impl_.unselected_round_transition_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .rl.training.v1.ModelIdentity completed_collection_round = 80;
+      case 80:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 130)) {
+          ptr = ctx->ParseMessage(_internal_mutable_completed_collection_round(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool collection_round_sealed = 81;
+      case 81:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 136)) {
+          _impl_.collection_round_sealed_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -7465,6 +7702,38 @@ uint8_t* SamplePoolStatusRsp::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt64ToArray(76, this->_internal_previously_drawn_evicted_transition_count(), target);
   }
 
+  // int64 removed_on_ack_transition_count = 77;
+  if (this->_internal_removed_on_ack_transition_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(77, this->_internal_removed_on_ack_transition_count(), target);
+  }
+
+  // .rl.training.v1.SampleReuseMode reuse_mode = 78;
+  if (this->_internal_reuse_mode() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      78, this->_internal_reuse_mode(), target);
+  }
+
+  // int64 unselected_round_transition_count = 79;
+  if (this->_internal_unselected_round_transition_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt64ToArray(79, this->_internal_unselected_round_transition_count(), target);
+  }
+
+  // .rl.training.v1.ModelIdentity completed_collection_round = 80;
+  if (this->_internal_has_completed_collection_round()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(80, _Internal::completed_collection_round(this),
+        _Internal::completed_collection_round(this).GetCachedSize(), target, stream);
+  }
+
+  // bool collection_round_sealed = 81;
+  if (this->_internal_collection_round_sealed() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(81, this->_internal_collection_round_sealed(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -7500,6 +7769,13 @@ size_t SamplePoolStatusRsp::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.sample_pool_);
+  }
+
+  // .rl.training.v1.ModelIdentity completed_collection_round = 80;
+  if (this->_internal_has_completed_collection_round()) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.completed_collection_round_);
   }
 
   // int64 push_attempt_count = 4;
@@ -7746,6 +8022,19 @@ size_t SamplePoolStatusRsp::ByteSizeLong() const {
     }
 
   }
+  // int32 active_consumer_count = 40;
+  if (this->_internal_active_consumer_count() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_active_consumer_count());
+  }
+
+  // .rl.training.v1.SampleReuseMode reuse_mode = 78;
+  if (this->_internal_reuse_mode() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_reuse_mode());
+  }
+
   // int64 evicted_transition_count = 66;
   if (this->_internal_evicted_transition_count() != 0) {
     total_size += 2 +
@@ -7802,11 +8091,23 @@ size_t SamplePoolStatusRsp::ByteSizeLong() const {
         this->_internal_previously_drawn_evicted_transition_count());
   }
 
-  // int32 active_consumer_count = 40;
-  if (this->_internal_active_consumer_count() != 0) {
+  // int64 removed_on_ack_transition_count = 77;
+  if (this->_internal_removed_on_ack_transition_count() != 0) {
     total_size += 2 +
-      ::_pbi::WireFormatLite::Int32Size(
-        this->_internal_active_consumer_count());
+      ::_pbi::WireFormatLite::Int64Size(
+        this->_internal_removed_on_ack_transition_count());
+  }
+
+  // int64 unselected_round_transition_count = 79;
+  if (this->_internal_unselected_round_transition_count() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int64Size(
+        this->_internal_unselected_round_transition_count());
+  }
+
+  // bool collection_round_sealed = 81;
+  if (this->_internal_collection_round_sealed() != 0) {
+    total_size += 2 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -7836,6 +8137,10 @@ void SamplePoolStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   if (from._internal_has_sample_pool()) {
     _this->_internal_mutable_sample_pool()->::rl::common::v1::ServiceInstanceIdentity::MergeFrom(
         from._internal_sample_pool());
+  }
+  if (from._internal_has_completed_collection_round()) {
+    _this->_internal_mutable_completed_collection_round()->::rl::training::v1::ModelIdentity::MergeFrom(
+        from._internal_completed_collection_round());
   }
   if (from._internal_push_attempt_count() != 0) {
     _this->_internal_set_push_attempt_count(from._internal_push_attempt_count());
@@ -7958,6 +8263,12 @@ void SamplePoolStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
     }
     _this->_impl_._has_bits_[0] |= cached_has_bits;
   }
+  if (from._internal_active_consumer_count() != 0) {
+    _this->_internal_set_active_consumer_count(from._internal_active_consumer_count());
+  }
+  if (from._internal_reuse_mode() != 0) {
+    _this->_internal_set_reuse_mode(from._internal_reuse_mode());
+  }
   if (from._internal_evicted_transition_count() != 0) {
     _this->_internal_set_evicted_transition_count(from._internal_evicted_transition_count());
   }
@@ -7982,8 +8293,14 @@ void SamplePoolStatusRsp::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   if (from._internal_previously_drawn_evicted_transition_count() != 0) {
     _this->_internal_set_previously_drawn_evicted_transition_count(from._internal_previously_drawn_evicted_transition_count());
   }
-  if (from._internal_active_consumer_count() != 0) {
-    _this->_internal_set_active_consumer_count(from._internal_active_consumer_count());
+  if (from._internal_removed_on_ack_transition_count() != 0) {
+    _this->_internal_set_removed_on_ack_transition_count(from._internal_removed_on_ack_transition_count());
+  }
+  if (from._internal_unselected_round_transition_count() != 0) {
+    _this->_internal_set_unselected_round_transition_count(from._internal_unselected_round_transition_count());
+  }
+  if (from._internal_collection_round_sealed() != 0) {
+    _this->_internal_set_collection_round_sealed(from._internal_collection_round_sealed());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -8014,8 +8331,8 @@ void SamplePoolStatusRsp::InternalSwap(SamplePoolStatusRsp* other) {
       &other->_impl_.finalization_id_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SamplePoolStatusRsp, _impl_.active_consumer_count_)
-      + sizeof(SamplePoolStatusRsp::_impl_.active_consumer_count_)
+      PROTOBUF_FIELD_OFFSET(SamplePoolStatusRsp, _impl_.collection_round_sealed_)
+      + sizeof(SamplePoolStatusRsp::_impl_.collection_round_sealed_)
       - PROTOBUF_FIELD_OFFSET(SamplePoolStatusRsp, _impl_.sample_pool_)>(
           reinterpret_cast<char*>(&_impl_.sample_pool_),
           reinterpret_cast<char*>(&other->_impl_.sample_pool_));

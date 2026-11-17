@@ -18,23 +18,28 @@ public:
           segment_sequence(runtime.next_segment_seq_.load()), activations(runtime.per_agent_model_activation_count_),
           latest_used(runtime.latest_prepared_used_by_agent_), closed(runtime.closed_segment_count_),
           quarantined(runtime.quarantined_transition_count_), excluded(runtime.pending_action_excluded_count_),
-          close_counts(runtime.segment_close_counts_), rng(runtime.action_rng_) {}
+          close_counts(runtime.segment_close_counts_), rng(runtime.action_rng_),
+          round_transitions(runtime.collection_round_transitions_) {}
 
     bool PrepareFrame(const std::vector<AgentTaskInput>& inputs, int64_t frame, bool collect,
                       std::vector<ModelTaskAction>& actions, std::string& error) {
         for (const auto& input : inputs) {
+            const bool completed_action = session.agents.at(input.agent_id).has_pending_action;
             if (!runtime_.FinalizePendingTransition(session, input.agent_id, input.reward,
                     input.observation, collect, error)) {
                 ++runtime_.rollout_estimator_failure_count_;
                 runtime_.MarkDegraded("Episode transition preparation failed: " + error);
                 return false;
             }
+            if (collect && completed_action) ++round_transitions;
             auto& agent = session.agents.at(input.agent_id);
             if (input.terminal) {
                 agent.done_collected = true;
                 agent.terminal_frame_id = frame;
             }
         }
+        seals_round = collect && runtime_.config_.rollout.collection_batch_size > 0 &&
+            round_transitions >= runtime_.config_.rollout.collection_batch_size;
         if (collect) {
             for (const auto& input : inputs) {
                 auto& agent = session.agents.at(input.agent_id);
@@ -48,8 +53,9 @@ public:
                         runtime_.MarkDegraded(error);
                         return false;
                     }
-                    if (agent.segment_transitions.size() != runtime_.config_.rollout.tmax) continue;
-                    reason = training::SEGMENT_CLOSE_REASON_TMAX;
+                    if (!seals_round && agent.segment_transitions.size() != runtime_.config_.rollout.tmax) continue;
+                    reason = seals_round ? training::SEGMENT_CLOSE_REASON_COLLECTION_ROUND
+                                         : training::SEGMENT_CLOSE_REASON_TMAX;
                     if (!runtime_.InferPinnedValue(agent, agent.segment_transitions.back().next_observation, bootstrap)) {
                         error = runtime_.last_error_;
                         ++runtime_.rollout_estimator_failure_count_;
@@ -59,6 +65,20 @@ public:
                 if (!Close(input.agent_id, reason, bootstrap, !input.terminal, error)) return false;
             }
         }
+        session.last_frame_id = frame;
+        const bool all_done = std::all_of(session.agents.begin(), session.agents.end(),
+            [](const auto& item) { return item.second.done_collected; });
+        if (all_done) session.phase = rl::session::v1::SESSION_PHASE_EPISODE_TERMINAL;
+        if (seals_round) {
+            output.back().set_collection_round_batch_size(runtime_.config_.rollout.collection_batch_size);
+            output.back().set_collection_round_transition_count(round_transitions);
+            return true;
+        }
+        return PrepareActions(inputs, frame, actions, error);
+    }
+
+    bool PrepareActions(const std::vector<AgentTaskInput>& inputs, int64_t frame,
+                        std::vector<ModelTaskAction>& actions, std::string& error) {
         for (const auto& input : inputs) {
             if (input.terminal) continue;
             auto& agent = session.agents.at(input.agent_id);
@@ -72,12 +92,11 @@ public:
             }
             actions.push_back({input.agent_id, action});
         }
-        session.last_frame_id = frame;
-        const bool all_done = std::all_of(session.agents.begin(), session.agents.end(),
-            [](const auto& item) { return item.second.done_collected; });
-        if (all_done) session.phase = rl::session::v1::SESSION_PHASE_EPISODE_TERMINAL;
         return true;
     }
+
+    bool SealsCollectionRound() const { return seals_round; }
+    void BeginNextCollectionRound() { round_transitions = 0; }
 
     bool PrepareAbort(bool collect, std::string& error) {
         const auto reason = training::SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE;
@@ -150,6 +169,7 @@ public:
         runtime_.pending_action_excluded_count_ = excluded;
         runtime_.segment_close_counts_ = std::move(close_counts);
         runtime_.action_rng_ = std::move(rng);
+        runtime_.collection_round_transitions_ = round_transitions;
     }
     int64_t ProducedTransitions() const { return transitions; }
     Session session;
@@ -176,4 +196,6 @@ private:
     std::unordered_map<training::SegmentCloseReason, int64_t> close_counts;
     std::mt19937 rng;
     std::vector<training::ProcessedTransitionEnvelope> output;
+    int64_t round_transitions;
+    bool seals_round = false;
 };

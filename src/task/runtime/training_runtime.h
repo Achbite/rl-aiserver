@@ -179,6 +179,7 @@ public:
     bool client_initialized_ = false;
 
     int64_t produced_unique_transitions_ = 0;
+    int64_t collection_round_transitions_ = 0;
     std::unordered_map<ModelStep, int64_t> produced_transitions_by_model_;
     int64_t produced_unique_envelopes_ = 0;
     int64_t enqueue_count_ = 0;

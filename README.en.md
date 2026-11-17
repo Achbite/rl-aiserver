@@ -34,6 +34,14 @@ AIServer provides static model evaluation plus training inference, per-Agent
 R-PIN segments, GAE/value targets, and processed-transition delivery. For local
 training, start it after Learner is ready and connect Client afterwards.
 
+The default architecture is asynchronous PPO with a CPU Learner and a Replay Pool
+that samples without replacement within a batch and permits reuse across batches.
+`rollout.collection_batch_size: 0` keeps collection asynchronous. A positive value
+is an explicit synchronous experiment and requires Pool's
+`sampling.reuse: synchronous_round`: seal the whole frame, pause action assignment,
+then resume only after TRAINED settlement and the next model's actual load.
+Consume-once and synchronous experiments do not change the default architecture.
+
 Local training runs only three containers: Learner, AIServer, and Client.
 `make shell` is a host command. When `aiserver-dev` is absent it builds the
 development image and creates and starts the container. When the container

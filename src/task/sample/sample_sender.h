@@ -79,6 +79,8 @@ public:
         double push_rpc_latency_sum_ms = 0.0;
         double push_rpc_latency_max_ms = 0.0;
         std::string sample_pool_instance_id;
+        training::SampleReuseMode reuse_mode = training::SAMPLE_REUSE_MODE_UNSPECIFIED;
+        training::ModelIdentity completed_collection_round;
         std::string last_error;
     };
 
@@ -198,5 +200,7 @@ private:
     double push_rpc_latency_max_ms_ = 0.0;
     std::string sample_pool_instance_id_;
     uint64_t sample_pool_lifecycle_epoch_ = 0;
+    training::SampleReuseMode reuse_mode_ = training::SAMPLE_REUSE_MODE_UNSPECIFIED;
+    training::ModelIdentity completed_collection_round_;
     std::string last_error_;
 };

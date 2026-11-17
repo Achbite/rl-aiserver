@@ -5,6 +5,11 @@
 AIServer 提供静态模型评测，以及训练中的推理、per-Agent R-PIN segment、GAE/Value Target 和
 processed-transition 样本发送。本地训练在 Learner ready 后启动 AIServer，再连接 Client。
 
+默认配合 CPU Learner 与允许跨批复用的无放回 Replay Pool 运行异步 PPO。
+`rollout.collection_batch_size: 0` 保持异步采样。正值仅用于显式同步对照试验，
+须配合 Pool 的 `sampling.reuse: synchronous_round`：完整帧封口后暂停动作分配，
+等待本轮 TRAINED 结算及下一模型实际加载后续采。一次消费和同步试验不改变默认架构。
+
 本地训练只运行 Learner、AIServer 和 Client 三个容器。`make shell` 是宿主机命令：没有
 `aiserver-dev` 时构建开发镜像、创建并启动容器；容器存在时只在必要时启动它，然后直接进入。
 它不会读取 Contracts 仓，也不会同步或覆盖本仓 `proto/`。完整三容器工作区包含以下同级目录：

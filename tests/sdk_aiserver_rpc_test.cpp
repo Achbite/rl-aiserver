@@ -15,8 +15,13 @@ void Require(bool condition, const std::string& message) {
 }
 using Client = rl_sdk::TaskClient<maze::MazeTaskServiceProtocol>;
 
-void TestActions(const std::string& model) {
+void TestActions(const std::string& model, bool synchronous = false) {
     model_fixture::TemporaryRoot root;
+    const auto bytes = model_fixture::ReadFile(model);
+    model_fixture::FixedModelDistributor models(model_fixture::MakeManifest(bytes), bytes);
+    model_fixture::CapturingSamplePool pool;
+    if (synchronous) pool.SetSynchronous();
+    model_fixture::LocalServer dependencies({&models, &pool});
     const auto map_path = root.path() / "routing.json";
     std::ofstream(map_path) << R"({"map_id":"routing","grid_size":1,"grid_cols":5,"grid_rows":5,
         "start_grid":{"x":1,"y":1},"goal_grid":{"x":4,"y":4},
@@ -32,7 +37,13 @@ void TestActions(const std::string& model) {
     Require(environment.Step(1, maze::MAZE_ACTION_RIGHT, error), error);
 
     MazeConfig config;
-    config.server.run_mode = aiserver_mode::kEvaluation;
+    config.server.run_mode = synchronous ? aiserver_mode::kTraining : aiserver_mode::kEvaluation;
+    config.model.local_train_dir = (root.path() / "train").string();
+    config.model_distribution.host = "127.0.0.1";
+    config.model_distribution.port = dependencies.port;
+    config.sample_distributor.host = "127.0.0.1";
+    config.sample_distributor.port = dependencies.port;
+    config.rollout.collection_batch_size = synchronous ? 1 : 0;
     config.model.evaluation_model_path = model;
     config.model.expected_obs_dim = 17;
     config.model.expected_action_dim = 9;
@@ -87,9 +98,27 @@ void TestActions(const std::string& model) {
         }
         maze::UpdateRsp response;
         std::vector<maze_client::AgentExecutionCursor> candidate;
-        Require(client.Update(request, response, [&](const auto& req, const auto& rsp) {
+        auto update = std::async(std::launch::async, [&] {
+            return client.Update(request, response, [&](const auto& req, const auto& rsp) {
                     return maze_client::PrepareAppliedAgentUpdate(req, rsp, cursors, candidate);
-                }) == rl_sdk::CommandOutcome::Applied, "actual AIServer accepts state and receipt: " + client.error());
+                });
+        });
+        if (synchronous && frame > 0) {
+            Require(pool.WaitForEnvelopeCount(frame * 2), "whole frame closes both actual Actor segments");
+            const auto envelopes = pool.envelopes();
+            Require(envelopes.back().collection_round_batch_size() == 1 &&
+                    envelopes.back().collection_round_transition_count() == 2,
+                    "last envelope seals the full frame including its explicit excess item");
+            if (frame == 1) models.SetCandidate(frame, bytes);
+            else pool.CompleteRound(envelopes.back().behavior_model());
+            Require(update.wait_for(std::chrono::milliseconds(350)) == std::future_status::timeout &&
+                    pool.envelopes().size() == static_cast<size_t>(frame * 2),
+                    "WAIT retries neither execute actions nor enqueue the frame twice; both facts are required");
+            if (frame == 1) pool.CompleteRound(envelopes.back().behavior_model());
+            else models.SetCandidate(frame, bytes);
+        }
+        Require(update.get() == rl_sdk::CommandOutcome::Applied,
+                "actual AIServer accepts state and receipt: " + client.error());
         cursors = std::move(candidate);
         if (frame == 2) {
             Require(environment.AllDone() && response.action_batch().actions_size() == 0 &&
@@ -101,25 +130,28 @@ void TestActions(const std::string& model) {
         for (const auto& action : response.action_batch().actions()) {
             const int id = action.agent_id();
             // x=1/4: UP logit=1, RIGHT=.5; x>=2/4: RIGHT wins.
-            Require(action.action_id() == (id == 0 ? maze::MAZE_ACTION_UP : maze::MAZE_ACTION_RIGHT),
+            Require(synchronous || action.action_id() == (id == 0 ? maze::MAZE_ACTION_UP : maze::MAZE_ACTION_RIGHT),
                     "known ONNX argmax is routed to its original agent");
             Require(maze_client::ExecuteAssignedAction(environment, cursors[id], action, error), error);
         }
         environment.AdvanceFrame();
-        Require(environment.GetAgent(0).grid_x == 1 && environment.GetAgent(0).grid_y == 2 + frame &&
-                environment.GetAgent(1).grid_x == 3 + frame && environment.GetAgent(1).grid_y == 1,
+        Require(synchronous || (environment.GetAgent(0).grid_x == 1 && environment.GetAgent(0).grid_y == 2 + frame &&
+                environment.GetAgent(1).grid_x == 3 + frame && environment.GetAgent(1).grid_y == 1),
                 "real environment executes the respective model actions");
     }
     maze::EndEpisodeRsp ended;
     maze::CloseSessionRsp closed;
     Require(client.EndEpisode(ended) == rl_sdk::CommandOutcome::Applied &&
             client.CloseSession(closed) == rl_sdk::CommandOutcome::Applied, client.error());
-    Require(service.BeginShutdown(), "evaluation service shuts down cleanly");
+    Require(synchronous ? model_fixture::FinishMetrics([&] { return service.BeginShutdown(); },
+                service.Metrics(), service.MetricSourceIdentity()) : service.BeginShutdown(),
+            "service shuts down cleanly");
 }
 }
 
 int main(int argc, char** argv) {
     Require(argc == 2, "usage: sdk_aiserver_rpc_test MODEL");
     TestActions(argv[1]);
+    TestActions(argv[1], true);
     std::cout << "aiserver_sdk_action_data_path: PASS\n";
 }

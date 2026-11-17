@@ -203,12 +203,13 @@ enum SegmentCloseReason : int {
   SEGMENT_CLOSE_REASON_CLIENT_CONTROLLED_CLOSE = 4,
   SEGMENT_CLOSE_REASON_CLIENT_RECOVERY_TIMEOUT = 5,
   SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN = 6,
+  SEGMENT_CLOSE_REASON_COLLECTION_ROUND = 7,
   SegmentCloseReason_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   SegmentCloseReason_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool SegmentCloseReason_IsValid(int value);
 constexpr SegmentCloseReason SegmentCloseReason_MIN = SEGMENT_CLOSE_REASON_UNSPECIFIED;
-constexpr SegmentCloseReason SegmentCloseReason_MAX = SEGMENT_CLOSE_REASON_AISERVER_CONTROLLED_SHUTDOWN;
+constexpr SegmentCloseReason SegmentCloseReason_MAX = SEGMENT_CLOSE_REASON_COLLECTION_ROUND;
 constexpr int SegmentCloseReason_ARRAYSIZE = SegmentCloseReason_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SegmentCloseReason_descriptor();
@@ -529,6 +530,33 @@ inline bool ModelLookupResult_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ModelLookupResult* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ModelLookupResult>(
     ModelLookupResult_descriptor(), name, value);
+}
+enum SampleReuseMode : int {
+  SAMPLE_REUSE_MODE_UNSPECIFIED = 0,
+  SAMPLE_REUSE_MODE_REPLAY = 1,
+  SAMPLE_REUSE_MODE_CONSUME_ONCE = 2,
+  SAMPLE_REUSE_MODE_SYNCHRONOUS_ROUND = 3,
+  SampleReuseMode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SampleReuseMode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SampleReuseMode_IsValid(int value);
+constexpr SampleReuseMode SampleReuseMode_MIN = SAMPLE_REUSE_MODE_UNSPECIFIED;
+constexpr SampleReuseMode SampleReuseMode_MAX = SAMPLE_REUSE_MODE_SYNCHRONOUS_ROUND;
+constexpr int SampleReuseMode_ARRAYSIZE = SampleReuseMode_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SampleReuseMode_descriptor();
+template<typename T>
+inline const std::string& SampleReuseMode_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SampleReuseMode>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SampleReuseMode_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SampleReuseMode_descriptor(), enum_t_value);
+}
+inline bool SampleReuseMode_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SampleReuseMode* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SampleReuseMode>(
+    SampleReuseMode_descriptor(), name, value);
 }
 enum SampleBackendType : int {
   SAMPLE_BACKEND_TYPE_UNSPECIFIED = 0,
@@ -993,6 +1021,8 @@ class ProcessedTransitionEnvelope final :
     kEnvelopeIdFieldNumber = 1,
     kProducerFieldNumber = 3,
     kBehaviorModelFieldNumber = 5,
+    kCollectionRoundBatchSizeFieldNumber = 7,
+    kCollectionRoundTransitionCountFieldNumber = 8,
   };
   // repeated .rl.training.v1.ProcessedTransition samples = 6;
   int samples_size() const;
@@ -1062,6 +1092,32 @@ class ProcessedTransitionEnvelope final :
       ::rl::training::v1::ModelIdentity* behavior_model);
   ::rl::training::v1::ModelIdentity* unsafe_arena_release_behavior_model();
 
+  // optional uint32 collection_round_batch_size = 7;
+  bool has_collection_round_batch_size() const;
+  private:
+  bool _internal_has_collection_round_batch_size() const;
+  public:
+  void clear_collection_round_batch_size();
+  uint32_t collection_round_batch_size() const;
+  void set_collection_round_batch_size(uint32_t value);
+  private:
+  uint32_t _internal_collection_round_batch_size() const;
+  void _internal_set_collection_round_batch_size(uint32_t value);
+  public:
+
+  // optional uint32 collection_round_transition_count = 8;
+  bool has_collection_round_transition_count() const;
+  private:
+  bool _internal_has_collection_round_transition_count() const;
+  public:
+  void clear_collection_round_transition_count();
+  uint32_t collection_round_transition_count() const;
+  void set_collection_round_transition_count(uint32_t value);
+  private:
+  uint32_t _internal_collection_round_transition_count() const;
+  void _internal_set_collection_round_transition_count(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.training.v1.ProcessedTransitionEnvelope)
  private:
   class _Internal;
@@ -1070,11 +1126,14 @@ class ProcessedTransitionEnvelope final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rl::training::v1::ProcessedTransition > samples_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr envelope_id_;
     ::rl::common::v1::ServiceInstanceIdentity* producer_;
     ::rl::training::v1::ModelIdentity* behavior_model_;
-    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+    uint32_t collection_round_batch_size_;
+    uint32_t collection_round_transition_count_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_proto_2ftraining_2ftraining_2eproto;
@@ -1996,6 +2055,7 @@ class GetBatchRsp final :
     kSamplePoolFieldNumber = 6,
     kLeaseDeadlineUnixMsFieldNumber = 4,
     kResultFieldNumber = 1,
+    kReuseModeFieldNumber = 7,
   };
   // repeated .rl.training.v1.SamplePoolItem items = 5;
   int items_size() const;
@@ -2079,6 +2139,15 @@ class GetBatchRsp final :
   void _internal_set_result(::rl::training::v1::GetBatchResult value);
   public:
 
+  // .rl.training.v1.SampleReuseMode reuse_mode = 7;
+  void clear_reuse_mode();
+  ::rl::training::v1::SampleReuseMode reuse_mode() const;
+  void set_reuse_mode(::rl::training::v1::SampleReuseMode value);
+  private:
+  ::rl::training::v1::SampleReuseMode _internal_reuse_mode() const;
+  void _internal_set_reuse_mode(::rl::training::v1::SampleReuseMode value);
+  public:
+
   // @@protoc_insertion_point(class_scope:rl.training.v1.GetBatchRsp)
  private:
   class _Internal;
@@ -2093,6 +2162,7 @@ class GetBatchRsp final :
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
     int64_t lease_deadline_unix_ms_;
     int result_;
+    int reuse_mode_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3542,6 +3612,7 @@ class SamplePoolStatusRsp final :
     kLastErrorFieldNumber = 31,
     kFinalizationIdFieldNumber = 69,
     kSamplePoolFieldNumber = 2,
+    kCompletedCollectionRoundFieldNumber = 80,
     kPushAttemptCountFieldNumber = 4,
     kAcceptedUniqueTransitionsFieldNumber = 5,
     kAcceptedUniqueEnvelopesFieldNumber = 6,
@@ -3581,6 +3652,8 @@ class SamplePoolStatusRsp final :
     kOldestReadyTransitionAgeMsFieldNumber = 45,
     kMinimumReadyModelStepFieldNumber = 46,
     kMaximumReadyModelStepFieldNumber = 47,
+    kActiveConsumerCountFieldNumber = 40,
+    kReuseModeFieldNumber = 78,
     kEvictedTransitionCountFieldNumber = 66,
     kEvictedEnvelopeCountFieldNumber = 67,
     kFinalizedAtUnixMsFieldNumber = 70,
@@ -3589,7 +3662,9 @@ class SamplePoolStatusRsp final :
     kDrawnTransitionSlotCountFieldNumber = 74,
     kUnsampledEvictedTransitionCountFieldNumber = 75,
     kPreviouslyDrawnEvictedTransitionCountFieldNumber = 76,
-    kActiveConsumerCountFieldNumber = 40,
+    kRemovedOnAckTransitionCountFieldNumber = 77,
+    kUnselectedRoundTransitionCountFieldNumber = 79,
+    kCollectionRoundSealedFieldNumber = 81,
   };
   // string last_error = 31;
   void clear_last_error();
@@ -3636,6 +3711,24 @@ class SamplePoolStatusRsp final :
   void unsafe_arena_set_allocated_sample_pool(
       ::rl::common::v1::ServiceInstanceIdentity* sample_pool);
   ::rl::common::v1::ServiceInstanceIdentity* unsafe_arena_release_sample_pool();
+
+  // .rl.training.v1.ModelIdentity completed_collection_round = 80;
+  bool has_completed_collection_round() const;
+  private:
+  bool _internal_has_completed_collection_round() const;
+  public:
+  void clear_completed_collection_round();
+  const ::rl::training::v1::ModelIdentity& completed_collection_round() const;
+  PROTOBUF_NODISCARD ::rl::training::v1::ModelIdentity* release_completed_collection_round();
+  ::rl::training::v1::ModelIdentity* mutable_completed_collection_round();
+  void set_allocated_completed_collection_round(::rl::training::v1::ModelIdentity* completed_collection_round);
+  private:
+  const ::rl::training::v1::ModelIdentity& _internal_completed_collection_round() const;
+  ::rl::training::v1::ModelIdentity* _internal_mutable_completed_collection_round();
+  public:
+  void unsafe_arena_set_allocated_completed_collection_round(
+      ::rl::training::v1::ModelIdentity* completed_collection_round);
+  ::rl::training::v1::ModelIdentity* unsafe_arena_release_completed_collection_round();
 
   // int64 push_attempt_count = 4;
   void clear_push_attempt_count();
@@ -4004,6 +4097,24 @@ class SamplePoolStatusRsp final :
   void _internal_set_maximum_ready_model_step(uint64_t value);
   public:
 
+  // int32 active_consumer_count = 40;
+  void clear_active_consumer_count();
+  int32_t active_consumer_count() const;
+  void set_active_consumer_count(int32_t value);
+  private:
+  int32_t _internal_active_consumer_count() const;
+  void _internal_set_active_consumer_count(int32_t value);
+  public:
+
+  // .rl.training.v1.SampleReuseMode reuse_mode = 78;
+  void clear_reuse_mode();
+  ::rl::training::v1::SampleReuseMode reuse_mode() const;
+  void set_reuse_mode(::rl::training::v1::SampleReuseMode value);
+  private:
+  ::rl::training::v1::SampleReuseMode _internal_reuse_mode() const;
+  void _internal_set_reuse_mode(::rl::training::v1::SampleReuseMode value);
+  public:
+
   // int64 evicted_transition_count = 66;
   void clear_evicted_transition_count();
   int64_t evicted_transition_count() const;
@@ -4080,13 +4191,31 @@ class SamplePoolStatusRsp final :
   void _internal_set_previously_drawn_evicted_transition_count(int64_t value);
   public:
 
-  // int32 active_consumer_count = 40;
-  void clear_active_consumer_count();
-  int32_t active_consumer_count() const;
-  void set_active_consumer_count(int32_t value);
+  // int64 removed_on_ack_transition_count = 77;
+  void clear_removed_on_ack_transition_count();
+  int64_t removed_on_ack_transition_count() const;
+  void set_removed_on_ack_transition_count(int64_t value);
   private:
-  int32_t _internal_active_consumer_count() const;
-  void _internal_set_active_consumer_count(int32_t value);
+  int64_t _internal_removed_on_ack_transition_count() const;
+  void _internal_set_removed_on_ack_transition_count(int64_t value);
+  public:
+
+  // int64 unselected_round_transition_count = 79;
+  void clear_unselected_round_transition_count();
+  int64_t unselected_round_transition_count() const;
+  void set_unselected_round_transition_count(int64_t value);
+  private:
+  int64_t _internal_unselected_round_transition_count() const;
+  void _internal_set_unselected_round_transition_count(int64_t value);
+  public:
+
+  // bool collection_round_sealed = 81;
+  void clear_collection_round_sealed();
+  bool collection_round_sealed() const;
+  void set_collection_round_sealed(bool value);
+  private:
+  bool _internal_collection_round_sealed() const;
+  void _internal_set_collection_round_sealed(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:rl.training.v1.SamplePoolStatusRsp)
@@ -4102,6 +4231,7 @@ class SamplePoolStatusRsp final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_error_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr finalization_id_;
     ::rl::common::v1::ServiceInstanceIdentity* sample_pool_;
+    ::rl::training::v1::ModelIdentity* completed_collection_round_;
     int64_t push_attempt_count_;
     int64_t accepted_unique_transitions_;
     int64_t accepted_unique_envelopes_;
@@ -4141,6 +4271,8 @@ class SamplePoolStatusRsp final :
     int64_t oldest_ready_transition_age_ms_;
     uint64_t minimum_ready_model_step_;
     uint64_t maximum_ready_model_step_;
+    int32_t active_consumer_count_;
+    int reuse_mode_;
     int64_t evicted_transition_count_;
     int64_t evicted_envelope_count_;
     int64_t finalized_at_unix_ms_;
@@ -4149,7 +4281,9 @@ class SamplePoolStatusRsp final :
     int64_t drawn_transition_slot_count_;
     int64_t unsampled_evicted_transition_count_;
     int64_t previously_drawn_evicted_transition_count_;
-    int32_t active_consumer_count_;
+    int64_t removed_on_ack_transition_count_;
+    int64_t unselected_round_transition_count_;
+    bool collection_round_sealed_;
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_proto_2ftraining_2ftraining_2eproto;
@@ -9048,6 +9182,62 @@ ProcessedTransitionEnvelope::samples() const {
   return _impl_.samples_;
 }
 
+// optional uint32 collection_round_batch_size = 7;
+inline bool ProcessedTransitionEnvelope::_internal_has_collection_round_batch_size() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool ProcessedTransitionEnvelope::has_collection_round_batch_size() const {
+  return _internal_has_collection_round_batch_size();
+}
+inline void ProcessedTransitionEnvelope::clear_collection_round_batch_size() {
+  _impl_.collection_round_batch_size_ = 0u;
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline uint32_t ProcessedTransitionEnvelope::_internal_collection_round_batch_size() const {
+  return _impl_.collection_round_batch_size_;
+}
+inline uint32_t ProcessedTransitionEnvelope::collection_round_batch_size() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.collection_round_batch_size)
+  return _internal_collection_round_batch_size();
+}
+inline void ProcessedTransitionEnvelope::_internal_set_collection_round_batch_size(uint32_t value) {
+  _impl_._has_bits_[0] |= 0x00000001u;
+  _impl_.collection_round_batch_size_ = value;
+}
+inline void ProcessedTransitionEnvelope::set_collection_round_batch_size(uint32_t value) {
+  _internal_set_collection_round_batch_size(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransitionEnvelope.collection_round_batch_size)
+}
+
+// optional uint32 collection_round_transition_count = 8;
+inline bool ProcessedTransitionEnvelope::_internal_has_collection_round_transition_count() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool ProcessedTransitionEnvelope::has_collection_round_transition_count() const {
+  return _internal_has_collection_round_transition_count();
+}
+inline void ProcessedTransitionEnvelope::clear_collection_round_transition_count() {
+  _impl_.collection_round_transition_count_ = 0u;
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+inline uint32_t ProcessedTransitionEnvelope::_internal_collection_round_transition_count() const {
+  return _impl_.collection_round_transition_count_;
+}
+inline uint32_t ProcessedTransitionEnvelope::collection_round_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.ProcessedTransitionEnvelope.collection_round_transition_count)
+  return _internal_collection_round_transition_count();
+}
+inline void ProcessedTransitionEnvelope::_internal_set_collection_round_transition_count(uint32_t value) {
+  _impl_._has_bits_[0] |= 0x00000002u;
+  _impl_.collection_round_transition_count_ = value;
+}
+inline void ProcessedTransitionEnvelope::set_collection_round_transition_count(uint32_t value) {
+  _internal_set_collection_round_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.ProcessedTransitionEnvelope.collection_round_transition_count)
+}
+
 // -------------------------------------------------------------------
 
 // SamplePoolItem
@@ -10111,6 +10301,26 @@ inline void GetBatchRsp::set_allocated_sample_pool(::rl::common::v1::ServiceInst
   }
   _impl_.sample_pool_ = sample_pool;
   // @@protoc_insertion_point(field_set_allocated:rl.training.v1.GetBatchRsp.sample_pool)
+}
+
+// .rl.training.v1.SampleReuseMode reuse_mode = 7;
+inline void GetBatchRsp::clear_reuse_mode() {
+  _impl_.reuse_mode_ = 0;
+}
+inline ::rl::training::v1::SampleReuseMode GetBatchRsp::_internal_reuse_mode() const {
+  return static_cast< ::rl::training::v1::SampleReuseMode >(_impl_.reuse_mode_);
+}
+inline ::rl::training::v1::SampleReuseMode GetBatchRsp::reuse_mode() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.GetBatchRsp.reuse_mode)
+  return _internal_reuse_mode();
+}
+inline void GetBatchRsp::_internal_set_reuse_mode(::rl::training::v1::SampleReuseMode value) {
+  
+  _impl_.reuse_mode_ = value;
+}
+inline void GetBatchRsp::set_reuse_mode(::rl::training::v1::SampleReuseMode value) {
+  _internal_set_reuse_mode(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.GetBatchRsp.reuse_mode)
 }
 
 // -------------------------------------------------------------------
@@ -12536,6 +12746,171 @@ inline void SamplePoolStatusRsp::_internal_set_previously_drawn_evicted_transiti
 inline void SamplePoolStatusRsp::set_previously_drawn_evicted_transition_count(int64_t value) {
   _internal_set_previously_drawn_evicted_transition_count(value);
   // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.previously_drawn_evicted_transition_count)
+}
+
+// int64 removed_on_ack_transition_count = 77;
+inline void SamplePoolStatusRsp::clear_removed_on_ack_transition_count() {
+  _impl_.removed_on_ack_transition_count_ = int64_t{0};
+}
+inline int64_t SamplePoolStatusRsp::_internal_removed_on_ack_transition_count() const {
+  return _impl_.removed_on_ack_transition_count_;
+}
+inline int64_t SamplePoolStatusRsp::removed_on_ack_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.removed_on_ack_transition_count)
+  return _internal_removed_on_ack_transition_count();
+}
+inline void SamplePoolStatusRsp::_internal_set_removed_on_ack_transition_count(int64_t value) {
+  
+  _impl_.removed_on_ack_transition_count_ = value;
+}
+inline void SamplePoolStatusRsp::set_removed_on_ack_transition_count(int64_t value) {
+  _internal_set_removed_on_ack_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.removed_on_ack_transition_count)
+}
+
+// .rl.training.v1.SampleReuseMode reuse_mode = 78;
+inline void SamplePoolStatusRsp::clear_reuse_mode() {
+  _impl_.reuse_mode_ = 0;
+}
+inline ::rl::training::v1::SampleReuseMode SamplePoolStatusRsp::_internal_reuse_mode() const {
+  return static_cast< ::rl::training::v1::SampleReuseMode >(_impl_.reuse_mode_);
+}
+inline ::rl::training::v1::SampleReuseMode SamplePoolStatusRsp::reuse_mode() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.reuse_mode)
+  return _internal_reuse_mode();
+}
+inline void SamplePoolStatusRsp::_internal_set_reuse_mode(::rl::training::v1::SampleReuseMode value) {
+  
+  _impl_.reuse_mode_ = value;
+}
+inline void SamplePoolStatusRsp::set_reuse_mode(::rl::training::v1::SampleReuseMode value) {
+  _internal_set_reuse_mode(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.reuse_mode)
+}
+
+// int64 unselected_round_transition_count = 79;
+inline void SamplePoolStatusRsp::clear_unselected_round_transition_count() {
+  _impl_.unselected_round_transition_count_ = int64_t{0};
+}
+inline int64_t SamplePoolStatusRsp::_internal_unselected_round_transition_count() const {
+  return _impl_.unselected_round_transition_count_;
+}
+inline int64_t SamplePoolStatusRsp::unselected_round_transition_count() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.unselected_round_transition_count)
+  return _internal_unselected_round_transition_count();
+}
+inline void SamplePoolStatusRsp::_internal_set_unselected_round_transition_count(int64_t value) {
+  
+  _impl_.unselected_round_transition_count_ = value;
+}
+inline void SamplePoolStatusRsp::set_unselected_round_transition_count(int64_t value) {
+  _internal_set_unselected_round_transition_count(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.unselected_round_transition_count)
+}
+
+// .rl.training.v1.ModelIdentity completed_collection_round = 80;
+inline bool SamplePoolStatusRsp::_internal_has_completed_collection_round() const {
+  return this != internal_default_instance() && _impl_.completed_collection_round_ != nullptr;
+}
+inline bool SamplePoolStatusRsp::has_completed_collection_round() const {
+  return _internal_has_completed_collection_round();
+}
+inline const ::rl::training::v1::ModelIdentity& SamplePoolStatusRsp::_internal_completed_collection_round() const {
+  const ::rl::training::v1::ModelIdentity* p = _impl_.completed_collection_round_;
+  return p != nullptr ? *p : reinterpret_cast<const ::rl::training::v1::ModelIdentity&>(
+      ::rl::training::v1::_ModelIdentity_default_instance_);
+}
+inline const ::rl::training::v1::ModelIdentity& SamplePoolStatusRsp::completed_collection_round() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.completed_collection_round)
+  return _internal_completed_collection_round();
+}
+inline void SamplePoolStatusRsp::unsafe_arena_set_allocated_completed_collection_round(
+    ::rl::training::v1::ModelIdentity* completed_collection_round) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.completed_collection_round_);
+  }
+  _impl_.completed_collection_round_ = completed_collection_round;
+  if (completed_collection_round) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:rl.training.v1.SamplePoolStatusRsp.completed_collection_round)
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolStatusRsp::release_completed_collection_round() {
+  
+  ::rl::training::v1::ModelIdentity* temp = _impl_.completed_collection_round_;
+  _impl_.completed_collection_round_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolStatusRsp::unsafe_arena_release_completed_collection_round() {
+  // @@protoc_insertion_point(field_release:rl.training.v1.SamplePoolStatusRsp.completed_collection_round)
+  
+  ::rl::training::v1::ModelIdentity* temp = _impl_.completed_collection_round_;
+  _impl_.completed_collection_round_ = nullptr;
+  return temp;
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolStatusRsp::_internal_mutable_completed_collection_round() {
+  
+  if (_impl_.completed_collection_round_ == nullptr) {
+    auto* p = CreateMaybeMessage<::rl::training::v1::ModelIdentity>(GetArenaForAllocation());
+    _impl_.completed_collection_round_ = p;
+  }
+  return _impl_.completed_collection_round_;
+}
+inline ::rl::training::v1::ModelIdentity* SamplePoolStatusRsp::mutable_completed_collection_round() {
+  ::rl::training::v1::ModelIdentity* _msg = _internal_mutable_completed_collection_round();
+  // @@protoc_insertion_point(field_mutable:rl.training.v1.SamplePoolStatusRsp.completed_collection_round)
+  return _msg;
+}
+inline void SamplePoolStatusRsp::set_allocated_completed_collection_round(::rl::training::v1::ModelIdentity* completed_collection_round) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.completed_collection_round_);
+  }
+  if (completed_collection_round) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(completed_collection_round));
+    if (message_arena != submessage_arena) {
+      completed_collection_round = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, completed_collection_round, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.completed_collection_round_ = completed_collection_round;
+  // @@protoc_insertion_point(field_set_allocated:rl.training.v1.SamplePoolStatusRsp.completed_collection_round)
+}
+
+// bool collection_round_sealed = 81;
+inline void SamplePoolStatusRsp::clear_collection_round_sealed() {
+  _impl_.collection_round_sealed_ = false;
+}
+inline bool SamplePoolStatusRsp::_internal_collection_round_sealed() const {
+  return _impl_.collection_round_sealed_;
+}
+inline bool SamplePoolStatusRsp::collection_round_sealed() const {
+  // @@protoc_insertion_point(field_get:rl.training.v1.SamplePoolStatusRsp.collection_round_sealed)
+  return _internal_collection_round_sealed();
+}
+inline void SamplePoolStatusRsp::_internal_set_collection_round_sealed(bool value) {
+  
+  _impl_.collection_round_sealed_ = value;
+}
+inline void SamplePoolStatusRsp::set_collection_round_sealed(bool value) {
+  _internal_set_collection_round_sealed(value);
+  // @@protoc_insertion_point(field_set:rl.training.v1.SamplePoolStatusRsp.collection_round_sealed)
 }
 
 // -------------------------------------------------------------------
@@ -17725,6 +18100,11 @@ template <> struct is_proto_enum< ::rl::training::v1::ModelLookupResult> : ::std
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::ModelLookupResult>() {
   return ::rl::training::v1::ModelLookupResult_descriptor();
+}
+template <> struct is_proto_enum< ::rl::training::v1::SampleReuseMode> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::rl::training::v1::SampleReuseMode>() {
+  return ::rl::training::v1::SampleReuseMode_descriptor();
 }
 template <> struct is_proto_enum< ::rl::training::v1::SampleBackendType> : ::std::true_type {};
 template <>

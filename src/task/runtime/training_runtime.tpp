@@ -950,6 +950,16 @@ bool TrainingRuntime<Sessions>::Start() {
                           last_error_.c_str());
                 return false;
             }
+            const bool synchronous_pool = sample_distributor_.GetSnapshot().reuse_mode ==
+                training::SAMPLE_REUSE_MODE_SYNCHRONOUS_ROUND;
+            if ((config_.rollout.collection_batch_size > 0) != synchronous_pool) {
+                last_error_ = "Actor collection mode disagrees with SamplePool reuse mode";
+                sample_distributor_.StopAndDrain();
+                std::string release_error;
+                if (!ReleaseTrainingWorkspaceLease(release_error)) last_error_ += "; " + release_error;
+                state_.store(training::AISERVER_STATE_DEGRADED);
+                return false;
+            }
             if (!LoadInitialModel()) {
                 sample_distributor_.StopAndDrain();
                 std::string release_error;
